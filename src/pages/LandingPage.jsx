@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
+import worshipHero from '@/assets/worship_hero.png';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -41,8 +42,8 @@ export default function LandingPage() {
           <div className="absolute inset-0 z-0">
             <img 
               alt="Prophetic Bible School" 
-              className="w-full h-full object-cover opacity-45 grayscale" 
-              src="https://images.unsplash.com/photo-1438211394478-ac273017e296?auto=format&fit=crop&q=80&w=1200"
+              className="w-full h-full object-cover opacity-50" 
+              src={worshipHero}
             />
             <div className="absolute inset-0 hero-gradient"></div>
           </div>
