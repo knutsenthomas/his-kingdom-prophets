@@ -34,6 +34,9 @@ import MediaLibrary from '@/pages/MediaLibrary';
 import GradesCalculator from '@/pages/GradesCalculator';
 import NotificationCenter from '@/pages/NotificationCenter';
 import TeacherProfile from '@/pages/TeacherProfile';
+import MarketingGrowth from '@/pages/MarketingGrowth';
+import QuizBuilder from '@/pages/QuizBuilder';
+import OnboardingHelper from '@/components/OnboardingHelper';
 
 // Admin Pages
 import CMSDashboard from '@/pages/CMSDashboard';
@@ -201,48 +204,53 @@ export default function App() {
 // Router wiring for all 42 views / sub-paths
 function AppRoutes() {
   return (
-    <Routes>
-      {/* Onboarding & Auth */}
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/landing/tablet" element={<LandingPage />} />
-      <Route path="/landing/mobile" element={<LandingPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<LoginPage />} />
-      <Route path="/interests" element={<InterestsPage />} />
-      <Route path="/complete-profile" element={<CompleteProfilePage />} />
-      <Route path="/onboarding-welcome" element={<WelcomePage />} />
+    <>
+      <OnboardingHelper />
+      <Routes>
+        {/* Onboarding & Auth */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/landing/tablet" element={<LandingPage />} />
+        <Route path="/landing/mobile" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<LoginPage />} />
+        <Route path="/interests" element={<InterestsPage />} />
+        <Route path="/complete-profile" element={<CompleteProfilePage />} />
+        <Route path="/onboarding-welcome" element={<WelcomePage />} />
 
-      {/* Student Portal */}
-      <Route element={<StudentLayout />}>
-        <Route path="/student/dashboard" element={<StudentDashboard />} />
-        <Route path="/student/lesson" element={<LessonView />} />
-        <Route path="/student/video" element={<VideoView />} />
-        <Route path="/student/library" element={<LibraryView />} />
-        <Route path="/student/assignments" element={<AssignmentsPage />} />
-        <Route path="/student/chat" element={<CommunityChatView />} />
-        <Route path="/student/profile" element={<StudentProfile />} />
-      </Route>
+        {/* Student Portal */}
+        <Route element={<StudentLayout />}>
+          <Route path="/student/dashboard" element={<StudentDashboard />} />
+          <Route path="/student/lesson" element={<LessonView />} />
+          <Route path="/student/video" element={<VideoView />} />
+          <Route path="/student/library" element={<LibraryView />} />
+          <Route path="/student/assignments" element={<AssignmentsPage />} />
+          <Route path="/student/chat" element={<CommunityChatView />} />
+          <Route path="/student/profile" element={<StudentProfile />} />
+        </Route>
 
-      {/* Teacher / Faculty Portal */}
-      <Route element={<TeacherLayout />}>
-        <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
-        <Route path="/teacher/follow-up" element={<StudentFollowUp />} />
-        <Route path="/teacher/handle-requests" element={<StudentFollowUp />} />
-        <Route path="/teacher/course-builder" element={<CourseBuilder />} />
-        <Route path="/teacher/media-library" element={<MediaLibrary />} />
-        <Route path="/teacher/grading" element={<GradesCalculator />} />
-        <Route path="/teacher/grades-calc" element={<GradesCalculator />} />
-        <Route path="/teacher/notifications" element={<NotificationCenter />} />
-        <Route path="/teacher/profile" element={<TeacherProfile />} />
-        
-        {/* Admin Portal */}
-        <Route path="/admin/cms" element={<CMSDashboard />} />
-        <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
-        <Route path="/admin/portal" element={<AdminPortal />} />
-      </Route>
+        {/* Teacher / Faculty Portal */}
+        <Route element={<TeacherLayout />}>
+          <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+          <Route path="/teacher/follow-up" element={<StudentFollowUp />} />
+          <Route path="/teacher/handle-requests" element={<StudentFollowUp />} />
+          <Route path="/teacher/course-builder" element={<CourseBuilder />} />
+          <Route path="/teacher/quiz-builder" element={<QuizBuilder />} />
+          <Route path="/teacher/marketing" element={<MarketingGrowth />} />
+          <Route path="/teacher/media-library" element={<MediaLibrary />} />
+          <Route path="/teacher/grading" element={<GradesCalculator />} />
+          <Route path="/teacher/grades-calc" element={<GradesCalculator />} />
+          <Route path="/teacher/notifications" element={<NotificationCenter />} />
+          <Route path="/teacher/profile" element={<TeacherProfile />} />
+          
+          {/* Admin Portal */}
+          <Route path="/admin/cms" element={<CMSDashboard />} />
+          <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
+          <Route path="/admin/portal" element={<AdminPortal />} />
+        </Route>
 
-      {/* Email Previews */}
-      <Route path="/email/previews" element={<EmailPreviews />} />
-    </Routes>
+        {/* Email Previews */}
+        <Route path="/email/previews" element={<EmailPreviews />} />
+      </Routes>
+    </>
   );
 }
