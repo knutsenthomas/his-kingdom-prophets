@@ -1,4 +1,20 @@
 import React, { createContext, useState, useEffect, useContext, useMemo } from 'react';
+import { auth, db, storage } from '@/firebase';
+import { 
+  signInWithEmailAndPassword, 
+  signOut, 
+  onAuthStateChanged,
+  createUserWithEmailAndPassword 
+} from 'firebase/auth';
+import { 
+  doc, 
+  getDoc, 
+  setDoc, 
+  updateDoc, 
+  collection, 
+  getDocs, 
+  onSnapshot 
+} from 'firebase/firestore';
 
 // Context API Sikkerhetsnett: Initialiser med tom brakett for å unngå "White screen of death"
 export const AppContext = createContext({});
@@ -391,7 +407,214 @@ export const AppProvider = ({ children }) => {
 
   const [isAdminEditing, setIsAdminEditing] = useState(false);
 
-  const updateCmsContent = (slug, value) => {
+  // Firestore Realtime / Seed subscriptions
+  useEffect(() => {
+    const fetchCmsContent = async () => {
+      try {
+        const cmsDocRef = doc(db, "cms_configs", "default");
+        const cmsSnap = await getDoc(cmsDocRef);
+        if (cmsSnap.exists()) {
+          setCmsContent(cmsSnap.data());
+          localStorage.setItem('hkm-cms-content', JSON.stringify(cmsSnap.data()));
+        } else {
+          // Document doesn't exist, seed it with the default cmsContent values!
+          const initialCms = {
+            'landing-hero-title': 'His Kingdom prophets',
+            'landing-hero-tagline': 'Profetisk Tjeneste og Åndelig Dybde',
+            'landing-hero-description': 'En åpenbaringsskole for profetisk utrustning, bibelundervisning og åndelig vekst, hvor solid bibelsk teologi møter den levende Ånd.',
+            'landing-hero-cta-primary': 'Begynn Din Reise',
+            'landing-hero-cta-secondary': 'Se Introduksjon',
+            'landing-pillars-title': 'Tre Søyler for Tjenesteutrustning',
+            'landing-pillars-desc': 'Vårt fundament forener grundig bibelsk lære med den profetiske gaverollen i Guds rike.',
+            'landing-pillar1-title': 'Profetisk Utrustning og Tjeneste',
+            'landing-pillar1-desc': 'Lær å høre Guds stemme, tyde syner og drømmer, og formidle åpenbaringskunnskap med sunne bibelske rammer og etisk modenhet.',
+            'landing-pillar2-title': 'Dyp Bibelundervisning',
+            'landing-pillar2-desc': 'Gå i dybden på paktsteologi, eskatologi og hermeneutiske verktøy som ruster deg til å dele sannhetens ord rett.',
+            'landing-pillar3-title': 'Personlig Åndelig Veiledning',
+            'landing-pillar3-desc': 'Personlig oppfølging og disippelskap for din tjeneste. Vi hjelper deg å vokse i karakter og finne ditt spesifikke kall.',
+            'landing-network-title': 'Globale Profetiske Nettverk',
+            'landing-network-desc': 'Koble deg til bønnenettverk, misjonsreiser og tjenester over hele verden for å utvide ditt åndelige perspektiv.',
+            
+            'login-title': 'His Kingdom Prophets',
+            'login-subtitle': 'Logg inn på din åpenbaringsportal',
+            'login-instruction': 'Velg din rolle under for rask pålogging, eller skriv inn brukernavn og passord for å gå til dine studier.',
+            
+            'student-welcome-title': 'Velkommen tilbake til studiene,',
+            'student-welcome-subtitle': 'Du gjør fremragende fremgang i den profetiske tjeneste og hermeneutikk denne uken. Dine mentorer har publisert 2 nye studiehefter i biblioteket.',
+            'student-active-courses-title': 'Mine aktive kurs',
+            'student-live-gatherings-title': 'Live-undervisning & Bønn',
+            'student-next-gatherings-title': 'Neste samlinger',
+            'student-tasks-title': 'Mine gjøremål & oppgaver',
+            'student-stats-title': 'Studie-statistikk',
+            'student-quicklinks-title': 'Hurtiglenker og ressurser',
+            'student-announcements-title': 'Viktige Kunngjøringer',
+            
+            'teacher-welcome-title': 'Veiledningssenter & Mentorportal',
+            'teacher-welcome-subtitle': 'Oversikt over studentenes åndelige fremdrift, disippelskap og oppfølgingsvarsler.',
+            'teacher-academic-year': 'Aktuelt studieår: 2026',
+            'teacher-kpi1-label': 'Totalt Registrert',
+            'teacher-kpi2-label': 'Faglig Snittfremdrift',
+            'teacher-kpi3-label': 'Evalueringssnitt',
+            'teacher-kpi4-label': 'Studenter under oppfølging',
+            'teacher-actions-title': 'Administrative tjenester',
+            
+            'admin-cms-welcome': 'Velkommen til Mandal Regnskapskontor sitt administrative portal for His Kingdom Prophets. Tjen Herren med integritet.',
+            'admin-cms-title': 'Plattforminnhold (Assets)',
+            'admin-cms-subtitle': 'Velg et statisk tekstfelt eller systemkonfigurasjon for å gjøre endringer direkte i databasen.',
+       
+            'welcome-ready-title': 'Alt er klart, {name}!',
+            'welcome-ready-subtitle': 'Din profil er nå ferdig konfigurert. Du er registrert som student ved vår profetiske bibelskole og utrustningssenter.',
+            'welcome-card1-title': 'Utforsk studieplanen',
+            'welcome-card1-desc': 'Få tilgang til dine kurs i profetisk tjeneste, bibelundervisning og menighetsledelse.',
+            'welcome-card2-title': 'Bli med i bønnefellesskap',
+            'welcome-card2-desc': 'Koble deg på studiegrupper, del profetiske åpenbaringer og chat med dine medstudenter.',
+            'welcome-cta-btn': 'GÅ TIL MITT DASHBOARD',
+       
+            'layout-logo-title': 'His Kingdom Prophets',
+            'layout-search-placeholder': 'Søk i plattformen...',
+            'layout-upgrade-banner-title': 'Utvid tjenesten',
+            'layout-upgrade-banner-desc': 'Få ubegrenset tilgang til alle studieskrifter og veiledning.',
+            'layout-upgrade-banner-btn': 'Oppgrader profil'
+          };
+          await setDoc(cmsDocRef, initialCms);
+          setCmsContent(initialCms);
+          localStorage.setItem('hkm-cms-content', JSON.stringify(initialCms));
+        }
+      } catch (err) {
+        console.warn("Klarte ikke koble til Firestore for CMS-innhold. Bruker localStorage eller fallback:", err);
+      }
+    };
+    fetchCmsContent();
+  }, []);
+
+  useEffect(() => {
+    // Sync Firebase Auth status and user profile
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          const userDocRef = doc(db, "users", firebaseUser.uid);
+          const userSnap = await getDoc(userDocRef);
+          if (userSnap.exists()) {
+            setUser(userSnap.data());
+          } else {
+            const email = firebaseUser.email;
+            let role = 'student';
+            let name = email.split('@')[0];
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+            let avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
+
+            if (email.includes('teacher') || email.includes('david')) {
+              role = 'teacher';
+              name = 'Apostel David Hansen';
+              avatar = "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120";
+            } else if (email.includes('admin') || email.includes('siri')) {
+              role = 'admin';
+              name = 'Pastor Siri Knutsen';
+              avatar = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120";
+            }
+
+            const defaultProfile = {
+              uid: firebaseUser.uid,
+              name,
+              email,
+              role,
+              avatar,
+              phone: role === 'teacher' ? "+47 900 11 222" : "+47 900 00 000",
+              location: "Mandal, Norge",
+              birthYear: "1995",
+              bio: "",
+              ministry: "",
+              socialInstagram: "",
+              socialFacebook: ""
+            };
+            await setDoc(userDocRef, defaultProfile);
+            setUser(defaultProfile);
+          }
+          setIsLoggedIn(true);
+        } catch (err) {
+          console.error("Feil ved lasting av brukerprofil fra Firestore:", err);
+        }
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    // Sync courses from Firestore or seed if empty
+    const syncCourses = async () => {
+      try {
+        const coursesColRef = collection(db, "courses");
+        const snapshot = await getDocs(coursesColRef);
+        if (snapshot.empty) {
+          for (const course of INITIAL_COURSES) {
+            await setDoc(doc(db, "courses", course.id), course);
+          }
+          setCourses(INITIAL_COURSES);
+        } else {
+          const loadedCourses = snapshot.docs.map(d => d.data());
+          setCourses(loadedCourses);
+        }
+      } catch (err) {
+        console.warn("Klarte ikke synkronisere kurs fra Firestore, bruker standard:", err);
+      }
+    };
+    syncCourses();
+  }, []);
+
+  useEffect(() => {
+    // Sync students from Firestore or seed if empty
+    const syncStudents = async () => {
+      try {
+        const studentsColRef = collection(db, "students");
+        const snapshot = await getDocs(studentsColRef);
+        if (snapshot.empty) {
+          for (const student of INITIAL_STUDENTS) {
+            await setDoc(doc(db, "students", student.id), student);
+          }
+          setStudents(INITIAL_STUDENTS);
+        } else {
+          const loadedStudents = snapshot.docs.map(d => d.data());
+          setStudents(loadedStudents);
+        }
+      } catch (err) {
+        console.warn("Klarte ikke synkronisere studenter fra Firestore, bruker standard:", err);
+      }
+    };
+    syncStudents();
+  }, []);
+
+  useEffect(() => {
+    // Sync module approvals in realtime
+    try {
+      const approvalsColRef = collection(db, "module_approvals");
+      const unsubscribe = onSnapshot(approvalsColRef, (snapshot) => {
+        const approvalsList = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        setModuleApprovals(approvalsList);
+      });
+      return () => unsubscribe();
+    } catch (err) {
+      console.warn("Klarte ikke lytte på godkjenninger i Firestore:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Sync assignment activity
+    const syncAssignmentActivity = async () => {
+      if (!user?.email) return;
+      try {
+        const activityDocRef = doc(db, "assignment_activity", user.email.replace(/[^a-zA-Z0-9]/g, "_"));
+        const snap = await getDoc(activityDocRef);
+        if (snap.exists()) {
+          setAssignmentActivity(snap.data());
+        }
+      } catch (err) {
+        console.warn("Klarte ikke synkronisere oppgaveaktivitet fra Firestore:", err);
+      }
+    };
+    syncAssignmentActivity();
+  }, [user?.email]);
+
+  const updateCmsContent = async (slug, value) => {
     setCmsContent(prev => {
       const updated = { ...prev, [slug]: value };
       try {
@@ -401,7 +624,15 @@ export const AppProvider = ({ children }) => {
       }
       return updated;
     });
+
+    try {
+      const cmsDocRef = doc(db, "cms_configs", "default");
+      await setDoc(cmsDocRef, { [slug]: value }, { merge: true });
+    } catch (err) {
+      console.error("Feil ved oppdatering av CMS-innhold i Firestore:", err);
+    }
   };
+
   const [assignmentActivity, setAssignmentActivity] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('hkm-assignment-activity') || '{}');
@@ -432,7 +663,7 @@ export const AppProvider = ({ children }) => {
     }, 4000);
   };
 
-  // Change active user persona
+  // Change active user persona (offline mode / local fallback state trigger)
   const changePersona = (role) => {
     if (role === 'student') {
       setUser({
@@ -482,41 +713,83 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  // Login handler
-  const login = (email, password) => {
-    if (email.includes('teacher') || email.includes('david')) {
-      changePersona('teacher');
-    } else if (email.includes('admin') || email.includes('siri')) {
-      changePersona('admin');
-    } else {
-      changePersona('student');
+  // Login handler with Firebase Authentication & seed profile setup
+  const login = async (email, password) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password || "pass123");
+      showToast("Logget inn via Firebase!");
+    } catch (err) {
+      console.warn("Firebase Auth login failed, checking/creating demo account or offline fallback:", err.message);
+      const isDemo = email.includes('student@hiskingdomprophets.com') ||
+                      email.includes('david@hiskingdomprophets.com') ||
+                      email.includes('siri@hiskingdomprophets.com');
+      
+      if (isDemo) {
+        try {
+          await createUserWithEmailAndPassword(auth, email, password || "pass123");
+          showToast("Demo-bruker opprettet og logget inn!");
+          return;
+        } catch (regErr) {
+          console.warn("Could not create user (probably already exists), doing offline fallback");
+        }
+      }
+
+      if (email.includes('teacher') || email.includes('david')) {
+        changePersona('teacher');
+      } else if (email.includes('admin') || email.includes('siri')) {
+        changePersona('admin');
+      } else {
+        changePersona('student');
+      }
     }
   };
 
+  // Logout handler
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error("Feil under utlogging:", err);
+    }
+    changePersona('none');
+  };
+
   // Add course module (Course Builder action)
-  const addCourseModule = (courseId, moduleTitle) => {
+  const addCourseModule = async (courseId, moduleTitle) => {
+    let updatedCourse = null;
     setCourses(prevCourses => {
       return prevCourses.map(course => {
         if (course.id === courseId) {
           const newModule = {
             id: `new-${Date.now()}`,
             title: moduleTitle,
-            completed: false
+            completed: false,
+            ...defaultModuleContent()
           };
-          return {
+          updatedCourse = {
             ...course,
             totalModules: course.totalModules + 1,
             modules: [...course.modules, newModule]
           };
+          return updatedCourse;
         }
         return course;
       });
     });
+
+    if (updatedCourse) {
+      try {
+        await setDoc(doc(db, "courses", courseId), updatedCourse);
+      } catch (err) {
+        console.error("Klarte ikke lagre ny modul til Firestore:", err);
+      }
+    }
     showToast(`Modulen "${moduleTitle}" ble lagt til i kurset!`);
   };
 
   // Toggle module completed state
-  const toggleModuleCompleted = (courseId, moduleId) => {
+  const toggleModuleCompleted = async (courseId, moduleId) => {
+    let updatedCourse = null;
     setCourses(prevCourses => {
       return prevCourses.map(course => {
         if (course.id === courseId) {
@@ -528,41 +801,72 @@ export const AppProvider = ({ children }) => {
           });
           const completedCount = updatedModules.filter(m => m.completed).length;
           const progressPercent = Math.round((completedCount / updatedModules.length) * 100);
-          return {
+          updatedCourse = {
             ...course,
             modulesCompleted: completedCount,
             progress: progressPercent,
             modules: updatedModules
           };
+          return updatedCourse;
         }
         return course;
       });
     });
+
+    if (updatedCourse) {
+      try {
+        await setDoc(doc(db, "courses", courseId), updatedCourse);
+      } catch (err) {
+        console.error("Klarte ikke lagre fullført-status til Firestore:", err);
+      }
+    }
   };
 
   // Update top-level course metadata (title, code, instructor)
-  const updateCourse = (courseId, fields) => {
-    setCourses(prev => prev.map(c =>
-      c.id === courseId ? { ...c, ...fields } : c
-    ));
+  const updateCourse = async (courseId, fields) => {
+    let updatedCourse = null;
+    setCourses(prev => prev.map(c => {
+      if (c.id === courseId) {
+        updatedCourse = { ...c, ...fields };
+        return updatedCourse;
+      }
+      return c;
+    }));
+
+    if (updatedCourse) {
+      try {
+        await setDoc(doc(db, "courses", courseId), updatedCourse);
+      } catch (err) {
+        console.error("Klarte ikke lagre kursendringer til Firestore:", err);
+      }
+    }
     showToast('Kursinfo ble oppdatert!');
   };
 
   // Update a single module's title
-  const updateModule = (courseId, moduleId, fields) => {
+  const updateModule = async (courseId, moduleId, fields) => {
+    let updatedCourse = null;
     setCourses(prev => prev.map(course => {
       if (course.id !== courseId) return course;
-      return {
-        ...course,
-        modules: course.modules.map(m =>
-          m.id === moduleId ? { ...m, ...fields } : m
-        )
-      };
+      const updatedModules = course.modules.map(m =>
+        m.id === moduleId ? { ...m, ...fields } : m
+      );
+      updatedCourse = { ...course, modules: updatedModules };
+      return updatedCourse;
     }));
+
+    if (updatedCourse) {
+      try {
+        await setDoc(doc(db, "courses", courseId), updatedCourse);
+      } catch (err) {
+        console.error("Klarte ikke lagre modulendringer til Firestore:", err);
+      }
+    }
   };
 
   // Delete a module and recalculate progress
-  const deleteModule = (courseId, moduleId) => {
+  const deleteModule = async (courseId, moduleId) => {
+    let updatedCourse = null;
     setCourses(prev => prev.map(course => {
       if (course.id !== courseId) return course;
       const remaining = course.modules.filter(m => m.id !== moduleId);
@@ -570,19 +874,29 @@ export const AppProvider = ({ children }) => {
       const progressPercent = remaining.length
         ? Math.round((completedCount / remaining.length) * 100)
         : 0;
-      return {
+      updatedCourse = {
         ...course,
         modules: remaining,
         totalModules: remaining.length,
         modulesCompleted: completedCount,
         progress: progressPercent
       };
+      return updatedCourse;
     }));
+
+    if (updatedCourse) {
+      try {
+        await setDoc(doc(db, "courses", courseId), updatedCourse);
+      } catch (err) {
+        console.error("Klarte ikke slette modul i Firestore:", err);
+      }
+    }
     showToast('Modulen ble slettet fra studieplanen.');
   };
 
   // Move a module one step up or down in the list
-  const reorderModule = (courseId, moduleId, direction) => {
+  const reorderModule = async (courseId, moduleId, direction) => {
+    let updatedCourse = null;
     setCourses(prev => prev.map(course => {
       if (course.id !== courseId) return course;
       const mods = [...course.modules];
@@ -591,67 +905,100 @@ export const AppProvider = ({ children }) => {
       const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
       if (swapIdx < 0 || swapIdx >= mods.length) return course;
       [mods[idx], mods[swapIdx]] = [mods[swapIdx], mods[idx]];
-      return { ...course, modules: mods };
+      updatedCourse = { ...course, modules: mods };
+      return updatedCourse;
     }));
+
+    if (updatedCourse) {
+      try {
+        await setDoc(doc(db, "courses", courseId), updatedCourse);
+      } catch (err) {
+        console.error("Klarte ikke lagre rekkefølge i Firestore:", err);
+      }
+    }
   };
 
   // Send a module for approval to a reviewer
-  const sendModuleForApproval = (courseId, moduleId, reviewerId, senderNote) => {
+  const sendModuleForApproval = async (courseId, moduleId, reviewerId, senderNote) => {
     const course = courses.find(c => c.id === courseId);
     const mod = course?.modules.find(m => m.id === moduleId);
     if (!mod || !course) return;
 
-    // Remove any previous pending request for same module
-    setModuleApprovals(prev => [
-      ...prev.filter(a => !(a.courseId === courseId && a.moduleId === moduleId)),
-      {
-        id: `appr-${Date.now()}`,
-        courseId,
-        moduleId,
-        courseTitle: course.title,
-        courseCode: course.code,
-        moduleTitle: mod.title,
-        reviewerId,
-        senderNote: senderNote || '',
-        status: 'pending', // pending | approved | rejected
-        reviewerNote: '',
-        submittedAt: new Date().toLocaleString('no-NO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }),
-        reviewedAt: null
-      }
-    ]);
+    const approvalDocId = `appr-${courseId}-${moduleId}`;
+    const approvalPayload = {
+      id: approvalDocId,
+      courseId,
+      moduleId,
+      courseTitle: course.title,
+      courseCode: course.code,
+      moduleTitle: mod.title,
+      reviewerId,
+      senderNote: senderNote || '',
+      status: 'pending', // pending | approved | rejected
+      reviewerNote: '',
+      submittedAt: new Date().toLocaleString('no-NO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }),
+      reviewedAt: null
+    };
+
+    try {
+      await setDoc(doc(db, "module_approvals", approvalDocId), approvalPayload);
+    } catch (err) {
+      console.error("Klarte ikke lagre godkjenning i Firestore:", err);
+    }
 
     // Also set module status to pending on course
+    let updatedCourse = null;
     setCourses(prev => prev.map(c => {
       if (c.id !== courseId) return c;
-      return {
+      updatedCourse = {
         ...c,
         modules: c.modules.map(m =>
           m.id === moduleId ? { ...m, approvalStatus: 'pending' } : m
         )
       };
+      return updatedCourse;
     }));
+
+    if (updatedCourse) {
+      try {
+        await setDoc(doc(db, "courses", courseId), updatedCourse);
+      } catch (err) {
+        console.error("Klarte ikke oppdatere modulstatus i Firestore:", err);
+      }
+    }
 
     showToast(`Modulen er sendt til godkjenning!`);
   };
 
   // Approve or reject a module approval request
-  const reviewModuleApproval = (approvalId, action, reviewerNote) => {
-    setModuleApprovals(prev => prev.map(a => {
-      if (a.id !== approvalId) return a;
-      return {
-        ...a,
-        status: action, // 'approved' | 'rejected'
-        reviewerNote: reviewerNote || '',
-        reviewedAt: new Date().toLocaleString('no-NO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
-      };
-    }));
+  const reviewModuleApproval = async (approvalId, action, reviewerNote) => {
+    let approval = moduleApprovals.find(a => a.id === approvalId);
+    if (!approval) {
+      const parts = approvalId.split('-');
+      if (parts.length >= 3) {
+        const matching = moduleApprovals.find(a => a.courseId === parts[1] && a.moduleId === parts[2]);
+        if (matching) approval = matching;
+      }
+    }
+    
+    const payload = {
+      status: action, // 'approved' | 'rejected'
+      reviewerNote: reviewerNote || '',
+      reviewedAt: new Date().toLocaleString('no-NO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+    };
 
-    // Sync approval status back to module
-    const approval = moduleApprovals.find(a => a.id === approvalId);
+    try {
+      const docId = approval?.id || approvalId;
+      await updateDoc(doc(db, "module_approvals", docId), payload);
+    } catch (err) {
+      console.error("Klarte ikke oppdatere godkjenning i Firestore:", err);
+    }
+
     if (approval) {
+      let updatedCourse = null;
       setCourses(prev => prev.map(c => {
         if (c.id !== approval.courseId) return c;
-        return {
+        updatedCourse = {
           ...c,
           modules: c.modules.map(m =>
             m.id === approval.moduleId
@@ -659,7 +1006,16 @@ export const AppProvider = ({ children }) => {
               : m
           )
         };
+        return updatedCourse;
       }));
+
+      if (updatedCourse) {
+        try {
+          await setDoc(doc(db, "courses", approval.courseId), updatedCourse);
+        } catch (err) {
+          console.error("Klarte ikke oppdatere kurs i Firestore:", err);
+        }
+      }
     }
 
     const label = action === 'approved' ? 'godkjent ✓' : 'avvist ✗';
@@ -671,26 +1027,36 @@ export const AppProvider = ({ children }) => {
     showToast(`Veiledningsmelding sendt til ${studentName}!`);
   };
 
-  const submitAssignment = (assignmentId, submission) => {
-    setAssignmentActivity(prev => ({
-      ...prev,
+  const submitAssignment = async (assignmentId, submission) => {
+    const newActivity = {
+      ...assignmentActivity,
       [assignmentId]: {
-        ...(prev[assignmentId] || {}),
+        ...(assignmentActivity[assignmentId] || {}),
         status: 'submitted',
         submission,
         grade: null,
         score: null,
         feedback: null
       }
-    }));
+    };
+    setAssignmentActivity(newActivity);
+
+    if (user?.email) {
+      try {
+        const docId = user.email.replace(/[^a-zA-Z0-9]/g, "_");
+        await setDoc(doc(db, "assignment_activity", docId), newActivity);
+      } catch (err) {
+        console.error("Klarte ikke lagre oppgavebesvarelse i Firestore:", err);
+      }
+    }
     showToast('Oppgave besvart og sendt til vurdering!');
   };
 
-  const gradeAssignment = (assignmentId, gradeData) => {
-    setAssignmentActivity(prev => ({
-      ...prev,
+  const gradeAssignment = async (assignmentId, gradeData) => {
+    const newActivity = {
+      ...assignmentActivity,
       [assignmentId]: {
-        ...(prev[assignmentId] || {}),
+        ...(assignmentActivity[assignmentId] || {}),
         status: 'graded',
         grade: gradeData.grade,
         score: gradeData.score,
@@ -698,13 +1064,32 @@ export const AppProvider = ({ children }) => {
         gradedAt: new Date().toLocaleString('no-NO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }),
         gradedBy: user?.name || 'Lærer'
       }
-    }));
+    };
+    setAssignmentActivity(newActivity);
+
+    if (user?.email) {
+      try {
+        const docId = user.email.replace(/[^a-zA-Z0-9]/g, "_");
+        await setDoc(doc(db, "assignment_activity", docId), newActivity);
+      } catch (err) {
+        console.error("Klarte ikke lagre oppgavekarakter i Firestore:", err);
+      }
+    }
     showToast('Vurderingen er lagret og synlig for eleven.');
   };
 
   // Update user profile fields
-  const updateUserProfile = (fields) => {
+  const updateUserProfile = async (fields) => {
     setUser(prev => ({ ...prev, ...fields }));
+
+    if (auth.currentUser) {
+      try {
+        const userDocRef = doc(db, "users", auth.currentUser.uid);
+        await setDoc(userDocRef, fields, { merge: true });
+      } catch (err) {
+        console.error("Feil ved lagring av profil til Firestore:", err);
+      }
+    }
     showToast('Profilen din er oppdatert!');
   };
 
@@ -762,7 +1147,7 @@ export const AppProvider = ({ children }) => {
       isAssistantTyping,
       toastMessage,
       login,
-      logout: () => changePersona('none'),
+      logout,
       changePersona,
       updateUserProfile,
       addCourseModule,

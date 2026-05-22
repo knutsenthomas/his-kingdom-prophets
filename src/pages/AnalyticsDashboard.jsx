@@ -17,35 +17,7 @@ export default function AnalyticsDashboard() {
   };
 
   return (
-    <div className="bg-background min-h-screen flex flex-col font-sans text-on-background">
-      {/* Header */}
-      <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => navigate('/teacher/dashboard')}
-              className="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95 text-on-surface-variant hover:text-primary"
-            >
-              <ArrowLeft size={20} />
-            </button>
-            <div className="font-serif text-2xl font-bold text-primary">His Kingdom Prophets</div>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-semibold uppercase tracking-wider text-secondary px-3 py-1 bg-surface-container rounded-full flex items-center gap-1">
-              <BarChart3 size={12} /> Analytics & Reports
-            </span>
-            <img 
-              src={user?.avatar} 
-              alt={user?.name} 
-              className="w-10 h-10 rounded-full border-2 border-primary-container shadow"
-            />
-          </div>
-        </div>
-      </header>
-
-      {/* Main Container */}
-      <main className="flex-grow w-full max-w-[1440px] mx-auto px-6 md:px-12 py-12 flex flex-col gap-8">
+    <div className="w-full px-4 sm:px-6 md:px-12 py-6 md:py-12 flex flex-col gap-6 md:gap-8 font-sans">
         
         {/* Intro */}
         {/* Intro */}
@@ -224,10 +196,6 @@ export default function AnalyticsDashboard() {
           </div>
 
         </div>
-      </main>
-
-      {/* Floating HKM Chat Widget */}
-      <HkmChatWidget />
     </div>
   );
 }

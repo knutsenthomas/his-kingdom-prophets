@@ -233,11 +233,11 @@ function AppRoutes() {
         <Route path="/teacher/grades-calc" element={<GradesCalculator />} />
         <Route path="/teacher/notifications" element={<NotificationCenter />} />
         <Route path="/teacher/profile" element={<TeacherProfile />} />
+        
+        {/* Admin Portal */}
+        <Route path="/admin/cms" element={<CMSDashboard />} />
+        <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
       </Route>
-
-      {/* Admin Portal */}
-      <Route path="/admin/cms" element={<CMSDashboard />} />
-      <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
 
       {/* Email Previews */}
       <Route path="/email/previews" element={<EmailPreviews />} />

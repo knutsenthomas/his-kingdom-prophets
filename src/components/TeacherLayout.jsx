@@ -4,7 +4,8 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Compass, Users, AlertTriangle, ClipboardList, BookOpen, 
-  Award, Bell, Power, Menu, ChevronLeft, Sliders, Video, User
+  Award, Bell, Power, Menu, ChevronLeft, Sliders, Video, User,
+  Languages, BarChart3
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 import CmsText from '@/components/CmsText';
@@ -28,7 +29,7 @@ export default function TeacherLayout() {
   }, [isCollapsed]);
 
   useEffect(() => {
-    if (user?.role && user.role !== 'teacher') {
+    if (user?.role && user.role !== 'teacher' && user.role !== 'admin') {
       changePersona('teacher');
     }
   }, [user?.role, changePersona]);
@@ -47,6 +48,13 @@ export default function TeacherLayout() {
     { name: 'Varslingssenter', path: '/teacher/notifications', icon: Bell },
     { name: 'Min lærerprofil', path: '/teacher/profile', icon: User }
   ];
+
+  if (user?.role === 'admin' || user?.role === 'teacher') {
+    navItems.push({ name: 'Global CMS Styring', path: '/admin/cms', icon: Languages });
+  }
+  if (user?.role === 'admin') {
+    navItems.push({ name: 'Analytics Dashboard', path: '/admin/analytics', icon: BarChart3 });
+  }
 
   return (
     <div className="bg-background min-h-screen flex flex-col font-sans text-on-surface">
@@ -69,7 +77,7 @@ export default function TeacherLayout() {
             >
               <span className="truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
               <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 sm:px-3 py-1 rounded-full shrink-0">
-                Mentor
+                {user?.role === 'admin' ? 'Admin' : 'Mentor'}
               </span>
             </div>
           </div>

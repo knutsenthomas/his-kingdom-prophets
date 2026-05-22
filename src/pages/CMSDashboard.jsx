@@ -2,7 +2,12 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import HkmChatWidget from '@/components/HkmChatWidget';
+import { 
+  Globe, History, Download, Upload, Search, Settings, AlertTriangle, 
+  ChevronLeft, ChevronRight, MoreVertical, X, CheckCircle2, Trash2, 
+  Copy, PlusCircle, Languages, Info, RotateCcw, Layout, UserCheck, 
+  BookOpen, Users, Rocket, Flag, UploadCloud
+} from 'lucide-react';
 
 // Definition of all CMS strings with labels, categories, and explanatory descriptions
 const assetDefinitions = [
@@ -100,7 +105,6 @@ export default function CMSDashboard() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState({ title: '', desc: '' });
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeMenuRow, setActiveMenuRow] = useState(null);
 
   // Initialize draftContent as a clean local copy of global cmsContent state
@@ -197,7 +201,7 @@ export default function CMSDashboard() {
     setIsPublishing(false);
     setToastMessage({
       title: 'Endringene ble publisert!',
-      desc: 'Innholdet er nå oppdatert i Supabase og synkronisert til produksjons-CDNs.'
+      desc: 'Innholdet er nå oppdatert i databasen og synkronisert på tvers av plattformen.'
     });
     setShowToast(true);
     setTimeout(() => {
@@ -222,12 +226,12 @@ export default function CMSDashboard() {
   // Category Tabs metadata and live count computations
   const categories = useMemo(() => {
     return [
-      { id: 'all', title: 'General Strings', section: 'System', icon: 'public', count: assetDefinitions.length },
-      { id: 'landing', title: 'Landing Page', section: 'Hjemmeside', icon: 'web', count: assetDefinitions.filter(d => d.section === 'Hjemmeside').length },
-      { id: 'auth', title: 'Auth Flow', section: 'Innlogging', icon: 'login', count: assetDefinitions.filter(d => d.section === 'Innlogging').length },
-      { id: 'student', title: 'Student Portal', section: 'Studentportal', icon: 'school', count: assetDefinitions.filter(d => d.section === 'Studentportal').length },
-      { id: 'teacher', title: 'Teacher Portal', section: 'Mentorportal', icon: 'assignment_ind', count: assetDefinitions.filter(d => d.section === 'Mentorportal').length },
-      { id: 'onboarding', title: 'Onboarding Flow', section: 'Onboarding', icon: 'rocket_launch', count: assetDefinitions.filter(d => d.section === 'Onboarding').length }
+      { id: 'all', title: 'General Strings', section: 'System', icon: Globe, count: assetDefinitions.length },
+      { id: 'landing', title: 'Landing Page', section: 'Hjemmeside', icon: Layout, count: assetDefinitions.filter(d => d.section === 'Hjemmeside').length },
+      { id: 'auth', title: 'Auth Flow', section: 'Innlogging', icon: UserCheck, count: assetDefinitions.filter(d => d.section === 'Innlogging').length },
+      { id: 'student', title: 'Student Portal', section: 'Studentportal', icon: BookOpen, count: assetDefinitions.filter(d => d.section === 'Studentportal').length },
+      { id: 'teacher', title: 'Teacher Portal', section: 'Mentorportal', icon: Users, count: assetDefinitions.filter(d => d.section === 'Mentorportal').length },
+      { id: 'onboarding', title: 'Onboarding Flow', section: 'Onboarding', icon: Rocket, count: assetDefinitions.filter(d => d.section === 'Onboarding').length }
     ];
   }, []);
 
@@ -407,183 +411,107 @@ export default function CMSDashboard() {
     { id: 4, date: 'I dag - 17:45', author: 'Siri Hansen (Administrator)', action: 'Oppdaterte landing-hero-title til "His Kingdom prophets"' },
     { id: 3, date: 'I dag - 14:20', author: 'Siri Hansen (Administrator)', action: 'La inn engelske oversettelser for student-welcome-subtitle' },
     { id: 2, date: 'I går - 09:15', author: 'Thomas Knutsen (Utvikler)', action: 'Konfigurerte onboarding felt-strings for nye studentprofiler' },
-    { id: 1, date: '20. Mai - 10:00', author: 'System (Initialisering)', action: 'Opprettet database tabeller og importerte standard språknøkler' }
+    { id: 1, date: '20. Mai - 10:00', author: 'System (Initialisering)', action: 'Etablerte CMS-språkbase med 75 nøkler' }
   ];
 
   return (
-    <div className="bg-background text-on-background font-body-md text-body-md overflow-hidden h-screen flex relative">
+    <div className="w-full px-4 sm:px-6 md:px-12 py-6 md:py-12 flex flex-col gap-6 md:gap-8 font-sans">
       
-      {/* 1. Portal Navigation Sidebar Panel (Left Side - Desktop style) */}
-      <aside className={`fixed left-0 top-0 h-full w-[280px] bg-surface-container border-r border-outline-variant flex flex-col py-4 z-50 transition-transform duration-300 lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
-        
-        {/* Sidebar Header */}
-        <div className="px-6 py-8 flex flex-col gap-2">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary rounded flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
-              <span className="material-symbols-outlined text-white text-2xl">shield</span>
-            </div>
-            <h1 className="font-headline-sm text-headline-sm font-bold text-primary">Admin Portal</h1>
-          </div>
-          <p className="font-label-md text-label-md text-on-surface-variant">Institutional Access</p>
-        </div>
-
-        {/* Navigation Routes */}
-        <nav className="flex-1 px-3 space-y-1 overflow-y-auto scrollbar-hide">
-          <button 
-            onClick={() => navigate('/teacher/dashboard')}
-            className="w-full flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-high transition-all rounded text-left"
+      {/* Dynamic Notification Bar for unsaved modifications */}
+      <AnimatePresence>
+        {unsavedCount > 0 && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="bg-amber-500/10 border border-amber-500/30 text-amber-900 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-sm select-none"
           >
-            <span className="material-symbols-outlined text-outline">dashboard</span>
-            <span className="font-label-md text-label-md">Dashboard</span>
-          </button>
-          
-          <button 
-            onClick={() => navigate('/teacher/course-builder')}
-            className="w-full flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-high transition-all rounded text-left"
-          >
-            <span className="material-symbols-outlined text-outline">architecture</span>
-            <span className="font-label-md text-label-md">Course Builder</span>
-          </button>
-          
-          <button 
-            onClick={() => navigate('/teacher/media-library')}
-            className="w-full flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-high transition-all rounded text-left"
-          >
-            <span className="material-symbols-outlined text-outline">video_library</span>
-            <span className="font-label-md text-label-md">Media Library</span>
-          </button>
-          
-          <button 
-            onClick={() => navigate('/teacher/follow-up')}
-            className="w-full flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-high transition-all rounded text-left"
-          >
-            <span className="material-symbols-outlined text-outline">group</span>
-            <span className="font-label-md text-label-md">Student Management</span>
-          </button>
-          
-          {/* Active Navigation: CMS Text Management */}
-          <button 
-            onClick={() => navigate('/admin/cms')}
-            className="w-full flex items-center gap-3 px-4 py-3 text-primary dark:text-primary-fixed font-bold bg-surface-bright border-l-4 border-primary translate-x-1 transition-transform duration-200 rounded-r text-left shadow-sm"
-          >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>translate</span>
-            <span className="font-label-md text-label-md">Text Management</span>
-          </button>
-        </nav>
-
-        {/* Sidebar Footer Controls */}
-        <div className="px-3 border-t border-outline-variant pt-4 pb-4">
-          <button 
-            onClick={() => navigate('/teacher/profile')}
-            className="w-full flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-high transition-all rounded text-left"
-          >
-            <span className="material-symbols-outlined text-outline">settings</span>
-            <span className="font-label-md text-label-md">Settings</span>
-          </button>
-          
-          <button 
-            onClick={() => navigate('/teacher/notifications')}
-            className="w-full flex items-center gap-3 px-4 py-3 text-on-secondary-container hover:bg-surface-container-high transition-all rounded text-left"
-          >
-            <span className="material-symbols-outlined text-outline">contact_support</span>
-            <span className="font-label-md text-label-md">Support</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Mobile Drawer Backdrop overlay */}
-      {isSidebarOpen && (
-        <div 
-          onClick={() => setIsSidebarOpen(false)}
-          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
-        />
-      )}
-
-      {/* 2. Main Workspace Canvas */}
-      <main className="flex-1 lg:ml-[280px] h-full flex flex-col relative bg-surface-container-low overflow-hidden">
-        
-        {/* 2a. TopAppBar Header Component */}
-        <header className="h-16 flex justify-between items-center px-8 bg-surface-container-lowest border-b border-outline-variant z-40 sticky top-0 shrink-0 select-none">
-          <div className="flex items-center gap-4">
-            {/* Hamburger menu for small screens */}
-            <button 
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="lg:hidden p-2 text-on-surface-variant hover:bg-surface-container rounded-lg"
-            >
-              <span className="material-symbols-outlined">menu</span>
-            </button>
-
-            <span className="font-headline-md text-headline-md font-bold text-primary">His Kingdom Prophets</span>
-            <div className="h-8 w-px bg-outline-variant hidden sm:block"></div>
-            <h2 className="font-headline-sm text-headline-sm text-on-surface hidden sm:block">Global Text Management</h2>
-          </div>
-
-          {/* Search and Profile Controls */}
-          <div className="flex items-center gap-4">
-            <div className="relative flex items-center bg-surface-container px-3 py-2 rounded-lg w-96 border border-transparent focus-within:border-primary transition-all">
-              <span className="material-symbols-outlined text-outline text-body-md">search</span>
-              <input 
-                ref={searchInputRef}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-transparent border-none outline-none focus:ring-0 text-body-sm w-full ml-2 text-on-surface placeholder:text-outline/70" 
-                placeholder="Search keys or strings..." 
-                type="text"
-              />
-              <span className="text-xs text-outline font-mono-sm select-none">⌘K</span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => navigate('/teacher/notifications')}
-                className="p-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full relative"
-              >
-                <span className="material-symbols-outlined">notifications</span>
-                <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
-              </button>
-              
-              <button className="p-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full hidden sm:block">
-                <span className="material-symbols-outlined">help</span>
-              </button>
-
-              <div className="w-8 h-8 rounded-full overflow-hidden border border-outline-variant shrink-0 ml-2">
-                <img 
-                  alt={user?.name || "Administrator profile"} 
-                  src={user?.avatar || "https://lh3.googleusercontent.com/aida-public/AB6AXuDnJX1ZfjeM1N_YJdkzoYf_gcO0Ky5k2RPUu8-II-cQ9cgz_CV-jDSFGQVU91zQ2kjux7jN3Kc0TvIUN8HPvA1kUIPvkFCM00uHZMTlnjo5QH-b3SMB-iQjp1WUu1-fjTZ0CsudBYVkQvoErcJQqHh76P3zwgpsehqA9fOStb1RLl3JYM0y0rvVuwy9agWBtBUY_ncDWMgyCO8z43jlPoTric8DXL1cVgE6nuqEYLiUZHiuPDI8ad4W8sjyHZ8z4WE9hAdSmEIqCd4"} 
-                  className="w-full h-full object-cover"
-                />
+            <div className="flex items-center gap-3">
+              <AlertTriangle className="text-amber-600 shrink-0" size={24} />
+              <div className="text-xs">
+                <span className="font-bold">Ulagrede endringer i utkast!</span>
+                <p className="text-amber-800 mt-0.5 font-medium">Du har endret {unsavedCount} tekstfelt som ikke er publisert til databasen ennå.</p>
               </div>
             </div>
-          </div>
-        </header>
+            <button 
+              onClick={handleDiscardChanges}
+              className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold shadow transition-all flex items-center gap-1.5 shrink-0 active:scale-[0.98]"
+            >
+              <RotateCcw size={14} /> Forkast endringer
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        {/* Sub-Layout: Categories and Table */}
-        <div className="flex-grow flex overflow-hidden">
-          
-          {/* 2b. Category Selector (Left Rail) */}
-          <div className="w-64 bg-surface-container-lowest border-r border-outline-variant flex flex-col p-6 shrink-0 hidden md:flex select-none">
-            <h3 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4">View Categories</h3>
-            <ul className="space-y-1 flex-grow overflow-y-auto scrollbar-hide">
+      {/* Page Header and Main Controls */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="font-serif text-2xl md:text-4xl font-bold text-primary flex items-center gap-2">
+            <Languages className="text-primary shrink-0" size={32} /> Global CMS Styring
+          </h1>
+          <p className="text-xs sm:text-sm text-on-surface-variant mt-1 font-medium">
+            Administrer og rediger all tekst på alle sider i Mandal Regnskapskontor og His Kingdom Prophets-plattformen.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <button 
+            onClick={() => setIsHistoryOpen(true)}
+            className="px-4 py-2 border border-outline-variant hover:border-primary text-xs font-bold uppercase rounded-lg bg-white flex items-center gap-1.5 hover:text-primary transition-all active:scale-95 shadow-sm"
+          >
+            <History size={16} /> Revisjonshistorikk
+          </button>
+          <button 
+            onClick={handlePublish}
+            disabled={isPublishing}
+            className="px-6 py-2 bg-[#1B4965] hover:bg-[#1B4965]/90 text-white text-xs font-bold uppercase rounded-lg shadow-sm flex items-center gap-1.5 transition-all active:scale-95 disabled:opacity-60 shrink-0"
+          >
+            {isPublishing ? (
+              <>
+                <svg className="animate-spin h-4 w-4 mr-1 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Publiserer...
+              </>
+            ) : (
+              <>
+                <UploadCloud size={16} /> Publiser endringer
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Main Grid: Left side category tabs & Right side editor */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        {/* Categories Rail (Left 3 cols) */}
+        <div className="lg:col-span-3 flex flex-col gap-6 bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm">
+          <div>
+            <h3 className="font-serif text-base font-bold text-primary border-b border-outline-variant/30 pb-3 mb-4 flex items-center gap-2">
+              <Settings className="text-primary" size={20} /> Kategori
+            </h3>
+            <ul className="space-y-1.5">
               {categories.map(tab => {
                 const isActive = selectedCategory === tab.id;
+                const IconComponent = tab.icon;
                 return (
                   <li key={tab.id}>
                     <button 
                       onClick={() => setSelectedCategory(tab.id)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-left ${
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-left text-xs font-semibold ${
                         isActive 
-                          ? 'bg-primary-fixed text-on-primary-fixed font-bold' 
-                          : 'text-on-surface-variant hover:bg-surface-container-low group'
+                          ? 'bg-primary/5 text-primary border-l-4 border-primary shadow-sm font-bold' 
+                          : 'text-on-surface-variant hover:bg-slate-50 hover:text-primary'
                       }`}
                     >
-                      <span className="flex items-center gap-2 font-label-md text-label-md">
-                        <span className={`material-symbols-outlined text-[18px] ${isActive ? 'text-on-primary-fixed' : 'text-outline group-hover:text-primary transition-colors'}`}>
-                          {tab.icon}
-                        </span>
+                      <span className="flex items-center gap-2">
+                        <IconComponent size={16} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
                         {tab.title}
                       </span>
-                      <span className={`text-xs px-1.5 py-0.5 rounded font-label-md ${
-                        isActive ? 'bg-primary text-white' : 'text-outline bg-surface-container'
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
+                        isActive ? 'bg-primary text-white' : 'text-outline bg-slate-100'
                       }`}>
                         {tab.count}
                       </span>
@@ -592,17 +520,17 @@ export default function CMSDashboard() {
                 );
               })}
             </ul>
+          </div>
 
-            {/* Export and Import Actions Panel */}
-            <div className="mt-10 pt-6 border-t border-outline-variant shrink-0">
-              <h3 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4">Export / Import</h3>
-              
+          {/* Export / Import Panel */}
+          <div className="border-t border-outline-variant/30 pt-5">
+            <h3 className="font-serif text-base font-bold text-primary mb-3">Eksporter / Importer</h3>
+            <div className="flex flex-col gap-2">
               <button 
                 onClick={handleExportJSON}
-                className="w-full flex items-center gap-2 px-3 py-2 text-primary border border-primary hover:bg-primary-fixed transition-colors rounded-lg mb-2 active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-primary border border-primary/20 hover:border-primary hover:bg-primary/5 transition-all rounded-lg active:scale-95 bg-white shadow-sm"
               >
-                <span className="material-symbols-outlined text-[18px]">download</span>
-                <span className="font-label-md">Export JSON</span>
+                <Download size={14} /> Eksporter JSON
               </button>
 
               <input 
@@ -614,274 +542,225 @@ export default function CMSDashboard() {
               />
               <button 
                 onClick={handleImportClick}
-                className="w-full flex items-center gap-2 px-3 py-2 text-on-surface-variant border border-outline-variant hover:bg-surface-container-low transition-colors rounded-lg active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-on-surface border border-outline-variant/30 hover:border-primary hover:bg-slate-50 transition-all rounded-lg active:scale-95 bg-white shadow-sm"
               >
-                <span className="material-symbols-outlined text-[18px]">upload</span>
-                <span className="font-label-md">Import CSV / JSON</span>
+                <Upload size={14} /> Importer CSV / JSON
               </button>
             </div>
           </div>
+        </div>
 
-          {/* 2c. Content Area: String Editor */}
-          <div className="flex-1 overflow-y-auto p-8 relative scroll-smooth h-full">
-            <div className="max-w-6xl mx-auto flex flex-col gap-6">
+        {/* Editor Area (Right 9 cols) */}
+        <div className="lg:col-span-9 flex flex-col gap-6">
+          
+          {/* Filters Card */}
+          <div className="bg-white border border-outline-variant/30 rounded-xl p-4 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 select-none">
+            <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto">
+              
+              {/* Search input in toolbar */}
+              <div className="relative flex items-center bg-slate-50 border border-outline-variant/40 rounded-lg px-3 py-1.5 w-full sm:w-64 md:w-80 focus-within:border-primary transition-all">
+                <Search className="text-outline shrink-0" size={18} />
+                <input 
+                  ref={searchInputRef}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="bg-transparent border-none outline-none focus:ring-0 text-xs w-full ml-2 text-on-surface placeholder:text-outline/70" 
+                  placeholder="Søk i språknøkler..." 
+                  type="text"
+                />
+                <span className="text-[10px] text-outline font-mono select-none shrink-0 ml-2">⌘K</span>
+              </div>
 
-              {/* Dynamic Notification Bar for unsaved modifications */}
-              <AnimatePresence>
-                {unsavedCount > 0 && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="bg-amber-500/10 border border-amber-500/30 text-amber-900 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-sm select-none"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="material-symbols-outlined text-amber-600 text-[24px]">warning</span>
-                      <div className="text-xs">
-                        <span className="font-bold">Ulagrede endringer i utkast!</span>
-                        <p className="text-amber-800 mt-0.5">Du har endret {unsavedCount} tekstfelt som ikke er publisert til databasen ennå.</p>
+              {/* Seksjon selector for small screens */}
+              <div className="flex items-center gap-2 md:hidden">
+                <span className="text-xs font-bold text-on-surface-variant">Seksjon:</span>
+                <select 
+                  value={selectedCategory} 
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="bg-slate-50 border border-outline-variant/30 rounded-lg text-xs py-1.5 pl-3 pr-8 focus:ring-primary focus:border-primary font-medium"
+                >
+                  <option value="all">General Strings</option>
+                  <option value="landing">Landing Page</option>
+                  <option value="auth">Auth Flow</option>
+                  <option value="student">Student Portal</option>
+                  <option value="teacher">Teacher Portal</option>
+                  <option value="onboarding">Onboarding Flow</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-on-surface-variant">Filter:</span>
+                <select 
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="bg-slate-50 border border-outline-variant/30 rounded-lg text-xs py-1.5 pl-3 pr-8 focus:ring-primary focus:border-primary font-medium"
+                >
+                  <option>All Statuses</option>
+                  <option>Draft</option>
+                  <option>Published</option>
+                  <option>Missing Translation</option>
+                </select>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-on-surface-variant">Sortering:</span>
+                <select 
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="bg-slate-50 border border-outline-variant/30 rounded-lg text-xs py-1.5 pl-3 pr-8 focus:ring-primary focus:border-primary font-medium"
+                >
+                  <option>Newest First</option>
+                  <option>Alphabetical (Key)</option>
+                  <option>Recently Modified</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="text-xs font-semibold text-outline shrink-0 ml-auto sm:ml-0">
+              Viser {totalItems === 0 ? 0 : (currentPage - 1) * rowsPerPage + 1}-{Math.min(currentPage * rowsPerPage, totalItems)} av {totalItems} strenger
+            </div>
+          </div>
+
+          {/* Grid Container */}
+          <div className="space-y-4">
+            
+            {/* Columns Header (large screen only) */}
+            <div className="hidden md:grid grid-cols-12 gap-6 px-6 py-2 text-outline font-bold uppercase tracking-wider select-none border-b border-outline-variant/20 text-[10px]">
+              <div className="col-span-3">Nøkkel / ID</div>
+              <div className="col-span-4 flex items-center gap-1.5">
+                <Flag size={14} className="text-outline" /> Norsk (NB)
+              </div>
+              <div className="col-span-4 flex items-center gap-1.5">
+                <Globe size={14} className="text-outline" /> Engelsk (EN)
+              </div>
+              <div className="col-span-1 text-center">Status</div>
+            </div>
+
+            {/* Empty State */}
+            {paginatedAssets.length === 0 && (
+              <div className="bg-white border border-dashed border-outline-variant/50 rounded-2xl p-16 text-center text-outline select-none shadow-sm">
+                <Info className="text-outline-variant mx-auto mb-3" size={48} />
+                <p className="font-serif text-lg font-bold text-primary">Ingen treff</p>
+                <p className="text-xs mt-1 text-on-surface-variant font-medium">
+                  Ingen språknøkler matcher valgte søk eller filterkriterier.
+                </p>
+              </div>
+            )}
+
+            {/* Content Rows */}
+            {paginatedAssets.map(asset => {
+              const slug = asset.slug;
+              const valNo = draftContent[slug] || '';
+              const valEn = draftContent[slug + '-en'] || '';
+
+              // Compute status dynamically
+              const isMissing = !valNo.trim() || !valEn.trim();
+              
+              const savedNo = cmsContent[slug] || '';
+              const savedEn = cmsContent[slug + '-en'] || '';
+              
+              // Prefilled fallbacks checking
+              const defaultNo = slug === 'nav.dashboard.title' ? 'Oversikt' :
+                                slug === 'btn.submit.primary' ? 'Send inn endringer' :
+                                slug === 'msg.welcome.student' ? 'Velkommen tilbake, {{name}}! Klar for å lære i dag?' :
+                                slug === 'nav.settings.account' ? 'Kontoinnstillinger' : '';
+              
+              const defaultEn = slug === 'nav.dashboard.title' ? 'Dashboard' :
+                                slug === 'btn.submit.primary' ? 'Submit Changes' :
+                                slug === 'msg.welcome.student' ? 'Welcome back, {{name}}! Ready to learn today?' :
+                                slug === 'error.auth.forbidden' ? 'You do not have permission to view this resource.' :
+                                slug === 'nav.settings.account' ? 'Account Settings' : '';
+
+              const baseNo = savedNo || defaultNo;
+              const baseEn = savedEn || defaultEn;
+
+              const isDraft = valNo !== baseNo || valEn !== baseEn;
+
+              // CSS classes for textareas
+              const noTextareaClass = `w-full bg-slate-50 border border-outline-variant/30 rounded-lg text-xs focus:ring-1 focus:ring-primary focus:border-primary py-2 px-3 resize-none ${
+                isMissing && !valNo.trim() 
+                  ? 'bg-red-50/50 border-dashed border-red-300 focus:ring-red-500 focus:border-red-500 placeholder:text-red-400' 
+                  : (valNo !== baseNo) 
+                    ? 'border-2 border-primary/30 bg-white' 
+                    : 'hover:border-outline-variant/60'
+              }`;
+
+              const enTextareaClass = `w-full bg-slate-50 border border-outline-variant/30 rounded-lg text-xs focus:ring-1 focus:ring-primary focus:border-primary py-2 px-3 resize-none ${
+                isMissing && !valEn.trim() 
+                  ? 'bg-red-50/50 border-dashed border-red-300 focus:ring-red-500 focus:border-red-500 placeholder:text-red-400' 
+                  : (valEn !== baseEn) 
+                    ? 'border-2 border-primary/30 bg-white' 
+                    : 'hover:border-outline-variant/60'
+              }`;
+
+              const isMenuOpen = activeMenuRow === slug;
+
+              return (
+                <div 
+                  key={slug}
+                  className={`group bg-white border transition-all p-5 rounded-xl flex flex-col gap-4 shadow-sm hover:shadow ${
+                    isMissing 
+                      ? 'border-dashed border-red-300 hover:border-red-500' 
+                      : 'border-outline-variant/30 hover:border-[#1B4965]'
+                  }`}
+                >
+                  <div className="grid grid-cols-1 grid-flow-row md:grid-cols-12 gap-4 items-start" style={{ display: 'block' }}>
+                    <div className="flex flex-col md:grid md:grid-cols-12 gap-4 items-start">
+                      {/* Key Info Column */}
+                      <div className="md:col-span-3 pt-1 select-none w-full">
+                        <code className={`font-mono text-[11px] px-2 py-1 rounded break-all font-bold ${
+                          isMissing ? 'text-red-600 bg-red-50' : 'text-primary bg-primary/5'
+                        }`}>
+                          {slug}
+                        </code>
+                        <p className="text-[11px] text-outline mt-2 leading-tight font-medium">
+                          {asset.description || 'Systemkonfigurasjon for tekstnøkkel.'}
+                        </p>
                       </div>
-                    </div>
-                    <button 
-                      onClick={handleDiscardChanges}
-                      className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold shadow transition-all flex items-center gap-1.5 shrink-0"
-                    >
-                      <span className="material-symbols-outlined text-[16px]">restart_alt</span> Forkast endringer
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
 
-              {/* Page Header Controls */}
-              <div className="flex justify-between items-end mb-4 select-none">
-                <div>
-                  <div className="flex items-center gap-2 text-primary mb-2">
-                    <span className="material-symbols-outlined">public</span>
-                    <span className="font-label-md uppercase tracking-widest">Global Resources</span>
-                  </div>
-                  <h3 className="font-headline-md text-headline-md text-on-surface">
-                    {selectedCategory === 'all' ? 'General Strings' : categories.find(c => c.id === selectedCategory)?.title}
-                  </h3>
-                  <p className="text-on-surface-variant mt-1">
-                    Manage common navigation labels, button text, and system messages across all modules.
-                  </p>
-                </div>
-                <div className="flex gap-4">
-                  <button 
-                    onClick={() => setIsHistoryOpen(true)}
-                    className="px-6 py-2.5 rounded-full border border-outline text-on-surface font-label-md hover:bg-surface-container-high transition-all flex items-center gap-2 active:scale-[0.98]"
-                  >
-                    <span className="material-symbols-outlined text-[20px]">history</span>
-                    View Revision History
-                  </button>
-                  <button 
-                    onClick={handlePublish}
-                    disabled={isPublishing}
-                    className="px-8 py-2.5 rounded-full bg-primary text-on-primary font-bold font-label-md shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-100 transition-all flex items-center gap-2 disabled:opacity-60"
-                  >
-                    {isPublishing ? (
-                      <>
-                        <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Publishing...
-                      </>
-                    ) : (
-                      <>
-                        <span className="material-symbols-outlined text-[20px]">publish</span>
-                        Publish Changes
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Toolbar Filters */}
-              <div className="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 mb-2 flex flex-wrap items-center justify-between gap-6 select-none shadow-sm">
-                <div className="flex flex-wrap items-center gap-6">
-                  {/* Category selector on mobile only */}
-                  <div className="flex items-center gap-3 md:hidden">
-                    <span className="font-label-md text-on-surface-variant">Seksjon:</span>
-                    <select 
-                      value={selectedCategory} 
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="bg-surface-container-low border-none rounded-lg text-body-sm focus:ring-primary py-1.5 px-4 pr-10"
-                    >
-                      <option value="all">General Strings</option>
-                      <option value="landing">Landing Page</option>
-                      <option value="auth">Auth Flow</option>
-                      <option value="student">Student Portal</option>
-                      <option value="teacher">Teacher Portal</option>
-                      <option value="onboarding">Onboarding Flow</option>
-                    </select>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <span className="font-label-md text-on-surface-variant">Filter by:</span>
-                    <select 
-                      value={filterStatus}
-                      onChange={(e) => setFilterStatus(e.target.value)}
-                      className="bg-surface-container-low border-none rounded-lg text-body-sm focus:ring-primary py-1.5 px-4 pr-10"
-                    >
-                      <option>All Statuses</option>
-                      <option>Draft</option>
-                      <option>Published</option>
-                      <option>Missing Translation</option>
-                    </select>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <span className="font-label-md text-on-surface-variant">Sort:</span>
-                    <select 
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="bg-surface-container-low border-none rounded-lg text-body-sm focus:ring-primary py-1.5 px-4 pr-10"
-                    >
-                      <option>Newest First</option>
-                      <option>Alphabetical (Key)</option>
-                      <option>Recently Modified</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-on-surface-variant">
-                    Showing {totalItems === 0 ? 0 : (currentPage - 1) * rowsPerPage + 1}-{Math.min(currentPage * rowsPerPage, totalItems)} of {totalItems} strings
-                  </span>
-                </div>
-              </div>
-
-              {/* String Grid */}
-              <div className="space-y-4">
-                
-                {/* Header for grid columns */}
-                <div className="grid grid-cols-12 gap-6 px-6 py-2 text-on-surface-variant font-label-md uppercase tracking-wider select-none border-b border-outline-variant/35">
-                  <div className="col-span-3">Key / Identifier</div>
-                  <div className="col-span-4 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[18px]">flag</span>
-                    Norwegian (NB)
-                  </div>
-                  <div className="col-span-4 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[18px]">public</span>
-                    English (EN)
-                  </div>
-                  <div className="col-span-1 text-center">Status</div>
-                </div>
-
-                {/* Empty State */}
-                {paginatedAssets.length === 0 && (
-                  <div className="bg-surface-container-lowest border border-dashed border-outline-variant rounded-2xl p-16 text-center text-outline select-none">
-                    <span className="material-symbols-outlined text-[48px] text-outline-variant mb-3">info</span>
-                    <p className="font-headline-sm text-headline-sm">Ingen treff</p>
-                    <p className="text-body-sm mt-1 text-on-surface-variant">
-                      Ingen språknøkler matcher valgte søk eller filterkriterier.
-                    </p>
-                  </div>
-                )}
-
-                {/* String Rows */}
-                {paginatedAssets.map(asset => {
-                  const slug = asset.slug;
-                  const valNo = draftContent[slug] || '';
-                  const valEn = draftContent[slug + '-en'] || '';
-
-                  // Compute status dynamically
-                  const isMissing = !valNo.trim() || !valEn.trim();
-                  
-                  const savedNo = cmsContent[slug] || '';
-                  const savedEn = cmsContent[slug + '-en'] || '';
-                  
-                  // Prefilled fallbacks checking
-                  const defaultNo = slug === 'nav.dashboard.title' ? 'Oversikt' :
-                                    slug === 'btn.submit.primary' ? 'Send inn endringer' :
-                                    slug === 'msg.welcome.student' ? 'Velkommen tilbake, {{name}}! Klar for å lære i dag?' :
-                                    slug === 'nav.settings.account' ? 'Kontoinnstillinger' : '';
-                  
-                  const defaultEn = slug === 'nav.dashboard.title' ? 'Dashboard' :
-                                    slug === 'btn.submit.primary' ? 'Submit Changes' :
-                                    slug === 'msg.welcome.student' ? 'Welcome back, {{name}}! Ready to learn today?' :
-                                    slug === 'error.auth.forbidden' ? 'You do not have permission to view this resource.' :
-                                    slug === 'nav.settings.account' ? 'Account Settings' : '';
-
-                  const baseNo = savedNo || defaultNo;
-                  const baseEn = savedEn || defaultEn;
-
-                  const isDraft = valNo !== baseNo || valEn !== baseEn;
-
-                  // CSS classes for textareas
-                  const noTextareaClass = `w-full bg-surface-container-low border border-transparent rounded-lg text-body-sm focus:ring-1 focus:ring-primary py-2 px-3 resize-none writing-surface ${
-                    isMissing && !valNo.trim() 
-                      ? 'bg-error-container/20 border-dashed border-error/50 focus:ring-error placeholder:text-error/50' 
-                      : (valNo !== baseNo) 
-                        ? 'border-2 border-primary/20 bg-surface-container-lowest' 
-                        : ''
-                  }`;
-
-                  const enTextareaClass = `w-full bg-surface-container-low border border-transparent rounded-lg text-body-sm focus:ring-1 focus:ring-primary py-2 px-3 resize-none writing-surface ${
-                    isMissing && !valEn.trim() 
-                      ? 'bg-error-container/20 border-dashed border-error/50 focus:ring-error placeholder:text-error/50' 
-                      : (valEn !== baseEn) 
-                        ? 'border-2 border-primary/20 bg-surface-container-lowest' 
-                        : ''
-                  }`;
-
-                  const isMenuOpen = activeMenuRow === slug;
-
-                  return (
-                    <div 
-                      key={slug}
-                      className={`group bg-surface-container-lowest border transition-all p-4 rounded-xl flex flex-col gap-4 ${
-                        isMissing 
-                          ? 'border-dashed border-error/50 hover:border-error' 
-                          : 'border-outline-variant hover:border-primary'
-                      }`}
-                    >
-                      <div className="grid grid-cols-12 gap-6 items-start">
-                        {/* Key Info Column */}
-                        <div className="col-span-3 pt-2 select-none">
-                          <code className={`font-mono-sm text-[13px] px-2 py-1 rounded break-all ${
-                            isMissing ? 'text-error bg-error-container/30' : 'text-primary bg-primary-fixed/30'
-                          }`}>
-                            {slug}
-                          </code>
-                          <p className="text-[11px] text-outline mt-2 leading-tight">
-                            {asset.description || 'System strings configuration parameter.'}
-                          </p>
+                      {/* Norwegian Textarea Column */}
+                      <div className="md:col-span-4 block w-full">
+                        <div className="flex items-center gap-1 mb-1 md:hidden select-none">
+                          <Flag size={12} className="text-outline" />
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-outline">Norsk (NB)</span>
                         </div>
+                        <textarea 
+                          style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
+                          className={noTextareaClass}
+                          value={valNo}
+                          onChange={(e) => handleTextChange(slug, e.target.value, 'no')}
+                          placeholder={isMissing && !valNo.trim() ? "Mangler norsk oversettelse..." : ""}
+                          rows={asset.type === 'textarea' ? 3 : 2}
+                        />
+                      </div>
 
-                        {/* Norwegian Textarea Column */}
-                        <div className="col-span-4 block-form-fix">
-                          <textarea 
-                            style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
-                            className={noTextareaClass}
-                            value={valNo}
-                            onChange={(e) => handleTextChange(slug, e.target.value, 'no')}
-                            placeholder={isMissing && !valNo.trim() ? "Missing Norwegian translation..." : ""}
-                            rows={asset.type === 'textarea' ? 3 : 2}
-                          />
+                      {/* English Textarea Column */}
+                      <div className="md:col-span-4 block w-full">
+                        <div className="flex items-center gap-1 mb-1 md:hidden select-none">
+                          <Globe size={12} className="text-outline" />
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-outline">Engelsk (EN)</span>
                         </div>
+                        <textarea 
+                          style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
+                          className={enTextareaClass}
+                          value={valEn}
+                          onChange={(e) => handleTextChange(slug, e.target.value, 'en')}
+                          placeholder={isMissing && !valEn.trim() ? "Missing English translation..." : ""}
+                          rows={asset.type === 'textarea' ? 3 : 2}
+                        />
+                      </div>
 
-                        {/* English Textarea Column */}
-                        <div className="col-span-4 block-form-fix">
-                          <textarea 
-                            style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
-                            className={enTextareaClass}
-                            value={valEn}
-                            onChange={(e) => handleTextChange(slug, e.target.value, 'en')}
-                            placeholder={isMissing && !valEn.trim() ? "Missing English translation..." : ""}
-                            rows={asset.type === 'textarea' ? 3 : 2}
-                          />
-                        </div>
-
-                        {/* Status Column */}
-                        <div className="col-span-1 flex flex-col items-center gap-2 pt-2 relative">
+                      {/* Status Column */}
+                      <div className="md:col-span-1 flex md:flex-col items-center justify-between md:justify-start gap-3 md:gap-2 pt-1.5 relative w-full md:w-auto">
+                        <span className="md:hidden text-[10px] font-bold uppercase text-outline select-none">Status:</span>
+                        
+                        <div className="flex items-center gap-2">
                           {isMissing ? (
-                            <span className="material-symbols-outlined text-error text-[20px]" title="Missing translation">warning</span>
+                            <AlertTriangle className="text-red-500 cursor-help" size={20} title="Mangler oversettelse" />
                           ) : (
                             <span 
                               className={`w-2.5 h-2.5 rounded-full cursor-help shadow-sm border border-white ${isDraft ? 'bg-amber-500' : 'bg-green-500'}`} 
-                              title={isDraft ? 'Draft - Unsaved' : 'Published'} 
+                              title={isDraft ? 'Utkast - Ulagret' : 'Publisert'} 
                             />
                           )}
                           
@@ -889,9 +768,9 @@ export default function CMSDashboard() {
                           <div className="relative">
                             <button 
                               onClick={() => setActiveMenuRow(isMenuOpen ? null : slug)}
-                              className="p-1 text-outline hover:text-primary transition-colors hover:bg-surface-container rounded-lg"
+                              className="p-1 text-outline hover:text-primary transition-colors hover:bg-slate-100 rounded-lg"
                             >
-                              <span className="material-symbols-outlined text-[20px]">more_vert</span>
+                              <MoreVertical size={20} />
                             </button>
 
                             <AnimatePresence>
@@ -905,7 +784,7 @@ export default function CMSDashboard() {
                                     initial={{ opacity: 0, scale: 0.95, y: -10 }}
                                     animate={{ opacity: 1, scale: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                    className="absolute right-0 mt-2 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-xl w-48 py-1.5 z-20 select-none text-left"
+                                    className="absolute right-0 mt-2 bg-white border border-outline-variant/30 rounded-xl shadow-xl w-48 py-1.5 z-20 select-none text-left"
                                   >
                                     <button 
                                       onClick={() => {
@@ -915,9 +794,9 @@ export default function CMSDashboard() {
                                         setTimeout(() => setShowToast(false), 2000);
                                         setActiveMenuRow(null);
                                       }}
-                                      className="w-full text-left px-4 py-2 hover:bg-surface-container-low text-xs font-label-md text-on-surface flex items-center gap-2"
+                                      className="w-full text-left px-4 py-2 hover:bg-slate-50 text-xs font-semibold text-on-surface flex items-center gap-2"
                                     >
-                                      <span className="material-symbols-outlined text-[16px] text-outline">content_copy</span> Kopier nøkkelnavn
+                                      <Copy className="text-outline" size={14} /> Kopier nøkkelnavn
                                     </button>
                                     <button 
                                       onClick={() => {
@@ -925,9 +804,9 @@ export default function CMSDashboard() {
                                         handleTextChange(slug, defaultEn, 'en');
                                         setActiveMenuRow(null);
                                       }}
-                                      className="w-full text-left px-4 py-2 hover:bg-surface-container-low text-xs font-label-md text-on-surface flex items-center gap-2"
+                                      className="w-full text-left px-4 py-2 hover:bg-slate-50 text-xs font-semibold text-on-surface flex items-center gap-2"
                                     >
-                                      <span className="material-symbols-outlined text-[16px] text-amber-500">restart_alt</span> Nullstill til standard
+                                      <RotateCcw className="text-amber-500" size={14} /> Nullstill til standard
                                     </button>
                                     <button 
                                       onClick={() => {
@@ -935,9 +814,9 @@ export default function CMSDashboard() {
                                         handleTextChange(slug, '', 'en');
                                         setActiveMenuRow(null);
                                       }}
-                                      className="w-full text-left px-4 py-2 hover:bg-surface-container-low text-xs font-label-md text-error flex items-center gap-2 border-t border-outline-variant/35 mt-1 pt-1.5"
+                                      className="w-full text-left px-4 py-2 hover:bg-red-50 text-xs font-semibold text-red-600 flex items-center gap-2 border-t border-outline-variant/30 mt-1 pt-1.5"
                                     >
-                                      <span className="material-symbols-outlined text-[16px] text-error">delete</span> Tøm feltene
+                                      <Trash2 className="text-red-600" size={14} /> Tøm feltene
                                     </button>
                                   </motion.div>
                                 </>
@@ -947,189 +826,185 @@ export default function CMSDashboard() {
                         </div>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="mt-8 flex justify-between items-center bg-surface-container-lowest border border-outline-variant p-4 rounded-xl shadow-sm select-none">
-                  <div className="flex items-center gap-4">
-                    <button 
-                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                      disabled={currentPage === 1}
-                      className="p-2 border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
-                    >
-                      <span className="material-symbols-outlined">chevron_left</span>
-                    </button>
-                    
-                    <div className="flex gap-1">
-                      {Array.from({ length: totalPages }).map((_, i) => {
-                        const page = i + 1;
-                        const isCurrent = currentPage === page;
-                        return (
-                          <button 
-                            key={page}
-                            onClick={() => setCurrentPage(page)}
-                            className={`w-10 h-10 flex items-center justify-center rounded-lg font-label-md text-xs font-bold transition-all ${
-                              isCurrent 
-                                ? 'bg-primary text-on-primary shadow-sm shadow-primary/20' 
-                                : 'hover:bg-surface-container text-on-surface'
-                            }`}
-                          >
-                            {page}
-                          </button>
-                        );
-                      })}
-                    </div>
-                    
-                    <button 
-                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                      disabled={currentPage === totalPages}
-                      className="p-2 border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
-                    >
-                      <span className="material-symbols-outlined">chevron_right</span>
-                    </button>
-                  </div>
-                  
-                  <div className="flex items-center gap-3">
-                    <span className="text-body-sm text-on-surface-variant">Rows per page:</span>
-                    <select 
-                      value={rowsPerPage}
-                      onChange={(e) => setRowsPerPage(Number(e.target.value))}
-                      className="bg-surface-container-low border-none rounded-lg text-body-sm py-1 px-4 focus:ring-primary"
-                    >
-                      <option value={5}>5</option>
-                      <option value={10}>10</option>
-                      <option value={25}>25</option>
-                      <option value={50}>50</option>
-                    </select>
                   </div>
                 </div>
-              )}
-
-              {/* Footer Buffer */}
-              <div className="h-24"></div>
-            </div>
+              );
+            })}
           </div>
-        </div>
 
-        {/* 3. Slide-Over Revision History Drawer Panel */}
-        <AnimatePresence>
-          {isHistoryOpen && (
-            <>
-              {/* Backdrop Overlay */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.3 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setIsHistoryOpen(false)}
-                className="fixed inset-0 bg-black z-[100]"
-              />
-
-              {/* Revision Drawer */}
-              <motion.div
-                initial={{ x: '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed right-0 top-0 h-full w-[450px] max-w-full bg-surface-container-lowest shadow-2xl z-[110] border-l border-outline-variant flex flex-col p-6 overflow-hidden select-none"
-              >
-                <div className="flex justify-between items-center pb-4 border-b border-outline-variant shrink-0">
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary text-[24px]">history</span>
-                    <h3 className="font-headline-sm text-headline-sm font-bold text-primary">Revisjonshistorikk</h3>
-                  </div>
-                  <button 
-                    onClick={() => setIsHistoryOpen(false)} 
-                    className="p-2 hover:bg-surface-container-low rounded-full text-outline hover:text-on-surface transition-colors"
-                  >
-                    <span className="material-symbols-outlined text-[20px]">close</span>
-                  </button>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex flex-col sm:flex-row justify-between items-center bg-white border border-outline-variant/30 p-4 rounded-xl shadow-sm gap-4 select-none">
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className="p-1.5 border border-outline-variant/30 rounded-lg hover:bg-slate-50 hover:border-primary transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                
+                <div className="flex gap-1">
+                  {Array.from({ length: totalPages }).map((_, i) => {
+                    const page = i + 1;
+                    const isCurrent = currentPage === page;
+                    return (
+                      <button 
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold transition-all ${
+                          isCurrent 
+                            ? 'bg-[#1B4965] text-white shadow-sm' 
+                            : 'hover:bg-slate-50 text-on-surface'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
                 </div>
-
-                {/* History Timeline Content */}
-                <div className="flex-grow overflow-y-auto py-6 space-y-6 scrollbar-hide">
-                  <p className="text-body-sm text-on-surface-variant leading-relaxed">
-                    Nedenfor vises revisjonsloggen for endringer gjort i CMS-systemet. Du kan rulle tilbake eller spore hvem som oppdaterte spesifikke strenger.
-                  </p>
-                  
-                  <div className="relative border-l border-outline-variant/65 ml-3 pl-6 space-y-8 mt-4">
-                    {mockRevisions.map((rev, index) => (
-                      <div key={rev.id} className="relative">
-                        {/* Timeline dot styling */}
-                        <span className={`absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full border-2 border-white shadow flex items-center justify-center ${index === 0 ? 'bg-primary ring-4 ring-primary/20' : 'bg-outline-variant'}`} />
-                        
-                        <span className="text-[10px] text-outline font-bold block">{rev.date}</span>
-                        <span className="text-xs font-bold text-primary mt-1 block">{rev.author}</span>
-                        <p className="text-[11px] text-on-surface-variant mt-1.5 leading-normal bg-surface-container-low p-2.5 rounded-lg border border-outline-variant/30 font-medium">
-                          {rev.action}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Revision Reversion Action Button */}
-                <div className="pt-4 border-t border-outline-variant shrink-0">
-                  <button 
-                    onClick={() => {
-                      if (window.confirm('Vil du hente den forrige revisjonen (Revisjon 3)? Dette vil overskrive dine nåværende utkast.')) {
-                        setDraftContent(prev => ({
-                          ...prev,
-                          'landing-hero-title': 'His Kingdom prophets',
-                          'student-welcome-subtitle-en': 'You are making exceptional progress in prophetic ministry and hermeneutics this week. Your mentors have published 2 new study books in the library.'
-                        }));
-                        setIsHistoryOpen(false);
-                        setToastMessage({
-                          title: 'Historikk gjenopprettet',
-                          desc: 'Innholdet fra Revisjon 3 er lagt inn i redigeringsfeltet ditt.'
-                        });
-                        setShowToast(true);
-                        setTimeout(() => setShowToast(false), 3000);
-                      }
-                    }}
-                    className="w-full py-3 bg-primary-container hover:bg-primary text-white text-xs font-bold rounded-xl shadow active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">refresh</span> Gjenopprett forrige revisjon (#3)
-                  </button>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-
-        {/* 4. Elegant Custom Floating System Toast Notification (Bottom-Right) */}
-        <AnimatePresence>
-          {showToast && (
-            <motion.div
-              initial={{ opacity: 0, y: 50, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              className="fixed bottom-8 right-8 z-[200] flex items-center gap-4 bg-inverse-surface text-inverse-on-surface px-6 py-4 rounded-xl shadow-2xl border border-outline/10 max-w-md cursor-pointer select-none"
-              onClick={() => setShowToast(false)}
-            >
-              <span className="material-symbols-outlined text-green-400 text-[24px]">check_circle</span>
-              <div className="flex flex-col">
-                <span className="font-bold font-label-md text-white leading-tight">{toastMessage.title}</span>
-                <span className="text-xs opacity-80 mt-1 leading-normal">{toastMessage.desc}</span>
+                
+                <button 
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                  className="p-1.5 border border-outline-variant/30 rounded-lg hover:bg-slate-50 hover:border-primary transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                >
+                  <ChevronRight size={18} />
+                </button>
               </div>
-              <button 
-                className="ml-4 text-slate-400 hover:text-white transition-opacity shrink-0"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowToast(false);
-                }}
-              >
-                <span className="material-symbols-outlined text-[18px]">close</span>
-              </button>
-            </motion.div>
+              
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-on-surface-variant">Rader per side:</span>
+                <select 
+                  value={rowsPerPage}
+                  onChange={(e) => setRowsPerPage(Number(e.target.value))}
+                  className="bg-slate-50 border border-outline-variant/30 rounded-lg text-xs py-1 px-3 focus:ring-primary focus:border-primary font-medium"
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+            </div>
           )}
-        </AnimatePresence>
 
-        {/* Floating HKM Chat Widget */}
-        <HkmChatWidget />
-      </main>
+        </div>
+      </div>
+
+      {/* Slide-Over Revision History Drawer Panel */}
+      <AnimatePresence>
+        {isHistoryOpen && (
+          <>
+            {/* Backdrop Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.3 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsHistoryOpen(false)}
+              className="fixed inset-0 bg-black z-[100]"
+            />
+
+            {/* Revision Drawer */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 h-full w-[450px] max-w-full bg-white shadow-2xl z-[110] border-l border-outline-variant/30 flex flex-col p-6 overflow-hidden select-none"
+            >
+              <div className="flex justify-between items-center pb-4 border-b border-outline-variant/30 shrink-0">
+                <div className="flex items-center gap-2">
+                  <History className="text-primary" size={24} />
+                  <h3 className="font-serif text-lg font-bold text-primary">Revisjonshistorikk</h3>
+                </div>
+                <button 
+                  onClick={() => setIsHistoryOpen(false)} 
+                  className="p-2 hover:bg-slate-100 rounded-full text-outline hover:text-on-surface transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* History Timeline Content */}
+              <div className="flex-grow overflow-y-auto py-6 space-y-6">
+                <p className="text-xs text-on-surface-variant leading-relaxed font-medium">
+                  Nedenfor vises revisjonsloggen for endringer gjort i CMS-systemet. Du kan rulle tilbake eller spore hvem som oppdaterte spesifikke strenger.
+                </p>
+                
+                <div className="relative border-l border-outline-variant/40 ml-3 pl-6 space-y-8 mt-4">
+                  {mockRevisions.map((rev, index) => (
+                    <div key={rev.id} className="relative">
+                      {/* Timeline dot styling */}
+                      <span className={`absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full border-2 border-white shadow flex items-center justify-center ${index === 0 ? 'bg-primary ring-4 ring-primary/20' : 'bg-outline-variant'}`} />
+                      
+                      <span className="text-[10px] text-outline font-bold block">{rev.date}</span>
+                      <span className="text-xs font-bold text-primary mt-1 block">{rev.author}</span>
+                      <p className="text-[11px] text-on-surface-variant mt-1.5 leading-normal bg-slate-50 p-2.5 rounded-lg border border-outline-variant/30 font-medium">
+                        {rev.action}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Revision Reversion Action Button */}
+              <div className="pt-4 border-t border-outline-variant/30 shrink-0">
+                <button 
+                  onClick={() => {
+                    if (window.confirm('Vil du hente den forrige revisjonen (Revisjon 3)? Dette vil overskrive dine nåværende utkast.')) {
+                      setDraftContent(prev => ({
+                        ...prev,
+                        'landing-hero-title': 'His Kingdom prophets',
+                        'student-welcome-subtitle-en': 'You are making exceptional progress in prophetic ministry and hermeneutics this week. Your mentors have published 2 new study books in the library.'
+                      }));
+                      setIsHistoryOpen(false);
+                      setToastMessage({
+                        title: 'Historikk gjenopprettet',
+                        desc: 'Innholdet fra Revisjon 3 er lagt inn i redigeringsfeltet ditt.'
+                      });
+                      setShowToast(true);
+                      setTimeout(() => setShowToast(false), 3000);
+                    }
+                  }}
+                  className="w-full py-3 bg-[#1B4965] hover:bg-[#1B4965]/90 text-white text-xs font-bold uppercase rounded-lg shadow active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                >
+                  <RotateCcw size={16} /> Gjenopprett forrige revisjon (#3)
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Elegant Custom Floating Toast Notification */}
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="fixed bottom-8 right-8 z-[200] flex items-center gap-4 bg-slate-900 text-white px-6 py-4 rounded-xl shadow-2xl border border-outline/10 max-w-md cursor-pointer select-none"
+            onClick={() => setShowToast(false)}
+          >
+            <CheckCircle2 className="text-green-400 shrink-0" size={24} />
+            <div className="flex flex-col">
+              <span className="font-bold text-white text-xs leading-tight">{toastMessage.title}</span>
+              <span className="text-[11px] opacity-80 mt-1 leading-normal font-medium">{toastMessage.desc}</span>
+            </div>
+            <button 
+              className="ml-4 text-slate-400 hover:text-white transition-opacity shrink-0"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowToast(false);
+              }}
+            >
+              <X size={18} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 }
