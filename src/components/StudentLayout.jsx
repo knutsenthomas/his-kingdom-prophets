@@ -61,26 +61,6 @@ export default function StudentLayout() {
             </div>
           </div>
 
-          {/* Navigation Links inside top bar for visual redundancy/desktop feel */}
-          <nav className="hidden lg:flex items-center gap-6">
-            {navItems.slice(0, 4).map(item => {
-              const isActive = location.pathname === item.path;
-              return (
-                <button 
-                  key={item.path}
-                  onClick={() => navigate(item.path)} 
-                  className={`transition-colors text-sm font-semibold pb-1 border-b-2 ${
-                    isActive 
-                      ? 'text-primary border-primary font-bold' 
-                      : 'text-on-surface-variant hover:text-primary border-transparent'
-                  }`}
-                >
-                  {item.name}
-                </button>
-              );
-            })}
-          </nav>
-
           {/* Search bar, notifications, avatar and logout */}
           <div className="flex items-center gap-4 text-primary shrink-0">
             <div className="hidden xl:flex items-center bg-surface-container-low rounded-lg px-4 border border-outline-variant/30 py-2 w-60">
