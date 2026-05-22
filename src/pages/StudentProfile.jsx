@@ -110,18 +110,16 @@ export default function StudentProfile() {
       {/* ── Profile hero card ── */}
       <div className="bg-white border border-outline-variant/30 rounded-2xl shadow-sm overflow-hidden">
         {/* Cover strip */}
-        <div className="h-20 bg-gradient-to-r from-[#1B4965] via-[#1B4965]/90 to-[#1B4965]/70 relative">
+        <div className="h-24 bg-gradient-to-r from-[#1B4965] via-[#1B4965]/90 to-[#1B4965]/70 relative">
           <div className="absolute inset-0 opacity-10"
             style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #c5a059 0%, transparent 60%), radial-gradient(circle at 80% 20%, white 0%, transparent 50%)' }} />
-          <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-b from-transparent to-white" />
-          <div className="absolute -bottom-6 left-0 right-0 h-12 bg-white rounded-t-[2rem]" />
         </div>
 
-        <div className="px-6 md:px-8 pb-7 -mt-8 relative z-10">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
-            <div className="flex flex-col sm:flex-row sm:items-end gap-4 min-w-0">
+        <div className="px-6 md:px-8 pb-7 -mt-10 relative z-10">
+          <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-5">
+            <div className="flex flex-col xl:flex-row xl:items-end gap-4 min-w-0">
               {/* Avatar with click-to-change */}
-              <div className="relative shrink-0">
+              <div className="relative w-20 h-20 shrink-0">
                 <img
                   src={draft.avatar}
                   alt={draft.name}
@@ -137,8 +135,8 @@ export default function StudentProfile() {
                 </button>
               </div>
 
-              <div className="min-w-0 sm:pb-1">
-                <h1 className="font-serif text-2xl lg:text-3xl font-bold text-primary leading-tight break-words">
+              <div className="min-w-0 xl:pb-2 pt-1 xl:pt-0">
+                <h1 className="font-serif text-2xl xl:text-3xl font-bold text-primary leading-tight break-words">
                   {draft.name || 'Student'}
                 </h1>
                 <p className="text-sm text-on-surface-variant font-semibold mt-1 leading-snug">
@@ -148,18 +146,18 @@ export default function StudentProfile() {
             </div>
 
             {/* Profile completion ring */}
-            <div className="shrink-0 flex flex-row lg:flex-col items-center gap-2 lg:gap-1 self-start lg:self-end lg:pb-1">
-            <div className="relative w-14 h-14">
-              <svg className="w-14 h-14 -rotate-90" viewBox="0 0 56 56">
-                <circle cx="28" cy="28" r="24" fill="none" stroke="#e2e8f0" strokeWidth="4" />
-                <circle cx="28" cy="28" r="24" fill="none" stroke="#1B4965" strokeWidth="4"
-                  strokeDasharray={`${2 * Math.PI * 24}`}
-                  strokeDashoffset={`${2 * Math.PI * 24 * (1 - completionPct / 100)}`}
-                  strokeLinecap="round" />
-              </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-primary">{completionPct}%</span>
-            </div>
-            <span className="text-[9px] font-bold text-outline uppercase tracking-wider text-center">Profil</span>
+            <div className="shrink-0 flex flex-row xl:flex-col items-center gap-2 xl:gap-1 self-start xl:self-end xl:pb-2">
+              <div className="relative w-14 h-14">
+                <svg className="w-14 h-14 -rotate-90" viewBox="0 0 56 56">
+                  <circle cx="28" cy="28" r="24" fill="none" stroke="#e2e8f0" strokeWidth="4" />
+                  <circle cx="28" cy="28" r="24" fill="none" stroke="#1B4965" strokeWidth="4"
+                    strokeDasharray={`${2 * Math.PI * 24}`}
+                    strokeDashoffset={`${2 * Math.PI * 24 * (1 - completionPct / 100)}`}
+                    strokeLinecap="round" />
+                </svg>
+                <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-primary">{completionPct}%</span>
+              </div>
+              <span className="text-[9px] font-bold text-outline uppercase tracking-wider text-center">Profil</span>
             </div>
           </div>
         </div>

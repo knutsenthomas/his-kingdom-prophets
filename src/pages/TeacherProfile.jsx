@@ -116,12 +116,10 @@ export default function TeacherProfile() {
       <div className="bg-white border border-outline-variant/30 rounded-2xl shadow-sm overflow-hidden">
         <div className="h-24 bg-gradient-to-r from-primary via-primary-container to-secondary relative">
           <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(135deg, transparent 0 35%, #c5a059 35% 36%, transparent 36% 100%)' }} />
-          <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-b from-transparent to-white" />
-          <div className="absolute -bottom-6 left-0 right-0 h-12 bg-white rounded-t-[2rem]" />
         </div>
 
-        <div className="px-6 md:px-8 pb-7 flex flex-col lg:flex-row items-start lg:items-center gap-5 -mt-10 relative z-10">
-          <div className="relative shrink-0">
+        <div className="px-6 md:px-8 pb-7 flex flex-col xl:flex-row items-start xl:items-end gap-5 -mt-10 relative z-10">
+          <div className="relative w-24 h-24 shrink-0">
             <img
               src={draft.avatar}
               alt={draft.name || 'Lærer'}
@@ -137,16 +135,16 @@ export default function TeacherProfile() {
             </button>
           </div>
 
-          <div className="flex-grow pt-0 lg:pt-8 min-w-0">
+          <div className="flex-grow pt-0 xl:pb-2 min-w-0">
             <div className="flex flex-wrap items-center gap-2 mb-2">
               <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">Mentor</span>
               <span className="px-2.5 py-1 rounded-full bg-[#c5a059]/15 text-[#8a682d] text-[10px] font-bold uppercase tracking-wider">{draft.department}</span>
             </div>
-            <h1 className="font-serif text-2xl md:text-3xl font-bold text-primary leading-tight">{draft.name || 'Lærer'}</h1>
+            <h1 className="font-serif text-2xl xl:text-3xl font-bold text-primary leading-tight">{draft.name || 'Lærer'}</h1>
             <p className="text-xs text-on-surface-variant font-semibold mt-1">{draft.title} - {draft.location}</p>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 w-full lg:w-auto lg:pt-8 lg:ml-auto">
+          <div className="grid grid-cols-3 gap-3 w-full xl:w-auto xl:ml-auto xl:pb-2">
             <StatCard label="Studenter" value={mentorStudents} />
             <StatCard label="Kurs" value={activeCourses} />
             <StatCard label="Profil" value={`${completionPct}%`} />
