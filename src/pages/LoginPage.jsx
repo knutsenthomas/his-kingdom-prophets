@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login } = useApp();
+  const { login, cmsContent } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -50,9 +50,11 @@ export default function LoginPage() {
             onClick={() => navigate('/')} 
             className="font-serif text-2xl sm:text-3xl font-bold text-primary mb-2 cursor-pointer"
           >
-            His Kingdom Prophets
+            {cmsContent?.['login-title'] || 'His Kingdom Prophets'}
           </div>
-          <p className="text-sm text-on-surface-variant">Logg inn på din åpenbaringsportal</p>
+          <p className="text-sm text-on-surface-variant">
+            {cmsContent?.['login-subtitle'] || 'Logg inn på din åpenbaringsportal'}
+          </p>
         </div>
 
         {/* Quick login helper profiles */}

@@ -10,48 +10,82 @@ import HkmChatWidget from '@/components/HkmChatWidget';
 
 export default function CMSDashboard() {
   const navigate = useNavigate();
-  const { user, showToast } = useApp();
-  const [selectedAssetId, setSelectedAssetId] = useState('cms-1');
+  const { user, showToast, cmsContent, updateCmsContent } = useApp();
+  const [selectedAssetId, setSelectedAssetId] = useState('landing-hero-title');
 
-  // Simulated CMS Platform Assets
-  const [assets, setAssets] = useState([
-    {
-      id: 'cms-1',
-      title: 'Hovedoverskrift Forside',
-      slug: 'landing-hero-title',
-      value: 'His Kingdom Prophets',
-      section: 'Hjemmeside',
-      lastUpdated: 'Vennligst lagre endringer for å oppdatere',
-      type: 'text'
-    },
-    {
-      id: 'cms-2',
-      title: 'Undertekst Registrering',
-      slug: 'register-subtitle',
-      value: 'Bli en del av en profetisk bibelskole fokusert på å høre Guds stemme og dyp teologisk forståelse.',
-      section: 'Onboarding',
-      lastUpdated: '2 dager siden av Admin Thor',
-      type: 'textarea'
-    },
-    {
-      id: 'cms-3',
-      title: 'Spirituelle Interesser Tag-liste',
-      slug: 'interests-tags',
-      value: 'Profetisk tjeneste, Bibelstudier, Sjelesorg, Lovsang, Eskatologi, Åndelig krigføring',
-      section: 'Onboarding',
-      lastUpdated: '1 uke siden',
-      type: 'text'
-    },
-    {
-      id: 'cms-4',
-      title: 'Systemets Retningslinjer (Plattform)',
-      slug: 'platform-terms',
-      value: 'Velkommen til Mandal Regnskapskontor sitt administrative portal for His Kingdom Prophets. Tjen Herren med integritet.',
-      section: 'System',
-      lastUpdated: '12 dager siden',
-      type: 'textarea'
-    }
-  ]);
+  const assetDefinitions = [
+    // Hjemmeside
+    { slug: 'landing-hero-title', title: 'Hero Hovedoverskrift', section: 'Hjemmeside', type: 'text' },
+    { slug: 'landing-hero-tagline', title: 'Hero Tagline', section: 'Hjemmeside', type: 'text' },
+    { slug: 'landing-hero-description', title: 'Hero Beskrivelse', section: 'Hjemmeside', type: 'textarea' },
+    { slug: 'landing-hero-cta-primary', title: 'Hero Hovedknapp', section: 'Hjemmeside', type: 'text' },
+    { slug: 'landing-hero-cta-secondary', title: 'Hero Sekundærknapp', section: 'Hjemmeside', type: 'text' },
+    { slug: 'landing-pillars-title', title: 'Tre Søyler Hovedtittel', section: 'Hjemmeside', type: 'text' },
+    { slug: 'landing-pillars-desc', title: 'Tre Søyler Undertekst', section: 'Hjemmeside', type: 'textarea' },
+    { slug: 'landing-pillar1-title', title: 'Søyle 1 Tittel', section: 'Hjemmeside', type: 'text' },
+    { slug: 'landing-pillar1-desc', title: 'Søyle 1 Beskrivelse', section: 'Hjemmeside', type: 'textarea' },
+    { slug: 'landing-pillar2-title', title: 'Søyle 2 Tittel', section: 'Hjemmeside', type: 'text' },
+    { slug: 'landing-pillar2-desc', title: 'Søyle 2 Beskrivelse', section: 'Hjemmeside', type: 'textarea' },
+    { slug: 'landing-pillar3-title', title: 'Søyle 3 Tittel', section: 'Hjemmeside', type: 'text' },
+    { slug: 'landing-pillar3-desc', title: 'Søyle 3 Beskrivelse', section: 'Hjemmeside', type: 'textarea' },
+    { slug: 'landing-network-title', title: 'Nettverk Tittel', section: 'Hjemmeside', type: 'text' },
+    { slug: 'landing-network-desc', title: 'Nettverk Beskrivelse', section: 'Hjemmeside', type: 'textarea' },
+    
+    // Innlogging
+    { slug: 'login-title', title: 'Tittel (Innlogging)', section: 'Innlogging', type: 'text' },
+    { slug: 'login-subtitle', title: 'Undertittel (Innlogging)', section: 'Innlogging', type: 'text' },
+    { slug: 'login-instruction', title: 'Rolle-instruksjoner (Innlogging)', section: 'Innlogging', type: 'textarea' },
+    
+    // Studentportal
+    { slug: 'student-welcome-title', title: 'Velkomsthilsen Tittel (Student)', section: 'Studentportal', type: 'text' },
+    { slug: 'student-welcome-subtitle', title: 'Velkomsthilsen Undertekst (Student)', section: 'Studentportal', type: 'textarea' },
+    { slug: 'student-active-courses-title', title: 'Mine aktive kurs Tittel', section: 'Studentportal', type: 'text' },
+    { slug: 'student-live-gatherings-title', title: 'Live Samlinger Tittel', section: 'Studentportal', type: 'text' },
+    { slug: 'student-next-gatherings-title', title: 'Neste Samlinger Tittel', section: 'Studentportal', type: 'text' },
+    { slug: 'student-tasks-title', title: 'Gjøremål Seksjonstittel', section: 'Studentportal', type: 'text' },
+    { slug: 'student-stats-title', title: 'Statistikk Seksjonstittel', section: 'Studentportal', type: 'text' },
+    { slug: 'student-quicklinks-title', title: 'Hurtiglenker Tittel (Student)', section: 'Studentportal', type: 'text' },
+    { slug: 'student-announcements-title', title: 'Kunngjøringer Tittel (Student)', section: 'Studentportal', type: 'text' },
+    
+    // Mentorportal / Lærer
+    { slug: 'teacher-welcome-title', title: 'Velkomsthilsen Tittel (Mentor)', section: 'Mentorportal', type: 'text' },
+    { slug: 'teacher-welcome-subtitle', title: 'Velkomsthilsen Undertekst (Mentor)', section: 'Mentorportal', type: 'textarea' },
+    { slug: 'teacher-academic-year', title: 'Studieår Undertekst', section: 'Mentorportal', type: 'text' },
+    { slug: 'teacher-kpi1-label', title: 'KPI 1 (Totalt Registrert)', section: 'Mentorportal', type: 'text' },
+    { slug: 'teacher-kpi2-label', title: 'KPI 2 (Snittfremdrift)', section: 'Mentorportal', type: 'text' },
+    { slug: 'teacher-kpi3-label', title: 'KPI 3 (Evalueringssnitt)', section: 'Mentorportal', type: 'text' },
+    { slug: 'teacher-kpi4-label', title: 'KPI 4 (Under oppfølging)', section: 'Mentorportal', type: 'text' },
+    { slug: 'teacher-actions-title', title: 'Administrative tjenester Overskrift', section: 'Mentorportal', type: 'text' },
+    
+    // Onboarding (Suksess-side)
+    { slug: 'welcome-ready-title', title: 'Velkomsttittel (Suksess)', section: 'Onboarding', type: 'text' },
+    { slug: 'welcome-ready-subtitle', title: 'Undertittel (Suksess)', section: 'Onboarding', type: 'textarea' },
+    { slug: 'welcome-card1-title', title: 'Kort 1 Tittel (Studieplan)', section: 'Onboarding', type: 'text' },
+    { slug: 'welcome-card1-desc', title: 'Kort 1 Beskrivelse', section: 'Onboarding', type: 'textarea' },
+    { slug: 'welcome-card2-title', title: 'Kort 2 Tittel (Fellesskap)', section: 'Onboarding', type: 'text' },
+    { slug: 'welcome-card2-desc', title: 'Kort 2 Beskrivelse', section: 'Onboarding', type: 'textarea' },
+    { slug: 'welcome-cta-btn', title: 'Knappetekst (Dashboard)', section: 'Onboarding', type: 'text' },
+
+    // System / Admin
+    { slug: 'admin-cms-welcome', title: 'Systemets Retningslinjer (Plattform)', section: 'System', type: 'textarea' },
+    { slug: 'admin-cms-title', title: 'CMS Seksjonstittel (Admin)', section: 'System', type: 'text' },
+    { slug: 'admin-cms-subtitle', title: 'CMS Hjelpetekst (Admin)', section: 'System', type: 'textarea' },
+    { slug: 'layout-logo-title', title: 'Plattform Logotittel', section: 'System', type: 'text' },
+    { slug: 'layout-search-placeholder', title: 'Søkefelt Hjelpetekst', section: 'System', type: 'text' },
+    { slug: 'layout-upgrade-banner-title', title: 'Sidebar Oppgrader Tittel', section: 'System', type: 'text' },
+    { slug: 'layout-upgrade-banner-desc', title: 'Sidebar Oppgrader Beskrivelse', section: 'System', type: 'textarea' },
+    { slug: 'layout-upgrade-banner-btn', title: 'Sidebar Oppgrader Knapp', section: 'System', type: 'text' }
+  ];
+
+  const assets = assetDefinitions.map(def => ({
+    id: def.slug,
+    slug: def.slug,
+    title: def.title,
+    section: def.section,
+    type: def.type,
+    value: cmsContent[def.slug] || '',
+    lastUpdated: 'Lagret i Supabase'
+  }));
 
   const activeAsset = assets.find(a => a.id === selectedAssetId) || assets[0];
   const [editValue, setEditValue] = useState(activeAsset?.value || '');
@@ -61,20 +95,11 @@ export default function CMSDashboard() {
     if (activeAsset) {
       setEditValue(activeAsset.value);
     }
-  }, [selectedAssetId]);
+  }, [selectedAssetId, cmsContent]);
 
   const handleSave = (e) => {
     e.preventDefault();
-    setAssets(prev => prev.map(a => {
-      if (a.id === selectedAssetId) {
-        return {
-          ...a,
-          value: editValue,
-          lastUpdated: 'Akkurat nå av deg'
-        };
-      }
-      return a;
-    }));
+    updateCmsContent(activeAsset.slug, editValue);
     showToast(`CMS Asset "${activeAsset.title}" ble oppdatert og lagret i Supabase!`);
   };
 

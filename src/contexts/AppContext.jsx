@@ -320,6 +320,86 @@ export const AppProvider = ({ children }) => {
   const [isAssistantTyping, setIsAssistantTyping] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
   const [moduleApprovals, setModuleApprovals] = useState([]);
+
+  // Centralized Headless CMS Content State
+  const [cmsContent, setCmsContent] = useState(() => {
+    try {
+      const saved = localStorage.getItem('hkm-cms-content');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error('Klarte ikke hente cms content fra localStorage:', e);
+    }
+    return {
+      'landing-hero-title': 'His Kingdom prophets',
+      'landing-hero-tagline': 'Profetisk Tjeneste og Åndelig Dybde',
+      'landing-hero-description': 'En åpenbaringsskole for profetisk utrustning, bibelundervisning og åndelig vekst, hvor solid bibelsk teologi møter den levende Ånd.',
+      'landing-hero-cta-primary': 'Begynn Din Reise',
+      'landing-hero-cta-secondary': 'Se Introduksjon',
+      'landing-pillars-title': 'Tre Søyler for Tjenesteutrustning',
+      'landing-pillars-desc': 'Vårt fundament forener grundig bibelsk lære med den profetiske gaverollen i Guds rike.',
+      'landing-pillar1-title': 'Profetisk Utrustning og Tjeneste',
+      'landing-pillar1-desc': 'Lær å høre Guds stemme, tyde syner og drømmer, og formidle åpenbaringskunnskap med sunne bibelske rammer og etisk modenhet.',
+      'landing-pillar2-title': 'Dyp Bibelundervisning',
+      'landing-pillar2-desc': 'Gå i dybden på paktsteologi, eskatologi og hermeneutiske verktøy som ruster deg til å dele sannhetens ord rett.',
+      'landing-pillar3-title': 'Personlig Åndelig Veiledning',
+      'landing-pillar3-desc': 'Personlig oppfølging og disippelskap for din tjeneste. Vi hjelper deg å vokse i karakter og finne ditt spesifikke kall.',
+      'landing-network-title': 'Globale Profetiske Nettverk',
+      'landing-network-desc': 'Koble deg til bønnenettverk, misjonsreiser og tjenester over hele verden for å utvide ditt åndelige perspektiv.',
+      
+      'login-title': 'His Kingdom Prophets',
+      'login-subtitle': 'Logg inn på din åpenbaringsportal',
+      'login-instruction': 'Velg din rolle under for rask pålogging, eller skriv inn brukernavn og passord for å gå til dine studier.',
+      
+      'student-welcome-title': 'Velkommen tilbake til studiene,',
+      'student-welcome-subtitle': 'Du gjør fremragende fremgang i den profetiske tjeneste og hermeneutikk denne uken. Dine mentorer har publisert 2 nye studiehefter i biblioteket.',
+      'student-active-courses-title': 'Mine aktive kurs',
+      'student-live-gatherings-title': 'Live-undervisning & Bønn',
+      'student-next-gatherings-title': 'Neste samlinger',
+      'student-tasks-title': 'Mine gjøremål & oppgaver',
+      'student-stats-title': 'Studie-statistikk',
+      'student-quicklinks-title': 'Hurtiglenker og ressurser',
+      'student-announcements-title': 'Viktige Kunngjøringer',
+      
+      'teacher-welcome-title': 'Veiledningssenter & Mentorportal',
+      'teacher-welcome-subtitle': 'Oversikt over studentenes åndelige fremdrift, disippelskap og oppfølgingsvarsler.',
+      'teacher-academic-year': 'Aktuelt studieår: 2026',
+      'teacher-kpi1-label': 'Totalt Registrert',
+      'teacher-kpi2-label': 'Faglig Snittfremdrift',
+      'teacher-kpi3-label': 'Evalueringssnitt',
+      'teacher-kpi4-label': 'Studenter under oppfølging',
+      'teacher-actions-title': 'Administrative tjenester',
+      
+      'admin-cms-welcome': 'Velkommen til Mandal Regnskapskontor sitt administrative portal for His Kingdom Prophets. Tjen Herren med integritet.',
+      'admin-cms-title': 'Plattforminnhold (Assets)',
+      'admin-cms-subtitle': 'Velg et statisk tekstfelt eller systemkonfigurasjon for å gjøre endringer direkte i databasen.',
+
+      'welcome-ready-title': 'Alt er klart, {name}!',
+      'welcome-ready-subtitle': 'Din profil er nå ferdig konfigurert. Du er registrert som student ved vår profetiske bibelskole og utrustningssenter.',
+      'welcome-card1-title': 'Utforsk studieplanen',
+      'welcome-card1-desc': 'Få tilgang til dine kurs i profetisk tjeneste, bibelundervisning og menighetsledelse.',
+      'welcome-card2-title': 'Bli med i bønnefellesskap',
+      'welcome-card2-desc': 'Koble deg på studiegrupper, del profetiske åpenbaringer og chat med dine medstudenter.',
+      'welcome-cta-btn': 'GÅ TIL MITT DASHBOARD',
+
+      'layout-logo-title': 'His Kingdom Prophets',
+      'layout-search-placeholder': 'Søk i plattformen...',
+      'layout-upgrade-banner-title': 'Utvid tjenesten',
+      'layout-upgrade-banner-desc': 'Få ubegrenset tilgang til alle studieskrifter og veiledning.',
+      'layout-upgrade-banner-btn': 'Oppgrader profil'
+    };
+  });
+
+  const updateCmsContent = (slug, value) => {
+    setCmsContent(prev => {
+      const updated = { ...prev, [slug]: value };
+      try {
+        localStorage.setItem('hkm-cms-content', JSON.stringify(updated));
+      } catch (e) {
+        console.error('Klarte ikke lagre cms content i localStorage:', e);
+      }
+      return updated;
+    });
+  };
   const [assignmentActivity, setAssignmentActivity] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('hkm-assignment-activity') || '{}');
@@ -694,7 +774,9 @@ export const AppProvider = ({ children }) => {
       reviewModuleApproval,
       sendSupportMessage,
       sendAssistantMessage,
-      showToast
+      showToast,
+      cmsContent,
+      updateCmsContent
     }}>
       {children}
     </AppContext.Provider>

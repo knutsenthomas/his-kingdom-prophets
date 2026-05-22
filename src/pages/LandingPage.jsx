@@ -5,7 +5,7 @@ import worshipHero from '@/assets/worship_hero.png';
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const { user } = useApp();
+  const { user, cmsContent } = useApp();
 
   return (
     <div className="bg-background text-on-background font-sans min-h-screen">
@@ -50,26 +50,26 @@ export default function LandingPage() {
           <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 py-16 md:py-32">
             <div className="max-w-2xl animate-in fade-in slide-in-from-left-8 duration-700">
               <span className="inline-block px-4 py-1.5 mb-6 rounded-full bg-primary-fixed/20 text-primary-fixed font-semibold text-xs uppercase tracking-wider backdrop-blur-md border border-primary-fixed/30">
-                Profetisk Tjeneste og Åndelig Dybde
+                {cmsContent?.['landing-hero-tagline'] || 'Profetisk Tjeneste og Åndelig Dybde'}
               </span>
               <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white mb-8 leading-tight font-bold">
-                Hans Kongerike Profeter
+                {cmsContent?.['landing-hero-title'] || 'His Kingdom prophets'}
               </h1>
               <p className="text-base md:text-lg text-on-primary-container mb-10 max-w-xl">
-                En åpenbaringsskole for profetisk utrustning, bibelundervisning og åndelig vekst, hvor solid bibelsk teologi møter den levende Ånd.
+                {cmsContent?.['landing-hero-description'] || 'En åpenbaringsskole for profetisk utrustning, bibelundervisning og åndelig vekst, hvor solid bibelsk teologi møter den levende Ånd.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button 
                   onClick={() => navigate('/login')} 
                   className="px-8 py-4 bg-white text-primary font-semibold rounded-xl hover:bg-primary-fixed transition-all shadow-lg hover:-translate-y-0.5 text-sm active:scale-[0.98]"
                 >
-                  Begynn Din Reise
+                  {cmsContent?.['landing-hero-cta-primary'] || 'Begynn Din Reise'}
                 </button>
                 <button 
                   onClick={() => navigate('/student/video')} 
                   className="px-8 py-4 border border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all group flex items-center justify-center gap-2 text-sm active:scale-[0.98]"
                 >
-                  Se Introduksjon
+                  {cmsContent?.['landing-hero-cta-secondary'] || 'Se Introduksjon'}
                   <span className="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </button>
               </div>
@@ -80,9 +80,11 @@ export default function LandingPage() {
         {/* Pillars Section (Bento Layout) */}
         <section id="programs" className="py-16 md:py-24 px-4 sm:px-6 md:px-12 max-w-[1440px] mx-auto">
           <div className="text-center mb-16 max-w-3xl mx-auto">
-            <h2 className="font-serif text-3xl md:text-4xl text-primary font-bold mb-4">Tre Søyler for Tjenesteutrustning</h2>
+            <h2 className="font-serif text-3xl md:text-4xl text-primary font-bold mb-4">
+              {cmsContent?.['landing-pillars-title'] || 'Tre Søyler for Tjenesteutrustning'}
+            </h2>
             <p className="text-base md:text-lg text-on-surface-variant">
-              Vårt fundament forener grundig bibelsk lære med den profetiske gaverollen i Guds rike.
+              {cmsContent?.['landing-pillars-desc'] || 'Vårt fundament forener grundig bibelsk lære med den profetiske gaverollen i Guds rike.'}
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -92,9 +94,11 @@ export default function LandingPage() {
                 <div className="w-14 h-14 bg-primary-fixed rounded-xl flex items-center justify-center text-primary mb-6 group-hover:scale-105 transition-transform">
                   <span className="material-symbols-outlined text-3xl">campaign</span>
                 </div>
-                <h3 className="font-serif text-2xl text-primary font-bold mb-3">Profetisk Utrustning og Tjeneste</h3>
+                <h3 className="font-serif text-2xl text-primary font-bold mb-3">
+                  {cmsContent?.['landing-pillar1-title'] || 'Profetisk Utrustning og Tjeneste'}
+                </h3>
                 <p className="text-on-surface-variant max-w-md text-sm md:text-base leading-relaxed">
-                  Lær å høre Guds stemme, tyde syner og drømmer, og formidle åpenbaringskunnskap med sunne bibelske rammer og etisk modenhet.
+                  {cmsContent?.['landing-pillar1-desc'] || 'Lær å høre Guds stemme, tyde syner og drømmer, og formidle åpenbaringskunnskap med sunne bibelske rammer og etisk modenhet.'}
                 </p>
               </div>
               <div className="absolute -bottom-6 -right-6 w-1/2 h-1/2 opacity-10 group-hover:opacity-30 transition-all duration-700">
@@ -108,9 +112,11 @@ export default function LandingPage() {
                 <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-white mb-6 border border-white/20">
                   <span className="material-symbols-outlined text-2xl">menu_book</span>
                 </div>
-                <h3 className="font-serif text-xl font-bold mb-3">Dyp Bibelundervisning</h3>
+                <h3 className="font-serif text-xl font-bold mb-3">
+                  {cmsContent?.['landing-pillar2-title'] || 'Dyp Bibelundervisning'}
+                </h3>
                 <p className="text-on-primary-container text-sm leading-relaxed">
-                  Gå i dybden på paktsteologi, eskatologi og hermeneutiske verktøy som ruster deg til å dele sannhetens ord rett.
+                  {cmsContent?.['landing-pillar2-desc'] || 'Gå i dybden på paktsteologi, eskatologi og hermeneutiske verktøy som ruster deg til å dele sannhetens ord rett.'}
                 </p>
               </div>
               <div className="pt-6">
@@ -127,9 +133,11 @@ export default function LandingPage() {
                 <div className="w-12 h-12 bg-primary text-white rounded-xl flex items-center justify-center mb-6">
                   <span className="material-symbols-outlined text-2xl">favorite</span>
                 </div>
-                <h3 className="font-serif text-xl text-primary font-bold mb-3">Personlig Åndelig Veiledning</h3>
+                <h3 className="font-serif text-xl text-primary font-bold mb-3">
+                  {cmsContent?.['landing-pillar3-title'] || 'Personlig Åndelig Veiledning'}
+                </h3>
                 <p className="text-on-surface-variant text-sm leading-relaxed">
-                  Personlig oppfølging og disippelskap for din tjeneste. Vi hjelper deg å vokse i karakter og finne ditt spesifikke kall.
+                  {cmsContent?.['landing-pillar3-desc'] || 'Personlig oppfølging og disippelskap for din tjeneste. Vi hjelper deg å vokse i karakter og finne ditt spesifikke kall.'}
                 </p>
               </div>
             </div>
@@ -137,9 +145,11 @@ export default function LandingPage() {
             {/* Accent Piece */}
             <div className="md:col-span-7 bento-card bg-tertiary-fixed border border-outline-variant p-6 sm:p-8 flex items-center justify-between rounded-2xl overflow-hidden relative min-h-[260px]">
               <div className="flex-1 z-10">
-                <h4 className="font-serif text-xl text-primary font-bold mb-2">Globale Profetiske Nettverk</h4>
+                <h4 className="font-serif text-xl text-primary font-bold mb-2">
+                  {cmsContent?.['landing-network-title'] || 'Globale Profetiske Nettverk'}
+                </h4>
                 <p className="text-on-surface-variant text-sm leading-relaxed max-w-sm">
-                  Koble deg til bønnenettverk, misjonsreiser og tjenester over hele verden for å utvide ditt åndelige perspektiv.
+                  {cmsContent?.['landing-network-desc'] || 'Koble deg til bønnenettverk, misjonsreiser og tjenester over hele verden for å utvide ditt åndelige perspektiv.'}
                 </p>
               </div>
               <div className="flex-shrink-0 z-10 h-24 w-24 rounded-full border-4 border-white/50 bg-primary/10 flex items-center justify-center">

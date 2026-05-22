@@ -10,7 +10,7 @@ import {
 
 export default function TeacherDashboard() {
   const navigate = useNavigate();
-  const { user, students, courses } = useApp();
+  const { user, students, courses, cmsContent } = useApp();
 
   // Attention status filter
   const atRiskStudents = students.filter(s => s.status === 'Kritisk' || s.status === 'Forsinket');
@@ -21,16 +21,18 @@ export default function TeacherDashboard() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="font-serif text-2xl md:text-4xl font-bold text-primary">
-            Velkommen tilbake, {user?.name.split(' ')[0]}!
+            {cmsContent?.['teacher-welcome-title'] 
+              ? cmsContent['teacher-welcome-title'].replace('{name}', user?.name.split(' ')[0] || 'Lærer')
+              : `Veiledningssenter & Mentorportal`}
           </h1>
           <p className="text-xs sm:text-sm text-on-surface-variant mt-1 font-medium">
-            Oversikt over studentenes åndelige fremdrift, disippelskap og oppfølgingsvarsler.
+            {cmsContent?.['teacher-welcome-subtitle'] || 'Oversikt over studentenes åndelige fremdrift, disippelskap og oppfølgingsvarsler.'}
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <span className="text-xs text-on-surface-variant font-semibold bg-surface-container px-3 py-1.5 rounded-full border border-outline-variant/30">
-            Aktuelt studieår: 2026
+            {cmsContent?.['teacher-academic-year'] || 'Aktuelt studieår: 2026'}
           </span>
         </div>
       </div>
@@ -40,7 +42,9 @@ export default function TeacherDashboard() {
         {/* KPI 1 */}
         <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow duration-300">
           <div className="space-y-1">
-            <p className="text-xs font-bold uppercase tracking-wider text-outline">Totalt Registrert</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-outline">
+              {cmsContent?.['teacher-kpi1-label'] || 'Totalt Registrert'}
+            </p>
             <h3 className="text-3xl font-bold font-serif text-primary">48</h3>
             <p className="text-[10px] text-green-600 font-semibold flex items-center gap-1">
               <TrendingUp size={12} /> +12% fra forrige måned
@@ -54,7 +58,9 @@ export default function TeacherDashboard() {
         {/* KPI 2 */}
         <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow duration-300">
           <div className="space-y-1">
-            <p className="text-xs font-bold uppercase tracking-wider text-outline">Faglig Snittfremdrift</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-outline">
+              {cmsContent?.['teacher-kpi2-label'] || 'Faglig Snittfremdrift'}
+            </p>
             <h3 className="text-3xl font-bold font-serif text-primary">46%</h3>
             <div className="h-1.5 w-24 bg-surface-container rounded-full overflow-hidden mt-1.5">
               <div className="h-full bg-primary w-[46%]" />
@@ -68,7 +74,9 @@ export default function TeacherDashboard() {
         {/* KPI 3 */}
         <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow duration-300">
           <div className="space-y-1">
-            <p className="text-xs font-bold uppercase tracking-wider text-outline">Evalueringssnitt</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-outline">
+              {cmsContent?.['teacher-kpi3-label'] || 'Evalueringssnitt'}
+            </p>
             <h3 className="text-3xl font-bold font-serif text-primary">B+</h3>
             <p className="text-[10px] text-outline font-semibold">Basert på siste 3 innleveringer</p>
           </div>
@@ -80,7 +88,9 @@ export default function TeacherDashboard() {
         {/* KPI 4 */}
         <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow duration-300">
           <div className="space-y-1">
-            <p className="text-xs font-bold uppercase tracking-wider text-outline">Studenter under oppfølging</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-outline">
+              {cmsContent?.['teacher-kpi4-label'] || 'Studenter under oppfølging'}
+            </p>
             <h3 className="text-3xl font-bold font-serif text-error">{atRiskStudents.length}</h3>
             <p className="text-[10px] text-error font-semibold flex items-center gap-1">
               <AlertTriangle size={12} /> Trenger oppmuntring / veiledning
@@ -101,7 +111,7 @@ export default function TeacherDashboard() {
           {/* Quick Actions Panel */}
           <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm">
             <h3 className="font-serif text-xl font-bold text-primary mb-6 flex items-center gap-2">
-              <Sliders size={20} className="text-[#c5a059]" /> Administrative tjenester
+              <Sliders size={20} className="text-[#c5a059]" /> {cmsContent?.['teacher-actions-title'] || 'Administrative tjenester'}
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

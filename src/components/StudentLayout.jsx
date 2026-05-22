@@ -11,7 +11,7 @@ import HkmChatWidget from '@/components/HkmChatWidget';
 export default function StudentLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout, showToast, changePersona } = useApp();
+  const { user, logout, showToast, changePersona, cmsContent } = useApp();
   
   // Collapse state initialized from localStorage for persistence
   const [isCollapsed, setIsCollapsed] = useState(() => {
@@ -64,7 +64,7 @@ export default function StudentLayout() {
               onClick={() => navigate('/student/dashboard')}
             >
               <GraduationCap className="text-primary shrink-0 animate-pulse" size={24} />
-              <span className="truncate">His Kingdom Prophets</span>
+              <span className="truncate">{cmsContent?.['layout-logo-title'] || 'His Kingdom Prophets'}</span>
             </div>
           </div>
 
@@ -74,7 +74,7 @@ export default function StudentLayout() {
               <Search className="text-on-surface-variant mr-2" size={16} />
               <input 
                 className="bg-transparent border-none focus:ring-0 text-xs w-full outline-none" 
-                placeholder="Søk i plattformen..." 
+                placeholder={cmsContent?.['layout-search-placeholder'] || 'Søk i plattformen...'}
                 type="text"
                 onChange={(e) => {
                   if (e.target.value.length > 3) {
@@ -192,13 +192,17 @@ export default function StudentLayout() {
           {/* Premium banner at bottom of sidebar */}
           <div className="p-6 w-72 shrink-0">
             <div className="bg-surface-container-low rounded-xl p-4 border border-outline-variant/30 text-center shadow-sm">
-              <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">Utvid tjenesten</p>
-              <p className="text-[11px] text-on-surface-variant mb-3 leading-relaxed">Få ubegrenset tilgang til alle studieskrifter og veiledning.</p>
+              <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
+                {cmsContent?.['layout-upgrade-banner-title'] || 'Utvid tjenesten'}
+              </p>
+              <p className="text-[11px] text-on-surface-variant mb-3 leading-relaxed">
+                {cmsContent?.['layout-upgrade-banner-desc'] || 'Få ubegrenset tilgang til alle studieskrifter og veiledning.'}
+              </p>
               <button 
                 onClick={() => showToast("Oppgradering sendt til behandling!")} 
                 className="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg shadow-sm hover:bg-primary-container transition-all active:scale-[0.97]"
               >
-                Oppgrader profil
+                {cmsContent?.['layout-upgrade-banner-btn'] || 'Oppgrader profil'}
               </button>
             </div>
             

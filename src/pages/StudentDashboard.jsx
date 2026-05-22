@@ -9,7 +9,7 @@ import {
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
-  const { courses, toggleModuleCompleted, showToast } = useApp();
+  const { courses, toggleModuleCompleted, showToast, cmsContent, user } = useApp();
   const [todoList, setTodoList] = useState([
     { id: 1, text: 'Lese Modul 3 i Profetisk 101', done: false },
     { id: 2, text: 'Johannes åpenbaring kapittel 4 tolkning', done: true },
@@ -35,9 +35,11 @@ export default function StudentDashboard() {
         </div>
         <div className="max-w-xl space-y-2.5">
           <span className="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase inline-block">Studie-status</span>
-          <h1 className="font-serif text-2xl md:text-3xl font-bold tracking-tight">Velkommen tilbake, Thomas!</h1>
+          <h1 className="font-serif text-2xl md:text-3xl font-bold tracking-tight">
+            {cmsContent?.['student-welcome-title'] || 'Velkommen tilbake,'} {user?.name || 'Thomas'}!
+          </h1>
           <p className="text-sm text-on-primary-container leading-relaxed">
-            Du gjør fremragende fremgang i den profetiske tjeneste og hermeneutikk denne uken. Dine mentorer har publisert 2 nye studiehefter i biblioteket.
+            {cmsContent?.['student-welcome-subtitle'] || 'Du gjør fremragende fremgang i den profetiske tjeneste og hermeneutikk denne uken. Dine mentorer har publisert 2 nye studiehefter i biblioteket.'}
           </p>
         </div>
       </motion.div>
@@ -48,7 +50,9 @@ export default function StudentDashboard() {
         {/* Left 2 Columns: Courses Progress */}
         <div className="lg:col-span-2 space-y-6">
           <div className="flex justify-between items-center">
-            <h2 className="font-serif text-xl font-bold text-primary">Mine aktive kurs</h2>
+            <h2 className="font-serif text-xl font-bold text-primary">
+              {cmsContent?.['student-active-courses-title'] || 'Mine aktive kurs'}
+            </h2>
             <button onClick={() => navigate('/student/library')} className="text-primary hover:text-primary-container text-xs font-bold flex items-center gap-1">
               Vis alle
               <ArrowRight size={14} />
@@ -101,7 +105,9 @@ export default function StudentDashboard() {
 
         {/* Right Column: Calendar & Join Live Zoom Class */}
         <div className="space-y-6">
-          <h2 className="font-serif text-xl font-bold text-primary">Live-undervisning & Bønn</h2>
+          <h2 className="font-serif text-xl font-bold text-primary">
+            {cmsContent?.['student-live-gatherings-title'] || 'Live-undervisning & Bønn'}
+          </h2>
           
           <div className="bg-white rounded-xl border border-outline-variant/40 shadow-sm p-6 space-y-6">
             <div className="bg-surface-container-low p-4 rounded-lg flex items-start gap-3 border-l-4 border-burnt-orange">
@@ -126,7 +132,7 @@ export default function StudentDashboard() {
             <div className="space-y-3.5 pt-4 border-t border-slate-100">
               <h4 className="text-xs font-bold text-primary uppercase tracking-wide flex items-center gap-1.5">
                 <Calendar size={14} />
-                <span>Neste samlinger</span>
+                <span>{cmsContent?.['student-next-gatherings-title'] || 'Neste samlinger'}</span>
               </h4>
               
               <div className="space-y-3 text-xs">
@@ -157,7 +163,9 @@ export default function StudentDashboard() {
         
         {/* Left 2 columns: Task List Checklist */}
         <div className="lg:col-span-2 space-y-6">
-          <h2 className="font-serif text-xl font-bold text-primary">Mine gjøremål & oppgaver</h2>
+          <h2 className="font-serif text-xl font-bold text-primary">
+            {cmsContent?.['student-tasks-title'] || 'Mine gjøremål & oppgaver'}
+          </h2>
           
           <div className="bg-white rounded-xl border border-outline-variant/40 shadow-sm p-6">
             <div className="space-y-3">
@@ -186,7 +194,9 @@ export default function StudentDashboard() {
 
         {/* Right column: Study Stats Card */}
         <div className="space-y-6">
-          <h2 className="font-serif text-xl font-bold text-primary">Studie-statistikk</h2>
+          <h2 className="font-serif text-xl font-bold text-primary">
+            {cmsContent?.['student-stats-title'] || 'Studie-statistikk'}
+          </h2>
           
           <div className="bg-white rounded-xl border border-outline-variant/40 shadow-sm p-6 flex flex-col justify-between">
             <div className="grid grid-cols-2 gap-4 text-center">
