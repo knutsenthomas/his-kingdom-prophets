@@ -117,6 +117,34 @@ const INITIAL_ASSISTANT_MESSAGES = [
   }
 ];
 
+// Personnel who can receive module approval requests
+export const SYSTEM_REVIEWERS = [
+  {
+    id: 'rev-1',
+    name: 'Apostel David Hansen',
+    role: 'Faglig leder – Profetisk linje',
+    avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120'
+  },
+  {
+    id: 'rev-2',
+    name: 'Profet Jon Arild',
+    role: 'Faglærer – Bibeltolkning',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120'
+  },
+  {
+    id: 'rev-3',
+    name: 'Pastor Siri Knutsen',
+    role: 'Administrasjon & Sjelesorg',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120'
+  },
+  {
+    id: 'rev-4',
+    name: 'Thomas Knutsen',
+    role: 'Innholdsansvarlig & Koordinator',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120'
+  }
+];
+
 export const AppProvider = ({ children }) => {
   // Simulated Authentication Persona State
   const [user, setUser] = useState({
@@ -134,6 +162,7 @@ export const AppProvider = ({ children }) => {
   const [assistantMessages, setAssistantMessages] = useState(INITIAL_ASSISTANT_MESSAGES);
   const [isAssistantTyping, setIsAssistantTyping] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+  const [moduleApprovals, setModuleApprovals] = useState([]);
 
   // Trigger Toast Notification Helper
   const showToast = (message) => {
@@ -292,6 +321,77 @@ export const AppProvider = ({ children }) => {
     }));
   };
 
+  // Send a module for approval to a reviewer
+  const sendModuleForApproval = (courseId, moduleId, reviewerId, senderNote) => {
+    const course = courses.find(c => c.id === courseId);
+    const mod = course?.modules.find(m => m.id === moduleId);
+    if (!mod || !course) return;
+
+    // Remove any previous pending request for same module
+    setModuleApprovals(prev => [
+      ...prev.filter(a => !(a.courseId === courseId && a.moduleId === moduleId)),
+      {
+        id: `appr-${Date.now()}`,
+        courseId,
+        moduleId,
+        courseTitle: course.title,
+        courseCode: course.code,
+        moduleTitle: mod.title,
+        reviewerId,
+        senderNote: senderNote || '',
+        status: 'pending', // pending | approved | rejected
+        reviewerNote: '',
+        submittedAt: new Date().toLocaleString('no-NO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }),
+        reviewedAt: null
+      }
+    ]);
+
+    // Also set module status to pending on course
+    setCourses(prev => prev.map(c => {
+      if (c.id !== courseId) return c;
+      return {
+        ...c,
+        modules: c.modules.map(m =>
+          m.id === moduleId ? { ...m, approvalStatus: 'pending' } : m
+        )
+      };
+    }));
+
+    showToast(`Modulen er sendt til godkjenning!`);
+  };
+
+  // Approve or reject a module approval request
+  const reviewModuleApproval = (approvalId, action, reviewerNote) => {
+    setModuleApprovals(prev => prev.map(a => {
+      if (a.id !== approvalId) return a;
+      return {
+        ...a,
+        status: action, // 'approved' | 'rejected'
+        reviewerNote: reviewerNote || '',
+        reviewedAt: new Date().toLocaleString('no-NO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+      };
+    }));
+
+    // Sync approval status back to module
+    const approval = moduleApprovals.find(a => a.id === approvalId);
+    if (approval) {
+      setCourses(prev => prev.map(c => {
+        if (c.id !== approval.courseId) return c;
+        return {
+          ...c,
+          modules: c.modules.map(m =>
+            m.id === approval.moduleId
+              ? { ...m, approvalStatus: action, completed: action === 'approved' ? true : m.completed }
+              : m
+          )
+        };
+      }));
+    }
+
+    const label = action === 'approved' ? 'godkjent ✓' : 'avvist ✗';
+    showToast(`Modulen ble ${label}.`);
+  };
+
   // Send support email/alert (Teacher action)
   const sendSupportMessage = (studentName, text) => {
     showToast(`Veiledningsmelding sendt til ${studentName}!`);
@@ -356,6 +456,9 @@ export const AppProvider = ({ children }) => {
       updateModule,
       deleteModule,
       reorderModule,
+      moduleApprovals,
+      sendModuleForApproval,
+      reviewModuleApproval,
       sendSupportMessage,
       sendAssistantMessage,
       showToast
