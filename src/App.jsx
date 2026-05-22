@@ -50,6 +50,12 @@ import EmailPreviews from '@/pages/EmailPreviews';
 import SupportCenter from '@/pages/SupportCenter';
 import AffiliatePortal from '@/pages/AffiliatePortal';
 import CourseInsights from '@/pages/CourseInsights';
+import Artikkel1LoggInn from '@/pages/support-articles/Artikkel1LoggInn';
+import Artikkel2Chat from '@/pages/support-articles/Artikkel2Chat';
+import Artikkel3Bibelkalkulator from '@/pages/support-articles/Artikkel3Bibelkalkulator';
+import Artikkel4Zoom from '@/pages/support-articles/Artikkel4Zoom';
+import Artikkel5Veiledning from '@/pages/support-articles/Artikkel5Veiledning';
+import Artikkel6Tjenestegaver from '@/pages/support-articles/Artikkel6Tjenestegaver';
 
 export default function App() {
   const { toastMessage } = useApp();
@@ -233,6 +239,12 @@ function AppRoutes() {
           <Route path="/student/profile" element={<StudentProfile />} />
           <Route path="/student/partner" element={<AffiliatePortal />} />
           <Route path="/student/support" element={<SupportCenter />} />
+          <Route path="/support/artikkel-logginn" element={<Artikkel1LoggInn />} />
+          <Route path="/support/artikkel-chat" element={<Artikkel2Chat />} />
+          <Route path="/support/artikkel-bibelkalkulator" element={<Artikkel3Bibelkalkulator />} />
+          <Route path="/support/artikkel-zoom" element={<Artikkel4Zoom />} />
+          <Route path="/support/artikkel-veiledning" element={<Artikkel5Veiledning />} />
+          <Route path="/support/artikkel-tjenestegaver" element={<Artikkel6Tjenestegaver />} />
         </Route>
 
         {/* Teacher / Faculty Portal */}

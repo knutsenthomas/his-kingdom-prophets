@@ -188,36 +188,62 @@ export default function SupportCenter() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <AnimatePresence mode="popLayout">
               {filteredArticles.length > 0 ? (
-                filteredArticles.map(art => (
-                  <motion.div
-                    key={art.id}
-                    layout
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    className="bg-white border border-outline-variant/30 hover:border-primary/30 p-5 rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between group cursor-pointer"
-                    onClick={() => showToast(`Åpner: "${art.title}"`)}
-                  >
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="px-2 py-0.5 rounded bg-slate-100 text-outline text-[9px] font-bold uppercase tracking-wider">
-                          {CATEGORIES.find(c => c.id === art.category)?.label}
-                        </span>
-                        <PlayCircle size={14} className="text-slate-400 group-hover:text-primary transition-colors" />
+                filteredArticles.map(art => {
+                  // Map artikkel-id til path
+                  let articlePath = '';
+                  switch (art.id) {
+                    case 'art-1':
+                      articlePath = '/support/artikkel-logginn';
+                      break;
+                    case 'art-2':
+                      articlePath = '/support/artikkel-chat';
+                      break;
+                    case 'art-3':
+                      articlePath = '/support/artikkel-bibelkalkulator';
+                      break;
+                    case 'art-4':
+                      articlePath = '/support/artikkel-zoom';
+                      break;
+                    case 'art-5':
+                      articlePath = '/support/artikkel-veiledning';
+                      break;
+                    case 'art-6':
+                      articlePath = '/support/artikkel-tjenestegaver';
+                      break;
+                    default:
+                      articlePath = '/support';
+                  }
+                  return (
+                    <motion.div
+                      key={art.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="bg-white border border-outline-variant/30 hover:border-primary/30 p-5 rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between group cursor-pointer"
+                      onClick={() => navigate(articlePath)}
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="px-2 py-0.5 rounded bg-slate-100 text-outline text-[9px] font-bold uppercase tracking-wider">
+                            {CATEGORIES.find(c => c.id === art.category)?.label}
+                          </span>
+                          <PlayCircle size={14} className="text-slate-400 group-hover:text-primary transition-colors" />
+                        </div>
+                        <h3 className="font-serif font-bold text-primary text-sm group-hover:text-[#c5a059] transition-colors leading-snug">
+                          {art.title}
+                        </h3>
+                        <p className="text-xs text-on-surface-variant leading-relaxed font-medium">
+                          {art.desc}
+                        </p>
                       </div>
-                      <h3 className="font-serif font-bold text-primary text-sm group-hover:text-[#c5a059] transition-colors leading-snug">
-                        {art.title}
-                      </h3>
-                      <p className="text-xs text-on-surface-variant leading-relaxed font-medium">
-                        {art.desc}
-                      </p>
-                    </div>
-                    <div className="flex justify-between items-center text-[10px] text-outline font-semibold border-t border-slate-100 pt-3 mt-4">
-                      <span>{art.views}</span>
-                      <span>{art.time}</span>
-                    </div>
-                  </motion.div>
-                ))
+                      <div className="flex justify-between items-center text-[10px] text-outline font-semibold border-t border-slate-100 pt-3 mt-4">
+                        <span>{art.views}</span>
+                        <span>{art.time}</span>
+                      </div>
+                    </motion.div>
+                  );
+                })
               ) : (
                 <motion.div 
                   initial={{ opacity: 0 }}
