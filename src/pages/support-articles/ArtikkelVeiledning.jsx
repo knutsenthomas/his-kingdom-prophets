@@ -6,58 +6,72 @@ export default function ArtikkelVeiledning() {
     <SupportArticleLayout
       title="Hvordan bestille digital veiledningstid"
       breadcrumbs={[
-        { label: 'Hjem', href: '#' },
-        { label: 'Hjelpesenter', href: '#' },
-        { label: 'Veiledning', active: true }
+        { label: 'Støttesenter', href: '#' },
+        { label: 'Studentressurser', href: '#' },
+        { label: 'Digital Veiledning', active: true }
       ]}
       relatedArticles={[
-        { title: 'Feilsøking ved Zoom- og videostrømmer', href: '/support/artikkel-zoom', meta: 'Lest av 650 brukere' },
-        { title: 'Navigering i Bønnefellesskapet og chatten', href: '/support/artikkel-chat', meta: 'Lest av 840 brukere' },
-        { title: 'Oversikt over de fem tjenestegavene', href: '/support/artikkel-tjenestegaver', meta: 'Lest av 1.4k brukere' }
+        { title: 'Tekniske krav for videosamtaler', href: '#', meta: 'WebRTC' },
+        { title: 'Avbestilling av veiledning', href: '#', meta: '24-timers frist' },
+        { title: 'Hvordan dele skjerm', href: '#', meta: 'Vis frem arbeidet ditt' }
       ]}
       cta={
-        <div className="mt-20 p-10 bg-surface-container rounded-xl border border-outline-variant text-center">
-          <h4 className="font-headline-md text-headline-md text-primary mb-4">Trenger du veiledning?</h4>
-          <p className="font-body-md text-body-md text-on-surface-variant mb-8 max-w-md mx-auto">Bestill tid med mentor eller kontakt support for hjelp.</p>
-          <button className="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md text-label-md font-bold hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 flex items-center gap-2 mx-auto">
-            <span className="material-symbols-outlined">support_agent</span>
-            Kontakt support
+        <section className="bg-secondary-container p-6 rounded-lg mt-12">
+          <h3 className="font-headline-sm text-headline-sm text-on-secondary-container mb-4">Trenger du mer hjelp?</h3>
+          <p className="text-body-md text-on-secondary-container/80 mb-6">Vår supportavdeling er tilgjengelig mandag til fredag 08:00 - 16:00.</p>
+          <button className="w-full bg-primary text-white font-label-md py-3 rounded-lg hover:bg-primary-container transition-all flex items-center justify-center gap-2">
+            <span className="material-symbols-outlined">chat</span>
+            Start en chat
           </button>
-        </div>
+        </section>
       }
     >
-      <div className="font-serif-editor text-body-lg text-on-surface-variant leading-relaxed mb-10">
-        <p>Lær å koble deg opp på faglærers kontortid og starte din private videosamtale.</p>
+      <p>Som student ved Scholastic Premium har du tilgang til personlig oppfølging fra dine faglærere gjennom vårt digitale veiledningssystem. Denne guiden forklarer steg-for-steg hvordan du finner ledige tider, bestiller en konsultasjon og kobler deg til videosamtalen.</p>
+      <h2 className="font-headline-md text-headline-md text-primary mt-12 mb-6">1. Finn din faglærer</h2>
+      <p>Naviger til "Courses" i venstremenyen og velg emnet du trenger veiledning i. Inne på emnesiden vil du se en modul merket <strong>"Veiledning og kontortid"</strong> i høyre marg. Her vil alle tilknyttede faglærere og assistenter være listet med sine tilgjengelige tidsluker.</p>
+      <div className="my-10 bg-surface-container p-6 rounded-lg border border-outline-variant flex items-start gap-6">
+        <img alt="Interface preview" className="w-48 h-32 object-cover rounded shadow-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA52sx4KR7vd29PnAqLa9yXQQIJdYaAnC-KPvhyydECVfgML9XhpKaDrJQPXR6eyKBGOSg3JuPlCtjWM5d_kyGyt-NE4Wi3Axl27ujSDfGjOjcu92aUtrv9NMmc2Fkbhp1yDWYJAGR0CTWMQV7hvMCaeSkv5BSLPslaU1PhRfAewX3zpzDXeCNayiz7xGhJZk4KuIUWHWuns-dCW4kedw8SNPCoF60zvffFfOd6ScxoaQWNmKh3Sj5et7U2SU9fDhyauugGSwXAQvM" />
+        <div>
+          <h4 className="font-headline-sm text-headline-sm text-primary mb-2">Tips fra support</h4>
+          <p className="font-body-md text-body-md text-on-surface-variant m-0">Du kan filtrere veiledere basert på fagområde eller spesifikke moduler hvis emnet er stort.</p>
+        </div>
       </div>
-      <div className="space-y-12">
-        <section className="flex gap-6 group">
-          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-sm text-headline-sm">1</div>
-          <div>
-            <h3 className="font-headline-md text-headline-md text-primary mb-3">Gå til Veiledning</h3>
-            <div className="font-body-md text-body-md text-on-surface-variant article-content">
-              <p>Gå til <strong>Veiledning</strong> i hovedmenyen og velg ønsket mentor og tid.</p>
+      <h2 className="font-headline-md text-headline-md text-primary mt-12 mb-6">2. Velg tidspunkt</h2>
+      <p>Når du klikker på "Bestill tid", åpnes en kalendervisning. De blå markerte områdene representerer ledig kontortid. Klikk på en ledig blokk for å se detaljer.</p>
+      <ul className="list-disc pl-6 mb-6 space-y-2 text-body-md">
+        <li><strong>Standard veiledning:</strong> 15 eller 30 minutter.</li>
+        <li><strong>Temabasert veiledning:</strong> Noen lærere setter opp egne tider for spesifikke innleveringer.</li>
+      </ul>
+      <h2 className="font-headline-md text-headline-md text-primary mt-12 mb-6">3. Bekreftelse og forberedelse</h2>
+      <p>Etter valgt tid vil du bli bedt om å skrive en kort beskrivelse (maks 200 ord) om hva du ønsker hjelp med. Dette er <strong>obligatorisk</strong> for at læreren skal kunne forberede seg best mulig til samtalen.</p>
+      <div className="bg-primary text-white p-8 rounded-lg my-12 relative overflow-hidden">
+        <div className="relative z-10">
+          <h3 className="font-headline-sm text-headline-sm mb-4">Sjekkliste før samtalen</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-inverse-primary">check_circle</span>
+              <span className="font-label-md">Test mikrofon og kamera</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-inverse-primary">check_circle</span>
+              <span className="font-label-md">Ha oppgavebeskrivelsen klar</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-inverse-primary">check_circle</span>
+              <span className="font-label-md">Last opp relevante utkast</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-inverse-primary">check_circle</span>
+              <span className="font-label-md">Sitt på et rolig sted</span>
             </div>
           </div>
-        </section>
-        <section className="flex gap-6">
-          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-sm text-headline-sm">2</div>
-          <div>
-            <h3 className="font-headline-md text-headline-md text-primary mb-3">Bestill tid</h3>
-            <div className="font-body-md text-body-md text-on-surface-variant article-content">
-              <p>Bestill tid og motta bekreftelse på e-post. Koble deg opp via kalenderen når tiden er inne.</p>
-            </div>
-          </div>
-        </section>
-        <section className="flex gap-6">
-          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-sm text-headline-sm">3</div>
-          <div>
-            <h3 className="font-headline-md text-headline-md text-primary mb-3">Avbestill ved behov</h3>
-            <div className="font-body-md text-body-md text-on-surface-variant article-content">
-              <p>Avbestill i god tid hvis du ikke kan møte til avtalt veiledning.</p>
-            </div>
-          </div>
-        </section>
+        </div>
+        <div className="absolute -right-10 -bottom-10 opacity-10">
+          <span className="material-symbols-outlined text-[160px]">video_chat</span>
+        </div>
       </div>
+      <h2 className="font-headline-md text-headline-md text-primary mt-12 mb-6">4. Hvordan koble seg til</h2>
+      <p>5 minutter før avtalt tid vil en grønn knapp merket <strong>"Bli med i møte"</strong> dukke opp på startsiden din i Scholastic Premium. Du vil også motta en lenke på e-post.</p>
     </SupportArticleLayout>
   );
 }

@@ -56,6 +56,7 @@ import ArtikkelBibelkalkulator from '@/pages/support-articles/ArtikkelBibelkalku
 import ArtikkelZoom from '@/pages/support-articles/ArtikkelZoom';
 import ArtikkelVeiledning from '@/pages/support-articles/ArtikkelVeiledning';
 import ArtikkelTjenestegaver from '@/pages/support-articles/ArtikkelTjenestegaver';
+import SupportArticleCMS from '@/pages/SupportArticleCMS';
 
 export default function App() {
   const { toastMessage } = useApp();
@@ -272,6 +273,9 @@ function AppRoutes() {
 
         {/* Email Previews */}
         <Route path="/email/previews" element={<EmailPreviews />} />
+
+        {/* Support Article CMS */}
+        <Route path="/admin/support-cms" element={<SupportArticleCMS />} />
       </Routes>
     </>
   );
