@@ -31,7 +31,8 @@ export default function ShowcaseShell({ viewportSize, setViewportSize }) {
         { name: "Videovisning / Live Klasse", path: "/student/video" },
         { name: "Bibliotek", path: "/student/library" },
         { name: "Oppgaveoversikt", path: "/student/assignments" },
-        { name: "Fellesskapschat", path: "/student/chat" }
+        { name: "Fellesskapschat", path: "/student/chat" },
+        { name: "Studentprofil", path: "/student/profile" }
       ]
     },
     {
@@ -44,7 +45,8 @@ export default function ShowcaseShell({ viewportSize, setViewportSize }) {
         { name: "Kursbygger", path: "/teacher/course-builder" },
         { name: "Mediebibliotek", path: "/teacher/media-library" },
         { name: "Karakterutregning", path: "/teacher/grades-calc" },
-        { name: "Varslingssenter", path: "/teacher/notifications" }
+        { name: "Varslingssenter", path: "/teacher/notifications" },
+        { name: "Lærerprofil", path: "/teacher/profile" }
       ]
     },
     {

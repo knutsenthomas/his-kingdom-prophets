@@ -83,12 +83,18 @@ export default function TeacherLayout() {
             </div>
             
             <div className="flex items-center gap-3 sm:gap-4 text-primary pl-2 border-l border-outline-variant/30">
-              <img 
-                src={user?.avatar} 
-                alt={user?.name} 
+              <button
                 onClick={() => navigate('/teacher/profile')}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary/20 shadow object-cover shrink-0" 
-              />
+                className="group relative rounded-full focus:outline-none focus:ring-2 focus:ring-primary/30"
+                title="Åpne min lærerprofil"
+                aria-label="Åpne min lærerprofil"
+              >
+                <img
+                  src={user?.avatar}
+                  alt={user?.name}
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary/20 shadow object-cover shrink-0 cursor-pointer transition-all group-hover:ring-2 group-hover:ring-primary/30 group-hover:ring-offset-2"
+                />
+              </button>
               <button 
                 onClick={handleLogOut} 
                 className="hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors" 
@@ -117,7 +123,11 @@ export default function TeacherLayout() {
         >
           <div className="py-8 px-6 space-y-8 w-72 shrink-0">
             {/* Mentor status details */}
-            <div className="px-2">
+            <button
+              onClick={() => navigate('/teacher/profile')}
+              className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
+              title="Åpne min lærerprofil"
+            >
               <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Mentorveiledning</p>
               <div className="bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/30 space-y-2">
                 <div className="flex justify-between items-center text-[11px] font-bold text-on-surface-variant">
@@ -130,7 +140,7 @@ export default function TeacherLayout() {
                   <div className="bg-amber-500 h-full w-[65%]"></div>
                 </div>
               </div>
-            </div>
+            </button>
 
             {/* Side Navigation Menu */}
             <nav className="space-y-1.5">

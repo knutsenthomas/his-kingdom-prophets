@@ -94,12 +94,18 @@ export default function StudentLayout() {
               </button>
               
               <div className="flex items-center gap-2 sm:gap-2.5 pl-2 border-l border-outline-variant/30 shrink-0">
-                <img 
-                  src={user?.avatar} 
-                  alt={user?.name} 
+                <button
                   onClick={() => navigate('/student/profile')}
-                  className="w-8 h-8 rounded-full object-cover border border-primary/20 shrink-0" 
-                />
+                  className="group relative rounded-full focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  title="Åpne min profil"
+                  aria-label="Åpne min profil"
+                >
+                  <img
+                    src={user?.avatar}
+                    alt={user?.name}
+                    className="w-8 h-8 rounded-full object-cover border border-primary/20 shrink-0 cursor-pointer transition-all group-hover:ring-2 group-hover:ring-primary/30 group-hover:ring-offset-2"
+                  />
+                </button>
                 <div className="hidden md:flex flex-col text-left">
                   <button onClick={() => navigate('/student/profile')} className="text-xs font-bold text-on-surface truncate max-w-[100px] text-left hover:text-primary transition-colors">
                     {user?.name}
@@ -135,7 +141,11 @@ export default function StudentLayout() {
         >
           <div className="py-8 px-6 space-y-8 w-72 shrink-0">
             {/* Student profile summary card */}
-            <div className="px-2">
+            <button
+              onClick={() => navigate('/student/profile')}
+              className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
+              title="Åpne min profil"
+            >
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <Award className="text-primary animate-pulse" size={20} />
@@ -149,7 +159,7 @@ export default function StudentLayout() {
                 <div className="bg-primary h-full w-[45%]" style={{ transition: 'width 0.8s ease-in-out' }}></div>
               </div>
               <p className="text-[10px] text-on-surface-variant font-semibold mt-2">45% Total fullføringsgrad</p>
-            </div>
+            </button>
 
             {/* Side Navigation Menu */}
             <nav className="space-y-1.5">
