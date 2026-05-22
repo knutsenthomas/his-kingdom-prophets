@@ -111,7 +111,7 @@ export default function StudentLayout() {
                     </span>
                   </span>
                   <span className="hidden md:flex flex-col text-left min-w-0">
-                    <span className="text-xs font-bold text-on-surface truncate max-w-[100px] group-hover:text-primary transition-colors">
+                    <span className="text-xs font-bold text-on-surface whitespace-nowrap md:max-w-none group-hover:text-primary transition-colors">
                       {user?.name}
                     </span>
                     <span className="text-[9px] font-medium text-on-surface-variant uppercase tracking-wider">Student</span>

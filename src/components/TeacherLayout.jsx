@@ -83,10 +83,10 @@ export default function TeacherLayout() {
                 aria-label="Åpne min lærerprofil"
               >
                 <span className="text-right hidden sm:block min-w-0">
-                  <span className="block text-xs font-bold text-primary group-hover:underline truncate max-w-[170px]">
+                  <span className="block text-xs font-bold text-primary group-hover:underline whitespace-nowrap md:max-w-none">
                     {user?.name}
                   </span>
-                  <span className="block text-[9px] text-outline font-semibold uppercase tracking-wide truncate max-w-[170px]">{user?.email}</span>
+                  <span className="block text-[9px] text-outline font-semibold uppercase tracking-wide whitespace-nowrap md:max-w-none">{user?.email}</span>
                 </span>
                 <span className="relative shrink-0">
                   <img
