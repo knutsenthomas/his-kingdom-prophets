@@ -305,65 +305,71 @@ export default function StudentProfile() {
               </div>
             </div>
 
-            {/* ── Admin-only: Kontaktdetaljer (kun synlig for admin/superadmin) ── */}
-            {isAdmin && (
-              <motion.div
-                key="admin-contact"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white border-2 border-[#1B4965]/20 rounded-2xl overflow-hidden shadow-sm"
-              >
-                {/* Admin-only header banner */}
+            {/* ── Kontaktdetaljer ── Synlig for alle profil-eiere, kun lest av admin/superadmin ── */}
+            <motion.div
+              key="contact-section"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white rounded-2xl overflow-hidden shadow-sm border-2 border-[#1B4965]/15"
+            >
+              {/* Header: vises ulikt basert på rolle */}
+              {isAdmin ? (
                 <div className="flex items-center gap-3 px-6 py-3 bg-[#1B4965] text-white">
                   <ShieldCheck size={15} className="shrink-0" />
                   <div>
                     <p className="text-[11px] font-bold uppercase tracking-widest">Admin-tilgang</p>
-                    <p className="text-[10px] text-white/65 font-medium">Kun synlig for administratorer og super-administratorer</p>
+                    <p className="text-[10px] text-white/65 font-medium">Du ser denne seksjonen fordi du er {user?.role}</p>
                   </div>
                   <span className="ml-auto px-2 py-0.5 rounded-full text-[9px] font-bold bg-white/15 uppercase tracking-wider">{user?.role}</span>
                 </div>
-
-                <div className="p-6">
-                  <h2 className="font-serif text-base font-bold text-[#1B4965] mb-5 flex items-center gap-2">
-                    <Lock size={16} className="text-[#c5a059]" /> Sensitiv kontaktinformasjon
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field label="Mobilnummer" icon={<Phone size={13} />}>
-                      <input
-                        value={draft.phone}
-                        onChange={e => set('phone', e.target.value)}
-                        placeholder="+47 000 00 000"
-                        type="tel"
-                        className="field-input"
-                      />
-                    </Field>
-
-                    <Field label="Fødselsdato" icon={<Calendar size={13} />}>
-                      <input
-                        value={draft.birthDate}
-                        onChange={e => set('birthDate', e.target.value)}
-                        placeholder="DD.MM.ÅÅÅÅ"
-                        type="date"
-                        className="field-input"
-                      />
-                    </Field>
-
-                    <Field label="Adresse" icon={<Home size={13} />} className="sm:col-span-2">
-                      <input
-                        value={draft.address}
-                        onChange={e => set('address', e.target.value)}
-                        placeholder="f.eks. Gateveien 12, 4500 Mandal"
-                        className="field-input"
-                      />
-                    </Field>
-                  </div>
-                  <p className="mt-4 text-[10px] text-[#1B4965]/60 font-semibold flex items-center gap-1.5">
-                    <Lock size={10} />
-                    Denne informasjonen er kryptert og deles aldri med andre studenter eller lærere.
+              ) : (
+                <div className="flex items-center gap-3 px-5 py-2.5 bg-[#1B4965]/05 border-b border-[#1B4965]/10">
+                  <Lock size={13} className="text-[#1B4965]/50 shrink-0" />
+                  <p className="text-[10px] font-semibold text-[#1B4965]/70">
+                    Disse opplysningene er <strong>private</strong> — kun synlig for administratorer, aldri for andre studenter eller lærere.
                   </p>
                 </div>
-              </motion.div>
-            )}
+              )}
+
+              <div className="p-6">
+                <h2 className="font-serif text-base font-bold text-[#1B4965] mb-5 flex items-center gap-2">
+                  <Lock size={16} className="text-[#c5a059]" /> Privat kontaktinformasjon
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Field label="Mobilnummer" icon={<Phone size={13} />}>
+                    <input
+                      value={draft.phone}
+                      onChange={e => set('phone', e.target.value)}
+                      placeholder="+47 000 00 000"
+                      type="tel"
+                      className="field-input"
+                    />
+                  </Field>
+
+                  <Field label="Fødselsdato" icon={<Calendar size={13} />}>
+                    <input
+                      value={draft.birthDate}
+                      onChange={e => set('birthDate', e.target.value)}
+                      type="date"
+                      className="field-input"
+                    />
+                  </Field>
+
+                  <Field label="Adresse" icon={<Home size={13} />} className="sm:col-span-2">
+                    <input
+                      value={draft.address}
+                      onChange={e => set('address', e.target.value)}
+                      placeholder="f.eks. Gateveien 12, 4500 Kristiansand"
+                      className="field-input"
+                    />
+                  </Field>
+                </div>
+                <p className="mt-4 text-[10px] text-[#1B4965]/50 font-semibold flex items-center gap-1.5">
+                  <Lock size={10} />
+                  Lagret kryptert • Kun lesbart for administratorer
+                </p>
+              </div>
+            </motion.div>
 
             {/* Save bar */}
             <div className="flex items-center justify-between gap-4 bg-white border border-outline-variant/30 rounded-2xl px-6 py-4 shadow-sm">
