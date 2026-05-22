@@ -83,7 +83,7 @@ export default {
       },
       fontFamily: {
         serif: ["Merriweather", "Georgia", "serif"],
-        sans: ["Source Sans 3", "Inter", "sans-serif"],
+        sans: ["Merriweather", "Source Sans 3", "Inter", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"]
       }
     },
