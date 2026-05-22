@@ -3,6 +3,14 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 // Context API Sikkerhetsnett: Initialiser med tom brakett for å unngå "White screen of death"
 export const AppContext = createContext({});
 
+const defaultModuleContent = (extra = {}) => ({
+  description: '',
+  learningGoals: [],
+  lessons: [],
+  assignment: { description: '', dueDate: '', type: 'essay' },
+  ...extra,
+});
+
 const INITIAL_COURSES = [
   {
     id: "prop101",
@@ -14,14 +22,15 @@ const INITIAL_COURSES = [
     instructor: "Apostel David Hansen",
     zoomLink: "https://zoom.us/j/9270778606",
     modules: [
-      { id: "m1", title: "Modul 1: Profetisk historie og bibelsk grunnlag", completed: true },
-      { id: "m2", title: "Modul 2: Å høre Guds stemme og skjelne ånder", completed: true },
-      { id: "m3", title: "Modul 3: Åpenbaringsgaver og drømmetydning", completed: false },
-      { id: "m4", title: "Modul 4: Profetisk karakter og etiske retningslinjer", completed: false },
-      { id: "m5", title: "Modul 5: Betjening og formidling av profetiske budskap", completed: false },
-      { id: "m6", title: "Modul 6: Profetisk forbønn og åndelig krigføring", completed: false },
-      { id: "m7", title: "Modul 7: Tjenestegavenes samspill i menigheten", completed: false },
-      { id: "m8", title: "Modul 8: Prøving og bedømmelse av profeti", completed: false }
+      { id: "m1", title: "Modul 1: Profetisk historie og bibelsk grunnlag", completed: true,
+        ...defaultModuleContent({ description: 'En grundig gjennomgang av profetiens røtter fra Det gamle testamentet til nytestamentlig praksis. Vi ser på profeter som Elias, Jesaja og Jeremia som forbilder.', learningGoals: ['Forstå profetiens historiske utvikling', 'Identifisere nøkkelprofeter i Bibelen', 'Legge et solid teologisk grunnlag'], lessons: [{ id: 'l1', title: 'Profetene i GT: Oversikt og kontekst', description: 'Fra kallet til Elias til Malakis avslutning.', duration: '45 min', videoUrl: '' }, { id: 'l2', title: 'NT-profetiens karakter og funksjon', description: 'Profetisk tjeneste i den tidlige kirken.', duration: '35 min', videoUrl: '' }], assignment: { description: 'Skriv et 2-siders refleksjonsessay om en GT-profet og trekk paralleller til din egen åndelige reise.', dueDate: '2025-06-15', type: 'essay' } }) },
+      { id: "m2", title: "Modul 2: Å høre Guds stemme og skjelne ånder", completed: true, ...defaultModuleContent({ description: 'Praktiske og åndelige verktøy for å lære å gjenkjenne Guds stemme. Tema inkluderer bønn, stillhet, drømmer og åpenbaringer.', learningGoals: ['Utvikle en sensitiv ånd for Guds ledelse', 'Forstå de ulike måtene Gud taler på', 'Lære å skjelne mellom åndelige kilder'] }) },
+      { id: "m3", title: "Modul 3: Åpenbaringsgaver og drømmetydning", completed: false, ...defaultModuleContent() },
+      { id: "m4", title: "Modul 4: Profetisk karakter og etiske retningslinjer", completed: false, ...defaultModuleContent() },
+      { id: "m5", title: "Modul 5: Betjening og formidling av profetiske budskap", completed: false, ...defaultModuleContent() },
+      { id: "m6", title: "Modul 6: Profetisk forbønn og åndelig krigføring", completed: false, ...defaultModuleContent() },
+      { id: "m7", title: "Modul 7: Tjenestegavenes samspill i menigheten", completed: false, ...defaultModuleContent() },
+      { id: "m8", title: "Modul 8: Prøving og bedømmelse av profeti", completed: false, ...defaultModuleContent() }
     ]
   },
   {
@@ -34,14 +43,14 @@ const INITIAL_COURSES = [
     instructor: "Profet Jon Arild",
     zoomLink: "https://zoom.us/j/9270778607",
     modules: [
-      { id: "p1", title: "Modul 1: Historisk-grammatisk eksegese", completed: true },
-      { id: "p2", title: "Modul 2: Paktsteologi og Guds frelsesplan", completed: true },
-      { id: "p3", title: "Modul 3: Eskatologi og endetidens profetier", completed: true },
-      { id: "p4", title: "Modul 4: Typologier og skyggebilder i GT", completed: true },
-      { id: "p5", title: "Modul 5: Hebraiske røtter og kulturell kontekst", completed: true },
-      { id: "p6", title: "Modul 6: Johannes' åpenbaring og symbolspråk", completed: true },
-      { id: "p7", title: "Modul 7: Skriftens inspirasjon og autoritet", completed: false },
-      { id: "p8", title: "Modul 8: Praktisk anvendelse av bibelsk teologi", completed: false }
+      { id: "p1", title: "Modul 1: Historisk-grammatisk eksegese", completed: true, ...defaultModuleContent({ description: 'Grundige metoder for bibeltolkning med fokus på den opprinnelige historiske og grammatiske konteksten.', learningGoals: ['Beherske historisk-grammatisk metode', 'Bruke greske og hebraiske verktøy', 'Unngå vanlige tolkningsfeil'] }) },
+      { id: "p2", title: "Modul 2: Paktsteologi og Guds frelsesplan", completed: true, ...defaultModuleContent() },
+      { id: "p3", title: "Modul 3: Eskatologi og endetidens profetier", completed: true, ...defaultModuleContent() },
+      { id: "p4", title: "Modul 4: Typologier og skyggebilder i GT", completed: true, ...defaultModuleContent() },
+      { id: "p5", title: "Modul 5: Hebraiske røtter og kulturell kontekst", completed: true, ...defaultModuleContent() },
+      { id: "p6", title: "Modul 6: Johannes' åpenbaring og symbolspråk", completed: true, ...defaultModuleContent() },
+      { id: "p7", title: "Modul 7: Skriftens inspirasjon og autoritet", completed: false, ...defaultModuleContent() },
+      { id: "p8", title: "Modul 8: Praktisk anvendelse av bibelsk teologi", completed: false, ...defaultModuleContent() }
     ]
   },
   {
@@ -54,17 +63,18 @@ const INITIAL_COURSES = [
     instructor: "Pastor Siri Knutsen",
     zoomLink: "https://zoom.us/j/9270778608",
     modules: [
-      { id: "w1", title: "Modul 1: Sjelesorg og indre helbredelse", completed: true },
-      { id: "w2", title: "Modul 2: Lederskap etter Guds hjerte", completed: true },
-      { id: "w3", title: "Modul 3: Åndelig veiledning og disippelskap", completed: true },
-      { id: "w4", title: "Modul 4: Håndtering av åndelig krise og konflikt", completed: true },
-      { id: "w5", title: "Modul 5: Menighetens administrasjon og struktur", completed: false },
-      { id: "w6", title: "Modul 6: De praktiske nådegaver i menighetslivet", completed: false },
-      { id: "w7", title: "Modul 7: Tverrkulturell sjelesorg og misjon", completed: false },
-      { id: "w8", title: "Modul 8: Pastoral etikk og integritet", completed: false }
+      { id: "w1", title: "Modul 1: Sjelesorg og indre helbredelse", completed: true, ...defaultModuleContent({ description: 'En innføring i kristen sjelesorg med fokus på helbredelse av dype emosjonelle og åndelige sår.', learningGoals: ['Forstå sjelesorgens teologiske grunnlag', 'Lære praktiske sjelesorgmodeller', 'Identifisere tegn på åndelig og emosjonell skade'] }) },
+      { id: "w2", title: "Modul 2: Lederskap etter Guds hjerte", completed: true, ...defaultModuleContent() },
+      { id: "w3", title: "Modul 3: Åndelig veiledning og disippelskap", completed: true, ...defaultModuleContent() },
+      { id: "w4", title: "Modul 4: Håndtering av åndelig krise og konflikt", completed: true, ...defaultModuleContent() },
+      { id: "w5", title: "Modul 5: Menighetens administrasjon og struktur", completed: false, ...defaultModuleContent() },
+      { id: "w6", title: "Modul 6: De praktiske nådegaver i menighetslivet", completed: false, ...defaultModuleContent() },
+      { id: "w7", title: "Modul 7: Tverrkulturell sjelesorg og misjon", completed: false, ...defaultModuleContent() },
+      { id: "w8", title: "Modul 8: Pastoral etikk og integritet", completed: false, ...defaultModuleContent() }
     ]
   }
 ];
+
 
 const INITIAL_STUDENTS = [
   {

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { SYSTEM_REVIEWERS } from '@/contexts/AppContext';
+import ModuleContentEditor from '@/components/ModuleContentEditor';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus, PlusCircle, Layers, Trash2, Eye, GripVertical,
@@ -9,7 +10,7 @@ import {
   Image as ImageIcon, Music, X, Link, Search, ChevronDown,
   ChevronRight, ChevronUp, Sparkles, Lock, Check, Pencil,
   ArrowUp, ArrowDown, CheckCircle2, Circle, Save, XCircle,
-  BookOpen, User, Hash, Send, Clock, ShieldCheck, ShieldX, ShieldAlert
+  BookOpen, User, Hash, Send, Clock, ShieldCheck, ShieldX, ShieldAlert, LayoutList
 } from 'lucide-react';
 
 // ─── Static media assets ──────────────────────────────────────────────────
@@ -220,9 +221,10 @@ function ApprovalModal({ mod, courseId, onClose }) {
 // ─── Module row ────────────────────────────────────────────────────────────
 function ModuleRow({ mod, index, total, courseId, linkedAssets, onOpenMediaDrawer }) {
   const { updateModule, deleteModule, reorderModule, toggleModuleCompleted } = useApp();
-  const [expanded, setExpanded]       = useState(false);
+  const [expanded, setExpanded]           = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
+  const [showContentEditor, setShowContentEditor] = useState(false);
 
   const linked = linkedAssets[mod.id] || [];
 
@@ -338,6 +340,13 @@ function ModuleRow({ mod, index, total, courseId, linkedAssets, onOpenMediaDrawe
                 {/* Action buttons */}
                 <div className="flex flex-wrap items-center gap-2.5">
                   <button
+                    onClick={() => setShowContentEditor(true)}
+                    className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 border border-outline-variant/30 text-primary text-xs font-bold uppercase rounded-lg hover:bg-primary/10 hover:border-primary/40 transition-all active:scale-95"
+                  >
+                    <LayoutList size={13} /> Rediger innhold
+                  </button>
+
+                  <button
                     onClick={() => onOpenMediaDrawer(mod.id)}
                     className="flex items-center gap-1.5 px-3.5 py-2 bg-primary text-white text-xs font-bold uppercase rounded-lg hover:bg-primary/90 shadow-sm transition-all active:scale-95"
                   >
@@ -384,6 +393,17 @@ function ModuleRow({ mod, index, total, courseId, linkedAssets, onOpenMediaDrawe
       <AnimatePresence>
         {showApprovalModal && (
           <ApprovalModal mod={mod} courseId={courseId} onClose={() => setShowApprovalModal(false)} />
+        )}
+      </AnimatePresence>
+
+      {/* Content editor */}
+      <AnimatePresence>
+        {showContentEditor && (
+          <ModuleContentEditor
+            courseId={courseId}
+            mod={mod}
+            onClose={() => setShowContentEditor(false)}
+          />
         )}
       </AnimatePresence>
     </>
