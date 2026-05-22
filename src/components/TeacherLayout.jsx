@@ -34,10 +34,8 @@ export default function TeacherLayout() {
   const navItems = [
     { name: 'Lærer Dashboard', path: '/teacher/dashboard', icon: Compass },
     { name: 'Tjenesteoppfølging', path: '/teacher/follow-up', icon: AlertTriangle, badge: atRiskCount },
-    { name: 'Håndter Oppfølging', path: '/teacher/handle-requests', icon: ClipboardList },
     { name: 'Kursbygger', path: '/teacher/course-builder', icon: Sliders },
     { name: 'Bibelkalkulator', path: '/teacher/grading', icon: Award },
-    { name: 'Karakterutregning', path: '/teacher/grades-calc', icon: Award },
     { name: 'Varslingssenter', path: '/teacher/notifications', icon: Bell }
   ];
 
