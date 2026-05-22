@@ -239,12 +239,12 @@ function AppRoutes() {
           <Route path="/student/profile" element={<StudentProfile />} />
           <Route path="/student/partner" element={<AffiliatePortal />} />
           <Route path="/student/support" element={<SupportCenter />} />
-          <Route path="/support/artikkel-logginn" element={<Artikkel1LoggInn />} />
-          <Route path="/support/artikkel-chat" element={<Artikkel2Chat />} />
-          <Route path="/support/artikkel-bibelkalkulator" element={<Artikkel3Bibelkalkulator />} />
-          <Route path="/support/artikkel-zoom" element={<Artikkel4Zoom />} />
-          <Route path="/support/artikkel-veiledning" element={<Artikkel5Veiledning />} />
-          <Route path="/support/artikkel-tjenestegaver" element={<Artikkel6Tjenestegaver />} />
+          <Route path="/support/artikkel-logginn" element={<ArtikkelLoggInn />} />
+          <Route path="/support/artikkel-chat" element={<ArtikkelChat />} />
+          <Route path="/support/artikkel-bibelkalkulator" element={<ArtikkelBibelkalkulator />} />
+          <Route path="/support/artikkel-zoom" element={<ArtikkelZoom />} />
+          <Route path="/support/artikkel-veiledning" element={<ArtikkelVeiledning />} />
+          <Route path="/support/artikkel-tjenestegaver" element={<ArtikkelTjenestegaver />} />
         </Route>
 
         {/* Teacher / Faculty Portal */}
