@@ -237,6 +237,61 @@ export const AppProvider = ({ children }) => {
     });
   };
 
+  // Update top-level course metadata (title, code, instructor)
+  const updateCourse = (courseId, fields) => {
+    setCourses(prev => prev.map(c =>
+      c.id === courseId ? { ...c, ...fields } : c
+    ));
+    showToast('Kursinfo ble oppdatert!');
+  };
+
+  // Update a single module's title
+  const updateModule = (courseId, moduleId, fields) => {
+    setCourses(prev => prev.map(course => {
+      if (course.id !== courseId) return course;
+      return {
+        ...course,
+        modules: course.modules.map(m =>
+          m.id === moduleId ? { ...m, ...fields } : m
+        )
+      };
+    }));
+  };
+
+  // Delete a module and recalculate progress
+  const deleteModule = (courseId, moduleId) => {
+    setCourses(prev => prev.map(course => {
+      if (course.id !== courseId) return course;
+      const remaining = course.modules.filter(m => m.id !== moduleId);
+      const completedCount = remaining.filter(m => m.completed).length;
+      const progressPercent = remaining.length
+        ? Math.round((completedCount / remaining.length) * 100)
+        : 0;
+      return {
+        ...course,
+        modules: remaining,
+        totalModules: remaining.length,
+        modulesCompleted: completedCount,
+        progress: progressPercent
+      };
+    }));
+    showToast('Modulen ble slettet fra studieplanen.');
+  };
+
+  // Move a module one step up or down in the list
+  const reorderModule = (courseId, moduleId, direction) => {
+    setCourses(prev => prev.map(course => {
+      if (course.id !== courseId) return course;
+      const mods = [...course.modules];
+      const idx = mods.findIndex(m => m.id === moduleId);
+      if (idx < 0) return course;
+      const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+      if (swapIdx < 0 || swapIdx >= mods.length) return course;
+      [mods[idx], mods[swapIdx]] = [mods[swapIdx], mods[idx]];
+      return { ...course, modules: mods };
+    }));
+  };
+
   // Send support email/alert (Teacher action)
   const sendSupportMessage = (studentName, text) => {
     showToast(`Veiledningsmelding sendt til ${studentName}!`);
@@ -297,6 +352,10 @@ export const AppProvider = ({ children }) => {
       changePersona,
       addCourseModule,
       toggleModuleCompleted,
+      updateCourse,
+      updateModule,
+      deleteModule,
+      reorderModule,
       sendSupportMessage,
       sendAssistantMessage,
       showToast
