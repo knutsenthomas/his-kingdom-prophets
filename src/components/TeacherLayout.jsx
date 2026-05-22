@@ -75,20 +75,20 @@ export default function TeacherLayout() {
 
           {/* User profile, badges and logout */}
           <div className="flex items-center gap-4 text-primary shrink-0">
-            <div className="text-right hidden sm:block">
-              <button onClick={() => navigate('/teacher/profile')} className="text-xs font-bold text-primary hover:underline">
-                {user?.name}
-              </button>
-              <p className="text-[9px] text-outline font-semibold uppercase tracking-wide">{user?.email}</p>
-            </div>
-            
             <div className="flex items-center gap-3 sm:gap-4 text-primary pl-2 border-l border-outline-variant/30">
               <button
+                type="button"
                 onClick={() => navigate('/teacher/profile')}
-                className="group relative rounded-full focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="group flex items-center gap-2.5 rounded-xl px-1.5 py-1 hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all active:scale-[0.98]"
                 title="Åpne min lærerprofil"
                 aria-label="Åpne min lærerprofil"
               >
+                <span className="text-right hidden sm:block min-w-0">
+                  <span className="block text-xs font-bold text-primary group-hover:underline truncate max-w-[170px]">
+                    {user?.name}
+                  </span>
+                  <span className="block text-[9px] text-outline font-semibold uppercase tracking-wide truncate max-w-[170px]">{user?.email}</span>
+                </span>
                 <img
                   src={user?.avatar}
                   alt={user?.name}
