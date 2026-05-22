@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -94,25 +94,29 @@ export default function StudentLayout() {
               </button>
               
               <div className="flex items-center gap-2 sm:gap-2.5 pl-2 border-l border-outline-variant/30 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => navigate('/student/profile')}
+                <Link
+                  to="/student/profile"
                   className="group flex items-center gap-2 sm:gap-2.5 rounded-xl px-1.5 py-1 hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all active:scale-[0.98]"
                   title="Åpne min profil"
                   aria-label="Åpne min profil"
                 >
-                  <img
-                    src={user?.avatar}
-                    alt={user?.name}
-                    className="w-8 h-8 rounded-full object-cover border border-primary/20 shrink-0 cursor-pointer transition-all group-hover:ring-2 group-hover:ring-primary/30 group-hover:ring-offset-2"
-                  />
+                  <span className="relative shrink-0">
+                    <img
+                      src={user?.avatar}
+                      alt={user?.name}
+                      className="w-8 h-8 rounded-full object-cover border border-primary/20 cursor-pointer transition-all group-hover:ring-2 group-hover:ring-primary/30 group-hover:ring-offset-2"
+                    />
+                    <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-primary text-white border-2 border-white flex items-center justify-center shadow-sm">
+                      <User size={9} />
+                    </span>
+                  </span>
                   <span className="hidden md:flex flex-col text-left min-w-0">
                     <span className="text-xs font-bold text-on-surface truncate max-w-[100px] group-hover:text-primary transition-colors">
                       {user?.name}
                     </span>
                     <span className="text-[9px] font-medium text-on-surface-variant uppercase tracking-wider">Student</span>
                   </span>
-                </button>
+                </Link>
                 <button 
                   onClick={handleLogOut} 
                   className="hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors" 

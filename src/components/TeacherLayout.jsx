@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -76,9 +76,8 @@ export default function TeacherLayout() {
           {/* User profile, badges and logout */}
           <div className="flex items-center gap-4 text-primary shrink-0">
             <div className="flex items-center gap-3 sm:gap-4 text-primary pl-2 border-l border-outline-variant/30">
-              <button
-                type="button"
-                onClick={() => navigate('/teacher/profile')}
+              <Link
+                to="/teacher/profile"
                 className="group flex items-center gap-2.5 rounded-xl px-1.5 py-1 hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all active:scale-[0.98]"
                 title="Åpne min lærerprofil"
                 aria-label="Åpne min lærerprofil"
@@ -89,12 +88,17 @@ export default function TeacherLayout() {
                   </span>
                   <span className="block text-[9px] text-outline font-semibold uppercase tracking-wide truncate max-w-[170px]">{user?.email}</span>
                 </span>
-                <img
-                  src={user?.avatar}
-                  alt={user?.name}
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary/20 shadow object-cover shrink-0 cursor-pointer transition-all group-hover:ring-2 group-hover:ring-primary/30 group-hover:ring-offset-2"
-                />
-              </button>
+                <span className="relative shrink-0">
+                  <img
+                    src={user?.avatar}
+                    alt={user?.name}
+                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary/20 shadow object-cover cursor-pointer transition-all group-hover:ring-2 group-hover:ring-primary/30 group-hover:ring-offset-2"
+                  />
+                  <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-primary text-white border-2 border-white flex items-center justify-center shadow-sm">
+                    <User size={9} />
+                  </span>
+                </span>
+              </Link>
               <button 
                 onClick={handleLogOut} 
                 className="hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors" 
