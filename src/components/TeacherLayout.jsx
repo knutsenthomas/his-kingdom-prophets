@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Compass, Users, AlertTriangle, ClipboardList, BookOpen, 
-  Award, Bell, Power, Search, Menu, X, ChevronLeft, ChevronRight, Sliders
+  Award, Bell, Power, Search, Menu, X, ChevronLeft, ChevronRight, Sliders, Video
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 
@@ -35,6 +35,7 @@ export default function TeacherLayout() {
     { name: 'Lærer Dashboard', path: '/teacher/dashboard', icon: Compass },
     { name: 'Tjenesteoppfølging', path: '/teacher/follow-up', icon: AlertTriangle, badge: atRiskCount },
     { name: 'Kursbygger', path: '/teacher/course-builder', icon: Sliders },
+    { name: 'Mediebibliotek', path: '/teacher/media-library', icon: Video },
     { name: 'Bibelkalkulator', path: '/teacher/grading', icon: Award },
     { name: 'Varslingssenter', path: '/teacher/notifications', icon: Bell }
   ];

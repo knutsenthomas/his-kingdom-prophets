@@ -42,6 +42,7 @@ export default function ShowcaseShell({ viewportSize, setViewportSize }) {
         { name: "Håndtering av Oppfølging", path: "/teacher/handle-requests" },
         { name: "Rettingsvisning / Karakterer", path: "/teacher/grading" },
         { name: "Kursbygger", path: "/teacher/course-builder" },
+        { name: "Mediebibliotek", path: "/teacher/media-library" },
         { name: "Karakterutregning", path: "/teacher/grades-calc" },
         { name: "Varslingssenter", path: "/teacher/notifications" }
       ]

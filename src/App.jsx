@@ -28,6 +28,7 @@ import CommunityChatView from '@/pages/CommunityChatView';
 import TeacherDashboard from '@/pages/TeacherDashboard';
 import StudentFollowUp from '@/pages/StudentFollowUp';
 import CourseBuilder from '@/pages/CourseBuilder';
+import MediaLibrary from '@/pages/MediaLibrary';
 import GradesCalculator from '@/pages/GradesCalculator';
 import NotificationCenter from '@/pages/NotificationCenter';
 
@@ -220,6 +221,7 @@ function AppRoutes() {
         <Route path="/teacher/follow-up" element={<StudentFollowUp />} />
         <Route path="/teacher/handle-requests" element={<StudentFollowUp />} />
         <Route path="/teacher/course-builder" element={<CourseBuilder />} />
+        <Route path="/teacher/media-library" element={<MediaLibrary />} />
         <Route path="/teacher/grading" element={<GradesCalculator />} />
         <Route path="/teacher/grades-calc" element={<GradesCalculator />} />
         <Route path="/teacher/notifications" element={<NotificationCenter />} />
