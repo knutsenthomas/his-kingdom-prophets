@@ -11,7 +11,7 @@ import HkmChatWidget from '@/components/HkmChatWidget';
 export default function CourseBuilder() {
   const navigate = useNavigate();
   const { user, courses, addCourseModule, showToast } = useApp();
-  const [selectedCourseId, setSelectedCourseId] = useState(courses[0]?.id || 'ped101');
+  const [selectedCourseId, setSelectedCourseId] = useState(courses[0]?.id || 'prop101');
   const [newModuleTitle, setNewModuleTitle] = useState('');
 
   const activeCourse = courses.find(c => c.id === selectedCourseId) || courses[0];
@@ -39,12 +39,12 @@ export default function CourseBuilder() {
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">His Kingdom Prophets</div>
           </div>
           
           <div className="flex items-center gap-3 sm:gap-4 shrink-0">
             <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-secondary px-2.5 sm:px-3 py-1 bg-surface-container rounded-full">
-              Kursbygger
+              Studiebygger (CMS)
             </span>
             <img 
               src={user?.avatar} 
@@ -62,10 +62,10 @@ export default function CourseBuilder() {
         <div className="w-full lg:w-4/12 flex flex-col gap-6">
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm">
             <h2 className="font-serif text-xl font-bold text-primary mb-2 flex items-center gap-2">
-              <Layers size={20} className="text-secondary" /> Velg Kurs
+              <Layers size={20} className="text-secondary" /> Velg Studie / Modul
             </h2>
             <p className="text-xs text-on-surface-variant mb-6">
-              Velg kurset du vil tilføre nye kapitler eller læreplanmoduler.
+              Velg studiet eller linjen du vil tilføre nye moduler eller læringskapitler.
             </p>
 
             <div className="space-y-3">
@@ -95,7 +95,7 @@ export default function CourseBuilder() {
                       {course.title}
                     </h3>
                     <p className={`text-[10px] mt-2 ${isActive ? 'text-on-primary-container/85' : 'text-outline'}`}>
-                      Faglærer: {course.instructor}
+                      Ansvarlig: {course.instructor}
                     </p>
                   </button>
                 );
@@ -117,13 +117,13 @@ export default function CourseBuilder() {
               <div className="border-b border-outline-variant pb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 bg-primary text-white rounded-full">
-                    Gjeldende Læreplan
+                    Studieplan & Moduler
                   </span>
                   <h2 className="font-serif text-3xl font-bold text-primary mt-2">
                     {activeCourse.title}
                   </h2>
                   <p className="text-xs text-on-surface-variant mt-1">
-                    Kurskode: <span className="font-semibold">{activeCourse.code}</span> • Ansvarlig: <span className="font-semibold">{activeCourse.instructor}</span>
+                    Studiekode: <span className="font-semibold">{activeCourse.code}</span> • Ansvarlig: <span className="font-semibold">{activeCourse.instructor}</span>
                   </p>
                 </div>
                 
@@ -167,12 +167,7 @@ export default function CourseBuilder() {
                           <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
                             mod.completed ? 'bg-green-100 text-green-700' : 'bg-surface-container text-outline'
                           }`}>
-                            {mod.completed ? 'Låst opp' : (
-                              <>
-                                <span className="hidden sm:inline">Standard utkast</span>
-                                <span className="sm:hidden">Utkast</span>
-                              </>
-                            )}
+                            {mod.completed ? 'Publisert' : 'Utkast'}
                           </span>
                           <button className="p-1.5 hover:bg-error-container/30 rounded text-outline hover:text-error transition-colors">
                             <Trash2 size={14} />
@@ -187,7 +182,7 @@ export default function CourseBuilder() {
               {/* Add New Module Form */}
               <form onSubmit={handleAddModule} className="border-t border-outline-variant pt-6 flex flex-col gap-4 form-field-stable">
                 <h3 className="font-serif text-lg font-bold text-primary flex items-center gap-2">
-                  <PlusCircle size={18} /> Legg til ny leksjon / modul
+                  <PlusCircle size={18} /> Legg til ny undervisningsmodul
                 </h3>
                 
                 <div className="flex flex-col md:flex-row gap-4 items-end">
@@ -197,7 +192,7 @@ export default function CourseBuilder() {
                       type="text"
                       value={newModuleTitle}
                       onChange={(e) => setNewModuleTitle(e.target.value)}
-                      placeholder="Skriv inn tittel på modulen (f.eks. Modul 9: Semesteroppsummering)..."
+                      placeholder="Skriv inn tittel på modulen (f.eks. Modul 9: Profetisk modning og prøving)..."
                       className="w-full p-3.5 border border-outline-variant rounded-lg font-sans text-xs focus:outline-none focus:border-primary shadow-sm transition-all focus:ring-1 focus:ring-primary"
                     />
                   </div>
@@ -213,14 +208,14 @@ export default function CourseBuilder() {
                 <div className="bg-surface-container p-4 rounded-lg flex gap-2.5 items-start mt-2">
                   <AlertCircle size={16} className="text-secondary mt-0.5 flex-shrink-0" />
                   <p className="text-[11px] text-on-surface-variant leading-normal leading-relaxed">
-                    <strong>Synkronisering i sanntid:</strong> Når du klikker på "Legg til modul", vil denne leksjonen umiddelbart integreres i kursets læreplan. Studenter som har dette kurset i sin konto vil se den nye modulen dukke opp på sitt dashboard og leksjonsskjermer med en gang!
+                    <strong>Sanntidsoppdatering (CMS):</strong> Når du legger til modulen, vil den umiddelbart integreres i studieplanen. Studenter som følger denne linjen vil få tilgang til det nye undervisningsmaterialet på sine dashbord og leksjonssider i sanntid.
                   </p>
                 </div>
               </form>
             </motion.div>
           ) : (
             <div className="bg-white border border-outline-variant rounded-xl p-12 text-center text-outline shadow-sm">
-              Velg et kurs fra venstre kolonne for å bygge læreplanen.
+              Velg et studie fra venstre kolonne for å bygge læreplanen.
             </div>
           )}
         </div>

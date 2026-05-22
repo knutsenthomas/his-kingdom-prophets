@@ -22,9 +22,9 @@ export default function TeacherDashboard() {
       <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
         <div className="flex justify-between items-center px-4 sm:px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
           <div className="flex items-center gap-2 sm:gap-4 truncate mr-2">
-            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">His Kingdom Prophets</div>
             <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 sm:px-3 py-1 rounded-full shrink-0">
-              Fakultet
+              Mentor
             </span>
           </div>
           
@@ -52,12 +52,12 @@ export default function TeacherDashboard() {
               Velkommen tilbake, {user?.name.split(' ')[0]}!
             </h1>
             <p className="text-xs sm:text-sm text-on-surface-variant mt-1">
-              Oversikt over klassens fremdrift, utestående sensurering og oppfølgingsvarsler.
+              Oversikt over studentenes åndelige fremdrift, disippelskap og oppfølgingsvarsler.
             </p>
           </div>
  
           <div className="flex items-center gap-3">
-            <span className="text-xs text-on-surface-variant font-semibold">Aktuelt semester: Vår 2026</span>
+            <span className="text-xs text-on-surface-variant font-semibold">Aktuelt studieår: 2026</span>
           </div>
         </div>
  
@@ -67,7 +67,7 @@ export default function TeacherDashboard() {
           {/* KPI 1 */}
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
-              <p className="text-xs font-bold uppercase tracking-wider text-outline">Totalt Enrollet</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-outline">Totalt Registrert</p>
               <h3 className="text-3xl font-bold font-serif text-primary">48</h3>
               <p className="text-[10px] text-green-600 font-semibold flex items-center gap-1">
                 <TrendingUp size={12} /> +12% fra forrige måned
@@ -95,7 +95,7 @@ export default function TeacherDashboard() {
           {/* KPI 3 */}
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
-              <p className="text-xs font-bold uppercase tracking-wider text-outline">Klasseroms-snitt</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-outline">Evalueringssnitt</p>
               <h3 className="text-3xl font-bold font-serif text-primary">B+</h3>
               <p className="text-[10px] text-outline font-semibold">Basert på siste 3 innleveringer</p>
             </div>
@@ -107,10 +107,10 @@ export default function TeacherDashboard() {
           {/* KPI 4 */}
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
-              <p className="text-xs font-bold uppercase tracking-wider text-outline">Studenter i Risikosonen</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-outline">Studenter under oppfølging</p>
               <h3 className="text-3xl font-bold font-serif text-error">{atRiskStudents.length}</h3>
               <p className="text-[10px] text-error font-semibold flex items-center gap-1">
-                <AlertTriangle size={12} /> Trenger umiddelbar oppfølging
+                <AlertTriangle size={12} /> Trenger oppmuntring / veiledning
               </p>
             </div>
             <div className="w-12 h-12 bg-error-container/30 rounded-lg flex items-center justify-center text-error">
@@ -128,7 +128,7 @@ export default function TeacherDashboard() {
             {/* Quick Actions Panel */}
             <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm">
               <h3 className="font-serif text-xl font-bold text-primary mb-6 flex items-center gap-2">
-                <Sliders size={20} className="text-secondary" /> Administrative Moduler
+                <Sliders size={20} className="text-secondary" /> Administrative tjenester
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -142,8 +142,8 @@ export default function TeacherDashboard() {
                     <AlertTriangle size={18} />
                   </div>
                   <div>
-                    <h4 className="font-serif font-bold text-base text-primary mb-1">Følge opp studenter</h4>
-                    <p className="text-xs text-on-surface-variant">Send advarsler, påminnelser og faglige støttemeldinger.</p>
+                    <h4 className="font-serif font-bold text-base text-primary mb-1">Tjenesteoppfølging</h4>
+                    <p className="text-xs text-on-surface-variant">Send oppmuntringer, veiledning og pastorale støttemeldinger.</p>
                   </div>
                 </button>
  
@@ -156,8 +156,8 @@ export default function TeacherDashboard() {
                     <BookOpen size={18} />
                   </div>
                   <div>
-                    <h4 className="font-serif font-bold text-base text-primary mb-1">Kursbygger (CMS)</h4>
-                    <p className="text-xs text-on-surface-variant">Legg til faglige leksjoner og pensum-moduler direkte.</p>
+                    <h4 className="font-serif font-bold text-base text-primary mb-1">Studiebygger (CMS)</h4>
+                    <p className="text-xs text-on-surface-variant">Legg til profetiske leksjoner og studieplaner direkte.</p>
                   </div>
                 </button>
  
@@ -170,8 +170,8 @@ export default function TeacherDashboard() {
                     <Award size={18} />
                   </div>
                   <div>
-                    <h4 className="font-serif font-bold text-base text-primary mb-1">Karakterberegning</h4>
-                    <p className="text-xs text-on-surface-variant">Beregne og simulere karaktergrenser og snitt-sensur.</p>
+                    <h4 className="font-serif font-bold text-base text-primary mb-1">Bibelkalkulator</h4>
+                    <p className="text-xs text-on-surface-variant">Beregne og simulere karakterer og bibelske evalueringer.</p>
                   </div>
                 </button>
  
@@ -184,8 +184,8 @@ export default function TeacherDashboard() {
                     <MessageSquare size={18} />
                   </div>
                   <div>
-                    <h4 className="font-serif font-bold text-base text-primary mb-1">Fakultetsvarsler</h4>
-                    <p className="text-xs text-on-surface-variant">Motta henvendelser og koordiner felleskunngjøringer.</p>
+                    <h4 className="font-serif font-bold text-base text-primary mb-1">Varslingssenter</h4>
+                    <p className="text-xs text-on-surface-variant">Motta henvendelser og koordiner felles kunngjøringer.</p>
                   </div>
                 </button>
  
@@ -286,7 +286,7 @@ export default function TeacherDashboard() {
             {/* Course Builder summary info */}
             <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm">
               <h3 className="font-serif text-lg font-bold text-primary mb-4 flex items-center gap-2">
-                <BookOpen size={18} /> Fagkatalogen din
+                <BookOpen size={18} /> Studieplaner
               </h3>
               
               <div className="space-y-3">

@@ -12,9 +12,9 @@ export default function StudentDashboard() {
   const navigate = useNavigate();
   const { user, courses, logout, toggleModuleCompleted, showToast } = useApp();
   const [todoList, setTodoList] = useState([
-    { id: 1, text: 'Lese Modul 3 i Pedagogikk 101', done: false },
-    { id: 2, text: 'Gjennomføre fysikkoppgave 4', done: true },
-    { id: 3, text: 'Akademisk skriving kapittel 2 utkast', done: false }
+    { id: 1, text: 'Lese Modul 3 i Profetisk 101', done: false },
+    { id: 2, text: 'Johannes åpenbaring kapittel 4 tolkning', done: true },
+    { id: 3, text: 'Forberede bønneseminar', done: false }
   ]);
 
   const handleToggleTodo = (id) => {
@@ -34,14 +34,14 @@ export default function StudentDashboard() {
         <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-12 max-w-[1440px] mx-auto h-20">
           <div className="font-serif text-lg sm:text-2xl font-bold text-primary flex items-center gap-1.5 sm:gap-2 cursor-pointer truncate mr-2" onClick={() => navigate('/student/dashboard')}>
             <GraduationCap className="text-primary shrink-0" size={24} />
-            <span className="truncate">Scholastic Premium</span>
+            <span className="truncate">His Kingdom Prophets</span>
           </div>
           
           <nav className="hidden md:flex items-center gap-8">
             <button onClick={() => navigate('/student/dashboard')} className="text-primary border-b-2 border-primary pb-1 font-bold text-sm">Dashboard</button>
-            <button onClick={() => navigate('/student/library')} className="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium">Kursbibliotek</button>
+            <button onClick={() => navigate('/student/library')} className="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium">Studieplan</button>
             <button onClick={() => navigate('/student/assignments')} className="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium">Oppgaver</button>
-            <button onClick={() => navigate('/student/chat')} className="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium">Fellesskap</button>
+            <button onClick={() => navigate('/student/chat')} className="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium">Bønnefellesskap</button>
           </nav>
 
           <div className="flex items-center gap-4 text-primary shrink-0">
@@ -80,7 +80,7 @@ export default function StudentDashboard() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-on-surface uppercase tracking-wider">Thomas Knutsen</p>
-                  <p className="text-[11px] text-on-surface-variant font-medium">Aktiv Læringsprofil</p>
+                  <p className="text-[11px] text-on-surface-variant font-medium">Aktiv Tjenesteprofil</p>
                 </div>
               </div>
               <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
@@ -104,17 +104,17 @@ export default function StudentDashboard() {
               </button>
               <button onClick={() => navigate('/student/chat')} className="flex items-center gap-3 w-full px-4 py-3 text-sm text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg font-medium text-left">
                 <Users size={18} />
-                <span>Fagfellesskap</span>
+                <span>Bønnefellesskap</span>
               </button>
             </nav>
           </div>
 
           <div className="px-2">
             <div className="bg-surface-container-low rounded-xl p-4 border border-outline-variant/30 text-center">
-              <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">Oppgrader plattform</p>
-              <p className="text-[11px] text-on-surface-variant mb-3 leading-relaxed">Få ubegrenset tilgang til alle premium forskningsressurser.</p>
-              <button onClick={() => showToast("Premium-oppgradering forespurt!")} className="w-full py-2.5 bg-primary text-white text-xs font-bold rounded-lg shadow-sm hover:bg-primary-container transition-all active:scale-[0.97]">
-                Oppgrader til Pro
+              <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">Utvid tjenesten</p>
+              <p className="text-[11px] text-on-surface-variant mb-3 leading-relaxed">Få ubegrenset tilgang til alle studieskrifter og veiledning.</p>
+              <button onClick={() => showToast("Utvidelse forespurt!")} className="w-full py-2.5 bg-primary text-white text-xs font-bold rounded-lg shadow-sm hover:bg-primary-container transition-all active:scale-[0.97]">
+                Oppgrader profil
               </button>
             </div>
           </div>
@@ -133,10 +133,10 @@ export default function StudentDashboard() {
               <GraduationCap size={240} />
             </div>
             <div className="max-w-xl space-y-2.5">
-              <span className="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase inline-block">Akademisk Status</span>
+              <span className="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase inline-block">Studie-status</span>
               <h1 className="font-serif text-2xl md:text-3xl font-bold tracking-tight">Velkommen tilbake, Thomas!</h1>
               <p className="text-sm text-on-primary-container leading-relaxed">
-                Du gjør fremragende fremgang i fysikk og pedagogikk denne uken. Dine faglærere har publisert 2 nye forelesningsnotater i biblioteket.
+                Du gjør fremragende fremgang i den profetiske tjeneste og hermeneutikk denne uken. Dine mentorer har publisert 2 nye studiehefter i biblioteket.
               </p>
             </div>
           </motion.div>
@@ -171,7 +171,7 @@ export default function StudentDashboard() {
                       </div>
                       <h3 className="font-serif font-bold text-primary text-base line-clamp-1 mb-2 hover:underline">{course.title}</h3>
                       <p className="text-xs text-on-surface-variant mb-6 line-clamp-2 leading-relaxed">
-                        Fullført {course.modulesCompleted} av {course.totalModules} faglige læringsmoduler.
+                        Fullført {course.modulesCompleted} av {course.totalModules} profetiske læringsmoduler.
                       </p>
                     </div>
 
@@ -200,15 +200,15 @@ export default function StudentDashboard() {
 
             {/* Right Column: Calendar & Join Live Zoom Class */}
             <div className="space-y-6">
-              <h2 className="font-serif text-xl font-bold text-primary">Live-undervisning</h2>
+              <h2 className="font-serif text-xl font-bold text-primary">Live-undervisning & Bønn</h2>
               
               <div className="bg-white rounded-xl border border-outline-variant/40 shadow-sm p-6 space-y-6">
                 <div className="bg-surface-container-low p-4 rounded-lg flex items-start gap-3 border-l-4 border-burnt-orange">
                   <PlayCircle className="text-burnt-orange shrink-0 animate-pulse mt-0.5" size={20} />
                   <div>
-                    <h4 className="text-xs font-bold text-primary uppercase tracking-wide">Neste Live Klasse</h4>
-                    <p className="text-sm font-serif font-bold text-on-surface mt-1">PED 101: Didaktikk & Metoder</p>
-                    <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">Startet kl. 12:15 med Dr. Vance</p>
+                    <h4 className="text-xs font-bold text-primary uppercase tracking-wide">Neste Live Samling</h4>
+                    <p className="text-sm font-serif font-bold text-on-surface mt-1">PROP 101: Høre Guds stemme</p>
+                    <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">Startet kl. 12:15 med Apostel David Hansen</p>
                     <a 
                       href={courses[0]?.zoomLink || "https://zoom.us"} 
                       target="_blank" 
@@ -225,13 +225,13 @@ export default function StudentDashboard() {
                 <div className="space-y-3.5 pt-4 border-t border-slate-100">
                   <h4 className="text-xs font-bold text-primary uppercase tracking-wide flex items-center gap-1.5">
                     <Calendar size={14} />
-                    <span>Neste forelesninger</span>
+                    <span>Neste samlinger</span>
                   </h4>
                   
                   <div className="space-y-3 text-xs">
                     <div className="flex justify-between items-center p-2 rounded hover:bg-slate-50">
                       <div>
-                        <p className="font-semibold text-on-surface">WRIT 201: Kildekritikk</p>
+                        <p className="font-semibold text-on-surface">MIN 201: Sjelesorg</p>
                         <p className="text-[10px] text-outline">Mandag 25. mai, 10:15</p>
                       </div>
                       <span className="bg-slate-100 text-on-surface-variant text-[9px] font-bold px-2 py-0.5 rounded font-mono">Zoom</span>
@@ -239,7 +239,7 @@ export default function StudentDashboard() {
 
                     <div className="flex justify-between items-center p-2 rounded hover:bg-slate-50">
                       <div>
-                        <p className="font-semibold text-on-surface">PHYS 301: Spin & Perturbation</p>
+                        <p className="font-semibold text-on-surface">BIBLE 301: Avansert Hermeneutikk</p>
                         <p className="text-[10px] text-outline">Onsdag 27. mai, 14:00</p>
                       </div>
                       <span className="bg-slate-100 text-on-surface-variant text-[9px] font-bold px-2 py-0.5 rounded font-mono">Zoom</span>
@@ -324,7 +324,7 @@ export default function StudentDashboard() {
         </button>
         <button onClick={() => navigate('/student/library')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
           <BookOpen size={18} />
-          <span>Kurs</span>
+          <span>Studieplan</span>
         </button>
         <button onClick={() => navigate('/student/assignments')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
           <CheckSquare size={18} />
@@ -332,7 +332,7 @@ export default function StudentDashboard() {
         </button>
         <button onClick={() => navigate('/student/chat')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
           <Users size={18} />
-          <span>Fagprat</span>
+          <span>Bønnerom</span>
         </button>
       </div>
 

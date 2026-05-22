@@ -19,7 +19,7 @@ export default function CMSDashboard() {
       id: 'cms-1',
       title: 'Hovedoverskrift Forside',
       slug: 'landing-hero-title',
-      value: 'Scholastic Premium',
+      value: 'His Kingdom Prophets',
       section: 'Hjemmeside',
       lastUpdated: 'Vennligst lagre endringer for å oppdatere',
       type: 'text'
@@ -28,16 +28,16 @@ export default function CMSDashboard() {
       id: 'cms-2',
       title: 'Undertekst Registrering',
       slug: 'register-subtitle',
-      value: 'Ta del i et globalt akademi basert på nysgjerrighet, stringens og akademisk dyktighet.',
+      value: 'Bli en del av en profetisk bibelskole fokusert på å høre Guds stemme og dyp teologisk forståelse.',
       section: 'Onboarding',
       lastUpdated: '2 dager siden av Admin Thor',
       type: 'textarea'
     },
     {
       id: 'cms-3',
-      title: 'Akademiske Interesser Tag-liste',
+      title: 'Spirituelle Interesser Tag-liste',
       slug: 'interests-tags',
-      value: 'Pedagogikk, Teoretisk Fysikk, Akademisk Skriving, Sosiologi, Filosofi, Astrofysikk',
+      value: 'Profetisk tjeneste, Bibelstudier, Sjelesorg, Lovsang, Eskatologi, Åndelig krigføring',
       section: 'Onboarding',
       lastUpdated: '1 uke siden',
       type: 'text'
@@ -46,7 +46,7 @@ export default function CMSDashboard() {
       id: 'cms-4',
       title: 'Systemets Retningslinjer (Plattform)',
       slug: 'platform-terms',
-      value: 'Velkommen til Mandal Regnskapskontor sitt utdannings-CMS. Ta hensyn til fagfeller...',
+      value: 'Velkommen til Mandal Regnskapskontor sitt administrative portal for His Kingdom Prophets. Tjen Herren med integritet.',
       section: 'System',
       lastUpdated: '12 dager siden',
       type: 'textarea'
@@ -90,7 +90,7 @@ export default function CMSDashboard() {
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-2xl font-bold text-primary">Scholastic Premium</div>
+            <div className="font-serif text-2xl font-bold text-primary">His Kingdom Prophets</div>
           </div>
           
           <div className="flex items-center gap-4">

@@ -26,7 +26,7 @@ export default function EmailPreviews() {
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-2xl font-bold text-primary">Scholastic Premium</div>
+            <div className="font-serif text-2xl font-bold text-primary">His Kingdom Prophets</div>
           </div>
           
           <div className="flex items-center gap-4">
@@ -59,10 +59,10 @@ export default function EmailPreviews() {
 
             <div className="space-y-3">
               {[
-                { id: 'enroll', title: 'Bekreftelse: Bestilling mottatt', desc: 'Sendes automatisk når student melder seg på et kurs.', icon: Sparkles },
-                { id: 'progress', title: 'Ukentlig framgangsrapport', desc: 'Personlig framdriftsoversending basert på fullførte moduler.', icon: Award },
-                { id: 'zoom', title: 'Kommende live undervisning', desc: 'Varsling med direktelenke til Zoom-forelesninger.', icon: Calendar },
-                { id: 'alert', title: 'Lærer oppfølging / Støttemelding', desc: 'Manuelt sendt varsel fra faglærer.', icon: ShieldAlert }
+                { id: 'enroll', title: 'Bekreftelse: Studieplass bekreftet', desc: 'Sendes automatisk når disippel melder seg på et studiespor.', icon: Sparkles },
+                { id: 'progress', title: 'Ukentlig åndelig rapport', desc: 'Personlig framdriftsoversending basert på leksjoner.', icon: Award },
+                { id: 'zoom', title: 'Kommende live bønneseminar', desc: 'Varsling med direktelenke til live bønnesamling.', icon: Calendar },
+                { id: 'alert', title: 'Pastoral oppfølging / Støtte', desc: 'Manuelt sendt oppmuntring og støttemelding fra din mentor.', icon: ShieldAlert }
               ].map(tmp => {
                 const isActive = selectedTemplate === tmp.id;
                 const Icon = tmp.icon;
@@ -132,10 +132,10 @@ export default function EmailPreviews() {
               <div className="w-3.5 h-3.5 bg-green-400 rounded-full" />
               
               <div className="bg-white border border-outline-variant rounded px-3 py-1 flex-grow font-mono text-[10px] text-center truncate">
-                {selectedTemplate === 'enroll' && 'Subject: Velkommen til Scholastic Premium – Påmelding bekreftet'}
-                {selectedTemplate === 'progress' && 'Subject: Din ukentlige akademiske fremdriftsrapport'}
-                {selectedTemplate === 'zoom' && 'Subject: Invitasjon til live undervisning og seminar'}
-                {selectedTemplate === 'alert' && `Subject: Personlig melding fra Dr. Vance`}
+                {selectedTemplate === 'enroll' && 'Subject: Velkommen til His Kingdom Prophets – Studieplass bekreftet'}
+                {selectedTemplate === 'progress' && 'Subject: Din ukentlige åndelige fremdriftsrapport'}
+                {selectedTemplate === 'zoom' && 'Subject: Invitasjon til live bønneseminar og samling'}
+                {selectedTemplate === 'alert' && `Subject: Pastoral hilsen fra Apostel David Hansen`}
               </div>
             </div>
 
@@ -147,9 +147,9 @@ export default function EmailPreviews() {
                 
                 {/* Brand Banner */}
                 <div className="bg-[#00324b] text-white p-8 text-center border-b-4 border-[#c5a059]">
-                  <h1 className="font-serif text-2xl font-bold tracking-wider">Scholastic Premium</h1>
+                  <h1 className="font-serif text-2xl font-bold tracking-wider">His Kingdom Prophets</h1>
                   <p className="text-[10px] tracking-widest uppercase font-semibold text-slate-300 mt-1">
-                    Academic Excellence through Minimalist Design
+                    Profetisk Utrustning & Dyp Bibelundervisning
                   </p>
                 </div>
 
@@ -159,18 +159,18 @@ export default function EmailPreviews() {
                   {/* Active HTML content based on state */}
                   {selectedTemplate === 'enroll' && (
                     <>
-                      <h2 className="font-serif text-lg font-bold text-slate-900 border-b border-slate-200 pb-2">
-                        Påmelding bekreftet, {user?.name.split(' ')[0]}!
+                       <h2 className="font-serif text-lg font-bold text-slate-900 border-b border-slate-200 pb-2">
+                        Studieplass bekreftet, {user?.name.split(' ')[0]}!
                       </h2>
                       <p>
-                        Vi har gleden av å bekrefte din påmelding til <strong>Scholastic Premium</strong> læringsplattformen for dette semesteret.
+                        Vi har gleden av å bekrefte din studieplass hos <strong>His Kingdom Prophets</strong> – skolen for profetisk utrustning for dette semesteret.
                       </p>
                       <div className="bg-slate-50 border border-slate-200 p-4 rounded text-xs space-y-2 text-slate-600">
-                        <p><strong>Studentkonto:</strong> {user?.email}</p>
-                        <p><strong>Aktive fagløp:</strong> Innføring i Pedagogikk (PED 101), Advanced Physics (PHYS 301)</p>
+                        <p><strong>Disippelkonto:</strong> {user?.email}</p>
+                        <p><strong>Aktive studiespor:</strong> Innføring i den Profetiske Tjeneste (PROP 101), Avansert Hermeneutikk (BIBLE 301)</p>
                       </div>
                       <p>
-                        Ditt personlige dashboard er konfigurert med dine akademiske interesser. Du har nå full tilgang til leksjonsbiblioteket, studiegruppechat og karakterberegninger.
+                        Ditt personlige dashboard er konfigurert med dine åndelige gaver og interesser. Du har nå full tilgang til leksjonsbiblioteket, bønne-chatten og bibelkalkulatoren.
                       </p>
                       
                       <button className="bg-[#00324b] hover:bg-[#1b4965] text-white font-bold py-3 px-6 rounded text-xs uppercase tracking-wider text-center block w-full transition-all">
@@ -193,7 +193,7 @@ export default function EmailPreviews() {
                       <div className="space-y-4">
                         <div className="space-y-1.5">
                           <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-slate-600">Innføring i Pedagogikk (PED 101)</span>
+                            <span className="text-slate-600">Innføring i den Profetiske Tjeneste (PROP 101)</span>
                             <span className="text-slate-900">25% (2 av 8 moduler)</span>
                           </div>
                           <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
@@ -203,7 +203,7 @@ export default function EmailPreviews() {
 
                         <div className="space-y-1.5">
                           <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-slate-600">Advanced Theoretical Physics (PHYS 301)</span>
+                            <span className="text-slate-600">Avansert Hermeneutikk og Tolkning (BIBLE 301)</span>
                             <span className="text-slate-900">75% (6 av 8 moduler)</span>
                           </div>
                           <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
@@ -213,7 +213,7 @@ export default function EmailPreviews() {
                       </div>
 
                       <p className="text-xs text-slate-500 italic">
-                        Neste anbefalte leksjon er "Modul 7: Time-Independent Perturbation Theory" i fysikk.
+                        Neste anbefalte leksjon er "Modul 7: Johannes Åpenbaring og eskatologiske typologier" i bibelstudiet.
                       </p>
 
                       <button className="bg-[#00324b] hover:bg-[#1b4965] text-white font-bold py-3 px-6 rounded text-xs uppercase tracking-wider text-center block w-full transition-all">
@@ -225,15 +225,15 @@ export default function EmailPreviews() {
                   {selectedTemplate === 'zoom' && (
                     <>
                       <h2 className="font-serif text-lg font-bold text-slate-900 border-b border-slate-200 pb-2">
-                        Invitasjon: Live seminar om Pedagogikk
+                        Invitasjon: Live bønneseminar om det profetiske
                       </h2>
                       <p>
-                        Du er herved invitert til det ukentlige live-seminaret i <strong>Innføring i Pedagogikk (PED 101)</strong> med Dr. Julian Vance.
+                        Du er herved invitert til det ukentlige live-bønneseminaret i <strong>Innføring i den Profetiske Tjeneste (PROP 101)</strong> med Apostel David Hansen.
                       </p>
                       <div className="bg-blue-50 border border-blue-200 p-4 rounded text-xs space-y-2 text-slate-600">
-                        <p><strong>Tema:</strong> Didaktiske metoder og klasseromsledelse</p>
+                        <p><strong>Tema:</strong> Å høre Guds stemme og tyde profetiske syner</p>
                         <p><strong>Tidspunkt:</strong> I morgen kl. 18:00 - 19:30 (Oslo-tid)</p>
-                        <p><strong>Plattform:</strong> Zoom Video-seminar</p>
+                        <p><strong>Plattform:</strong> Live video-samling på nett</p>
                       </div>
                       <p>
                         Vi anbefaler at du logger inn 5 minutter før for å teste lyd og bilde. Ha notatblokk og leksjonsmaterialet for Modul 3 klart til diskusjonen.
@@ -248,13 +248,13 @@ export default function EmailPreviews() {
                   {selectedTemplate === 'alert' && (
                     <>
                       <h2 className="font-serif text-lg font-bold text-slate-900 border-b border-slate-200 pb-2">
-                        Personlig melding fra Dr. Julian Vance
+                        Pastoral hilsen fra Apostel David Hansen
                       </h2>
                       <p>
                         Hei {user?.name.split(' ')[0]},
                       </p>
                       <div className="bg-slate-50 border-l-4 border-[#00324b] p-4 rounded-r text-xs italic text-slate-600 leading-relaxed font-serif">
-                        "Jeg legger merke til at du har hatt en litt roligere periode i Innføring i Pedagogikk i det siste. Jeg vil gjerne forsikre meg om at alt går bra med studiene dine. Si gjerne ifra om det er deler av pensum du syns er utfordrende, så kan vi ta en prat."
+                        "Jeg legger merke til at du har hatt en litt roligere periode i Innføring i den Profetiske Tjeneste i det siste. Jeg vil gjerne forsikre meg om at alt går bra med din åndelige vandring og studiene. Si gjerne ifra om det er områder av utrustningen du opplever utfordrende, eller om du ønsker bønneoppfølging."
                       </div>
                       <p>
                         Du kan svare på denne oppfølgingen direkte ved å logge inn på plattformen og sende en melding i studiechatten eller ta kontakt på neste seminar.
@@ -267,14 +267,14 @@ export default function EmailPreviews() {
                   )}
 
                   <p className="text-[11px] text-slate-500 text-center border-t border-slate-200 pt-6">
-                    Trenger du hjelp? Kontakt <a className="text-[#00324b] underline" href="#help">support@scholastic.com</a> eller logg inn på plattformen.
+                    Trenger du hjelp? Kontakt <a className="text-[#00324b] underline" href="#help">support@hiskingdomprophets.com</a> eller logg inn på plattformen.
                   </p>
                 </div>
 
                 {/* Email Footer */}
                 <div className="bg-slate-50 p-6 text-center text-[10px] text-slate-400 border-t border-slate-200">
-                  <p>© 2026 Scholastic Premium. Alle rettigheter reservert.</p>
-                  <p className="mt-1">Levert av Mandal Regnskapskontor Headless CMS og e-postvarslingstjeneste.</p>
+                  <p>© 2026 His Kingdom Prophets. Alle rettigheter reservert.</p>
+                  <p className="mt-1">Levert i samarbeid med Mandal Regnskapskontor Headless CMS og e-postvarslingstjeneste.</p>
                 </div>
 
               </div>

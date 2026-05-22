@@ -125,7 +125,7 @@ export default function App() {
                   <iframe 
                     src={location.pathname} 
                     className="w-full h-full border-none bg-background overflow-y-auto"
-                    title="Scholastic Premium Tablet View"
+                    title="His Kingdom Prophets Tablet View"
                   />
                 </div>
 
@@ -151,7 +151,7 @@ export default function App() {
                   <iframe 
                     src={location.pathname} 
                     className="w-full h-full border-none bg-background overflow-y-auto"
-                    title="Scholastic Premium Mobile View"
+                    title="His Kingdom Prophets Mobile View"
                   />
                 </div>
 

@@ -22,18 +22,18 @@ export default function AssignmentsPage() {
   const [assignments, setAssignments] = useState([
     {
       id: 'ass-1',
-      title: 'Pedagogisk metodediskusjon',
-      courseCode: 'PED 101',
-      courseName: 'Innføring i Pedagogikk',
+      title: 'Det profetiske embete i GT vs NT',
+      courseCode: 'PROP 101',
+      courseName: 'Innføring i den Profetiske Tjeneste',
       dueDate: '2026-06-05',
       dueTime: '23:59',
       status: 'pending', // pending, submitted, graded
-      description: 'Skriv et essay på 1500-2000 ord der du drøfter didaktiske forskjeller mellom behavioristiske og kognitive læringsteorier. Gi konkrete eksempler fra klasseromssituasjoner og diskuter hvordan lærerens rolle endrer seg mellom disse to tilnærmingene.',
+      description: 'Skriv et essay på 1500-2000 ord der du drøfter didaktiske og åndelige forskjeller mellom det gammeltestamentlige og det nytestamentlige profetembetet. Gi konkrete bibelske eksempler og diskuter hvordan profetens rolle endrer seg etter pinseedagen.',
       weight: '30% av totalkarakter',
       gradingRubric: [
-        { criterion: 'Teoretisk forståelse', points: 40 },
-        { criterion: 'Kritisk refleksjon', points: 40 },
-        { criterion: 'Struktur og språk', points: 20 }
+        { criterion: 'Bibelforståelse & Hermeneutikk', points: 40 },
+        { criterion: 'Åndelig refleksjon & karakter', points: 40 },
+        { criterion: 'Struktur og formidling', points: 20 }
       ],
       submission: null,
       grade: null,
@@ -41,17 +41,17 @@ export default function AssignmentsPage() {
     },
     {
       id: 'ass-2',
-      title: 'Kvantemekaniske bølgefunksjoner',
-      courseCode: 'PHYS 301',
-      courseName: 'Advanced Theoretical Physics',
+      title: 'Eksegese av Johannes\' åpenbaring',
+      courseCode: 'BIBLE 301',
+      courseName: 'Avansert Hermeneutikk og Tolkning',
       dueDate: '2026-06-12',
       dueTime: '12:00',
       status: 'pending',
-      description: 'Løs Schrödinger-ligningen for en harmonisk oscillator i tre dimensjoner. Utled egenverdiene og diskuter degenerasjonsgraden for de tre laveste energinivåene. Alle utregninger må dokumenteres grundig i PDF-format.',
+      description: 'Foreta en grundig eksegetisk analyse av Johannes\' åpenbaring kapittel 5. Utled de eskatologiske typologiene og diskuter lammet som åpner seglene. Alle tolkninger og kildehenvisninger må dokumenteres grundig i PDF-format.',
       weight: '40% av totalkarakter',
       gradingRubric: [
-        { criterion: 'Matematisk stringens', points: 50 },
-        { criterion: 'Fysisk tolkning', points: 30 },
+        { criterion: 'Hermeneutisk stringens', points: 50 },
+        { criterion: 'Teologisk tolkning', points: 30 },
         { criterion: 'Formatering & ryddighet', points: 20 }
       ],
       submission: null,
@@ -60,22 +60,22 @@ export default function AssignmentsPage() {
     },
     {
       id: 'ass-3',
-      title: 'Kildekritisk rapport',
-      courseCode: 'WRIT 201',
-      courseName: 'Akademisk Skriving',
+      title: 'Sjelesorgstudie i Mandal',
+      courseCode: 'MIN 201',
+      courseName: 'Sjelesorg og Menighetsledelse',
       dueDate: '2026-05-18',
       dueTime: '23:59',
       status: 'submitted',
-      description: 'Velg tre vitenskapelige artikler innenfor ditt valgte forskningsfelt og foreta en komparativ kildekritisk analyse. Vurder forfatternes autoritet, metodiske åpenhet, og eventuelle bias.',
+      description: 'Velg tre sjelesorgs-modeller eller case-studier innenfor kristen veiledning og foreta en komparativ analyse. Vurder modellsikkerhet, bibelsk forankring og pastoral relevans.',
       weight: '25% av totalkarakter',
       gradingRubric: [
-        { criterion: 'Kildeidentifikasjon', points: 30 },
-        { criterion: 'Metodisk evaluering', points: 50 },
-        { criterion: 'Akademisk referering', points: 20 }
+        { criterion: 'Sjelesorgmodeller', points: 30 },
+        { criterion: 'Sjelesorgfaglig evaluering', points: 50 },
+        { criterion: 'Referering & Etikk', points: 20 }
       ],
       submission: {
-        text: 'Dette essayet sammenligner tre artikler som omhandler maskinlæring i pedagogiske rammeverk...',
-        fileName: 'kildekritisk_analyse_knutsen.pdf',
+        text: 'Dette essayet sammenligner tre sjelesorgsmodeller i en menighetskontekst med fokus på helbredelse av indre sår...',
+        fileName: 'sjelesorg_analyse_knutsen.pdf',
         submittedAt: '2026-05-17 19:42'
       },
       grade: null,
@@ -83,26 +83,26 @@ export default function AssignmentsPage() {
     },
     {
       id: 'ass-4',
-      title: 'Problemstilling & Prosjektskisse',
-      courseCode: 'WRIT 201',
-      courseName: 'Akademisk Skriving',
+      title: 'Problemstilling & Etablering av bønnesenter',
+      courseCode: 'MIN 201',
+      courseName: 'Sjelesorg og Menighetsledelse',
       dueDate: '2026-04-20',
       dueTime: '23:59',
       status: 'graded',
-      description: 'Formuler en presis problemstilling for din kommende semesteroppgave, og utarbeid en strukturert prosjektskisse som inkluderer teoretisk rammeverk og foreslått forskningsmetodikk.',
+      description: 'Utarbeid en strukturert prosjektskisse for etablering av et bønne- og sjelesorgs-senter i Mandal, inkludert åndelig rammeverk og praktisk menighetsledelse.',
       weight: '15% av totalkarakter',
       gradingRubric: [
-        { criterion: 'Problemstillingens kvalitet', points: 40 },
-        { criterion: 'Faglig relevans', points: 35 },
-        { criterion: 'Språklig presisjon', points: 25 }
+        { criterion: 'Skissens teologiske dybde', points: 40 },
+        { criterion: 'Faglig & pastoral relevans', points: 35 },
+        { criterion: 'Formidlingspresisjon', points: 25 }
       ],
       submission: {
-        text: 'Jeg ønsker å undersøke effekten av AI-assistert tilbakemelding på studentenes motivasjon...',
-        fileName: 'prosjektskisse_v1.pdf',
+        text: 'Jeg ønsker å utarbeide en skisse for et bønnesenter i Mandal menighet med fokus på kontinuerlig forbønn, opplæring i nådegaver, og sjelesorg...',
+        fileName: 'prosjektskisse_bønnesenter_v1.pdf',
         submittedAt: '2026-04-18 11:15'
       },
       grade: 'A',
-      feedback: 'En fremragende problemstilling med et solid metodisk fundament. Veldig godt spisset, og du viser stor teoretisk modenhet i valg av litteratur. Fortsett det utmerkede arbeidet!',
+      feedback: 'En fremragende prosjektskisse med et solid teologisk fundament. Veldig godt spisset, og du viser stor åndelig og praktisk modenhet i din tilnærming. Fortsett det utmerkede arbeidet!',
       score: '96/100'
     }
   ]);
@@ -159,7 +159,7 @@ export default function AssignmentsPage() {
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">His Kingdom Prophets</div>
           </div>
           
           <div className="flex items-center gap-3 sm:gap-4 shrink-0">
@@ -443,7 +443,7 @@ export default function AssignmentsPage() {
                       </div>
                       <div className="flex justify-between pt-1">
                         <span className="text-outline">Vurdert av:</span>
-                        <span className="font-semibold text-primary">Lærer Vance</span>
+                        <span className="font-semibold text-primary">Apostel David Hansen</span>
                       </div>
                     </div>
                   </div>
@@ -474,7 +474,7 @@ export default function AssignmentsPage() {
         </button>
         <button onClick={() => navigate('/student/library')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
           <BookOpen size={18} />
-          <span>Kurs</span>
+          <span>Studieplan</span>
         </button>
         <button onClick={() => navigate('/student/assignments')} className="flex flex-col items-center gap-0.5 text-xs text-primary font-bold">
           <CheckSquare size={18} />
@@ -482,7 +482,7 @@ export default function AssignmentsPage() {
         </button>
         <button onClick={() => navigate('/student/chat')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
           <Users size={18} />
-          <span>Fagprat</span>
+          <span>Bønnerom</span>
         </button>
       </div>
 

@@ -17,11 +17,11 @@ export default function CommunityChatView() {
   // Initial Chat Feed State
   const [channels, setChannels] = useState({
     general: {
-      name: 'general',
-      topic: 'Generell faglig og sosial diskusjon for alle studenter',
+      name: 'generelt',
+      topic: 'Generell teologisk og profetisk samtale for alle studenter',
       pinned: {
-        author: 'Dr. Julian Vance (Lærer)',
-        text: 'Husk å sjekke leksjonsmodulene i Pedagogikk (PED 101) før Zoom-seminaret i morgen kveld kl. 18:00. Vi skal diskutere didaktiske metoder i praksis.',
+        author: 'Apostel David Hansen (Mentor)',
+        text: 'Husk å sjekke leksjonsmodulene i Profetisk Tjeneste (PROP 101) før Zoom-samlingen i morgen kveld kl. 18:00. Vi skal dele og prøve profetiske ord i praksis.',
         time: 'I går'
       },
       messages: [
@@ -29,7 +29,7 @@ export default function CommunityChatView() {
           id: 1,
           author: 'Marius Holm',
           avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120',
-          text: 'Hei alle sammen! Er det noen andre som tar PED 101 dette semesteret? Tenkte å starte en kollokviegruppe på biblioteket til fredag.',
+          text: 'Hei alle sammen! Er det noen andre som tar PROP 101 nå? Tenkte å starte en bønne- og studiegruppe på fredag.',
           time: '10:15',
           role: 'Student'
         },
@@ -37,7 +37,7 @@ export default function CommunityChatView() {
           id: 2,
           author: 'Ingrid Nilsen',
           avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120',
-          text: 'Ja, gjerne Marius! Jeg sliter litt med didaktikk-modulen og vil gjerne sparre litt før innleveringen.',
+          text: 'Ja, gjerne Marius! Jeg har jobbet mye med modulen om å høre Guds stemme, og vil gjerne sparre litt.',
           time: '10:24',
           role: 'Student'
         },
@@ -45,18 +45,18 @@ export default function CommunityChatView() {
           id: 3,
           author: 'Anders Berg',
           avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120',
-          text: 'Teller meg med på den! Skal vi møtes rundt kl 12:00?',
+          text: 'Bli med! Skal vi møtes online eller på bønnerommet kl 12:00?',
           time: '10:31',
           role: 'Student'
         }
       ]
     },
     'study-groups': {
-      name: 'study-groups',
-      topic: 'Organisering av studiegrupper og kollokvier',
+      name: 'bønnegrupper',
+      topic: 'Organisering av studiegrupper og bønneringer',
       pinned: {
-        author: 'Elena Rodriguez (Faglærer)',
-        text: 'For Akademisk Skriving anbefaler jeg sterkt at studiegrupper gjør fagfellevurdering (peer-review) på utkastene til prosjektskissene deres.',
+        author: 'Pastor Siri Knutsen (Mentor)',
+        text: 'For kurset i Sjelesorg (MIN 201) anbefaler jeg sterkt at dere ber sammen for prosjektplanene deres og søker Herrens ledelse.',
         time: '2 dager siden'
       },
       messages: [
@@ -64,35 +64,35 @@ export default function CommunityChatView() {
           id: 1,
           author: 'Anders Berg',
           avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120',
-          text: 'Noen som er ledige for kildekritikk-diskusjon i dag? Er på grupperom 4.',
+          text: 'Noen som er ledige for felles bønnetjeneste i dag? Er på bønnerom 2.',
           time: '09:05',
           role: 'Student'
         }
       ]
     },
     'physics-seminar': {
-      name: 'physics-seminar',
-      topic: 'Faglige samtaler rundt Advanced Theoretical Physics',
+      name: 'syner-og-drømmer',
+      topic: 'Samtaler rundt drømmer, syner og åpenbaringer',
       pinned: null,
       messages: [
         {
           id: 1,
-          author: 'Dr. Alistair Thorne (Lærer)',
+          author: 'Profet Jon Arild (Mentor)',
           avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120',
-          text: 'Bølgefunksjonsoppgaven krever grundig matematisk redegjørelse av degenerasjonsgraden. Ikke hopp over leddene i utledningen.',
+          text: 'Å tyde syner krever dyp fortrolighet med Guds ord og Den Hellige Ånds ledelse. Sjekk alltid åpenbaringer mot skriftens ord.',
           time: 'I dag 08:30',
-          role: 'Lærer'
+          role: 'Mentor'
         }
       ]
     }
   });
 
   const [onlineMembers] = useState([
-    { name: 'Dr. Julian Vance', role: 'Lærer', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120', online: true },
+    { name: 'Apostel David Hansen', role: 'Mentor', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120', online: true },
     { name: 'Anders Berg', role: 'Student', avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120', online: true },
     { name: 'Ingrid Nilsen', role: 'Student', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120', online: true },
     { name: 'Marius Holm', role: 'Student', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120', online: false },
-    { name: 'Dr. Alistair Thorne', role: 'Lærer', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120', online: false }
+    { name: 'Profet Jon Arild', role: 'Mentor', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120', online: false }
   ]);
 
   const activeChannelData = channels[activeChannel];
@@ -107,7 +107,7 @@ export default function CommunityChatView() {
       avatar: user?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120',
       text: messageText,
       time: new Date().toLocaleTimeString('no-NO', { hour: '2-digit', minute: '2-digit' }),
-      role: user?.role === 'teacher' ? 'Lærer' : (user?.role === 'admin' ? 'Admin' : 'Student')
+      role: user?.role === 'teacher' ? 'Mentor' : (user?.role === 'admin' ? 'Admin' : 'Student')
     };
 
     setChannels(prev => ({
@@ -134,7 +134,7 @@ export default function CommunityChatView() {
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">His Kingdom Prophets</div>
           </div>
           
           <div className="flex items-center gap-3 sm:gap-4 shrink-0">
@@ -162,9 +162,9 @@ export default function CommunityChatView() {
             
             <div className="space-y-1">
               {[
-                { id: 'general', name: 'general', desc: 'Hovedchaten' },
-                { id: 'study-groups', name: 'study-groups', desc: 'Kollokvieorganisering' },
-                { id: 'physics-seminar', name: 'physics-seminar', desc: 'Advanced Physics' }
+                { id: 'general', name: 'generelt', desc: 'Hovedsamtale' },
+                { id: 'study-groups', name: 'bønnegrupper', desc: 'Felles bønn & studier' },
+                { id: 'physics-seminar', name: 'syner-og-drømmer', desc: 'Profetisk deling' }
               ].map(ch => {
                 const isActive = activeChannel === ch.id;
                 return (
@@ -236,7 +236,7 @@ export default function CommunityChatView() {
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-bold text-primary">{msg.author}</span>
                         <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
-                          msg.role === 'Lærer' 
+                          msg.role === 'Mentor' || msg.role === 'Lærer' 
                             ? 'bg-primary text-white' 
                             : 'bg-surface-container text-on-surface-variant'
                         }`}>
@@ -331,7 +331,7 @@ export default function CommunityChatView() {
         </button>
         <button onClick={() => navigate('/student/library')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
           <BookOpen size={18} />
-          <span>Kurs</span>
+          <span>Studieplan</span>
         </button>
         <button onClick={() => navigate('/student/assignments')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
           <CheckSquare size={18} />
@@ -339,7 +339,7 @@ export default function CommunityChatView() {
         </button>
         <button onClick={() => navigate('/student/chat')} className="flex flex-col items-center gap-0.5 text-xs text-primary font-bold">
           <Users size={18} />
-          <span>Fagprat</span>
+          <span>Bønnerom</span>
         </button>
       </div>
 

@@ -67,7 +67,7 @@ export default function ShowcaseShell({ viewportSize, setViewportSize }) {
       <div className="flex justify-between items-center px-4 py-1.5 bg-primary-container text-[11px] text-on-primary-container font-mono">
         <div className="flex items-center gap-1">
           <Eye size={12} className="text-on-primary-container" />
-          <span>SCHOLASTIC PREMIUM SHOWCASE HUB</span>
+          <span>HIS KINGDOM PROPHETS SHOWCASE HUB</span>
         </div>
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)}

@@ -17,16 +17,16 @@ export default function VideoView() {
   const [discussionList, setDiscussionList] = useState([
     {
       id: 1,
-      sender: "Prof. Aris Thorne",
-      text: "Flott spørsmål, Thomas. Overgangen forutsetter bevaring av energiprinsippet innenfor et potensialfelt. Jeg har lagt til en ressurs om Hamilton-operatorer under ressursfanen.",
+      sender: "Profet Jon Arild",
+      text: "Flott spørsmål, Thomas. Tolkningen forutsetter at vi forstår den historiske konteksten i Efesos på Johannes' tid. Jeg har lagt til en teologisk studieguide om apokalyptisk symbolspråk under ressursfanen.",
       time: "1 time siden",
       isInstructor: true,
-      initials: "AT"
+      initials: "JA"
     },
     {
       id: 2,
       sender: "Thomas Knutsen",
-      text: "Kan noen avklare overgangen fra den klassiske energiligningen ved 12:45? @ProfAris",
+      text: "Kan noen avklare tolkningen av de syv lysestakene ved 12:45? @JonArild",
       time: "2 timer siden",
       isInstructor: false,
       initials: "TK"
@@ -34,7 +34,7 @@ export default function VideoView() {
     {
       id: 3,
       sender: "Sarah J.",
-      text: "08:15-merket binder virkelig alt vi diskuterte i modul 2 sammen. Fantastisk visualisering.",
+      text: "08:15-merket binder virkelig alt vi diskuterte i modul 2 om endetiden sammen. Fantastisk dybde.",
       time: "5 timer siden",
       isInstructor: false,
       initials: "SJ"
@@ -57,7 +57,7 @@ export default function VideoView() {
 
     setDiscussionList(prev => [...prev, comment]);
     setNewComment("");
-    showToast("Kommentar lagt til i forelesningen!");
+    showToast("Kommentar lagt til i diskusjonen!");
   };
 
   const handleJumpTime = (time) => {
@@ -78,7 +78,7 @@ export default function VideoView() {
         <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-12 max-w-[1440px] mx-auto h-20">
           <div className="font-serif text-lg sm:text-2xl font-bold text-primary flex items-center gap-1.5 sm:gap-2 cursor-pointer truncate mr-2" onClick={() => navigate('/student/dashboard')}>
             <GraduationCap className="text-primary shrink-0" size={24} />
-            <span className="truncate">Scholastic Premium</span>
+            <span className="truncate">His Kingdom Prophets</span>
           </div>
           
           <nav className="hidden md:flex items-center gap-8">
@@ -124,7 +124,7 @@ export default function VideoView() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-on-surface uppercase tracking-wider">{user?.name}</p>
-                  <p className="text-[11px] text-on-surface-variant font-medium">Aktiv Læringsprofil</p>
+                  <p className="text-[11px] text-on-surface-variant font-medium">Aktiv Utrustningsprofil</p>
                 </div>
               </div>
               <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
@@ -148,7 +148,7 @@ export default function VideoView() {
               </button>
               <button onClick={() => navigate('/student/chat')} className="flex items-center gap-3 w-full px-4 py-3 text-sm text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg font-medium text-left">
                 <Users size={18} />
-                <span>Fagfellesskap</span>
+                <span>Fellesskap</span>
               </button>
             </nav>
           </div>
@@ -161,9 +161,9 @@ export default function VideoView() {
           <nav className="flex items-center gap-2 text-xs font-semibold text-outline">
             <span className="hover:underline cursor-pointer" onClick={() => navigate('/student/library')}>Kurs</span>
             <span>/</span>
-            <span className="hover:underline cursor-pointer" onClick={() => navigate('/student/lesson')}>Bølgemekanikk</span>
+            <span className="hover:underline cursor-pointer" onClick={() => navigate('/student/lesson', { state: { courseId: 'bible301' } })}>Bibelstudier</span>
             <span>/</span>
-            <span className="text-primary font-bold">Leksjon 4: Schrödinger-ligningen</span>
+            <span className="text-primary font-bold">Modul 6: Johannes' åpenbaring og symbolspråk</span>
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -176,13 +176,13 @@ export default function VideoView() {
                 {/* Thumbnail / Video Stream Mock */}
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-tr from-slate-900 via-slate-800 to-primary">
                   <div className="text-center text-white/40 font-mono space-y-3 relative z-10 px-4">
-                    <p className="text-xs uppercase tracking-widest font-bold">Bølgemekanikk & Kvantefysiske Systemer</p>
-                    <h3 className="font-serif text-lg md:text-xl font-bold text-white/80">Tidsuboavhengig Schrödinger-ligning</h3>
-                    <p className="text-[10px] text-white/60">Foreleser: Dr. Alistair Thorne</p>
+                    <p className="text-xs uppercase tracking-widest font-bold">Bibelstudier & Avansert Hermeneutikk</p>
+                    <h3 className="font-serif text-lg md:text-xl font-bold text-white/80">Johannes' åpenbaring og eskatologisk symbolspråk</h3>
+                    <p className="text-[10px] text-white/60">Foreleser: Profet Jon Arild</p>
                   </div>
-                  {/* Glowing background mathematics element */}
+                  {/* Glowing background scripture elements */}
                   <div className="absolute inset-0 opacity-10 bg-cover font-serif text-white flex items-center justify-center text-2xl whitespace-pre-wrap select-none p-12">
-                    {"Hψ = Eψ\n-iℏ ∂ψ/∂t = Hψ"}
+                    {"Apostlenes gjerninger 2:17\nÅpenbaringen 1:1\n1. Kor 14"}
                   </div>
                 </div>
 
@@ -219,7 +219,7 @@ export default function VideoView() {
               <div className="bg-white border border-outline-variant/30 rounded-2xl overflow-hidden shadow-sm">
                 <div className="flex border-b border-slate-100 text-xs font-bold">
                   <button className="px-6 py-4 text-primary border-b-2 border-primary bg-primary/5">TRANSKRIPT & NOTATER</button>
-                  <button onClick={() => showToast("Laster ned faglige ressurser...")} className="px-6 py-4 text-on-surface-variant hover:text-primary transition-colors">RESSURSER</button>
+                  <button onClick={() => showToast("Laster ned teologiske studieguider...")} className="px-6 py-4 text-on-surface-variant hover:text-primary transition-colors">STUDIEGUIDER</button>
                   <button onClick={() => navigate('/student/assignments')} className="px-6 py-4 text-on-surface-variant hover:text-primary transition-colors">OPPGAVER</button>
                 </div>
 
@@ -239,7 +239,7 @@ export default function VideoView() {
                     >
                       <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-0.5 rounded h-fit">00:15</span>
                       <p className="text-sm font-serif font-medium text-on-surface leading-relaxed italic">
-                        "I vår utforskning av bølgemekanikk må vi først innse det fundamentale postulatet at partikler utviser bølgelignende oppførsel. Dette leder oss direkte til formelverket for den tidsuboavhengige Schrödinger-ligningen."
+                        "I vår utforskning av bibelhermeneutikk må vi først innse det fundamentale postulatet at skriften må tolkes i lys av seg selv. Dette leder oss direkte til det historisk-grammatiske tolkningsprinsippet."
                       </p>
                     </div>
 
@@ -249,7 +249,7 @@ export default function VideoView() {
                     >
                       <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-0.5 rounded h-fit">02:45</span>
                       <p className="text-sm font-serif font-medium text-on-surface leading-relaxed">
-                        "Betrakt Hamilton-operatoren, som representerer systemets totale energi. Vi utleder de stasjonære tilstandene ved å løse egenverdiproblemet der operatoren virker på bølgefunksjonen ψ..."
+                        "Betrakt paktsteologien som representerer Guds overordnede plan. Vi utleder de profetiske mønstrene ved å analysere skyggebildene og typologiene i Det Gamle Testamente..."
                       </p>
                     </div>
 
@@ -259,7 +259,7 @@ export default function VideoView() {
                     >
                       <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-0.5 rounded h-fit">05:12</span>
                       <p className="text-sm font-serif font-medium text-on-surface leading-relaxed">
-                        "Utledningen fortsetter ved å anta en separasjon av variabler for den tidsavhengige bølgefunksjonen. Ved å substituere den foreslåtte løsningen inn i den generelle bølgeligningen, isolerer vi romkomponenten..."
+                        "Tolkningen fortsetter ved å skille mellom bokstavelig og symbolsk språk i apokalyptisk litteratur. Ved å sammenligne symbolene med gammeltestamentlige referanser, finner vi den dype åpenbaringen..."
                       </p>
                     </div>
                   </div>
@@ -307,7 +307,7 @@ export default function VideoView() {
                 <form onSubmit={handlePostComment} className="p-3 border-t border-slate-100 bg-slate-50 block">
                   <div className="relative w-full">
                     <textarea 
-                      placeholder="Still et faglig spørsmål eller tag @professor..."
+                      placeholder="Still et åndelig eller teologisk spørsmål..."
                       value={newComment}
                       onChange={(e) => setNewComment(e.target.value)}
                       rows={2}
@@ -324,7 +324,7 @@ export default function VideoView() {
                 </form>
               </div>
 
-              {/* Upcoming live academic calendar inside Sidebar */}
+              {/* Upcoming live theological calendar inside Sidebar */}
               <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
                 <h3 className="font-serif font-bold text-primary text-base mb-4 flex items-center gap-2">
                   <Calendar size={16} />
@@ -333,10 +333,10 @@ export default function VideoView() {
                 <div className="space-y-3 text-xs">
                   <div className="flex gap-3 items-start hover:bg-slate-50 p-2 rounded">
                     <div className="bg-primary/5 text-primary p-2 rounded font-bold text-center font-mono shrink-0">
-                      24. okt
+                      24. mai
                     </div>
                     <div>
-                      <p className="font-bold text-on-surface">Hydrogen Atom Analysis</p>
+                      <p className="font-bold text-on-surface">Profetisk Utrustning Live</p>
                       <p className="text-[10px] text-outline flex items-center gap-1 mt-0.5">
                         <Clock size={10} />
                         Torsdag, kl. 10:00
@@ -346,10 +346,10 @@ export default function VideoView() {
 
                   <div className="flex gap-3 items-start hover:bg-slate-50 p-2 rounded">
                     <div className="bg-primary/5 text-primary p-2 rounded font-bold text-center font-mono shrink-0">
-                      27. okt
+                      27. mai
                     </div>
                     <div>
-                      <p className="font-bold text-on-surface">Angular Momentum II</p>
+                      <p className="font-bold text-on-surface">Avansert Hermeneutikk Seminar</p>
                       <p className="text-[10px] text-outline flex items-center gap-1 mt-0.5">
                         <Clock size={10} />
                         Søndag, kl. 14:00
@@ -382,7 +382,7 @@ export default function VideoView() {
         </button>
         <button onClick={() => navigate('/student/chat')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
           <Users size={18} />
-          <span>Fagprat</span>
+          <span>Fellesskap</span>
         </button>
       </div>
 

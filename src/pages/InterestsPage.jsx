@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 
 const INTERESTS = [
-  { id: "ped", name: "Pedagogikk & Didaktikk", icon: "school" },
-  { id: "phys", name: "Teoretisk Fysikk", icon: "science" },
-  { id: "write", name: "Akademisk Skriving", icon: "edit" },
-  { id: "phil", name: "Klassisk Filosofi", icon: "psychology" },
-  { id: "hist", name: "Historisk Analyse", icon: "history_edu" },
-  { id: "tech", name: "Moderne Datateknologi", icon: "terminal" },
-  { id: "math", name: "Avansert Matematikk", icon: "calculate" },
-  { id: "stat", name: "Statistiske Metoder", icon: "bar_chart" }
+  { id: "prop101", name: "Profetisk tjeneste", icon: "campaign" },
+  { id: "bible301", name: "Bibelstudier & Hermeneutikk", icon: "menu_book" },
+  { id: "min201", name: "Sjelesorg & Healing", icon: "favorite" },
+  { id: "worship", name: "Lovsang & Tilbedelse", icon: "music_note" },
+  { id: "eschatology", name: "Eskatologi (Siste tider)", icon: "schedule" },
+  { id: "hearing", name: "Høre Guds røst", icon: "hearing" },
+  { id: "church", name: "Menighetsbygging", icon: "home" },
+  { id: "warfare", name: "Åndelig krigføring & Bønn", icon: "shield" }
 ];
 
 export default function InterestsPage() {
@@ -38,9 +38,9 @@ export default function InterestsPage() {
         </div>
 
         {/* Headline */}
-        <h1 className="font-serif text-2xl sm:text-3xl text-primary font-bold mb-4">Dine akademiske interesser</h1>
+        <h1 className="font-serif text-2xl sm:text-3xl text-primary font-bold mb-4">Dine åndelige kjerneområder</h1>
         <p className="text-on-surface-variant text-sm md:text-base max-w-md mx-auto mb-10">
-          Velg minst ett kjerneområde du ønsker å fokusere på under ditt opphold. Dette tilpasser studieplanen din.
+          Velg minst ett tjenesteområde du ønsker å fokusere på under din utrustning hos oss. Dette tilpasser studieplanen din.
         </p>
 
         {/* Grid layout */}

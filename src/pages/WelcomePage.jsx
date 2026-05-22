@@ -17,7 +17,7 @@ export default function WelcomePage() {
       {/* Header */}
       <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
         <div className="flex justify-between items-center px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
-          <div className="font-serif text-2xl font-bold text-primary">Scholastic Premium</div>
+          <div className="font-serif text-2xl font-bold text-primary">His Kingdom Prophets</div>
           <nav className="flex gap-4">
             <button onClick={handleDashboardRedirect} className="text-on-surface-variant font-semibold text-xs tracking-wider uppercase hover:text-primary transition-colors">
               Hopp over
@@ -78,7 +78,7 @@ export default function WelcomePage() {
               transition={{ delay: 0.2 }}
               className="text-lg md:text-xl text-on-surface-variant max-w-2xl mx-auto leading-relaxed"
             >
-              Din akademiske profil er nå ferdig konfigurert. Du er en del av et globalt nettverk dedikert til akademisk dyktighet og nysgjerrighet.
+              Din profil er nå ferdig konfigurert. Du er registrert som student ved vår profetiske bibelskole og utrustningssenter.
             </motion.p>
           </div>
 
@@ -97,9 +97,9 @@ export default function WelcomePage() {
               <div className="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center mb-4 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                 <BookOpen size={20} />
               </div>
-              <h3 className="font-serif text-lg font-bold text-primary mb-2">Utforsk kurskatalogen</h3>
+              <h3 className="font-serif text-lg font-bold text-primary mb-2">Utforsk studieplanen</h3>
               <p className="text-sm text-on-surface-variant leading-relaxed">
-                Få tilgang til ditt personlige læringsløp basert på dine faglige interesser.
+                Få tilgang til dine kurs i profetisk tjeneste, bibelundervisning og menighetsledelse.
               </p>
             </button>
 
@@ -111,9 +111,9 @@ export default function WelcomePage() {
               <div className="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center mb-4 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                 <Users size={20} />
               </div>
-              <h3 className="font-serif text-lg font-bold text-primary mb-2 font-serif">Bli med i fagfellesskap</h3>
+              <h3 className="font-serif text-lg font-bold text-primary mb-2 font-serif">Bli med i bønnefellesskap</h3>
               <p className="text-sm text-on-surface-variant leading-relaxed">
-                Koble deg på studiegrupper, chat med medstudenter og finn faglige partnere.
+                Koble deg på studiegrupper, del profetiske åpenbaringer og chat med dine medstudenter.
               </p>
             </button>
           </motion.div>
@@ -139,14 +139,14 @@ export default function WelcomePage() {
       {/* Footer */}
       <footer className="bg-surface-container-low border-t border-outline-variant py-8">
         <div className="flex flex-col md:flex-row justify-between items-center px-6 md:px-12 w-full max-w-[1440px] mx-auto text-xs text-on-surface-variant">
-          <div className="font-serif text-lg font-bold text-primary mb-4 md:mb-0 font-serif">Scholastic Premium</div>
+          <div className="font-serif text-lg font-bold text-primary mb-4 md:mb-0 font-serif">His Kingdom Prophets</div>
           <div className="flex flex-col md:flex-row items-center gap-6">
             <nav className="flex gap-4">
               <a className="hover:underline transition-all" href="#privacy">Personvern</a>
               <a className="hover:underline transition-all" href="#terms">Vilkår</a>
               <a className="hover:underline transition-all" href="#help">Hjelpesenter</a>
             </nav>
-            <p className="text-secondary mt-2 md:mt-0">© 2026 Scholastic Premium. Academic Excellence through Minimalist Design.</p>
+            <p className="text-secondary mt-2 md:mt-0">© 2026 His Kingdom Prophets. Profetisk utrustning og dyp bibelundervisning.</p>
           </div>
         </div>
       </footer>

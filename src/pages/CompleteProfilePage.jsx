@@ -37,7 +37,7 @@ export default function CompleteProfilePage() {
       {/* Header */}
       <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
         <div className="flex justify-between items-center px-4 sm:px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
-          <div className="font-serif text-2xl font-bold text-primary">Scholastic Premium</div>
+          <div className="font-serif text-2xl font-bold text-primary">His Kingdom Prophets</div>
           <button onClick={handleSkip} className="text-on-surface-variant font-semibold text-xs tracking-wider uppercase hover:text-primary transition-colors active:opacity-80">
             Hopp over
           </button>
@@ -69,7 +69,7 @@ export default function CompleteProfilePage() {
                 <span>Profilinfo</span>
               </div>
               <div className="opacity-40">
-                <span>Interesser</span>
+                <span>Tjenester</span>
               </div>
               <div className="opacity-40">
                 <span>Godkjenning</span>
@@ -81,7 +81,7 @@ export default function CompleteProfilePage() {
           <div className="text-center mb-10">
             <h1 className="font-serif text-3xl md:text-4xl text-on-surface mb-4 font-bold">Fullfør din profil</h1>
             <p className="text-body-lg text-on-surface-variant">
-              Dine faglige detaljer hjelper oss med å introdusere deg for de rette forskergruppene og medstudentene på plattformen.
+              Dine åndelige detaljer hjelper mentorene våre med å gi deg den beste veiledningen og koble deg med de rette bønnegruppene.
             </p>
           </div>
 
@@ -128,7 +128,7 @@ export default function CompleteProfilePage() {
               {/* Input: Institution */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-on-surface uppercase tracking-wider" htmlFor="institution">
-                  Nåværende Institusjon
+                  Menighetstilknytning / Fellesskap
                 </label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-outline">
@@ -137,7 +137,7 @@ export default function CompleteProfilePage() {
                   <input 
                     className="w-full pl-12 pr-4 py-4 bg-background border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary-container focus:border-primary transition-all text-sm outline-none font-medium"
                     id="institution" 
-                    placeholder="f.eks. Mandal Regnskapskontor eller Universitetet i Agder" 
+                    placeholder="f.eks. Mandal Frikirke, huskirke, eller misjonsfellesskap" 
                     type="text"
                     value={institution}
                     onChange={(e) => setInstitution(e.target.value)}
@@ -149,7 +149,7 @@ export default function CompleteProfilePage() {
               {/* Input: Headline */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-on-surface uppercase tracking-wider" htmlFor="headline">
-                  Profesjonell Tittel / Overskrift
+                  Din Tjenestegave / Kall
                 </label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-outline">
@@ -158,14 +158,14 @@ export default function CompleteProfilePage() {
                   <input 
                     className="w-full pl-12 pr-4 py-4 bg-background border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary-container focus:border-primary transition-all text-sm outline-none font-medium"
                     id="headline" 
-                    placeholder="f.eks. Statsautorisert Regnskapsfører eller Pedagogikkstudent" 
+                    placeholder="f.eks. Profetisk aspirant, lovsangsleder, sjelesørger, pastor" 
                     type="text"
                     value={headline}
                     onChange={(e) => setHeadline(e.target.value)}
                     required
                   />
                 </div>
-                <p className="text-xs text-outline px-1">Beskriv kort din faglige eller akademiske profil.</p>
+                <p className="text-xs text-outline px-1">Beskriv kort din åndelige tjeneste eller ditt kall.</p>
               </div>
 
               {/* Peer Connect Highlight */}
@@ -174,7 +174,7 @@ export default function CompleteProfilePage() {
                 <div>
                   <p className="text-xs text-on-surface font-bold">Hvorfor er dette viktig?</p>
                   <p className="text-xs text-on-surface-variant mt-1 leading-relaxed">
-                    Ved å fullføre disse feltene kan plattformen koble deg sammen med relevante mentornettverk, kollokviegrupper og tilpassede læringsløp.
+                    Ved å spesifisere ditt kall kan plattformen koble deg sammen med relevante mentornettverk som Apostel David Hansen, bønnegrupper og tilpassede læringsløp.
                   </p>
                 </div>
               </div>
@@ -203,14 +203,14 @@ export default function CompleteProfilePage() {
       {/* Footer */}
       <footer className="bg-surface-container-low border-t border-outline-variant py-8">
         <div className="flex flex-col md:flex-row justify-between items-center px-6 md:px-12 w-full max-w-[1440px] mx-auto text-xs text-on-surface-variant">
-          <div className="font-serif text-lg font-bold text-primary mb-4 md:mb-0">Scholastic Premium</div>
+          <div className="font-serif text-lg font-bold text-primary mb-4 md:mb-0">His Kingdom Prophets</div>
           <div className="flex flex-col md:flex-row items-center gap-6">
             <nav className="flex gap-4">
               <a className="hover:underline transition-all" href="#privacy">Personvern</a>
               <a className="hover:underline transition-all" href="#terms">Vilkår</a>
               <a className="hover:underline transition-all" href="#help">Hjelpesenter</a>
             </nav>
-            <p className="text-secondary mt-2 md:mt-0">© 2026 Scholastic Premium. Academic Excellence through Minimalist Design.</p>
+            <p className="text-secondary mt-2 md:mt-0">© 2026 His Kingdom Prophets. Utrustning av profetiske tjenester for menigheten.</p>
           </div>
         </div>
       </footer>

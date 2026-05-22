@@ -24,10 +24,10 @@ export default function NotificationCenter() {
     },
     {
       id: 'not-2',
-      title: 'Ny obligatorisk oppgave publisert',
-      body: 'Modul 5: Akademisk Skriving essayoppgave er nå åpen for innlevering. Frist 5. juni.',
+      title: 'Ny studieoppgave publisert',
+      body: 'Modul 5: Sjelesorg og Menighetsledelse (MIN 201) essayoppgave er nå åpen for innlevering. Frist 5. juni.',
       category: 'broadcast',
-      sentBy: 'Elena Rodriguez',
+      sentBy: 'Pastor Siri Knutsen',
       time: 'I går'
     },
     {
@@ -43,7 +43,7 @@ export default function NotificationCenter() {
   // Form states
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
-  const [targetAudience, setTargetAudience] = useState('alle'); // alle, ped101, phys301, write201
+  const [targetAudience, setTargetAudience] = useState('alle'); // alle, prop101, bible301, min201
 
   const handleBroadcast = (e) => {
     e.preventDefault();
@@ -54,9 +54,9 @@ export default function NotificationCenter() {
 
     const audMap = {
       alle: 'Alle studenter',
-      ped101: 'PED 101 Studentene',
-      phys301: 'PHYS 301 Studentene',
-      write201: 'WRIT 201 Studentene'
+      prop101: 'PROP 101 Studentene',
+      bible301: 'BIBLE 301 Studentene',
+      min201: 'MIN 201 Studentene'
     };
 
     const newNotification = {
@@ -64,7 +64,7 @@ export default function NotificationCenter() {
       title: subject,
       body: message,
       category: 'broadcast',
-      sentBy: user?.name || 'Dr. Julian Vance',
+      sentBy: user?.name || 'Apostel David Hansen',
       time: 'Akkurat nå'
     };
 
@@ -91,7 +91,7 @@ export default function NotificationCenter() {
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">His Kingdom Prophets</div>
           </div>
           
           <div className="flex items-center gap-3 sm:gap-4 shrink-0">
@@ -133,9 +133,9 @@ export default function NotificationCenter() {
                   className="w-full p-3 border border-outline-variant rounded-lg font-sans text-xs focus:outline-none focus:border-primary shadow-sm bg-white"
                 >
                   <option value="alle">Alle studenter på plattformen</option>
-                  <option value="ped101">Studenter i Innføring i Pedagogikk (PED 101)</option>
-                  <option value="phys301">Studenter i Advanced Theoretical Physics (PHYS 301)</option>
-                  <option value="write201">Studenter i Akademisk Skriving (WRIT 201)</option>
+                  <option value="prop101">Studenter i Innføring i den Profetiske Tjeneste (PROP 101)</option>
+                  <option value="bible301">Studenter i Avansert Hermeneutikk og Tolkning (BIBLE 301)</option>
+                  <option value="min201">Studenter i Sjelesorg og Menighetsledelse (MIN 201)</option>
                 </select>
               </div>
 

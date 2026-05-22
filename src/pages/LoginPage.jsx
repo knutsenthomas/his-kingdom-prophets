@@ -50,9 +50,9 @@ export default function LoginPage() {
             onClick={() => navigate('/')} 
             className="font-serif text-2xl sm:text-3xl font-bold text-primary mb-2 cursor-pointer"
           >
-            Scholastic Premium
+            His Kingdom Prophets
           </div>
-          <p className="text-sm text-on-surface-variant">Logg inn på din akademiske portal</p>
+          <p className="text-sm text-on-surface-variant">Logg inn på din åpenbaringsportal</p>
         </div>
 
         {/* Quick login helper profiles */}
@@ -60,19 +60,19 @@ export default function LoginPage() {
           <p className="text-xs font-bold text-primary uppercase tracking-wider mb-3 text-center">Hurtigpålogging (Demo)</p>
           <div className="grid grid-cols-3 gap-2">
             <button
-              onClick={() => handleQuickLogin('student@scholastic.com')}
+              onClick={() => handleQuickLogin('student@hiskingdomprophets.com')}
               className="px-2 py-2 bg-primary text-white text-xs rounded hover:opacity-90 active:scale-[0.98] transition-all font-semibold"
             >
               Student
             </button>
             <button
-              onClick={() => handleQuickLogin('teacher@scholastic.com')}
+              onClick={() => handleQuickLogin('david@hiskingdomprophets.com')}
               className="px-2 py-2 bg-secondary-container text-primary text-xs rounded hover:opacity-90 active:scale-[0.98] transition-all font-semibold"
             >
-              Lærer
+              Mentor
             </button>
             <button
-              onClick={() => handleQuickLogin('admin@scholastic.com')}
+              onClick={() => handleQuickLogin('siri@hiskingdomprophets.com')}
               className="px-2 py-2 bg-tertiary-container text-white text-xs rounded hover:opacity-90 active:scale-[0.98] transition-all font-semibold"
             >
               Admin
@@ -86,7 +86,7 @@ export default function LoginPage() {
             <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">E-postadresse</label>
             <input
               type="email"
-              placeholder="navn@scholastic.com"
+              placeholder="navn@hiskingdomprophets.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-surface-container border border-outline rounded-lg px-4 py-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"

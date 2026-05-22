@@ -20,7 +20,7 @@ export default function StudentFollowUp() {
     setSelectedStudent(student);
     setTemplateType('oppmuntring');
     setCustomText(
-      `Hei ${student.name.split(' ')[0]}!\n\nJeg legger merke til at du har hatt en litt roligere periode i ${student.courseName} i det siste. \n\nJeg vil gjerne forsikre meg om at alt går bra med studiene dine, og heier på deg! Si gjerne ifra om det er deler av pensum du syns er ekstra utfordrende, så kan vi ta en prat.\n\nBeste hilsen\n${user?.name}`
+      `Hei ${student.name.split(' ')[0]}!\n\nJeg legger merke til at du har hatt en litt roligere periode i ${student.courseName} i det siste.\n\nJeg ber for deg og din profetiske utrustning, og ønsker å høre hvordan det går med studieprogresjonen og din åndelige vandring. Si gjerne ifra om det er moduler eller emner du synes er krevende, eller om du trenger forbønn og sjelesorg.\n\nGuds velsignelse,\n${user?.name}`
     );
   };
 
@@ -29,11 +29,11 @@ export default function StudentFollowUp() {
     setTemplateType(type);
     if (type === 'oppmuntring') {
       setCustomText(
-        `Hei ${student.name.split(' ')[0]}!\n\nJeg legger merke til at du har hatt en litt roligere periode i ${student.courseName} i det siste. \n\nJeg vil gjerne forsikre meg om at alt går bra med studiene dine, og heier på deg! Si gjerne ifra om det er deler av pensum du syns er ekstra utfordrende, så kan vi ta en prat.\n\nBeste hilsen\n${user?.name}`
+        `Hei ${student.name.split(' ')[0]}!\n\nJeg legger merke til at du har hatt en litt roligere periode i ${student.courseName} i det siste.\n\nJeg ber for deg og din profetiske utrustning, og ønsker å høre hvordan det går med studieprogresjonen og din åndelige vandring. Si gjerne ifra om det er moduler eller emner du synes er krevende, eller om du trenger forbønn og sjelesorg.\n\nGuds velsignelse,\n${user?.name}`
       );
     } else {
       setCustomText(
-        `Hei ${student.name.split(' ')[0]}!\n\nDette er en vennlig påminnelse om at du henger litt etter den planlagte studieprogresjonen i ${student.courseName}. Du har fullført ${student.modulesCompleted} av ${student.totalModules} moduler.\n\nVennligst logg inn og gjør ferdig neste modul før ukens utgang, eller ta direkte kontakt så vi kan strukturere en plan.\n\nVennlig hilsen\n${user?.name}`
+        `Hei ${student.name.split(' ')[0]}!\n\nDette er en vennlig påminnelse om din framdrift i ${student.courseName}. Du har fullført ${student.modulesCompleted} av ${student.totalModules} moduler.\n\nFor å bevare kontinuiteten i din profetiske utrustning og disippelskap, vil jeg oppmuntre deg til å fullføre neste modul før ukens utgang. Ta gjerne kontakt om vi skal strukturere en personlig studieplan sammen.\n\nVennlig hilsen i Kristus,\n${user?.name}`
       );
     }
   };
@@ -58,12 +58,12 @@ export default function StudentFollowUp() {
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">His Kingdom Prophets</div>
           </div>
           
           <div className="flex items-center gap-3 sm:gap-4 shrink-0">
             <span className="hidden sm:inline-block text-xs font-semibold uppercase tracking-wider text-secondary px-3 py-1 bg-surface-container rounded-full">
-              Følge Opp Studenter
+              Disippeloppfølging
             </span>
             <img 
               src={user?.avatar} 
@@ -80,10 +80,10 @@ export default function StudentFollowUp() {
         {/* Intro */}
         <div className="space-y-2">
           <h1 className="font-serif text-2xl sm:text-3xl font-bold text-primary flex items-center gap-2 flex-wrap">
-            <ShieldAlert size={28} className="text-error shrink-0" /> Studenters Oppfølgingssenter
+            <ShieldAlert size={28} className="text-error shrink-0" /> Senter for Disippeloppfølging
           </h1>
           <p className="text-xs sm:text-sm text-on-surface-variant max-w-3xl leading-relaxed">
-            Nedenfor finner du en oversikt over studenter som er merket i risikosonen. Disse har enten kritisk lav progresjon på leksjonsmodulene, eller har ikke vært aktive i systemet over lengre tid. Klikk på "Send oppfølging" for å sende en tilpasset støttemelding.
+            Nedenfor finner du en oversikt over disipler som har lavere studieaktivitet. Disse har enten lav progresjon på leksjonsmodulene, eller har ikke vært aktive i systemet over lengre tid. Klikk på "Send oppfølging" for å sende en tilpasset sjelesorgs- eller oppmuntringsmelding.
           </p>
         </div>
 
@@ -92,7 +92,7 @@ export default function StudentFollowUp() {
           <div className="flex items-center gap-3">
             <Filter size={18} className="text-primary shrink-0" />
             <span className="text-xs font-semibold text-on-surface-variant uppercase leading-relaxed">
-              Aktive risikokriterier: Siste aktivitet &gt; 3 dager eller Progresjon &lt; 60%
+              Aktive kriterier: Siste aktivitet &gt; 3 dager eller Progresjon &lt; 60%
             </span>
           </div>
 
@@ -139,7 +139,7 @@ export default function StudentFollowUp() {
                   {/* Progresjon Bar indicator */}
                   <div className="space-y-1.5 pt-2">
                     <div className="flex justify-between text-xs font-semibold">
-                      <span className="text-outline">Modulprogresjon</span>
+                      <span className="text-outline">Studieprogresjon</span>
                       <span className="text-primary">{stud.progress}% ({stud.modulesCompleted} av {stud.totalModules} fullført)</span>
                     </div>
                     <div className="h-2 w-full bg-surface-container rounded-full overflow-hidden">
@@ -153,7 +153,7 @@ export default function StudentFollowUp() {
                   {/* Activity and details */}
                   <div className="grid grid-cols-2 gap-4 text-xs pt-2 border-t border-outline-variant/30 text-on-surface-variant">
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-outline">Siste Lese-aktivitet</p>
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-outline">Siste studieaktivitet</p>
                       <p className="font-semibold">{stud.lastActivity}</p>
                     </div>
                     <div>
@@ -194,7 +194,7 @@ export default function StudentFollowUp() {
               <div className="p-4 sm:p-6 bg-primary text-white flex justify-between items-center shrink-0">
                 <div className="space-y-1 min-w-0 mr-4">
                   <h3 className="font-serif text-lg sm:text-xl font-bold flex items-center gap-2 truncate">
-                    <Send size={18} className="shrink-0" /> Send faglært oppfølging
+                    <Send size={18} className="shrink-0" /> Send pastoral oppfølging
                   </h3>
                   <p className="text-xs text-on-primary-container/85 truncate">Mottaker: {selectedStudent.name} ({selectedStudent.courseName})</p>
                 </div>
@@ -222,7 +222,7 @@ export default function StudentFollowUp() {
                           : 'border-outline-variant hover:border-primary text-on-surface-variant hover:text-primary bg-transparent'
                       }`}
                     >
-                      Oppmuntring / Heiarop
+                      Oppmuntring & Forbønn
                     </button>
                     <button
                       type="button"
@@ -233,7 +233,7 @@ export default function StudentFollowUp() {
                           : 'border-outline-variant hover:border-primary text-on-surface-variant hover:text-primary bg-transparent'
                       }`}
                     >
-                      Formell Påminnelse
+                      Kjærlig Påminnelse
                     </button>
                   </div>
                 </div>

@@ -83,7 +83,7 @@ export default function GradesCalculator() {
 
   const handleSaveGrade = (e) => {
     e.preventDefault();
-    showToast(`Endelig karakter ${letterGrade} ({${finalScore}/100}) er lagret og logget for ${activeStudent.name}!`);
+    showToast(`Endelig vurderingsgrad ${letterGrade} (${finalScore}/100) er lagret og registrert for ${activeStudent.name}!`);
   };
 
   const weightsSum = Number(weightQuiz) + Number(weightAssignment) + Number(weightExam);
@@ -101,12 +101,12 @@ export default function GradesCalculator() {
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">His Kingdom Prophets</div>
           </div>
           
           <div className="flex items-center gap-3 sm:gap-4 shrink-0">
             <span className="hidden sm:inline-block text-xs font-semibold uppercase tracking-wider text-secondary px-3 py-1 bg-surface-container rounded-full">
-              Karakterberegning / Sensor
+              Bibelkalkulator / Vurdering
             </span>
             <img 
               src={user?.avatar} 
@@ -123,10 +123,10 @@ export default function GradesCalculator() {
         {/* Intro */}
         <div className="space-y-2">
           <h1 className="font-serif text-2xl sm:text-3xl font-bold text-primary flex items-center gap-2 flex-wrap">
-            <Calculator size={28} className="text-secondary shrink-0" /> Automatisk Karakterkalkulator
+            <Calculator size={28} className="text-secondary shrink-0" /> Bibelkalkulator & Vurderingsverktøy
           </h1>
           <p className="text-xs sm:text-sm text-on-surface-variant max-w-3xl leading-relaxed">
-            Velg en student, sett vekting på de ulike vurderingsdelene, og oppgi foreløpige poengsummer. Kalkulatoren beregner automatisk den endelige vektede poengsummen og bokstavkarakteren i sanntid.
+            Velg en disippel, angi vekting for de ulike studieelementene (quizer, praktiske tjenesteoppgaver og semesteroppgave), og oppgi foreløpige poengsummer. Kalkulatoren beregner automatisk vektet poengsum og endelig vurdering i sanntid.
           </p>
         </div>
 
@@ -139,7 +139,7 @@ export default function GradesCalculator() {
             {/* Student selection card */}
             <div className="bg-white border border-outline-variant rounded-xl p-5 sm:p-6 shadow-sm">
               <h3 className="font-serif text-base font-bold text-primary mb-4 flex items-center gap-2">
-                <UserCheck size={18} className="shrink-0" /> Velg student som skal vurderes
+                <UserCheck size={18} className="shrink-0" /> Velg disippel som skal vurderes
               </h3>
               
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -175,7 +175,7 @@ export default function GradesCalculator() {
               
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-2 border-b border-outline-variant/30">
                 <h3 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-                  <Percent size={18} className="shrink-0" /> Vurderingsvekting (sum 100%)
+                  <Percent size={18} className="shrink-0" /> Studieplanvekting (sum 100%)
                 </h3>
                 <span className={`text-xs font-bold px-2 py-0.5 rounded shrink-0 ${isWeightValid ? 'bg-green-100 text-green-700' : 'bg-error-container text-error'}`}>
                   Sum: {weightsSum}%
@@ -185,7 +185,7 @@ export default function GradesCalculator() {
               {/* Slider 1: Quizzes */}
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-semibold">
-                  <span className="text-on-surface-variant">Leksjonsquizer / E-læring</span>
+                  <span className="text-on-surface-variant">Skrift- & Leksjonsquizer</span>
                   <span className="text-primary">{weightQuiz}% vekting</span>
                 </div>
                 <input 
@@ -201,7 +201,7 @@ export default function GradesCalculator() {
               {/* Slider 2: Assignments */}
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-semibold">
-                  <span className="text-on-surface-variant">Obligatoriske Innleveringer</span>
+                  <span className="text-on-surface-variant">Praktiske Oppgaver & Veiledning</span>
                   <span className="text-primary">{weightAssignment}% vekting</span>
                 </div>
                 <input 
@@ -217,7 +217,7 @@ export default function GradesCalculator() {
               {/* Slider 3: Semester Project */}
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-semibold">
-                  <span className="text-on-surface-variant">Skriftlig Semesteroppgave / Eksamen</span>
+                  <span className="text-on-surface-variant">Semesteroppgave / Teologisk Fordypning</span>
                   <span className="text-primary">{weightExam}% vekting</span>
                 </div>
                 <input 
@@ -233,7 +233,7 @@ export default function GradesCalculator() {
 
             {/* Score Inputs Card */}
             <div className="bg-white border border-outline-variant rounded-xl p-5 sm:p-6 shadow-sm space-y-4">
-              <h3 className="font-serif text-base font-bold text-primary">Score-innlesing (foreløpige poengsummer, 0-100)</h3>
+              <h3 className="font-serif text-base font-bold text-primary">Poengsummer (foreløpige resultater, 0-100)</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 form-field-stable">
                 <div className="space-y-2">
@@ -249,7 +249,7 @@ export default function GradesCalculator() {
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-outline block">Innleveringer</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-outline block">Tjenesteoppgaver</label>
                   <input
                     type="number"
                     min="0"
@@ -261,7 +261,7 @@ export default function GradesCalculator() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-outline block">Eksamen</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-outline block">Semesteroppgave</label>
                   <input
                     type="number"
                     min="0"
@@ -281,13 +281,13 @@ export default function GradesCalculator() {
             
             {/* Grade output card */}
             <div className="bg-white border border-outline-variant rounded-xl p-6 sm:p-8 shadow-sm flex flex-col items-center justify-between text-center gap-6">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-outline">Beregnet Karakterresymé</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-outline">Beregnet Vurderingsresymé</span>
               
               {/* Massive Grade Ring Visualizer */}
               <div className="relative w-40 h-40 sm:w-44 sm:h-44 flex items-center justify-center bg-surface-container rounded-full shadow-inner border-4 border-white shrink-0">
                 <div className="absolute inset-4 bg-white rounded-full shadow-md flex flex-col items-center justify-center">
                   <span className={`text-5xl sm:text-6xl font-bold font-serif ${gradeColor}`}>{letterGrade}</span>
-                  <span className="text-[11px] sm:text-xs font-semibold text-outline">Poeng: {finalScore}/100</span>
+                  <span className="text-[11px] sm:text-xs font-semibold text-outline">Resultat: {finalScore}/100</span>
                 </div>
               </div>
 
@@ -297,18 +297,18 @@ export default function GradesCalculator() {
                   <span className="text-primary truncate ml-2 max-w-[180px]">{activeStudent.name}</span>
                 </div>
                 <div className="flex justify-between font-semibold py-1">
-                  <span className="text-outline">Tilmeldt kurs:</span>
+                  <span className="text-outline">Tilmelt studie:</span>
                   <span className="text-primary truncate ml-2 max-w-[180px]">{activeStudent.courseName}</span>
                 </div>
                 <div className="flex justify-between font-semibold py-1 pb-3">
-                  <span className="text-outline">Progresjon:</span>
+                  <span className="text-outline">Studieprogresjon:</span>
                   <span className="text-primary">{activeStudent.progress}%</span>
                 </div>
 
                 {!isWeightValid && (
                   <div className="bg-error-container/30 border border-error/20 p-3 rounded-lg flex gap-2 items-start text-[11px] text-error mt-2">
                     <AlertCircle size={14} className="mt-0.5 flex-shrink-0" />
-                    <span>Vektene summerer til {weightsSum}%. Karakteren er ikke offisiell før summen er nøyaktig 100%.</span>
+                    <span>Vektene summerer til {weightsSum}%. Evalueringen er ikke offisiell før summen er nøyaktig 100%.</span>
                   </div>
                 )}
               </div>
@@ -322,7 +322,7 @@ export default function GradesCalculator() {
                     : 'bg-surface-container text-outline border border-outline-variant cursor-not-allowed'
                 }`}
               >
-                <Save size={16} className="shrink-0" /> LAGRE ENDELIG KARAKTER
+                <Save size={16} className="shrink-0" /> LAGRE ENDELIG EVALUERING
               </button>
             </div>
 

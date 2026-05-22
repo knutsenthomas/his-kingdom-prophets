@@ -5,63 +5,63 @@ export const AppContext = createContext({});
 
 const INITIAL_COURSES = [
   {
-    id: "ped101",
-    title: "Innføring i Pedagogikk",
-    code: "PED 101",
+    id: "prop101",
+    title: "Innføring i den Profetiske Tjeneste",
+    code: "PROP 101",
     progress: 25,
     modulesCompleted: 2,
     totalModules: 8,
-    instructor: "Dr. Julian Vance",
+    instructor: "Apostel David Hansen",
     zoomLink: "https://zoom.us/j/9270778606",
     modules: [
-      { id: "m1", title: "Modul 1: Pedagogisk historie og grunnlag", completed: true },
-      { id: "m2", title: "Modul 2: Læringsteorier og kognitiv utvikling", completed: true },
-      { id: "m3", title: "Modul 3: Didaktikk og undervisningsmetoder", completed: false },
-      { id: "m4", title: "Modul 4: Klasseromsledelse og relasjonsbygging", completed: false },
-      { id: "m5", title: "Modul 5: Tilpasset opplæring og spesialpedagogikk", completed: false },
-      { id: "m6", title: "Modul 6: Vurdering for læring og eksamen", completed: false },
-      { id: "m7", title: "Modul 7: Det flerkulturelle klasserommet", completed: false },
-      { id: "m8", title: "Modul 8: Profesjonsetikk og lærerrollen", completed: false }
+      { id: "m1", title: "Modul 1: Profetisk historie og bibelsk grunnlag", completed: true },
+      { id: "m2", title: "Modul 2: Å høre Guds stemme og skjelne ånder", completed: true },
+      { id: "m3", title: "Modul 3: Åpenbaringsgaver og drømmetydning", completed: false },
+      { id: "m4", title: "Modul 4: Profetisk karakter og etiske retningslinjer", completed: false },
+      { id: "m5", title: "Modul 5: Betjening og formidling av profetiske budskap", completed: false },
+      { id: "m6", title: "Modul 6: Profetisk forbønn og åndelig krigføring", completed: false },
+      { id: "m7", title: "Modul 7: Tjenestegavenes samspill i menigheten", completed: false },
+      { id: "m8", title: "Modul 8: Prøving og bedømmelse av profeti", completed: false }
     ]
   },
   {
-    id: "phys301",
-    title: "Advanced Theoretical Physics",
-    code: "PHYS 301",
+    id: "bible301",
+    title: "Avansert Hermeneutikk og Tolkning",
+    code: "BIBLE 301",
     progress: 75,
     modulesCompleted: 6,
     totalModules: 8,
-    instructor: "Dr. Alistair Thorne",
+    instructor: "Profet Jon Arild",
     zoomLink: "https://zoom.us/j/9270778607",
     modules: [
-      { id: "p1", title: "Modul 1: Classical Mechanics Review", completed: true },
-      { id: "p2", title: "Modul 2: Quantum Mechanics Foundations", completed: true },
-      { id: "p3", title: "Modul 3: The Schrödinger Equation & Solvable Systems", completed: true },
-      { id: "p4", title: "Modul 4: Angular Momentum & Spin", completed: true },
-      { id: "p5", title: "Modul 5: Quantum Mechanics in Three Dimensions", completed: true },
-      { id: "p6", title: "Modul 6: Identical Particles & Helium Atom", completed: true },
-      { id: "p7", title: "Modul 7: Time-Independent Perturbation Theory", completed: false },
-      { id: "p8", title: "Modul 8: Relativistic Quantum Mechanics Intro", completed: false }
+      { id: "p1", title: "Modul 1: Historisk-grammatisk eksegese", completed: true },
+      { id: "p2", title: "Modul 2: Paktsteologi og Guds frelsesplan", completed: true },
+      { id: "p3", title: "Modul 3: Eskatologi og endetidens profetier", completed: true },
+      { id: "p4", title: "Modul 4: Typologier og skyggebilder i GT", completed: true },
+      { id: "p5", title: "Modul 5: Hebraiske røtter og kulturell kontekst", completed: true },
+      { id: "p6", title: "Modul 6: Johannes' åpenbaring og symbolspråk", completed: true },
+      { id: "p7", title: "Modul 7: Skriftens inspirasjon og autoritet", completed: false },
+      { id: "p8", title: "Modul 8: Praktisk anvendelse av bibelsk teologi", completed: false }
     ]
   },
   {
-    id: "write201",
-    title: "Akademisk Skriving",
-    code: "WRIT 201",
+    id: "min201",
+    title: "Sjelesorg og Menighetsledelse",
+    code: "MIN 201",
     progress: 50,
     modulesCompleted: 4,
     totalModules: 8,
-    instructor: "Elena Rodriguez",
+    instructor: "Pastor Siri Knutsen",
     zoomLink: "https://zoom.us/j/9270778608",
     modules: [
-      { id: "w1", title: "Modul 1: Problemstilling og disposisjon", completed: true },
-      { id: "w2", title: "Modul 2: Kildekritikk og litteratursøk", completed: true },
-      { id: "w3", title: "Modul 3: Argumentasjon og akademisk sjanger", completed: true },
-      { id: "w4", title: "Modul 4: Referansestiler og plagiering", completed: true },
-      { id: "w5", title: "Modul 5: Skriveprosessen: fra utkast til manus", completed: false },
-      { id: "w6", title: "Modul 6: Revisjon, respons og fagfellevurdering", completed: false },
-      { id: "w7", title: "Modul 7: Formidling og vitenskapelig publisering", completed: false },
-      { id: "w8", title: "Modul 8: Sluttredigering og innlevering", completed: false }
+      { id: "w1", title: "Modul 1: Sjelesorg og indre helbredelse", completed: true },
+      { id: "w2", title: "Modul 2: Lederskap etter Guds hjerte", completed: true },
+      { id: "w3", title: "Modul 3: Åndelig veiledning og disippelskap", completed: true },
+      { id: "w4", title: "Modul 4: Håndtering av åndelig krise og konflikt", completed: true },
+      { id: "w5", title: "Modul 5: Menighetens administrasjon og struktur", completed: false },
+      { id: "w6", title: "Modul 6: De praktiske nådegaver i menighetslivet", completed: false },
+      { id: "w7", title: "Modul 7: Tverrkulturell sjelesorg og misjon", completed: false },
+      { id: "w8", title: "Modul 8: Pastoral etikk og integritet", completed: false }
     ]
   }
 ];
@@ -70,8 +70,8 @@ const INITIAL_STUDENTS = [
   {
     id: "s1",
     name: "Anders Berg",
-    courseId: "ped101",
-    courseName: "Pedagogikk 101",
+    courseId: "prop101",
+    courseName: "Profetisk Tjeneste 101",
     status: "Kritisk",
     statusColor: "text-error bg-error-container/10",
     progress: 25,
@@ -83,8 +83,8 @@ const INITIAL_STUDENTS = [
   {
     id: "s2",
     name: "Ingrid Nilsen",
-    courseId: "write201",
-    courseName: "Akademisk Skriving",
+    courseId: "min201",
+    courseName: "Sjelesorg & Ledelse",
     status: "Forsinket",
     statusColor: "text-on-secondary-container bg-secondary-container/20",
     progress: 50,
@@ -96,8 +96,8 @@ const INITIAL_STUDENTS = [
   {
     id: "s3",
     name: "Marius Holm",
-    courseId: "ped101",
-    courseName: "Innføring i Pedagogikk",
+    courseId: "prop101",
+    courseName: "Innføring i den Profetiske Tjeneste",
     status: "Forsinket",
     statusColor: "text-on-secondary-container bg-secondary-container/20",
     progress: 12,
@@ -112,7 +112,7 @@ const INITIAL_ASSISTANT_MESSAGES = [
   {
     id: "am1",
     sender: "assistant",
-    text: "Hei! Jeg er din HKM Assistent. Hvordan kan jeg hjelpe deg med dine studier eller administrative oppgaver i dag?",
+    text: "Hei! Jeg er din HKM Assistent. Hvordan kan jeg hjelpe deg med din bibelundervisning, profetiske utrustning eller administrative oppgaver i dag?",
     time: "11:58"
   }
 ];
@@ -121,7 +121,7 @@ export const AppProvider = ({ children }) => {
   // Simulated Authentication Persona State
   const [user, setUser] = useState({
     name: "Thomas Knutsen",
-    email: "student@scholastic.com",
+    email: "student@hiskingdomprophets.com",
     role: "student",
     avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120"
   });
@@ -148,7 +148,7 @@ export const AppProvider = ({ children }) => {
     if (role === 'student') {
       setUser({
         name: "Thomas Knutsen",
-        email: "student@scholastic.com",
+        email: "student@hiskingdomprophets.com",
         role: "student",
         avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120"
       });
@@ -156,22 +156,22 @@ export const AppProvider = ({ children }) => {
       showToast("Byttet til Student-persona!");
     } else if (role === 'teacher') {
       setUser({
-        name: "Dr. Julian Vance",
-        email: "teacher@scholastic.com",
+        name: "Apostel David Hansen",
+        email: "david@hiskingdomprophets.com",
         role: "teacher",
-        avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120"
+        avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120"
       });
       setIsLoggedIn(true);
-      showToast("Byttet til Lærer-persona!");
+      showToast("Byttet til Mentor-persona!");
     } else if (role === 'admin') {
       setUser({
-        name: "Admin Thor",
-        email: "admin@scholastic.com",
+        name: "Pastor Siri Knutsen",
+        email: "siri@hiskingdomprophets.com",
         role: "admin",
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120"
+        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120"
       });
       setIsLoggedIn(true);
-      showToast("Byttet til Admin-persona!");
+      showToast("Byttet til Administrator-persona!");
     } else {
       setUser(null);
       setIsLoggedIn(false);
@@ -181,9 +181,9 @@ export const AppProvider = ({ children }) => {
 
   // Login handler
   const login = (email, password) => {
-    if (email.includes('teacher')) {
+    if (email.includes('teacher') || email.includes('david')) {
       changePersona('teacher');
-    } else if (email.includes('admin')) {
+    } else if (email.includes('admin') || email.includes('siri')) {
       changePersona('admin');
     } else {
       changePersona('student');
@@ -239,7 +239,7 @@ export const AppProvider = ({ children }) => {
 
   // Send support email/alert (Teacher action)
   const sendSupportMessage = (studentName, text) => {
-    showToast(`Støttemelding sendt til ${studentName}!`);
+    showToast(`Veiledningsmelding sendt til ${studentName}!`);
   };
 
   // Send message in HKM Assistant widget
@@ -255,17 +255,17 @@ export const AppProvider = ({ children }) => {
 
     // Auto-respond simulating the HKM Assistent with customized answers based on keyword
     setTimeout(() => {
-      let replyText = "Det høres spennende ut! Som din akademiske assistent kan jeg hjelpe deg med å strukturere leseplanen din, sette opp varsler for zoom-forelesninger, eller forklare kjernebegreper i pedagogikk eller teoretisk fysikk.";
+      let replyText = "Det høres spennende ut! Som din HKM-assistent kan jeg hjelpe deg med å strukturere din profetiske studieplan, sette opp varsler for zoom-forelesninger, eller forklare kjernebegreper i bibeltolking, sjelesorg eller profetisk tjeneste.";
       
       const lower = text.toLowerCase();
-      if (lower.includes("fysikk") || lower.includes("physics") || lower.includes("schr")) {
-        replyText = "Fysikkmodulen vår, ledet av Dr. Alistair Thorne, dekker Schrödinger-ligningen i kapittel 3. Ønsker du at jeg skal hente fram leksjonsmaterialet eller sende deg Zoom-lenken til neste live-undervisning?";
-      } else if (lower.includes("pedagogikk") || lower.includes("læring")) {
-        replyText = "Innføring i Pedagogikk (PED 101) ledes av Dr. Julian Vance. Du har fullført 2 av 8 moduler. Den neste modulen handler om Didaktikk og undervisningsmetoder. Vil du starte leksjonen nå?";
-      } else if (lower.includes("skriving") || lower.includes("essay") || lower.includes("oppgave")) {
-        replyText = "Akademisk Skriving (WRIT 201) dekker problemstillinger, kildekritikk og argumentasjon. Hvis du jobber med Modul 5 (Skriveprosessen), kan jeg gi deg noen gode disposisjonsmaler.";
+      if (lower.includes("profet") || lower.includes("syn") || lower.includes("stemme") || lower.includes("prop")) {
+        replyText = "Vår profetiske utrustningslinje ledes av Apostel David Hansen. Du jobber for øyeblikket med PROP 101. Ønsker du at jeg henter fram leksjonsmaterialet om å høre Guds stemme, eller vil du se over de profetiske retningslinjene?";
+      } else if (lower.includes("bibel") || lower.includes("hermeneutikk") || lower.includes("skrift") || lower.includes("tolkning")) {
+        replyText = "Avansert Hermeneutikk og Tolkning (BIBLE 301) ledes av Profet Jon Arild. Du har god fremgang her! Modulen om eskatologi og endetidens profetier er spesielt populær. Skal jeg åpne leseplanen din?";
+      } else if (lower.includes("sjelesorg") || lower.includes("ledelse") || lower.includes("pastor") || lower.includes("min")) {
+        replyText = "Sjelesorg og Menighetsledelse (MIN 201) ledes av Pastor Siri Knutsen. Dette kurset gir dyp innsikt i indre helbredelse og åndelig veiledning. Trenger du en disposisjon eller mal for sjelesorgs-oppgaven din?";
       } else if (lower.includes("hjelp") || lower.includes("admin") || lower.includes("kontakt")) {
-        replyText = "Dersom du har tekniske problemer eller trenger særskilt oppfølging, kan jeg sette deg i kontakt med Dr. Vance eller administrasjonen. Ønsker du at jeg oppretter en oppfølgingssak?";
+        replyText = "Dersom du har administrative spørsmål eller trenger spesiell oppfølging, kan jeg sette deg i kontakt med Apostel David Hansen eller Pastor Siri Knutsen. Ønsker du at jeg oppretter en henvendelse?";
       }
 
       const responseMsg = {

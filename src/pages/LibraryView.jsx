@@ -15,9 +15,9 @@ export default function LibraryView() {
 
   const filteredCourses = courses.filter(course => {
     if (activeFilter === 'All') return true;
-    if (activeFilter === 'Pedagogikk') return course.id === 'ped101';
-    if (activeFilter === 'Physics') return course.id === 'phys301';
-    if (activeFilter === 'Skriving') return course.id === 'write201';
+    if (activeFilter === 'Profetisk') return course.id === 'prop101';
+    if (activeFilter === 'Bibelstudier') return course.id === 'bible301';
+    if (activeFilter === 'Sjelesorg') return course.id === 'min201';
     return true;
   });
 
@@ -33,14 +33,14 @@ export default function LibraryView() {
         <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-12 max-w-[1440px] mx-auto h-20">
           <div className="font-serif text-lg sm:text-2xl font-bold text-primary flex items-center gap-1.5 sm:gap-2 cursor-pointer truncate mr-2" onClick={() => navigate('/student/dashboard')}>
             <GraduationCap className="text-primary shrink-0" size={24} />
-            <span className="truncate">Scholastic Premium</span>
+            <span className="truncate">His Kingdom Prophets</span>
           </div>
           
           <nav className="hidden md:flex items-center gap-8">
             <button onClick={() => navigate('/student/dashboard')} className="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium">Dashboard</button>
-            <button onClick={() => navigate('/student/library')} className="text-primary border-b-2 border-primary pb-1 font-bold text-sm">Kursbibliotek</button>
+            <button onClick={() => navigate('/student/library')} className="text-primary border-b-2 border-primary pb-1 font-bold text-sm">Studieplan</button>
             <button onClick={() => navigate('/student/assignments')} className="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium">Oppgaver</button>
-            <button onClick={() => navigate('/student/chat')} className="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium">Fellesskap</button>
+            <button onClick={() => navigate('/student/chat')} className="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium">Bønnefellesskap</button>
           </nav>
 
           <div className="flex items-center gap-4 text-primary shrink-0">
@@ -78,7 +78,7 @@ export default function LibraryView() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-on-surface uppercase tracking-wider">{user?.name}</p>
-                  <p className="text-[11px] text-on-surface-variant font-medium">Aktiv Læringsprofil</p>
+                  <p className="text-[11px] text-on-surface-variant font-medium">Aktiv Tjenesteprofil</p>
                 </div>
               </div>
               <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
@@ -102,7 +102,7 @@ export default function LibraryView() {
               </button>
               <button onClick={() => navigate('/student/chat')} className="flex items-center gap-3 w-full px-4 py-3 text-sm text-on-surface-variant hover:bg-surface-container-low transition-all rounded-lg font-medium text-left">
                 <Users size={18} />
-                <span>Fagfellesskap</span>
+                <span>Bønnefellesskap</span>
               </button>
             </nav>
           </div>
@@ -116,11 +116,11 @@ export default function LibraryView() {
             <nav className="flex items-center gap-2 text-xs font-semibold text-outline">
               <span className="hover:text-primary cursor-pointer" onClick={() => navigate('/student/dashboard')}>Hjem</span>
               <span>/</span>
-              <span className="text-primary font-bold">Kursbibliotek</span>
+              <span className="text-primary font-bold">Studieplan</span>
             </nav>
-            <h1 className="font-serif text-3xl font-bold text-primary">Kursbibliotek</h1>
+            <h1 className="font-serif text-3xl font-bold text-primary">Studieplan</h1>
             <p className="text-sm text-on-surface-variant max-w-3xl leading-relaxed">
-              Utforsk det faglige innholdet og finn dine aktive kurs. Klikk på et kurs for å begynne å lese forelesninger, se live zoom-undervisning eller løse oppgaver.
+              Utforsk det faglige innholdet og finn dine aktive kurs. Klikk på et emne for å åpne leksjoner, se live zoom-undervisning eller løse oppgaver.
             </p>
           </section>
 
@@ -135,28 +135,28 @@ export default function LibraryView() {
               Alle Kurs
             </button>
             <button 
-              onClick={() => setActiveFilter('Pedagogikk')}
+              onClick={() => setActiveFilter('Profetisk')}
               className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all shadow-sm ${
-                activeFilter === 'Pedagogikk' ? 'bg-primary text-white' : 'bg-white text-on-surface-variant border border-outline-variant/30 hover:bg-slate-50'
+                activeFilter === 'Profetisk' ? 'bg-primary text-white' : 'bg-white text-on-surface-variant border border-outline-variant/30 hover:bg-slate-50'
               }`}
             >
-              Pedagogikk
+              Profetisk
             </button>
             <button 
-              onClick={() => setActiveFilter('Physics')}
+              onClick={() => setActiveFilter('Bibelstudier')}
               className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all shadow-sm ${
-                activeFilter === 'Physics' ? 'bg-primary text-white' : 'bg-white text-on-surface-variant border border-outline-variant/30 hover:bg-slate-50'
+                activeFilter === 'Bibelstudier' ? 'bg-primary text-white' : 'bg-white text-on-surface-variant border border-outline-variant/30 hover:bg-slate-50'
               }`}
             >
-              Teoretisk Fysikk
+              Bibelstudier
             </button>
             <button 
-              onClick={() => setActiveFilter('Skriving')}
+              onClick={() => setActiveFilter('Sjelesorg')}
               className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all shadow-sm ${
-                activeFilter === 'Skriving' ? 'bg-primary text-white' : 'bg-white text-on-surface-variant border border-outline-variant/30 hover:bg-slate-50'
+                activeFilter === 'Sjelesorg' ? 'bg-primary text-white' : 'bg-white text-on-surface-variant border border-outline-variant/30 hover:bg-slate-50'
               }`}
             >
-              Akademisk Skriving
+              Sjelesorg
             </button>
           </section>
 
@@ -177,17 +177,17 @@ export default function LibraryView() {
                     <h3 className="font-serif font-bold text-lg leading-tight relative z-10">{course.title}</h3>
                   </div>
 
-                  <div className="p-6">
-                    <div className="flex justify-between items-center mb-3">
-                      <span className="bg-primary/5 text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider font-mono">
-                        {course.code}
-                      </span>
-                      <span className="text-xs text-outline font-medium">Dr. Vance</span>
+                    <div className="p-6">
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="bg-primary/5 text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider font-mono">
+                          {course.code}
+                        </span>
+                        <span className="text-xs text-outline font-medium">{course.instructor}</span>
+                      </div>
+                      <p className="text-xs text-on-surface-variant leading-relaxed">
+                        Solid bibelsk undervisning levert av erfarne mentorer og tjenestegaver. Dette kurset gir grunnlag for videre tjenesteutrustning.
+                      </p>
                     </div>
-                    <p className="text-xs text-on-surface-variant leading-relaxed">
-                      Undervisning og eksamensoppgaver levert av akkrediterte professorer. Dette kurset teller 10 studiepoeng.
-                    </p>
-                  </div>
                 </div>
 
                 <div className="p-6 border-t border-slate-100 flex items-center justify-between">
@@ -210,17 +210,17 @@ export default function LibraryView() {
               <div>
                 <div className="h-44 bg-slate-200 relative flex items-center justify-center p-6 text-slate-500 text-center">
                   <Laptop size={48} className="text-slate-300 absolute -right-2 -bottom-2" />
-                  <h3 className="font-serif font-bold text-lg leading-tight">Merkevarebygging 2.0</h3>
+                  <h3 className="font-serif font-bold text-lg leading-tight">Lovsang & Tilbedelse 401</h3>
                 </div>
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-3">
                     <span className="bg-slate-100 text-slate-500 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider font-mono">
-                      MKT 401
+                      WOR 401
                     </span>
-                    <span className="text-xs text-outline font-medium">Premium</span>
+                    <span className="text-xs text-outline font-medium">Tjenestegave</span>
                   </div>
                   <p className="text-xs text-on-surface-variant leading-relaxed">
-                    Dette er et avansert kurs for masterstudenter. Lær moderne merkevarestrategi og markedskommunikasjon.
+                    Dette er et videregående kurs for lovsangere og tilbedere. Lær om tabernaklets tjeneste og åndelig lederskap i lovsang.
                   </p>
                 </div>
               </div>
@@ -244,7 +244,7 @@ export default function LibraryView() {
         </button>
         <button onClick={() => navigate('/student/library')} className="flex flex-col items-center gap-0.5 text-xs text-primary font-bold">
           <BookOpen size={18} />
-          <span>Kurs</span>
+          <span>Studieplan</span>
         </button>
         <button onClick={() => navigate('/student/assignments')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
           <CheckSquare size={18} />
@@ -252,7 +252,7 @@ export default function LibraryView() {
         </button>
         <button onClick={() => navigate('/student/chat')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
           <Users size={18} />
-          <span>Fagprat</span>
+          <span>Bønnerom</span>
         </button>
       </div>
 

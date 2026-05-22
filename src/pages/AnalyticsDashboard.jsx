@@ -28,7 +28,7 @@ export default function AnalyticsDashboard() {
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-2xl font-bold text-primary">Scholastic Premium</div>
+            <div className="font-serif text-2xl font-bold text-primary">His Kingdom Prophets</div>
           </div>
           
           <div className="flex items-center gap-4">
@@ -55,7 +55,7 @@ export default function AnalyticsDashboard() {
               <BarChart3 size={28} className="text-secondary shrink-0" /> Administrativ Analyse & Rapportering
             </h1>
             <p className="text-xs sm:text-sm text-on-surface-variant mt-1">
-              Sanntidsvisning av studentaktivitet, seminar-oppmøte og eksamens-resultater på tvers av fakultetene.
+              Sanntidsvisning av disippelaktivitet, bønneseminar-oppmøte og studie-resultater på tvers av tjenestegavene.
             </p>
           </div>
           
@@ -83,9 +83,9 @@ export default function AnalyticsDashboard() {
           {/* KPI 2 */}
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
-              <p className="text-xs font-bold uppercase tracking-wider text-outline">Oppmøte på Zoom-seminar</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-outline">Oppmøte på Bønneseminar</p>
               <h3 className="text-3xl font-bold font-serif text-primary">94.6%</h3>
-              <p className="text-[10px] text-outline font-semibold">Gjennomsnitt alle 3 hovedfag</p>
+              <p className="text-[10px] text-outline font-semibold">Gjennomsnitt alle 3 studiespor</p>
             </div>
             <div className="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary shrink-0">
               <Clock size={22} />
@@ -95,7 +95,7 @@ export default function AnalyticsDashboard() {
           {/* KPI 3 */}
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
-              <p className="text-xs font-bold uppercase tracking-wider text-outline">Modul-fullføringsgrad</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-outline">Leksjons-fullføring</p>
               <h3 className="text-3xl font-bold font-serif text-primary">78%</h3>
               <p className="text-[10px] text-outline font-semibold">Totalt fullførte leksjoner</p>
             </div>
@@ -132,8 +132,8 @@ export default function AnalyticsDashboard() {
                 {/* Report Item 1 */}
                 <div className="p-4 bg-surface-container-low border border-outline-variant rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-primary transition-all">
                   <div className="space-y-1 min-w-0">
-                    <h4 className="text-sm font-bold text-primary leading-tight">Studentprogresjon for semesteret (Fullstendig)</h4>
-                    <p className="text-[11px] text-on-surface-variant leading-relaxed">Inkluderer fullførte leksjonsmoduler, tidsbruk, og quiz-resultater for alle 48 aktive studenter.</p>
+                    <h4 className="text-sm font-bold text-primary leading-tight">Disippelprogresjon for semesteret (Fullstendig)</h4>
+                    <p className="text-[11px] text-on-surface-variant leading-relaxed">Inkluderer fullførte leksjonsmoduler, bønne-engasjement, og studie-evalueringer for alle 48 aktive disipler.</p>
                   </div>
                   
                   <div className="flex gap-2 shrink-0 w-full sm:w-auto">
@@ -155,8 +155,8 @@ export default function AnalyticsDashboard() {
                 {/* Report Item 2 */}
                 <div className="p-4 bg-surface-container-low border border-outline-variant rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-primary transition-all">
                   <div className="space-y-1 min-w-0">
-                    <h4 className="text-sm font-bold text-primary leading-tight">Klasseroms-fremdrift & Sensuroversikt</h4>
-                    <p className="text-[11px] text-on-surface-variant leading-relaxed">Inneholder alle innleverte besvarelser og karakterstatistikk.</p>
+                    <h4 className="text-sm font-bold text-primary leading-tight">Studiespor-fremdrift & Vurderingsoversikt</h4>
+                    <p className="text-[11px] text-on-surface-variant leading-relaxed">Inneholder alle innleverte besvarelser, praktiske oppgaver og evalueringsstatistikk.</p>
                   </div>
                   
                   <div className="flex gap-2 shrink-0 w-full sm:w-auto">
@@ -178,8 +178,8 @@ export default function AnalyticsDashboard() {
                 {/* Report Item 3 */}
                 <div className="p-4 bg-surface-container-low border border-outline-variant rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-primary transition-all">
                   <div className="space-y-1 min-w-0">
-                    <h4 className="text-sm font-bold text-primary leading-tight">Zoom Seminar Oppmøte-historikk</h4>
-                    <p className="text-[11px] text-on-surface-variant leading-relaxed">Detaljerte loggfiler som viser ankomst- og avreisetidspunkter under live-forelesningene.</p>
+                    <h4 className="text-sm font-bold text-primary leading-tight">Bønneseminar Oppmøte-historikk</h4>
+                    <p className="text-[11px] text-on-surface-variant leading-relaxed">Detaljerte loggfiler som viser ankomst- og avreisetidspunkter under live-samlingene på nett.</p>
                   </div>
                   
                   <div className="flex gap-2 shrink-0 w-full sm:w-auto">
@@ -205,9 +205,9 @@ export default function AnalyticsDashboard() {
 
               <div className="space-y-4">
                 {[
-                  { title: 'PED 101: 8 nye moduler fullført', desc: 'Studenter fullførte kognitive teorier-leksjonen i dag.', time: '10 min siden' },
-                  { title: 'Zoom-seminar fullført', desc: 'Advanced Physics (PHYS 301) gjennomførte forelesning med 92% oppmøte.', time: '2 timer siden' },
-                  { title: 'Karakter lagret for Anders Berg', desc: 'Dr. Vance lagret endelig foreløpig karakter for didaktikk-oppgaven.', time: '3 timer siden' },
+                  { title: 'PROP 101: 8 nye moduler fullført', desc: 'Studenter fullførte leksjonen om å høre Guds stemme i dag.', time: '10 min siden' },
+                  { title: 'Bønneseminar fullført', desc: 'Avansert Hermeneutikk (BIBLE 301) gjennomførte samling med 92% oppmøte.', time: '2 timer siden' },
+                  { title: 'Vurdering lagret for Anders Berg', desc: 'Apostel David Hansen lagret endelig foreløpig evaluering for tjeneste-oppgaven.', time: '3 timer siden' },
                   { title: 'IT-Drift: Systemoppdatering 2.4', desc: 'Ny plattform-oppdatering rullet ut for alle brukere.', time: '5 timer siden' }
                 ].map((act, idx) => (
                   <div key={idx} className="flex gap-3 text-xs items-start">
