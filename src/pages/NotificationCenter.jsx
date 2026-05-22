@@ -6,7 +6,6 @@ import {
   ArrowLeft, Bell, Megaphone, Send, Clock, 
   Trash2, ShieldAlert, CheckCircle2, Layers, AlertCircle
 } from 'lucide-react';
-import HkmChatWidget from '@/components/HkmChatWidget';
 
 export default function NotificationCenter() {
   const navigate = useNavigate();
@@ -80,49 +79,37 @@ export default function NotificationCenter() {
   };
 
   return (
-    <div className="bg-background min-h-screen flex flex-col font-sans text-on-background">
-      {/* Header */}
-      <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center px-4 sm:px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
-          <div className="flex items-center gap-2 sm:gap-4 truncate mr-2">
-            <button 
-              onClick={() => navigate('/teacher/dashboard')}
-              className="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95 text-on-surface-variant hover:text-primary shrink-0"
-            >
-              <ArrowLeft size={20} />
-            </button>
-            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">His Kingdom Prophets</div>
-          </div>
-          
-          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-            <span className="hidden sm:inline-block text-xs font-semibold uppercase tracking-wider text-secondary px-3 py-1 bg-surface-container rounded-full">
-              Varslingssenter
-            </span>
-            <img 
-              src={user?.avatar} 
-              alt={user?.name} 
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary-container shadow object-cover shrink-0"
-            />
-          </div>
+    <div className="w-full px-4 sm:px-6 md:px-12 py-6 md:py-12 flex flex-col gap-6 md:gap-8 font-sans">
+      
+      {/* Navigation Breadcrumbs */}
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2 text-sm">
+          <button 
+            onClick={() => navigate('/teacher/dashboard')}
+            className="flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors text-xs font-bold uppercase tracking-wider active:scale-95"
+          >
+            <ArrowLeft size={14} />
+            Tilbake til Dashboard
+          </button>
         </div>
-      </header>
+      </div>
 
       {/* Main Grid */}
-      <main className="flex-grow w-full max-w-[1440px] mx-auto px-6 md:px-12 py-12 flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-8">
         
         {/* Left Side: Broadcast Composed Form (7 cols) */}
         <div className="w-full lg:w-7/12">
-          <div className="bg-white border border-outline-variant rounded-xl p-5 sm:p-8 shadow-sm flex flex-col gap-6">
-            <div className="border-b border-outline-variant pb-4">
+          <div className="bg-white border border-outline-variant/30 rounded-xl p-5 sm:p-8 shadow-sm flex flex-col gap-6">
+            <div className="border-b border-outline-variant/30 pb-4">
               <h2 className="font-serif text-xl sm:text-2xl font-bold text-primary flex items-center gap-2 flex-wrap">
-                <Megaphone size={24} className="text-secondary shrink-0" /> Send Kunngjøring / Broadcast
+                <Megaphone size={24} className="text-[#c5a059] shrink-0" /> Send Kunngjøring / Broadcast
               </h2>
-              <p className="text-xs text-on-surface-variant mt-1">
+              <p className="text-xs text-on-surface-variant mt-1 font-medium">
                 Opprett og send et systemvarsel eller e-post-varsel til valgte klasseromsgrupper.
               </p>
             </div>
 
-            <form onSubmit={handleBroadcast} className="space-y-4 flex flex-col form-field-stable">
+            <form onSubmit={handleBroadcast} className="space-y-4 flex flex-col">
               
               {/* Audience Dropdown */}
               <div className="space-y-2">
@@ -130,7 +117,7 @@ export default function NotificationCenter() {
                 <select
                   value={targetAudience}
                   onChange={(e) => setTargetAudience(e.target.value)}
-                  className="w-full p-3 border border-outline-variant rounded-lg font-sans text-xs focus:outline-none focus:border-primary shadow-sm bg-white"
+                  className="w-full p-3 border border-outline-variant rounded-lg font-sans text-xs focus:outline-none focus:border-primary shadow-sm bg-white font-medium cursor-pointer"
                 >
                   <option value="alle">Alle studenter på plattformen</option>
                   <option value="prop101">Studenter i Innføring i den Profetiske Tjeneste (PROP 101)</option>
@@ -147,7 +134,11 @@ export default function NotificationCenter() {
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   placeholder="Skriv inn en kort overskrift for varselet..."
-                  className="w-full p-3.5 border border-outline-variant rounded-lg font-sans text-xs focus:outline-none focus:border-primary shadow-sm transition-all"
+                  className="w-full p-3.5 border border-outline-variant rounded-lg font-sans text-xs focus:outline-none focus:border-primary shadow-sm transition-all font-medium"
+                  style={{
+                    transform: 'translateZ(0) !important',
+                    backfaceVisibility: 'hidden !important'
+                  }}
                 />
               </div>
 
@@ -157,16 +148,20 @@ export default function NotificationCenter() {
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Skriv inn innholdet på kunngjøringen din her..."
+                  placeholder="Skriv inn innholdet på kunngjøringen din hier..."
                   rows={6}
-                  className="w-full p-4 border border-outline-variant rounded-lg font-sans text-sm focus:outline-none focus:border-primary shadow-sm transition-all focus:ring-1 focus:ring-primary"
+                  className="w-full p-4 border border-outline-variant rounded-lg font-sans text-sm focus:outline-none focus:border-primary shadow-sm transition-all focus:ring-1 focus:ring-primary leading-relaxed font-medium"
+                  style={{
+                    transform: 'translateZ(0) !important',
+                    backfaceVisibility: 'hidden !important'
+                  }}
                 />
               </div>
 
               {/* Actions */}
               <button
                 type="submit"
-                className="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 w-full md:w-auto md:self-end shadow-md shrink-0"
+                className="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 w-full md:w-auto md:self-end shadow-md shrink-0"
               >
                 <Send size={16} className="shrink-0" /> SEND KUNNGJØRING
               </button>
@@ -176,9 +171,9 @@ export default function NotificationCenter() {
 
         {/* Right Side: Historical Log (5 cols) */}
         <div className="w-full lg:w-5/12 flex flex-col gap-6">
-          <div className="bg-white border border-outline-variant rounded-xl p-5 sm:p-6 shadow-sm flex flex-col gap-6">
+          <div className="bg-white border border-outline-variant/30 rounded-xl p-5 sm:p-6 shadow-sm flex flex-col gap-6">
             <h3 className="font-serif text-lg font-bold text-primary flex items-center gap-2 border-b border-outline-variant/30 pb-4">
-              <Bell size={18} className="shrink-0" /> Historikk
+              <Bell size={18} className="shrink-0 text-primary" /> Historikk
             </h3>
 
             <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
@@ -188,7 +183,7 @@ export default function NotificationCenter() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="py-12 text-center text-outline text-xs flex flex-col items-center gap-2"
+                    className="py-12 text-center text-outline text-xs flex flex-col items-center gap-2 font-medium"
                   >
                     <CheckCircle2 size={32} className="text-secondary/50" />
                     Ingen varsler i historikken.
@@ -200,7 +195,7 @@ export default function NotificationCenter() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="p-4 bg-surface-container-low border border-outline-variant rounded-lg flex flex-col gap-2 hover:border-primary/30 transition-all relative group"
+                      className="p-4 bg-surface-container-low border border-outline-variant/20 rounded-lg flex flex-col gap-2 hover:border-primary/30 transition-all relative group"
                     >
                       <div className="flex justify-between items-start">
                         <div className="flex items-center gap-2">
@@ -208,7 +203,7 @@ export default function NotificationCenter() {
                             <span className="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded bg-primary text-white">System</span>
                           )}
                           {not.category === 'broadcast' && (
-                            <span className="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded bg-secondary text-white">Kunngjøring</span>
+                            <span className="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded bg-[#c5a059] text-white">Kunngjøring</span>
                           )}
                           {not.category === 'warning' && (
                             <span className="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded bg-error-container text-error">Varsel</span>
@@ -227,7 +222,7 @@ export default function NotificationCenter() {
                       <h4 className="font-serif font-bold text-sm text-primary leading-snug">
                         {not.title}
                       </h4>
-                      <p className="text-xs text-on-surface-variant leading-relaxed">
+                      <p className="text-xs text-on-surface-variant leading-relaxed font-medium">
                         {not.body}
                       </p>
 
@@ -243,10 +238,7 @@ export default function NotificationCenter() {
           </div>
         </div>
 
-      </main>
-
-      {/* Floating HKM Chat Widget */}
-      <HkmChatWidget />
+      </div>
     </div>
   );
 }

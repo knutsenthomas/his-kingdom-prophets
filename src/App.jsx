@@ -6,6 +6,8 @@ import { Sparkles } from 'lucide-react';
 
 // Components & Shells
 import ShowcaseShell from '@/components/ShowcaseShell';
+import StudentLayout from '@/components/StudentLayout';
+import TeacherLayout from '@/components/TeacherLayout';
 
 // Onboarding Pages
 import LandingPage from '@/pages/LandingPage';
@@ -203,21 +205,25 @@ function AppRoutes() {
       <Route path="/onboarding-welcome" element={<WelcomePage />} />
 
       {/* Student Portal */}
-      <Route path="/student/dashboard" element={<StudentDashboard />} />
-      <Route path="/student/lesson" element={<LessonView />} />
-      <Route path="/student/video" element={<VideoView />} />
-      <Route path="/student/library" element={<LibraryView />} />
-      <Route path="/student/assignments" element={<AssignmentsPage />} />
-      <Route path="/student/chat" element={<CommunityChatView />} />
+      <Route element={<StudentLayout />}>
+        <Route path="/student/dashboard" element={<StudentDashboard />} />
+        <Route path="/student/lesson" element={<LessonView />} />
+        <Route path="/student/video" element={<VideoView />} />
+        <Route path="/student/library" element={<LibraryView />} />
+        <Route path="/student/assignments" element={<AssignmentsPage />} />
+        <Route path="/student/chat" element={<CommunityChatView />} />
+      </Route>
 
       {/* Teacher / Faculty Portal */}
-      <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
-      <Route path="/teacher/follow-up" element={<StudentFollowUp />} />
-      <Route path="/teacher/handle-requests" element={<StudentFollowUp />} />
-      <Route path="/teacher/course-builder" element={<CourseBuilder />} />
-      <Route path="/teacher/grading" element={<GradesCalculator />} />
-      <Route path="/teacher/grades-calc" element={<GradesCalculator />} />
-      <Route path="/teacher/notifications" element={<NotificationCenter />} />
+      <Route element={<TeacherLayout />}>
+        <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+        <Route path="/teacher/follow-up" element={<StudentFollowUp />} />
+        <Route path="/teacher/handle-requests" element={<StudentFollowUp />} />
+        <Route path="/teacher/course-builder" element={<CourseBuilder />} />
+        <Route path="/teacher/grading" element={<GradesCalculator />} />
+        <Route path="/teacher/grades-calc" element={<GradesCalculator />} />
+        <Route path="/teacher/notifications" element={<NotificationCenter />} />
+      </Route>
 
       {/* Admin Portal */}
       <Route path="/admin/cms" element={<CMSDashboard />} />
