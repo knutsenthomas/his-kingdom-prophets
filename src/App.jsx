@@ -38,6 +38,7 @@ import TeacherProfile from '@/pages/TeacherProfile';
 // Admin Pages
 import CMSDashboard from '@/pages/CMSDashboard';
 import AnalyticsDashboard from '@/pages/AnalyticsDashboard';
+import AdminPortal from '@/pages/AdminPortal';
 
 // Email Previews
 import EmailPreviews from '@/pages/EmailPreviews';
@@ -237,6 +238,7 @@ function AppRoutes() {
         {/* Admin Portal */}
         <Route path="/admin/cms" element={<CMSDashboard />} />
         <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
+        <Route path="/admin/portal" element={<AdminPortal />} />
       </Route>
 
       {/* Email Previews */}

@@ -53,7 +53,8 @@ export default function ShowcaseShell({ viewportSize, setViewportSize }) {
       group: "Administrator / CMS",
       items: [
         { name: "Global CMS Styring", path: "/admin/cms" },
-        { name: "Analytics Dashboard", path: "/admin/analytics" }
+        { name: "Analytics Dashboard", path: "/admin/analytics" },
+        { name: "Admin Portal", path: "/admin/portal" }
       ]
     },
     {
@@ -178,6 +179,16 @@ export default function ShowcaseShell({ viewportSize, setViewportSize }) {
             >
               <Shield size={14} />
               <span>Admin</span>
+            </button>
+
+            <button
+              onClick={() => changePersona('superadmin')}
+              className={`px-3 py-1.5 rounded-lg transition-all text-xs flex items-center gap-1 ${
+                user?.role === 'superadmin' ? 'bg-secondary-container text-primary font-bold' : 'bg-primary-container text-on-primary-container hover:text-white'
+              }`}
+            >
+              <Shield size={14} className="text-amber-400" />
+              <span>Super Admin</span>
             </button>
           </div>
 

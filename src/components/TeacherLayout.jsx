@@ -29,7 +29,7 @@ export default function TeacherLayout() {
   }, [isCollapsed]);
 
   useEffect(() => {
-    if (user?.role && user.role !== 'teacher' && user.role !== 'admin') {
+    if (user?.role && user.role !== 'teacher' && user.role !== 'admin' && user.role !== 'superadmin') {
       changePersona('teacher');
     }
   }, [user?.role, changePersona]);
@@ -49,11 +49,12 @@ export default function TeacherLayout() {
     { name: 'Min lærerprofil', path: '/teacher/profile', icon: User }
   ];
 
-  if (user?.role === 'admin' || user?.role === 'teacher') {
+  if (user?.role === 'admin' || user?.role === 'teacher' || user?.role === 'superadmin') {
     navItems.push({ name: 'Global CMS Styring', path: '/admin/cms', icon: Languages });
   }
-  if (user?.role === 'admin') {
+  if (user?.role === 'admin' || user?.role === 'superadmin') {
     navItems.push({ name: 'Analytics Dashboard', path: '/admin/analytics', icon: BarChart3 });
+    navItems.push({ name: 'Brukerhåndtering', path: '/admin/portal', icon: Users });
   }
 
   return (
