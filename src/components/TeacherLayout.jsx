@@ -188,20 +188,6 @@ export default function TeacherLayout() {
         {/* Main Content View Container */}
         <main className="flex-grow flex flex-col min-w-0 transition-all duration-300 relative">
           
-          {/* Top floating menu button when sidebar is collapsed */}
-          {isCollapsed && (
-            <div className="absolute top-4 left-4 z-25 hidden md:block">
-              <button
-                onClick={() => setIsCollapsed(false)}
-                className="bg-white border border-outline-variant/50 p-2.5 rounded-lg shadow-lg hover:shadow-xl text-primary transition-all hover:bg-primary/5 active:scale-95 flex items-center gap-2"
-                title="Vis mentormeny"
-              >
-                <Menu size={16} />
-                <span className="text-[10px] font-bold uppercase tracking-wider">Åpne Mentorveiviser</span>
-              </button>
-            </div>
-          )}
-
           <div className="flex-grow">
             <Outlet />
           </div>
