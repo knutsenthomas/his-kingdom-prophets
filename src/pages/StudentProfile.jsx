@@ -110,40 +110,45 @@ export default function StudentProfile() {
       {/* ── Profile hero card ── */}
       <div className="bg-white border border-outline-variant/30 rounded-2xl shadow-sm overflow-hidden">
         {/* Cover strip */}
-        <div className="h-24 bg-gradient-to-r from-[#1B4965] via-[#1B4965]/90 to-[#1B4965]/70 relative">
+        <div className="h-20 bg-gradient-to-r from-[#1B4965] via-[#1B4965]/90 to-[#1B4965]/70 relative">
           <div className="absolute inset-0 opacity-10"
             style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #c5a059 0%, transparent 60%), radial-gradient(circle at 80% 20%, white 0%, transparent 50%)' }} />
+          <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-b from-transparent to-white" />
+          <div className="absolute -bottom-6 left-0 right-0 h-12 bg-white rounded-t-[2rem]" />
         </div>
 
-        <div className="px-6 pb-6 flex flex-col sm:flex-row items-start sm:items-end gap-4 -mt-10 relative">
-          {/* Avatar with click-to-change */}
-          <div className="relative shrink-0">
-            <img
-              src={draft.avatar}
-              alt={draft.name}
-              className="w-20 h-20 rounded-2xl border-4 border-white shadow-lg object-cover bg-slate-200 cursor-pointer hover:opacity-90 transition-opacity"
-              onClick={() => setShowAvatarPicker(true)}
-            />
-            <button
-              onClick={() => setShowAvatarPicker(true)}
-              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#c5a059] text-white flex items-center justify-center shadow-md hover:bg-[#b8904a] transition-colors"
-              title="Endre profilbilde"
-            >
-              <Camera size={13} />
-            </button>
-          </div>
+        <div className="px-6 md:px-8 pb-7 -mt-8 relative z-10">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+            <div className="flex flex-col sm:flex-row sm:items-end gap-4 min-w-0">
+              {/* Avatar with click-to-change */}
+              <div className="relative shrink-0">
+                <img
+                  src={draft.avatar}
+                  alt={draft.name}
+                  className="w-20 h-20 rounded-2xl border-4 border-white shadow-lg object-cover bg-slate-200 cursor-pointer hover:opacity-90 transition-opacity"
+                  onClick={() => setShowAvatarPicker(true)}
+                />
+                <button
+                  onClick={() => setShowAvatarPicker(true)}
+                  className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#c5a059] text-white flex items-center justify-center shadow-md hover:bg-[#b8904a] transition-colors"
+                  title="Endre profilbilde"
+                >
+                  <Camera size={13} />
+                </button>
+              </div>
 
-          <div className="flex-grow pt-4 sm:pt-0 min-w-0">
-            <h1 className="font-serif text-2xl font-bold text-primary leading-tight truncate">
-              {draft.name || 'Student'}
-            </h1>
-            <p className="text-xs text-on-surface-variant font-semibold mt-0.5">
-              {draft.ministry || 'Tjenestegave ikke angitt'} · {draft.location || 'Sted ikke angitt'}
-            </p>
-          </div>
+              <div className="min-w-0 sm:pb-1">
+                <h1 className="font-serif text-2xl lg:text-3xl font-bold text-primary leading-tight break-words">
+                  {draft.name || 'Student'}
+                </h1>
+                <p className="text-sm text-on-surface-variant font-semibold mt-1 leading-snug">
+                  {draft.ministry || 'Tjenestegave ikke angitt'} · {draft.location || 'Sted ikke angitt'}
+                </p>
+              </div>
+            </div>
 
-          {/* Profile completion ring */}
-          <div className="shrink-0 flex flex-col items-center gap-1 mt-2 sm:mt-0">
+            {/* Profile completion ring */}
+            <div className="shrink-0 flex flex-row lg:flex-col items-center gap-2 lg:gap-1 self-start lg:self-end lg:pb-1">
             <div className="relative w-14 h-14">
               <svg className="w-14 h-14 -rotate-90" viewBox="0 0 56 56">
                 <circle cx="28" cy="28" r="24" fill="none" stroke="#e2e8f0" strokeWidth="4" />
@@ -155,6 +160,7 @@ export default function StudentProfile() {
               <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-primary">{completionPct}%</span>
             </div>
             <span className="text-[9px] font-bold text-outline uppercase tracking-wider text-center">Profil</span>
+            </div>
           </div>
         </div>
 
