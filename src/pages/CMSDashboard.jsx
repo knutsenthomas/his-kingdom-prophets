@@ -450,7 +450,7 @@ export default function CMSDashboard() {
             <Languages className="text-primary shrink-0" size={32} /> Global CMS Styring
           </h1>
           <p className="text-xs sm:text-sm text-on-surface-variant mt-1 font-medium">
-            Administrer og rediger all tekst på alle sider i Mandal Regnskapskontor og His Kingdom Prophets-plattformen.
+            Administrer og rediger all tekst på alle sider i His Kingdom Prophets-plattformen.
           </p>
         </div>
 

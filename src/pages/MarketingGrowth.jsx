@@ -11,7 +11,7 @@ const DEFAULT_COUPONS = [
   { id: "c1", code: "PROPHET20", type: "percent", value: 20, active: true, limit: 150, used: 84 },
   { id: "c2", code: "BIBELSTUDIE50", type: "flat", value: 500, active: true, limit: 50, used: 12 },
   { id: "c3", code: "SUMMERSEMESTER", type: "percent", value: 15, active: false, limit: 200, used: 184 },
-  { id: "c4", code: "MANDALREGNSKAP", type: "percent", value: 30, active: true, limit: 100, used: 41 }
+  { id: "c4", code: "PROFETISK30", type: "percent", value: 30, active: true, limit: 100, used: 41 }
 ];
 
 const DEFAULT_CAMPAIGNS = [

@@ -19,7 +19,7 @@ export default function NotificationCenter() {
   const [notifications, setNotifications] = useState([
     { id: 'not-1', title: 'Plattformoppdatering fullført', body: 'Vi har rullet ut versjon 2.4 med forbedret rendering og raskere scrolling.', category: 'system', sentBy: 'System Admin', time: '2 timer siden' },
     { id: 'not-2', title: 'Ny studieoppgave publisert', body: 'Modul 5: Sjelesorg og Menighetsledelse (MIN 201) essayoppgave er nå åpen. Frist 5. juni.', category: 'broadcast', sentBy: 'Pastor Siri Knutsen', time: 'I går' },
-    { id: 'not-3', title: 'Vedlikeholdsvarsel på server', body: 'Supabase-databasen vil gjennomgå vedlikehold søndag kl. 02:00–04:00. Noe nedetid kan forekomme.', category: 'warning', sentBy: 'IT-Drift Mandal', time: '3 dager siden' },
+    { id: 'not-3', title: 'Vedlikeholdsvarsel på server', body: 'Supabase-databasen vil gjennomgå vedlikehold søndag kl. 02:00–04:00. Noe nedetid kan forekomme.', category: 'warning', sentBy: 'IT-Avdelingen', time: '3 dager siden' },
   ]);
 
   const [subject, setSubject] = useState('');

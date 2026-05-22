@@ -4,7 +4,8 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Compass, BookOpen, Video, CheckSquare, Users, 
-  Menu, Bell, Power, Search, Award, GraduationCap, ChevronLeft, User
+  Menu, Bell, Power, Search, Award, GraduationCap, ChevronLeft, User,
+  Gift, HelpCircle
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 import CmsText from '@/components/CmsText';
@@ -42,6 +43,8 @@ export default function StudentLayout() {
     { name: 'Klasserom / Video', path: '/student/video', icon: Video },
     { name: 'Oppgaver', path: '/student/assignments', icon: CheckSquare },
     { name: 'Bønnefellesskap', path: '/student/chat', icon: Users },
+    { name: 'Partnerportal', path: '/student/partner', icon: Gift },
+    { name: 'Hjelpesenter', path: '/student/support', icon: HelpCircle },
     { name: 'Min profil', path: '/student/profile', icon: User },
   ];
 

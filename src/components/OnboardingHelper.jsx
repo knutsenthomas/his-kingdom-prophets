@@ -46,7 +46,7 @@ export default function OnboardingHelper() {
       desc: "Se den sirkulære oransje knappen nederst til høyre? Dette er din HKM Assistent. Den drives av en avansert AI og hjelper deg med teologiske spørsmål live.",
       icon: MessageSquare,
       color: "from-[#d17d39] to-[#bd4f2a]",
-      highlight: "Chatten er alltid tilgjengelig og tilpasset Mandal Regnskapskontor og His Kingdom Prophets' byråstandard."
+      highlight: "Chatten er alltid tilgjengelig og tilpasset His Kingdom Prophets' høye byråstandard."
     },
     {
       title: "Utrustning og fellesskap",

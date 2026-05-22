@@ -41,7 +41,7 @@ export default function TeacherProfile() {
     expertise: user?.expertise || 'Profetisk tjeneste, bibelsk veiledning og disippelskap',
     officeHours: user?.officeHours || 'Tirsdag og torsdag 12:00-15:00',
     zoomLink: user?.zoomLink || 'https://zoom.us/j/9270778606',
-    location: user?.location || 'Mandal, Norge',
+    location: user?.location || 'Kristiansand, Norge',
     bio: user?.bio || '',
     avatar: user?.avatar || AVATAR_OPTIONS[0],
   });
@@ -61,7 +61,7 @@ export default function TeacherProfile() {
       expertise: user?.expertise || 'Profetisk tjeneste, bibelsk veiledning og disippelskap',
       officeHours: user?.officeHours || 'Tirsdag og torsdag 12:00-15:00',
       zoomLink: user?.zoomLink || 'https://zoom.us/j/9270778606',
-      location: user?.location || 'Mandal, Norge',
+      location: user?.location || 'Kristiansand, Norge',
       bio: user?.bio || '',
       avatar: user?.avatar || AVATAR_OPTIONS[0],
     });
@@ -99,7 +99,7 @@ export default function TeacherProfile() {
       expertise: user?.expertise || 'Profetisk tjeneste, bibelsk veiledning og disippelskap',
       officeHours: user?.officeHours || 'Tirsdag og torsdag 12:00-15:00',
       zoomLink: user?.zoomLink || 'https://zoom.us/j/9270778606',
-      location: user?.location || 'Mandal, Norge',
+      location: user?.location || 'Kristiansand, Norge',
       bio: user?.bio || '',
       avatar: user?.avatar || AVATAR_OPTIONS[0],
     });
@@ -114,12 +114,12 @@ export default function TeacherProfile() {
       </div>
 
       <div className="bg-white border border-outline-variant/30 rounded-2xl shadow-sm overflow-hidden">
-        <div className="h-24 bg-gradient-to-r from-primary via-primary-container to-secondary relative">
-          <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(135deg, transparent 0 35%, #c5a059 35% 36%, transparent 36% 100%)' }} />
+        <div className="h-24 bg-gradient-to-r from-[#1B4965] via-[#1B4965]/90 to-[#1B4965]/70 relative">
+          <div className="absolute inset-0 opacity-15" style={{ backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(197, 160, 89, 0.45), transparent 70%)' }} />
         </div>
 
-        <div className="px-6 md:px-8 pb-7 flex flex-col xl:flex-row items-start xl:items-end gap-5 -mt-10 relative z-10">
-          <div className="relative w-24 h-24 shrink-0">
+        <div className="px-6 md:px-8 pb-7 flex flex-col xl:flex-row items-start xl:items-end gap-5 relative z-10">
+          <div className="relative w-24 h-24 shrink-0 -mt-12 z-10">
             <img
               src={draft.avatar}
               alt={draft.name || 'Lærer'}
@@ -203,7 +203,7 @@ export default function TeacherProfile() {
                     <input value={draft.department} onChange={e => set('department', e.target.value)} className="field-input" placeholder="f.eks. Profetisk utrustning" />
                   </Field>
                   <Field label="Sted" icon={<MapPin size={13} />}>
-                    <input value={draft.location} onChange={e => set('location', e.target.value)} className="field-input" placeholder="f.eks. Mandal, Norge" />
+                    <input value={draft.location} onChange={e => set('location', e.target.value)} className="field-input" placeholder="f.eks. Kristiansand, Norge" />
                   </Field>
                   <Field label="Fagområde" icon={<BookOpen size={13} />} className="sm:col-span-2">
                     <input value={draft.expertise} onChange={e => set('expertise', e.target.value)} className="field-input" placeholder="Skriv fagområder studentene kan søke veiledning i" />

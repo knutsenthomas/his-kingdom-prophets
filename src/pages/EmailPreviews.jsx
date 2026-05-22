@@ -274,7 +274,7 @@ export default function EmailPreviews() {
                 {/* Email Footer */}
                 <div className="bg-slate-50 p-6 text-center text-[10px] text-slate-400 border-t border-slate-200">
                   <p>© 2026 His Kingdom Prophets. Alle rettigheter reservert.</p>
-                  <p className="mt-1">Levert i samarbeid med Mandal Regnskapskontor Headless CMS og e-postvarslingstjeneste.</p>
+                  <p className="mt-1">Levert i samarbeid med His Kingdom Prophets Headless CMS og e-postvarslingstjeneste.</p>
                 </div>
 
               </div>

@@ -54,7 +54,7 @@ export default function TeacherDashboard() {
     },
     {
       id: 'class-2',
-      title: 'Apokalyptisk Hermeneutikk i Mandal',
+      title: 'Apokalyptisk Hermeneutikk i Kristiansand',
       code: 'BIBLE 301',
       time: '19:00 - 20:30',
       instructor: 'Profet Jon Arild',
@@ -146,7 +146,7 @@ export default function TeacherDashboard() {
           </span>
           <span className="text-xs text-white font-bold bg-[#c5a059] px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1">
             <Sparkles size={12} />
-            Mandal Regnskapskontor CMS
+            HKM Headless CMS
           </span>
         </div>
       </div>

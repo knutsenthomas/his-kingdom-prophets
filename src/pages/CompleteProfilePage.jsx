@@ -137,7 +137,7 @@ export default function CompleteProfilePage() {
                   <input 
                     className="w-full pl-12 pr-4 py-4 bg-background border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary-container focus:border-primary transition-all text-sm outline-none font-medium"
                     id="institution" 
-                    placeholder="f.eks. Mandal Frikirke, huskirke, eller misjonsfellesskap" 
+                    placeholder="f.eks. Huskirke, menighet eller misjonsfellesskap" 
                     type="text"
                     value={institution}
                     onChange={(e) => setInstitution(e.target.value)}

@@ -198,7 +198,7 @@ const INITIAL_STANDALONE_ASSIGNMENTS = [
   },
   {
     id: 'ass-3',
-    title: 'Sjelesorgstudie i Mandal',
+    title: 'Sjelesorgstudie i Kristiansand',
     courseCode: 'MIN 201',
     courseName: 'Sjelesorg og Menighetsledelse',
     dueDate: '2026-05-18',
@@ -228,7 +228,7 @@ const INITIAL_STANDALONE_ASSIGNMENTS = [
     dueDate: '2026-04-20',
     dueTime: '23:59',
     status: 'graded',
-    description: 'Utarbeid en strukturert prosjektskisse for etablering av et bønne- og sjelesorgs-senter i Mandal, inkludert åndelig rammeverk og praktisk menighetsledelse.',
+    description: 'Utarbeid en strukturert prosjektskisse for etablering av et bønne- og sjelesorgs-senter i Kristiansand, inkludert åndelig rammeverk og praktisk menighetsledelse.',
     weight: '15% av totalkarakter',
     gradingRubric: [
       { criterion: 'Skissens teologiske dybde', points: 40 },
@@ -236,7 +236,7 @@ const INITIAL_STANDALONE_ASSIGNMENTS = [
       { criterion: 'Formidlingspresisjon', points: 25 }
     ],
     submission: {
-      text: 'Jeg ønsker å utarbeide en skisse for et bønnesenter i Mandal menighet med fokus på kontinuerlig forbønn, opplæring i nådegaver, og sjelesorg...',
+      text: 'Jeg ønsker å utarbeide en skisse for et bønnesenter i Kristiansand menighet med fokus på kontinuerlig forbønn, opplæring i nådegaver, og sjelesorg...',
       fileName: 'prosjektskisse_bønnesenter_v1.pdf',
       submittedAt: '2026-04-18 11:15'
     },
@@ -322,7 +322,7 @@ export const AppProvider = ({ children }) => {
     role: "student",
     avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
     phone: "+47 900 00 000",
-    location: "Mandal, Norge",
+    location: "Kristiansand, Norge",
     birthYear: "1995",
     bio: "",
     ministry: "",
@@ -388,7 +388,7 @@ export const AppProvider = ({ children }) => {
       'teacher-kpi4-label': 'Studenter under oppfølging',
       'teacher-actions-title': 'Administrative tjenester',
       
-      'admin-cms-welcome': 'Velkommen til Mandal Regnskapskontor sitt administrative portal for His Kingdom Prophets. Tjen Herren med integritet.',
+      'admin-cms-welcome': 'Velkommen til His Kingdom Prophets sitt administrative portal. Tjen Herren med integritet.',
       'admin-cms-title': 'Plattforminnhold (Assets)',
       'admin-cms-subtitle': 'Velg et statisk tekstfelt eller systemkonfigurasjon for å gjøre endringer direkte i databasen.',
 
@@ -461,7 +461,7 @@ export const AppProvider = ({ children }) => {
             'teacher-kpi4-label': 'Studenter under oppfølging',
             'teacher-actions-title': 'Administrative tjenester',
             
-            'admin-cms-welcome': 'Velkommen til Mandal Regnskapskontor sitt administrative portal for His Kingdom Prophets. Tjen Herren med integritet.',
+            'admin-cms-welcome': 'Velkommen til His Kingdom Prophets sitt administrative portal. Tjen Herren med integritet.',
             'admin-cms-title': 'Plattforminnhold (Assets)',
             'admin-cms-subtitle': 'Velg et statisk tekstfelt eller systemkonfigurasjon for å gjøre endringer direkte i databasen.',
        
@@ -527,7 +527,7 @@ export const AppProvider = ({ children }) => {
               role,
               avatar,
               phone: role === 'teacher' ? "+47 900 11 222" : "+47 900 00 000",
-              location: "Mandal, Norge",
+              location: "Kristiansand, Norge",
               birthYear: "1995",
               bio: "",
               ministry: "",
@@ -679,7 +679,7 @@ export const AppProvider = ({ children }) => {
         role: "student",
         avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
         phone: "+47 900 00 000",
-        location: "Mandal, Norge",
+        location: "Kristiansand, Norge",
         birthYear: "1995",
         bio: "",
         ministry: "",
@@ -699,7 +699,7 @@ export const AppProvider = ({ children }) => {
         expertise: "Profetisk tjeneste, åndelig dømmekraft og bibelsk veiledning",
         officeHours: "Tirsdag og torsdag 12:00-15:00",
         zoomLink: "https://zoom.us/j/9270778606",
-        location: "Mandal, Norge",
+        location: "Kristiansand, Norge",
         bio: "Veileder studenter i profetisk modenhet, karakterbygging og trygg praktisk betjening."
       });
       setIsLoggedIn(true);
@@ -720,7 +720,7 @@ export const AppProvider = ({ children }) => {
         role: "superadmin",
         avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120",
         phone: "+47 900 99 999",
-        location: "Mandal, Norge",
+        location: "Kristiansand, Norge",
         birthYear: "1990",
         bio: "Overordnet systemansvarlig for His Kingdom Prophets plattformen."
       });
@@ -785,7 +785,7 @@ export const AppProvider = ({ children }) => {
         role,
         avatar,
         phone: "+47 900 00 000",
-        location: "Mandal, Norge",
+        location: "Kristiansand, Norge",
         birthYear: "1995",
         bio: "",
         ministry: "",
@@ -811,7 +811,7 @@ export const AppProvider = ({ children }) => {
         role,
         avatar,
         phone: "+47 900 00 000",
-        location: "Mandal, Norge",
+        location: "Kristiansand, Norge",
         birthYear: "1995"
       };
       setUser(localProfile);
@@ -837,7 +837,7 @@ export const AppProvider = ({ children }) => {
           role: role || 'student',
           avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
           phone: "+47 900 00 000",
-          location: "Mandal, Norge",
+          location: "Kristiansand, Norge",
           birthYear: "1995"
         };
         await setDoc(userDocRef, defaultProfile);
@@ -871,7 +871,7 @@ export const AppProvider = ({ children }) => {
           role: role || 'student',
           avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
           phone: "+47 900 00 000",
-          location: "Mandal, Norge",
+          location: "Kristiansand, Norge",
           birthYear: "1995"
         };
         await setDoc(userDocRef, defaultProfile);

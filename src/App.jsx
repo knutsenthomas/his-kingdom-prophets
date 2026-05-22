@@ -46,6 +46,11 @@ import AdminPortal from '@/pages/AdminPortal';
 // Email Previews
 import EmailPreviews from '@/pages/EmailPreviews';
 
+// Premium Additions (Support Center, Affiliate Portal, Course Insights)
+import SupportCenter from '@/pages/SupportCenter';
+import AffiliatePortal from '@/pages/AffiliatePortal';
+import CourseInsights from '@/pages/CourseInsights';
+
 export default function App() {
   const { toastMessage } = useApp();
   const [viewportSize, setViewportSize] = useState('desktop'); // desktop, tablet, mobile
@@ -226,6 +231,8 @@ function AppRoutes() {
           <Route path="/student/assignments" element={<AssignmentsPage />} />
           <Route path="/student/chat" element={<CommunityChatView />} />
           <Route path="/student/profile" element={<StudentProfile />} />
+          <Route path="/student/partner" element={<AffiliatePortal />} />
+          <Route path="/student/support" element={<SupportCenter />} />
         </Route>
 
         {/* Teacher / Faculty Portal */}
@@ -241,6 +248,9 @@ function AppRoutes() {
           <Route path="/teacher/grades-calc" element={<GradesCalculator />} />
           <Route path="/teacher/notifications" element={<NotificationCenter />} />
           <Route path="/teacher/profile" element={<TeacherProfile />} />
+          <Route path="/teacher/insights" element={<CourseInsights />} />
+          <Route path="/teacher/partner" element={<AffiliatePortal />} />
+          <Route path="/teacher/support" element={<SupportCenter />} />
           
           {/* Admin Portal */}
           <Route path="/admin/cms" element={<CMSDashboard />} />

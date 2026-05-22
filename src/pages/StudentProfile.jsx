@@ -111,15 +111,15 @@ export default function StudentProfile() {
       <div className="bg-white border border-outline-variant/30 rounded-2xl shadow-sm overflow-hidden">
         {/* Cover strip */}
         <div className="h-24 bg-gradient-to-r from-[#1B4965] via-[#1B4965]/90 to-[#1B4965]/70 relative">
-          <div className="absolute inset-0 opacity-10"
-            style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #c5a059 0%, transparent 60%), radial-gradient(circle at 80% 20%, white 0%, transparent 50%)' }} />
+          <div className="absolute inset-0 opacity-15"
+            style={{ backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(197, 160, 89, 0.45), transparent 70%)' }} />
         </div>
 
-        <div className="px-6 md:px-8 pb-7 -mt-10 relative z-10">
+        <div className="px-6 md:px-8 pb-7 relative z-10">
           <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-5">
             <div className="flex flex-col xl:flex-row xl:items-end gap-4 min-w-0">
               {/* Avatar with click-to-change */}
-              <div className="relative w-20 h-20 shrink-0">
+              <div className="relative w-20 h-20 shrink-0 -mt-12 z-10">
                 <img
                   src={draft.avatar}
                   alt={draft.name}
@@ -241,7 +241,7 @@ export default function StudentProfile() {
                   <input
                     value={draft.location}
                     onChange={e => set('location', e.target.value)}
-                    placeholder="f.eks. Mandal, Norge"
+                    placeholder="f.eks. Kristiansand, Norge"
                     className="field-input"
                     style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
                   />

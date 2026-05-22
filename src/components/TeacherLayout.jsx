@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Compass, Users, AlertTriangle, ClipboardList, BookOpen, 
   Award, Bell, Power, Menu, ChevronLeft, Sliders, Video, User,
-  Languages, BarChart3, TrendingUp
+  Languages, BarChart3, TrendingUp, Gift, HelpCircle
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 import CmsText from '@/components/CmsText';
@@ -44,9 +44,12 @@ export default function TeacherLayout() {
     { name: 'Tjenesteoppfølging', path: '/teacher/follow-up', icon: AlertTriangle, badge: atRiskCount },
     { name: 'Kursbygger', path: '/teacher/course-builder', icon: Sliders },
     { name: 'Prøvebygger', path: '/teacher/quiz-builder', icon: ClipboardList },
+    { name: 'Kursinnsikt', path: '/teacher/insights', icon: BarChart3 },
     { name: 'Markedsføring', path: '/teacher/marketing', icon: TrendingUp },
     { name: 'Mediebibliotek', path: '/teacher/media-library', icon: Video },
     { name: 'Bibelkalkulator', path: '/teacher/grading', icon: Award },
+    { name: 'Partnerportal', path: '/teacher/partner', icon: Gift },
+    { name: 'Hjelpesenter', path: '/teacher/support', icon: HelpCircle },
     { name: 'Varslingssenter', path: '/teacher/notifications', icon: Bell },
     { name: 'Min lærerprofil', path: '/teacher/profile', icon: User }
   ];
