@@ -56,20 +56,21 @@ export default function HkmChatWidget() {
             {/* Header - Deep Brand Blue */}
             <div className="bg-[#1B4965] text-white px-5 py-4 flex items-center justify-between shadow-sm">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center font-serif font-bold text-sm text-secondary-container">
+                <div className="w-8 h-8 flex items-center justify-center font-serif font-bold text-sm text-secondary-container bg-white/10" style={{ borderRadius: '9999px' }}>
                   HKM
                 </div>
                 <div>
                   <h3 className="font-semibold text-sm">HKM Assistent</h3>
                   <span className="text-[10px] text-on-primary-container/80 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block animate-pulse"></span>
+                    <span className="w-1.5 h-1.5 bg-green-400 inline-block animate-pulse" style={{ borderRadius: '9999px' }}></span>
                     Tilkoblet plattformen
                   </span>
                 </div>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="p-1 rounded-full hover:bg-white/10 text-white/80 hover:text-white transition-colors"
+                className="p-1 hover:bg-white/10 text-white/80 hover:text-white transition-colors"
+                style={{ borderRadius: '9999px' }}
               >
                 <X size={18} />
               </button>
@@ -140,12 +141,13 @@ export default function HkmChatWidget() {
         )}
       </AnimatePresence>
 
-      {/* Floating Toggle Button - Circular SVG with Orange Gradient */}
+      {/* Floating Toggle Button - Circular SVG with Solid Deep Blue */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 rounded-full flex items-center justify-center text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+        className="w-14 h-14 flex items-center justify-center text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
         style={{
-          background: 'linear-gradient(135deg, #d17d39 0%, #bd4f2a 100%)',
+          borderRadius: '9999px',
+          backgroundColor: '#1B4965',
           transform: 'translateZ(0) !important',
           backfaceVisibility: 'hidden !important'
         }}
