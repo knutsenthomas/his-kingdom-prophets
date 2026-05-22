@@ -136,3 +136,44 @@ button {
   0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
   40% { transform: scale(1); opacity: 1; }
 }
+
+/* Subtle gradient for academic banner background */
+.banner-gradient {
+  background: linear-gradient(135deg, #1B4965 0%, #0b293c 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Academic pattern overlay */
+.banner-gradient::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAPooQdvUI0AckTy45_roRAeth1Chjgj2CogxpV-vxX9T_j7bMeAaFci9AhvPusYk_n4_24jzola3HdNLAfcizQPZsGlRs0P-CBGX2wTuCzMDCz1vPUdXOXAewrrtmDPnAVVelTX38olsGsw45erSTlx3I2uNPipN-0mn7fn6CKHh1MuJJckCkf1XijWKC4KzwUvGkIHDkQ21TYSHh42nQqQEzx29E9ooZg8EGQSApgL4ClJUB54oGEyWRuyaiZdqcoNTJpSibtnt4);
+  background-size: cover;
+  pointer-events: none;
+}
+
+/* Smooth transitions for interactive elements */
+.stat-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Hide scrollbar for stats */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

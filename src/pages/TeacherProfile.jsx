@@ -113,48 +113,83 @@ export default function TeacherProfile() {
         <span className="text-primary font-bold">Min lærerprofil</span>
       </div>
 
-      <div className="bg-white border border-outline-variant/30 rounded-2xl shadow-sm overflow-hidden">
-        <div className="h-24 bg-gradient-to-r from-[#1B4965] via-[#1B4965]/90 to-[#1B4965]/70 relative">
-          <div className="absolute inset-0 opacity-15" style={{ backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(197, 160, 89, 0.45), transparent 70%)' }} />
-        </div>
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100" data-purpose="profile-header">
+        {/* Reduced banner height to h-16 / h-20 matching academic pattern */}
+        <section className="banner-gradient h-16 md:h-20 flex items-center px-6 relative" data-purpose="hero-banner" />
 
-        <div className="px-6 md:px-8 pb-7 flex flex-col xl:flex-row items-start xl:items-end gap-5 relative z-10">
-          <div className="relative w-24 h-24 shrink-0 -mt-12 z-10">
-            <img
-              src={draft.avatar}
-              alt={draft.name || 'Lærer'}
-              className="w-24 h-24 rounded-2xl border-4 border-white shadow-lg object-cover bg-slate-200 cursor-pointer hover:opacity-90 transition-opacity"
-              onClick={() => setShowAvatarPicker(true)}
-            />
-            <button
-              onClick={() => setShowAvatarPicker(true)}
-              className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-[#c5a059] text-white flex items-center justify-center shadow-md hover:bg-[#b8904a] transition-colors"
-              title="Endre profilbilde"
-            >
-              <Camera size={14} />
-            </button>
-          </div>
-
-          <div className="flex-grow pt-0 xl:pb-2 min-w-0">
-            <div className="flex flex-wrap items-center gap-2 mb-2">
-              <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">Mentor</span>
-              <span className="px-2.5 py-1 rounded-full bg-[#c5a059]/15 text-[#8a682d] text-[10px] font-bold uppercase tracking-wider">{draft.department}</span>
+        {/* Tightened details padding and layout */}
+        <section className="px-4 pb-3 pt-0 relative" data-purpose="profile-details-section">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+            {/* Inline-sitting profile image with minimal overlap */}
+            <div className="profile-img-container flex-shrink-0 -mt-8 md:-mt-10 relative z-20" data-purpose="image-wrapper">
+              <div className="relative inline-block group">
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border-4 border-white overflow-hidden shadow-md bg-gray-200">
+                  <img 
+                    alt={draft.name || 'Apostel David Hansen'} 
+                    className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
+                    src={draft.avatar} 
+                    style={{ objectPosition: 'top center', transform: 'scale(1.1)' }}
+                    onClick={() => setShowAvatarPicker(true)}
+                  />
+                </div>
+                <button 
+                  onClick={() => setShowAvatarPicker(true)}
+                  className="absolute bottom-0 right-0 bg-[#c5a059] text-white p-1 rounded-lg shadow-md hover:bg-opacity-90 transition-all duration-200" 
+                  title="Endre bilde"
+                >
+                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+                    <path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+                  </svg>
+                </button>
+              </div>
             </div>
-            <h1 className="font-serif text-2xl xl:text-3xl font-bold text-primary leading-tight">{draft.name || 'Lærer'}</h1>
-            <p className="text-xs text-on-surface-variant font-semibold mt-1">{draft.title} - {draft.location}</p>
-          </div>
 
-          <div className="grid grid-cols-3 gap-3 w-full xl:w-auto xl:ml-auto xl:pb-2">
-            <StatCard label="Studenter" value={mentorStudents} />
-            <StatCard label="Kurs" value={activeCourses} />
-            <StatCard label="Profil" value={`${completionPct}%`} />
+            {/* Text section with reduced vertical spacing */}
+            <div className="flex-grow pt-1">
+              <div className="flex flex-wrap gap-1.5 mb-1" data-purpose="badge-container">
+                <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#eef2ff] text-[#1B4965] border border-blue-100">Mentor</span>
+                <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#fdf6e7] text-[#c5a059] border border-amber-100">{draft.department || 'Profetisk Linje'}</span>
+              </div>
+              <h1 className="text-2xl md:text-3xl font-serif text-[#1B4965] mb-0.5 tracking-tight font-bold font-serif" id="teacher-name">
+                {draft.name || 'Apostel David Hansen'}
+              </h1>
+              <p className="text-sm text-gray-500 font-medium flex items-center gap-1.5">
+                <svg className="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+                  <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+                </svg>
+                {draft.title || 'Faglig leder og mentor'} • {draft.location || 'Kristiansand, Norge'}
+              </p>
+            </div>
+
+            {/* Statistics cards with reduced padding and size */}
+            <div className="flex flex-row gap-2 mt-2 lg:mt-0 overflow-x-auto pb-1 lg:pb-0 no-scrollbar" data-purpose="stats-overview">
+              <div className="stat-card flex flex-col items-center justify-center min-w-[70px] lg:min-w-[85px] p-2 bg-slate-50 border border-gray-100 rounded-xl" data-purpose="stat-item">
+                <span className="text-xl font-serif font-bold text-[#1B4965]">{mentorStudents}</span>
+                <span className="text-[8px] font-bold tracking-widest text-gray-400 uppercase">Studenter</span>
+              </div>
+              
+              <div className="stat-card flex flex-col items-center justify-center min-w-[70px] lg:min-w-[85px] p-2 bg-slate-50 border border-gray-100 rounded-xl" data-purpose="stat-item">
+                <span className="text-xl font-serif font-bold text-[#1B4965]">{activeCourses}</span>
+                <span className="text-[8px] font-bold tracking-widest text-gray-400 uppercase">Kurs</span>
+              </div>
+
+              <div className="stat-card flex flex-col items-center justify-center min-w-[70px] lg:min-w-[85px] p-2 bg-slate-50 border border-gray-100 rounded-xl" data-purpose="stat-item">
+                <span className="text-xl font-serif font-bold text-[#1B4965]">{completionPct}%</span>
+                <div className="w-full bg-gray-200 h-0.5 rounded-full mt-1 mb-0.5 overflow-hidden">
+                  <div className="bg-[#c5a059] h-full" style={{ width: `${completionPct}%`, transition: 'width 0.4s ease' }} />
+                </div>
+                <span className="text-[8px] font-bold tracking-widest text-gray-400 uppercase">Profil</span>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
 
         {completionPct < 100 && (
-          <div className="mx-6 mb-5 flex items-center gap-2.5 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl">
-            <Sparkles size={14} className="text-amber-600 shrink-0" />
-            <p className="text-[11px] font-semibold text-amber-800">Fullfør lærerprofilen slik at studentene lettere finner veiledning, kontortid og fagområde.</p>
+          <div className="mx-4 mb-3 flex items-center gap-2.5 px-4 py-2 bg-amber-50/50 border border-amber-200/50 rounded-xl">
+            <Sparkles size={12} className="text-amber-600 shrink-0" />
+            <p className="text-[10px] font-semibold text-amber-800">Fullfør lærerprofilen slik at studentene lettere finner veiledning, kontortid og fagområde.</p>
           </div>
         )}
       </div>
