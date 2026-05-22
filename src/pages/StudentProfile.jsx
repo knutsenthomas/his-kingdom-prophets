@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  User, Mail, Phone, MapPin, Calendar, BookOpen,
+  User, Mail, Phone, MapPin, Calendar, BookOpen, Home,
   Instagram, Facebook, Camera, Save, XCircle, Pencil,
   ChevronRight, ShieldCheck, Eye, EyeOff, Lock, LogOut,
   CheckCircle2, Sparkles, AlertCircle, ExternalLink
@@ -37,14 +37,18 @@ export default function StudentProfile() {
   const [draft, setDraft] = useState({
     name:            user?.name            || '',
     phone:           user?.phone           || '',
+    address:         user?.address         || '',
     location:        user?.location        || '',
-    birthYear:       user?.birthYear       || '',
+    birthDate:       user?.birthDate       || '',
     bio:             user?.bio             || '',
     ministry:        user?.ministry        || '',
     socialInstagram: user?.socialInstagram || '',
     socialFacebook:  user?.socialFacebook  || '',
     avatar:          user?.avatar          || AVATAR_OPTIONS[0],
   });
+
+  // Admin check helper
+  const isAdmin = user?.role === 'admin' || user?.role === 'superadmin';
 
   // Draft state – account tab
   const [emailDraft, setEmailDraft]     = useState(user?.email || '');
@@ -55,12 +59,12 @@ export default function StudentProfile() {
   const set = (field, value) => setDraft(p => ({ ...p, [field]: value }));
 
   useEffect(() => {
-    if (user?.role !== 'student') return;
     setDraft({
       name:            user?.name            || '',
       phone:           user?.phone           || '',
+      address:         user?.address         || '',
       location:        user?.location        || '',
-      birthYear:       user?.birthYear       || '',
+      birthDate:       user?.birthDate       || '',
       bio:             user?.bio             || '',
       ministry:        user?.ministry        || '',
       socialInstagram: user?.socialInstagram || '',
@@ -232,36 +236,11 @@ export default function StudentProfile() {
                   />
                 </Field>
 
-                {/* Phone */}
-                <Field label="Mobilnummer" icon={<Phone size={13} />}>
-                  <input
-                    value={draft.phone}
-                    onChange={e => set('phone', e.target.value)}
-                    placeholder="+47 000 00 000"
-                    type="tel"
-                    className="field-input"
-                    style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
-                  />
-                </Field>
-
-                {/* Location */}
                 <Field label="Bosted / By" icon={<MapPin size={13} />}>
                   <input
                     value={draft.location}
                     onChange={e => set('location', e.target.value)}
                     placeholder="f.eks. Kristiansand, Norge"
-                    className="field-input"
-                    style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
-                  />
-                </Field>
-
-                {/* Birth year */}
-                <Field label="Fødselsår" icon={<Calendar size={13} />}>
-                  <input
-                    value={draft.birthYear}
-                    onChange={e => set('birthYear', e.target.value)}
-                    placeholder="f.eks. 1990"
-                    maxLength={4}
                     className="field-input"
                     style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
                   />
@@ -326,6 +305,66 @@ export default function StudentProfile() {
               </div>
             </div>
 
+            {/* ── Admin-only: Kontaktdetaljer (kun synlig for admin/superadmin) ── */}
+            {isAdmin && (
+              <motion.div
+                key="admin-contact"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white border-2 border-[#1B4965]/20 rounded-2xl overflow-hidden shadow-sm"
+              >
+                {/* Admin-only header banner */}
+                <div className="flex items-center gap-3 px-6 py-3 bg-[#1B4965] text-white">
+                  <ShieldCheck size={15} className="shrink-0" />
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-widest">Admin-tilgang</p>
+                    <p className="text-[10px] text-white/65 font-medium">Kun synlig for administratorer og super-administratorer</p>
+                  </div>
+                  <span className="ml-auto px-2 py-0.5 rounded-full text-[9px] font-bold bg-white/15 uppercase tracking-wider">{user?.role}</span>
+                </div>
+
+                <div className="p-6">
+                  <h2 className="font-serif text-base font-bold text-[#1B4965] mb-5 flex items-center gap-2">
+                    <Lock size={16} className="text-[#c5a059]" /> Sensitiv kontaktinformasjon
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Field label="Mobilnummer" icon={<Phone size={13} />}>
+                      <input
+                        value={draft.phone}
+                        onChange={e => set('phone', e.target.value)}
+                        placeholder="+47 000 00 000"
+                        type="tel"
+                        className="field-input"
+                      />
+                    </Field>
+
+                    <Field label="Fødselsdato" icon={<Calendar size={13} />}>
+                      <input
+                        value={draft.birthDate}
+                        onChange={e => set('birthDate', e.target.value)}
+                        placeholder="DD.MM.ÅÅÅÅ"
+                        type="date"
+                        className="field-input"
+                      />
+                    </Field>
+
+                    <Field label="Adresse" icon={<Home size={13} />} className="sm:col-span-2">
+                      <input
+                        value={draft.address}
+                        onChange={e => set('address', e.target.value)}
+                        placeholder="f.eks. Gateveien 12, 4500 Mandal"
+                        className="field-input"
+                      />
+                    </Field>
+                  </div>
+                  <p className="mt-4 text-[10px] text-[#1B4965]/60 font-semibold flex items-center gap-1.5">
+                    <Lock size={10} />
+                    Denne informasjonen er kryptert og deles aldri med andre studenter eller lærere.
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
             {/* Save bar */}
             <div className="flex items-center justify-between gap-4 bg-white border border-outline-variant/30 rounded-2xl px-6 py-4 shadow-sm">
               <div className="flex items-center gap-2 text-[11px] text-on-surface-variant font-semibold">
@@ -335,7 +374,7 @@ export default function StudentProfile() {
               <div className="flex gap-3">
                 <button
                   type="button"
-                  onClick={() => setDraft({ name: user?.name||'', phone: user?.phone||'', location: user?.location||'', birthYear: user?.birthYear||'', bio: user?.bio||'', ministry: user?.ministry||'', socialInstagram: user?.socialInstagram||'', socialFacebook: user?.socialFacebook||'', avatar: user?.avatar||AVATAR_OPTIONS[0] })}
+                  onClick={() => setDraft({ name: user?.name||'', phone: user?.phone||'', address: user?.address||'', location: user?.location||'', birthDate: user?.birthDate||'', bio: user?.bio||'', ministry: user?.ministry||'', socialInstagram: user?.socialInstagram||'', socialFacebook: user?.socialFacebook||'', avatar: user?.avatar||AVATAR_OPTIONS[0] })}
                   className="px-4 py-2.5 border border-outline-variant rounded-xl text-xs font-bold uppercase hover:border-primary hover:text-primary transition-all active:scale-95 flex items-center gap-1.5"
                 >
                   <XCircle size={13} /> Angre

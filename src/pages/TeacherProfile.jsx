@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  AlertCircle, Award, BookOpen, Briefcase, Camera, CheckCircle2,
-  ChevronRight, Eye, EyeOff, Link as LinkIcon, Lock, LogOut,
-  Mail, MapPin, Save, ShieldCheck, Sparkles, User, Video, XCircle
+  AlertCircle, Award, BookOpen, Briefcase, Calendar, Camera, CheckCircle2,
+  ChevronRight, Eye, EyeOff, Home, Link as LinkIcon, Lock, LogOut,
+  Mail, MapPin, Phone, Save, ShieldCheck, Sparkles, User, Video, XCircle
 } from 'lucide-react';
 
 const AVATAR_OPTIONS = [
@@ -42,9 +42,14 @@ export default function TeacherProfile() {
     officeHours: user?.officeHours || 'Tirsdag og torsdag 12:00-15:00',
     zoomLink: user?.zoomLink || 'https://zoom.us/j/9270778606',
     location: user?.location || 'Kristiansand, Norge',
+    phone: user?.phone || '',
+    address: user?.address || '',
+    birthDate: user?.birthDate || '',
     bio: user?.bio || '',
     avatar: user?.avatar || AVATAR_OPTIONS[0],
   });
+
+  const isAdmin = user?.role === 'admin' || user?.role === 'superadmin';
 
   const set = (field, value) => setDraft(prev => ({ ...prev, [field]: value }));
   const mentorStudents = students?.length || 0;
@@ -53,7 +58,6 @@ export default function TeacherProfile() {
   const completionPct = Math.round((completionFields.filter(Boolean).length / completionFields.length) * 100);
 
   useEffect(() => {
-    if (user?.role !== 'teacher') return;
     setDraft({
       name: user?.name || '',
       title: user?.title || 'Faglærer og mentor',
@@ -62,6 +66,9 @@ export default function TeacherProfile() {
       officeHours: user?.officeHours || 'Tirsdag og torsdag 12:00-15:00',
       zoomLink: user?.zoomLink || 'https://zoom.us/j/9270778606',
       location: user?.location || 'Kristiansand, Norge',
+      phone: user?.phone || '',
+      address: user?.address || '',
+      birthDate: user?.birthDate || '',
       bio: user?.bio || '',
       avatar: user?.avatar || AVATAR_OPTIONS[0],
     });
@@ -100,6 +107,9 @@ export default function TeacherProfile() {
       officeHours: user?.officeHours || 'Tirsdag og torsdag 12:00-15:00',
       zoomLink: user?.zoomLink || 'https://zoom.us/j/9270778606',
       location: user?.location || 'Kristiansand, Norge',
+      phone: user?.phone || '',
+      address: user?.address || '',
+      birthDate: user?.birthDate || '',
       bio: user?.bio || '',
       avatar: user?.avatar || AVATAR_OPTIONS[0],
     });
@@ -263,6 +273,65 @@ export default function TeacherProfile() {
                   </Field>
                 </div>
               </section>
+
+              {/* ── Admin-only: Kontaktdetaljer ── */}
+              {isAdmin && (
+                <motion.section
+                  key="admin-contact-teacher"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-white border-2 border-[#1B4965]/20 rounded-2xl overflow-hidden shadow-sm"
+                >
+                  <div className="flex items-center gap-3 px-6 py-3 bg-[#1B4965] text-white">
+                    <ShieldCheck size={15} className="shrink-0" />
+                    <div>
+                      <p className="text-[11px] font-bold uppercase tracking-widest">Admin-tilgang</p>
+                      <p className="text-[10px] text-white/65 font-medium">Kun synlig for administratorer og super-administratorer</p>
+                    </div>
+                    <span className="ml-auto px-2 py-0.5 rounded-full text-[9px] font-bold bg-white/15 uppercase tracking-wider">{user?.role}</span>
+                  </div>
+
+                  <div className="p-6">
+                    <h2 className="font-serif text-base font-bold text-[#1B4965] mb-5 flex items-center gap-2">
+                      <Lock size={16} className="text-[#c5a059]" /> Sensitiv kontaktinformasjon
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <Field label="Mobilnummer" icon={<Phone size={13} />}>
+                        <input
+                          value={draft.phone}
+                          onChange={e => set('phone', e.target.value)}
+                          placeholder="+47 000 00 000"
+                          type="tel"
+                          className="field-input"
+                        />
+                      </Field>
+
+                      <Field label="Fødselsdato" icon={<Calendar size={13} />}>
+                        <input
+                          value={draft.birthDate}
+                          onChange={e => set('birthDate', e.target.value)}
+                          placeholder="DD.MM.ÅÅÅÅ"
+                          type="date"
+                          className="field-input"
+                        />
+                      </Field>
+
+                      <Field label="Adresse" icon={<Home size={13} />} className="sm:col-span-2">
+                        <input
+                          value={draft.address}
+                          onChange={e => set('address', e.target.value)}
+                          placeholder="f.eks. Gateveien 12, 4500 Kristiansand"
+                          className="field-input"
+                        />
+                      </Field>
+                    </div>
+                    <p className="mt-4 text-[10px] text-[#1B4965]/60 font-semibold flex items-center gap-1.5">
+                      <Lock size={10} />
+                      Denne informasjonen er kryptert og deles aldri med studenter.
+                    </p>
+                  </div>
+                </motion.section>
+              )}
             </div>
 
             <aside className="xl:col-span-4 flex flex-col gap-5">
