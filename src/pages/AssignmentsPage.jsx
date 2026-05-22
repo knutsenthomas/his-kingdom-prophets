@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,103 +9,20 @@ import {
 
 export default function AssignmentsPage() {
   const navigate = useNavigate();
-  const { user, showToast } = useApp();
+  const { user, showToast, assignments, submitAssignment } = useApp();
   const [activeTab, setActiveTab] = useState('pending'); // pending, submitted, graded
-  const [selectedId, setSelectedId] = useState('ass-1');
   const [submissionText, setSubmissionText] = useState('');
   const [uploadedFile, setUploadedFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Simulated Assignment Data
-  const [assignments, setAssignments] = useState([
-    {
-      id: 'ass-1',
-      title: 'Det profetiske embete i GT vs NT',
-      courseCode: 'PROP 101',
-      courseName: 'Innføring i den Profetiske Tjeneste',
-      dueDate: '2026-06-05',
-      dueTime: '23:59',
-      status: 'pending', // pending, submitted, graded
-      description: 'Skriv et essay på 1500-2000 ord der du drøfter didaktiske og åndelige forskjeller mellom det gammeltestamentlige og det nytestamentlige profetembetet. Gi konkrete bibelske eksempler og diskuter hvordan profetens rolle endrer seg etter pinseedagen.',
-      weight: '30% av totalkarakter',
-      gradingRubric: [
-        { criterion: 'Bibelforståelse & Hermeneutikk', points: 40 },
-        { criterion: 'Åndelig refleksjon & karakter', points: 40 },
-        { criterion: 'Struktur og formidling', points: 20 }
-      ],
-      submission: null,
-      grade: null,
-      feedback: null
-    },
-    {
-      id: 'ass-2',
-      title: 'Eksegese av Johannes\' åpenbaring',
-      courseCode: 'BIBLE 301',
-      courseName: 'Avansert Hermeneutikk og Tolkning',
-      dueDate: '2026-06-12',
-      dueTime: '12:00',
-      status: 'pending',
-      description: 'Foreta en grundig eksegetisk analyse av Johannes\' åpenbaring kapittel 5. Utled de eskatologiske typologiene og diskuter lammet som åpner seglene. Alle tolkninger og kildehenvisninger må dokumenteres grundig i PDF-format.',
-      weight: '40% av totalkarakter',
-      gradingRubric: [
-        { criterion: 'Hermeneutisk stringens', points: 50 },
-        { criterion: 'Teologisk tolkning', points: 30 },
-        { criterion: 'Formatering & ryddighet', points: 20 }
-      ],
-      submission: null,
-      grade: null,
-      feedback: null
-    },
-    {
-      id: 'ass-3',
-      title: 'Sjelesorgstudie i Mandal',
-      courseCode: 'MIN 201',
-      courseName: 'Sjelesorg og Menighetsledelse',
-      dueDate: '2026-05-18',
-      dueTime: '23:59',
-      status: 'submitted',
-      description: 'Velg tre sjelesorgs-modeller eller case-studier innenfor kristen veiledning og foreta en komparativ analyse. Vurder modellsikkerhet, bibelsk forankring og pastoral relevans.',
-      weight: '25% av totalkarakter',
-      gradingRubric: [
-        { criterion: 'Sjelesorgmodeller', points: 30 },
-        { criterion: 'Sjelesorgfaglig evaluering', points: 50 },
-        { criterion: 'Referering & Etikk', points: 20 }
-      ],
-      submission: {
-        text: 'Dette essayet sammenligner tre sjelesorgsmodeller i en menighetskontekst med fokus på helbredelse av indre sår...',
-        fileName: 'sjelesorg_analyse_knutsen.pdf',
-        submittedAt: '2026-05-17 19:42'
-      },
-      grade: null,
-      feedback: null
-    },
-    {
-      id: 'ass-4',
-      title: 'Problemstilling & Etablering av bønnesenter',
-      courseCode: 'MIN 201',
-      courseName: 'Sjelesorg og Menighetsledelse',
-      dueDate: '2026-04-20',
-      dueTime: '23:59',
-      status: 'graded',
-      description: 'Utarbeid en strukturert prosjektskisse for etablering av et bønne- og sjelesorgs-senter i Mandal, inkludert åndelig rammeverk og praktisk menighetsledelse.',
-      weight: '15% av totalkarakter',
-      gradingRubric: [
-        { criterion: 'Skissens teologiske dybde', points: 40 },
-        { criterion: 'Faglig & pastoral relevans', points: 35 },
-        { criterion: 'Formidlingspresisjon', points: 25 }
-      ],
-      submission: {
-        text: 'Jeg ønsker å utarbeide en skisse for et bønnesenter i Mandal menighet med fokus på kontinuerlig forbønn, opplæring i nådegaver, og sjelesorg...',
-        fileName: 'prosjektskisse_bønnesenter_v1.pdf',
-        submittedAt: '2026-04-18 11:15'
-      },
-      grade: 'A',
-      feedback: 'En fremragende prosjektskisse med et solid teologisk fundament. Veldig godt spisset, og du viser stor åndelig og praktisk modenhet i din tilnærming. Fortsett det utmerkede arbeidet!',
-      score: '96/100'
-    }
-  ]);
+  const [selectedId, setSelectedId] = useState(assignments.find(a => a.status === activeTab)?.id || assignments[0]?.id);
 
   const activeAssignment = assignments.find(a => a.id === selectedId) || assignments[0];
+
+  useEffect(() => {
+    if (!assignments.some(a => a.id === selectedId)) {
+      setSelectedId(assignments.find(a => a.status === activeTab)?.id || assignments[0]?.id);
+    }
+  }, [assignments, activeTab, selectedId]);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -122,24 +39,15 @@ export default function AssignmentsPage() {
 
     setIsSubmitting(true);
     setTimeout(() => {
-      setAssignments(prev => prev.map(ass => {
-        if (ass.id === selectedId) {
-          return {
-            ...ass,
-            status: 'submitted',
-            submission: {
-              text: submissionText,
-              fileName: uploadedFile ? uploadedFile.name : 'skriftlig_besvarelse.pdf',
-              submittedAt: new Date().toISOString().replace('T', ' ').substring(0, 16)
-            }
-          };
-        }
-        return ass;
-      }));
+      submitAssignment(selectedId, {
+        studentName: user?.name || 'Student',
+        text: submissionText,
+        fileName: uploadedFile ? uploadedFile.name : 'skriftlig_besvarelse.pdf',
+        submittedAt: new Date().toISOString().replace('T', ' ').substring(0, 16)
+      });
       setIsSubmitting(false);
       setSubmissionText('');
       setUploadedFile(null);
-      showToast("Oppgave besvart og sendt til vurdering!");
     }, 1000);
   };
 
@@ -215,6 +123,11 @@ export default function AssignmentsPage() {
                           <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-surface-container-highest text-primary">
                             {ass.courseCode}
                           </span>
+                          {ass.moduleTitle && (
+                            <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-primary/5 text-primary">
+                              Klasserom
+                            </span>
+                          )}
                           <span className="text-xs text-on-surface-variant font-semibold">
                             {ass.weight}
                           </span>

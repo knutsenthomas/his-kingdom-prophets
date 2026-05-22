@@ -3,14 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { 
   Play, Pause, SkipForward, Volume2, MessageSquare, Download, 
-  Send, Calendar, Clock
+  Send, Calendar, Clock, FileText, ClipboardList, BookOpen, ExternalLink
 } from 'lucide-react';
 
 export default function VideoView() {
   const navigate = useNavigate();
-  const { user, showToast } = useApp();
+  const { user, showToast, courses } = useApp();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState("15:20");
+  const [activeClassroomTab, setActiveClassroomTab] = useState('transcript');
   const [discussionList, setDiscussionList] = useState([
     {
       id: 1,
@@ -63,6 +64,26 @@ export default function VideoView() {
     showToast(`Hoppet til ${time} i videoen.`);
   };
 
+  const classroomCourse = courses.find(course => course.id === 'bible301') || courses[0];
+  const classroomModule = classroomCourse?.modules.find(mod => mod.id === 'p6') || classroomCourse?.modules[0];
+  const transcript = classroomModule?.transcript?.length ? classroomModule.transcript : [
+    { id: 'fallback-1', time: '00:15', text: 'I vår utforskning av bibelhermeneutikk må vi først innse at skriften må tolkes i lys av seg selv.' },
+    { id: 'fallback-2', time: '02:45', text: 'Betrakt paktsteologien som representerer Guds overordnede plan og de profetiske mønstrene i Det gamle testamente.' },
+    { id: 'fallback-3', time: '05:12', text: 'Tolkningen fortsetter ved å skille mellom bokstavelig og symbolsk språk i apokalyptisk litteratur.' },
+  ];
+  const studyGuides = classroomModule?.studyGuides || [];
+  const assignments = classroomModule?.assignments?.length
+    ? classroomModule.assignments
+    : classroomModule?.assignment?.description
+      ? [{ id: `${classroomModule.id}-assignment`, title: 'Moduloppgave', ...classroomModule.assignment }]
+      : [];
+
+  const classroomTabs = [
+    { id: 'transcript', label: 'Transkript & notater', Icon: FileText, count: transcript.length },
+    { id: 'guides', label: 'Studieguider', Icon: BookOpen, count: studyGuides.length },
+    { id: 'assignments', label: 'Oppgaver', Icon: ClipboardList, count: assignments.length },
+  ];
+
   return (
     <main className="flex-grow p-4 sm:p-6 md:p-10 space-y-6 md:space-y-8 overflow-x-hidden">
       
@@ -72,7 +93,7 @@ export default function VideoView() {
         <span>/</span>
         <span className="hover:underline cursor-pointer text-on-surface-variant hover:text-primary" onClick={() => navigate('/student/lesson', { state: { courseId: 'bible301' } })}>Bibelstudier</span>
         <span>/</span>
-        <span className="text-primary font-bold">Modul 6: Johannes' åpenbaring og symbolspråk</span>
+        <span className="text-primary font-bold">{classroomModule?.title || 'Klasserom'}</span>
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -85,9 +106,9 @@ export default function VideoView() {
             {/* Thumbnail / Video Stream Mock */}
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-tr from-slate-900 via-slate-800 to-primary">
               <div className="text-center text-white/40 font-mono space-y-3 relative z-10 px-4">
-                <p className="text-xs uppercase tracking-widest font-bold">Bibelstudier & Avansert Hermeneutikk</p>
-                <h3 className="font-serif text-lg md:text-xl font-bold text-white/80">Johannes' åpenbaring og eskatologisk symbolspråk</h3>
-                <p className="text-[10px] text-white/60">Foreleser: Profet Jon Arild</p>
+                <p className="text-xs uppercase tracking-widest font-bold">{classroomCourse?.title}</p>
+                <h3 className="font-serif text-lg md:text-xl font-bold text-white/80">{classroomModule?.title}</h3>
+                <p className="text-[10px] text-white/60">Foreleser: {classroomCourse?.instructor}</p>
               </div>
               {/* Glowing background scripture elements */}
               <div className="absolute inset-0 opacity-10 bg-cover font-serif text-white flex items-center justify-center text-2xl whitespace-pre-wrap select-none p-12">
@@ -124,54 +145,119 @@ export default function VideoView() {
             </div>
           </div>
 
-          {/* Transcript & tabs card */}
+          {/* Classroom resource tabs */}
           <div className="bg-white border border-outline-variant/30 rounded-2xl overflow-hidden shadow-sm">
-            <div className="flex border-b border-slate-100 text-xs font-bold">
-              <button className="px-6 py-4 text-primary border-b-2 border-primary bg-primary/5">TRANSKRIPT & NOTATER</button>
-              <button onClick={() => showToast("Laster ned teologiske studieguider...")} className="px-6 py-4 text-on-surface-variant hover:text-primary transition-colors">STUDIEGUIDER</button>
-              <button onClick={() => navigate('/student/assignments')} className="px-6 py-4 text-on-surface-variant hover:text-primary transition-colors">OPPGAVER</button>
+            <div className="flex border-b border-slate-100 text-xs font-bold overflow-x-auto">
+              {classroomTabs.map(tab => {
+                const Icon = tab.Icon;
+                const isActive = activeClassroomTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveClassroomTab(tab.id)}
+                    className={`px-5 sm:px-6 py-4 transition-colors flex items-center gap-2 whitespace-nowrap border-b-2 -mb-px ${
+                      isActive
+                        ? 'text-primary border-primary bg-primary/5'
+                        : 'text-on-surface-variant border-transparent hover:text-primary'
+                    }`}
+                  >
+                    <Icon size={14} />
+                    <span>{tab.label.toUpperCase()}</span>
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full ${isActive ? 'bg-primary text-white' : 'bg-slate-100 text-outline'}`}>{tab.count}</span>
+                  </button>
+                );
+              })}
             </div>
 
             <div className="p-6 md:p-8 space-y-6">
-              <div className="flex items-center justify-between">
-                <h3 className="font-serif font-bold text-primary text-lg">Forelesningstranskript</h3>
-                <button className="p-2 hover:bg-slate-100 rounded-lg text-outline flex items-center gap-1 text-xs font-bold" onClick={() => showToast("Nedlasting startet...")}>
-                  <Download size={14} />
-                  <span>Last ned PDF</span>
-                </button>
-              </div>
+              {activeClassroomTab === 'transcript' && (
+                <>
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-serif font-bold text-primary text-lg">Forelesningstranskript</h3>
+                    <button className="p-2 hover:bg-slate-100 rounded-lg text-outline flex items-center gap-1 text-xs font-bold" onClick={() => showToast("Nedlasting startet...")}>
+                      <Download size={14} />
+                      <span>Last ned PDF</span>
+                    </button>
+                  </div>
 
-              <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
-                <div 
-                  onClick={() => handleJumpTime("00:15")}
-                  className="flex gap-4 p-2 rounded hover:bg-slate-50 cursor-pointer transition-colors"
-                >
-                  <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-0.5 rounded h-fit">00:15</span>
-                  <p className="text-sm font-serif font-medium text-on-surface leading-relaxed italic">
-                    "I vår utforskning av bibelhermeneutikk må vi først innse det fundamentale postulatet at skriften må tolkes i lys av seg selv. Dette leder oss direkte til det historisk-grammatiske tolkningsprinsippet."
-                  </p>
-                </div>
+                  <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
+                    {transcript.map(line => (
+                      <div key={line.id} onClick={() => handleJumpTime(line.time || '00:00')} className="flex gap-4 p-2 rounded hover:bg-slate-50 cursor-pointer transition-colors">
+                        <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-0.5 rounded h-fit">{line.time || '00:00'}</span>
+                        <p className="text-sm font-serif font-medium text-on-surface leading-relaxed">"{line.text}"</p>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
 
-                <div 
-                  onClick={() => handleJumpTime("02:45")}
-                  className="flex gap-4 p-2 rounded hover:bg-slate-50 cursor-pointer transition-colors"
-                >
-                  <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-0.5 rounded h-fit">02:45</span>
-                  <p className="text-sm font-serif font-medium text-on-surface leading-relaxed">
-                    "Betrakt paktsteologien som representerer Guds overordnede plan. Vi utleder de profetiske mønstrene ved å analysere skyggebildene og typologiene i Det Gamle Testamente..."
-                  </p>
+              {activeClassroomTab === 'guides' && (
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-serif font-bold text-primary text-lg">Studieguider</h3>
+                    <p className="text-xs text-on-surface-variant font-semibold mt-1">Ressurser lagt til av lærer for denne forelesningen.</p>
+                  </div>
+                  {studyGuides.length === 0 ? (
+                    <div className="py-10 text-center border-2 border-dashed border-outline-variant/20 rounded-xl">
+                      <BookOpen size={28} className="mx-auto text-outline-variant mb-2" />
+                      <p className="text-xs font-semibold text-on-surface-variant">Ingen studieguider er lagt til ennå.</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {studyGuides.map(guide => (
+                        <div key={guide.id} className="p-4 border border-outline-variant/30 rounded-xl bg-surface-container-lowest hover:border-primary/40 transition-colors">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="min-w-0">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-[#8a682d] bg-[#c5a059]/15 px-2 py-0.5 rounded-full">{guide.type || 'Guide'}</span>
+                              <h4 className="font-serif text-sm font-bold text-primary mt-2">{guide.title || 'Studieguide'}</h4>
+                            </div>
+                            <FileText size={18} className="text-primary shrink-0" />
+                          </div>
+                          <p className="text-xs text-on-surface-variant leading-relaxed mt-2">{guide.description}</p>
+                          <button onClick={() => guide.fileUrl ? window.open(guide.fileUrl, '_blank') : showToast('Studieguide åpnet.')} className="mt-4 text-xs font-bold text-primary inline-flex items-center gap-1 hover:underline">
+                            Åpne ressurs <ExternalLink size={11} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
+              )}
 
-                <div 
-                  onClick={() => handleJumpTime("05:12")}
-                  className="flex gap-4 p-2 rounded hover:bg-slate-50 cursor-pointer transition-colors"
-                >
-                  <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-0.5 rounded h-fit">05:12</span>
-                  <p className="text-sm font-serif font-medium text-on-surface leading-relaxed">
-                    "Tolkningen fortsetter ved å skille mellom bokstavelig og symbolsk språk i apokalyptisk litteratur. Ved å sammenligne symbolene med gammeltestamentlige referanser, finner vi den dype åpenbaringen..."
-                  </p>
+              {activeClassroomTab === 'assignments' && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <h3 className="font-serif font-bold text-primary text-lg">Oppgaver</h3>
+                      <p className="text-xs text-on-surface-variant font-semibold mt-1">Oppgaver knyttet til denne forelesningen.</p>
+                    </div>
+                    <button onClick={() => navigate('/student/assignments')} className="px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-container transition-all active:scale-95">
+                      Åpne oppgavemeny
+                    </button>
+                  </div>
+
+                  {assignments.length === 0 ? (
+                    <div className="py-10 text-center border-2 border-dashed border-outline-variant/20 rounded-xl">
+                      <ClipboardList size={28} className="mx-auto text-outline-variant mb-2" />
+                      <p className="text-xs font-semibold text-on-surface-variant">Ingen oppgaver er lagt til denne forelesningen ennå.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {assignments.map(assignment => (
+                        <div key={assignment.id} className="p-4 border border-outline-variant/30 rounded-xl bg-surface-container-lowest">
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <span className="text-[10px] font-bold uppercase px-2.5 py-1 rounded-full bg-primary text-white">{assignment.type || 'oppgave'}</span>
+                            {assignment.dueDate && <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-200">Frist: {assignment.dueDate} kl {assignment.dueTime || '23:59'}</span>}
+                            {assignment.weight && <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-primary">{assignment.weight}</span>}
+                          </div>
+                          <h4 className="font-serif text-base font-bold text-primary">{assignment.title || 'Moduloppgave'}</h4>
+                          <p className="text-xs text-on-surface-variant leading-relaxed mt-2">{assignment.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
             </div>
           </div>
 

@@ -5,7 +5,7 @@ import {
   X, Save, Plus, Trash2, BookOpen, Target, PlaySquare,
   ClipboardList, ChevronUp, ChevronDown, GripVertical,
   Check, AlertCircle, Link as LinkIcon, Clock, FileText,
-  Pencil, CheckCircle2, Eye
+  Eye, ScrollText, FilePlus2
 } from 'lucide-react';
 
 // ─── Tab config ─────────────────────────────────────────────────────────────
@@ -13,7 +13,9 @@ const TABS = [
   { id: 'overview',      label: 'Oversikt',           Icon: BookOpen },
   { id: 'goals',         label: 'Læringsmål',          Icon: Target },
   { id: 'lessons',       label: 'Undervisningstimer',  Icon: PlaySquare },
-  { id: 'assignment',    label: 'Innlevering',         Icon: ClipboardList },
+  { id: 'transcript',    label: 'Transkript',          Icon: ScrollText },
+  { id: 'guides',        label: 'Studieguider',        Icon: FilePlus2 },
+  { id: 'assignment',    label: 'Oppgaver',            Icon: ClipboardList },
 ];
 
 const ASSIGNMENT_TYPES = [
@@ -23,6 +25,24 @@ const ASSIGNMENT_TYPES = [
   { id: 'quiz',        label: 'Spørsmål / Quiz' },
   { id: 'discussion',  label: 'Diskusjonsforum' },
 ];
+
+const normalizeAssignments = (mod) => {
+  if (Array.isArray(mod.assignments) && mod.assignments.length > 0) {
+    return mod.assignments.map(a => ({ ...a }));
+  }
+  if (mod.assignment?.description) {
+    return [{
+      id: `ass-${mod.id}`,
+      title: 'Moduloppgave',
+      description: mod.assignment.description,
+      dueDate: mod.assignment.dueDate || '',
+      dueTime: mod.assignment.dueTime || '23:59',
+      type: mod.assignment.type || 'essay',
+      weight: mod.assignment.weight || 'Modulvurdering',
+    }];
+  }
+  return [];
+};
 
 // ─── Auto-growing textarea ───────────────────────────────────────────────────
 function AutoTextarea({ value, onChange, placeholder, className, minRows = 3 }) {
@@ -55,6 +75,9 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
     description:  mod.description  || '',
     learningGoals: [...(mod.learningGoals || [])],
     lessons:       (mod.lessons || []).map(l => ({ ...l })),
+    transcript:    (mod.transcript || []).map(line => ({ ...line })),
+    studyGuides:   (mod.studyGuides || []).map(guide => ({ ...guide })),
+    assignments:   normalizeAssignments(mod),
     assignment: {
       description: mod.assignment?.description || '',
       dueDate:     mod.assignment?.dueDate     || '',
@@ -68,7 +91,6 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
 
   // ── Helpers ──
   const set = (field, value) => setDraft(p => ({ ...p, [field]: value }));
-  const setAssignment = (field, value) => setDraft(p => ({ ...p, assignment: { ...p.assignment, [field]: value } }));
 
   // Goals
   const addGoal = () => {
@@ -101,13 +123,62 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
     set('lessons', arr);
   };
 
+  // Transcript
+  const addTranscriptLine = () => set('transcript', [
+    ...draft.transcript,
+    { id: `tr-${Date.now()}`, time: '', text: '' }
+  ]);
+  const removeTranscriptLine = (i) => set('transcript', draft.transcript.filter((_, idx) => idx !== i));
+  const updateTranscriptLine = (i, field, val) => set('transcript', draft.transcript.map((line, idx) => idx === i ? { ...line, [field]: val } : line));
+  const moveTranscriptLine = (i, dir) => {
+    const arr = [...draft.transcript];
+    const to = dir === 'up' ? i - 1 : i + 1;
+    if (to < 0 || to >= arr.length) return;
+    [arr[i], arr[to]] = [arr[to], arr[i]];
+    set('transcript', arr);
+  };
+
+  // Study guides
+  const addStudyGuide = () => set('studyGuides', [
+    ...draft.studyGuides,
+    { id: `sg-${Date.now()}`, title: '', description: '', type: 'PDF', fileUrl: '' }
+  ]);
+  const removeStudyGuide = (i) => set('studyGuides', draft.studyGuides.filter((_, idx) => idx !== i));
+  const updateStudyGuide = (i, field, val) => set('studyGuides', draft.studyGuides.map((guide, idx) => idx === i ? { ...guide, [field]: val } : guide));
+
+  // Assignments
+  const addAssignment = () => set('assignments', [
+    ...draft.assignments,
+    { id: `ass-${Date.now()}`, title: '', description: '', dueDate: '', dueTime: '23:59', type: 'essay', weight: 'Modulvurdering' }
+  ]);
+  const removeAssignment = (i) => set('assignments', draft.assignments.filter((_, idx) => idx !== i));
+  const updateAssignment = (i, field, val) => set('assignments', draft.assignments.map((ass, idx) => idx === i ? { ...ass, [field]: val } : ass));
+  const moveAssignment = (i, dir) => {
+    const arr = [...draft.assignments];
+    const to = dir === 'up' ? i - 1 : i + 1;
+    if (to < 0 || to >= arr.length) return;
+    [arr[i], arr[to]] = [arr[to], arr[i]];
+    set('assignments', arr);
+  };
+
   // Save to AppContext
   const handleSave = () => {
     updateModule(courseId, mod.id, {
       description:   draft.description,
       learningGoals: draft.learningGoals,
       lessons:       draft.lessons,
-      assignment:    draft.assignment,
+      transcript:    draft.transcript,
+      studyGuides:   draft.studyGuides,
+      assignments:   draft.assignments,
+      assignment:    draft.assignments[0]
+        ? {
+            description: draft.assignments[0].description,
+            dueDate: draft.assignments[0].dueDate,
+            dueTime: draft.assignments[0].dueTime,
+            type: draft.assignments[0].type,
+            weight: draft.assignments[0].weight,
+          }
+        : draft.assignment,
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -119,7 +190,9 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
     overview:   !!draft.description.trim(),
     goals:      draft.learningGoals.length > 0,
     lessons:    draft.lessons.length > 0,
-    assignment: !!draft.assignment.description.trim(),
+    transcript: draft.transcript.some(line => line.text.trim()),
+    guides:     draft.studyGuides.some(guide => guide.title.trim()),
+    assignment: draft.assignments.some(ass => ass.description.trim() || ass.title.trim()),
   };
 
   return (
@@ -235,7 +308,9 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
                     {[
                       { label: 'Læringsmål', value: draft.learningGoals.length, icon: Target, tab: 'goals' },
                       { label: 'Undervisningstimer', value: draft.lessons.length, icon: PlaySquare, tab: 'lessons' },
-                      { label: 'Innlevering', value: draft.assignment.description ? '✓' : '–', icon: ClipboardList, tab: 'assignment' },
+                      { label: 'Transkript', value: draft.transcript.length, icon: ScrollText, tab: 'transcript' },
+                      { label: 'Studieguider', value: draft.studyGuides.length, icon: FilePlus2, tab: 'guides' },
+                      { label: 'Oppgaver', value: draft.assignments.length, icon: ClipboardList, tab: 'assignment' },
                     ].map(card => {
                       const Icon = card.icon;
                       return (
@@ -250,6 +325,113 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
                         </button>
                       );
                     })}
+                  </div>
+                </>
+              )}
+
+              {/* ══ TRANSCRIPT ══ */}
+              {activeTab === 'transcript' && (
+                <>
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <h3 className="font-serif text-base font-bold text-primary flex items-center gap-2">
+                        <ScrollText size={16} className="text-[#c5a059]" /> Forelesningstranskript
+                      </h3>
+                      <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">
+                        Legg inn tidsstemplede transkriptlinjer som vises i klasserommet.
+                      </p>
+                    </div>
+                    <button onClick={addTranscriptLine} className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-xs font-bold uppercase rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm shrink-0">
+                      <Plus size={13} /> Ny linje
+                    </button>
+                  </div>
+
+                  <div className="space-y-3">
+                    {draft.transcript.length === 0 && (
+                      <div className="py-12 text-center border-2 border-dashed border-outline-variant/20 rounded-xl">
+                        <ScrollText size={28} className="text-outline-variant mx-auto mb-2" />
+                        <p className="text-xs font-semibold text-on-surface-variant mb-3">Ingen transkriptlinjer ennå.</p>
+                        <button onClick={addTranscriptLine} className="px-4 py-2 bg-primary text-white text-xs font-bold uppercase rounded-lg shadow-sm hover:bg-primary/90 transition-all active:scale-95 inline-flex items-center gap-1.5">
+                          <Plus size={13} /> Legg til transkript
+                        </button>
+                      </div>
+                    )}
+
+                    {draft.transcript.map((line, i) => (
+                      <motion.div key={line.id} layout className="grid grid-cols-1 sm:grid-cols-[96px_1fr_auto] gap-3 items-start bg-white border-2 border-outline-variant/20 rounded-xl p-4 shadow-sm">
+                        <div className="space-y-1">
+                          <label className="text-[9px] font-bold uppercase tracking-wider text-outline">Tid</label>
+                          <input value={line.time} onChange={e => updateTranscriptLine(i, 'time', e.target.value)} placeholder="00:15" className="w-full px-3 py-2.5 border border-outline-variant/30 rounded-lg text-xs font-mono font-bold text-primary focus:outline-none focus:border-primary shadow-sm" />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[9px] font-bold uppercase tracking-wider text-outline">Transkripttekst</label>
+                          <AutoTextarea value={line.text} onChange={e => updateTranscriptLine(i, 'text', e.target.value)} placeholder="Skriv hva som blir sagt i denne delen av forelesningen..." minRows={2} className="w-full px-3 py-2.5 border border-outline-variant/30 rounded-lg text-xs font-medium text-on-surface focus:outline-none focus:border-primary shadow-sm leading-relaxed transition-colors" />
+                        </div>
+                        <div className="flex sm:flex-col gap-1 pt-5">
+                          <button onClick={() => moveTranscriptLine(i, 'up')} disabled={i === 0} className="p-1.5 text-outline hover:text-primary disabled:opacity-20"><ChevronUp size={13} /></button>
+                          <button onClick={() => moveTranscriptLine(i, 'down')} disabled={i === draft.transcript.length - 1} className="p-1.5 text-outline hover:text-primary disabled:opacity-20"><ChevronDown size={13} /></button>
+                          <button onClick={() => removeTranscriptLine(i)} className="p-1.5 text-outline hover:text-red-500 hover:bg-red-50 rounded"><Trash2 size={13} /></button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* ══ STUDY GUIDES ══ */}
+              {activeTab === 'guides' && (
+                <>
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <h3 className="font-serif text-base font-bold text-primary flex items-center gap-2">
+                        <FilePlus2 size={16} className="text-[#c5a059]" /> Studieguider
+                      </h3>
+                      <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">
+                        Legg til PDF-er, notater eller lenker som vises i klasserommets studieguide-fane.
+                      </p>
+                    </div>
+                    <button onClick={addStudyGuide} className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-xs font-bold uppercase rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm shrink-0">
+                      <Plus size={13} /> Ny guide
+                    </button>
+                  </div>
+
+                  <div className="space-y-4">
+                    {draft.studyGuides.length === 0 && (
+                      <div className="py-12 text-center border-2 border-dashed border-outline-variant/20 rounded-xl">
+                        <FilePlus2 size={28} className="text-outline-variant mx-auto mb-2" />
+                        <p className="text-xs font-semibold text-on-surface-variant mb-3">Ingen studieguider ennå.</p>
+                        <button onClick={addStudyGuide} className="px-4 py-2 bg-primary text-white text-xs font-bold uppercase rounded-lg shadow-sm hover:bg-primary/90 transition-all active:scale-95 inline-flex items-center gap-1.5">
+                          <Plus size={13} /> Legg til første guide
+                        </button>
+                      </div>
+                    )}
+
+                    {draft.studyGuides.map((guide, i) => (
+                      <motion.div key={guide.id} layout className="bg-white border-2 border-outline-variant/20 rounded-xl p-4 shadow-sm space-y-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-xs font-bold text-primary">Studieguide {i + 1}</span>
+                          <button onClick={() => removeStudyGuide(i)} className="p-1.5 text-outline hover:text-red-500 hover:bg-red-50 rounded"><Trash2 size={13} /></button>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div className="space-y-1 sm:col-span-2">
+                            <label className="text-[9px] font-bold uppercase tracking-wider text-outline">Tittel</label>
+                            <input value={guide.title} onChange={e => updateStudyGuide(i, 'title', e.target.value)} placeholder="f.eks. Studieguide: Apokalyptisk symbolspråk" className="w-full px-3 py-2.5 border border-outline-variant/30 rounded-lg text-xs font-bold text-primary focus:outline-none focus:border-primary shadow-sm" />
+                          </div>
+                          <div className="space-y-1 sm:col-span-2">
+                            <label className="text-[9px] font-bold uppercase tracking-wider text-outline">Beskrivelse</label>
+                            <AutoTextarea value={guide.description} onChange={e => updateStudyGuide(i, 'description', e.target.value)} placeholder="Kort forklaring av hva studenten får i guiden..." minRows={2} className="w-full px-3 py-2.5 border border-outline-variant/30 rounded-lg text-xs font-medium text-on-surface focus:outline-none focus:border-primary shadow-sm leading-relaxed transition-colors" />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold uppercase tracking-wider text-outline">Type</label>
+                            <input value={guide.type} onChange={e => updateStudyGuide(i, 'type', e.target.value)} placeholder="PDF, Notat, Lenke" className="w-full px-3 py-2.5 border border-outline-variant/30 rounded-lg text-xs font-semibold focus:outline-none focus:border-primary shadow-sm" />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-bold uppercase tracking-wider text-outline">Fil-/ressurslenke</label>
+                            <input value={guide.fileUrl} onChange={e => updateStudyGuide(i, 'fileUrl', e.target.value)} placeholder="https://..." className="w-full px-3 py-2.5 border border-outline-variant/30 rounded-lg text-xs font-semibold focus:outline-none focus:border-primary shadow-sm" />
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
                   </div>
                 </>
               )}
@@ -427,75 +609,89 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
               {/* ══ ASSIGNMENT ══ */}
               {activeTab === 'assignment' && (
                 <>
-                  <div>
-                    <h3 className="font-serif text-base font-bold text-primary mb-1 flex items-center gap-2">
-                      <ClipboardList size={16} className="text-[#c5a059]" /> Innlevering / Oppgave
-                    </h3>
-                    <p className="text-[11px] text-on-surface-variant font-medium mb-5">
-                      Beskriv oppgaven studenten skal innlevere etter fullført modul.
-                    </p>
-
-                    {/* Assignment type */}
-                    <div className="space-y-2 mb-5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-outline block">Type oppgave</label>
-                      <div className="flex flex-wrap gap-2">
-                        {ASSIGNMENT_TYPES.map(type => (
-                          <button
-                            key={type.id}
-                            onClick={() => setAssignment('type', type.id)}
-                            className={`px-3.5 py-2 rounded-lg border-2 text-xs font-bold transition-all ${
-                              draft.assignment.type === type.id
-                                ? 'bg-primary border-primary text-white shadow-sm'
-                                : 'bg-white border-outline-variant/30 text-on-surface-variant hover:border-primary/40 hover:text-primary'
-                            }`}
-                          >
-                            {type.label}
-                          </button>
-                        ))}
-                      </div>
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <h3 className="font-serif text-base font-bold text-primary flex items-center gap-2">
+                        <ClipboardList size={16} className="text-[#c5a059]" /> Oppgaver i klasserommet
+                      </h3>
+                      <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">
+                        Legg til én eller flere oppgaver som vises under Oppgaver-fanen i klasserommet og i oppgavemenyen.
+                      </p>
                     </div>
+                    <button onClick={addAssignment} className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-xs font-bold uppercase rounded-lg hover:bg-primary/90 transition-all active:scale-95 shadow-sm shrink-0">
+                      <Plus size={13} /> Ny oppgave
+                    </button>
+                  </div>
 
-                    {/* Assignment description */}
-                    <div className="space-y-2 mb-5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-outline block">Oppgavetekst</label>
-                      <AutoTextarea
-                        value={draft.assignment.description}
-                        onChange={e => setAssignment('description', e.target.value)}
-                        placeholder="Beskriv oppgaven studenten skal utføre og innlevere. Inkluder krav til omfang, format og eventuelle referanser…"
-                        minRows={6}
-                        className="w-full px-4 py-3.5 border-2 border-outline-variant/30 rounded-xl text-sm font-medium focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 leading-relaxed shadow-sm transition-colors text-on-surface"
-                      />
-                    </div>
-
-                    {/* Due date */}
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-outline block flex items-center gap-1.5"><Clock size={11} /> Innleveringsfrist</label>
-                      <input
-                        type="date"
-                        value={draft.assignment.dueDate}
-                        onChange={e => setAssignment('dueDate', e.target.value)}
-                        className="px-3.5 py-2.5 border-2 border-outline-variant/30 rounded-xl text-xs font-semibold focus:outline-none focus:border-primary shadow-sm transition-colors text-primary"
-                        style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
-                      />
-                    </div>
-
-                    {/* Preview card */}
-                    {draft.assignment.description && (
-                      <div className="mt-6 bg-slate-50 border border-outline-variant/20 rounded-xl p-5">
-                        <p className="text-[10px] font-bold uppercase tracking-wider text-outline mb-3 flex items-center gap-1.5"><Eye size={11} /> Slik ser studenten oppgaven</p>
-                        <div className="flex flex-wrap items-center gap-2 mb-3">
-                          <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-primary text-white uppercase">
-                            {ASSIGNMENT_TYPES.find(t => t.id === draft.assignment.type)?.label}
-                          </span>
-                          {draft.assignment.dueDate && (
-                            <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-200 flex items-center gap-1">
-                              <Clock size={10} /> Frist: {new Date(draft.assignment.dueDate).toLocaleDateString('no-NO', { day: 'numeric', month: 'long', year: 'numeric' })}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-xs text-on-surface-variant leading-relaxed font-medium">{draft.assignment.description}</p>
+                  <div className="space-y-4">
+                    {draft.assignments.length === 0 && (
+                      <div className="py-12 text-center border-2 border-dashed border-outline-variant/20 rounded-xl">
+                        <ClipboardList size={28} className="text-outline-variant mx-auto mb-2" />
+                        <p className="text-xs font-semibold text-on-surface-variant mb-3">Ingen oppgaver lagt til for denne modulen.</p>
+                        <button onClick={addAssignment} className="px-4 py-2 bg-primary text-white text-xs font-bold uppercase rounded-lg shadow-sm hover:bg-primary/90 transition-all active:scale-95 inline-flex items-center gap-1.5">
+                          <Plus size={13} /> Legg til første oppgave
+                        </button>
                       </div>
                     )}
+
+                    {draft.assignments.map((assignment, i) => (
+                      <motion.div key={assignment.id} layout className="bg-white border-2 border-outline-variant/20 rounded-xl overflow-hidden shadow-sm">
+                        <div className="flex items-center gap-3 px-4 py-3 bg-slate-50/80 border-b border-outline-variant/10">
+                          <GripVertical size={15} className="text-outline shrink-0" />
+                          <span className="w-6 h-6 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center shrink-0 font-mono">{i + 1}</span>
+                          <span className="flex-grow text-xs font-bold text-primary truncate">{assignment.title || <span className="text-outline-variant italic font-normal">Ny oppgave uten tittel</span>}</span>
+                          <div className="flex items-center gap-1 shrink-0">
+                            <button onClick={() => moveAssignment(i, 'up')} disabled={i === 0} className="p-1 text-outline hover:text-primary disabled:opacity-20"><ChevronUp size={13} /></button>
+                            <button onClick={() => moveAssignment(i, 'down')} disabled={i === draft.assignments.length - 1} className="p-1 text-outline hover:text-primary disabled:opacity-20"><ChevronDown size={13} /></button>
+                            <button onClick={() => removeAssignment(i)} className="p-1 text-outline hover:text-red-500 hover:bg-red-50 rounded"><Trash2 size={13} /></button>
+                          </div>
+                        </div>
+
+                        <div className="p-4 space-y-4">
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-outline block">Type oppgave</label>
+                            <div className="flex flex-wrap gap-2">
+                              {ASSIGNMENT_TYPES.map(type => (
+                                <button key={type.id} onClick={() => updateAssignment(i, 'type', type.id)} className={`px-3.5 py-2 rounded-lg border-2 text-xs font-bold transition-all ${assignment.type === type.id ? 'bg-primary border-primary text-white shadow-sm' : 'bg-white border-outline-variant/30 text-on-surface-variant hover:border-primary/40 hover:text-primary'}`}>
+                                  {type.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div className="space-y-1 sm:col-span-2">
+                              <label className="text-[9px] font-bold uppercase tracking-wider text-outline">Tittel</label>
+                              <input value={assignment.title} onChange={e => updateAssignment(i, 'title', e.target.value)} placeholder="Oppgavetittel" className="w-full px-3 py-2.5 border border-outline-variant/30 rounded-lg text-xs font-bold text-primary focus:outline-none focus:border-primary shadow-sm" />
+                            </div>
+                            <div className="space-y-1 sm:col-span-2">
+                              <label className="text-[9px] font-bold uppercase tracking-wider text-outline">Oppgavetekst</label>
+                              <AutoTextarea value={assignment.description} onChange={e => updateAssignment(i, 'description', e.target.value)} placeholder="Beskriv oppgaven studenten skal utføre og innlevere..." minRows={4} className="w-full px-3 py-2.5 border border-outline-variant/30 rounded-lg text-xs font-medium text-on-surface focus:outline-none focus:border-primary shadow-sm leading-relaxed transition-colors" />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold uppercase tracking-wider text-outline flex items-center gap-1"><Clock size={10} /> Innleveringsfrist</label>
+                              <input type="date" value={assignment.dueDate} onChange={e => updateAssignment(i, 'dueDate', e.target.value)} className="w-full px-3 py-2.5 border border-outline-variant/30 rounded-lg text-xs font-semibold focus:outline-none focus:border-primary shadow-sm text-primary" />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold uppercase tracking-wider text-outline">Klokkeslett</label>
+                              <input value={assignment.dueTime} onChange={e => updateAssignment(i, 'dueTime', e.target.value)} placeholder="23:59" className="w-full px-3 py-2.5 border border-outline-variant/30 rounded-lg text-xs font-semibold focus:outline-none focus:border-primary shadow-sm" />
+                            </div>
+                            <div className="space-y-1 sm:col-span-2">
+                              <label className="text-[9px] font-bold uppercase tracking-wider text-outline">Vekting</label>
+                              <input value={assignment.weight} onChange={e => updateAssignment(i, 'weight', e.target.value)} placeholder="f.eks. 30% av totalkarakter" className="w-full px-3 py-2.5 border border-outline-variant/30 rounded-lg text-xs font-semibold focus:outline-none focus:border-primary shadow-sm" />
+                            </div>
+                          </div>
+
+                          {(assignment.title || assignment.description) && (
+                            <div className="bg-slate-50 border border-outline-variant/20 rounded-xl p-4">
+                              <p className="text-[10px] font-bold uppercase tracking-wider text-outline mb-2 flex items-center gap-1.5"><Eye size={11} /> Studentforhåndsvisning</p>
+                              <h4 className="font-serif text-sm font-bold text-primary">{assignment.title || 'Oppgave'}</h4>
+                              <p className="text-xs text-on-surface-variant leading-relaxed font-medium mt-1">{assignment.description}</p>
+                            </div>
+                          )}
+                        </div>
+                      </motion.div>
+                    ))}
                   </div>
                 </>
               )}

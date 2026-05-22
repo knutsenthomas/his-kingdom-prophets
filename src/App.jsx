@@ -23,6 +23,7 @@ import VideoView from '@/pages/VideoView';
 import LibraryView from '@/pages/LibraryView';
 import AssignmentsPage from '@/pages/AssignmentsPage';
 import CommunityChatView from '@/pages/CommunityChatView';
+import StudentProfile from '@/pages/StudentProfile';
 
 // Teacher Pages
 import TeacherDashboard from '@/pages/TeacherDashboard';
@@ -31,6 +32,7 @@ import CourseBuilder from '@/pages/CourseBuilder';
 import MediaLibrary from '@/pages/MediaLibrary';
 import GradesCalculator from '@/pages/GradesCalculator';
 import NotificationCenter from '@/pages/NotificationCenter';
+import TeacherProfile from '@/pages/TeacherProfile';
 
 // Admin Pages
 import CMSDashboard from '@/pages/CMSDashboard';
@@ -213,6 +215,7 @@ function AppRoutes() {
         <Route path="/student/library" element={<LibraryView />} />
         <Route path="/student/assignments" element={<AssignmentsPage />} />
         <Route path="/student/chat" element={<CommunityChatView />} />
+        <Route path="/student/profile" element={<StudentProfile />} />
       </Route>
 
       {/* Teacher / Faculty Portal */}
@@ -225,6 +228,7 @@ function AppRoutes() {
         <Route path="/teacher/grading" element={<GradesCalculator />} />
         <Route path="/teacher/grades-calc" element={<GradesCalculator />} />
         <Route path="/teacher/notifications" element={<NotificationCenter />} />
+        <Route path="/teacher/profile" element={<TeacherProfile />} />
       </Route>
 
       {/* Admin Portal */}

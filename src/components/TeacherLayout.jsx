@@ -4,14 +4,14 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Compass, Users, AlertTriangle, ClipboardList, BookOpen, 
-  Award, Bell, Power, Search, Menu, X, ChevronLeft, ChevronRight, Sliders, Video
+  Award, Bell, Power, Menu, ChevronLeft, Sliders, Video, User
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 
 export default function TeacherLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout, showToast, students } = useApp();
+  const { user, logout, showToast, students, changePersona } = useApp();
 
   // Attention status filters for KPI tracking in sidebar
   const atRiskCount = students?.filter(s => s.status === 'Kritisk' || s.status === 'Forsinket').length || 0;
@@ -26,6 +26,12 @@ export default function TeacherLayout() {
     localStorage.setItem('hkm-teacher-sidebar-collapsed', isCollapsed);
   }, [isCollapsed]);
 
+  useEffect(() => {
+    if (user?.role && user.role !== 'teacher') {
+      changePersona('teacher');
+    }
+  }, [user?.role, changePersona]);
+
   const handleLogOut = () => {
     logout();
     navigate('/');
@@ -37,7 +43,8 @@ export default function TeacherLayout() {
     { name: 'Kursbygger', path: '/teacher/course-builder', icon: Sliders },
     { name: 'Mediebibliotek', path: '/teacher/media-library', icon: Video },
     { name: 'Bibelkalkulator', path: '/teacher/grading', icon: Award },
-    { name: 'Varslingssenter', path: '/teacher/notifications', icon: Bell }
+    { name: 'Varslingssenter', path: '/teacher/notifications', icon: Bell },
+    { name: 'Min lærerprofil', path: '/teacher/profile', icon: User }
   ];
 
   return (
@@ -69,7 +76,9 @@ export default function TeacherLayout() {
           {/* User profile, badges and logout */}
           <div className="flex items-center gap-4 text-primary shrink-0">
             <div className="text-right hidden sm:block">
-              <p className="text-xs font-bold text-primary">{user?.name}</p>
+              <button onClick={() => navigate('/teacher/profile')} className="text-xs font-bold text-primary hover:underline">
+                {user?.name}
+              </button>
               <p className="text-[9px] text-outline font-semibold uppercase tracking-wide">{user?.email}</p>
             </div>
             
@@ -77,6 +86,7 @@ export default function TeacherLayout() {
               <img 
                 src={user?.avatar} 
                 alt={user?.name} 
+                onClick={() => navigate('/teacher/profile')}
                 className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary/20 shadow object-cover shrink-0" 
               />
               <button 

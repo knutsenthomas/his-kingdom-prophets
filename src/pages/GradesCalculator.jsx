@@ -4,13 +4,19 @@ import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
 import { 
   ArrowLeft, Award, HelpCircle, Save, Percent, 
-  PlusCircle, RefreshCw, Calculator, UserCheck, AlertCircle
+  PlusCircle, RefreshCw, Calculator, UserCheck, AlertCircle,
+  ClipboardList, FileText, CheckCircle2, Clock
 } from 'lucide-react';
 
 export default function GradesCalculator() {
   const navigate = useNavigate();
-  const { user, students, showToast } = useApp();
+  const { user, students, assignments, gradeAssignment, showToast } = useApp();
   const [selectedStudentId, setSelectedStudentId] = useState(students[0]?.id || 's1');
+  const [assignmentTab, setAssignmentTab] = useState('submitted');
+  const [selectedAssignmentId, setSelectedAssignmentId] = useState(assignments.find(a => a.status === 'submitted')?.id || assignments[0]?.id);
+  const [assignmentGrade, setAssignmentGrade] = useState('B');
+  const [assignmentScore, setAssignmentScore] = useState('85/100');
+  const [assignmentFeedback, setAssignmentFeedback] = useState('God besvarelse med tydelig refleksjon og god bibelsk forankring. Spiss gjerne konklusjonen enda mer.');
   
   // Weights (must sum to 100%)
   const [weightQuiz, setWeightQuiz] = useState(20);
@@ -28,6 +34,21 @@ export default function GradesCalculator() {
   const [gradeColor, setGradeColor] = useState('text-primary');
 
   const activeStudent = students.find(s => s.id === selectedStudentId) || students[0];
+  const filteredAssignments = assignments.filter(assignment => assignment.status === assignmentTab);
+  const activeAssignment = assignments.find(assignment => assignment.id === selectedAssignmentId) || filteredAssignments[0] || assignments[0];
+
+  useEffect(() => {
+    if (!assignments.some(assignment => assignment.id === selectedAssignmentId)) {
+      setSelectedAssignmentId(assignments.find(assignment => assignment.status === assignmentTab)?.id || assignments[0]?.id);
+    }
+  }, [assignments, assignmentTab, selectedAssignmentId]);
+
+  useEffect(() => {
+    if (!activeAssignment) return;
+    setAssignmentGrade(activeAssignment.grade || 'B');
+    setAssignmentScore(activeAssignment.score || '85/100');
+    setAssignmentFeedback(activeAssignment.feedback || 'God besvarelse med tydelig refleksjon og god bibelsk forankring. Spiss gjerne konklusjonen enda mer.');
+  }, [activeAssignment?.id]);
 
   // Update scores when changing student
   useEffect(() => {
@@ -83,6 +104,17 @@ export default function GradesCalculator() {
   const handleSaveGrade = (e) => {
     e.preventDefault();
     showToast(`Endelig vurderingsgrad ${letterGrade} (${finalScore}/100) er lagret og registrert for ${activeStudent.name}!`);
+  };
+
+  const handleGradeAssignment = (e) => {
+    e.preventDefault();
+    if (!activeAssignment) return;
+    gradeAssignment(activeAssignment.id, {
+      grade: assignmentGrade,
+      score: assignmentScore,
+      feedback: assignmentFeedback
+    });
+    setAssignmentTab('graded');
   };
 
   const weightsSum = Number(weightQuiz) + Number(weightAssignment) + Number(weightExam);
@@ -322,6 +354,156 @@ export default function GradesCalculator() {
             </button>
           </div>
 
+        </div>
+      </div>
+
+      <div className="bg-white border border-outline-variant/30 rounded-xl shadow-sm overflow-hidden">
+        <div className="p-5 sm:p-6 border-b border-outline-variant/20 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h2 className="font-serif text-xl font-bold text-primary flex items-center gap-2">
+              <ClipboardList size={20} className="text-[#c5a059]" /> Oppgaver fra elevsidene
+            </h2>
+            <p className="text-xs text-on-surface-variant font-semibold mt-1">
+              Synkronisert med oppgavene som vises for elevene i klasserom og oppgavemeny.
+            </p>
+          </div>
+          <div className="flex bg-surface-container-low p-1 rounded-lg border border-outline-variant">
+            {[
+              { id: 'pending', label: 'Utestående' },
+              { id: 'submitted', label: 'Innsendt' },
+              { id: 'graded', label: 'Vurdert' }
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setAssignmentTab(tab.id);
+                  const found = assignments.find(assignment => assignment.status === tab.id);
+                  if (found) setSelectedAssignmentId(found.id);
+                }}
+                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition-all ${
+                  assignmentTab === tab.id ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-primary'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-12">
+          <div className="xl:col-span-5 border-r border-outline-variant/20 p-5 max-h-[520px] overflow-y-auto">
+            <div className="space-y-3">
+              {filteredAssignments.length === 0 ? (
+                <div className="py-12 text-center text-on-surface-variant text-sm flex flex-col items-center gap-3">
+                  <CheckCircle2 size={34} className="text-secondary/50" />
+                  Ingen oppgaver i denne kategorien.
+                </div>
+              ) : filteredAssignments.map(assignment => {
+                const isSelected = assignment.id === activeAssignment?.id;
+                return (
+                  <button
+                    key={assignment.id}
+                    onClick={() => setSelectedAssignmentId(assignment.id)}
+                    className={`w-full text-left p-4 rounded-lg border transition-all ${
+                      isSelected ? 'bg-primary/5 border-primary shadow-sm' : 'bg-white border-outline-variant/40 hover:border-primary/40 hover:bg-surface-container-low'
+                    }`}
+                  >
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-surface-container-highest text-primary">{assignment.courseCode}</span>
+                      {assignment.source === 'module' && <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-primary/5 text-primary">Klasserom</span>}
+                      <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${
+                        assignment.status === 'pending'
+                          ? 'bg-error-container text-error'
+                          : assignment.status === 'submitted'
+                          ? 'bg-secondary-container/50 text-on-secondary-container'
+                          : 'bg-green-100 text-green-800'
+                      }`}>
+                        {assignment.status === 'pending' ? 'Ikke innlevert' : assignment.status === 'submitted' ? 'Innsendt' : 'Vurdert'}
+                      </span>
+                    </div>
+                    <h4 className="font-serif font-bold text-base text-primary leading-tight">{assignment.title}</h4>
+                    <p className="text-xs text-on-surface-variant mt-1 line-clamp-2">{assignment.description}</p>
+                    <div className="flex items-center gap-2 text-[10px] text-outline font-semibold mt-3">
+                      <Clock size={11} />
+                      <span>Frist: {assignment.dueDate} kl {assignment.dueTime}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="xl:col-span-7 p-5 sm:p-6">
+            {activeAssignment ? (
+              <form onSubmit={handleGradeAssignment} className="space-y-6">
+                <div className="border-b border-outline-variant/20 pb-5">
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-primary text-white rounded-full">
+                      {activeAssignment.courseCode} - {activeAssignment.courseName}
+                    </span>
+                    {activeAssignment.moduleTitle && (
+                      <span className="text-xs font-bold px-3 py-1 bg-surface-container text-primary rounded-full">
+                        {activeAssignment.moduleTitle}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="font-serif text-2xl font-bold text-primary leading-tight">{activeAssignment.title}</h3>
+                  <p className="text-sm text-on-surface-variant leading-relaxed mt-3">{activeAssignment.description}</p>
+                </div>
+
+                <div className="bg-surface-container-low border border-outline-variant/30 rounded-xl p-4 space-y-3">
+                  <h4 className="font-serif text-base font-bold text-primary flex items-center gap-2">
+                    <FileText size={16} /> Elevinnlevering
+                  </h4>
+                  {activeAssignment.submission ? (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div>
+                          <p className="text-[10px] font-bold uppercase tracking-wider text-outline">Elev</p>
+                          <p className="font-bold text-primary">{activeAssignment.submission.studentName || 'Thomas Knutsen'}</p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-bold uppercase tracking-wider text-outline">Mottatt</p>
+                          <p className="font-semibold text-on-surface-variant">{activeAssignment.submission.submittedAt}</p>
+                        </div>
+                      </div>
+                      <p className="text-xs text-primary font-bold underline">{activeAssignment.submission.fileName}</p>
+                      <p className="text-xs text-on-surface-variant leading-relaxed italic bg-white border border-outline-variant/30 rounded-lg p-3">
+                        "{activeAssignment.submission.text || 'Ingen skriftlig tekst oppgitt.'}"
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-on-surface-variant font-semibold">Eleven har ikke levert denne oppgaven ennå.</p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">Karakter</label>
+                    <input value={assignmentGrade} onChange={e => setAssignmentGrade(e.target.value)} className="field-input" placeholder="A, B, C..." />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">Poengsum</label>
+                    <input value={assignmentScore} onChange={e => setAssignmentScore(e.target.value)} className="field-input" placeholder="85/100" />
+                  </div>
+                  <div className="space-y-1.5 sm:col-span-2">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">Tilbakemelding til elev</label>
+                    <textarea value={assignmentFeedback} onChange={e => setAssignmentFeedback(e.target.value)} rows={4} className="field-input resize-none leading-relaxed" />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={!activeAssignment.submission}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white text-xs font-bold uppercase rounded-lg shadow-md hover:bg-primary/90 transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <Save size={15} /> Lagre vurdering til elev
+                </button>
+              </form>
+            ) : (
+              <div className="py-12 text-center text-outline">Velg en oppgave for å se detaljer.</div>
+            )}
+          </div>
         </div>
       </div>
     </div>

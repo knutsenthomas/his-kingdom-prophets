@@ -4,14 +4,14 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Compass, BookOpen, Video, CheckSquare, Users, 
-  Menu, X, Bell, Power, Search, Award, GraduationCap, ChevronLeft
+  Menu, Bell, Power, Search, Award, GraduationCap, ChevronLeft, User
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 
 export default function StudentLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout, showToast } = useApp();
+  const { user, logout, showToast, changePersona } = useApp();
   
   // Collapse state initialized from localStorage for persistence
   const [isCollapsed, setIsCollapsed] = useState(() => {
@@ -22,6 +22,12 @@ export default function StudentLayout() {
   useEffect(() => {
     localStorage.setItem('hkm-student-sidebar-collapsed', isCollapsed);
   }, [isCollapsed]);
+
+  useEffect(() => {
+    if (user?.role && user.role !== 'student') {
+      changePersona('student');
+    }
+  }, [user?.role, changePersona]);
 
   const handleLogOut = () => {
     logout();
@@ -35,6 +41,7 @@ export default function StudentLayout() {
     { name: 'Klasserom / Video', path: '/student/video', icon: Video },
     { name: 'Oppgaver', path: '/student/assignments', icon: CheckSquare },
     { name: 'Bønnefellesskap', path: '/student/chat', icon: Users },
+    { name: 'Min profil', path: '/student/profile', icon: User },
   ];
 
   return (
@@ -90,10 +97,13 @@ export default function StudentLayout() {
                 <img 
                   src={user?.avatar} 
                   alt={user?.name} 
+                  onClick={() => navigate('/student/profile')}
                   className="w-8 h-8 rounded-full object-cover border border-primary/20 shrink-0" 
                 />
                 <div className="hidden md:flex flex-col text-left">
-                  <span className="text-xs font-bold text-on-surface truncate max-w-[100px]">{user?.name}</span>
+                  <button onClick={() => navigate('/student/profile')} className="text-xs font-bold text-on-surface truncate max-w-[100px] text-left hover:text-primary transition-colors">
+                    {user?.name}
+                  </button>
                   <span className="text-[9px] font-medium text-on-surface-variant uppercase tracking-wider">Student</span>
                 </div>
                 <button 
