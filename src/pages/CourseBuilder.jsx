@@ -31,32 +31,32 @@ export default function CourseBuilder() {
     <div className="bg-background min-h-screen flex flex-col font-sans text-on-background">
       {/* Header */}
       <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
-          <div className="flex items-center gap-4">
+        <div className="flex justify-between items-center px-4 sm:px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
+          <div className="flex items-center gap-2 sm:gap-4 truncate mr-2">
             <button 
               onClick={() => navigate('/teacher/dashboard')}
-              className="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95 text-on-surface-variant hover:text-primary"
+              className="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95 text-on-surface-variant hover:text-primary shrink-0"
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-2xl font-bold text-primary">Scholastic Premium</div>
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-semibold uppercase tracking-wider text-secondary px-3 py-1 bg-surface-container rounded-full">
-              Kursbygger / Curricula
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-secondary px-2.5 sm:px-3 py-1 bg-surface-container rounded-full">
+              Kursbygger
             </span>
             <img 
               src={user?.avatar} 
               alt={user?.name} 
-              className="w-10 h-10 rounded-full border-2 border-primary-container shadow"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary-container shadow object-cover shrink-0"
             />
           </div>
         </div>
       </header>
-
+ 
       {/* Main Grid */}
-      <main className="flex-grow w-full max-w-[1440px] mx-auto px-6 md:px-12 py-12 flex flex-col lg:flex-row gap-8">
+      <main className="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 py-6 md:py-12 flex flex-col lg:flex-row gap-6 md:gap-8">
         
         {/* Left Side: Select Course Column */}
         <div className="w-full lg:w-4/12 flex flex-col gap-6">
@@ -111,7 +111,7 @@ export default function CourseBuilder() {
               key={activeCourse.id}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-white border border-outline-variant rounded-xl p-8 shadow-sm flex flex-col gap-8"
+              className="bg-white border border-outline-variant rounded-xl p-5 sm:p-8 shadow-sm flex flex-col gap-6 sm:gap-8"
             >
               {/* Info Header */}
               <div className="border-b border-outline-variant pb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -147,27 +147,32 @@ export default function CourseBuilder() {
                         initial={{ opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0 }}
-                        className="bg-surface-container-low border border-outline-variant p-4 rounded-lg flex items-center gap-4 hover:border-primary-container/40 transition-colors"
+                        className="bg-surface-container-low border border-outline-variant p-3 sm:p-4 rounded-lg flex items-center gap-2.5 sm:gap-4 hover:border-primary-container/40 transition-colors"
                       >
-                        <div className="text-outline cursor-grab">
+                        <div className="text-outline cursor-grab shrink-0">
                           <GripVertical size={16} />
                         </div>
                         
-                        <div className="w-8 h-8 rounded bg-primary/5 text-primary font-bold text-xs flex items-center justify-center border border-primary-container/10">
+                        <div className="w-8 h-8 rounded bg-primary/5 text-primary font-bold text-xs flex items-center justify-center border border-primary-container/10 shrink-0">
                           {index + 1}
                         </div>
 
-                        <div className="flex-grow">
-                          <h4 className="text-sm font-semibold text-primary leading-tight">
+                        <div className="flex-grow min-w-0">
+                          <h4 className="text-xs sm:text-sm font-semibold text-primary leading-tight truncate">
                             {mod.title}
                           </h4>
                         </div>
 
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                           <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
                             mod.completed ? 'bg-green-100 text-green-700' : 'bg-surface-container text-outline'
                           }`}>
-                            {mod.completed ? 'Låst opp' : 'Standard utkast'}
+                            {mod.completed ? 'Låst opp' : (
+                              <>
+                                <span className="hidden sm:inline">Standard utkast</span>
+                                <span className="sm:hidden">Utkast</span>
+                              </>
+                            )}
                           </span>
                           <button className="p-1.5 hover:bg-error-container/30 rounded text-outline hover:text-error transition-colors">
                             <Trash2 size={14} />

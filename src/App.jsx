@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
@@ -40,6 +40,34 @@ export default function App() {
   const { toastMessage } = useApp();
   const [viewportSize, setViewportSize] = useState('desktop'); // desktop, tablet, mobile
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isEmbedded, setIsEmbedded] = useState(false);
+
+  useEffect(() => {
+    setIsEmbedded(window.self !== window.top);
+  }, []);
+
+  // Post messages from iframe to parent window for routing sync
+  useEffect(() => {
+    if (isEmbedded) {
+      window.top.postMessage({ type: 'NAVIGATE', path: location.pathname }, '*');
+    }
+  }, [location.pathname, isEmbedded]);
+
+  // Handle messages in parent window from the iframe
+  useEffect(() => {
+    if (!isEmbedded) {
+      const handleMessage = (e) => {
+        if (e.data && e.data.type === 'NAVIGATE') {
+          if (window.location.pathname !== e.data.path) {
+            navigate(e.data.path);
+          }
+        }
+      };
+      window.addEventListener('message', handleMessage);
+      return () => window.removeEventListener('message', handleMessage);
+    }
+  }, [isEmbedded, navigate]);
 
   // Reset viewport size or adjust based on specific paths if necessary
   useEffect(() => {
@@ -49,6 +77,14 @@ export default function App() {
       setViewportSize('mobile');
     }
   }, [location.pathname]);
+
+  if (isEmbedded) {
+    return (
+      <div className="min-h-screen bg-background text-on-background w-full">
+        <AppRoutes />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col overflow-x-hidden font-sans">
@@ -85,8 +121,12 @@ export default function App() {
                 <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-1 bg-slate-800 rounded-full" />
                 
                 {/* Screen area */}
-                <div className="flex-grow bg-background overflow-y-auto rounded-[1rem] relative">
-                  <AppRoutes />
+                <div className="flex-grow bg-background overflow-hidden rounded-[1rem] relative h-full w-full">
+                  <iframe 
+                    src={location.pathname} 
+                    className="w-full h-full border-none bg-background overflow-y-auto"
+                    title="Scholastic Premium Tablet View"
+                  />
                 </div>
 
                 {/* Home indicator Mockup */}
@@ -107,8 +147,12 @@ export default function App() {
                 </div>
                 
                 {/* Screen area */}
-                <div className="flex-grow bg-background overflow-y-auto rounded-[2rem] relative">
-                  <AppRoutes />
+                <div className="flex-grow bg-background overflow-hidden rounded-[2rem] relative h-full w-full">
+                  <iframe 
+                    src={location.pathname} 
+                    className="w-full h-full border-none bg-background overflow-y-auto"
+                    title="Scholastic Premium Mobile View"
+                  />
                 </div>
 
                 {/* Home Indicator */}

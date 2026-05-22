@@ -20,47 +20,47 @@ export default function TeacherDashboard() {
     <div className="bg-background min-h-screen flex flex-col font-sans text-on-background">
       {/* Header */}
       <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
-          <div className="flex items-center gap-4">
-            <div className="font-serif text-2xl font-bold text-primary">Scholastic Premium</div>
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-3 py-1 rounded-full">
-              Fakultetsportal
+        <div className="flex justify-between items-center px-4 sm:px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
+          <div className="flex items-center gap-2 sm:gap-4 truncate mr-2">
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
+            <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 sm:px-3 py-1 rounded-full shrink-0">
+              Fakultet
             </span>
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="text-right hidden md:block">
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+            <div className="text-right hidden sm:block">
               <p className="text-xs font-bold text-primary">{user?.name}</p>
               <p className="text-[9px] text-outline font-semibold uppercase">{user?.email}</p>
             </div>
             <img 
               src={user?.avatar} 
               alt={user?.name} 
-              className="w-10 h-10 rounded-full border-2 border-primary-container shadow"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary-container shadow object-cover shrink-0"
             />
           </div>
         </div>
       </header>
-
+ 
       {/* Grid Container */}
-      <main className="flex-grow w-full max-w-[1440px] mx-auto px-6 md:px-12 py-12 flex flex-col gap-8">
+      <main className="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 py-6 md:py-12 flex flex-col gap-6 md:gap-8">
         
         {/* Intro Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="font-serif text-3xl md:text-4xl font-bold text-primary">
+            <h1 className="font-serif text-2xl md:text-4xl font-bold text-primary">
               Velkommen tilbake, {user?.name.split(' ')[0]}!
             </h1>
-            <p className="text-sm text-on-surface-variant mt-1">
+            <p className="text-xs sm:text-sm text-on-surface-variant mt-1">
               Oversikt over klassens fremdrift, utestående sensurering og oppfølgingsvarsler.
             </p>
           </div>
-
+ 
           <div className="flex items-center gap-3">
             <span className="text-xs text-on-surface-variant font-semibold">Aktuelt semester: Vår 2026</span>
           </div>
         </div>
-
+ 
         {/* Classroom Summary KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           
@@ -77,7 +77,7 @@ export default function TeacherDashboard() {
               <Users size={22} />
             </div>
           </div>
-
+ 
           {/* KPI 2 */}
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
@@ -91,7 +91,7 @@ export default function TeacherDashboard() {
               <BookOpen size={22} />
             </div>
           </div>
-
+ 
           {/* KPI 3 */}
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
@@ -103,7 +103,7 @@ export default function TeacherDashboard() {
               <Award size={22} />
             </div>
           </div>
-
+ 
           {/* KPI 4 */}
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
@@ -118,7 +118,7 @@ export default function TeacherDashboard() {
             </div>
           </div>
         </div>
-
+ 
         {/* Dashboard Panels */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
@@ -135,7 +135,7 @@ export default function TeacherDashboard() {
                 
                 {/* Module 1: Student Followup */}
                 <button 
-                  onClick={() => navigate('/teacher/followup')}
+                  onClick={() => navigate('/teacher/follow-up')}
                   className="p-5 rounded-lg border border-outline-variant hover:border-primary bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-300 text-left flex flex-col justify-between h-40 active:scale-[0.98] group"
                 >
                   <div className="w-10 h-10 bg-primary/5 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
@@ -146,10 +146,10 @@ export default function TeacherDashboard() {
                     <p className="text-xs text-on-surface-variant">Send advarsler, påminnelser og faglige støttemeldinger.</p>
                   </div>
                 </button>
-
+ 
                 {/* Module 2: Course Builder */}
                 <button 
-                  onClick={() => navigate('/teacher/coursebuilder')}
+                  onClick={() => navigate('/teacher/course-builder')}
                   className="p-5 rounded-lg border border-outline-variant hover:border-primary bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-300 text-left flex flex-col justify-between h-40 active:scale-[0.98] group"
                 >
                   <div className="w-10 h-10 bg-primary/5 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
@@ -160,10 +160,10 @@ export default function TeacherDashboard() {
                     <p className="text-xs text-on-surface-variant">Legg til faglige leksjoner og pensum-moduler direkte.</p>
                   </div>
                 </button>
-
+ 
                 {/* Module 3: Grade Calculator */}
                 <button 
-                  onClick={() => navigate('/teacher/grades')}
+                  onClick={() => navigate('/teacher/grading')}
                   className="p-5 rounded-lg border border-outline-variant hover:border-primary bg-surface-container-lowest hover:bg-surface-container-low transition-all duration-300 text-left flex flex-col justify-between h-40 active:scale-[0.98] group"
                 >
                   <div className="w-10 h-10 bg-primary/5 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
@@ -174,7 +174,7 @@ export default function TeacherDashboard() {
                     <p className="text-xs text-on-surface-variant">Beregne og simulere karaktergrenser og snitt-sensur.</p>
                   </div>
                 </button>
-
+ 
                 {/* Module 4: Notification Center */}
                 <button 
                   onClick={() => navigate('/teacher/notifications')}
@@ -188,55 +188,55 @@ export default function TeacherDashboard() {
                     <p className="text-xs text-on-surface-variant">Motta henvendelser og koordiner felleskunngjøringer.</p>
                   </div>
                 </button>
-
+ 
               </div>
             </div>
-
+ 
             {/* Simulated Grade Performance Metrics Visualizer */}
             <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm">
               <h3 className="font-serif text-xl font-bold text-primary mb-4">Karakterfordeling</h3>
               <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between text-xs text-on-surface-variant font-semibold">
+                <div className="flex items-center justify-between text-xs text-on-surface-variant font-semibold font-sans">
                   <span>Karakter A</span>
                   <div className="flex items-center gap-2 flex-grow mx-4">
                     <div className="h-3 bg-primary rounded-full flex-grow relative overflow-hidden">
-                      <div className="absolute inset-0 bg-secondary-container w-[20%]" />
+                      <div className="absolute inset-0 bg-[#c5a059] w-[20%]" />
                     </div>
                     <span className="w-6 text-right">20%</span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between text-xs text-on-surface-variant font-semibold">
+                <div className="flex items-center justify-between text-xs text-on-surface-variant font-semibold font-sans">
                   <span>Karakter B</span>
                   <div className="flex items-center gap-2 flex-grow mx-4">
                     <div className="h-3 bg-primary rounded-full flex-grow relative overflow-hidden">
-                      <div className="absolute inset-0 bg-secondary-container w-[45%]" />
+                      <div className="absolute inset-0 bg-[#c5a059] w-[45%]" />
                     </div>
                     <span className="w-6 text-right">45%</span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between text-xs text-on-surface-variant font-semibold">
+                <div className="flex items-center justify-between text-xs text-on-surface-variant font-semibold font-sans">
                   <span>Karakter C</span>
                   <div className="flex items-center gap-2 flex-grow mx-4">
                     <div className="h-3 bg-primary rounded-full flex-grow relative overflow-hidden">
-                      <div className="absolute inset-0 bg-secondary-container w-[25%]" />
+                      <div className="absolute inset-0 bg-[#c5a059] w-[25%]" />
                     </div>
                     <span className="w-6 text-right">25%</span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between text-xs text-on-surface-variant font-semibold">
+                <div className="flex items-center justify-between text-xs text-on-surface-variant font-semibold font-sans">
                   <span>Karakter D/F</span>
                   <div className="flex items-center gap-2 flex-grow mx-4">
                     <div className="h-3 bg-primary rounded-full flex-grow relative overflow-hidden">
-                      <div className="absolute inset-0 bg-error-container w-[10%]" />
+                      <div className="absolute inset-0 bg-error/25 w-[10%]" />
                     </div>
                     <span className="w-6 text-right">10%</span>
                   </div>
                 </div>
               </div>
             </div>
-
+ 
           </div>
-
+ 
           {/* Attention Warnings Sidebar: Right (5 cols) */}
           <div className="lg:col-span-5 flex flex-col gap-6">
             
@@ -247,7 +247,7 @@ export default function TeacherDashboard() {
                   <AlertTriangle size={18} className="text-error" /> Behov for oppfølging
                 </h3>
                 <button 
-                  onClick={() => navigate('/teacher/followup')}
+                  onClick={() => navigate('/teacher/follow-up')}
                   className="text-xs text-primary font-bold uppercase hover:underline"
                 >
                   Vis alle

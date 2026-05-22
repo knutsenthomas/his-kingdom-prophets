@@ -83,25 +83,25 @@ export default function NotificationCenter() {
     <div className="bg-background min-h-screen flex flex-col font-sans text-on-background">
       {/* Header */}
       <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
-          <div className="flex items-center gap-4">
+        <div className="flex justify-between items-center px-4 sm:px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
+          <div className="flex items-center gap-2 sm:gap-4 truncate mr-2">
             <button 
               onClick={() => navigate('/teacher/dashboard')}
-              className="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95 text-on-surface-variant hover:text-primary"
+              className="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95 text-on-surface-variant hover:text-primary shrink-0"
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-2xl font-bold text-primary">Scholastic Premium</div>
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-semibold uppercase tracking-wider text-secondary px-3 py-1 bg-surface-container rounded-full">
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+            <span className="hidden sm:inline-block text-xs font-semibold uppercase tracking-wider text-secondary px-3 py-1 bg-surface-container rounded-full">
               Varslingssenter
             </span>
             <img 
               src={user?.avatar} 
               alt={user?.name} 
-              className="w-10 h-10 rounded-full border-2 border-primary-container shadow"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary-container shadow object-cover shrink-0"
             />
           </div>
         </div>
@@ -112,17 +112,17 @@ export default function NotificationCenter() {
         
         {/* Left Side: Broadcast Composed Form (7 cols) */}
         <div className="w-full lg:w-7/12">
-          <div className="bg-white border border-outline-variant rounded-xl p-8 shadow-sm flex flex-col gap-6">
+          <div className="bg-white border border-outline-variant rounded-xl p-5 sm:p-8 shadow-sm flex flex-col gap-6">
             <div className="border-b border-outline-variant pb-4">
-              <h2 className="font-serif text-2xl font-bold text-primary flex items-center gap-2">
-                <Megaphone size={24} className="text-secondary" /> Send Kunngjøring / Broadcast
+              <h2 className="font-serif text-xl sm:text-2xl font-bold text-primary flex items-center gap-2 flex-wrap">
+                <Megaphone size={24} className="text-secondary shrink-0" /> Send Kunngjøring / Broadcast
               </h2>
               <p className="text-xs text-on-surface-variant mt-1">
                 Opprett og send et systemvarsel eller e-post-varsel til valgte klasseromsgrupper.
               </p>
             </div>
 
-            <form onSubmit={handleBroadcast} className="space-y-4 form-field-stable">
+            <form onSubmit={handleBroadcast} className="space-y-4 flex flex-col form-field-stable">
               
               {/* Audience Dropdown */}
               <div className="space-y-2">
@@ -166,9 +166,9 @@ export default function NotificationCenter() {
               {/* Actions */}
               <button
                 type="submit"
-                className="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 w-full md:w-auto md:self-end shadow-md"
+                className="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 w-full md:w-auto md:self-end shadow-md shrink-0"
               >
-                <Send size={16} /> SEND KUNNGJØRING
+                <Send size={16} className="shrink-0" /> SEND KUNNGJØRING
               </button>
             </form>
           </div>
@@ -176,9 +176,9 @@ export default function NotificationCenter() {
 
         {/* Right Side: Historical Log (5 cols) */}
         <div className="w-full lg:w-5/12 flex flex-col gap-6">
-          <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col gap-6">
+          <div className="bg-white border border-outline-variant rounded-xl p-5 sm:p-6 shadow-sm flex flex-col gap-6">
             <h3 className="font-serif text-lg font-bold text-primary flex items-center gap-2 border-b border-outline-variant/30 pb-4">
-              <Bell size={18} /> Historikk
+              <Bell size={18} className="shrink-0" /> Historikk
             </h3>
 
             <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">

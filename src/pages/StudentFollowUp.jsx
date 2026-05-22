@@ -50,25 +50,25 @@ export default function StudentFollowUp() {
     <div className="bg-background min-h-screen flex flex-col font-sans text-on-background">
       {/* Header */}
       <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
-          <div className="flex items-center gap-4">
+        <div className="flex justify-between items-center px-4 sm:px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
+          <div className="flex items-center gap-2 sm:gap-4 truncate mr-2">
             <button 
               onClick={() => navigate('/teacher/dashboard')}
-              className="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95 text-on-surface-variant hover:text-primary"
+              className="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95 text-on-surface-variant hover:text-primary shrink-0"
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-2xl font-bold text-primary">Scholastic Premium</div>
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-semibold uppercase tracking-wider text-secondary px-3 py-1 bg-surface-container rounded-full">
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+            <span className="hidden sm:inline-block text-xs font-semibold uppercase tracking-wider text-secondary px-3 py-1 bg-surface-container rounded-full">
               Følge Opp Studenter
             </span>
             <img 
               src={user?.avatar} 
               alt={user?.name} 
-              className="w-10 h-10 rounded-full border-2 border-primary-container shadow"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary-container shadow object-cover shrink-0"
             />
           </div>
         </div>
@@ -79,25 +79,27 @@ export default function StudentFollowUp() {
         
         {/* Intro */}
         <div className="space-y-2">
-          <h1 className="font-serif text-3xl font-bold text-primary flex items-center gap-2">
-            <ShieldAlert size={28} className="text-error" /> Studenters Oppfølgingssenter
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-primary flex items-center gap-2 flex-wrap">
+            <ShieldAlert size={28} className="text-error shrink-0" /> Studenters Oppfølgingssenter
           </h1>
-          <p className="text-sm text-on-surface-variant max-w-3xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-on-surface-variant max-w-3xl leading-relaxed">
             Nedenfor finner du en oversikt over studenter som er merket i risikosonen. Disse har enten kritisk lav progresjon på leksjonsmodulene, eller har ikke vært aktive i systemet over lengre tid. Klikk på "Send oppfølging" for å sende en tilpasset støttemelding.
           </p>
         </div>
 
         {/* Filters/Summary */}
-        <div className="bg-white border border-outline-variant rounded-xl p-5 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="bg-white border border-outline-variant rounded-xl p-4 sm:p-5 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
           <div className="flex items-center gap-3">
-            <Filter size={18} className="text-primary" />
-            <span className="text-xs font-semibold text-on-surface-variant uppercase">Aktive risikokriterier: Siste aktivitet &gt; 3 dager eller Progresjon &lt; 60%</span>
+            <Filter size={18} className="text-primary shrink-0" />
+            <span className="text-xs font-semibold text-on-surface-variant uppercase leading-relaxed">
+              Aktive risikokriterier: Siste aktivitet &gt; 3 dager eller Progresjon &lt; 60%
+            </span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded bg-error-container border border-error/30" />
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="w-3.5 h-3.5 rounded bg-error-container border border-error/30 shrink-0" />
             <span className="text-xs font-bold text-error mr-4">1 Kritisk</span>
-            <span className="w-3.5 h-3.5 rounded bg-secondary-container/50 border border-outline-variant" />
+            <span className="w-3.5 h-3.5 rounded bg-secondary-container/50 border border-outline-variant shrink-0" />
             <span className="text-xs font-bold text-on-secondary-container">2 Forsinket</span>
           </div>
         </div>
@@ -109,7 +111,7 @@ export default function StudentFollowUp() {
             return (
               <div 
                 key={stud.id} 
-                className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col justify-between gap-6 hover:border-primary transition-all duration-300 relative overflow-hidden bento-card"
+                className="bg-white border border-outline-variant rounded-xl p-5 sm:p-6 shadow-sm flex flex-col justify-between gap-6 hover:border-primary transition-all duration-300 relative overflow-hidden bento-card"
               >
                 {/* Risk Bar overlay accent */}
                 <div className={`absolute top-0 left-0 w-full h-1.5 ${isCritical ? 'bg-error' : 'bg-secondary'}`} />
@@ -119,18 +121,18 @@ export default function StudentFollowUp() {
                     <img 
                       src={stud.avatar} 
                       alt={stud.name} 
-                      className="w-12 h-12 rounded-full border border-outline-variant shadow-sm"
+                      className="w-12 h-12 rounded-full border border-outline-variant shadow-sm object-cover shrink-0"
                     />
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-serif text-lg font-bold text-primary">{stud.name}</h3>
+                    <div className="space-y-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="font-serif text-base sm:text-lg font-bold text-primary truncate">{stud.name}</h3>
                         <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
                           isCritical ? 'bg-error-container text-error' : 'bg-secondary-container/50 text-on-secondary-container'
                         }`}>
                           {stud.status}
                         </span>
                       </div>
-                      <p className="text-xs text-on-surface-variant font-semibold">{stud.courseName}</p>
+                      <p className="text-xs text-on-surface-variant font-semibold truncate">{stud.courseName}</p>
                     </div>
                   </div>
 
@@ -181,40 +183,40 @@ export default function StudentFollowUp() {
       {/* Support Dialog Template Modal Overlay */}
       <AnimatePresence>
         {selectedStudent && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 modal-overlay">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 modal-overlay">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="bg-white border border-outline-variant rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden"
+              className="bg-white border border-outline-variant rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
             >
               {/* Header */}
-              <div className="p-6 bg-primary text-white flex justify-between items-center">
-                <div className="space-y-1">
-                  <h3 className="font-serif text-xl font-bold flex items-center gap-2">
-                    <Send size={18} /> Send faglært oppfølging
+              <div className="p-4 sm:p-6 bg-primary text-white flex justify-between items-center shrink-0">
+                <div className="space-y-1 min-w-0 mr-4">
+                  <h3 className="font-serif text-lg sm:text-xl font-bold flex items-center gap-2 truncate">
+                    <Send size={18} className="shrink-0" /> Send faglært oppfølging
                   </h3>
-                  <p className="text-xs text-on-primary-container/85">Mottaker: {selectedStudent.name} ({selectedStudent.courseName})</p>
+                  <p className="text-xs text-on-primary-container/85 truncate">Mottaker: {selectedStudent.name} ({selectedStudent.courseName})</p>
                 </div>
                 <button 
                   onClick={() => setSelectedStudent(null)}
-                  className="p-1 hover:bg-white/10 rounded-full text-white/90 transition-colors"
+                  className="p-1 hover:bg-white/10 rounded-full text-white/90 transition-colors shrink-0"
                 >
                   <X size={20} />
                 </button>
               </div>
 
               {/* Form body */}
-              <form onSubmit={handleSend} className="p-6 space-y-6 form-field-stable">
+              <form onSubmit={handleSend} className="p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-y-auto flex-grow form-field-stable">
                 
                 {/* Stepper / Toggle Tabs for Templates */}
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-outline block">1. Velg Meldingstype</label>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
                     <button
                       type="button"
                       onClick={() => handleTemplateToggle('oppmuntring', selectedStudent)}
-                      className={`py-3 px-4 rounded-lg border font-bold text-xs uppercase tracking-wider text-center transition-all ${
+                      className={`py-2.5 sm:py-3 px-4 rounded-lg border font-bold text-xs uppercase tracking-wider text-center transition-all ${
                         templateType === 'oppmuntring'
                           ? 'border-primary bg-primary/5 text-primary'
                           : 'border-outline-variant hover:border-primary text-on-surface-variant hover:text-primary bg-transparent'
@@ -225,7 +227,7 @@ export default function StudentFollowUp() {
                     <button
                       type="button"
                       onClick={() => handleTemplateToggle('paaminnelse', selectedStudent)}
-                      className={`py-3 px-4 rounded-lg border font-bold text-xs uppercase tracking-wider text-center transition-all ${
+                      className={`py-2.5 sm:py-3 px-4 rounded-lg border font-bold text-xs uppercase tracking-wider text-center transition-all ${
                         templateType === 'paaminnelse'
                           ? 'border-primary bg-primary/5 text-primary'
                           : 'border-outline-variant hover:border-primary text-on-surface-variant hover:text-primary bg-transparent'
@@ -242,25 +244,25 @@ export default function StudentFollowUp() {
                   <textarea
                     value={customText}
                     onChange={(e) => setCustomText(e.target.value)}
-                    rows={8}
-                    className="w-full p-4 border border-outline-variant rounded-lg font-sans text-sm focus:outline-none focus:border-primary shadow-sm transition-all focus:ring-1 focus:ring-primary leading-relaxed"
+                    rows={6}
+                    className="w-full p-3 sm:p-4 border border-outline-variant rounded-lg font-sans text-sm focus:outline-none focus:border-primary shadow-sm transition-all focus:ring-1 focus:ring-primary leading-relaxed"
                   />
                 </div>
 
                 {/* Submitting Buttons */}
-                <div className="flex gap-4 justify-end pt-4 border-t border-outline-variant/40">
+                <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4 justify-end pt-4 border-t border-outline-variant/40 shrink-0">
                   <button
                     type="button"
                     onClick={() => setSelectedStudent(null)}
-                    className="py-3 px-6 rounded-lg font-bold text-xs uppercase tracking-wider text-on-surface-variant hover:bg-surface-container active:scale-95 transition-all"
+                    className="py-3 px-6 rounded-lg font-bold text-xs uppercase tracking-wider text-on-surface-variant hover:bg-surface-container active:scale-95 transition-all w-full sm:w-auto"
                   >
                     Avbryt
                   </button>
                   <button
                     type="submit"
-                    className="bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-primary-container transition-all active:scale-[0.98] shadow-md flex items-center gap-2"
+                    className="bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-primary-container transition-all active:scale-[0.98] shadow-md flex items-center justify-center gap-2 w-full sm:w-auto"
                   >
-                    <Send size={14} /> SEND MELDING
+                    <Send size={14} className="shrink-0" /> SEND MELDING
                   </button>
                 </div>
 

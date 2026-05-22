@@ -30,7 +30,7 @@ export default function InterestsPage() {
 
   return (
     <div className="bg-background text-on-background font-sans min-h-screen flex items-center justify-center p-6">
-      <div className="w-full max-w-2xl bg-white rounded-2xl border border-outline-variant shadow-lg p-8 md:p-12 text-center flex flex-col">
+      <div className="w-full max-w-2xl bg-white rounded-2xl border border-outline-variant shadow-lg p-5 sm:p-8 md:p-12 text-center flex flex-col">
         
         {/* Progress header */}
         <div className="w-full bg-surface-container rounded-full h-1.5 mb-8">
@@ -38,7 +38,7 @@ export default function InterestsPage() {
         </div>
 
         {/* Headline */}
-        <h1 className="font-serif text-3xl text-primary font-bold mb-4">Dine akademiske interesser</h1>
+        <h1 className="font-serif text-2xl sm:text-3xl text-primary font-bold mb-4">Dine akademiske interesser</h1>
         <p className="text-on-surface-variant text-sm md:text-base max-w-md mx-auto mb-10">
           Velg minst ett kjerneområde du ønsker å fokusere på under ditt opphold. Dette tilpasser studieplanen din.
         </p>

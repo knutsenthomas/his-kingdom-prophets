@@ -42,13 +42,13 @@ export default function LoginPage() {
 
   return (
     <div className="bg-background text-on-background font-sans min-h-screen flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white rounded-2xl border border-outline-variant shadow-lg overflow-hidden flex flex-col p-8">
+      <div className="w-full max-w-md bg-white rounded-2xl border border-outline-variant shadow-lg overflow-hidden flex flex-col p-6 sm:p-8">
         
         {/* Title */}
         <div className="text-center mb-8">
           <div 
             onClick={() => navigate('/')} 
-            className="font-serif text-3xl font-bold text-primary mb-2 cursor-pointer"
+            className="font-serif text-2xl sm:text-3xl font-bold text-primary mb-2 cursor-pointer"
           >
             Scholastic Premium
           </div>

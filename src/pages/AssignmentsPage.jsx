@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FileText, Calendar, Clock, Award, CheckCircle2, 
   AlertCircle, ChevronRight, UploadCloud, Send, ArrowLeft,
-  ChevronLeft
+  ChevronLeft, Compass, BookOpen, CheckSquare, Users
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 
@@ -148,28 +148,28 @@ export default function AssignmentsPage() {
   const filteredAssignments = assignments.filter(a => a.status === activeTab);
 
   return (
-    <div className="bg-background min-h-screen flex flex-col font-sans text-on-background">
+    <div className="bg-background min-h-screen flex flex-col font-sans text-on-background pb-20 md:pb-0">
       {/* Header */}
       <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
-          <div className="flex items-center gap-4">
+        <div className="flex justify-between items-center px-4 sm:px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
+          <div className="flex items-center gap-2 sm:gap-4 truncate mr-2">
             <button 
               onClick={() => navigate('/student/dashboard')}
-              className="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95 text-on-surface-variant hover:text-primary"
+              className="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95 text-on-surface-variant hover:text-primary shrink-0"
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-2xl font-bold text-primary">Scholastic Premium</div>
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-semibold uppercase tracking-wider text-secondary px-3 py-1 bg-surface-container rounded-full">
-              Studentkonto
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-secondary px-2.5 sm:px-3 py-1 bg-surface-container rounded-full">
+              Student
             </span>
             <img 
               src={user?.avatar} 
               alt={user?.name} 
-              className="w-10 h-10 rounded-full border-2 border-primary-container shadow"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary-container shadow object-cover shrink-0"
             />
           </div>
         </div>
@@ -274,7 +274,7 @@ export default function AssignmentsPage() {
               key={activeAssignment.id}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-white border border-outline-variant rounded-xl p-8 shadow-sm flex flex-col gap-6"
+              className="bg-white border border-outline-variant rounded-xl p-5 sm:p-8 shadow-sm flex flex-col gap-6"
             >
               {/* Header Details */}
               <div className="border-b border-outline-variant pb-6">
@@ -465,6 +465,26 @@ export default function AssignmentsPage() {
           )}
         </div>
       </main>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-outline-variant/30 z-40 flex justify-around py-3 shadow-lg">
+        <button onClick={() => navigate('/student/dashboard')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
+          <Compass size={18} />
+          <span>Dashboard</span>
+        </button>
+        <button onClick={() => navigate('/student/library')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
+          <BookOpen size={18} />
+          <span>Kurs</span>
+        </button>
+        <button onClick={() => navigate('/student/assignments')} className="flex flex-col items-center gap-0.5 text-xs text-primary font-bold">
+          <CheckSquare size={18} />
+          <span>Oppgaver</span>
+        </button>
+        <button onClick={() => navigate('/student/chat')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
+          <Users size={18} />
+          <span>Fagprat</span>
+        </button>
+      </div>
 
       {/* Floating HKM Chat Widget */}
       <HkmChatWidget />

@@ -93,25 +93,25 @@ export default function GradesCalculator() {
     <div className="bg-background min-h-screen flex flex-col font-sans text-on-background">
       {/* Header */}
       <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
-          <div className="flex items-center gap-4">
+        <div className="flex justify-between items-center px-4 sm:px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
+          <div className="flex items-center gap-2 sm:gap-4 truncate mr-2">
             <button 
               onClick={() => navigate('/teacher/dashboard')}
-              className="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95 text-on-surface-variant hover:text-primary"
+              className="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95 text-on-surface-variant hover:text-primary shrink-0"
             >
               <ArrowLeft size={20} />
             </button>
-            <div className="font-serif text-2xl font-bold text-primary">Scholastic Premium</div>
+            <div className="font-serif text-lg sm:text-2xl font-bold text-primary truncate">Scholastic Premium</div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-semibold uppercase tracking-wider text-secondary px-3 py-1 bg-surface-container rounded-full">
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+            <span className="hidden sm:inline-block text-xs font-semibold uppercase tracking-wider text-secondary px-3 py-1 bg-surface-container rounded-full">
               Karakterberegning / Sensor
             </span>
             <img 
               src={user?.avatar} 
               alt={user?.name} 
-              className="w-10 h-10 rounded-full border-2 border-primary-container shadow"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary-container shadow object-cover shrink-0"
             />
           </div>
         </div>
@@ -122,10 +122,10 @@ export default function GradesCalculator() {
         
         {/* Intro */}
         <div className="space-y-2">
-          <h1 className="font-serif text-3xl font-bold text-primary flex items-center gap-2">
-            <Calculator size={28} className="text-secondary" /> Automatisk Karakterkalkulator
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-primary flex items-center gap-2 flex-wrap">
+            <Calculator size={28} className="text-secondary shrink-0" /> Automatisk Karakterkalkulator
           </h1>
-          <p className="text-sm text-on-surface-variant max-w-3xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-on-surface-variant max-w-3xl leading-relaxed">
             Velg en student, sett vekting på de ulike vurderingsdelene, og oppgi foreløpige poengsummer. Kalkulatoren beregner automatisk den endelige vektede poengsummen og bokstavkarakteren i sanntid.
           </p>
         </div>
@@ -137,19 +137,19 @@ export default function GradesCalculator() {
           <div className="lg:col-span-7 flex flex-col gap-6">
             
             {/* Student selection card */}
-            <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm">
+            <div className="bg-white border border-outline-variant rounded-xl p-5 sm:p-6 shadow-sm">
               <h3 className="font-serif text-base font-bold text-primary mb-4 flex items-center gap-2">
-                <UserCheck size={18} /> Velg student som skal vurderes
+                <UserCheck size={18} className="shrink-0" /> Velg student som skal vurderes
               </h3>
               
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {students.map(stud => {
                   const isSelected = stud.id === selectedStudentId;
                   return (
                     <button
                       key={stud.id}
                       onClick={() => setSelectedStudentId(stud.id)}
-                      className={`p-3 rounded-lg border text-center transition-all duration-200 active:scale-[0.98] ${
+                      className={`p-3 rounded-lg border flex sm:flex-col items-center sm:justify-center gap-3 sm:gap-2 text-left sm:text-center transition-all duration-200 active:scale-[0.98] ${
                         isSelected
                           ? 'border-primary bg-primary/5 text-primary font-bold shadow-sm'
                           : 'border-outline-variant hover:border-primary-container/40 text-on-surface-variant hover:bg-surface-container-low'
@@ -158,10 +158,12 @@ export default function GradesCalculator() {
                       <img 
                         src={stud.avatar} 
                         alt={stud.name} 
-                        className="w-10 h-10 rounded-full mx-auto mb-2 border border-outline-variant shadow-sm"
+                        className="w-10 h-10 rounded-full border border-outline-variant shadow-sm object-cover shrink-0"
                       />
-                      <p className="text-xs truncate">{stud.name.split(' ')[0]}</p>
-                      <span className="text-[9px] text-outline font-semibold uppercase">{stud.status}</span>
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold sm:font-normal truncate">{stud.name.split(' ')[0]}</p>
+                        <span className="text-[9px] text-outline font-semibold uppercase block sm:inline">{stud.status}</span>
+                      </div>
                     </button>
                   );
                 })}
@@ -169,13 +171,13 @@ export default function GradesCalculator() {
             </div>
 
             {/* Calculations weights and sliders */}
-            <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col gap-6">
+            <div className="bg-white border border-outline-variant rounded-xl p-5 sm:p-6 shadow-sm flex flex-col gap-6">
               
-              <div className="flex justify-between items-center pb-2 border-b border-outline-variant/30">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-2 border-b border-outline-variant/30">
                 <h3 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-                  <Percent size={18} /> Vurderingsvekting (skal summere til 100%)
+                  <Percent size={18} className="shrink-0" /> Vurderingsvekting (sum 100%)
                 </h3>
-                <span className={`text-xs font-bold px-2 py-0.5 rounded ${isWeightValid ? 'bg-green-100 text-green-700' : 'bg-error-container text-error'}`}>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded shrink-0 ${isWeightValid ? 'bg-green-100 text-green-700' : 'bg-error-container text-error'}`}>
                   Sum: {weightsSum}%
                 </span>
               </div>
@@ -230,7 +232,7 @@ export default function GradesCalculator() {
             </div>
 
             {/* Score Inputs Card */}
-            <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm space-y-4">
+            <div className="bg-white border border-outline-variant rounded-xl p-5 sm:p-6 shadow-sm space-y-4">
               <h3 className="font-serif text-base font-bold text-primary">Score-innlesing (foreløpige poengsummer, 0-100)</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 form-field-stable">
@@ -278,25 +280,25 @@ export default function GradesCalculator() {
           <div className="lg:col-span-5 flex flex-col gap-6">
             
             {/* Grade output card */}
-            <div className="bg-white border border-outline-variant rounded-xl p-8 shadow-sm flex flex-col items-center justify-between text-center gap-6">
+            <div className="bg-white border border-outline-variant rounded-xl p-6 sm:p-8 shadow-sm flex flex-col items-center justify-between text-center gap-6">
               <span className="text-[10px] font-bold uppercase tracking-wider text-outline">Beregnet Karakterresymé</span>
               
               {/* Massive Grade Ring Visualizer */}
-              <div className="relative w-44 h-44 flex items-center justify-center bg-surface-container rounded-full shadow-inner border-4 border-white">
+              <div className="relative w-40 h-40 sm:w-44 sm:h-44 flex items-center justify-center bg-surface-container rounded-full shadow-inner border-4 border-white shrink-0">
                 <div className="absolute inset-4 bg-white rounded-full shadow-md flex flex-col items-center justify-center">
-                  <span className={`text-6xl font-bold font-serif ${gradeColor}`}>{letterGrade}</span>
-                  <span className="text-xs font-semibold text-outline">Poeng: {finalScore}/100</span>
+                  <span className={`text-5xl sm:text-6xl font-bold font-serif ${gradeColor}`}>{letterGrade}</span>
+                  <span className="text-[11px] sm:text-xs font-semibold text-outline">Poeng: {finalScore}/100</span>
                 </div>
               </div>
 
-              <div className="space-y-1 w-full border-t border-outline-variant/30 pt-6 text-left text-xs">
+              <div className="space-y-1.5 w-full border-t border-outline-variant/30 pt-6 text-left text-xs">
                 <div className="flex justify-between font-semibold py-1">
                   <span className="text-outline">Mottaker:</span>
-                  <span className="text-primary">{activeStudent.name}</span>
+                  <span className="text-primary truncate ml-2 max-w-[180px]">{activeStudent.name}</span>
                 </div>
                 <div className="flex justify-between font-semibold py-1">
                   <span className="text-outline">Tilmeldt kurs:</span>
-                  <span className="text-primary">{activeStudent.courseName}</span>
+                  <span className="text-primary truncate ml-2 max-w-[180px]">{activeStudent.courseName}</span>
                 </div>
                 <div className="flex justify-between font-semibold py-1 pb-3">
                   <span className="text-outline">Progresjon:</span>
@@ -314,13 +316,13 @@ export default function GradesCalculator() {
               <button
                 onClick={handleSaveGrade}
                 disabled={!isWeightValid}
-                className={`w-full py-4 px-6 rounded-lg font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-md ${
+                className={`w-full py-3.5 sm:py-4 px-6 rounded-lg font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-md ${
                   isWeightValid 
                     ? 'bg-primary text-white hover:bg-primary-container shadow-primary-container/20' 
                     : 'bg-surface-container text-outline border border-outline-variant cursor-not-allowed'
                 }`}
               >
-                <Save size={16} /> LAGRE ENDELIG KARAKTER
+                <Save size={16} className="shrink-0" /> LAGRE ENDELIG KARAKTER
               </button>
             </div>
 

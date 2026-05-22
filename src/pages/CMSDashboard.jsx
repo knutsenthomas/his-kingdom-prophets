@@ -111,9 +111,9 @@ export default function CMSDashboard() {
         
         {/* Left Side: CMS Items Navigator (5 cols) */}
         <div className="w-full lg:w-5/12 flex flex-col gap-6">
-          <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm">
+          <div className="bg-white border border-outline-variant rounded-xl p-5 sm:p-6 shadow-sm">
             <h2 className="font-serif text-xl font-bold text-primary mb-2 flex items-center gap-2">
-              <Layout size={20} className="text-secondary" /> Plattforminnhold (Assets)
+              <Layout size={20} className="text-secondary shrink-0" /> Plattforminnhold (Assets)
             </h2>
             <p className="text-xs text-on-surface-variant mb-6">
               Velg et statisk tekstfelt eller systemkonfigurasjon for å gjøre endringer direkte i databasen.
@@ -132,17 +132,17 @@ export default function CMSDashboard() {
                         : 'bg-white border-outline-variant hover:border-primary-container/40 hover:bg-surface-container-low text-on-surface-variant hover:text-primary'
                     }`}
                   >
-                    <div className="flex justify-between items-center mb-1">
-                      <span className={`text-[8px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+                      <span className={`text-[8px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shrink-0 ${
                         isActive ? 'bg-primary-container text-white' : 'bg-surface-container text-primary'
                       }`}>
                         {asset.section}
                       </span>
-                      <span className={`text-[10px] ${isActive ? 'text-on-primary-container' : 'text-outline'} font-mono`}>
+                      <span className={`text-[10px] ${isActive ? 'text-on-primary-container' : 'text-outline'} font-mono truncate`}>
                         {asset.slug}
                       </span>
                     </div>
-                    <h3 className="font-serif text-sm font-bold mt-1 group-hover:text-primary-container transition-colors">
+                    <h3 className="font-serif text-sm font-bold mt-1 group-hover:text-primary-container transition-colors leading-tight">
                       {asset.title}
                     </h3>
                     <p className={`text-[10px] truncate max-w-[280px] mt-2 ${isActive ? 'text-on-primary-container/70' : 'text-outline'}`}>
@@ -162,32 +162,33 @@ export default function CMSDashboard() {
               key={activeAsset.id}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-white border border-outline-variant rounded-xl p-8 shadow-sm flex flex-col gap-6"
+              className="bg-white border border-outline-variant rounded-xl p-5 sm:p-8 shadow-sm flex flex-col gap-6"
             >
               {/* Asset Header Info */}
-              <div className="border-b border-outline-variant pb-4 flex justify-between items-start">
+              <div className="border-b border-outline-variant pb-4 flex flex-col-reverse sm:flex-row justify-between items-start gap-4">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 bg-surface-container text-primary rounded-full">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 bg-surface-container text-primary rounded-full shrink-0">
                       Seksjon: {activeAsset.section}
                     </span>
-                    <span className="text-xs font-semibold text-secondary font-mono">{activeAsset.slug}</span>
+                    <span className="text-xs font-semibold text-secondary font-mono truncate">{activeAsset.slug}</span>
                   </div>
-                  <h2 className="font-serif text-2xl font-bold text-primary mt-2">
+                  <h2 className="font-serif text-xl sm:text-2xl font-bold text-primary mt-2 leading-tight">
                     Rediger: {activeAsset.title}
                   </h2>
                 </div>
                 
                 <button 
                   onClick={() => navigate('/')}
-                  className="p-2 hover:bg-surface-container rounded-full text-outline hover:text-primary transition-colors"
+                  className="p-2 hover:bg-surface-container rounded-full text-outline hover:text-primary transition-colors shrink-0 self-end sm:self-start"
+                  title="Forhåndsvis klientside"
                 >
                   <Eye size={18} />
                 </button>
               </div>
 
               {/* Editing Form */}
-              <form onSubmit={handleSave} className="space-y-6 form-field-stable">
+              <form onSubmit={handleSave} className="space-y-6 flex flex-col form-field-stable">
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-outline block">Tekstverdi i Databasen</label>
                   {activeAsset.type === 'textarea' ? (
@@ -207,14 +208,14 @@ export default function CMSDashboard() {
                   )}
                 </div>
 
-                <div className="flex justify-between items-center text-xs text-outline pt-2 border-t border-outline-variant/30">
-                  <span>Sist oppdatert: <strong>{activeAsset.lastUpdated}</strong></span>
+                <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center text-xs text-outline pt-4 border-t border-outline-variant/30 shrink-0">
+                  <span className="leading-relaxed">Sist oppdatert: <strong>{activeAsset.lastUpdated}</strong></span>
                   
                   <button
                     type="submit"
-                    className="bg-primary text-white font-bold py-3.5 px-8 rounded-lg hover:bg-primary-container transition-all active:scale-[0.98] shadow-md flex items-center gap-2"
+                    className="bg-primary text-white font-bold py-3 px-6 sm:py-3.5 sm:px-8 rounded-lg hover:bg-primary-container transition-all active:scale-[0.98] shadow-md flex items-center justify-center gap-2 w-full sm:w-auto"
                   >
-                    <Save size={16} /> LAGRE I SUPABASE
+                    <Save size={16} className="shrink-0" /> LAGRE I SUPABASE
                   </button>
                 </div>
               </form>

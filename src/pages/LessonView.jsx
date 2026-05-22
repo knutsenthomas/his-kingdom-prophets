@@ -82,13 +82,13 @@ export default function LessonView() {
   };
 
   return (
-    <div className="bg-background min-h-screen flex flex-col font-sans text-on-surface">
+    <div className="bg-background min-h-screen flex flex-col font-sans text-on-surface pb-20 md:pb-0">
       {/* Top Navbar */}
       <header className="bg-white border-b border-outline-variant/30 sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center w-full px-6 md:px-12 max-w-[1440px] mx-auto h-20">
-          <div className="font-serif text-2xl font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => navigate('/student/dashboard')}>
-            <GraduationCap className="text-primary" size={26} />
-            <span>Scholastic Premium</span>
+        <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-12 max-w-[1440px] mx-auto h-20">
+          <div className="font-serif text-lg sm:text-2xl font-bold text-primary flex items-center gap-1.5 sm:gap-2 cursor-pointer truncate mr-2" onClick={() => navigate('/student/dashboard')}>
+            <GraduationCap className="text-primary shrink-0" size={24} />
+            <span className="truncate">Scholastic Premium</span>
           </div>
           
           <nav className="hidden md:flex items-center gap-8">
@@ -98,22 +98,22 @@ export default function LessonView() {
             <button onClick={() => navigate('/student/chat')} className="text-on-surface-variant hover:text-primary transition-colors text-sm font-medium">Fellesskap</button>
           </nav>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 text-primary shrink-0">
             <div className="hidden lg:flex items-center bg-surface-container-low rounded-lg px-4 border border-outline-variant/30 py-2 w-64">
               <Search className="text-on-surface-variant mr-2" size={16} />
               <input className="bg-transparent border-none focus:ring-0 text-xs w-full outline-none" placeholder="Søk i plattformen..." type="text"/>
             </div>
             
-            <div className="flex items-center gap-4 text-primary">
-              <button className="relative hover:opacity-80 transition-all p-1">
+            <div className="flex items-center gap-3 sm:gap-4 text-primary">
+              <button className="relative hover:opacity-80 transition-all p-1 shrink-0">
                 <Bell size={20} />
                 <span className="absolute top-0 right-0 w-2 h-2 bg-burnt-orange rounded-full"></span>
               </button>
-              <div className="flex items-center gap-2.5 pl-2 border-l border-outline-variant/30">
-                <img src={user?.avatar} alt={user?.name} className="w-8 h-8 rounded-full object-cover border border-primary/20" />
+              <div className="flex items-center gap-2 sm:gap-2.5 pl-2 border-l border-outline-variant/30 shrink-0">
+                <img src={user?.avatar} alt={user?.name} className="w-8 h-8 rounded-full object-cover border border-primary/20 shrink-0" />
                 <span className="hidden sm:inline text-xs font-semibold text-on-surface">{user?.name}</span>
                 <button onClick={handleLogOut} className="hover:text-red-500 transition-colors p-1" title="Logg ut">
-                  <Power size={18} />
+                   <Power size={18} />
                 </button>
               </div>
             </div>
@@ -181,7 +181,7 @@ export default function LessonView() {
         </aside>
 
         {/* Lesson Reading Panel */}
-        <main className="flex-1 p-6 md:p-10 lg:p-12 overflow-x-hidden">
+        <main className="flex-1 p-4 sm:p-6 md:p-10 lg:p-12 overflow-x-hidden">
           <div className="max-w-[760px] mx-auto space-y-8">
             
             {/* Top course info card */}
@@ -215,7 +215,7 @@ export default function LessonView() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="bg-white border border-outline-variant/20 shadow-sm p-8 md:p-12 rounded-2xl"
+              className="bg-white border border-outline-variant/20 shadow-sm p-5 sm:p-8 md:p-12 rounded-xl sm:rounded-2xl"
             >
               {getModuleText(currentModule.title)}
             </motion.div>
@@ -242,6 +242,26 @@ export default function LessonView() {
 
           </div>
         </main>
+      </div>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-outline-variant/30 z-40 flex justify-around py-3 shadow-lg">
+        <button onClick={() => navigate('/student/dashboard')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
+          <Compass size={18} />
+          <span>Dashboard</span>
+        </button>
+        <button onClick={() => navigate('/student/library')} className="flex flex-col items-center gap-0.5 text-xs text-primary font-bold">
+          <BookOpen size={18} />
+          <span>Kurs</span>
+        </button>
+        <button onClick={() => navigate('/student/assignments')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
+          <CheckSquare size={18} />
+          <span>Oppgaver</span>
+        </button>
+        <button onClick={() => navigate('/student/chat')} className="flex flex-col items-center gap-0.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
+          <Users size={18} />
+          <span>Fagprat</span>
+        </button>
       </div>
 
       <HkmChatWidget />

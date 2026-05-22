@@ -9,8 +9,8 @@ export default function LandingPage() {
   return (
     <div className="bg-background text-on-background font-sans min-h-screen">
       {/* TopNavBar */}
-      <header className="sticky top-0 z-40 flex justify-between items-center w-full px-container-padding h-20 max-w-[1440px] mx-auto glass-nav border-b border-outline-variant">
-        <div className="font-serif text-headline-md text-primary font-bold cursor-pointer" onClick={() => navigate('/')}>
+      <header className="sticky top-0 z-40 flex justify-between items-center w-full px-4 sm:px-6 md:px-12 h-20 max-w-[1440px] mx-auto glass-nav border-b border-outline-variant">
+        <div className="font-serif text-lg sm:text-2xl text-primary font-bold cursor-pointer shrink-0" onClick={() => navigate('/')}>
           Scholastic Premium
         </div>
         <nav className="hidden md:flex items-center gap-8">
@@ -19,16 +19,16 @@ export default function LandingPage() {
           <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#research">Forskning</a>
           <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#admissions">Opptak</a>
         </nav>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <button 
             onClick={() => navigate('/login')} 
-            className="px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors"
+            className="px-3 sm:px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors text-xs sm:text-sm shrink-0"
           >
             Logg inn
           </button>
           <button 
             onClick={() => navigate('/login')} 
-            className="px-6 py-2.5 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-sm"
+            className="px-3 sm:px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-xs sm:text-sm shrink-0"
           >
             Søk Nå
           </button>
@@ -46,7 +46,7 @@ export default function LandingPage() {
             />
             <div className="absolute inset-0 hero-gradient"></div>
           </div>
-          <div className="relative z-10 w-full max-w-[1440px] mx-auto px-container-padding py-20 md:py-32">
+          <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 py-16 md:py-32">
             <div className="max-w-2xl animate-in fade-in slide-in-from-left-8 duration-700">
               <span className="inline-block px-4 py-1.5 mb-6 rounded-full bg-primary-fixed/20 text-primary-fixed font-semibold text-xs uppercase tracking-wider backdrop-blur-md border border-primary-fixed/30">
                 Akademisk Ekspertise Reimagined
@@ -55,7 +55,7 @@ export default function LandingPage() {
                 Refining Academic Excellence
               </h1>
               <p className="text-base md:text-lg text-on-primary-container mb-10 max-w-xl">
-                Et moderne akademi for tenkere og forskere, hvor tradisjonelle standarder møter innovative digitale løsninger. Hev ditt faglige nivå med våre ekspert-mentorer.
+                Et moderne akademi for tenkere og forskere, hvor tradisjonelle standarder møter innovative digitale løsninger. Hev ditt faglige niveau med våre ekspert-mentorer.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button 
@@ -77,7 +77,7 @@ export default function LandingPage() {
         </section>
 
         {/* Pillars Section (Bento Layout) */}
-        <section id="programs" className="py-24 px-container-padding max-w-[1440px] mx-auto">
+        <section id="programs" className="py-16 md:py-24 px-4 sm:px-6 md:px-12 max-w-[1440px] mx-auto">
           <div className="text-center mb-16 max-w-3xl mx-auto">
             <h2 className="font-serif text-3xl md:text-4xl text-primary font-bold mb-4">Våre Tre Distinkte Søyler</h2>
             <p className="text-base md:text-lg text-on-surface-variant">
@@ -86,7 +86,7 @@ export default function LandingPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Pillar 1 */}
-            <div className="md:col-span-8 group bento-card bg-surface-container-lowest border border-outline-variant p-8 md:p-12 flex flex-col justify-between overflow-hidden relative rounded-2xl min-h-[320px]">
+            <div className="md:col-span-8 group bento-card bg-surface-container-lowest border border-outline-variant p-6 sm:p-8 md:p-12 flex flex-col justify-between overflow-hidden relative rounded-2xl min-h-[320px]">
               <div className="relative z-10">
                 <div className="w-14 h-14 bg-primary-fixed rounded-xl flex items-center justify-center text-primary mb-6 group-hover:scale-105 transition-transform">
                   <span className="material-symbols-outlined text-3xl">school</span>
@@ -102,7 +102,7 @@ export default function LandingPage() {
             </div>
 
             {/* Pillar 2 */}
-            <div className="md:col-span-4 group bento-card bg-primary text-white p-8 flex flex-col justify-between rounded-2xl min-h-[320px]">
+            <div className="md:col-span-4 group bento-card bg-primary text-white p-6 sm:p-8 flex flex-col justify-between rounded-2xl min-h-[320px]">
               <div>
                 <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-white mb-6 border border-white/20">
                   <span className="material-symbols-outlined text-2xl">auto_stories</span>
@@ -121,7 +121,7 @@ export default function LandingPage() {
             </div>
 
             {/* Pillar 3 */}
-            <div className="md:col-span-5 group bento-card bg-surface-container border border-outline-variant p-8 flex flex-col justify-between rounded-2xl min-h-[260px]">
+            <div className="md:col-span-5 group bento-card bg-surface-container border border-outline-variant p-6 sm:p-8 flex flex-col justify-between rounded-2xl min-h-[260px]">
               <div>
                 <div className="w-12 h-12 bg-primary text-white rounded-xl flex items-center justify-center mb-6">
                   <span className="material-symbols-outlined text-2xl">psychology</span>
@@ -134,7 +134,7 @@ export default function LandingPage() {
             </div>
 
             {/* Accent Piece */}
-            <div className="md:col-span-7 bento-card bg-tertiary-fixed border border-outline-variant p-8 flex items-center justify-between rounded-2xl overflow-hidden relative min-h-[260px]">
+            <div className="md:col-span-7 bento-card bg-tertiary-fixed border border-outline-variant p-6 sm:p-8 flex items-center justify-between rounded-2xl overflow-hidden relative min-h-[260px]">
               <div className="flex-1 z-10">
                 <h4 className="font-serif text-xl text-primary font-bold mb-2">Globalt Campusnettverk</h4>
                 <p className="text-on-surface-variant text-sm leading-relaxed max-w-sm">
@@ -150,13 +150,13 @@ export default function LandingPage() {
 
         {/* Testimonials Section */}
         <section id="faculty" className="py-24 bg-surface-container-low overflow-hidden">
-          <div className="max-w-[1440px] mx-auto px-container-padding">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12">
             <div className="mb-12 max-w-2xl">
               <h2 className="font-serif text-3xl text-primary font-bold mb-4">Suksesshistorier</h2>
               <p className="text-on-surface-variant">Effekten av vårt pedagogiske økosystem fortalt av våre forskere.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="p-8 bg-white rounded-2xl shadow-sm border border-outline-variant relative">
+              <div className="p-6 sm:p-8 bg-white rounded-2xl shadow-sm border border-outline-variant relative">
                 <div className="flex items-center gap-4 mb-6">
                   <img 
                     alt="Alistair Thorne" 
@@ -173,7 +173,7 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              <div className="p-8 bg-white rounded-2xl shadow-sm border border-outline-variant relative">
+              <div className="p-6 sm:p-8 bg-white rounded-2xl shadow-sm border border-outline-variant relative">
                 <div className="flex items-center gap-4 mb-6">
                   <img 
                     alt="Elena Rodriguez" 
@@ -195,7 +195,7 @@ export default function LandingPage() {
 
         {/* Final CTA Section */}
         <section id="admissions" className="py-24 bg-background border-t border-outline-variant text-center">
-          <div className="max-w-[1440px] mx-auto px-container-padding">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12">
             <div className="inline-flex items-center gap-2 mb-6 text-primary">
               <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>workspace_premium</span>
               <span className="text-xs font-semibold tracking-widest uppercase">Begrenset Opptak Åpent</span>
@@ -206,16 +206,16 @@ export default function LandingPage() {
             <p className="text-base text-on-surface-variant mb-10 max-w-xl mx-auto">
               Bli en del av et eksklusivt læringsmiljø dedikert til kunnskap, grundighet og akademisk vekst.
             </p>
-            <div className="flex justify-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <button 
                 onClick={() => navigate('/login')} 
-                className="px-8 py-4 bg-primary text-on-primary font-semibold rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
+                className="w-full sm:w-auto px-8 py-4 bg-primary text-on-primary font-semibold rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
               >
                 Søk Opptak 2026
               </button>
               <button 
                 onClick={() => navigate('/student/library')} 
-                className="px-8 py-4 bg-surface-container border border-outline-variant text-primary font-semibold rounded-xl hover:bg-surface-container-high transition-all"
+                className="w-full sm:w-auto px-8 py-4 bg-surface-container border border-outline-variant text-primary font-semibold rounded-xl hover:bg-surface-container-high transition-all"
               >
                 Se Studieplan
               </button>
@@ -225,14 +225,14 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-12 px-container-padding flex flex-col md:flex-row justify-between items-center gap-6 bg-tertiary text-white">
+      <footer className="w-full py-12 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6 bg-tertiary text-white">
         <div className="flex flex-col gap-2 text-center md:text-left">
           <div className="font-serif text-lg font-bold text-on-tertiary">Scholastic Premium</div>
           <p className="text-xs text-on-tertiary opacity-80 max-w-md">
             © 2026 Scholastic Premium. Alle rettigheter reservert.
           </p>
         </div>
-        <nav className="flex flex-wrap justify-center gap-6 text-xs">
+        <nav className="flex flex-wrap justify-center gap-6 text-xs text-center">
           <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">Personvern</a>
           <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">Betingelser</a>
           <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">Tilgjengelighet</a>

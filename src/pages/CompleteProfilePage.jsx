@@ -36,7 +36,7 @@ export default function CompleteProfilePage() {
     <div className="bg-background min-h-screen flex flex-col font-sans text-on-background">
       {/* Header */}
       <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
+        <div className="flex justify-between items-center px-4 sm:px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
           <div className="font-serif text-2xl font-bold text-primary">Scholastic Premium</div>
           <button onClick={handleSkip} className="text-on-surface-variant font-semibold text-xs tracking-wider uppercase hover:text-primary transition-colors active:opacity-80">
             Hopp over
@@ -89,7 +89,7 @@ export default function CompleteProfilePage() {
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white shadow-lg shadow-primary/5 p-8 md:p-10 rounded-xl border border-outline-variant"
+            className="bg-white shadow-lg shadow-primary/5 p-5 sm:p-8 md:p-10 rounded-xl border border-outline-variant"
           >
             <form onSubmit={handleContinue} className="space-y-8">
               
