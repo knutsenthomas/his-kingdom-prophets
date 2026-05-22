@@ -7,6 +7,7 @@ import {
   Award, Bell, Power, Menu, ChevronLeft, Sliders, Video, User
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
+import CmsText from '@/components/CmsText';
 
 export default function TeacherLayout() {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ export default function TeacherLayout() {
               className="font-serif text-lg sm:text-2xl font-bold text-primary flex items-center gap-1.5 sm:gap-2 cursor-pointer truncate" 
               onClick={() => navigate('/teacher/dashboard')}
             >
-              <span className="truncate">His Kingdom Prophets</span>
+              <span className="truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
               <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 sm:px-3 py-1 rounded-full shrink-0">
                 Mentor
               </span>

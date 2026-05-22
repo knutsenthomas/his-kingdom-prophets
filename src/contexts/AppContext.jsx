@@ -389,6 +389,8 @@ export const AppProvider = ({ children }) => {
     };
   });
 
+  const [isAdminEditing, setIsAdminEditing] = useState(false);
+
   const updateCmsContent = (slug, value) => {
     setCmsContent(prev => {
       const updated = { ...prev, [slug]: value };
@@ -776,7 +778,9 @@ export const AppProvider = ({ children }) => {
       sendAssistantMessage,
       showToast,
       cmsContent,
-      updateCmsContent
+      updateCmsContent,
+      isAdminEditing,
+      setIsAdminEditing
     }}>
       {children}
     </AppContext.Provider>

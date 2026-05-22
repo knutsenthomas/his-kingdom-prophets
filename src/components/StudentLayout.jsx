@@ -7,11 +7,12 @@ import {
   Menu, Bell, Power, Search, Award, GraduationCap, ChevronLeft, User
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
+import CmsText from '@/components/CmsText';
 
 export default function StudentLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout, showToast, changePersona, cmsContent } = useApp();
+  const { user, logout, showToast, changePersona, cmsContent, isAdminEditing } = useApp();
   
   // Collapse state initialized from localStorage for persistence
   const [isCollapsed, setIsCollapsed] = useState(() => {
@@ -64,24 +65,32 @@ export default function StudentLayout() {
               onClick={() => navigate('/student/dashboard')}
             >
               <GraduationCap className="text-primary shrink-0 animate-pulse" size={24} />
-              <span className="truncate">{cmsContent?.['layout-logo-title'] || 'His Kingdom Prophets'}</span>
+              <span className="truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
             </div>
           </div>
 
           {/* Search bar, notifications, avatar and logout */}
           <div className="flex items-center gap-4 text-primary shrink-0">
-            <div className="hidden xl:flex items-center bg-surface-container-low rounded-lg px-4 border border-outline-variant/30 py-2 w-60">
-              <Search className="text-on-surface-variant mr-2" size={16} />
-              <input 
-                className="bg-transparent border-none focus:ring-0 text-xs w-full outline-none" 
-                placeholder={cmsContent?.['layout-search-placeholder'] || 'Søk i plattformen...'}
-                type="text"
-                onChange={(e) => {
-                  if (e.target.value.length > 3) {
-                    showToast(`Søker etter "${e.target.value}"...`);
-                  }
-                }}
-              />
+            <div className="hidden xl:flex items-center bg-surface-container-low rounded-lg px-4 border border-outline-variant/30 py-2 w-60 relative">
+              <Search className="text-on-surface-variant mr-2 shrink-0" size={16} />
+              {isAdminEditing ? (
+                <CmsText 
+                  slug="layout-search-placeholder" 
+                  fallback="Søk i plattformen..." 
+                  className="text-xs text-on-surface-variant w-full font-normal"
+                />
+              ) : (
+                <input 
+                  className="bg-transparent border-none focus:ring-0 text-xs w-full outline-none" 
+                  placeholder={cmsContent?.['layout-search-placeholder'] || 'Søk i plattformen...'}
+                  type="text"
+                  onChange={(e) => {
+                    if (e.target.value.length > 3) {
+                      showToast(`Søker etter "${e.target.value}"...`);
+                    }
+                  }}
+                />
+              )}
             </div>
             
             <div className="flex items-center gap-3 sm:gap-4 text-primary">
@@ -193,16 +202,19 @@ export default function StudentLayout() {
           <div className="p-6 w-72 shrink-0">
             <div className="bg-surface-container-low rounded-xl p-4 border border-outline-variant/30 text-center shadow-sm">
               <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                {cmsContent?.['layout-upgrade-banner-title'] || 'Utvid tjenesten'}
+                <CmsText slug="layout-upgrade-banner-title" fallback="Utvid tjenesten" />
               </p>
-              <p className="text-[11px] text-on-surface-variant mb-3 leading-relaxed">
-                {cmsContent?.['layout-upgrade-banner-desc'] || 'Få ubegrenset tilgang til alle studieskrifter og veiledning.'}
-              </p>
+              <CmsText
+                slug="layout-upgrade-banner-desc"
+                fallback="Få ubegrenset tilgang til alle studieskrifter og veiledning."
+                as="p"
+                className="text-[11px] text-on-surface-variant mb-3 leading-relaxed"
+              />
               <button 
                 onClick={() => showToast("Oppgradering sendt til behandling!")} 
                 className="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg shadow-sm hover:bg-primary-container transition-all active:scale-[0.97]"
               >
-                {cmsContent?.['layout-upgrade-banner-btn'] || 'Oppgrader profil'}
+                <CmsText slug="layout-upgrade-banner-btn" fallback="Oppgrader profil" />
               </button>
             </div>
             

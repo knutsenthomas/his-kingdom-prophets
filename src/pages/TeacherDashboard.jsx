@@ -7,6 +7,7 @@ import {
   Sparkles, Calendar, ArrowRight, MessageSquare, ClipboardList,
   Sliders, Award
 } from 'lucide-react';
+import CmsText from '@/components/CmsText';
 
 export default function TeacherDashboard() {
   const navigate = useNavigate();
@@ -21,18 +22,23 @@ export default function TeacherDashboard() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="font-serif text-2xl md:text-4xl font-bold text-primary">
-            {cmsContent?.['teacher-welcome-title'] 
-              ? cmsContent['teacher-welcome-title'].replace('{name}', user?.name.split(' ')[0] || 'Lærer')
-              : `Veiledningssenter & Mentorportal`}
+            <CmsText 
+              slug="teacher-welcome-title" 
+              fallback="Veiledningssenter & Mentorportal" 
+              replaceObj={{ '{name}': user?.name.split(' ')[0] || 'Lærer' }} 
+            />
           </h1>
-          <p className="text-xs sm:text-sm text-on-surface-variant mt-1 font-medium">
-            {cmsContent?.['teacher-welcome-subtitle'] || 'Oversikt over studentenes åndelige fremdrift, disippelskap og oppfølgingsvarsler.'}
-          </p>
+          <CmsText
+            slug="teacher-welcome-subtitle"
+            fallback="Oversikt over studentenes åndelige fremdrift, disippelskap og oppfølgingsvarsler."
+            as="p"
+            className="text-xs sm:text-sm text-on-surface-variant mt-1 font-medium"
+          />
         </div>
 
         <div className="flex items-center gap-3">
           <span className="text-xs text-on-surface-variant font-semibold bg-surface-container px-3 py-1.5 rounded-full border border-outline-variant/30">
-            {cmsContent?.['teacher-academic-year'] || 'Aktuelt studieår: 2026'}
+            <CmsText slug="teacher-academic-year" fallback="Aktuelt studieår: 2026" />
           </span>
         </div>
       </div>
@@ -43,7 +49,7 @@ export default function TeacherDashboard() {
         <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow duration-300">
           <div className="space-y-1">
             <p className="text-xs font-bold uppercase tracking-wider text-outline">
-              {cmsContent?.['teacher-kpi1-label'] || 'Totalt Registrert'}
+              <CmsText slug="teacher-kpi1-label" fallback="Totalt Registrert" />
             </p>
             <h3 className="text-3xl font-bold font-serif text-primary">48</h3>
             <p className="text-[10px] text-green-600 font-semibold flex items-center gap-1">
@@ -59,7 +65,7 @@ export default function TeacherDashboard() {
         <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow duration-300">
           <div className="space-y-1">
             <p className="text-xs font-bold uppercase tracking-wider text-outline">
-              {cmsContent?.['teacher-kpi2-label'] || 'Faglig Snittfremdrift'}
+              <CmsText slug="teacher-kpi2-label" fallback="Faglig Snittfremdrift" />
             </p>
             <h3 className="text-3xl font-bold font-serif text-primary">46%</h3>
             <div className="h-1.5 w-24 bg-surface-container rounded-full overflow-hidden mt-1.5">
@@ -75,7 +81,7 @@ export default function TeacherDashboard() {
         <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow duration-300">
           <div className="space-y-1">
             <p className="text-xs font-bold uppercase tracking-wider text-outline">
-              {cmsContent?.['teacher-kpi3-label'] || 'Evalueringssnitt'}
+              <CmsText slug="teacher-kpi3-label" fallback="Evalueringssnitt" />
             </p>
             <h3 className="text-3xl font-bold font-serif text-primary">B+</h3>
             <p className="text-[10px] text-outline font-semibold">Basert på siste 3 innleveringer</p>
@@ -89,7 +95,7 @@ export default function TeacherDashboard() {
         <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow duration-300">
           <div className="space-y-1">
             <p className="text-xs font-bold uppercase tracking-wider text-outline">
-              {cmsContent?.['teacher-kpi4-label'] || 'Studenter under oppfølging'}
+              <CmsText slug="teacher-kpi4-label" fallback="Studenter under oppfølging" />
             </p>
             <h3 className="text-3xl font-bold font-serif text-error">{atRiskStudents.length}</h3>
             <p className="text-[10px] text-error font-semibold flex items-center gap-1">
@@ -111,7 +117,7 @@ export default function TeacherDashboard() {
           {/* Quick Actions Panel */}
           <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm">
             <h3 className="font-serif text-xl font-bold text-primary mb-6 flex items-center gap-2">
-              <Sliders size={20} className="text-[#c5a059]" /> {cmsContent?.['teacher-actions-title'] || 'Administrative tjenester'}
+              <Sliders size={20} className="text-[#c5a059]" /> <CmsText slug="teacher-actions-title" fallback="Administrative tjenester" />
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -3,6 +3,7 @@ import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
+import CmsVisualToggle from '@/components/CmsVisualToggle';
 
 // Components & Shells
 import ShowcaseShell from '@/components/ShowcaseShell';
@@ -87,6 +88,7 @@ export default function App() {
     return (
       <div className="min-h-screen bg-background text-on-background w-full">
         <AppRoutes />
+        <CmsVisualToggle />
       </div>
     );
   }
@@ -168,6 +170,8 @@ export default function App() {
         </div>
 
       </div>
+
+      <CmsVisualToggle />
 
       {/* Global Branded Toast Manager */}
       <AnimatePresence>

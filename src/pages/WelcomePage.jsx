@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
 import { BookOpen, Users, Check, ArrowRight, Award } from 'lucide-react';
+import CmsText from '@/components/CmsText';
 
 export default function WelcomePage() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function WelcomePage() {
       <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
         <div className="flex justify-between items-center px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
           <div className="font-serif text-2xl font-bold text-primary">
-            {cmsContent?.['layout-logo-title'] || 'His Kingdom Prophets'}
+            <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
           </div>
           <nav className="flex gap-4">
             <button onClick={handleDashboardRedirect} className="text-on-surface-variant font-semibold text-xs tracking-wider uppercase hover:text-primary transition-colors">
@@ -72,9 +73,11 @@ export default function WelcomePage() {
               animate={{ opacity: 1, y: 0 }}
               className="font-serif text-3xl md:text-5xl text-on-surface font-bold tracking-tight"
             >
-              {cmsContent?.['welcome-ready-title']
-                ? cmsContent['welcome-ready-title'].replace('{name}', user?.name.split(' ')[0] || '')
-                : `Alt er klart, ${user?.name.split(' ')[0] || ''}!`}
+              <CmsText 
+                slug="welcome-ready-title" 
+                fallback="Alt er klart, {name}!" 
+                replaceObj={{ '{name}': user?.name?.split(' ')[0] || '' }}
+              />
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0 }}
@@ -82,7 +85,10 @@ export default function WelcomePage() {
               transition={{ delay: 0.2 }}
               className="text-lg md:text-xl text-on-surface-variant max-w-2xl mx-auto leading-relaxed"
             >
-              {cmsContent?.['welcome-ready-subtitle'] || 'Din profil er nå ferdig konfigurert. Du er registrert som student ved vår profetiske bibelskole og utrustningssenter.'}
+              <CmsText 
+                slug="welcome-ready-subtitle" 
+                fallback="Din profil er nå ferdig konfigurert. Du er registrert som student ved vår profetiske bibelskole og utrustningssenter." 
+              />
             </motion.p>
           </div>
 
@@ -101,12 +107,18 @@ export default function WelcomePage() {
               <div className="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center mb-4 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                 <BookOpen size={20} />
               </div>
-              <h3 className="font-serif text-lg font-bold text-primary mb-2">
-                {cmsContent?.['welcome-card1-title'] || 'Utforsk studieplanen'}
-              </h3>
-              <p className="text-sm text-on-surface-variant leading-relaxed">
-                {cmsContent?.['welcome-card1-desc'] || 'Få tilgang til dine kurs i profetisk tjeneste, bibelundervisning og menighetsledelse.'}
-              </p>
+              <CmsText 
+                slug="welcome-card1-title" 
+                fallback="Utforsk studieplanen" 
+                as="h3" 
+                className="font-serif text-lg font-bold text-primary mb-2" 
+              />
+              <CmsText 
+                slug="welcome-card1-desc" 
+                fallback="Få tilgang til dine kurs i profetisk tjeneste, bibelundervisning og menighetsledelse." 
+                as="p" 
+                className="text-sm text-on-surface-variant leading-relaxed" 
+              />
             </button>
 
             {/* Option Card 2 */}
@@ -117,12 +129,18 @@ export default function WelcomePage() {
               <div className="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center mb-4 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                 <Users size={20} />
               </div>
-              <h3 className="font-serif text-lg font-bold text-primary mb-2 font-serif">
-                {cmsContent?.['welcome-card2-title'] || 'Bli med i bønnefellesskap'}
-              </h3>
-              <p className="text-sm text-on-surface-variant leading-relaxed">
-                {cmsContent?.['welcome-card2-desc'] || 'Koble deg på studiegrupper, del profetiske åpenbaringer og chat med dine medstudenter.'}
-              </p>
+              <CmsText 
+                slug="welcome-card2-title" 
+                fallback="Bli med i bønnefellesskap" 
+                as="h3" 
+                className="font-serif text-lg font-bold text-primary mb-2" 
+              />
+              <CmsText 
+                slug="welcome-card2-desc" 
+                fallback="Koble deg på studiegrupper, del profetiske åpenbaringer og chat med dine medstudenter." 
+                as="p" 
+                className="text-sm text-on-surface-variant leading-relaxed" 
+              />
             </button>
           </motion.div>
 
@@ -137,7 +155,7 @@ export default function WelcomePage() {
               onClick={handleDashboardRedirect}
               className="bg-primary text-white font-bold py-4 px-12 rounded-lg hover:bg-primary-container transition-all shadow-lg shadow-primary-container/20 flex items-center gap-2 mx-auto active:scale-[0.98] duration-150"
             >
-              {cmsContent?.['welcome-cta-btn'] || 'GÅ TIL MITT DASHBOARD'}
+              <CmsText slug="welcome-cta-btn" fallback="GÅ TIL MITT DASHBOARD" />
               <ArrowRight size={16} />
             </button>
           </motion.div>

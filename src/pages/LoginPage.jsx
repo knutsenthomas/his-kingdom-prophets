@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
+import CmsText from '@/components/CmsText';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -50,11 +51,14 @@ export default function LoginPage() {
             onClick={() => navigate('/')} 
             className="font-serif text-2xl sm:text-3xl font-bold text-primary mb-2 cursor-pointer"
           >
-            {cmsContent?.['login-title'] || 'His Kingdom Prophets'}
+            <CmsText slug="login-title" fallback="His Kingdom Prophets" />
           </div>
-          <p className="text-sm text-on-surface-variant">
-            {cmsContent?.['login-subtitle'] || 'Logg inn på din åpenbaringsportal'}
-          </p>
+          <CmsText 
+            slug="login-subtitle" 
+            fallback="Logg inn på din åpenbaringsportal" 
+            as="p" 
+            className="text-sm text-on-surface-variant" 
+          />
         </div>
 
         {/* Quick login helper profiles */}

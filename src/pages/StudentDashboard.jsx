@@ -6,6 +6,7 @@ import {
   BookOpen, Calendar, GraduationCap, PlayCircle, 
   ExternalLink, ArrowRight, Award, Compass
 } from 'lucide-react';
+import CmsText from '@/components/CmsText';
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
@@ -36,11 +37,14 @@ export default function StudentDashboard() {
         <div className="max-w-xl space-y-2.5">
           <span className="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase inline-block">Studie-status</span>
           <h1 className="font-serif text-2xl md:text-3xl font-bold tracking-tight">
-            {cmsContent?.['student-welcome-title'] || 'Velkommen tilbake,'} {user?.name || 'Thomas'}!
+            <CmsText slug="student-welcome-title" fallback="Velkommen tilbake," /> {user?.name || 'Thomas'}!
           </h1>
-          <p className="text-sm text-on-primary-container leading-relaxed">
-            {cmsContent?.['student-welcome-subtitle'] || 'Du gjør fremragende fremgang i den profetiske tjeneste og hermeneutikk denne uken. Dine mentorer har publisert 2 nye studiehefter i biblioteket.'}
-          </p>
+          <CmsText
+            slug="student-welcome-subtitle"
+            fallback="Du gjør fremragende fremgang i den profetiske tjeneste og hermeneutikk denne uken. Dine mentorer har publisert 2 nye studiehefter i biblioteket."
+            as="p"
+            className="text-sm text-on-primary-container leading-relaxed"
+          />
         </div>
       </motion.div>
 
@@ -51,7 +55,7 @@ export default function StudentDashboard() {
         <div className="lg:col-span-2 space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="font-serif text-xl font-bold text-primary">
-              {cmsContent?.['student-active-courses-title'] || 'Mine aktive kurs'}
+              <CmsText slug="student-active-courses-title" fallback="Mine aktive kurs" />
             </h2>
             <button onClick={() => navigate('/student/library')} className="text-primary hover:text-primary-container text-xs font-bold flex items-center gap-1">
               Vis alle
@@ -106,7 +110,7 @@ export default function StudentDashboard() {
         {/* Right Column: Calendar & Join Live Zoom Class */}
         <div className="space-y-6">
           <h2 className="font-serif text-xl font-bold text-primary">
-            {cmsContent?.['student-live-gatherings-title'] || 'Live-undervisning & Bønn'}
+            <CmsText slug="student-live-gatherings-title" fallback="Live-undervisning & Bønn" />
           </h2>
           
           <div className="bg-white rounded-xl border border-outline-variant/40 shadow-sm p-6 space-y-6">
@@ -132,7 +136,7 @@ export default function StudentDashboard() {
             <div className="space-y-3.5 pt-4 border-t border-slate-100">
               <h4 className="text-xs font-bold text-primary uppercase tracking-wide flex items-center gap-1.5">
                 <Calendar size={14} />
-                <span>{cmsContent?.['student-next-gatherings-title'] || 'Neste samlinger'}</span>
+                <CmsText slug="student-next-gatherings-title" fallback="Neste samlinger" as="span" />
               </h4>
               
               <div className="space-y-3 text-xs">
@@ -164,7 +168,7 @@ export default function StudentDashboard() {
         {/* Left 2 columns: Task List Checklist */}
         <div className="lg:col-span-2 space-y-6">
           <h2 className="font-serif text-xl font-bold text-primary">
-            {cmsContent?.['student-tasks-title'] || 'Mine gjøremål & oppgaver'}
+            <CmsText slug="student-tasks-title" fallback="Mine gjøremål & oppgaver" />
           </h2>
           
           <div className="bg-white rounded-xl border border-outline-variant/40 shadow-sm p-6">
@@ -195,7 +199,7 @@ export default function StudentDashboard() {
         {/* Right column: Study Stats Card */}
         <div className="space-y-6">
           <h2 className="font-serif text-xl font-bold text-primary">
-            {cmsContent?.['student-stats-title'] || 'Studie-statistikk'}
+            <CmsText slug="student-stats-title" fallback="Studie-statistikk" />
           </h2>
           
           <div className="bg-white rounded-xl border border-outline-variant/40 shadow-sm p-6 flex flex-col justify-between">
