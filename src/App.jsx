@@ -50,12 +50,12 @@ import EmailPreviews from '@/pages/EmailPreviews';
 import SupportCenter from '@/pages/SupportCenter';
 import AffiliatePortal from '@/pages/AffiliatePortal';
 import CourseInsights from '@/pages/CourseInsights';
-import Artikkel1LoggInn from '@/pages/support-articles/Artikkel1LoggInn';
-import Artikkel2Chat from '@/pages/support-articles/Artikkel2Chat';
-import Artikkel3Bibelkalkulator from '@/pages/support-articles/Artikkel3Bibelkalkulator';
-import Artikkel4Zoom from '@/pages/support-articles/Artikkel4Zoom';
-import Artikkel5Veiledning from '@/pages/support-articles/Artikkel5Veiledning';
-import Artikkel6Tjenestegaver from '@/pages/support-articles/Artikkel6Tjenestegaver';
+import ArtikkelLoggInn from '@/pages/support-articles/ArtikkelLoggInn';
+import ArtikkelChat from '@/pages/support-articles/ArtikkelChat';
+import ArtikkelBibelkalkulator from '@/pages/support-articles/ArtikkelBibelkalkulator';
+import ArtikkelZoom from '@/pages/support-articles/ArtikkelZoom';
+import ArtikkelVeiledning from '@/pages/support-articles/ArtikkelVeiledning';
+import ArtikkelTjenestegaver from '@/pages/support-articles/ArtikkelTjenestegaver';
 
 export default function App() {
   const { toastMessage } = useApp();
