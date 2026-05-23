@@ -1559,6 +1559,24 @@ export const AppProvider = ({ children }) => {
     showToast(`Veiledningsmelding sendt til ${studentName}!`);
   };
 
+  // Submit support ticket to Firestore
+  const submitSupportTicket = async (ticketData) => {
+    try {
+      const ticketRef = doc(collection(db, "support_tickets"));
+      const newTicket = {
+        id: ticketRef.id,
+        createdAt: new Date().toISOString(),
+        status: 'open',
+        ...ticketData
+      };
+      await setDoc(ticketRef, newTicket);
+      return true;
+    } catch (e) {
+      console.error("Klarte ikke lagre support ticket i Firestore:", e);
+      throw e;
+    }
+  };
+
   const submitAssignment = async (assignmentId, submission) => {
     const newActivity = {
       ...assignmentActivity,
@@ -1698,6 +1716,7 @@ export const AppProvider = ({ children }) => {
       reviewModuleApproval,
       sendSupportMessage,
       sendAssistantMessage,
+      submitSupportTicket,
       showToast,
       cmsContent,
       updateCmsContent,

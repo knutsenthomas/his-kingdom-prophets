@@ -7,7 +7,7 @@ import logo from '@/assets/logo.png';
 
 export default function ContactSupportPage() {
   const navigate = useNavigate();
-  const { user, showToast, language, toggleLanguage } = useApp();
+  const { user, showToast, language, toggleLanguage, submitSupportTicket } = useApp();
 
   const isEn = language === 'en';
 
@@ -21,7 +21,7 @@ export default function ContactSupportPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.message.trim() || !form.subject.trim()) {
       showToast(isEn ? 'Please fill out all fields.' : 'Vennligst fyll ut alle feltene.');
@@ -29,11 +29,22 @@ export default function ContactSupportPage() {
     }
     
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      await submitSupportTicket({
+        name: form.name,
+        email: form.email,
+        subject: form.subject,
+        message: form.message,
+        source: 'contact_page'
+      });
       showToast(isEn ? 'Support ticket created successfully!' : 'Støttehenvendelse opprettet!');
       setSuccess(true);
+    } catch (err) {
+      showToast(isEn ? 'Failed to submit ticket. Please try again.' : 'Klarte ikke å sende henvendelse. Vennligst prøv igjen.');
+      console.error(err);
+    } finally {
       setIsSubmitting(false);
-    }, 1200);
+    }
   };
 
   return (

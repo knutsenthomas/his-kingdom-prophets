@@ -89,7 +89,7 @@ const FAQS = [
 
 export default function SupportCenter() {
   const navigate = useNavigate();
-  const { user, showToast } = useApp();
+  const { user, showToast, submitSupportTicket } = useApp();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCat, setSelectedCat] = useState('all');
@@ -99,18 +99,29 @@ export default function SupportCenter() {
   const [contactForm, setContactForm] = useState({ name: user?.name || '', email: user?.email || '', msg: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleContactSubmit = (e) => {
+  const handleContactSubmit = async (e) => {
     e.preventDefault();
     if (!contactForm.msg.trim()) {
       showToast('Vennligst skriv en melding før du sender.');
       return;
     }
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      await submitSupportTicket({
+        name: contactForm.name,
+        email: contactForm.email,
+        subject: 'Hjelpesenter forespørsel',
+        message: contactForm.msg,
+        source: 'support_center'
+      });
       showToast('Hjelpeforespørsel sendt! Vi kontakter deg på e-post innen 24 timer.');
       setContactForm(prev => ({ ...prev, msg: '' }));
+    } catch (err) {
+      showToast('Klarte ikke å sende henvendelsen. Vennligst prøv igjen.');
+      console.error(err);
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   const filteredArticles = ARTICLES.filter(art => {
