@@ -165,7 +165,21 @@ export default function AdminPortal() {
         const snapshot = await getDocs(collection(db, "system_configs"));
         const permDoc = snapshot.docs.find(d => d.id === 'permissions');
         if (permDoc) {
-          setPermissionsMatrix(permDoc.data());
+          const data = permDoc.data();
+          const merged = { ...DEFAULT_PERMISSIONS };
+          Object.keys(DEFAULT_PERMISSIONS).forEach(role => {
+            merged[role] = {
+              ...DEFAULT_PERMISSIONS[role],
+              ...(data[role] || {})
+            };
+            Object.keys(DEFAULT_PERMISSIONS[role]).forEach(group => {
+              merged[role][group] = {
+                ...DEFAULT_PERMISSIONS[role][group],
+                ...(data[role]?.[group] || {})
+              };
+            });
+          });
+          setPermissionsMatrix(merged);
         } else {
           await setDoc(doc(db, "system_configs", "permissions"), DEFAULT_PERMISSIONS);
           setPermissionsMatrix(DEFAULT_PERMISSIONS);
@@ -306,23 +320,31 @@ export default function AdminPortal() {
   };
 
   const togglePermission = (role, group, action) => {
-    setPermissionsMatrix(prev => ({
-      ...prev,
-      [role]: {
-        ...prev[role],
-        [group]: {
-          ...prev[role][group],
-          [action]: !prev[role][group][action]
+    setPermissionsMatrix(prev => {
+      const prevRole = prev?.[role] || DEFAULT_PERMISSIONS[role] || {};
+      const prevGroup = prevRole?.[group] || DEFAULT_PERMISSIONS[role]?.[group] || {};
+      return {
+        ...prev,
+        [role]: {
+          ...prevRole,
+          [group]: {
+            ...prevGroup,
+            [action]: !prevGroup[action]
+          }
         }
-      }
-    }));
+      };
+    });
   };
 
   // --- FILTERS & PAGINATION LOGIC ---
-  const filteredUsers = usersList.filter(u => {
-    const matchesSearch = u.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          u.uid.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredUsers = (usersList || []).filter(u => {
+    if (!u) return false;
+    const name = u.name || '';
+    const email = u.email || '';
+    const uid = u.uid || '';
+    const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          uid.toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesRole = roleFilter === 'ALL' || u.role === roleFilter;
     const matchesStatus = statusFilter === 'ALL' || u.status === statusFilter;
@@ -334,6 +356,9 @@ export default function AdminPortal() {
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.max(1, Math.ceil(filteredUsers.length / usersPerPage));
+
+  const rolePermissions = permissionsMatrix?.[selectedRole] || DEFAULT_PERMISSIONS[selectedRole] || {};
+  const groupPermissions = rolePermissions?.[activePermissionGroup] || DEFAULT_PERMISSIONS[selectedRole]?.[activePermissionGroup] || {};
 
   return (
     <div className="min-h-screen bg-[#f6fafe] p-4 sm:p-8 max-w-[1440px] mx-auto text-[#171c1f]">
@@ -390,19 +415,19 @@ export default function AdminPortal() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-white border border-[#c1c7ce]/40 p-5 rounded-2xl shadow-sm">
                 <p className="text-xs text-[#72787e] font-bold uppercase tracking-wider">Totalt antall brukere</p>
-                <p className="text-3xl font-serif font-bold text-[#00324b] mt-2">{usersList.length}</p>
+                <p className="text-3xl font-serif font-bold text-[#00324b] mt-2">{(usersList || []).length}</p>
               </div>
               <div className="bg-white border border-[#c1c7ce]/40 p-5 rounded-2xl shadow-sm">
                 <p className="text-xs text-[#72787e] font-bold uppercase tracking-wider">Studenter</p>
-                <p className="text-3xl font-serif font-bold text-[#1b4965] mt-2">{usersList.filter(u=>u.role==='student').length}</p>
+                <p className="text-3xl font-serif font-bold text-[#1b4965] mt-2">{(usersList || []).filter(u=>u?.role==='student').length}</p>
               </div>
               <div className="bg-white border border-[#c1c7ce]/40 p-5 rounded-2xl shadow-sm">
                 <p className="text-xs text-[#72787e] font-bold uppercase tracking-wider">Mentorer / Lærere</p>
-                <p className="text-3xl font-serif font-bold text-[#46617b] mt-2">{usersList.filter(u=>u.role==='teacher').length}</p>
+                <p className="text-3xl font-serif font-bold text-[#46617b] mt-2">{(usersList || []).filter(u=>u?.role==='teacher').length}</p>
               </div>
               <div className="bg-white border border-[#c1c7ce]/40 p-5 rounded-2xl shadow-sm">
                 <p className="text-xs text-[#72787e] font-bold uppercase tracking-wider">Administratorer</p>
-                <p className="text-3xl font-serif font-bold text-[#001e2f] mt-2">{usersList.filter(u=>u.role==='admin' || u.role==='superadmin').length}</p>
+                <p className="text-3xl font-serif font-bold text-[#001e2f] mt-2">{(usersList || []).filter(u=>u?.role==='admin' || u?.role==='superadmin').length}</p>
               </div>
             </div>
 
@@ -511,7 +536,7 @@ export default function AdminPortal() {
                                 />
                               ) : (
                                 <div className="w-10 h-10 rounded-full bg-[#1b4965]/10 flex items-center justify-center font-bold text-[#1b4965] text-xs shadow-inner">
-                                  {userItem.name.split(' ').map(n=>n[0]).join('').slice(0, 2).toUpperCase()}
+                                  {(userItem.name || '').split(' ').map(n=>n[0] || '').join('').slice(0, 2).toUpperCase()}
                                 </div>
                               )}
                               <div>
@@ -840,20 +865,23 @@ export default function AdminPortal() {
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input 
                           type="checkbox" 
-                          checked={Object.values(permissionsMatrix[selectedRole][activePermissionGroup]).every(v=>v)}
+                          checked={Object.values(groupPermissions).every(v=>v)}
                           onChange={() => {
-                            const currentVal = Object.values(permissionsMatrix[selectedRole][activePermissionGroup]).every(v=>v);
+                            const currentVal = Object.values(groupPermissions).every(v=>v);
                             const updatedGroup = {};
-                            Object.keys(permissionsMatrix[selectedRole][activePermissionGroup]).forEach(k => {
+                            Object.keys(groupPermissions).forEach(k => {
                               updatedGroup[k] = !currentVal;
                             });
-                            setPermissionsMatrix(prev => ({
-                              ...prev,
-                              [selectedRole]: {
-                                ...prev[selectedRole],
-                                [activePermissionGroup]: updatedGroup
-                              }
-                            }));
+                            setPermissionsMatrix(prev => {
+                              const prevRole = prev?.[selectedRole] || DEFAULT_PERMISSIONS[selectedRole] || {};
+                              return {
+                                ...prev,
+                                [selectedRole]: {
+                                  ...prevRole,
+                                  [activePermissionGroup]: updatedGroup
+                                }
+                              };
+                            });
                           }}
                           className="sr-only peer"
                         />
@@ -864,7 +892,7 @@ export default function AdminPortal() {
 
                   {/* Checklist */}
                   <div className="space-y-4">
-                    {Object.keys(permissionsMatrix[selectedRole][activePermissionGroup]).map(capKey => {
+                    {Object.keys(groupPermissions).map(capKey => {
                       let title = "";
                       let description = "";
                       let isHighRisk = false;
@@ -920,7 +948,7 @@ export default function AdminPortal() {
                           <label className="relative inline-flex items-center cursor-pointer mt-1 shrink-0">
                             <input 
                               type="checkbox"
-                              checked={permissionsMatrix[selectedRole][activePermissionGroup][capKey] || false}
+                              checked={groupPermissions[capKey] || false}
                               onChange={() => togglePermission(selectedRole, activePermissionGroup, capKey)}
                               className="sr-only peer"
                             />
