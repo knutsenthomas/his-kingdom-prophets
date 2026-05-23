@@ -244,7 +244,7 @@ export default function LoginPage() {
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#72787e]" />
                     <input
                       type="email"
-                      placeholder="navn@hiskingdomprophets.com"
+                      placeholder="knutsenthomas@gmail.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
@@ -319,7 +319,7 @@ export default function LoginPage() {
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#72787e]" />
                     <input
                       type="email"
-                      placeholder="navn@hiskingdomprophets.com"
+                      placeholder="knutsenthomas@gmail.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
@@ -455,57 +455,7 @@ export default function LoginPage() {
           )}
         </AnimatePresence>
 
-        {/* Developer Sandbox / Quick Logins for Testing */}
-        <div className="mt-8 pt-6 border-t border-[#c1c7ce]/40">
-          <details className="group cursor-pointer select-none">
-            <summary className="flex items-center justify-between text-xs font-bold text-[#46617b] uppercase tracking-wider hover:text-[#00324b] transition-colors">
-              <span>Hurtigpålogging (Demo / Utvikling)</span>
-              <span className="transition-transform group-open:rotate-180">▼</span>
-            </summary>
-            
-            <motion.div 
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              className="grid grid-cols-2 gap-2 mt-4 cursor-default"
-            >
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('student@hiskingdomprophets.com', 'student')}
-                className="flex items-center justify-between px-3 py-2 bg-[#eaeef2] hover:bg-[#cee5ff]/30 text-[#00324b] text-xs rounded-xl font-bold transition-all border border-transparent hover:border-[#c1c7ce]"
-              >
-                <span>Elev</span>
-                <GraduationCap className="w-3.5 h-3.5 text-[#46617b]" />
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('david@hiskingdomprophets.com', 'teacher')}
-                className="flex items-center justify-between px-3 py-2 bg-[#eaeef2] hover:bg-[#cee5ff]/30 text-[#00324b] text-xs rounded-xl font-bold transition-all border border-transparent hover:border-[#c1c7ce]"
-              >
-                <span>Mentor</span>
-                <Users className="w-3.5 h-3.5 text-[#46617b]" />
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('siri@hiskingdomprophets.com', 'admin')}
-                className="flex items-center justify-between px-3 py-2 bg-[#eaeef2] hover:bg-[#cee5ff]/30 text-[#00324b] text-xs rounded-xl font-bold transition-all border border-transparent hover:border-[#c1c7ce]"
-              >
-                <span>Administrator</span>
-                <Shield className="w-3.5 h-3.5 text-[#46617b]" />
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('superadmin@hiskingdomprophets.com', 'superadmin')}
-                className="flex items-center justify-between px-3 py-2 bg-[#eaeef2] hover:bg-[#cee5ff]/30 text-[#00324b] text-xs rounded-xl font-bold transition-all border border-transparent hover:border-[#c1c7ce]"
-              >
-                <span>Super Admin</span>
-                <ShieldAlert className="w-3.5 h-3.5 text-[#46617b]" />
-              </button>
-            </motion.div>
-          </details>
-        </div>
+
 
       </motion.div>
     </div>
