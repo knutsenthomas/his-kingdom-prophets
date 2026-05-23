@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
@@ -6,22 +6,58 @@ import { School, Briefcase, Users, CheckCircle, ArrowRight } from 'lucide-react'
 
 export default function CompleteProfilePage() {
   const navigate = useNavigate();
-  const { user, showToast } = useApp();
+  const { user, updateUserProfile, showToast } = useApp();
   const [institution, setInstitution] = useState('');
   const [headline, setHeadline] = useState('');
   const [avatar, setAvatar] = useState(user?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120');
 
-  const handleContinue = (e) => {
+  // Navigation Guard: Redirect administrators, teachers or already onboarded students
+  useEffect(() => {
+    if (user && user.email) {
+      const email = user.email.toLowerCase();
+      if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(email) || user.role === 'superadmin') {
+        navigate('/admin/portal');
+      } else if (user.role === 'teacher' || email.includes('teacher') || email.includes('david')) {
+        navigate('/teacher/dashboard');
+      } else if (user.role === 'admin' || email.includes('admin') || email.includes('siri')) {
+        navigate('/admin/cms');
+      } else if (user.onboardingCompleted) {
+        navigate('/student/dashboard');
+      }
+    }
+  }, [user, navigate]);
+
+  const handleContinue = async (e) => {
     e.preventDefault();
     if (!institution || !headline) {
       showToast("Vennligst fyll ut alle feltene for å fullføre profilen.");
       return;
     }
+    try {
+      if (updateUserProfile) {
+        await updateUserProfile({
+          institution,
+          headline,
+          onboardingCompleted: true
+        });
+      }
+    } catch (err) {
+      console.error("Feil ved lagring av profilinfo:", err);
+    }
     showToast("Profilen din har blitt oppdatert!");
     navigate('/onboarding-welcome');
   };
 
-  const handleSkip = () => {
+  const handleSkip = async () => {
+    try {
+      if (updateUserProfile) {
+        await updateUserProfile({
+          onboardingCompleted: true
+        });
+      }
+    } catch (err) {
+      console.error("Feil ved skipping av profilinfo:", err);
+    }
     navigate('/onboarding-welcome');
   };
 

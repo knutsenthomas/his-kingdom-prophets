@@ -26,7 +26,7 @@ export default function LoginPage() {
   const [name, setName] = useState('');
   const [selectedRole, setSelectedRole] = useState('student'); // 'student' | 'teacher' | 'admin' | 'superadmin'
 
-  const handleAuthSuccess = (emailAddress, role) => {
+  const handleAuthSuccess = (emailAddress, role, onboardingCompleted) => {
     const checkEmail = emailAddress ? emailAddress.toLowerCase() : '';
     
     if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(checkEmail)) {
@@ -43,14 +43,18 @@ export default function LoginPage() {
     } else if (checkRole === 'admin' || checkEmail.includes('admin') || checkEmail.includes('siri')) {
       navigate('/admin/cms');
     } else {
-      navigate('/interests');
+      if (onboardingCompleted) {
+        navigate('/student/dashboard');
+      } else {
+        navigate('/interests');
+      }
     }
   };
 
   // Reactive redirect observer - triggers immediately once user context changes (Google, email, Apple)
   useEffect(() => {
     if (user && user.email) {
-      handleAuthSuccess(user.email, user.role);
+      handleAuthSuccess(user.email, user.role, user.onboardingCompleted);
     }
   }, [user]);
 

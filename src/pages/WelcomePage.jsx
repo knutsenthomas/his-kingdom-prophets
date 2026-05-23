@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
@@ -8,6 +8,20 @@ import CmsText from '@/components/CmsText';
 export default function WelcomePage() {
   const navigate = useNavigate();
   const { user, cmsContent } = useApp();
+
+  // Navigation Guard: Redirect administrators, teachers or superadmins
+  useEffect(() => {
+    if (user && user.email) {
+      const email = user.email.toLowerCase();
+      if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(email) || user.role === 'superadmin') {
+        navigate('/admin/portal');
+      } else if (user.role === 'teacher' || email.includes('teacher') || email.includes('david')) {
+        navigate('/teacher/dashboard');
+      } else if (user.role === 'admin' || email.includes('admin') || email.includes('siri')) {
+        navigate('/admin/cms');
+      }
+    }
+  }, [user, navigate]);
 
   const handleDashboardRedirect = () => {
     navigate('/student/dashboard');
