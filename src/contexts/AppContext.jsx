@@ -1763,17 +1763,131 @@ export const AppProvider = ({ children }) => {
 
     // Auto-respond simulating the HKM Assistent with customized answers based on keyword
     setTimeout(() => {
-      let replyText = "Det høres spennende ut! Som din HKM-assistent kan jeg hjelpe deg med å strukturere din profetiske studieplan, sette opp varsler for zoom-forelesninger, eller forklare kjernebegreper i bibeltolking, sjelesorg eller profetisk tjeneste.";
+      let replyText = "";
+      const lower = text.toLowerCase().trim();
+
+      // 1. Navigation / Finding things
+      if (lower.includes("finn") || lower.includes("hvor er") || lower.includes("naviger") || lower.includes("meny") || lower.includes("side") || lower.includes("portal") || lower.includes("link") || lower.includes("lenke")) {
+        if (lower.includes("oppgave") || lower.includes("innlevering") || lower.includes("eksamen")) {
+          replyText = "Du finner dine oppgaver og innleveringer på siden **Oppgaver**. Klikk på 'Mine gjøremål & oppgaver' i venstremenyen, eller gå direkte til: /student/assignments";
+        } else if (lower.includes("kurs") || lower.includes("studie") || lower.includes("leksjon") || lower.includes("klasse")) {
+          replyText = "Dine aktive kurs og leksjonsplaner ligger på **Elev Dashboard** eller i **Biblioteket**. Du finner dem i menyen til venstre under 'Oversikt' (/student/dashboard) og 'Bibelressurser' (/student/library).";
+        } else if (lower.includes("profil") || lower.includes("innstilling") || lower.includes("bilde") || lower.includes("konto")) {
+          replyText = "Du kan redigere din profil, kontodetaljer, mobilnummer og laste opp profilbilde under **Min profil** (for elever: /student/profile, for mentorer: /teacher/profile).";
+        } else if (lower.includes("video") || lower.includes("lyd") || lower.includes("opptak")) {
+          replyText = "Plattformens video- og lydopplastinger ligger i **Mediebiblioteket**. Du finner dette under 'Mediebibliotek' i venstremenyen (/teacher/media-library eller i biblioteket for elever).";
+        } else if (lower.includes("partner") || lower.includes("affiliate") || lower.includes("verve")) {
+          replyText = "Informasjon om vårt partner- og verveprogram finner du i **Partnerportalen** under 'Partnerportal' i venstremenyen (/student/partner eller /teacher/partner).";
+        } else if (lower.includes("karakter") || lower.includes("evaluering") || lower.includes("kalkulator")) {
+          replyText = "Vurderingsverktøy og karakteroversikt ligger i **Bibelkalkulatoren** under 'Bibelkalkulator' i venstremenyen (/teacher/grading).";
+        } else if (lower.includes("hjelp") || lower.includes("support") || lower.includes("kundeservice") || lower.includes("kontakt")) {
+          replyText = "Hjelpesenteret og support-billetter ligger i **Hjelpesenteret** under 'Hjelpesenter' i venstremenyen (/student/support eller /teacher/support). Du kan også bruke den offentlige support-siden (/support).";
+        } else {
+          replyText = "Jeg kan hjelpe deg med å finne frem! Her er hurtiglenkene til hoveddelene på siden:\n\n" +
+            "📖 **Kurs & Leksjoner:** Gå til 'Oversikt' i menyen (/student/dashboard)\n" +
+            "📝 **Oppgaver:** Gå til 'Mine gjøremål & oppgaver' (/student/assignments)\n" +
+            "👤 **Lærerprofil:** Gå til 'Min lærerprofil' (/teacher/profile)\n" +
+            "🛠️ **Hjelpesenter & Support:** Gå til 'Hjelpesenter' (/student/support)\n" +
+            "🤝 **Partnerportal:** Gå til 'Partnerportal' (/student/partner)";
+        }
+      }
       
-      const lower = text.toLowerCase();
-      if (lower.includes("profet") || lower.includes("syn") || lower.includes("stemme") || lower.includes("prop")) {
-        replyText = "Vår profetiske utrustningslinje ledes av Apostel David Hansen. Du jobber for øyeblikket med PROP 101. Ønsker du at jeg henter fram leksjonsmaterialet om å høre Guds stemme, eller vil du se over de profetiske retningslinjene?";
-      } else if (lower.includes("bibel") || lower.includes("hermeneutikk") || lower.includes("skrift") || lower.includes("tolkning")) {
-        replyText = "Avansert Hermeneutikk og Tolkning (BIBLE 301) ledes av Profet Jon Arild. Du har god fremgang her! Modulen om eskatologi og endetidens profetier er spesielt populær. Skal jeg åpne leseplanen din?";
-      } else if (lower.includes("sjelesorg") || lower.includes("ledelse") || lower.includes("pastor") || lower.includes("min")) {
-        replyText = "Sjelesorg og Menighetsledelse (MIN 201) ledes av Pastor Siri Knutsen. Dette kurset gir dyp innsikt i indre helbredelse og åndelig veiledning. Trenger du en disposisjon eller mal for sjelesorgs-oppgaven din?";
-      } else if (lower.includes("hjelp") || lower.includes("admin") || lower.includes("kontakt")) {
-        replyText = "Dersom du har administrative spørsmål eller trenger spesiell oppfølging, kan jeg sette deg i kontakt med Apostel David Hansen eller Pastor Siri Knutsen. Ønsker du at jeg oppretter en henvendelse?";
+      // 2. Contacting Teachers / Mentors
+      else if (lower.includes("lærer") || lower.includes("mentor") || lower.includes("veileder") || lower.includes("david") || lower.includes("arild") || lower.includes("siri") || lower.includes("thomas")) {
+        let mentorInfo = "";
+        if (lower.includes("david") || lower.includes("hansen") || lower.includes("profetisk")) {
+          mentorInfo = "**Apostel David Hansen** leder den *Profetiske utrustningslinjen* (PROP 101). Han har kontortid tirsdager kl. 12:00-15:00. Du kan kontakte ham eller booke en videosamtale via Zoom-lenken på hans profil.";
+        } else if (lower.includes("arild") || lower.includes("jon") || lower.includes("hermeneutikk") || lower.includes("tolkning")) {
+          mentorInfo = "**Profet Jon Arild** er faglærer for *Avansert Hermeneutikk og Tolkning* (BIBLE 301). Han veileder i grundig bibeltolkning, typologier og endetidens profetier.";
+        } else if (lower.includes("siri") || lower.includes("pastor") || lower.includes("sjelesorg")) {
+          mentorInfo = "**Pastor Siri Knutsen** leder *Sjelesorg og Menighetsledelse* (MIN 201). Hun er tilgjengelig for samtaler om indre helbredelse, disippelskap og praktisk menighetsarbeid.";
+        } else if (lower.includes("thomas") || lower.includes("knutsen")) {
+          mentorInfo = "**Thomas Knutsen** er innholdsansvarlig, koordinator og systemeier. Han bistår med tekniske spørsmål, koordinering av studieløp og plattformhåndtering.";
+        } else {
+          mentorInfo = "Våre tilgjengelige mentorer og lærerteam:\n\n" +
+            "• **Apostel David Hansen** (Faglig leder – Profetisk tjeneste)\n" +
+            "• **Profet Jon Arild** (Faglærer – Hermeneutikk & Lære)\n" +
+            "• **Pastor Siri Knutsen** (Pastoral omsorg – Sjelesorg & Ledelse)\n" +
+            "• **Thomas Knutsen** (Koordinator & Systemeier)\n\n" +
+            "Du kan kontakte din tildelte mentor direkte fra din profil, sende en intern melding, eller møte dem digitalt i deres oppgitte kontortid.";
+        }
+        replyText = mentorInfo + "\n\nØnsker du at jeg oppretter en direkte kontaktforespørsel eller sender en beskjed til en av dem på dine vegne?";
+      }
+
+      // 3. Support / Help
+      else if (lower.includes("support") || lower.includes("hjelp") || lower.includes("feil") || lower.includes("krasj") || lower.includes("ticket") || lower.includes("billett") || lower.includes("kundeservice")) {
+        replyText = "Trenger du hjelp med plattformen? Du har to enkle måter å få support på:\n\n" +
+          "1. Gå til **Hjelpesenteret** (/student/support eller /teacher/support) for å lese veiledninger om pålogging, Zoom, og oppgaver.\n" +
+          "2. Send inn en **support-billett** direkte fra Hjelpesenteret, så vil Thomas Knutsen eller vårt tekniske team hjelpe deg innen 24 timer.\n\n" +
+          "Hvis du opplever en akutt feil, kan du beskrive den for meg her, så skal jeg prøve å feilsøke den umiddelbart!";
+      }
+
+      // 4. Bible Verses (with verification disclaimer)
+      else if (lower.includes("vers") || lower.includes("kapittel") || lower.includes("skriftsted") || lower.includes("sitat") || 
+               lower.includes("johannes") || lower.includes("romerne") || lower.includes("salme") || lower.includes("efeserne") || 
+               lower.includes("matteus") || lower.includes("åpenbaring") || lower.includes("korinter") || lower.includes("bibelvers")) {
+        
+        let verseText = "";
+        if (lower.includes("johannes 3") || lower.includes("joh 3") || lower.includes("så har gud elsket")) {
+          verseText = "*\"For så har Gud elsket verden at han ga sin Sønn, den enbårne, for at hver den som tror på ham, ikke skal fortapes, men ha evig liv.\"* — **Johannes 3:16**";
+        } else if (lower.includes("salme 23") || lower.includes("herren er min hyrde")) {
+          verseText = "*\"Herren er min hyrde, jeg mangler ikke noe. Han lar meg ligge i grønne enger, han leder meg til vann der jeg finner hvile.\"* — **Salme 23:1-2**";
+        } else if (lower.includes("romerne 8") || lower.includes("gud samvirker") || lower.includes("rom 8")) {
+          verseText = "*\"Vi vet at alle ting samvirker til det gode for dem som elsker Gud, dem som etter hans rådslutning er kalt.\"* — **Romerne 8:28**";
+        } else if (lower.includes("efeserne 2") || lower.includes("av nåde") || lower.includes("efe 2")) {
+          verseText = "*\"For av nåde er dere frelst, ved tro. Og dette er ikke av dere selv, det er Guds gave, ikke av gjerninger, for at ikke noen skal rose seg.\"* — **Efeserne 2:8-9**";
+        } else if (lower.includes("åpenbaring") || lower.includes("åp") || lower.includes("se, jeg står")) {
+          verseText = "*\"Se, jeg står for døren og banker. Om noen hører min røst og åpner døren, da vil jeg gå inn til ham og holde måltid med ham, og han med meg.\"* — **Johannes' åpenbaring 3:20**";
+        } else if (lower.includes("høre") || lower.includes("saue") || lower.includes("røst")) {
+          verseText = "*\"Mine får hører min røst, og jeg kjenner dem, og de følger meg.\"* — **Johannes 10:27**";
+        } else {
+          verseText = "*\"Ditt ord er en lykt for min fot og et lys for min sti.\"* — **Salme 119:105**\n\n" +
+            "Her er også et viktig kjernevers for profetisk utrustning:\n" +
+            "*\"Men den som taler profetisk, taler for mennesker til oppbyggelse, formaning og trøst.\"* — **1. Korinterbrev 14:3**";
+        }
+
+        replyText = "Her er et vakkert og styrkende skriftsted til deg:\n\n" + verseText + "\n\n" +
+          "⚠️ **Viktig påminnelse:** *Husk å alltid slå opp i din egen Bibel og undersøke skriftene selv for å bekrefte konteksten og hente full åpenbaring!*";
+      }
+
+      // 5. Biblical Topics / Subjects
+      else if (lower.includes("profetisk") || lower.includes("profeti") || lower.includes("høre gud") || lower.includes("syn") || lower.includes("drøm") || lower.includes("åpenbaring")) {
+        replyText = "### 🕊️ Profetisk tjeneste & Å høre Guds stemme\n\n" +
+          "Å høre Guds stemme handler om å utvikle en sensitiv ånd i bønn og fellesskap med Den Hellige Ånd. Gud kan tale gjennom:\n" +
+          "1. **Den indre stemmen:** Et mildt inntrykk, tanke eller impuls i din ånd.\n" +
+          "2. **Drømmer og syner:** Billedlige åpenbaringer som krever åndelig tyding.\n" +
+          "3. **Skriften:** Guds skrevne ord er det ultimate filteret.\n\n" +
+          "⚠️ *All profeti og åpenbaring må prøves! Den må oppbygge, formane og trøste (1. Kor 14:3), og den må være i 100% samsvar med Guds skrevne Ord. Vi lærer mer om dette i PROP 101 med Apostel David Hansen.*";
+      } else if (lower.includes("hermeneutikk") || lower.includes("tolkning") || lower.includes("eksegese") || lower.includes("forstå bibelen")) {
+        replyText = "### 📖 Avansert Hermeneutikk (Bibelhermeneutikk)\n\n" +
+          "Hermeneutikk er læren om hvordan vi tolker bibelske tekster på en sunn måte. I BIBLE 301 med Profet Jon Arild fokuserer vi på **historisk-grammatisk eksegese**:\n\n" +
+          "• **Kontekst:** Hvem skrev teksten, til hvem, og hvorfor?\n" +
+          "• **Sjanger:** Er det poesi (Salmene), historie (Kongebøkene), profeti eller brev?\n" +
+          "• **Typologi:** Hvordan peker gammeltestamentlige skyggebilder (f.eks. tempelet eller ofringene) frem mot Kristus?\n\n" +
+          "Målet er å finne forfatterens opprinnelige intensjon før vi gjør en personlig anvendelse i dag.";
+      } else if (lower.includes("sjelesorg") || lower.includes("indre helbredelse") || lower.includes("pastoral") || lower.includes("sorg")) {
+        replyText = "### 🩹 Sjelesorg & Omsorg\n\n" +
+          "Sjelesorg betyr 'omsorg for sjelen'. I MIN 201 med Pastor Siri Knutsen lærer vi om hvordan vi kan betjene mennesker som bærer på dype emosjonelle eller åndelige sår:\n\n" +
+          "• **Lytting:** Gi rom for menneskets unike historie og smerte.\n" +
+          "• **Den Hellige Ånds ledelse:** La Ånden avdekke roten til sårene.\n" +
+          "• **Indre helbredelse:** Bringer Jesu kors, tilgivelse og sannhet inn i de smertefulle minnene.\n\n" +
+          "Sjelesorg utføres alltid under streng taushetsplikt og med dyp kjærlighet.";
+      } else if (lower.includes("eskatologi") || lower.includes("endetid") || lower.includes("tusenårsriket") || lower.includes("bortrykkelse")) {
+        replyText = "### 🎺 Eskatologi (Læren om de siste ting)\n\n" +
+          "Eskatologi handler om Guds frelsesplan for historiens fullendelse, Jesu gjenkomst og gjenopprettelsen av alle ting. I BIBLE 301 studerer vi:\n\n" +
+          "• **Paktsperspektivet:** Guds trofasthet mot sine løfter.\n" +
+          "• **Apokalyptisk symbolspråk:** Hvordan tolke symboler, tall og syner i Johannes' åpenbaring og Daniels bok i lys av GT.\n" +
+          "• **Fokus:** Bibelsk eskatologi skal aldri skape frykt, men gi et levende og salig håp om Kristi endelige seier!";
+      }
+
+      // Default Fallback
+      else {
+        replyText = "Hei! Som din **HKM Assistent** hjelper jeg deg gjerne med:\n\n" +
+          "🧭 **Navigasjon:** Skriv f.eks. *'Hvor finner jeg oppgavene mine?'* eller *'Vis meg lenken til profilbilde'*\n" +
+          "📞 **Kontakt:** Skriv *'Kontakt David'* eller *'Kontakt Siri'* for å få info om kontortid, zoom og fagområde\n" +
+          "🛠️ **Support:** Skriv *'Support'* for hjelp med plattformen eller opprettelse av billetter\n" +
+          "🕊️ **Bibelske emner:** Skriv *'profetisk'*, *'hermeneutikk'*, *'sjelesorg'* eller *'eskatologi'* for en teologisk forklaring\n" +
+          "📖 **Bibelvers:** Skriv et bibelboknavn eller *'vis meg et vers'*, så henter jeg opp et oppmuntrende skriftsted!";
       }
 
       const responseMsg = {
