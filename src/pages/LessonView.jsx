@@ -121,6 +121,22 @@ const findBibleBook = (bookStr) => {
   return found;
 };
 
+
+const migrateMarkdownToHtml = (text) => {
+  if (!text) return "";
+  // If it already contains HTML tags (like <strong>, <em>, <blockquote, <p, etc.), assume it is already HTML
+  if (/<[a-z][\s\S]*>/i.test(text)) return text;
+  
+  // Basic markdown to HTML conversion
+  let html = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  html = html.replace(/^&gt;\s+(.*?)$/gm, '<blockquote style="border-left: 4px solid #1B4965; padding-left: 1rem; margin: 0.75rem 0; font-style: italic; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; padding-top: 0.375rem; padding-bottom: 0.375rem;">$1</blockquote>');
+  html = html.replace(/^-\s+(.*?)$/gm, '<li style="margin-left: 1.25rem; list-style-type: disc; margin-top: 0.25rem; margin-bottom: 0.25rem;">$1</li>');
+  html = html.replace(/\n/g, '<br />');
+  return html;
+};
+
 export default function LessonView() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -145,6 +161,7 @@ export default function LessonView() {
   const [selectedBibleVerses, setSelectedBibleVerses] = useState([]);
   
   const textareaRef = useRef(null);
+  const editorRef = useRef(null);
   const saveTimeoutRef = useRef(null);
   
   // Determine selected course from location state or default to prop101
@@ -207,7 +224,8 @@ export default function LessonView() {
       
       // 1. Load from localStorage for instant display
       const savedNotes = localStorage.getItem(`hkm-notes-${courseId}-${currentModule.id}`) || "";
-      setNotes(savedNotes);
+      const migratedNotes = migrateMarkdownToHtml(savedNotes);
+      setNotes(migratedNotes);
       setActiveTab('write'); // Reset tab
 
       // 2. Fetch from Firestore for cloud sync if user is logged in
@@ -217,9 +235,10 @@ export default function LessonView() {
           const noteSnap = await getDoc(noteDocRef);
           if (noteSnap.exists()) {
             const cloudText = noteSnap.data().text || "";
-            if (cloudText && cloudText !== savedNotes) {
-              setNotes(cloudText);
-              localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, cloudText);
+            const migratedCloud = migrateMarkdownToHtml(cloudText);
+            if (migratedCloud && migratedCloud !== migratedNotes) {
+              setNotes(migratedCloud);
+              localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, migratedCloud);
             }
           }
         } catch (err) {
@@ -361,22 +380,57 @@ export default function LessonView() {
     }
   };
 
-  const insertVerseToNotes = (verse) => {
-    const verseRef = `\n> *"${verse.text.trim()}"* — **${selectedBibleBook.nor} ${verse.chapter}:${verse.verse}** (${selectedBibleTranslation === 'bibelselskap' ? 'N11' : selectedBibleTranslation.toUpperCase()})\n\n`;
-    const textarea = textareaRef.current;
-    if (textarea) {
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
-      const newText = notes.substring(0, start) + verseRef + notes.substring(end);
-      setNotes(newText);
-      localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newText);
-      saveNotesToFirestore(newText);
+  const insertHtmlAtCursor = (html) => {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    editor.focus();
+    
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      
+      if (editor.contains(range.commonAncestorContainer)) {
+        range.deleteContents();
+        const el = document.createElement("div");
+        el.innerHTML = html;
+        const frag = document.createDocumentFragment();
+        let node, lastNode;
+        while ((node = el.firstChild)) {
+          lastNode = frag.appendChild(node);
+        }
+        range.insertNode(frag);
+        
+        if (lastNode) {
+          const newRange = range.cloneRange();
+          newRange.setStartAfter(lastNode);
+          newRange.collapse(true);
+          selection.removeAllRanges();
+          selection.addRange(newRange);
+        }
+      } else {
+        editor.innerHTML += html;
+      }
     } else {
-      const newText = notes + verseRef;
-      setNotes(newText);
-      localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newText);
-      saveNotesToFirestore(newText);
+      editor.innerHTML += html;
     }
+    
+    const newHtml = editor.innerHTML;
+    setNotes(newHtml);
+    localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newHtml);
+    saveNotesToFirestore(newHtml);
+  };
+
+  const insertVerseToNotes = (verse) => {
+    const transName = selectedBibleTranslation === 'bibelselskap' ? 'N11' : selectedBibleTranslation.toUpperCase();
+    const htmlRef = `<blockquote style="border-left: 4px solid #1B4965; padding-left: 1rem; margin: 0.75rem 0; font-style: italic; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; padding-top: 0.375rem; padding-bottom: 0.375rem;">
+      "${verse.text.trim()}"
+    </blockquote>
+    <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; margin-bottom: 0.75rem;">
+      — <b>${selectedBibleBook.nor} ${verse.chapter}:${verse.verse}</b> (${transName})
+    </p><br/>`;
+    
+    insertHtmlAtCursor(htmlRef);
     showToast("Skriftsted limt inn i dine notater!");
     setSelectedBibleVerses([]); // Clear selection when single verse is added
     setSidebarTab('notes');
@@ -405,9 +459,9 @@ export default function LessonView() {
       
     if (targetVerses.length === 0) return;
 
-    // Combine text neatly: "16 For så har Gud... 17 for Gud sendte..."
+    // Combine text neatly
     const combinedText = targetVerses
-      .map(v => `${v.verse} ${v.text.trim()}`)
+      .map(v => `<span style="font-weight: bold; color: #1B4965; margin-right: 0.25rem;">${v.verse}</span>${v.text.trim()}`)
       .join(' ');
 
     // Create the range string: f.eks. "16-17" or "16"
@@ -416,24 +470,15 @@ export default function LessonView() {
       : `${sortedVerseNums[0]}-${sortedVerseNums[sortedVerseNums.length - 1]}`;
 
     const transName = selectedBibleTranslation === 'bibelselskap' ? 'N11' : selectedBibleTranslation.toUpperCase();
-    const verseRef = `\n> *"${combinedText}"* — **${selectedBibleBook.nor} ${selectedBibleChapter}:${verseRange}** (${transName})\n\n`;
+    const htmlRef = `<blockquote style="border-left: 4px solid #1B4965; padding-left: 1rem; margin: 0.75rem 0; font-style: italic; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; padding-top: 0.375rem; padding-bottom: 0.375rem;">
+      "${combinedText}"
+    </blockquote>
+    <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; margin-bottom: 0.75rem;">
+      — <b>${selectedBibleBook.nor} ${selectedBibleChapter}:${verseRange}</b> (${transName})
+    </p><br/>`;
     
-    const textarea = textareaRef.current;
-    if (textarea) {
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
-      const newText = notes.substring(0, start) + verseRef + notes.substring(end);
-      setNotes(newText);
-      localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newText);
-      saveNotesToFirestore(newText);
-    } else {
-      const newText = notes + verseRef;
-      setNotes(newText);
-      localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newText);
-      saveNotesToFirestore(newText);
-    }
-    
-    showToast(`${selectedBibleVerses.length} skriftsted${selectedBibleVerses.length > 1 ? 'er' : ''} limt inn i dine notater!`);
+    insertHtmlAtCursor(htmlRef);
+    showToast(`${selectedBibleVerses.length} skriftsteder limt inn i dine notater!`);
     setSelectedBibleVerses([]); // Clear selection
     setSidebarTab('notes'); // Switch to notes tab
   };
@@ -448,8 +493,7 @@ export default function LessonView() {
     );
   }
 
-  const handleNotesChange = (e) => {
-    const val = e.target.value;
+  const handleContentChange = (val) => {
     setNotes(val);
     setIsSaving(true);
     localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, val);
@@ -460,28 +504,53 @@ export default function LessonView() {
     }, 800);
   };
 
-  const insertFormatting = async (syntax) => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const text = textarea.value;
-    const selected = text.substring(start, end);
-    let replacement = "";
-    if (syntax === 'bold') replacement = `**${selected || 'fet tekst'}**`;
-    else if (syntax === 'italic') replacement = `*${selected || 'kursiv tekst'}*`;
-    else if (syntax === 'list') replacement = `\n- ${selected || 'punkt'}`;
-    else if (syntax === 'quote') replacement = `\n> ${selected || 'sitat'}`;
-    const newText = text.substring(0, start) + replacement + text.substring(end);
-    setNotes(newText);
-    localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newText);
-    setIsSaving(true);
-    await saveNotesToFirestore(newText);
-    setIsSaving(false);
-    setTimeout(() => {
-      textarea.focus();
-      textarea.setSelectionRange(start + replacement.length, start + replacement.length);
-    }, 50);
+  const insertFormatting = (syntax) => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    editor.focus();
+
+    document.execCommand('styleWithCSS', false, false);
+    
+    if (syntax === 'bold') {
+      document.execCommand('bold', false, null);
+    } else if (syntax === 'italic') {
+      document.execCommand('italic', false, null);
+    } else if (syntax === 'list') {
+      document.execCommand('insertUnorderedList', false, null);
+    } else if (syntax === 'quote') {
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        let node = range.commonAncestorContainer;
+        while (node && node !== editor) {
+          if (node.nodeName === 'BLOCKQUOTE') {
+            document.execCommand('formatBlock', false, 'p');
+            return;
+          }
+          node = node.parentNode;
+        }
+      }
+      
+      document.execCommand('formatBlock', false, 'blockquote');
+      
+      setTimeout(() => {
+        const bqs = editor.querySelectorAll('blockquote');
+        bqs.forEach(bq => {
+          bq.style.borderLeft = '4px solid #1B4965';
+          bq.style.paddingLeft = '1rem';
+          bq.style.margin = '0.75rem 0';
+          bq.style.fontStyle = 'italic';
+          bq.style.backgroundColor = '#f8fafc';
+          bq.style.borderTopRightRadius = '0.375rem';
+          bq.style.borderBottomRightRadius = '0.375rem';
+          bq.style.paddingTop = '0.375rem';
+          bq.style.paddingBottom = '0.375rem';
+        });
+      }, 50);
+    }
+    
+    const newHtml = editor.innerHTML;
+    handleContentChange(newHtml);
   };
 
   const sendNoteToAssistant = () => {
@@ -513,11 +582,11 @@ export default function LessonView() {
       showToast("Ingen notater å laste ned!");
       return;
     }
-    const blob = new Blob([notes], { type: 'text/markdown;charset=utf-8;' });
+    const blob = new Blob([notes], { type: 'text/html;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `Notat-${currentModule.title.replace(/\s+/g, '_')}.md`);
+    link.setAttribute('download', `Notat-${currentModule.title.replace(/\s+/g, '_')}.html`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -641,10 +710,26 @@ export default function LessonView() {
                       <div className="flex-grow"></div>
                       <button onClick={clearNotes} className="p-1 min-w-6"><Trash2 size={14} /></button>
                     </div>
-                    <textarea ref={textareaRef} value={notes} onChange={handleNotesChange} className="w-full flex-grow p-3 border outline-none resize-none bg-slate-50" />
+                    <div 
+                      ref={editorRef}
+                      contentEditable
+                      dangerouslySetInnerHTML={{ __html: notes }}
+                      onBlur={(e) => {
+                        const newHtml = e.target.innerHTML;
+                        handleContentChange(newHtml);
+                      }}
+                      onInput={(e) => {
+                        const newHtml = e.target.innerHTML;
+                        handleContentChange(newHtml);
+                      }}
+                      className="w-full flex-grow p-3 border outline-none overflow-y-auto bg-slate-50 rounded-lg min-h-[200px] text-xs font-sans focus:bg-white focus:border-[#1B4965] transition-all"
+                    />
                   </div>
                 ) : (
-                  <div className="w-full flex-grow p-3 border overflow-y-auto" dangerouslySetInnerHTML={{ __html: parseMarkdown(notes) }} />
+                  <div 
+                    className="w-full flex-grow p-3 border overflow-y-auto font-sans text-xs space-y-2 leading-relaxed text-on-surface bg-white rounded-lg min-h-[200px]" 
+                    dangerouslySetInnerHTML={{ __html: notes || '<p class="text-outline italic text-xs py-4 text-center">Ingen notater skrevet ennå... Begynn å skrive i "Skriv" fanen!</p>' }} 
+                  />
                 )}
               </div>
               <div className="flex flex-col gap-2 shrink-0 pt-3 border-t">
