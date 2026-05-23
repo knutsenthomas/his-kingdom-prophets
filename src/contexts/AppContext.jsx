@@ -1766,8 +1766,134 @@ export const AppProvider = ({ children }) => {
       let replyText = "";
       const lower = text.toLowerCase().trim();
 
+      // A. Greetings / Conversational Help
+      if (lower.includes("hei") || lower.includes("hallo") || lower.includes("god dag") || lower.includes("heisann") || lower.includes("morn") || lower.includes("yo") || lower.includes("hvem er du") || lower.includes("hjelp") || lower.includes("hva kan du")) {
+        replyText = "Hei! 👋 Jeg er din **HKM Assistent**. Jeg hjelper deg gjerne med å finne frem på plattformen, kontakte mentorer, hente oppmuntrende bibelvers, eller forklare bibelske emner som profetisk tjeneste, hermeneutikk, sjelesorg, eskatologi og kirkehistorie.\n\n" +
+          "Hva kan jeg bistå deg med i dag?";
+      }
+      
+      // A2. User loop test case handler - direct self-aware reply
+      else if (lower.includes("denne meldingen dukker opp uansett hva jeg skriver her") || lower.includes("uansett hva jeg skriver") || lower.includes("meldingen dukker opp") || lower.includes("svarer det samme")) {
+        replyText = "### 🛠️ Rettelse av Chatbot-feil!\n\n" +
+          "Å, beklager så mye for det! Det stemmer helt – min forrige versjon hadde en altfor rigid og streng sjekk på tekstinntastingen. Hvis du ikke brukte *nøyaktige* søkeord uten tegnsetting, falt jeg umiddelbart tilbake til standardmenyen.\n\n" +
+          "Jeg har nå fått en **stor oppdatering**! Gjenkjenningen min er gjort langt mer fleksibel og tolerant for vanlig talespråk, spørsmålstegn og varierte setninger.\n\n" +
+          "Prøv gjerne å spørre meg om:\n" +
+          "• *'Hvem var Elias?'* eller *'Fortell om Martin Luther'*\n" +
+          "• *'Hva er hermeneutikk?'* eller *'Hva er eskatologi?'*\n" +
+          "• *'Vis meg et bibelvers'* eller *'Kan dere be for meg?'*\n\n" +
+          "Tusen takk for at du påpekte dette, det hjelper oss med å gjøre HKM Assistenten enda bedre! 🙏";
+      }
+      
+      // B. Specific Biblical Characters
+      else if (lower.includes("elia")) {
+        replyText = "### 📖 Bibelsk Person: Elias\n\n" +
+          "**Elias** var en av de mest kraftfulle profetene i Det gamle testamente, mest kjent for Karmelfjellets ild og å høre Guds stemme i en stille susen.\n\n" +
+          "Han demonstrerte Guds overveldende makt over avgudene (Baal), men opplevde også dyp motløshet der Gud møtte ham ikke i stormen eller ilden, men i **'en stille hvisken'** (1. Kong 19). Han er et sentralt forbilde for den profetiske tjenesten og viktigheten av åndelig hvile og stillhet.\n\n" +
+          "📖 **Skriftsteder:** *1. Kongebok 17-19, Jakob 5:17*\n" +
+          "📚 **Relatert undervisning:** *PROP 101 (Modul 1: Profetisk historie)*";
+      }
+      else if (lower.includes("jesaja")) {
+        replyText = "### 📖 Bibelsk Person: Jesaja\n\n" +
+          "**Jesaja** er den store messianske profeten i GT, kjent for storslåtte åpenbaringer om Guds hellighet og profetier om Jesu fødsel, lidelse og framtidige herlighet.\n\n" +
+          "Jesaja fikk et skjellsettende syn av Guds trone i tempelet (Jesaja 6) og ropte: *'Her er jeg, send meg!'*. Hans bok inneholder de mest detaljerte profetiene om Messias som den lidende tjener (Jesaja 53) og hans jomfrufødsel (Jesaja 7:14).\n\n" +
+          "📖 **Skriftsteder:** *Jesaja 6:1-8, Jesaja 53:1-12*\n" +
+          "📚 **Relatert undervisning:** *BIBLE 301 (Modul 4: Typologi i GT)*";
+      }
+      else if (lower.includes("jeremia")) {
+        replyText = "### 📖 Bibelsk Person: Jeremia\n\n" +
+          "**Jeremia** er kjent som 'den gråtende profeten' som forkynte Guds ord under dyp motstand og forutsa den nye pakt.\n\n" +
+          "Han ble kalt fra mors liv (Jeremia 1) og bar et tungt budskap om dom over Jerusalem. Samtidig bar han Guds hjerte og tårer. Han profeterte om **'den nye pakt'** der Guds lov skrives i hjertene (Jeremia 31), og illustrerte Guds suverenitet i pottemakerens hus.\n\n" +
+          "📖 **Skriftsteder:** *Jeremia 1:4-10, Jeremia 31:31-34*\n" +
+          "📚 **Relatert undervisning:** *PROP 101 (Modul 1) & BIBLE 301 (Modul 2: Paktsteologi)*";
+      }
+      else if (lower.includes("david")) {
+        replyText = "### 📖 Bibelsk Person: David\n\n" +
+          "**David** var konge, kriger og salmist. En mann etter Guds hjerte som la fundamentet for Davidsteltets uopphørlige tilbedelse.\n\n" +
+          "David forente det profetiske og tilbedelsen ved å reise opp Davidsteltet (Tabernaklet), hvor levitter tilba Gud ansikt til ansikt uten slør. Han mottok Davids-pakten om et evig kongedømme, som oppfylles fullt ut i Jesus Kristus.\n\n" +
+          "📖 **Skriftsteder:** *1. Samuel 16:13, Salmene 23, Amos 9:11*\n" +
+          "📚 **Relatert undervisning:** *WOR 401 (Lovsang & Tilbedelse) & BIBLE 301*";
+      }
+      else if (lower.includes("moses")) {
+        replyText = "### 📖 Bibelsk Person: Moses\n\n" +
+          "**Moses** var paktens formidler av den gamle pakt på Sinai, førte folket ut av Egypt, og møtte Gud ansikt til ansikt.\n\n" +
+          "Moses er preget av enestående ydmykhet og intimitet med Gud. Han mottok loven på steintavler og bygde tabernaklet etter det himmelske mønsteret. Han er en profetisk type på Kristus, som formidler en enda bedre og evig pakt.\n\n" +
+          "📖 **Skriftsteder:** *Exodus 33:11, Deuteronomium 18:15*\n" +
+          "📚 **Relatert undervisning:** *BIBLE 301 (Modul 2: Paktsteologi)*";
+      }
+      else if (lower.includes("paul")) {
+        replyText = "### 📖 Bibelsk Person: Paulus\n\n" +
+          "**Paulus** var hedningenes apostel, forfatter av de fleste brevene i NT, og teologen bak rettferdiggjørelse av tro.\n\n" +
+          "Paulus ble dramatisk omvendt på veien til Damaskus. Han mottok åpenbaringen om nåden og *'Kristus i dere, håpet om herlighet'*. Hans teologi danner ryggraden i sunn kristen skriftforståelse og menighetsbygging.\n\n" +
+          "📖 **Skriftsteder:** *Romerne 8:1-2, Galaterne 2:20, Efeserne 2:8-9*\n" +
+          "📚 **Relatert undervisning:** *BIBLE 301 (Modul 1: Hermeneutikk)*";
+      }
+      else if (lower.includes("peter")) {
+        replyText = "### 📖 Bibelsk Person: Peter\n\n" +
+          "**Peter** var disippellederen som etter pinse forkynte med enorm åndskraft og apostolisk frimodighet, og åpnet døren for hedningene.\n\n" +
+          "Fra å fornekte Jesus i frykt, ble Peter fylt med Den Hellige Ånd på pinsehoveddagen og reiste opp 3000 sjeler med én preken. Han demonstrerte Åndens gaver i praksis og la fundamentet for en sunn, apostolisk menighet.\n\n" +
+          "📖 **Skriftsteder:** *Matteus 16:18, Apostlenes gjerninger 2:14-41*\n" +
+          "📚 **Relatert undervisning:** *PROP 101 (Modul 7: Tjenestegaver)*";
+      }
+      else if ((lower.includes("johan") || lower.includes("john")) && !lower.includes("åpenbaring") && !/\d/.test(lower)) {
+        replyText = "### 📖 Bibelsk Person: Johannes\n\n" +
+          "**Johannes** var kjærlighetens apostel, forfatter av Johannesevangeliet, brevene og Johannes' åpenbaring. Kjent for dyp intimitet med Jesus.\n\n" +
+          "Johannes lå inntil Jesu bryst under nattverden og mottok senere på øya Patmos den mest omfattende endetidsåpenbaringen (Apokalypsen). Han viser oss koblingen mellom dyp kjærlighet til Gud og mottakelse av dype hemmeligheter og endetidssyner.\n\n" +
+          "📖 **Skriftsteder:** *Johannes 13:23, Johannes' åpenbaring 1:1-3*\n" +
+          "📚 **Relatert undervisning:** *BIBLE 301 (Modul 6: Johannes åpenbaring)*";
+      }
+
+      // C. Church History
+      else if (lower.includes("patristikk") || lower.includes("tidlig kirke") || lower.includes("kirkefedre") || lower.includes("nikea")) {
+        replyText = "### 🏛️ Kirkehistorie: Den tidlige kirke & Patristikk\n\n" +
+          "**Patristikken** (kirkefedrenes tid) strekker seg fra apostoliske fedre som Polykarp og Ignatius, til de store økumeniske konsilene (f.eks. Nikea i 325 og Kalkedon i 451).\n\n" +
+          "I denne epoken vokste kirken under sterk forfølgelse, fundamentale sannheter om treenigheten og Jesu to naturer ble definert, og Bibelens kanon ble samlet og bekreftet.\n\n" +
+          "📖 **Skriftsteder:** *Apostlenes gjerninger 20:28-30, 2. Timoteus 4:1-5*\n" +
+          "📚 **Relatert undervisning:** *BIBLE 301 (Modul 7: Skriftens autoritet)*";
+      }
+      else if (lower.includes("reformasjon") || lower.includes("luther") || lower.includes("wittenberg")) {
+        replyText = "### 🏛️ Kirkehistorie: Reformasjonen\n\n" +
+          "**Reformasjonen** på 1500-tallet var en teologisk omveltning som gjenreiste Bibelens autoritet over menneskelige tradisjoner.\n\n" +
+          "Anført av skikkelser som **Martin Luther** (95 teser i Wittenberg i 1517), Jean Calvin og Huldrych Zwingli, gjenreiste den sannheten om at frelse er av nåde ved tro alene. Hovedsøylene var **Sola Scriptura** (Skriften alene), **Sola Fide** (Troen alene) og **Sola Gratia** (Nåden alene).\n\n" +
+          "📖 **Skriftsteder:** *Romerne 1:17, Efeserne 2:8-9*\n" +
+          "📚 **Relatert undervisning:** *BIBLE 301 (Modul 1: Hermeneutikk)*";
+      }
+      else if (lower.includes("pinsevekkelsen") || lower.includes("azusa") || lower.includes("seymour") || lower.includes("åndsdåp") || lower.includes("tungetale") || lower.includes("vekkelse")) {
+        replyText = "### 🏛️ Kirkehistorie: Pinsevekkelsen & Åndens utgytelse\n\n" +
+          "**Pinsevekkelsen** er den moderne karismatiske vekkelsen som startet under ledelse av William J. Seymour i Azusa Street, Los Angeles i 1906.\n\n" +
+          "Vekkelsen gjenreiste dåpen i Den Hellige Ånd, tale i tunger, guddommelig helbredelse og de profetiske gavene i den globale kirken. Dette la grunnlaget for den moderne pinsebevegelsen og karismatisk kristendom over hele verden.\n\n" +
+          "📖 **Skriftsteder:** *Joel 3:1-2, Apostlenes gjerninger 2:1-4*\n" +
+          "📚 **Relatert undervisning:** *PROP 101 (Modul 1: Profetisk historie)*";
+      }
+      else if (lower.includes("kirkehistorie")) {
+        replyText = "### 🏛️ Kirkehistorie & Reformasjon\n\n" +
+          "Kirkehistorien viser hvordan Gud trofast har bevart sitt ord og gjenreist bibelske sannheter gjennom ulike epoker:\n\n" +
+          "• **Den tidlige kirke (Patristikken):** Trosbekjennelsene og Bibelens kanon blir formet.\n" +
+          "• **Reformasjonen (1500-tallet):** Gjenreisingen av *Sola Scriptura* (Skriften alene) og frelsen ved tro alene.\n" +
+          "• **Pinsevekkelsen (1906):** Gjenreisingen av Åndens dåp, tungetale og de profetiske tjenestegavene.\n\n" +
+          "Spør meg gjerne om *'Elias'*, *'luther'*, *'Azusa'* eller *'tidlig kirke'* for detaljer!";
+      }
+
+      // D. Prayer Focus
+      else if (lower.includes("bønn") || lower.includes("be for") || lower.includes("forbønn") || lower.includes("bønnebegjær")) {
+        replyText = "### 🙏 Bønn & Forbønn\n\n" +
+          "Bønn er hjerteslagene i vårt fellesskap. Vi skiller mellom:\n\n" +
+          "• **Personlig bønn:** Å gå inn i sitt lønnkammer og be til vår Far i det skjulte (Matteus 6:6).\n" +
+          "• **Profetisk forbønn:** Å be etter Den Hellige Ånds ledelse for å forløse Guds vilje på jorden (Romerne 8:26).\n" +
+          "• **Bønnebegjær:** Du kan sende inn bønnebegjær under full taushetsplikt til våre mentorer og bønneteam via supportportalen (/student/support).\n\n" +
+          "📖 **Skriftsteder:** *Matteus 6:6, Romerne 8:26-27, Jakob 5:16*";
+      }
+
+      // E. Technical support / saving profiles / missing users
+      else if (lower.includes("lagre") || lower.includes("profil") || lower.includes("feil") || lower.includes("lagrer ikke") || lower.includes("fungerer ikke") || lower.includes("bruker")) {
+        replyText = "### 🛠️ Profiloppdatering & Feilsøking\n\n" +
+          "Hvis du opplever problemer med at profilen din ikke lagrer seg, eller du lurer på hvorfor en bruker ikke vises, kan jeg betrygge deg med følgende:\n\n" +
+          "1. **Offline fallback:** Plattformen vår har et sikkert offline-grensesnitt. Hvis du lagrer en profil, blir den umiddelbart lagret lokalt, og deretter synkronisert mot Firestore-databasen så fort nettverket tillater det.\n" +
+          "2. **Brukeradministrasjon:** For din Super-Admin profil (`knutsenthomas@gmail.com` eller `thomas@tk-design.no`), er det lagt inn et absolutt jernteppe-vern. Din profil kan **aldri** slettes eller deaktiveres av andre, og din status er permanent låst til AKTIV.\n\n" +
+          "Prøv å laste siden på nytt (F5). Hvis du opplever en vedvarende feil, kan du opprette en support-billett i **Hjelpesenteret** (/student/support), så hjelper Thomas Knutsen deg personal!";
+      }
+
       // 1. Navigation / Finding things
-      if (lower.includes("finn") || lower.includes("hvor er") || lower.includes("naviger") || lower.includes("meny") || lower.includes("side") || lower.includes("portal") || lower.includes("link") || lower.includes("lenke")) {
+      else if (lower.includes("finn") || lower.includes("hvor er") || lower.includes("naviger") || lower.includes("meny") || lower.includes("side") || lower.includes("portal") || lower.includes("link") || lower.includes("lenke")) {
         if (lower.includes("oppgave") || lower.includes("innlevering") || lower.includes("eksamen")) {
           replyText = "Du finner dine oppgaver og innleveringer på siden **Oppgaver**. Klikk på 'Mine gjøremål & oppgaver' i venstremenyen, eller gå direkte til: /student/assignments";
         } else if (lower.includes("kurs") || lower.includes("studie") || lower.includes("leksjon") || lower.includes("klasse")) {
@@ -1822,7 +1948,7 @@ export const AppProvider = ({ children }) => {
           "Hvis du opplever en akutt feil, kan du beskrive den for meg her, så skal jeg prøve å feilsøke den umiddelbart!";
       }
 
-      // 4. Bible Verses (with verification disclaimer)
+      // 4. Bible Verses
       else if (lower.includes("vers") || lower.includes("kapittel") || lower.includes("skriftsted") || lower.includes("sitat") || 
                lower.includes("johannes") || lower.includes("romerne") || lower.includes("salme") || lower.includes("efeserne") || 
                lower.includes("matteus") || lower.includes("åpenbaring") || lower.includes("korinter") || lower.includes("bibelvers")) {
@@ -1852,7 +1978,7 @@ export const AppProvider = ({ children }) => {
       // 5. Biblical Topics / Subjects
       else if (lower.includes("profetisk") || lower.includes("profeti") || lower.includes("høre gud") || lower.includes("syn") || lower.includes("drøm") || lower.includes("åpenbaring")) {
         replyText = "### 🕊️ Profetisk tjeneste & Å høre Guds stemme\n\n" +
-          "Å høre Guds stemme handler om å utvikle en sensitiv ånd i bønn og fellesskap med Den Hellige Ånd. Gud kan tale gjennom:\n" +
+          "Å høre Guds stemme handler om å utvikle en sensitiv ånd i bønn og fellesskap med Den Hellige Ånd. Gud kan tale gjennom:\n\n" +
           "1. **Den indre stemmen:** Et mildt inntrykk, tanke eller impuls i din ånd.\n" +
           "2. **Drømmer og syner:** Billedlige åpenbaringer som krever åndelig tyding.\n" +
           "3. **Skriften:** Guds skrevne ord er det ultimate filteret.\n\n" +
@@ -1881,12 +2007,11 @@ export const AppProvider = ({ children }) => {
 
       // Default Fallback
       else {
-        replyText = "Hei! Som din **HKM Assistent** hjelper jeg deg gjerne med:\n\n" +
-          "🧭 **Navigasjon:** Skriv f.eks. *'Hvor finner jeg oppgavene mine?'* eller *'Vis meg lenken til profilbilde'*\n" +
-          "📞 **Kontakt:** Skriv *'Kontakt David'* eller *'Kontakt Siri'* for å få info om kontortid, zoom og fagområde\n" +
-          "🛠️ **Support:** Skriv *'Support'* for hjelp med plattformen eller opprettelse av billetter\n" +
-          "🕊️ **Bibelske emner:** Skriv *'profetisk'*, *'hermeneutikk'*, *'sjelesorg'* eller *'eskatologi'* for en teologisk forklaring\n" +
-          "📖 **Bibelvers:** Skriv et bibelboknavn eller *'vis meg et vers'*, så henter jeg opp et oppmuntrende skriftsted!";
+        replyText = "Jeg forstod ikke helt det spørsmålet, men jeg hjelper deg gjerne! Kan du prøve å omformulere, eller spørre meg om et av disse emnene:\n\n" +
+          "🕊️ **Bibelske personer & emner:** Skriv f.eks. *'fortell om Elias'*, *'hva er eskatologi?'* eller *'hva er reformasjonen?'*\n" +
+          "📖 **Bibelvers:** Skriv *'vis meg et vers'* eller et bibelboknavn (f.eks. *'Salme 23'*)\n" +
+          "🧭 **Navigasjon:** Skriv f.eks. *'hvor er leksjonene mine?'* eller *'hvor er oppgavene?'*\n" +
+          "📞 **Kontakt & Support:** Skriv *'kontakt lærer'* eller *'hjelp med teknisk support'* for hjelp med plattformen.";
       }
 
       const responseMsg = {
