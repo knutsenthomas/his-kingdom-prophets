@@ -829,40 +829,70 @@ export const AppProvider = ({ children }) => {
           const userSnap = await getDoc(userDocRef);
           if (userSnap.exists()) {
             const userData = userSnap.data();
+            let needsUpdate = false;
+
             // Automatically upgrade superadmins in Firestore if role is different
             if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(userData.email?.toLowerCase()) && userData.role !== 'superadmin') {
               userData.role = 'superadmin';
               userData.name = 'Thomas Knutsen';
+              needsUpdate = true;
+            }
+
+            // Auto-clean fake mock profile names (e.g. Apostel David Hansen) back to real, clean names
+            if (userData.name === 'Apostel David Hansen' && userData.email?.toLowerCase().includes('david')) {
+              const prefix = userData.email.split('@')[0];
+              const cleanName = prefix.split(/[._-]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+              userData.name = cleanName;
+              needsUpdate = true;
+            }
+            if (userData.name === 'Pastor Siri Knutsen' && userData.email?.toLowerCase().includes('siri')) {
+              const prefix = userData.email.split('@')[0];
+              const cleanName = prefix.split(/[._-]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+              userData.name = cleanName;
+              needsUpdate = true;
+            }
+            if (userData.name === 'Super Administrator' && userData.email?.toLowerCase().includes('super')) {
+              const prefix = userData.email.split('@')[0];
+              const cleanName = prefix.split(/[._-]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+              userData.name = cleanName;
+              needsUpdate = true;
+            }
+
+            // Reset mock avatars to default student/user avatar
+            const mockAvatars = [
+              "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120",
+              "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120",
+              "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120"
+            ];
+            if (mockAvatars.includes(userData.avatar)) {
+              userData.avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
+              needsUpdate = true;
+            }
+
+            if (needsUpdate) {
               try {
-                await setDoc(userDocRef, { role: 'superadmin', name: 'Thomas Knutsen' }, { merge: true });
+                await setDoc(userDocRef, { 
+                  role: userData.role, 
+                  name: userData.name, 
+                  avatar: userData.avatar 
+                }, { merge: true });
               } catch (fsErr) {
-                console.warn("Firestore role sync blocked by rules, upgraded state locally:", fsErr);
+                console.warn("Firestore profile sync blocked by rules, upgraded state locally:", fsErr);
               }
             }
+
             setUser(userData);
           } else {
             const email = firebaseUser.email;
             let role = 'student';
-            let name = email.split('@')[0];
-            name = name.charAt(0).toUpperCase() + name.slice(1);
+            // Extract clean name from email prefix
+            const prefix = email.split('@')[0];
+            const name = prefix.split(/[._-]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
             let avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
 
             if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(email?.toLowerCase())) {
               role = 'superadmin';
-              name = 'Thomas Knutsen';
               avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
-            } else if (email.includes('teacher') || email.includes('david')) {
-              role = 'teacher';
-              name = 'Apostel David Hansen';
-              avatar = "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120";
-            } else if (email.includes('super') || email.includes('superadmin')) {
-              role = 'superadmin';
-              name = 'Super Administrator';
-              avatar = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120";
-            } else if (email.includes('admin') || email.includes('siri')) {
-              role = 'admin';
-              name = 'Pastor Siri Knutsen';
-              avatar = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120";
             }
 
             const defaultProfile = {
@@ -871,7 +901,7 @@ export const AppProvider = ({ children }) => {
               email,
               role,
               avatar,
-              phone: role === 'teacher' ? "+47 900 11 222" : "+47 900 00 000",
+              phone: "+47 900 00 000",
               location: "Kristiansand, Norge",
               birthYear: "1995",
               bio: "",
