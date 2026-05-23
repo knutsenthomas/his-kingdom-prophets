@@ -427,6 +427,71 @@ export default function BibleView() {
   const [generatedCommentaries, setGeneratedCommentaries] = useState({});
   const [generationStep, setGenerationStep] = useState(0);
 
+  // Multi-verse Selection States
+  const [selectedVerses, setSelectedVerses] = useState([]);
+
+  // Reset verse selection when book or chapter changes
+  useEffect(() => {
+    setSelectedVerses([]);
+  }, [selectedBook, selectedChapter]);
+
+  const toggleVerseSelection = (verseNum) => {
+    setSelectedVerses(prev => {
+      if (prev.includes(verseNum)) {
+        return prev.filter(num => num !== verseNum);
+      } else {
+        return [...prev, verseNum].sort((a, b) => a - b);
+      }
+    });
+  };
+
+  const handleBulkCopy = () => {
+    if (selectedVerses.length === 0) return;
+    const sortedVerses = [...selectedVerses].sort((a, b) => a - b);
+    const targets = sortedVerses.map(num => verses.find(v => v.verse === num)).filter(Boolean);
+    const combinedText = targets.map(v => `[${v.verse}] ${v.text.trim()}`).join(' ');
+    const verseRange = sortedVerses.length === 1 ? `${sortedVerses[0]}` : `${sortedVerses[0]}-${sortedVerses[sortedVerses.length - 1]}`;
+    const translationName = TRANSLATIONS.find(t => t.id === selectedTranslation)?.name || selectedTranslation.toUpperCase();
+    
+    const textToCopy = `"${combinedText}" — ${selectedBook.nor} ${selectedChapter}:${verseRange} (${translationName})`;
+    navigator.clipboard.writeText(textToCopy);
+    showToast(`${selectedVerses.length} vers kopiert til utklippstavlen!`);
+    setSelectedVerses([]);
+  };
+
+  const handleBulkSendToAssistant = () => {
+    if (selectedVerses.length === 0) return;
+    const sortedVerses = [...selectedVerses].sort((a, b) => a - b);
+    const targets = sortedVerses.map(num => verses.find(v => v.verse === num)).filter(Boolean);
+    const combinedText = targets.map(v => `[${v.verse}] ${v.text.trim()}`).join(' ');
+    const verseRange = sortedVerses.length === 1 ? `${sortedVerses[0]}` : `${sortedVerses[0]}-${sortedVerses[sortedVerses.length - 1]}`;
+    
+    const assistantPrompt = `Jeg studerer akkurat ${selectedBook.nor} ${selectedChapter}:${verseRange} som lyder:\n\n"${combinedText}"\n\nKan du gi meg en dypere teologisk, historisk og profetisk kommentar av disse versene og hvordan de henger sammen?`;
+    sendAssistantMessage(assistantPrompt);
+    showToast('Sendt til HKM Assistent! Åpne chatten nede til høyre.');
+    setSelectedVerses([]);
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('hkm-open-chat'));
+    }, 500);
+  };
+
+  const handleBulkShareToChat = () => {
+    if (selectedVerses.length === 0) return;
+    const sortedVerses = [...selectedVerses].sort((a, b) => a - b);
+    const targets = sortedVerses.map(num => verses.find(v => v.verse === num)).filter(Boolean);
+    const combinedText = targets.map(v => `[${v.verse}] ${v.text.trim()}`).join(' ');
+    const verseRange = sortedVerses.length === 1 ? `${sortedVerses[0]}` : `${sortedVerses[0]}-${sortedVerses[sortedVerses.length - 1]}`;
+    const translationName = TRANSLATIONS.find(t => t.id === selectedTranslation)?.name || selectedTranslation.toUpperCase();
+    
+    const shareMessage = `Hei alle sammen! 📖 Her er et avsnitt fra bibelstudiet mitt i dag:\n\n*"${combinedText}"*\n— **${selectedBook.nor} ${selectedChapter}:${verseRange}** (${translationName})`;
+    localStorage.setItem('hkm-pending-chat-message', shareMessage);
+    showToast('Deling klargjort! Sender deg til bønnefellesskapet...');
+    setSelectedVerses([]);
+    setTimeout(() => {
+      navigate('/student/chat');
+    }, 1200);
+  };
+
   const handleGenerateCommentary = () => {
     setIsGeneratingCommentary(true);
     setGenerationStep(0);
@@ -707,7 +772,7 @@ export default function BibleView() {
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Left Column: Book and chapter selection pane */}
-        <div className={`lg:col-span-4 ${showStudyPanel ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-6`}>
+        <div className={`${showStudyPanel ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-6`}>
           <div className="bg-white border border-outline-variant/20 rounded-2xl p-5 shadow-sm space-y-5">
             <h2 className="font-serif font-bold text-base text-primary flex items-center gap-2 border-b border-slate-100 pb-3">
               <BookMarked size={18} />
@@ -806,7 +871,7 @@ export default function BibleView() {
         </div>
 
         {/* Middle Column: Bible reading pane */}
-        <div className={`lg:col-span-8 ${showStudyPanel ? 'lg:col-span-5' : 'lg:col-span-8'} space-y-6`}>
+        <div className={`${showStudyPanel ? 'lg:col-span-5' : 'lg:col-span-8'} space-y-6`}>
           <div className="bg-white border border-outline-variant/20 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]">
             
             {/* Reading header with next/prev buttons and study panel toggle */}
@@ -878,11 +943,11 @@ export default function BibleView() {
                         <div 
                           id={`v-${verse.verse}`}
                           key={`${verse.chapter}-${verse.verse}`}
-                          onClick={() => setHighlightedVerse(highlightedVerse === verse.verse ? null : verse.verse)}
-                          className={`group p-2.5 rounded-xl transition-all cursor-pointer relative ${
-                            highlightedVerse === verse.verse 
-                              ? 'bg-primary/5 border border-primary/20 shadow-sm shadow-primary/5' 
-                              : 'hover:bg-slate-50/80 border border-transparent'
+                          onClick={() => toggleVerseSelection(verse.verse)}
+                          className={`group p-2.5 rounded-xl transition-all cursor-pointer relative border ${
+                            selectedVerses.includes(verse.verse) || highlightedVerse === verse.verse 
+                              ? 'bg-primary/5 border-primary/20 shadow-sm shadow-primary/5' 
+                              : 'hover:bg-slate-50/80 border-transparent'
                           }`}
                         >
                           <p className="text-sm md:text-base text-on-surface leading-relaxed pr-24">
@@ -949,6 +1014,55 @@ export default function BibleView() {
                 Husk å undersøke skriftene selv for å hente full åpenbaring!
               </span>
             </div>
+
+            {/* Floating control bar for multi-verse selection */}
+            <AnimatePresence>
+              {selectedVerses.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  className="bg-[#1B4965]/95 backdrop-blur border border-[#1B4965]/20 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 text-white shadow-xl mt-6 font-sans pointer-events-auto shrink-0"
+                  style={{ transform: 'translateZ(0)' }}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-burnt-orange animate-pulse" />
+                    <span className="text-xs font-bold">
+                      {selectedVerses.length} {selectedVerses.length === 1 ? 'vers' : 'vers'} valgt
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 text-xs">
+                    <button 
+                      onClick={handleBulkCopy}
+                      className="px-3 py-1.5 bg-white/10 hover:bg-white/20 active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer"
+                    >
+                      <Copy size={13} />
+                      <span>Kopier</span>
+                    </button>
+                    <button 
+                      onClick={handleBulkSendToAssistant}
+                      className="px-3 py-1.5 bg-burnt-orange hover:bg-burnt-orange-dark active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm shadow-burnt-orange/20 cursor-pointer"
+                    >
+                      <Sparkles size={13} />
+                      <span>Spør HKM</span>
+                    </button>
+                    <button 
+                      onClick={handleBulkShareToChat}
+                      className="px-3 py-1.5 bg-white/10 hover:bg-white/20 active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer"
+                    >
+                      <Send size={13} />
+                      <span>Del i chat</span>
+                    </button>
+                    <button 
+                      onClick={() => setSelectedVerses([])}
+                      className="px-2.5 py-1.5 text-slate-300 hover:text-white rounded-xl transition-all cursor-pointer font-bold"
+                    >
+                      Nullstill
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
           </div>
         </div>
