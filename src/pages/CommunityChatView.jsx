@@ -11,6 +11,15 @@ export default function CommunityChatView() {
   const [activeChannel, setActiveChannel] = useState('general');
   const [messageText, setMessageText] = useState('');
 
+  React.useEffect(() => {
+    const pendingMsg = localStorage.getItem('hkm-pending-chat-message');
+    if (pendingMsg) {
+      setMessageText(pendingMsg);
+      localStorage.removeItem('hkm-pending-chat-message');
+      showToast("Ditt leksjonsnotat er lagt inn i tekstfeltet!");
+    }
+  }, [showToast]);
+
   // Initial Chat Feed State
   const [channels, setChannels] = useState({
     general: {

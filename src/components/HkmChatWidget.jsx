@@ -30,6 +30,12 @@ export default function HkmChatWidget() {
     }
   }, [assistantMessages, isAssistantTyping, isOpen]);
 
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener('hkm-open-chat', handleOpen);
+    return () => window.removeEventListener('hkm-open-chat', handleOpen);
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!inputText.trim()) return;

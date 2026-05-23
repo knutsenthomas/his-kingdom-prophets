@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
+import { db } from '@/firebase';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { motion } from 'framer-motion';
 import { 
   ArrowLeft, ArrowRight, CheckCircle, PlayCircle, ExternalLink, FileText,
@@ -11,7 +13,7 @@ import {
 export default function LessonView() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { courses, toggleModuleCompleted, showToast, user } = useApp();
+  const { courses, toggleModuleCompleted, showToast, user, sendAssistantMessage } = useApp();
   
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [hideStudyPlan, setHideStudyPlan] = useState(false);
@@ -56,29 +58,74 @@ export default function LessonView() {
     };
   }, [user?.role]);
 
-  // Load notes when courseId or currentModule changes
-  useEffect(() => {
-    const savedNotes = localStorage.getItem(`hkm-notes-${courseId}-${currentModule.id}`) || "";
-    setNotes(savedNotes);
-    setActiveTab('write'); // Reset tab
-  }, [courseId, currentModule.id]);
+  // Save notes securely to Firestore
+  const saveNotesToFirestore = async (val) => {
+    if (!user?.uid) return;
+    try {
+      const noteDocRef = doc(db, "user_notes", `${user.uid}_${courseId}_${currentModule.id}`);
+      await setDoc(noteDocRef, {
+        text: val,
+        userId: user.uid,
+        userName: user.name,
+        courseId,
+        courseTitle: course.title,
+        moduleId: currentModule.id,
+        moduleTitle: currentModule.title,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+    } catch (err) {
+      console.error("Klarte ikke lagre notater i Firestore:", err);
+    }
+  };
 
-  // Handle note change with autosave debounce
+  // Load notes from localStorage first, then sync with Firestore cloud
+  useEffect(() => {
+    const loadNotes = async () => {
+      // 1. Load from localStorage for instant display
+      const savedNotes = localStorage.getItem(`hkm-notes-${courseId}-${currentModule.id}`) || "";
+      setNotes(savedNotes);
+      setActiveTab('write'); // Reset tab
+
+      // 2. Fetch from Firestore for cloud sync if user is logged in
+      if (user?.uid) {
+        try {
+          const noteDocRef = doc(db, "user_notes", `${user.uid}_${courseId}_${currentModule.id}`);
+          const noteSnap = await getDoc(noteDocRef);
+          if (noteSnap.exists()) {
+            const cloudText = noteSnap.data().text || "";
+            if (cloudText && cloudText !== savedNotes) {
+              setNotes(cloudText);
+              localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, cloudText);
+            }
+          }
+        } catch (err) {
+          console.error("Klarte ikke hente notater fra Firestore:", err);
+        }
+      }
+    };
+
+    loadNotes();
+  }, [courseId, currentModule.id, user?.uid]);
+
+  // Handle note change with autosave debounce to local and firestore
   const handleNotesChange = (e) => {
     const val = e.target.value;
     setNotes(val);
     setIsSaving(true);
     
+    // Save to localStorage immediately
     localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, val);
     
+    // Debounce cloud Firestore save
     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
-    saveTimeoutRef.current = setTimeout(() => {
+    saveTimeoutRef.current = setTimeout(async () => {
+      await saveNotesToFirestore(val);
       setIsSaving(false);
-    }, 600);
+    }, 800);
   };
 
   // Cursor formatting helper for Rich Text actions
-  const insertFormatting = (syntax) => {
+  const insertFormatting = async (syntax) => {
     const textarea = textareaRef.current;
     if (!textarea) return;
 
@@ -102,10 +149,46 @@ export default function LessonView() {
     setNotes(newText);
     localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newText);
     
+    setIsSaving(true);
+    await saveNotesToFirestore(newText);
+    setIsSaving(false);
+    
     setTimeout(() => {
       textarea.focus();
       textarea.setSelectionRange(start + replacement.length, start + replacement.length);
     }, 50);
+  };
+
+  // Share note to theological AI assistant
+  const sendNoteToAssistant = () => {
+    if (!notes.trim()) {
+      showToast("Ingen notater å sende!");
+      return;
+    }
+    const messageText = `Her er mine notater fra leksjonen "${currentModule.title}" under kurset ${course.title}:\n\n${notes}\n\nKan du gi meg teologisk tilbakemelding på disse notatene?`;
+    
+    sendAssistantMessage(messageText);
+    showToast("Notater sendt til HKM Assistent! Åpne chatten nede til høyre.");
+    window.dispatchEvent(new CustomEvent('hkm-open-chat'));
+  };
+
+  // Share note to community chat as a message
+  const shareNoteToCommunity = () => {
+    if (!notes.trim()) {
+      showToast("Ingen notater å dele!");
+      return;
+    }
+    
+    const shareMessage = `Hei alle sammen! 📖 Her er mine notater fra leksjonen "${currentModule.title}" under kurset *${course.title}*:\n\n"${notes}"\n\nHva tenker dere om disse punktene?`;
+    
+    // Save to localStorage so CommunityChatView can read it
+    localStorage.setItem('hkm-pending-chat-message', shareMessage);
+    
+    showToast("Notater klargjort! Omdirigerer til bønnefellesskapet...");
+    
+    setTimeout(() => {
+      navigate('/student/chat');
+    }, 800);
   };
 
   // Downloader for Markdown file
@@ -597,23 +680,44 @@ export default function LessonView() {
           </div>
 
           {/* Footer Actions */}
-          <div className="grid grid-cols-2 gap-2 shrink-0 pt-3 border-t border-outline-variant/20 text-xs font-bold font-sans">
-            <button
-              onClick={copyNotesToClipboard}
-              className="flex items-center justify-center gap-1.5 py-2.5 px-3 border border-outline-variant/30 rounded-lg bg-white text-on-surface hover:bg-slate-50 transition-all active:scale-[0.97]"
-              title="Kopier til utklippstavle"
-            >
-              <ClipboardCopy size={14} />
-              <span>Kopier</span>
-            </button>
-            <button
-              onClick={downloadNotes}
-              className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-primary text-white rounded-lg hover:bg-primary-container transition-all active:scale-[0.97]"
-              title="Last ned som markdown-fil"
-            >
-              <Download size={14} />
-              <span>Last ned (.md)</span>
-            </button>
+          <div className="flex flex-col gap-2 shrink-0 pt-3 border-t border-outline-variant/20 text-xs font-bold font-sans">
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={copyNotesToClipboard}
+                className="flex items-center justify-center gap-1.5 py-2 px-2.5 border border-outline-variant/30 rounded-lg bg-white text-on-surface hover:bg-slate-50 transition-all active:scale-[0.97]"
+                title="Kopier til utklippstavle"
+              >
+                <ClipboardCopy size={12} />
+                <span>Kopier</span>
+              </button>
+              <button
+                onClick={downloadNotes}
+                className="flex items-center justify-center gap-1.5 py-2 px-2.5 bg-primary text-white rounded-lg hover:bg-primary-container transition-all active:scale-[0.97]"
+                title="Last ned som markdown-fil"
+              >
+                <Download size={12} />
+                <span>Last ned (.md)</span>
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={sendNoteToAssistant}
+                className="flex items-center justify-center gap-1.5 py-2 px-2.5 border border-primary/20 bg-primary/5 text-primary rounded-lg hover:bg-primary/10 transition-all active:scale-[0.97]"
+                title="Send notat til HKM Assistent"
+              >
+                <MessageSquare size={12} className="text-burnt-orange" />
+                <span>Send til HKM</span>
+              </button>
+              <button
+                onClick={shareNoteToCommunity}
+                className="flex items-center justify-center gap-1.5 py-2 px-2.5 border border-[#bd4f2a]/20 bg-[#bd4f2a]/5 text-[#bd4f2a] rounded-lg hover:bg-[#bd4f2a]/10 transition-all active:scale-[0.97]"
+                title="Del notat i bønnefellesskapet"
+              >
+                <Send size={12} />
+                <span>Del i fellesskap</span>
+              </button>
+            </div>
           </div>
 
         </div>
