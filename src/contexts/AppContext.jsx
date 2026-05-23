@@ -1046,7 +1046,35 @@ export const AppProvider = ({ children }) => {
   };
 
   // Change active user persona (offline mode / local fallback state trigger)
-  const changePersona = (role) => {
+  const changePersona = async (role) => {
+    const firebaseUser = auth.currentUser;
+    if (firebaseUser) {
+      // Logged in with a real account - only change role and preserve the rest!
+      try {
+        const userDocRef = doc(db, "users", firebaseUser.uid);
+        setUser(prev => {
+          const updated = { 
+            ...prev, 
+            role: role === 'none' ? 'student' : role 
+          };
+          // Persist the role change to Firestore
+          setDoc(userDocRef, { role: updated.role }, { merge: true }).catch(err => 
+            console.warn("Could not save persona change to Firestore:", err)
+          );
+          return updated;
+        });
+        setIsLoggedIn(true);
+        if (role === 'student') showToast("Byttet til Student-persona!");
+        else if (role === 'teacher') showToast("Byttet til Mentor-persona!");
+        else if (role === 'admin') showToast("Byttet til Administrator-persona!");
+        else if (role === 'superadmin') showToast("Byttet til Super Admin-persona!");
+      } catch (err) {
+        console.error("Feil ved bytte av persona:", err);
+      }
+      return;
+    }
+
+    // Offline / Demo mode fallbacks (only run when NOT logged in with a real account)
     if (role === 'student') {
       setUser({
         name: "Thomas Knutsen",
