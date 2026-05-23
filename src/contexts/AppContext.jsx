@@ -7,7 +7,8 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   OAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  signInWithRedirect
 } from 'firebase/auth';
 import { 
   doc, 
@@ -1173,14 +1174,28 @@ export const AppProvider = ({ children }) => {
       await signInWithPopup(auth, provider);
       showToast("Logget inn med Google!");
     } catch (err) {
-      console.error("Google login failed:", err);
-      let msg = "Klarte ikke å logge inn med Google. Vennligst sjekk at tredjepartsinformasjonskapsler er tillatt i nettleseren din.";
+      console.warn("Google popup login failed, trying redirect fallback...", err);
       if (err.code === 'auth/popup-blocked') {
-        msg = "Innloggingsvinduet ble blokkert av nettleseren. Vennligst tillat popups for dette nettstedet.";
-      } else if (err.code === 'auth/popup-closed-by-user') {
-        msg = "Innloggingsvinduet ble lukket før påloggingen ble fullført.";
+        showToast("Innloggingsvinduet ble blokkert. Vennligst tillat popups eller prøv igjen.");
+        return;
       }
-      showToast(msg);
+      if (err.code === 'auth/popup-closed-by-user') {
+        showToast("Innloggingsvinduet ble lukket.");
+        return;
+      }
+
+      // Automatic fallback to redirect to bypass third-party cookie restrictions
+      try {
+        const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({
+          prompt: 'select_account'
+        });
+        showToast("Cookies blokkert. Viderekobler til Google...");
+        await signInWithRedirect(auth, provider);
+      } catch (redirErr) {
+        console.error("Redirect fallback failed too:", redirErr);
+        showToast("Kunne ikke koble til Google. Sjekk nettleserinnstillingene.");
+      }
     }
   };
 
@@ -1191,14 +1206,25 @@ export const AppProvider = ({ children }) => {
       await signInWithPopup(auth, provider);
       showToast("Logget inn med Apple!");
     } catch (err) {
-      console.error("Apple login failed:", err);
-      let msg = "Klarte ikke å logge inn med Apple. Vennligst sjekk at tredjepartsinformasjonskapsler er tillatt i nettleseren din.";
+      console.warn("Apple popup login failed, trying redirect fallback...", err);
       if (err.code === 'auth/popup-blocked') {
-        msg = "Innloggingsvinduet ble blokkert av nettleseren. Vennligst tillat popups for dette nettstedet.";
-      } else if (err.code === 'auth/popup-closed-by-user') {
-        msg = "Innloggingsvinduet ble lukket før påloggingen ble fullført.";
+        showToast("Innloggingsvinduet ble blokkert. Vennligst tillat popups eller prøv igjen.");
+        return;
       }
-      showToast(msg);
+      if (err.code === 'auth/popup-closed-by-user') {
+        showToast("Innloggingsvinduet ble lukket.");
+        return;
+      }
+
+      // Automatic fallback to redirect to bypass third-party cookie restrictions
+      try {
+        const provider = new OAuthProvider('apple.com');
+        showToast("Viderekobler til Apple...");
+        await signInWithRedirect(auth, provider);
+      } catch (redirErr) {
+        console.error("Redirect fallback failed too:", redirErr);
+        showToast("Kunne ikke koble til Apple. Sjekk nettleserinnstillingene.");
+      }
     }
   };
 
