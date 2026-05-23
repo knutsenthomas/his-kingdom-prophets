@@ -452,9 +452,9 @@ export default function LessonView() {
     // Sort verse numbers in ascending order
     const sortedVerseNums = [...selectedBibleVerses].sort((a, b) => a - b);
     
-    // Get corresponding verse objects
+    // Get corresponding verse objects with robust Number conversion
     const targetVerses = sortedVerseNums
-      .map(num => bibleVerses.find(v => v.verse === num))
+      .map(num => bibleVerses.find(v => Number(v.verse) === Number(num)))
       .filter(Boolean);
       
     if (targetVerses.length === 0) return;
@@ -785,7 +785,7 @@ export default function LessonView() {
                       id={`v-lesson-${v.verse}`}
                       onClick={() => toggleVerseSelection(v.verse)}
                       className={`group relative p-2 border-b cursor-pointer transition-all rounded-lg ${
-                        selectedBibleVerses.includes(v.verse) || highlightedBibleVerse === v.verse
+                        selectedBibleVerses.includes(Number(v.verse)) || selectedBibleVerses.includes(v.verse) || highlightedBibleVerse === v.verse
                           ? 'bg-[#1B4965]/5 border border-[#1B4965]/20 shadow-sm' 
                           : 'hover:bg-slate-100 border border-transparent'
                       }`}
@@ -794,13 +794,15 @@ export default function LessonView() {
                         <span className="font-bold text-primary mr-1.5">{v.verse}</span>
                         {v.text}
                       </p>
-                      <button 
-                        onClick={(e) => { e.stopPropagation(); insertVerseToNotes(v); }} 
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-1 text-primary hover:bg-primary/10 rounded transition-all animate-fade-in"
-                        title="Sett inn i notater"
-                      >
-                        <Send size={10} />
-                      </button>
+                      {selectedBibleVerses.length === 0 && (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); insertVerseToNotes(v); }} 
+                          className="absolute right-1.5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-1 text-primary hover:bg-primary/10 rounded transition-all animate-fade-in"
+                          title="Sett inn i notater"
+                        >
+                          <Send size={10} />
+                        </button>
+                      )}
                     </div>
                   ))
                 ) : (
