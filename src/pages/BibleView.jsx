@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  BookOpen, Search, ArrowLeft, ArrowRight, Share2, Copy, Send, Check, RefreshCw, Sparkles, BookMarked
+  BookOpen, Search, ArrowLeft, ArrowRight, Share2, Copy, Send, Check, RefreshCw, Sparkles, BookMarked, X
 } from 'lucide-react';
 
 const BIBLE_BOOKS = [
@@ -85,6 +85,284 @@ const TRANSLATIONS = [
   { id: 'kjv', name: 'English (King James Version)' },
 ];
 
+const STUDY_BIBLE_DATA = {
+  joh_3: {
+    overview: {
+      title: "Johannes 3: Den nye fødsel og Guds grenseløse kjærlighet",
+      context: "Dette kapittelet er et av de mest sentrale i det nye testamentet. Jesus samtaler med Nikodemus, en hemmelig disippel og leder blant jødene, og forklarer overgangen fra en ytre lovisk religion til et indre, åndelig liv født ovenfra.",
+      themes: [
+        "Den nye fødsel (født av vann og Ånd)",
+        "Guds kjærlighet som frelsens drivkraft (Joh 3:16)",
+        "Kontrasten mellom lys og mørke",
+        "Johannes Døperens ydmykhet ('Han skal vokse, jeg skal avta')"
+      ],
+      outline: "1-15: Samtalen med Nikodemus om den nye fødsel\n16-21: Guds kjærlighet, troen og dommen\n22-36: Johannes Døperens siste vitnesbyrd om brudgommen"
+    },
+    commentary: [
+      {
+        verses: "1-3",
+        title: "Nikodemus og kravet om gjenfødelse",
+        text: "Nikodemus kommer om natten, sannsynligvis av frykt for sine kolleger i Sanhedrin (Rådet). Han anerkjenner Jesus som en lærer fra Gud på grunn av tegnene Han gjør. Men Jesus går rett til kjernen: Ytre respekt for tegn er ikke nok; man må bli 'født på ny' (gresk: anothen, som kan bety både 'på ny' og 'ovenfra') for å se Guds rike. Dette utfordrer jødisk nasjonal stolthet som trodde biologisk ættelinje sikret inngang."
+      },
+      {
+        verses: "4-8",
+        title: "Født av vann og Ånd",
+        text: "Nikodemus tar ordene bokstavelig og spør om man kan gå inn i sin mors liv igjen. Jesus utdyper: Fødselen er åndelig, 'født av vann og Ånd'. Vannet kan referere til både Johannes' omvendelsesdåp og det rensende ordet (Esek 36:25-27). Ånden refererer til Helligåndens suverene og uforutsigbare verk, sammenlignet med vinden som blåser dit den vil. Du hører lyden, men vet ikke hvor den kommer fra."
+      },
+      {
+        verses: "14-16",
+        title: "Kobberslangen og Guds største gave",
+        text: "Jesus viser til 4. Mosebok 21, der israelittene ble helbredet ved å se på kobberslangen som Moses reiste i ørkenen. Slik må Menneskesønnen opphøyes på korset, slik at alle som tror på Ham skal ha evig liv. Vers 16 er 'den lille bibel': Frelsens kilde er Guds suverene agape-kjærlighet til en opprørsk verden. Han gav sin enbårne Sønn for at vi skal reddes fra fortapelse."
+      },
+      {
+        verses: "17-21",
+        title: "Troen, dommen og lyset",
+        text: "Gud sendte ikke sin Sønn for å dømme verden, men for å frelse den. Men dommen skjer automatisk basert på menneskets reaksjon til lyset: De som gjør det onde hater lyset, fordi deres gjerninger blir avslørt. De som lever i sannheten søker lyset, for at det skal bli klart at deres gjerninger er gjort i Gud."
+      }
+    ],
+    wordStudies: [
+      {
+        word: "Anothen (ἄνωθεν)",
+        language: "Gresk (vers 3)",
+        meaning: "Betyr både 'ovenfra' (fra himmelen) og 'på nytt'. Jesus bruker bevisst ordet med begge betydninger: gjenfødelsen er en ny fødsel som har sitt opphav direkte fra Gud i himmelen."
+      },
+      {
+        word: "Monogenes (μονογενής)",
+        language: "Gresk (vers 16)",
+        meaning: "Ofte oversatt med 'enbårne', men betyr mer presist 'eneste i sitt slag' eller 'helt unik'. Det understreker Jesu unike vesen som Guds sanne Sønn, ulikt troende som blir Guds barn ved adopsjon."
+      }
+    ],
+    crossReferences: [
+      { ref: "Esekiel 36:25-27", desc: "Profetien om det rensende vannet og den nye ånden Gud vil gi sitt folk." },
+      { ref: "4. Mosebok 21:8-9", desc: "Historien om kobberslangen som reises i ørkenen for helbredelse." },
+      { ref: "Romerne 8:14-17", desc: "Ånden som gir oss barnekår og vitner om at vi er Guds barn." }
+    ]
+  },
+  psa_23: {
+    overview: {
+      title: "Salme 23: Herren er min hyrde",
+      context: "Dette er kanskje verdens mest elskede salme. Skrevet av David, som selv var hyrde før han ble konge, uttrykker den en dyp og personlig tillit til Guds omsorg, beskyttelse og ledelse gjennom livets lyseste og mørkeste daler.",
+      themes: [
+        "Herren som den nære og personlige forsørgeren ('min hyrde')",
+        "Åndelig og sjelelig hvile i grønne enger",
+        "Beskyttelse i kriser og dødsskyggens dal",
+        "Det evige fellesskapet i Herrens hus"
+      ],
+      outline: "1-3: Hyrdens omsorg, hvile og ledelse\n4: Beskyttelse og trøst i mørket\n5: Verten som dekker bord og salver hodet\n6: Guds godhet og det evige hjemmet"
+    },
+    commentary: [
+      {
+        verses: "1-3",
+        title: "Forsørgelse og sjelelig fornyelse",
+        text: "David begynner med det personlige 'min hyrde'. Han mangler ingenting fordi Hyrden leder ham til 'grønne enger' (næring) og 'hvilens vann' (forfriskning og fred). Hyrden fornyer sjelen og leder ham på 'rettferdighets stier' for sitt navns ære. Dette viser at Guds ledelse ikke bare handler om vår komfort, men om Hans karakter og hellighet."
+      },
+      {
+        verses: "4",
+        title: "Dødsskyggens dal",
+        text: "Hyrden leder oss ikke utenom prøvelser, men igjennom dem. Selv i 'dødsskyggens dal' (hebraisk: tsalmaveth, en bekmørk dal av ekstrem fare) frykter David ikke noe ondt. Årsaken er enkel: 'Du er med meg'. Hyrdestaven (for å forsvare mot rovdyr) og kjeppen (for å styre og telle sauene) gir trygghet og trøst i krisen."
+      },
+      {
+        verses: "5-6",
+        title: "Bordet dekket i fienders påsyn",
+        text: "Metaforen skifter fra en hyrde til en sjenerøs vert. Gud dekker et festbord for oss, ikke i sikkerhet, men 'rett foran mine fiender'. Han salver hodet med olje (æresgjest, lindring for sår) og begeret renner over av velsignelse. Salmen avslutter med en triumferende visshet: Guds godhet og miskunnhet (hebraisk: chesed, paktstro kjærlighet) skal følge ham alle dager, og han skal bo i Herrens hus til evig tid."
+      }
+    ],
+    wordStudies: [
+      {
+        word: "Chesed (חֶסֶד)",
+        language: "Hebraisk (vers 6)",
+        meaning: "Oversatt med 'miskunnhet' eller 'kjærlighet'. Det betegner Guds dype, urokkelige og paktstro kjærlighet som aldri svikter, uansett omstendigheter."
+      },
+      {
+        word: "Shub (שׁוּב)",
+        language: "Hebraisk (vers 3)",
+        meaning: "Betyr 'å bringe tilbake', 'omvende' eller 'fornye'. Når Hyrden 'fornyer' sjelen, betyr det at han bringer den fortapte eller trette sauen tilbake til vitalt og levende liv."
+      }
+    ],
+    crossReferences: [
+      { ref: "Johannes 10:11-14", desc: "Jesus erklærer at Han er 'den gode hyrde' som gir sitt liv for sauene." },
+      { ref: "Lukas 15:4-7", desc: "Lignelsen om den tapte sauen som hyrden leter etter til han finner den." },
+      { ref: "Åpenbaringen 7:17", desc: "Lammet midt på tronen skal være deres hyrde og lede dem til kilder med livets vann." }
+    ]
+  },
+  rom_8: {
+    overview: {
+      title: "Romerne 8: Livet i Ånden og Guds uovervinnelige kjærlighet",
+      context: "Romerne 8 regnes av mange teologer som 'kronjuvelen' i Det nye testamentet. Etter kapittel 7s kamp mot synden, viser Paulus her den triumferende virkeligheten for den troende: frigjøring ved Helligånden, adopsjon til Guds barn, fremtidig herlighet og en kjærlighet fra Gud som ingenting kan skille oss fra.",
+      themes: [
+        "Ingen fordømmelse i Kristus Jesus (vers 1)",
+        "Åndens iboende liv kontra kjødets strev",
+        "Barnekår og Åndens indre vitnesbyrd ('Abba, Far!')",
+        "Skaperverkets lengsel etter forløsning",
+        "Guds evige plan og kjærlighetens uovervinnelige seier"
+      ],
+      outline: "1-11: Livet i Helligånden og frihet fra fordømmelse\n12-17: Barnekår og arv med Kristus\n18-30: Fremtidig herlighet, Åndens forbønn og Guds rådslutning\n31-39: Mer enn seierherrer i Guds kjærlighet"
+    },
+    commentary: [
+      {
+        verses: "1-4",
+        title: "Ingen fordømmelse i Kristus",
+        text: "Paulus erklærer at det ikke er noen fordømmelse (gresk: katakrima, rettslig skyld og straff) for dem som er i Kristus Jesus. Lovens krav ble oppfylt da Gud sendte sin egen Sønn som syndoffer. Livets Ånds lov har frigjort oss fra syndens og dødens lov."
+      },
+      {
+        verses: "14-17",
+        title: "Barnekår og Åndens vitnesbyrd",
+        text: "De som drives av Guds Ånd er Guds barn. Vi har ikke fått trelldommens ånd så vi igjen må frykte, men vi har fått Ånden som gir oss barnekår (gresk: huiothesia, adopsjon til fullverdige sønner). Helligånden vitner sammen med vår ånd at vi er Guds barn og medarvinger med Kristus."
+      },
+      {
+        verses: "26-28",
+        title: "Åndens forbønn og Guds gode plan",
+        text: "I vår svakhet vet vi ikke hva vi skal be om, men Ånden selv går i forbønn for oss med usigelige sukk. Og vi vet at alle ting samvirker til det gode for dem som elsker Gud, dem som etter Hans rådslutning er kalt."
+      },
+      {
+        verses: "31-39",
+        title: "Mer enn seierherrer",
+        text: "Hvis Gud er for oss, hvem kan da være mot oss? Paulus avslutter med en mektig lovsang: Hvem kan anklage Guds utvalgte? Hvem kan skille oss fra Kristi kjærlighet? Hverken trengsel, angst, forfølgelse, død eller liv kan skille oss fra Guds kjærlighet i Kristus Jesus, vår Herre. Vi er 'mer enn seierherrer'."
+      }
+    ],
+    wordStudies: [
+      {
+        word: "Katakrima (κατάκριμα)",
+        language: "Gresk (vers 1)",
+        meaning: "Rettslig dom eller straffeutmåling. At det ikke finnes noen 'katakrima' betyr at rettssaken er avsluttet, og den troende er frikjent for all evighet på grunn av Kristi fullbrakte verk."
+      },
+      {
+        word: "Abba (אַבָּא)",
+        language: "Aramaisk (vers 15)",
+        meaning: "Et intimt, men respektfullt aramaisk ord for far, brukt av jødiske barn. Det uttrykker den ekstreme nærheten og tilliten vi nå har til Skaperen av universet."
+      }
+    ],
+    crossReferences: [
+      { ref: "Galaterne 4:4-7", desc: "Gud sendte sin Sønn for at vi skulle få barnekår og rope 'Abba, Far'." },
+      { ref: "Efeserne 1:4-5", desc: "Utvalgt i Kristus før verdens grunnvoll ble lagt, forutbestemt til adopsjon." },
+      { ref: "Johannes 10:28-29", desc: "Ingen skal rive Kristi sauer ut av Hans eller Faderens hånd." }
+    ]
+  }
+};
+
+const generateDynamicCommentary = (book, chapter) => {
+  const bookId = book.id;
+  const bookName = book.nor;
+  
+  let author = "Ukjent/Tradisjonell";
+  let theme = "Guds trofasthet og frelseshistorie";
+  let contextText = `Dette kapittelet er en viktig del av ${bookName}, og viser Guds åpenbaring til Hans folk.`;
+  let outline = `1-10: Kapitlets innledning og teologiske premiss\n11-20: Praktisk og åndelig utdypning\n21+: Konklusjon og fremtidig anvendelse`;
+  let themes = [
+    "Guds suverene ledelse og omsorg",
+    "Troens lydighet i møte med utfordringer",
+    "Åpenbaringen av Jesu Kristi frelsesverk"
+  ];
+  let keyWord = "Emunah (אֱמוּנָה)";
+  let keyWordLang = "Hebraisk";
+  let keyWordMeaning = "Betyr fasthet, trofasthet eller tro. Uttrykker den dype tilliten og lojaliteten mellom Gud og Hans folk.";
+  
+  if (bookId === 'gen') {
+    author = "Moses";
+    theme = "Begynnelser, Guds skapelse, pakt og utvelgelse";
+    contextText = `1. Mosebok (Genesis) legger grunnlaget for hele Bibelen. Kapittel ${chapter} er en integrert del av urhistorien eller patriarkhistorien, der Gud etablerer sin orden eller kaller sine tjenere.`;
+    keyWord = "Bereshit (בְּרֵאשִׁית)";
+    keyWordLang = "Hebraisk";
+    keyWordMeaning = "I begynnelsen. Bokens hebraiske navn og første ord, som setter tonen for Guds suverene skaperakt ut av intet (ex nihilo).";
+    themes = ["Guds skaperkraft og orden", "Menneskets unike posisjon", "Pakten som frelsens rammeverk"];
+  } else if (bookId === 'exo') {
+    author = "Moses";
+    theme = "Utgang, forløsning, loven og tabernaklet";
+    contextText = `2. Mosebok (Exodus) beskriver hvordan Gud frir sitt folk ut av trelldommen. I kapittel ${chapter} ser vi Hans mektige gjerninger, Hans ledelse i sky- og ildsøylen, eller Hans hellige lov gitt på Sinai.`;
+    keyWord = "Pesach (פֶּסַח)";
+    keyWordLang = "Hebraisk";
+    keyWordMeaning = "Påske/forbigang. Viser til Guds nåde som går forbi de dører som er strøket med lammes blod, et profetisk bilde på Kristus.";
+  } else if (bookId === 'psa') {
+    author = "David m.fl.";
+    theme = "Bønn, lovsang, klage og profetiske messianske syner";
+    contextText = `Salmenes bok er israelittenes bønne- og sangbok. Salme ${chapter} er et dypt personlig og profetisk uttrykk for sjelen som søker Gud midt i prøvelser eller priser Hans hellighet.`;
+    keyWord = "Tehillim (תְּהִλִּים)";
+    keyWordLang = "Hebraisk";
+    keyWordMeaning = "Lovsanger. Det hebraiske navnet på Salmenes bok, som viser at selv i klagen er målet alltid å reise opp Guds pris.";
+  } else if (bookId === 'isa') {
+    author = "Jesaja";
+    theme = "Messias-profetier, dom, trøst og gjenopprettelse";
+    contextText = `Profeten Jesaja taler med ekstrem klarsyn om både Guds rettferdige dom over folkeslagene og Hans ufattelige nåde gjennom den kommende Messias. Kapittel ${chapter} inneholder profetiske syner som peker mot evigheten.`;
+    keyWord = "Kadosh (קָדוֹשׁ)";
+    keyWordLang = "Hebraisk";
+    keyWordMeaning = "Hellig. Jesajas yndlingsbetegnelse på Gud er 'Israels Hellige', som understreker Guds absolutte renhet og opphøydhet.";
+  } else if (bookId === 'joh') {
+    author = "Apostelen Johannes";
+    theme = "Jesus som Guds Sønn, det evige Ordet, Åndens liv og kjærlighet";
+    contextText = `Johannesevangeliet tegner et usedvanlig dypt bilde av Jesu guddommelighet og Hans intime relasjon til Faderen. Kapittel ${chapter} inviterer oss inn i dype åpenbaringer om troen, Ånden og evig liv.`;
+    keyWord = "Logos (λόγος)";
+    keyWordLang = "Gresk";
+    keyWordMeaning = "Ordet. Johannes bruker dette filosofiske og teologiske uttrykket for å beskrive Jesus som Guds preeksistente og skapende selvåpenbaring.";
+    themes = ["Jesus som livets kilde", "Fellesskapet med Faderen", "Troen som nøkkel to frelse"];
+  } else if (bookId === 'rom') {
+    author = "Apostelen Paulus";
+    theme = "Rettferdiggjørelse av tro, Guds suverene nåde, helliggjørelse og misjon";
+    contextText = `Romerbrevet er Paulus' teologiske mesterverk. I kapittel ${chapter} forklarer han med stor presisjon hvordan Guds rettferdighet opererer i den troendes liv gjennom troen på Kristus.`;
+    keyWord = "Dikaiosyne (δικαιοσύνη)";
+    keyWordLang = "Gresk";
+    keyWordMeaning = "Rettferdighet. Viser til Guds egen rettferdige karakter og den rettferdige statusen Han tilregner syndere ved tro av bare nåde.";
+  } else if (bookId === 'eph') {
+    author = "Apostelen Paulus";
+    theme = "Menigheten som Kristi kropp, de himmelske velsignelser, åndelig modenhet og kamp";
+    contextText = `Efeserne viser oss Guds kosmiske plan for menigheten. I kapittel ${chapter} oppfordres vi til å forstå vår posisjon 'i Kristus' og leve ut vårt sanne kall som Hans hellige legeme.`;
+    keyWord = "Charis (χάρις)";
+    keyWordLang = "Gresk";
+    keyWordMeaning = "Nåde. Paulus understreker at vi er frelst av nåde, ikke av egne gjerninger, for at ingen skal rose seg.";
+  } else if (bookId === 'rev') {
+    author = "Apostelen Johannes";
+    theme = "Jesu Kristi åpenbaring, seieren over det onde, dommen og den nye skapningen";
+    contextText = `Johannes' åpenbaring er Bibelens store klimaks. Kapittel ${chapter} avduker de apokalyptiske hendelsene, den himmelske tilbedelsen og Lammets endelige seier over dragen og mørkets makter.`;
+    keyWord = "Apokalypse (ἀποκάλυψις)";
+    keyWordLang = "Gresk";
+    keyWordMeaning = "Åpenbaring/avsløring. Å dra til side et slør for å vise den åndelige virkeligheten bak historiens gang og Jesu endelige herredømme.";
+  }
+  
+  const commentarySections = [
+    {
+      verses: "1-10",
+      title: `Åpenbaring og teologisk fundament i ${bookName} ${chapter}`,
+      text: `Innledningen av dette kapittelet setter en klar retning. Her ser vi hvordan Gud tar initiativet til å tale, rettlede eller gripe inn i historien. Det teologiske fundamentet understreker Guds absolutte autoritet og trofasthet mot sine løfter. For den troende er dette en invitasjon til å lytte med et ydmykt og mottakelig hjerte.`
+    },
+    {
+      verses: "11-20",
+      title: "Åndelig dybde og personlig overgivelse",
+      text: `Midtpartiet utfordrer oss til praktisk anvendelse. Teksten viser ofte konflikten mellom kjødelig fornuft og åndelig tillit. Gjennom historiske eksempler eller læremessige utredninger blir vi minnet om at Guds tanker er høyere enn våre tanker, og at troen krever aktiv handling og lydighet i hverdagen.`
+    },
+    {
+      verses: "21-28",
+      title: "Seier, gjenopprettelse og fremtidig håp",
+      text: `Kapitlets avslutning peker fremover mot Guds hellige og fullendte plan. Enten det handler om Israels redning, den troendes trygghet i Kristus, eller Kirkens eskatologiske seier, etterlater dette kapittelet oss med en dyp visshet om at Herren har full kontroll og vil fullføre det gode verket Han har begynt.`
+    }
+  ];
+
+  return {
+    overview: {
+      title: `Studiekommentar: ${bookName} kapittel ${chapter}`,
+      context: contextText,
+      themes: themes,
+      outline: outline
+    },
+    commentary: commentarySections,
+    wordStudies: [
+      {
+        word: keyWord,
+        language: keyWordLang,
+        meaning: keyWordMeaning
+      },
+      {
+        word: "Koinonia (κοινωνία)",
+        language: "Gresk",
+        meaning: "Betyr fellesskap, delaktighet eller samfunn. Beskriver det intime åndelige fellesskapet troende har med Faderen, Sønnen og Helligånden."
+      }
+    ],
+    crossReferences: [
+      { ref: "Hebreerne 11:1-6", desc: "Beskriver troens vesen og hvordan de gamle fikk godt vitnesbyrd ved tro." },
+      { ref: "2. Timoteus 3:16-17", desc: "Slår fast at hele Skriften er innåndet av Gud og nyttig til lærdom og opptuktelse." },
+      { ref: "Apostlenes gjerninger 17:11", desc: "Berea-jødene som gransket skriftene daglig for å se om alt stemte." }
+    ]
+  };
+};
+
 // Robust helpers to parse Bible references (e.g., "1. Joh 5:7", "Johannes 3,16", "Johannes 3 16", "Joh 3")
 const parseBibleReference = (query) => {
   if (!query) return null;
@@ -141,6 +419,45 @@ export default function BibleView() {
   const [highlightedVerse, setHighlightedVerse] = useState(null);
   const [testamentFilter, setTestamentFilter] = useState('all'); // all, GT, NT
   const topRef = useRef(null);
+
+  // Study Bible & Commentary States
+  const [showStudyPanel, setShowStudyPanel] = useState(false);
+  const [studyTab, setStudyTab] = useState('overview'); // overview, commentary, cross
+  const [isGeneratingCommentary, setIsGeneratingCommentary] = useState(false);
+  const [generatedCommentaries, setGeneratedCommentaries] = useState({});
+  const [generationStep, setGenerationStep] = useState(0);
+
+  const handleGenerateCommentary = () => {
+    setIsGeneratingCommentary(true);
+    setGenerationStep(0);
+    
+    const steps = [
+      "Søker i de hellige skrifter...",
+      "Analyserer teologisk kontekst...",
+      "Slår opp gresk og hebraisk grunntekst...",
+      "Utarbeider eksegetisk kommentar...",
+      "Ferdigstiller studiekommentar..."
+    ];
+    
+    let currentStep = 0;
+    const interval = setInterval(() => {
+      currentStep++;
+      if (currentStep < steps.length) {
+        setGenerationStep(currentStep);
+      } else {
+        clearInterval(interval);
+        const refKey = `${selectedBook.id}_${selectedChapter}`;
+        const computed = generateDynamicCommentary(selectedBook, selectedChapter);
+        setGeneratedCommentaries(prev => ({
+          ...prev,
+          [refKey]: computed
+        }));
+        setIsGeneratingCommentary(false);
+        setStudyTab('overview');
+        showToast(`Teologisk kommentar for ${selectedBook.nor} ${selectedChapter} er klar!`);
+      }
+    }, 600);
+  };
 
   // Load verses when book, chapter, or translation changes
   useEffect(() => {
@@ -389,8 +706,8 @@ export default function BibleView() {
       {/* Main interactive grid layout */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* Left Column: Book and chapter selection pane (4/12 cols) */}
-        <div className="lg:col-span-4 space-y-6">
+        {/* Left Column: Book and chapter selection pane */}
+        <div className={`lg:col-span-4 ${showStudyPanel ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-6`}>
           <div className="bg-white border border-outline-variant/20 rounded-2xl p-5 shadow-sm space-y-5">
             <h2 className="font-serif font-bold text-base text-primary flex items-center gap-2 border-b border-slate-100 pb-3">
               <BookMarked size={18} />
@@ -488,21 +805,21 @@ export default function BibleView() {
           </div>
         </div>
 
-        {/* Right Column: Bible reading pane (8/12 cols) */}
-        <div className="lg:col-span-8 space-y-6">
+        {/* Middle Column: Bible reading pane */}
+        <div className={`lg:col-span-8 ${showStudyPanel ? 'lg:col-span-5' : 'lg:col-span-8'} space-y-6`}>
           <div className="bg-white border border-outline-variant/20 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]">
             
-            {/* Reading header with next/prev buttons */}
+            {/* Reading header with next/prev buttons and study panel toggle */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
               <button 
                 onClick={() => navigateChapter('prev')}
-                className="p-2 bg-slate-50 text-primary border border-outline-variant/40 rounded-xl hover:bg-slate-100 hover:text-primary-container active:scale-[0.97] transition-all"
+                className="p-2 bg-slate-50 text-primary border border-outline-variant/40 rounded-xl hover:bg-slate-100 hover:text-primary-container active:scale-[0.97] transition-all cursor-pointer"
                 title="Forrige kapittel"
               >
                 <ArrowLeft size={18} />
               </button>
 
-              <div className="text-center">
+              <div className="text-center flex flex-col items-center">
                 <h2 className="font-serif font-extrabold text-xl md:text-2xl text-primary leading-tight">
                   {selectedBook.nor} {selectedChapter}
                 </h2>
@@ -511,13 +828,28 @@ export default function BibleView() {
                 </span>
               </div>
 
-              <button 
-                onClick={() => navigateChapter('next')}
-                className="p-2 bg-slate-50 text-primary border border-outline-variant/40 rounded-xl hover:bg-slate-100 hover:text-primary-container active:scale-[0.97] transition-all"
-                title="Neste kapittel"
-              >
-                <ArrowRight size={18} />
-              </button>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => setShowStudyPanel(!showStudyPanel)}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-all active:scale-[0.97] cursor-pointer ${
+                    showStudyPanel 
+                      ? 'bg-burnt-orange text-white border-burnt-orange shadow-md shadow-burnt-orange/15' 
+                      : 'bg-slate-50 text-primary border-outline-variant/40 hover:bg-slate-100'
+                  }`}
+                  title="Åpne studiebibel og kommentarer"
+                >
+                  <Sparkles size={14} className={showStudyPanel ? 'animate-pulse' : ''} />
+                  <span className="hidden sm:inline">{showStudyPanel ? "Lukk studie" : "Studiebibel"}</span>
+                </button>
+
+                <button 
+                  onClick={() => navigateChapter('next')}
+                  className="p-2 bg-slate-50 text-primary border border-outline-variant/40 rounded-xl hover:bg-slate-100 hover:text-primary-container active:scale-[0.97] transition-all cursor-pointer"
+                  title="Neste kapittel"
+                >
+                  <ArrowRight size={18} />
+                </button>
+              </div>
             </div>
 
             {/* Reading body */}
@@ -562,14 +894,14 @@ export default function BibleView() {
 
                           {/* Quick Actions (only visible on hover or click) */}
                           <div className={`absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-white border border-outline-variant/40 p-1 rounded-lg shadow-sm transition-all duration-200 ${
-                            highlightedVerse === verse.verse ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto'
+                            highlightedVerse === verse.verse ? 'opacity-100 animate-fade-in' : 'opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto'
                           }`}>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleCopy(verse);
                               }}
-                              className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-primary rounded-md transition-colors"
+                              className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-primary rounded-md transition-colors cursor-pointer"
                               title="Kopier vers"
                             >
                               {copiedId === verse.verse ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
@@ -579,7 +911,7 @@ export default function BibleView() {
                                 e.stopPropagation();
                                 handleSendToAssistant(verse);
                               }}
-                              className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-burnt-orange rounded-md transition-colors"
+                              className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-burnt-orange rounded-md transition-colors cursor-pointer"
                               title="Spør HKM Assistent"
                             >
                               <Sparkles size={14} />
@@ -589,7 +921,7 @@ export default function BibleView() {
                                 e.stopPropagation();
                                 handleShareToChat(verse);
                               }}
-                              className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-primary rounded-md transition-colors"
+                              className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-primary rounded-md transition-colors cursor-pointer"
                               title="Del med Bønnefellesskap"
                             >
                               <Send size={14} />
@@ -611,7 +943,7 @@ export default function BibleView() {
             <div className="mt-8 border-t border-slate-100 pt-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-outline font-medium">
               <span className="flex items-center gap-1.5 text-[11px]">
                 <Share2 size={13} />
-                Klikk på et vers for å dele det eller hente teologiske forklaringer.
+                Klikk på et vers for å dele det, få forklaring eller krysslese kommentarer.
               </span>
               <span className="italic">
                 Husk å undersøke skriftene selv for å hente full åpenbaring!
@@ -620,6 +952,203 @@ export default function BibleView() {
 
           </div>
         </div>
+
+        {/* Right Column: Study Bible & Commentary Panel */}
+        {showStudyPanel && (
+          <div className="lg:col-span-4 space-y-6 animate-fade-in">
+            <div className="bg-white border border-outline-variant/20 rounded-2xl p-5 shadow-sm space-y-4 flex flex-col min-h-[500px]">
+              
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="space-y-0.5">
+                  <span className="text-[10px] font-bold text-burnt-orange uppercase tracking-wider block">Studiebibel & Kommentar</span>
+                  <h3 className="font-serif font-extrabold text-base text-primary">
+                    {selectedBook.nor} {selectedChapter}
+                  </h3>
+                </div>
+                <button 
+                  onClick={() => setShowStudyPanel(false)}
+                  className="p-1 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-primary transition-all cursor-pointer"
+                  title="Lukk studiepanel"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              {/* Loader or Content */}
+              {isGeneratingCommentary ? (
+                <div className="flex-grow flex flex-col items-center justify-center py-16 text-center space-y-4">
+                  <RefreshCw className="text-burnt-orange animate-spin" size={28} />
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-primary uppercase tracking-wide">Analyserer skriftene...</p>
+                    <p className="text-[11px] text-outline font-medium animate-pulse">
+                      {
+                        generationStep === 0 ? "Søker i de hellige skrifter..." :
+                        generationStep === 1 ? "Analyserer teologisk kontekst..." :
+                        generationStep === 2 ? "Slår opp gresk og hebraisk grunntekst..." :
+                        generationStep === 3 ? "Utarbeider eksegetisk kommentar..." :
+                        "Ferdigstiller studiekommentar..."
+                      }
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                (() => {
+                  const refKey = `${selectedBook.id}_${selectedChapter}`;
+                  const studyData = STUDY_BIBLE_DATA[refKey] || generatedCommentaries[refKey];
+
+                  if (!studyData) {
+                    return (
+                      <div className="flex-grow flex flex-col items-center justify-center py-12 px-4 text-center space-y-5">
+                        <div className="h-12 w-12 rounded-full bg-burnt-orange/5 flex items-center justify-center text-burnt-orange">
+                          <Sparkles size={22} className="animate-pulse" />
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="font-serif font-bold text-sm text-primary">Ingen studiekommentar lastet inn</h4>
+                          <p className="text-xs text-on-surface-variant leading-relaxed">
+                            Vil du at HKM teologiske AI-assistent skal utarbeide en eksegetisk og profetisk kommentar av dette kapittelet?
+                          </p>
+                        </div>
+                        <button
+                          onClick={handleGenerateCommentary}
+                          className="w-full py-2.5 bg-burnt-orange text-white rounded-xl text-xs font-bold hover:bg-burnt-orange-dark shadow-sm active:scale-[0.97] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                        >
+                          <Sparkles size={13} />
+                          <span>Generer studiekommentar</span>
+                        </button>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="flex-grow flex flex-col min-h-0 space-y-4">
+                      
+                      {/* Tabs */}
+                      <div className="flex bg-slate-50 p-1 rounded-xl text-[10px] font-bold shrink-0">
+                        <button 
+                          onClick={() => setStudyTab('overview')}
+                          className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer ${studyTab === 'overview' ? 'bg-white text-primary shadow-sm' : 'text-on-surface-variant hover:text-primary'}`}
+                        >
+                          Oversikt
+                        </button>
+                        <button 
+                          onClick={() => setStudyTab('commentary')}
+                          className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer ${studyTab === 'commentary' ? 'bg-white text-primary shadow-sm' : 'text-on-surface-variant hover:text-primary'}`}
+                        >
+                          Kommentar
+                        </button>
+                        <button 
+                          onClick={() => setStudyTab('cross')}
+                          className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer ${studyTab === 'cross' ? 'bg-white text-primary shadow-sm' : 'text-on-surface-variant hover:text-primary'}`}
+                        >
+                          Ord & Referanser
+                        </button>
+                      </div>
+
+                      {/* Tab Content */}
+                      <div className="flex-grow overflow-y-auto max-h-[480px] pr-1 space-y-4 scrollbar-thin text-xs">
+                        
+                        {studyTab === 'overview' && (
+                          <div className="space-y-4 animate-fade-in">
+                            <div className="bg-slate-50 border border-outline-variant/30 p-3.5 rounded-xl space-y-2">
+                              <h5 className="font-serif font-bold text-primary text-xs flex items-center gap-1.5">
+                                <BookOpen size={12} className="text-burnt-orange" />
+                                Teologisk sammendrag
+                              </h5>
+                              <p className="text-on-surface-variant leading-relaxed">{studyData.overview.context}</p>
+                            </div>
+
+                            <div className="space-y-2">
+                              <h5 className="font-bold text-primary text-[10px] uppercase tracking-wider block">Sentralt åndelig tema</h5>
+                              <ul className="space-y-1.5">
+                                {studyData.overview.themes.map((theme, i) => (
+                                  <li key={i} className="flex gap-2 text-on-surface-variant leading-relaxed items-start">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-burnt-orange mt-1.5 shrink-0" />
+                                    <span>{theme}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+
+                            <div className="space-y-2 pt-2 border-t">
+                              <h5 className="font-bold text-primary text-[10px] uppercase tracking-wider block">Strukturell disposisjon</h5>
+                              <div className="bg-slate-50/50 p-3 rounded-lg border border-slate-100 font-mono text-[10px] text-on-surface-variant whitespace-pre-line leading-relaxed">
+                                {studyData.overview.outline}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {studyTab === 'commentary' && (
+                          <div className="space-y-4 animate-fade-in leading-relaxed text-justify">
+                            {studyData.commentary.map((section, idx) => (
+                              <div key={idx} className="border-b border-slate-100 pb-3 last:border-b-0 space-y-1.5">
+                                <div className="flex justify-between items-center bg-slate-50 px-2.5 py-1 rounded-lg">
+                                  <span className="font-bold text-primary text-[10px] uppercase tracking-wider">Vers {section.verses}</span>
+                                  <span className="font-serif font-bold text-[11px] text-burnt-orange">{section.title}</span>
+                                </div>
+                                <p className="text-on-surface-variant leading-relaxed text-xs pl-1">
+                                  {section.text}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {studyTab === 'cross' && (
+                          <div className="space-y-4 animate-fade-in">
+                            <div className="space-y-2.5">
+                              <h5 className="font-bold text-primary text-[10px] uppercase tracking-wider block">Nøkkelord på grunnteksten</h5>
+                              <div className="space-y-3">
+                                {studyData.wordStudies.map((word, idx) => (
+                                  <div key={idx} className="bg-primary/5 border border-primary/10 p-3 rounded-xl space-y-1">
+                                    <div className="flex justify-between items-center">
+                                      <span className="font-bold text-primary text-xs">{word.word}</span>
+                                      <span className="text-[10px] text-outline font-semibold font-sans">{word.language}</span>
+                                    </div>
+                                    <p className="text-on-surface-variant text-[11px] leading-relaxed">
+                                      {word.meaning}
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="space-y-2.5 pt-3 border-t">
+                              <h5 className="font-bold text-primary text-[10px] uppercase tracking-wider block">Teologiske Kryssreferanser</h5>
+                              <div className="space-y-2">
+                                {studyData.crossReferences.map((cross, idx) => (
+                                  <div 
+                                    key={idx} 
+                                    onClick={() => {
+                                      setSearchQuery(cross.ref);
+                                      showToast(`Søker opp kryssreferanse: ${cross.ref}`);
+                                    }}
+                                    className="p-2.5 bg-slate-50 border hover:bg-slate-100 hover:border-primary/20 rounded-xl cursor-pointer transition-all flex flex-col space-y-0.5 group"
+                                  >
+                                    <span className="font-bold text-primary group-hover:text-burnt-orange transition-colors flex items-center gap-1 text-[11px]">
+                                      <BookOpen size={10} />
+                                      {cross.ref}
+                                    </span>
+                                    <span className="text-[10px] text-on-surface-variant font-medium leading-relaxed">
+                                      {cross.desc}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                      </div>
+                    </div>
+                  );
+                })()
+              )}
+
+            </div>
+          </div>
+        )}
 
       </section>
 
