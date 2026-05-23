@@ -134,28 +134,72 @@ export default function AdminPortal() {
         if (querySnapshot.empty) {
           // Seed initial demo users to Firestore
           const list = [...DEFAULT_USERS];
+          if (currentUser && !list.some(u => u.email?.toLowerCase() === currentUser.email?.toLowerCase())) {
+            list.push({
+              uid: currentUser.uid || 'current-admin',
+              name: currentUser.name || 'Thomas Knutsen',
+              email: currentUser.email,
+              role: currentUser.role || 'superadmin',
+              created: '23. May 2026',
+              status: 'AKTIV',
+              avatar: currentUser.avatar || ''
+            });
+          }
           for (const u of list) {
-            await setDoc(doc(db, "users", u.uid), u);
+            try {
+              await setDoc(doc(db, "users", u.uid), u);
+            } catch (wErr) {
+              console.warn("Could not seed user:", u.email, wErr);
+            }
           }
           setUsersList(list);
           localStorage.setItem('hkm-admin-portal-users', JSON.stringify(list));
         } else {
           const loaded = querySnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+          // Ensure current user is in the list
+          if (currentUser && !loaded.some(u => u.email?.toLowerCase() === currentUser.email?.toLowerCase())) {
+            loaded.push({
+              uid: currentUser.uid || 'current-admin',
+              name: currentUser.name || 'Thomas Knutsen',
+              email: currentUser.email,
+              role: currentUser.role || 'superadmin',
+              created: '23. May 2026',
+              status: 'AKTIV',
+              avatar: currentUser.avatar || ''
+            });
+          }
           setUsersList(loaded);
           localStorage.setItem('hkm-admin-portal-users', JSON.stringify(loaded));
         }
       } catch (err) {
         console.warn("Firestore fetch failed, loading local/offline state:", err);
         const cached = localStorage.getItem('hkm-admin-portal-users');
-        if (cached) {
-          setUsersList(JSON.parse(cached));
-        } else {
-          setUsersList(DEFAULT_USERS);
+        let list = [];
+        try {
+          list = cached ? JSON.parse(cached) : [];
+        } catch {
+          list = [];
         }
+        if (!Array.isArray(list) || list.length === 0) {
+          list = [...DEFAULT_USERS];
+        }
+        // Ensure current user is in the list
+        if (currentUser && !list.some(u => u.email?.toLowerCase() === currentUser.email?.toLowerCase())) {
+          list.push({
+            uid: currentUser.uid || 'current-admin',
+            name: currentUser.name || 'Thomas Knutsen',
+            email: currentUser.email,
+            role: currentUser.role || 'superadmin',
+            created: '23. May 2026',
+            status: 'AKTIV',
+            avatar: currentUser.avatar || ''
+          });
+        }
+        setUsersList(list);
       }
     };
     fetchUsers();
-  }, [isAuthorized]);
+  }, [isAuthorized, currentUser]);
 
   // Sync permissions
   useEffect(() => {
