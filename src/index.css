@@ -186,3 +186,29 @@ button {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Shift or hide floating widgets when Lesson Sidebar is open to prevent overlapping action buttons */
+@media (min-width: 768px) {
+  body:has(.lesson-notes-sidebar-open) .hkm-chat-widget-container {
+    right: 408px !important;
+  }
+  body:has(.lesson-notes-sidebar-open) .cms-visual-toggle-container {
+    right: 408px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  body:has(.lesson-notes-sidebar-open) .hkm-chat-widget-container {
+    display: none !important;
+  }
+  body:has(.lesson-notes-sidebar-open) .cms-visual-toggle-container {
+    display: none !important;
+  }
+}
+
+/* Ensure smooth transitions for floating widgets */
+.hkm-chat-widget-container,
+.cms-visual-toggle-container {
+  transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease, opacity 0.3s ease !important;
+}
+

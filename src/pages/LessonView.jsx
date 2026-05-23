@@ -891,7 +891,7 @@ export default function LessonView() {
         </div>
       </main>
 
-      <aside className={`bg-white border-l border-outline-variant/20 h-[calc(100vh-80px)] sticky top-20 flex flex-col py-6 px-5 overflow-y-auto shrink-0 transition-all duration-300 ease-in-out z-30 ${isNotesOpen ? 'w-full md:w-96 opacity-100 p-6' : 'w-0 opacity-0 pointer-events-none'}`}>
+      <aside className={`lesson-notes-sidebar bg-white border-l border-outline-variant/20 h-[calc(100vh-80px)] sticky top-20 flex flex-col py-6 px-5 overflow-y-auto shrink-0 transition-all duration-300 ease-in-out z-30 ${isNotesOpen ? 'w-full md:w-96 opacity-100 p-6 lesson-notes-sidebar-open' : 'w-0 opacity-0 pointer-events-none'}`}>
         <div className="flex flex-col h-full space-y-4 min-w-0">
           <div className="flex items-center justify-between pb-3 border-b border-outline-variant/30 shrink-0">
             <h3 className="font-bold text-primary text-base flex items-center gap-1.5">{sidebarTab === 'notes' ? <><Edit3 size={16} />Mine Notater</> : <><BookOpen size={16} />Bibelverktøy</>}</h3>
