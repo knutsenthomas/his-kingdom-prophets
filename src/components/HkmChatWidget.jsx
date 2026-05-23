@@ -150,7 +150,7 @@ export default function HkmChatWidget() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-[99] font-sans">
+    <div className="fixed bottom-6 right-6 z-[99] font-sans flex flex-col items-end">
       {/* Chrome Jitter Fix Layer Isolation stylesheet */}
       <style>{`
         .hkm-chat-panel {
