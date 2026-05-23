@@ -841,11 +841,13 @@ export const AppProvider = ({ children }) => {
       const userDocRef = doc(db, "users", firebaseUser.uid);
       const userSnap = await getDoc(userDocRef);
       if (!userSnap.exists()) {
+        const email = firebaseUser.email;
+        const isThomas = email === 'thomas@tk-design.no';
         const defaultProfile = {
           uid: firebaseUser.uid,
-          name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+          name: isThomas ? 'Thomas Knutsen' : (firebaseUser.displayName || firebaseUser.email.split('@')[0]),
           email: firebaseUser.email,
-          role: role || 'student',
+          role: isThomas ? 'superadmin' : (role || 'student'),
           avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
           phone: "+47 900 00 000",
           location: "Kristiansand, Norge",
@@ -854,7 +856,13 @@ export const AppProvider = ({ children }) => {
         await setDoc(userDocRef, defaultProfile);
         setUser(defaultProfile);
       } else {
-        setUser(userSnap.data());
+        const userData = userSnap.data();
+        if (userData.email === 'thomas@tk-design.no' && userData.role !== 'superadmin') {
+          userData.role = 'superadmin';
+          userData.name = 'Thomas Knutsen';
+          await setDoc(userDocRef, { role: 'superadmin', name: 'Thomas Knutsen' }, { merge: true });
+        }
+        setUser(userData);
       }
       setIsLoggedIn(true);
       showToast("Logget inn med Google!");
@@ -875,11 +883,13 @@ export const AppProvider = ({ children }) => {
       const userDocRef = doc(db, "users", firebaseUser.uid);
       const userSnap = await getDoc(userDocRef);
       if (!userSnap.exists()) {
+        const email = firebaseUser.email;
+        const isThomas = email === 'thomas@tk-design.no';
         const defaultProfile = {
           uid: firebaseUser.uid,
-          name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+          name: isThomas ? 'Thomas Knutsen' : (firebaseUser.displayName || firebaseUser.email.split('@')[0]),
           email: firebaseUser.email,
-          role: role || 'student',
+          role: isThomas ? 'superadmin' : (role || 'student'),
           avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
           phone: "+47 900 00 000",
           location: "Kristiansand, Norge",
@@ -888,7 +898,13 @@ export const AppProvider = ({ children }) => {
         await setDoc(userDocRef, defaultProfile);
         setUser(defaultProfile);
       } else {
-        setUser(userSnap.data());
+        const userData = userSnap.data();
+        if (userData.email === 'thomas@tk-design.no' && userData.role !== 'superadmin') {
+          userData.role = 'superadmin';
+          userData.name = 'Thomas Knutsen';
+          await setDoc(userDocRef, { role: 'superadmin', name: 'Thomas Knutsen' }, { merge: true });
+        }
+        setUser(userData);
       }
       setIsLoggedIn(true);
       showToast("Logget inn med Apple!");
