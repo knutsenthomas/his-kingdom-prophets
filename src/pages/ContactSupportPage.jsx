@@ -174,6 +174,7 @@ export default function ContactSupportPage() {
                             type="text"
                             value={form.name}
                             onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
+                            placeholder={isEn ? 'e.g., John Doe' : 'F.eks. Thomas Knutsen'}
                             className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-xs sm:text-sm font-semibold outline-none transition-all"
                             required
                           />

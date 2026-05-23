@@ -326,6 +326,7 @@ export default function SupportCenter() {
                   type="text"
                   value={contactForm.name}
                   onChange={(e) => setContactForm(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="F.eks. Thomas Knutsen"
                   className="w-full p-2.5 bg-slate-50 border border-outline-variant/30 rounded-lg text-xs outline-none focus:ring-1 focus:ring-primary focus:border-primary font-medium"
                   required
                 />
