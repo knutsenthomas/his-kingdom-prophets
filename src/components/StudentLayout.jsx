@@ -198,6 +198,47 @@ const SEARCH_DATABASE = [
     details: "Dette kurset kombinerer sunn menighetsteologi med praktiske sjelesorgverktøy. Tema inkluderer aktiv lytting, Den Hellige Ånds ledelse i samtaler, og personlig disippelskap.",
     verses: "Johannes 21:15-17, Galaterne 6:2",
     route: "/student/library"
+  },
+  // Kirkehistorie
+  {
+    id: "h-tidligkirke",
+    category: "Kirkehistorie",
+    title: "Den tidlige kirke & Patristikk",
+    subtitle: "Apostlenes etterfølgere og paktens bevaring",
+    description: "Tiden etter apostlene der kirken vokste under sterk forfølgelse og formulerte sine kjerne-trosbekjennelser.",
+    details: "Patristikken (kirkefedrenes tid) strekker seg fra apostoliske fedre som Polykarp og Ignatius, til de store økumeniske konsilene (f.eks. Nikea i 325 og Kalkedon i 451). Her ble fundamentale sannheter om treenigheten og Jesu to naturer (fullt Gud og fullt menneske) definert mot kjetteri, og Bibelens kanon ble samlet og bekreftet.",
+    verses: "Apostlenes gjerninger 20:28-30, 2. Timoteus 4:1-5",
+    relatedCourse: "BIBLE 301 (Modul 7: Skriftens autoritet)"
+  },
+  {
+    id: "h-reformasjon",
+    category: "Kirkehistorie",
+    title: "Reformasjonen",
+    subtitle: "Tilbake til skriften alene (Sola Scriptura)",
+    description: "Den åndelige og teologiske omveltningen på 1500-tallet som gjenreiste Bibelens autoritet.",
+    details: "Anført av skikkelser som Martin Luther (som spikret opp de 95 tesene i Wittenberg i 1517), Jean Calvin og Huldrych Zwingli, brøt reformasjonen med ubibelske tradisjoner i den katolske kirken. Hovedsøylene var Sola Scriptura (Skriften alene), Sola Fide (Troen alene) og Sola Gratia (Nåden alene), som ga vanlige folk Bibelen på sitt eget morsmål.",
+    verses: "Romerne 1:17, Efeserne 2:8-9",
+    relatedCourse: "BIBLE 301 (Modul 1: Hermeneutikk)"
+  },
+  {
+    id: "h-vekkelse",
+    category: "Kirkehistorie",
+    title: "Pinsevekkelsen & Åndens utgytelse",
+    subtitle: "Azusa Street og gjenreisingen av Åndens gaver",
+    description: "Den moderne karismatiske vekkelsen som startet i 1906 og gjenreiste Den Hellige Ånds dåp og gaver.",
+    details: "Etter århundrer med rasjonalisme brøt pinsevekkelsen frem under ledelse av William J. Seymour i Azusa Street, Los Angeles i 1906. Her opplevde troende dåpen i Den Hellige Ånd, tale i tunger, helbredelser og en gjenreising av de profetiske gavene. Dette la grunnlaget for den globale pinsebevegelsen og moderne karismatisk kristendom.",
+    verses: "Joel 3:1-2, Apostlenes gjerninger 2:1-4",
+    relatedCourse: "PROP 101 (Modul 1: Profetisk historie)"
+  },
+  {
+    id: "h-profetiskmoderne",
+    category: "Kirkehistorie",
+    title: "Den profetiske gjenreisingen i vår tid",
+    subtitle: "Gjenopprettelse av tjenestegaver (Efeserne 4:11)",
+    description: "Bevegelsen mot slutten av det 20. århundre som reetablerte profet- og apostelembetet i menigheten.",
+    details: "I løpet av de siste tiårene har Guds Ånd brakt en dypere forståelse og gjenreising av tjenestegavene beskrevet i Efeserne 4:11 - spesielt profeten og apostelen. Målet er at menigheten ikke bare skal drives administrativt, men ledes av åpenbaring, skjelneevne og åndelig autoritet for å utruste de hellige til tjeneste.",
+    verses: "Efeserne 4:11-13, Amos 3:7",
+    relatedCourse: "PROP 101 (Modul 7: Tjenestegavenes samspill)"
   }
 ];
 
@@ -681,7 +722,8 @@ export default function StudentLayout() {
                   { id: 'Bibelsk Person', label: language === 'en' ? 'Biblical People' : 'Bibelske Personer' },
                   { id: 'Bibelsk Emne', label: language === 'en' ? 'Topics' : 'Bibelske Emner' },
                   { id: 'Bønn & Åndelig Liv', label: language === 'en' ? 'Prayer' : 'Bønn & Åndelighet' },
-                  { id: 'Undervisning & Kurs', label: language === 'en' ? 'Teaching' : 'Undervisning' }
+                  { id: 'Undervisning & Kurs', label: language === 'en' ? 'Teaching' : 'Undervisning' },
+                  { id: 'Kirkehistorie', label: language === 'en' ? 'Church History' : 'Kirkehistorie' }
                 ].map(chip => (
                   <button
                     key={chip.id}
@@ -753,6 +795,7 @@ export default function StudentLayout() {
                             item.category === 'Bibelsk Person' ? 'bg-amber-50 text-amber-700 border border-amber-100' :
                             item.category === 'Bibelsk Emne' ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' :
                             item.category.includes('Bønn') ? 'bg-rose-50 text-rose-700 border border-rose-100' :
+                            item.category === 'Kirkehistorie' ? 'bg-cyan-50 text-cyan-700 border border-cyan-100' :
                             'bg-emerald-50 text-emerald-700 border border-emerald-100'
                           }`}>
                             {item.category}
@@ -789,6 +832,7 @@ export default function StudentLayout() {
                               selectedSearchItem.category === 'Bibelsk Person' ? 'bg-amber-50 text-amber-700 border border-amber-100' :
                               selectedSearchItem.category === 'Bibelsk Emne' ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' :
                               selectedSearchItem.category.includes('Bønn') ? 'bg-rose-50 text-rose-700 border border-rose-100' :
+                              selectedSearchItem.category === 'Kirkehistorie' ? 'bg-cyan-50 text-cyan-700 border border-cyan-100' :
                               'bg-emerald-50 text-emerald-700 border border-emerald-100'
                             }`}>
                               {selectedSearchItem.category}
