@@ -49,8 +49,8 @@ export default function HkmChatWidget() {
             transition={{ duration: 0.2 }}
             className="hkm-chat-panel bg-white w-[360px] h-[500px] rounded-2xl shadow-2xl border border-outline-variant flex flex-col overflow-hidden mb-4"
             style={{
-              transform: 'translateZ(0) !important',
-              backfaceVisibility: 'hidden !important'
+              transform: 'translateZ(0)',
+              backfaceVisibility: 'hidden'
             }}
           >
             {/* Header - Deep Brand Blue */}
@@ -80,7 +80,7 @@ export default function HkmChatWidget() {
             <div 
               ref={chatBodyRef}
               className="hkm-chat-body flex-grow p-4 overflow-y-auto space-y-4 bg-slate-50"
-              style={{ position: 'relative !important' }}
+              style={{ position: 'relative' }}
             >
               {assistantMessages.map((msg) => (
                 <div 
@@ -124,8 +124,8 @@ export default function HkmChatWidget() {
                   onChange={(e) => setInputText(e.target.value)}
                   className="w-full bg-slate-50 border border-outline-variant rounded-xl pl-4 pr-12 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all font-medium text-on-surface"
                   style={{
-                    transform: 'translateZ(0) !important',
-                    backfaceVisibility: 'hidden !important'
+                    transform: 'translateZ(0)',
+                    backfaceVisibility: 'hidden'
                   }}
                 />
                 <button
@@ -148,8 +148,8 @@ export default function HkmChatWidget() {
         style={{
           borderRadius: '9999px',
           backgroundColor: '#1B4965',
-          transform: 'translateZ(0) !important',
-          backfaceVisibility: 'hidden !important'
+          transform: 'translateZ(0)',
+          backfaceVisibility: 'hidden'
         }}
       >
         {isOpen ? <X size={24} /> : <MessageSquare size={24} />}

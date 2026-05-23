@@ -197,8 +197,8 @@ export default function StudentLayout() {
           style={{ 
             width: isCollapsed ? '0px' : '288px',
             opacity: isCollapsed ? 0 : 1,
-            transform: 'translateZ(0) !important',
-            backfaceVisibility: 'hidden !important'
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden'
           }}
         >
           <div className="py-8 px-6 space-y-8 w-72 shrink-0">
