@@ -107,7 +107,7 @@ export default function ContactSupportPage() {
                   <h4 className="text-xs font-bold text-primary uppercase tracking-wide">
                     {isEn ? 'Email Support' : 'E-post support'}
                   </h4>
-                  <p className="text-xs font-semibold text-slate-700 mt-1">support@hiskingdomprophets.org</p>
+                  <p className="text-xs font-semibold text-slate-700 mt-1">hiskingdomprophets@hiskingdomministry.no</p>
                   <p className="text-[10px] font-medium text-slate-400 mt-0.5">
                     {isEn ? 'Response time: Within 24 hours' : 'Svarstid: Innen 24 timer'}
                   </p>

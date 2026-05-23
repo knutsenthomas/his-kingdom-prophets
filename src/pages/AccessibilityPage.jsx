@@ -128,7 +128,7 @@ export default function AccessibilityPage() {
                 <section className="space-y-3">
                   <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">4. Feedback & Contact</h2>
                   <p>
-                    We welcome your feedback on the accessibility of our platform. If you encounter any barriers or have difficulty using any feature, please submit a support ticket or email us at support@hiskingdomprophets.org.
+                    We welcome your feedback on the accessibility of our platform. If you encounter any barriers or have difficulty using any feature, please submit a support ticket or email us at hiskingdomprophets@hiskingdomministry.no.
                   </p>
                 </section>
               </>
@@ -158,7 +158,7 @@ export default function AccessibilityPage() {
                 <section className="space-y-3">
                   <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">4. Tilbakemelding og kontakt</h2>
                   <p>
-                    Vi setter pris på dine tilbakemeldinger angående tilgjengeligheten på nettstedet vårt. Dersom du opplever hindringer eller har forbedringsforslag, vennligst kontakt oss via support eller send en e-post til support@hiskingdomprophets.org.
+                    Vi setter pris på dine tilbakemeldinger angående tilgjengeligheten på nettstedet vårt. Dersom du opplever hindringer eller har forbedringsforslag, vennligst kontakt oss via support eller send en e-post til hiskingdomprophets@hiskingdomministry.no.
                   </p>
                 </section>
               </>

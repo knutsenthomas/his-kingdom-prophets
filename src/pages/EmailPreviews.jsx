@@ -267,7 +267,7 @@ export default function EmailPreviews() {
                   )}
 
                   <p className="text-[11px] text-slate-500 text-center border-t border-slate-200 pt-6">
-                    Trenger du hjelp? Kontakt <a className="text-[#3c096c] underline" href="#help">support@hiskingdomprophets.com</a> eller logg inn på plattformen.
+                    Trenger du hjelp? Kontakt <a className="text-[#3c096c] underline" href="#help">hiskingdomprophets@hiskingdomministry.no</a> eller logg inn på plattformen.
                   </p>
                 </div>
 

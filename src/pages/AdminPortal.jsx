@@ -1157,7 +1157,7 @@ export default function AdminPortal() {
                   <input
                     type="email"
                     required
-                    placeholder="anders@hiskingdomprophets.com"
+                    placeholder="anders@hiskingdomministry.no"
                     value={newUserEmail}
                     onChange={(e)=>setNewUserEmail(e.target.value)}
                     className="w-full bg-[#f6fafe] border border-[#c1c7ce]/80 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#561291] focus:outline-none transition-all"

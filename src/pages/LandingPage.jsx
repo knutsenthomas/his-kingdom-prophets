@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,6 +11,70 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const { user, cmsContent, language, toggleLanguage } = useApp();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('programs');
+
+  const navItems = [
+    { slug: 'landing-nav-programs', fallback: 'Studielinjer', href: '#programs', id: 'programs' },
+    { slug: 'landing-nav-faculty', fallback: 'Mentorer', href: '#faculty', id: 'faculty' },
+    { slug: 'landing-nav-resources', fallback: 'Bibelressurser', href: '#research', id: 'research' },
+    { slug: 'landing-nav-admissions', fallback: 'Søk Opptak', href: '#admissions', id: 'admissions' }
+  ];
+
+  const handleNavClick = (e, id) => {
+    e.preventDefault();
+    setActiveSection(id);
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  useEffect(() => {
+    const sections = ['programs', 'faculty', 'research', 'admissions'];
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -60% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    // Fallback when scrolled to top
+    const handleScroll = () => {
+      if (window.scrollY < 100) {
+        setActiveSection('programs');
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) observer.unobserve(el);
+      });
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <div className="bg-background text-on-background font-sans min-h-screen">
@@ -27,18 +91,23 @@ export default function LandingPage() {
           </div>
           
           <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-            <a className="font-semibold text-primary border-b-2 border-primary cursor-pointer transition-colors duration-200" href="#programs">
-              <CmsText slug="landing-nav-programs" fallback="Studielinjer" />
-            </a>
-            <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#faculty">
-              <CmsText slug="landing-nav-faculty" fallback="Mentorer" />
-            </a>
-            <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#research">
-              <CmsText slug="landing-nav-resources" fallback="Bibelressurser" />
-            </a>
-            <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#admissions">
-              <CmsText slug="landing-nav-admissions" fallback="Søk Opptak" />
-            </a>
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.id)}
+                  className={`font-semibold cursor-pointer pb-1 border-b-2 transition-all duration-200 ${
+                    isActive 
+                      ? 'text-primary border-primary' 
+                      : 'text-on-surface-variant border-transparent hover:text-primary hover:border-primary/40'
+                  }`}
+                >
+                  <CmsText slug={item.slug} fallback={item.fallback} />
+                </a>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-1 min-[360px]:gap-2 sm:gap-4">
@@ -137,21 +206,26 @@ export default function LandingPage() {
 
                 {/* Navigation Links */}
                 <nav className="flex flex-col gap-2">
-                  {[
-                    { name: <CmsText slug="landing-nav-programs" fallback="Studielinjer" />, href: '#programs' },
-                    { name: <CmsText slug="landing-nav-faculty" fallback="Mentorer" />, href: '#faculty' },
-                    { name: <CmsText slug="landing-nav-resources" fallback="Bibelressurser" />, href: '#research' },
-                    { name: <CmsText slug="landing-nav-admissions" fallback="Søk Opptak" />, href: '#admissions' }
-                  ].map(item => (
-                    <a
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="px-4 py-3.5 text-sm font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-xl transition-all"
-                    >
-                      {item.name}
-                    </a>
-                  ))}
+                  {navItems.map(item => {
+                    const isActive = activeSection === item.id;
+                    return (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        onClick={(e) => {
+                          handleNavClick(e, item.id);
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className={`px-4 py-3.5 text-sm font-semibold rounded-xl transition-all ${
+                          isActive 
+                            ? 'text-primary bg-primary/5 font-bold' 
+                            : 'text-on-surface-variant hover:text-primary hover:bg-surface-container-low'
+                        }`}
+                      >
+                        <CmsText slug={item.slug} fallback={item.fallback} />
+                      </a>
+                    );
+                  })}
                 </nav>
               </div>
 
@@ -358,7 +432,7 @@ export default function LandingPage() {
           </div>
           
           {/* Symmetrical full-width global network banner below */}
-          <div className="mt-12 bg-gradient-to-r from-[#561291]/5 to-transparent border border-[#561291]/10 rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-[#561291]/20 transition-all duration-300 shadow-sm relative overflow-hidden group">
+          <div id="research" className="mt-12 bg-gradient-to-r from-[#561291]/5 to-transparent border border-[#561291]/10 rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-[#561291]/20 transition-all duration-300 shadow-sm relative overflow-hidden group">
             <div className="flex items-center gap-4 sm:gap-6 relative z-10">
               <div className="w-14 h-14 rounded-full bg-white text-[#561291] shadow-sm flex items-center justify-center border border-outline-variant/30 flex-shrink-0 animate-float">
                 <Globe size={26} className="text-[#561291]" />

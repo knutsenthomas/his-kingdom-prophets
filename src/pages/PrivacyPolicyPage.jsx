@@ -135,7 +135,7 @@ export default function PrivacyPolicyPage() {
                 <section className="space-y-3">
                   <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">5. Contact Information</h2>
                   <p>
-                    If you have any questions, wish to access your stored data, or request permanent deletion of your profile under GDPR guidelines, please contact us at support@hiskingdomprophets.org.
+                    If you have any questions, wish to access your stored data, or request permanent deletion of your profile under GDPR guidelines, please contact us at hiskingdomprophets@hiskingdomministry.no.
                   </p>
                 </section>
               </>
@@ -172,7 +172,7 @@ export default function PrivacyPolicyPage() {
                 <section className="space-y-3">
                   <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">5. Kontaktinformasjon</h2>
                   <p>
-                    Dersom du har spørsmål, ønsker innsyn i dine lagrede data, eller ber om permanent sletting av profilen din i henhold til GDPR-retningslinjene, vennligst kontakt oss på support@hiskingdomprophets.org.
+                    Dersom du har spørsmål, ønsker innsyn i dine lagrede data, eller ber om permanent sletting av profilen din i henhold til GDPR-retningslinjene, vennligst kontakt oss på hiskingdomprophets@hiskingdomministry.no.
                   </p>
                 </section>
               </>
