@@ -526,30 +526,11 @@ export default function StudentLayout() {
             </nav>
           </div>
 
-          {/* Premium banner at bottom of sidebar */}
+          {/* Sidebar footer with minimize trigger */}
           <div className="p-6 w-72 shrink-0">
-            <div className="bg-surface-container-low rounded-xl p-4 border border-outline-variant/30 text-center shadow-sm">
-              <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                <CmsText slug="layout-upgrade-banner-title" fallback="Utvid tjenesten" />
-              </p>
-              <CmsText
-                slug="layout-upgrade-banner-desc"
-                fallback="Få ubegrenset tilgang til alle studieskrifter og veiledning."
-                as="p"
-                className="text-[11px] text-on-surface-variant mb-3 leading-relaxed"
-              />
-              <button 
-                onClick={() => showToast("Oppgradering sendt til behandling!")} 
-                className="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg shadow-sm hover:bg-primary-container transition-all active:scale-[0.97]"
-              >
-                <CmsText slug="layout-upgrade-banner-btn" fallback="Oppgrader profil" />
-              </button>
-            </div>
-            
-            {/* Small minimize trigger button inside sidebar footer */}
             <button
               onClick={() => setIsCollapsed(true)}
-              className="mt-4 flex items-center justify-center gap-1.5 w-full py-1.5 text-[10px] uppercase font-bold tracking-widest text-on-surface-variant hover:text-primary transition-all"
+              className="flex items-center justify-center gap-1.5 w-full py-1.5 text-[10px] uppercase font-bold tracking-widest text-on-surface-variant hover:text-primary transition-all"
             >
               <ChevronLeft size={14} />
               <span>Skjul meny</span>
@@ -650,29 +631,7 @@ export default function StudentLayout() {
             </nav>
           </div>
 
-          {/* Premium banner at bottom of drawer */}
-          <div className="p-6">
-            <div className="bg-surface-container-low rounded-xl p-4 border border-outline-variant/30 text-center shadow-sm">
-              <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                <CmsText slug="layout-upgrade-banner-title" fallback="Utvid tjenesten" />
-              </p>
-              <CmsText
-                slug="layout-upgrade-banner-desc"
-                fallback="Få ubegrenset tilgang til alle studieskrifter og veiledning."
-                as="p"
-                className="text-[10px] text-on-surface-variant mb-3 leading-relaxed"
-              />
-              <button 
-                onClick={() => {
-                  showToast("Oppgradering sendt til behandling!");
-                  setIsMobileMenuOpen(false);
-                }} 
-                className="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg shadow-sm hover:bg-primary-container transition-all"
-              >
-                <CmsText slug="layout-upgrade-banner-btn" fallback="Oppgrader profil" />
-              </button>
-            </div>
-          </div>
+
         </aside>
       </div>
 
