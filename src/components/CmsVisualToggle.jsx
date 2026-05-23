@@ -8,8 +8,8 @@ export default function CmsVisualToggle() {
   const { user, isAdminEditing, setIsAdminEditing, showToast } = useApp();
   const navigate = useNavigate();
 
-  // Only display this floating control bar if logged in user is an Administrator
-  if (user?.role !== 'admin') {
+  // Only display this floating control bar if logged in user is an Administrator or Superadmin
+  if (user?.role !== 'admin' && user?.role !== 'superadmin') {
     return null;
   }
 
