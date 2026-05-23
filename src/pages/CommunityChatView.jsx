@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { 
@@ -11,7 +11,7 @@ export default function CommunityChatView() {
   const [activeChannel, setActiveChannel] = useState('general');
   const [messageText, setMessageText] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const pendingMsg = localStorage.getItem('hkm-pending-chat-message');
     if (pendingMsg) {
       setMessageText(pendingMsg);
