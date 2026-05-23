@@ -1559,9 +1559,10 @@ export const AppProvider = ({ children }) => {
     showToast(`Veiledningsmelding sendt til ${studentName}!`);
   };
 
-  // Submit support ticket to Firestore
+  // Submit support ticket to Firestore and trigger email dispatch
   const submitSupportTicket = async (ticketData) => {
     try {
+      // 1. Lagre henvendelsen i "support_tickets" for databaselogg
       const ticketRef = doc(collection(db, "support_tickets"));
       const newTicket = {
         id: ticketRef.id,
@@ -1570,6 +1571,34 @@ export const AppProvider = ({ children }) => {
         ...ticketData
       };
       await setDoc(ticketRef, newTicket);
+
+      // 2. Lagre i "support_emails" for automatisk e-postutsending via Firebase Extension
+      const emailRef = doc(collection(db, "support_emails"));
+      const newEmail = {
+        to: 'hiskingdomprophets@hiskingdomministry.no',
+        replyTo: ticketData.email,
+        message: {
+          subject: `[HKM Support] ${ticketData.subject || 'Ny henvendelse'}`,
+          text: `Ny henvendelse fra ${ticketData.name} (${ticketData.email}):\n\n${ticketData.message}`,
+          html: `
+            <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; border: 1px solid #eee; border-radius: 8px;">
+              <h2 style="color: #1B4965; border-bottom: 2px solid #1B4965; padding-bottom: 10px; margin-top: 0;">Ny support-henvendelse</h2>
+              <p><strong>Navn:</strong> ${ticketData.name}</p>
+              <p><strong>E-post:</strong> <a href="mailto:${ticketData.email}">${ticketData.email}</a></p>
+              <p><strong>Kilde:</strong> ${ticketData.source === 'support_center' ? 'Studentportal / Hjelpesenter' : 'Offentlig kontaktside'}</p>
+              <p><strong>Emne:</strong> ${ticketData.subject || 'Generell forespørsel'}</p>
+              <div style="background-color: #f8fafc; padding: 15px; border-left: 4px solid #c5a059; margin-top: 20px; border-radius: 4px;">
+                <p style="margin: 0; white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${ticketData.message}</p>
+              </div>
+              <p style="font-size: 11px; color: #666; margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px;">
+                Dette er en automatisk generert e-post sendt fra His Kingdom Prophets plattformen.
+              </p>
+            </div>
+          `
+        }
+      };
+      await setDoc(emailRef, newEmail);
+
       return true;
     } catch (e) {
       console.error("Klarte ikke lagre support ticket i Firestore:", e);
