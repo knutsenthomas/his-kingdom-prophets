@@ -76,9 +76,9 @@ export default function TeacherLayout() {
   }
 
   return (
-    <div className="bg-background min-h-screen flex flex-col font-sans text-on-surface">
+    <div className="bg-background min-h-screen flex flex-col font-sans text-on-surface pt-20">
       {/* Dynamic Mentor Header */}
-      <header className="bg-white border-b border-outline-variant/30 sticky top-0 z-40 shadow-sm">
+      <header className="bg-white border-b border-outline-variant/30 fixed top-0 left-0 right-0 z-40 shadow-sm">
         <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-12 max-w-[1440px] mx-auto h-20">
           
           {/* Logo & Toggle Trigger */}
