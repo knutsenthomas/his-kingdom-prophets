@@ -14,7 +14,7 @@ const parseInlineStyles = (text, isAssistant) => {
     if (token.startsWith('**') && token.endsWith('**')) {
       const content = token.slice(2, -2);
       return (
-        <strong key={index} className={`font-bold ${isAssistant ? 'text-[#1B4965]' : 'text-white'}`}>
+        <strong key={index} className={`font-bold ${isAssistant ? 'text-[#561291]' : 'text-white'}`}>
           {content}
         </strong>
       );
@@ -59,7 +59,7 @@ const renderRichText = (text, isAssistant) => {
       flushList(`list-before-h-${index}`);
       const headingText = trimmed.slice(4);
       renderedElements.push(
-        <h3 key={`h-${index}`} className={`text-base font-bold mt-4 mb-2 first:mt-0 flex items-center gap-1.5 leading-snug ${isAssistant ? 'text-[#1B4965]' : 'text-white'}`}>
+        <h3 key={`h-${index}`} className={`text-base font-bold mt-4 mb-2 first:mt-0 flex items-center gap-1.5 leading-snug ${isAssistant ? 'text-[#561291]' : 'text-white'}`}>
           {parseInlineStyles(headingText, isAssistant)}
         </h3>
       );
@@ -70,7 +70,7 @@ const renderRichText = (text, isAssistant) => {
       const bulletText = trimmed.slice(2);
       listItems.push(
         <li key={`li-${index}`} className={`flex items-start gap-2 text-sm leading-relaxed ${isAssistant ? 'text-slate-700' : 'text-white/90'}`}>
-          <span className={`${isAssistant ? 'text-[#1B4965]' : 'text-white'} shrink-0 mt-1 select-none`}>•</span>
+          <span className={`${isAssistant ? 'text-[#561291]' : 'text-white'} shrink-0 mt-1 select-none`}>•</span>
           <span className="flex-1">{parseInlineStyles(bulletText, isAssistant)}</span>
         </li>
       );
@@ -83,7 +83,7 @@ const renderRichText = (text, isAssistant) => {
       const bulletText = match[2];
       listItems.push(
         <li key={`li-${index}`} className={`flex items-start gap-2 text-sm leading-relaxed ${isAssistant ? 'text-slate-700' : 'text-white/90'}`}>
-          <span className={`${isAssistant ? 'text-[#1B4965]' : 'text-white'} shrink-0 font-bold text-xs mt-0.5 select-none`}>{num}.</span>
+          <span className={`${isAssistant ? 'text-[#561291]' : 'text-white'} shrink-0 font-bold text-xs mt-0.5 select-none`}>{num}.</span>
           <span className="flex-1">{parseInlineStyles(bulletText, isAssistant)}</span>
         </li>
       );
@@ -244,14 +244,14 @@ export default function HkmChatWidget() {
           position: relative !important;
         }
         .hkm-chat-toggle {
-          background: linear-gradient(135deg, #d17d39 0%, #bd4f2a 100%) !important;
+          background: linear-gradient(135deg, #561291 0%, #3c096c 100%) !important;
           transform: translateZ(0) !important;
           backface-visibility: hidden !important;
           transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
         }
         .hkm-chat-toggle:hover {
           transform: translateZ(0) scale(1.05) !important;
-          box-shadow: 0 10px 20px rgba(209, 125, 57, 0.3) !important;
+          box-shadow: 0 10px 20px rgba(86, 18, 145, 0.3) !important;
         }
         .hkm-chat-toggle:active {
           transform: translateZ(0) scale(0.95) !important;
@@ -267,8 +267,8 @@ export default function HkmChatWidget() {
             transition={{ duration: 0.2 }}
             className="hkm-chat-panel bg-white w-[360px] h-[500px] rounded-2xl shadow-2xl border border-outline-variant flex flex-col overflow-hidden mb-4"
           >
-            {/* Header - Mandal Regnskapskontor Dark Blue (#1B4965) */}
-            <div className="bg-[#1B4965] text-white px-5 py-4 flex items-center justify-between shadow-sm">
+            {/* Header - Majestic Royal Purple (#561291) */}
+            <div className="bg-[#561291] text-white px-5 py-4 flex items-center justify-between shadow-sm">
               <div className="flex items-center gap-2.5">
                 <img 
                   src={logo} 
@@ -355,7 +355,7 @@ export default function HkmChatWidget() {
                   placeholder="Skriv din melding her..."
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  className="w-full bg-slate-50 border border-outline-variant rounded-xl pl-4 pr-12 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#1B4965] focus:border-[#1B4965] transition-all font-medium text-on-surface"
+                  className="w-full bg-slate-50 border border-outline-variant rounded-xl pl-4 pr-12 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#561291] focus:border-[#561291] transition-all font-medium text-on-surface"
                 />
                 <button
                   type="submit"
@@ -370,7 +370,7 @@ export default function HkmChatWidget() {
         )}
       </AnimatePresence>
 
-      {/* Floating Toggle Button - Circular SVG with Orange Gradient */}
+      {/* Floating Toggle Button - Circular SVG with Majestic Royal Purple */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="hkm-chat-toggle w-14 h-14 flex items-center justify-center text-white shadow-xl hover:shadow-2xl cursor-pointer animate-fade-in"
