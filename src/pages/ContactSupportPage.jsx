@@ -169,13 +169,12 @@ export default function ContactSupportPage() {
                           {isEn ? 'Your Name' : 'Ditt navn'}
                         </label>
                         <div className="relative flex items-center">
-                          <User size={14} className="absolute left-3 text-slate-400" />
                           <input
                             type="text"
                             value={form.name}
                             onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
-                            placeholder={isEn ? 'e.g., John Doe' : 'F.eks. Thomas Knutsen'}
-                            className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-xs sm:text-sm font-semibold outline-none transition-all"
+                            placeholder={isEn ? 'Your name...' : 'Ditt navn...'}
+                            className="w-full px-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-xs sm:text-sm font-semibold outline-none transition-all"
                             required
                           />
                         </div>
@@ -186,12 +185,12 @@ export default function ContactSupportPage() {
                           {isEn ? 'Email Address' : 'E-postadresse'}
                         </label>
                         <div className="relative flex items-center">
-                          <Mail size={14} className="absolute left-3 text-slate-400" />
                           <input
                             type="email"
                             value={form.email}
                             onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))}
-                            className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-xs sm:text-sm font-semibold outline-none transition-all"
+                            placeholder={isEn ? 'Email address...' : 'E-postadresse...'}
+                            className="w-full px-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-xs sm:text-sm font-semibold outline-none transition-all"
                             required
                           />
                         </div>
@@ -203,13 +202,12 @@ export default function ContactSupportPage() {
                         {isEn ? 'Subject' : 'Hva gjelder henvendelsen?'}
                       </label>
                       <div className="relative flex items-center">
-                        <HelpCircle size={14} className="absolute left-3 text-slate-400" />
                         <input
                           type="text"
                           value={form.subject}
                           onChange={(e) => setForm(prev => ({ ...prev, subject: e.target.value }))}
-                          placeholder={isEn ? 'e.g., Assignment evaluation, Video error' : 'F.eks. Oppgavelink, Zoom feilmelding'}
-                          className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-xs sm:text-sm font-semibold outline-none transition-all"
+                          placeholder={isEn ? 'Subject...' : 'Hva gjelder henvendelsen?...'}
+                          className="w-full px-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-xs sm:text-sm font-semibold outline-none transition-all"
                           required
                         />
                       </div>
