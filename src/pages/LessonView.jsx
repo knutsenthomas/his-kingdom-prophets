@@ -380,45 +380,48 @@ export default function LessonView() {
     }
   };
 
-  const insertHtmlAtCursor = (html) => {
+  const insertHtmlToNotes = (html) => {
     const editor = editorRef.current;
-    if (!editor) return;
-
-    editor.focus();
-    
-    const selection = window.getSelection();
-    if (selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0);
-      
-      if (editor.contains(range.commonAncestorContainer)) {
-        range.deleteContents();
-        const el = document.createElement("div");
-        el.innerHTML = html;
-        const frag = document.createDocumentFragment();
-        let node, lastNode;
-        while ((node = el.firstChild)) {
-          lastNode = frag.appendChild(node);
+    if (editor && sidebarTab === 'notes') {
+      editor.focus();
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        if (editor.contains(range.commonAncestorContainer)) {
+          range.deleteContents();
+          const el = document.createElement("div");
+          el.innerHTML = html;
+          const frag = document.createDocumentFragment();
+          let node, lastNode;
+          while ((node = el.firstChild)) {
+            lastNode = frag.appendChild(node);
+          }
+          range.insertNode(frag);
+          if (lastNode) {
+            const newRange = range.cloneRange();
+            newRange.setStartAfter(lastNode);
+            newRange.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+          }
+          const newHtml = editor.innerHTML;
+          setNotes(newHtml);
+          localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newHtml);
+          saveNotesToFirestore(newHtml);
+          return;
         }
-        range.insertNode(frag);
-        
-        if (lastNode) {
-          const newRange = range.cloneRange();
-          newRange.setStartAfter(lastNode);
-          newRange.collapse(true);
-          selection.removeAllRanges();
-          selection.addRange(newRange);
-        }
-      } else {
-        editor.innerHTML += html;
       }
-    } else {
-      editor.innerHTML += html;
     }
     
-    const newHtml = editor.innerHTML;
-    setNotes(newHtml);
-    localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newHtml);
-    saveNotesToFirestore(newHtml);
+    // Fallback: Append directly to state if editor is unmounted
+    setNotes(prev => {
+      const current = prev ? prev.trim() : "";
+      const separator = current ? "<br/><br/>" : "";
+      const newText = current + separator + html;
+      localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newText);
+      saveNotesToFirestore(newText);
+      return newText;
+    });
   };
 
   const insertVerseToNotes = (verse) => {
@@ -428,9 +431,9 @@ export default function LessonView() {
     </blockquote>
     <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; margin-bottom: 0.75rem;">
       — <b>${selectedBibleBook.nor} ${verse.chapter}:${verse.verse}</b> (${transName})
-    </p><br/>`;
+    </p>`;
     
-    insertHtmlAtCursor(htmlRef);
+    insertHtmlToNotes(htmlRef);
     showToast("Skriftsted limt inn i dine notater!");
     setSelectedBibleVerses([]); // Clear selection when single verse is added
     setSidebarTab('notes');
@@ -475,9 +478,9 @@ export default function LessonView() {
     </blockquote>
     <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; margin-bottom: 0.75rem;">
       — <b>${selectedBibleBook.nor} ${selectedBibleChapter}:${verseRange}</b> (${transName})
-    </p><br/>`;
+    </p>`;
     
-    insertHtmlAtCursor(htmlRef);
+    insertHtmlToNotes(htmlRef);
     showToast(`${selectedBibleVerses.length} skriftsteder limt inn i dine notater!`);
     setSelectedBibleVerses([]); // Clear selection
     setSidebarTab('notes'); // Switch to notes tab
