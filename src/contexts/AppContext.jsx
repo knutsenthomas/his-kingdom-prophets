@@ -16,7 +16,8 @@ import {
   updateDoc, 
   collection, 
   getDocs, 
-  onSnapshot 
+  onSnapshot,
+  deleteDoc
 } from 'firebase/firestore';
 
 // Context API Sikkerhetsnett: Initialiser med tom brakett for å unngå "White screen of death"
@@ -812,34 +813,76 @@ export const AppProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         const userEmail = firebaseUser.email?.toLowerCase();
-        if (userEmail !== 'knutsenthomas@gmail.com') {
-          console.warn("Unauthorized user tried to log in:", userEmail);
-          setUser(null);
-          setIsLoggedIn(false);
-          await signOut(auth);
-          showToast("Tilgang nektet: Kun knutsenthomas@gmail.com er tillatt på denne plattformen.");
-          return;
-        }
-
+        
         try {
           const userDocRef = doc(db, "users", firebaseUser.uid);
-          const userSnap = await getDoc(userDocRef);
+          let userSnap = await getDoc(userDocRef);
+          let userData = null;
+
           if (userSnap.exists()) {
-            const userData = userSnap.data();
+            userData = userSnap.data();
+          } else {
+            // Check if there is an existing pre-created profile in the "users" collection matching this email
+            const querySnapshot = await getDocs(collection(db, "users"));
+            let matchedDoc = null;
+            querySnapshot.forEach(docSnap => {
+              const data = docSnap.data();
+              if (data.email?.toLowerCase() === userEmail) {
+                matchedDoc = { id: docSnap.id, data };
+              }
+            });
+
+            if (matchedDoc) {
+              // Found a pre-created profile! Let's migrate it to their actual UID!
+              userData = {
+                ...matchedDoc.data,
+                uid: firebaseUser.uid // Set to their actual firebase UID
+              };
+              await setDoc(userDocRef, userData);
+              
+              // Clean up the temporary pre-created usr- document
+              if (matchedDoc.id !== firebaseUser.uid) {
+                try {
+                  await deleteDoc(doc(db, "users", matchedDoc.id));
+                } catch (delErr) {
+                  console.warn("Could not delete temporary pre-created user doc:", delErr);
+                }
+              }
+            } else if (userEmail === 'knutsenthomas@gmail.com') {
+              // Owner doesn't have a profile yet, initialize it!
+              userData = {
+                uid: firebaseUser.uid,
+                name: 'Thomas Knutsen',
+                email: firebaseUser.email,
+                role: 'superadmin',
+                avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
+                phone: "+47 900 00 000",
+                location: "Kristiansand, Norge",
+                birthYear: "1995",
+                bio: "",
+                ministry: "",
+                socialInstagram: "",
+                socialFacebook: ""
+              };
+              await setDoc(userDocRef, userData);
+            }
+          }
+
+          if (userData) {
             let needsUpdate = false;
 
             // Automatically upgrade superadmins in Firestore if role is different
-            if (userData.role !== 'superadmin' || userData.name !== 'Thomas Knutsen') {
-              userData.role = 'superadmin';
-              userData.name = 'Thomas Knutsen';
-              needsUpdate = true;
+            if (userEmail === 'knutsenthomas@gmail.com') {
+              if (userData.role !== 'superadmin' || userData.name !== 'Thomas Knutsen') {
+                userData.role = 'superadmin';
+                userData.name = 'Thomas Knutsen';
+                needsUpdate = true;
+              }
             }
 
             // Reset mock avatars to default student/user avatar
             const mockAvatars = [
-              "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120",
-              "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120",
-              "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120"
+              "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120"
             ];
             if (mockAvatars.includes(userData.avatar)) {
               userData.avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
@@ -859,25 +902,15 @@ export const AppProvider = ({ children }) => {
             }
 
             setUser(userData);
+            setIsLoggedIn(true);
           } else {
-            const defaultProfile = {
-              uid: firebaseUser.uid,
-              name: 'Thomas Knutsen',
-              email: firebaseUser.email,
-              role: 'superadmin',
-              avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
-              phone: "+47 900 00 000",
-              location: "Kristiansand, Norge",
-              birthYear: "1995",
-              bio: "",
-              ministry: "",
-              socialInstagram: "",
-              socialFacebook: ""
-            };
-            await setDoc(userDocRef, defaultProfile);
-            setUser(defaultProfile);
+            // Unauthorized user (not knutsenthomas@gmail.com AND not in the pre-created admin list)
+            console.warn("Unauthorized user tried to log in:", userEmail);
+            setUser(null);
+            setIsLoggedIn(false);
+            await signOut(auth);
+            showToast("Tilgang nektet: Din e-postadresse er ikke registrert i systemet.");
           }
-          setIsLoggedIn(true);
         } catch (err) {
           console.error("Feil ved lasting av brukerprofil fra Firestore:", err);
         }
@@ -1047,11 +1080,6 @@ export const AppProvider = ({ children }) => {
 
   // Login handler with Firebase Authentication
   const login = async (email, password) => {
-    const checkEmail = email?.toLowerCase();
-    if (checkEmail !== 'knutsenthomas@gmail.com') {
-      showToast("Tilgang nektet: Kun knutsenthomas@gmail.com er tillatt på denne plattformen.");
-      return;
-    }
     try {
       await signInWithEmailAndPassword(auth, email, password);
       showToast("Logget inn via Firebase!");
@@ -1071,11 +1099,32 @@ export const AppProvider = ({ children }) => {
   // Sign up with Email/Password
   const registerWithEmail = async (email, password, name, role) => {
     const checkEmail = email?.toLowerCase();
-    if (checkEmail !== 'knutsenthomas@gmail.com') {
-      showToast("Registrering er sperret. Kun knutsenthomas@gmail.com er tillatt.");
-      return;
-    }
+    
+    // Check if pre-invited/pre-added by administrator
     try {
+      let isInvited = false;
+      let invitedProfile = null;
+      let docId = null;
+
+      if (checkEmail === 'knutsenthomas@gmail.com') {
+        isInvited = true;
+      } else {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        querySnapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          if (data.email?.toLowerCase() === checkEmail) {
+            isInvited = true;
+            invitedProfile = data;
+            docId = docSnap.id;
+          }
+        });
+      }
+
+      if (!isInvited) {
+        showToast("Registrering sperret: Din e-post er ikke registrert av en administrator.");
+        return;
+      }
+
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
       
@@ -1083,23 +1132,30 @@ export const AppProvider = ({ children }) => {
 
       const defaultProfile = {
         uid: firebaseUser.uid,
-        name: 'Thomas Knutsen',
+        name: invitedProfile?.name || name || 'Bruker',
         email,
-        role: 'superadmin',
-        avatar,
-        phone: "+47 900 00 000",
-        location: "Kristiansand, Norge",
-        birthYear: "1995",
-        bio: "",
-        ministry: "",
-        socialInstagram: "",
-        socialFacebook: ""
+        role: invitedProfile?.role || role || 'student',
+        avatar: invitedProfile?.avatar || avatar,
+        phone: invitedProfile?.phone || "+47 900 00 000",
+        location: invitedProfile?.location || "Kristiansand, Norge",
+        birthYear: invitedProfile?.birthYear || "1995",
+        bio: invitedProfile?.bio || "",
+        ministry: invitedProfile?.ministry || "",
+        socialInstagram: invitedProfile?.socialInstagram || "",
+        socialFacebook: invitedProfile?.socialFacebook || ""
       };
       
+      // Save profile under their actual Firebase UID
       await setDoc(doc(db, "users", firebaseUser.uid), defaultProfile);
+      
+      // Clean up the temporary doc generated in Brukeradministrasjon
+      if (docId && docId !== firebaseUser.uid) {
+        await deleteDoc(doc(db, "users", docId));
+      }
+
       setUser(defaultProfile);
       setIsLoggedIn(true);
-      showToast(`Bruker opprettet som superadmin!`);
+      showToast(`Bruker registrert som ${defaultProfile.role}!`);
     } catch (err) {
       console.error("Firebase registration failed:", err.message);
       showToast("Kunne ikke registrere bruker: " + err.message);
@@ -1114,43 +1170,7 @@ export const AppProvider = ({ children }) => {
       provider.setCustomParameters({
         prompt: 'select_account'
       });
-      const result = await signInWithPopup(auth, provider);
-      const firebaseUser = result.user;
-      const email = firebaseUser.email?.toLowerCase();
-      
-      if (email !== 'knutsenthomas@gmail.com') {
-        showToast("Tilgang nektet: Kun knutsenthomas@gmail.com er tillatt.");
-        await signOut(auth);
-        setUser(null);
-        setIsLoggedIn(false);
-        return;
-      }
-      
-      const userDocRef = doc(db, "users", firebaseUser.uid);
-      const userSnap = await getDoc(userDocRef);
-      if (!userSnap.exists()) {
-        const defaultProfile = {
-          uid: firebaseUser.uid,
-          name: 'Thomas Knutsen',
-          email: firebaseUser.email,
-          role: 'superadmin',
-          avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
-          phone: "+47 900 00 000",
-          location: "Kristiansand, Norge",
-          birthYear: "1995"
-        };
-        await setDoc(userDocRef, defaultProfile);
-        setUser(defaultProfile);
-      } else {
-        const userData = userSnap.data();
-        if (userData.role !== 'superadmin' || userData.name !== 'Thomas Knutsen') {
-          userData.role = 'superadmin';
-          userData.name = 'Thomas Knutsen';
-          await setDoc(userDocRef, { role: 'superadmin', name: 'Thomas Knutsen' }, { merge: true });
-        }
-        setUser(userData);
-      }
-      setIsLoggedIn(true);
+      await signInWithPopup(auth, provider);
       showToast("Logget inn med Google!");
     } catch (err) {
       console.error("Google login failed:", err);
@@ -1168,43 +1188,7 @@ export const AppProvider = ({ children }) => {
   const loginWithApple = async (role) => {
     try {
       const provider = new OAuthProvider('apple.com');
-      const result = await signInWithPopup(auth, provider);
-      const firebaseUser = result.user;
-      const email = firebaseUser.email?.toLowerCase();
-      
-      if (email !== 'knutsenthomas@gmail.com') {
-        showToast("Tilgang nektet: Kun knutsenthomas@gmail.com er tillatt.");
-        await signOut(auth);
-        setUser(null);
-        setIsLoggedIn(false);
-        return;
-      }
-      
-      const userDocRef = doc(db, "users", firebaseUser.uid);
-      const userSnap = await getDoc(userDocRef);
-      if (!userSnap.exists()) {
-        const defaultProfile = {
-          uid: firebaseUser.uid,
-          name: 'Thomas Knutsen',
-          email: firebaseUser.email,
-          role: 'superadmin',
-          avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
-          phone: "+47 900 00 000",
-          location: "Kristiansand, Norge",
-          birthYear: "1995"
-        };
-        await setDoc(userDocRef, defaultProfile);
-        setUser(defaultProfile);
-      } else {
-        const userData = userSnap.data();
-        if (userData.role !== 'superadmin' || userData.name !== 'Thomas Knutsen') {
-          userData.role = 'superadmin';
-          userData.name = 'Thomas Knutsen';
-          await setDoc(userDocRef, { role: 'superadmin', name: 'Thomas Knutsen' }, { merge: true });
-        }
-        setUser(userData);
-      }
-      setIsLoggedIn(true);
+      await signInWithPopup(auth, provider);
       showToast("Logget inn med Apple!");
     } catch (err) {
       console.error("Apple login failed:", err);
@@ -1220,11 +1204,6 @@ export const AppProvider = ({ children }) => {
 
   // Passwordless magic link login
   const loginPasswordless = async (email, role) => {
-    const checkEmail = email?.toLowerCase();
-    if (checkEmail !== 'knutsenthomas@gmail.com') {
-      showToast("Tilgang nektet: Kun knutsenthomas@gmail.com er tillatt på denne plattformen.");
-      return;
-    }
     try {
       await signInWithEmailAndPassword(auth, email, "pass123");
       showToast("Løsinnlogging fullført!");
