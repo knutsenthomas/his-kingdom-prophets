@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  BookOpen, Search, ArrowLeft, ArrowRight, Share2, Copy, Send, Check, RefreshCw, Sparkles, BookMarked, X
+  BookOpen, Search, ArrowLeft, ArrowRight, Share2, Copy, Send, Check, RefreshCw, Sparkles, BookMarked, X,
+  Trash2, Save, Loader2
 } from 'lucide-react';
+import { db } from '@/firebase';
+import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
 
 const BIBLE_BOOKS = [
   // Det gamle testamentet (GT)
@@ -408,7 +411,7 @@ const findBibleBook = (bookStr) => {
 
 export default function BibleView() {
   const navigate = useNavigate();
-  const { showToast, sendAssistantMessage } = useApp();
+  const { showToast, sendAssistantMessage, user } = useApp();
   const [selectedBook, setSelectedBook] = useState(BIBLE_BOOKS.find(b => b.id === 'joh'));
   const [selectedChapter, setSelectedChapter] = useState(3);
   const [selectedTranslation, setSelectedTranslation] = useState('bibelselskap');
@@ -422,13 +425,172 @@ export default function BibleView() {
 
   // Study Bible & Commentary States
   const [showStudyPanel, setShowStudyPanel] = useState(false);
-  const [studyTab, setStudyTab] = useState('overview'); // overview, commentary, cross
+  const [studyTab, setStudyTab] = useState('overview'); // overview, commentary, cross, notes
   const [isGeneratingCommentary, setIsGeneratingCommentary] = useState(false);
   const [generatedCommentaries, setGeneratedCommentaries] = useState({});
   const [generationStep, setGenerationStep] = useState(0);
 
   // Multi-verse Selection States
   const [selectedVerses, setSelectedVerses] = useState([]);
+
+  // Personal Study Notes States
+  const [noteText, setNoteText] = useState('');
+  const [noteSaveStatus, setNoteSaveStatus] = useState('idle'); // idle, loading, saving, saved, error
+  const saveTimeoutRef = useRef(null);
+
+  // Load notes for current book and chapter
+  useEffect(() => {
+    const loadNote = async () => {
+      if (!selectedBook) return;
+      const refKey = `${selectedBook.id}_${selectedChapter}`;
+      const cacheKey = `hkm-bible-note-${user?.uid || 'guest'}-${refKey}`;
+      
+      // Try local cache first for instant loading
+      const cached = localStorage.getItem(cacheKey);
+      setNoteText(cached || '');
+      setNoteSaveStatus('idle');
+      
+      if (!user?.uid) return;
+      
+      try {
+        setNoteSaveStatus('loading');
+        const docRef = doc(db, "bible_notes", `${user.uid}_${refKey}`);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const content = data.content || '';
+          setNoteText(content);
+          localStorage.setItem(cacheKey, content);
+          setNoteSaveStatus('saved');
+        } else {
+          setNoteSaveStatus('idle');
+        }
+      } catch (err) {
+        console.error("Feil ved lasting av notater:", err);
+        setNoteSaveStatus('error');
+      }
+    };
+
+    loadNote();
+    
+    // Clear any pending auto-saves when switching chapters
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+  }, [selectedBook, selectedChapter, user]);
+
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleSaveNote = async (textToSave = noteText) => {
+    if (!selectedBook) return;
+    const refKey = `${selectedBook.id}_${selectedChapter}`;
+    const cacheKey = `hkm-bible-note-${user?.uid || 'guest'}-${refKey}`;
+    
+    // Always save to localStorage immediately
+    localStorage.setItem(cacheKey, textToSave);
+    setNoteSaveStatus('saving');
+    
+    if (!user?.uid) {
+      // For guests, we only have local storage
+      setTimeout(() => {
+        setNoteSaveStatus('saved');
+      }, 500);
+      return;
+    }
+    
+    try {
+      const docRef = doc(db, "bible_notes", `${user.uid}_${refKey}`);
+      await setDoc(docRef, {
+        userId: user.uid,
+        userName: user.name || '',
+        bookId: selectedBook.id,
+        bookName: selectedBook.nor,
+        chapter: selectedChapter,
+        content: textToSave,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+      
+      setNoteSaveStatus('saved');
+    } catch (err) {
+      console.error("Feil ved lagring av notater:", err);
+      setNoteSaveStatus('error');
+      showToast("Kunne ikke synkronisere notatene til skyen. De er lagret lokalt.");
+    }
+  };
+
+  const handleNoteChange = (e) => {
+    const text = e.target.value;
+    setNoteText(text);
+    setNoteSaveStatus('idle');
+    
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+    
+    saveTimeoutRef.current = setTimeout(() => {
+      handleSaveNote(text);
+    }, 1500);
+  };
+
+  const handleSendNoteToAssistant = () => {
+    if (!noteText.trim()) {
+      showToast("Skriv et notat først!");
+      return;
+    }
+    const assistantPrompt = `Jeg studerer ${selectedBook.nor} ${selectedChapter} og har skrevet følgende notater og refleksjoner:\n\n"${noteText}"\n\nKan du hjelpe meg å utdype disse refleksjonene ut fra et teologisk og historisk perspektiv?`;
+    sendAssistantMessage(assistantPrompt);
+    showToast('Sendt til HKM Assistent! Åpne chatten nede til høyre.');
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('hkm-open-chat'));
+    }, 500);
+  };
+
+  const handleShareNoteToChat = () => {
+    if (!noteText.trim()) {
+      showToast("Skriv et notat først!");
+      return;
+    }
+    const shareMessage = `Hei alle sammen! 📖 Her er mine studie-notater og refleksjoner fra **${selectedBook.nor} ${selectedChapter}** i dag:\n\n"${noteText}"`;
+    localStorage.setItem('hkm-pending-chat-message', shareMessage);
+    showToast('Deling klargjort! Sender deg til bønnefellesskapet...');
+    setTimeout(() => {
+      navigate('/student/chat');
+    }, 1200);
+  };
+
+  const handleClearNote = async () => {
+    if (!window.confirm("Er du sikker på at du vil slette notatet for dette kapittelet? Dette kan ikke angres.")) return;
+    
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+    
+    const refKey = `${selectedBook.id}_${selectedChapter}`;
+    const cacheKey = `hkm-bible-note-${user?.uid || 'guest'}-${refKey}`;
+    localStorage.removeItem(cacheKey);
+    setNoteText('');
+    setNoteSaveStatus('idle');
+    
+    if (!user?.uid) {
+      showToast("Notatet er slettet.");
+      return;
+    }
+    
+    try {
+      const docRef = doc(db, "bible_notes", `${user.uid}_${refKey}`);
+      await deleteDoc(docRef);
+      showToast("Notatet er slettet.");
+    } catch (err) {
+      console.error("Feil ved sletting av notater:", err);
+      showToast("Kunne ikke slette notatet fra skyen, men det er fjernet lokalt.");
+    }
+  };
 
   // Reset verse selection when book or chapter changes
   useEffect(() => {
@@ -1141,21 +1303,27 @@ export default function BibleView() {
                       <div className="flex bg-slate-50 p-1 rounded-xl text-[10px] font-bold shrink-0">
                         <button 
                           onClick={() => setStudyTab('overview')}
-                          className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer ${studyTab === 'overview' ? 'bg-white text-primary shadow-sm' : 'text-on-surface-variant hover:text-primary'}`}
+                          className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer text-center ${studyTab === 'overview' ? 'bg-white text-primary shadow-sm' : 'text-on-surface-variant hover:text-primary'}`}
                         >
                           Oversikt
                         </button>
                         <button 
                           onClick={() => setStudyTab('commentary')}
-                          className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer ${studyTab === 'commentary' ? 'bg-white text-primary shadow-sm' : 'text-on-surface-variant hover:text-primary'}`}
+                          className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer text-center ${studyTab === 'commentary' ? 'bg-white text-primary shadow-sm' : 'text-on-surface-variant hover:text-primary'}`}
                         >
                           Kommentar
                         </button>
                         <button 
                           onClick={() => setStudyTab('cross')}
-                          className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer ${studyTab === 'cross' ? 'bg-white text-primary shadow-sm' : 'text-on-surface-variant hover:text-primary'}`}
+                          className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer text-center ${studyTab === 'cross' ? 'bg-white text-primary shadow-sm' : 'text-on-surface-variant hover:text-primary'}`}
                         >
-                          Ord & Referanser
+                          Ord & Ref
+                        </button>
+                        <button 
+                          onClick={() => setStudyTab('notes')}
+                          className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer text-center ${studyTab === 'notes' ? 'bg-white text-primary shadow-sm' : 'text-on-surface-variant hover:text-primary'}`}
+                        >
+                          Notater
                         </button>
                       </div>
 
@@ -1250,6 +1418,90 @@ export default function BibleView() {
                                   </div>
                                 ))}
                               </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {studyTab === 'notes' && (
+                          <div className="space-y-4 animate-fade-in flex flex-col h-full pb-2">
+                            <div className="flex justify-between items-center bg-slate-50 px-2.5 py-1.5 rounded-lg">
+                              <span className="font-bold text-primary text-[10px] uppercase tracking-wider">Personlige notater</span>
+                              <div className="flex items-center gap-1.5 font-sans">
+                                {noteSaveStatus === 'loading' && (
+                                  <span className="text-[10px] text-outline flex items-center gap-1">
+                                    <Loader2 className="animate-spin text-primary" size={10} />
+                                    Laster...
+                                  </span>
+                                )}
+                                {noteSaveStatus === 'saving' && (
+                                  <span className="text-[10px] text-burnt-orange flex items-center gap-1 font-bold">
+                                    <Loader2 className="animate-spin text-burnt-orange" size={10} />
+                                    Lagrer...
+                                  </span>
+                                )}
+                                {noteSaveStatus === 'saved' && (
+                                  <span className="text-[10px] text-green-600 flex items-center gap-1 font-bold">
+                                    <Check size={10} className="stroke-[3]" />
+                                    Lagret i skyen
+                                  </span>
+                                )}
+                                {noteSaveStatus === 'error' && (
+                                  <span className="text-[10px] text-rose-500 font-bold">
+                                    Kun lagret lokalt
+                                  </span>
+                                )}
+                                {noteSaveStatus === 'idle' && noteText && (
+                                  <span className="text-[10px] text-outline font-medium italic">
+                                    Endret...
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="relative flex-grow">
+                              <textarea
+                                value={noteText}
+                                onChange={handleNoteChange}
+                                placeholder="Skriv ned dine personlige notater, åpenbaringer, tanker og bønner for dette kapittelet her... Endringer lagres automatisk."
+                                className="w-full h-[220px] bg-slate-50/50 border border-outline-variant/35 rounded-xl p-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all leading-relaxed font-sans placeholder:italic resize-none scrollbar-thin text-on-surface"
+                              />
+                            </div>
+
+                            {/* Utility and Action Row */}
+                            <div className="grid grid-cols-2 gap-2 shrink-0 font-sans">
+                              <button
+                                onClick={handleSendNoteToAssistant}
+                                disabled={!noteText.trim()}
+                                className="py-2 px-3 bg-burnt-orange disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl text-[10px] font-bold hover:bg-burnt-orange-dark shadow-sm active:scale-[0.97] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                              >
+                                <Sparkles size={11} />
+                                <span>Spør HKM</span>
+                              </button>
+                              <button
+                                onClick={handleShareNoteToChat}
+                                disabled={!noteText.trim()}
+                                className="py-2 px-3 bg-[#1B4965]/90 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl text-[10px] font-bold hover:bg-[#1B4965] shadow-sm active:scale-[0.97] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                              >
+                                <Send size={11} />
+                                <span>Del i chat</span>
+                              </button>
+                            </div>
+
+                            <div className="flex justify-between items-center pt-2 border-t text-[10px] shrink-0 font-sans">
+                              <button
+                                onClick={() => handleSaveNote(noteText)}
+                                className="text-primary hover:text-primary-container font-bold flex items-center gap-1 cursor-pointer"
+                              >
+                                <Save size={12} />
+                                <span>Lagre nå</span>
+                              </button>
+                              <button
+                                onClick={handleClearNote}
+                                className="text-rose-500 hover:text-rose-700 font-bold flex items-center gap-1 cursor-pointer"
+                              >
+                                <Trash2 size={12} />
+                                <span>Slett notat</span>
+                              </button>
                             </div>
                           </div>
                         )}
