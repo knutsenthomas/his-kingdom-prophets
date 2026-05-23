@@ -14,7 +14,7 @@ export default function GradesCalculator() {
   const [selectedStudentId, setSelectedStudentId] = useState(students[0]?.id || 's1');
   const [assignmentTab, setAssignmentTab] = useState('submitted');
   const [selectedAssignmentId, setSelectedAssignmentId] = useState(assignments.find(a => a.status === 'submitted')?.id || assignments[0]?.id);
-  const [assignmentGrade, setAssignmentGrade] = useState('B');
+  const [assignmentGrade, setAssignmentGrade] = useState('Bestått');
   const [assignmentScore, setAssignmentScore] = useState('85/100');
   const [assignmentFeedback, setAssignmentFeedback] = useState('God besvarelse med tydelig refleksjon og god bibelsk forankring. Spiss gjerne konklusjonen enda mer.');
   
@@ -30,7 +30,7 @@ export default function GradesCalculator() {
 
   // Calculated results
   const [finalScore, setFinalScore] = useState(0);
-  const [letterGrade, setLetterGrade] = useState('C');
+  const [letterGrade, setLetterGrade] = useState('Bestått');
   const [gradeColor, setGradeColor] = useState('text-primary');
 
   const activeStudent = students.find(s => s.id === selectedStudentId) || students[0];
@@ -78,24 +78,12 @@ export default function GradesCalculator() {
     );
     setFinalScore(calculated);
 
-    // Letter grade scale
-    let grade = 'F';
+    // Passed / Not passed evaluation
+    let grade = 'Ikke bestått';
     let color = 'text-error';
-    if (calculated >= 90) {
-      grade = 'A';
+    if (calculated >= 50) {
+      grade = 'Bestått';
       color = 'text-primary';
-    } else if (calculated >= 80) {
-      grade = 'B';
-      color = 'text-primary';
-    } else if (calculated >= 68) {
-      grade = 'C';
-      color = 'text-[#c5a059]';
-    } else if (calculated >= 55) {
-      grade = 'D';
-      color = 'text-on-secondary-container';
-    } else if (calculated >= 40) {
-      grade = 'E';
-      color = 'text-on-secondary-container';
     }
     setLetterGrade(grade);
     setGradeColor(color);
@@ -479,8 +467,15 @@ export default function GradesCalculator() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">Karakter</label>
-                    <input value={assignmentGrade} onChange={e => setAssignmentGrade(e.target.value)} className="field-input" placeholder="A, B, C..." />
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">Resultat</label>
+                    <select
+                      value={assignmentGrade}
+                      onChange={e => setAssignmentGrade(e.target.value)}
+                      className="w-full bg-[#f0f4f8] border border-outline-variant/60 rounded-xl px-3 py-2 text-sm font-semibold focus:ring-1 focus:ring-primary focus:outline-none"
+                    >
+                      <option value="Bestått">Bestått</option>
+                      <option value="Ikke bestått">Ikke bestått</option>
+                    </select>
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-outline">Poengsum</label>

@@ -182,7 +182,7 @@ export default function AssignmentsPage() {
                 )}
                 {activeAssignment.status === 'graded' && (
                   <span className="text-xs font-semibold px-3 py-1 bg-green-100 text-green-800 rounded-full flex items-center gap-1">
-                    <Award size={12} /> Karakter: {activeAssignment.grade}
+                    <Award size={12} /> Resultat: {activeAssignment.grade === 'Ikke bestått' || activeAssignment.grade === 'F' ? 'Ikke bestått' : 'Bestått'}
                   </span>
                 )}
               </div>
@@ -314,9 +314,11 @@ export default function AssignmentsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Grade box */}
                   <div className="bg-primary/5 border border-primary/20 rounded-lg p-5 flex flex-col items-center justify-center text-center">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary mb-1">Karakter</span>
-                    <span className="text-5xl font-bold font-serif text-primary leading-none mb-2">{activeAssignment.grade}</span>
-                    <span className="text-xs font-semibold text-secondary">Poengsum: {activeAssignment.score}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary mb-1">Resultat</span>
+                    <span className="text-3xl font-bold font-serif text-primary leading-none mb-2">
+                      {activeAssignment.grade === 'Ikke bestått' || activeAssignment.grade === 'F' ? 'Ikke bestått' : 'Bestått'}
+                    </span>
+                    <span className="text-xs font-semibold text-secondary">Vurdering: {activeAssignment.score}</span>
                   </div>
 
                   {/* Meta box */}

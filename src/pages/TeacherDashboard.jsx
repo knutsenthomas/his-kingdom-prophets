@@ -31,7 +31,7 @@ export default function TeacherDashboard() {
 
   // Inline grading modal state
   const [selectedGradingAssignment, setSelectedGradingAssignment] = useState(null);
-  const [gradeInput, setGradeInput] = useState('A');
+  const [gradeInput, setGradeInput] = useState('Bestått');
   const [scoreInput, setScoreInput] = useState('95/100');
   const [feedbackInput, setFeedbackInput] = useState('');
 
@@ -83,7 +83,7 @@ export default function TeacherDashboard() {
 
   const handleOpenGrader = (assignment) => {
     setSelectedGradingAssignment(assignment);
-    setGradeInput('A');
+    setGradeInput('Bestått');
     setScoreInput('90/100');
     setFeedbackInput(`Kjære student,\n\nTakk for din grundige besvarelse. Du viser god teologisk forståelse og reflekterer modent rundt dette emnet. Fortsett det gode arbeidet!`);
   };
@@ -189,10 +189,10 @@ export default function TeacherDashboard() {
         <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow duration-300">
           <div className="space-y-1">
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">
-              <CmsText slug="teacher-kpi3-label" fallback="Evalueringssnitt" />
+              <CmsText slug="teacher-kpi3-label" fallback="Gjennomføringsrate" />
             </p>
-            <h3 className="text-3xl font-bold font-serif text-[#3c096c]">A-</h3>
-            <p className="text-[10px] text-outline font-semibold">Basert på siste innleveringer</p>
+            <h3 className="text-3xl font-bold font-serif text-[#3c096c]">95%</h3>
+            <p className="text-[10px] text-outline font-semibold">Bestått-andel for aktive disipler</p>
           </div>
           <div className="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
             <Award size={22} />
@@ -445,17 +445,16 @@ export default function TeacherDashboard() {
           <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
             <h3 className="font-serif text-lg font-bold text-primary mb-4 flex items-center gap-2">
               <BarChart3 size={18} className="text-[#c5a059]" />
-              <span>Karakterfordeling</span>
+              <span>Resultatfordeling</span>
             </h3>
             <div className="flex flex-col gap-3">
               {[
-                { grade: 'Karakter A', pct: 20, color: 'bg-[#c5a059]' },
-                { grade: 'Karakter B', pct: 45, color: 'bg-[#c5a059]' },
-                { grade: 'Karakter C', pct: 25, color: 'bg-[#c5a059]' },
-                { grade: 'Karakter D/F', pct: 10, color: 'bg-error/70' }
+                { label: 'Bestått', pct: 85, color: 'bg-primary' },
+                { label: 'Ikke bestått', pct: 5, color: 'bg-error/70' },
+                { label: 'Ikke levert', pct: 10, color: 'bg-slate-300' }
               ].map((g, idx) => (
                 <div key={idx} className="flex items-center justify-between text-xs text-on-surface-variant font-semibold font-sans">
-                  <span className="w-16 shrink-0">{g.grade}</span>
+                  <span className="w-20 shrink-0">{g.label}</span>
                   <div className="flex items-center gap-2 flex-grow mx-4">
                     <div className="h-3 bg-slate-100 rounded-full flex-grow relative overflow-hidden">
                       <div className={`h-full ${g.color}`} style={{ width: `${g.pct}%` }} />
@@ -525,16 +524,15 @@ export default function TeacherDashboard() {
                 {/* Score & Grade Select */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="block text-[10px] font-bold text-outline uppercase tracking-wider">Karakter</label>
+                    <label className="block text-[10px] font-bold text-outline uppercase tracking-wider">Resultat</label>
                     <select
                       value={gradeInput}
                       onChange={(e) => setGradeInput(e.target.value)}
                       className="w-full bg-[#f0f4f8] border border-outline-variant/60 rounded-xl px-3 py-2 text-sm font-semibold focus:ring-1 focus:ring-primary focus:outline-none"
                       style={{ transform: 'translateZ(0) !important', display: 'block' }}
                     >
-                      {['A', 'B', 'C', 'D', 'E', 'F'].map(g => (
-                        <option key={g} value={g}>Karakter {g}</option>
-                      ))}
+                      <option value="Bestått">Bestått</option>
+                      <option value="Ikke bestått">Ikke bestått</option>
                     </select>
                   </div>
 
