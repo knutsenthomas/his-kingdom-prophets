@@ -1948,10 +1948,22 @@ export const AppProvider = ({ children }) => {
           "Hvis du opplever en akutt feil, kan du beskrive den for meg her, så skal jeg prøve å feilsøke den umiddelbart!";
       }
 
-      // 4. Bible Verses
+      // 4. Bible Verses & Entire Bible Portal
+      else if (lower.includes("hele bibelen") || lower.includes("lese bibelen") || lower.includes("bibelportal") || lower.includes("bibel-oppslag")) {
+        replyText = "### 📖 Hele Bibelen er nå tilgjengelig!\n\n" +
+          "Nå har vi lagt inn **hele Bibelen** direkte på plattformen! Du trenger ikke lenger slå opp i eksterne verktøy.\n\n" +
+          "Du finner den fulle bibelopplevelsen under **Bibelen** i venstremenyen: /student/bible.\n\n" +
+          "**Hva du kan gjøre der:**\n" +
+          "• **Alle 66 bøker:** Les alt fra Genesis til Åpenbaringen.\n" +
+          "• **Flere oversettelser:** Bytt sømløst mellom *Norsk Bokmål (1930)*, *Norsk Nynorsk (1921)*, *English (KJV)* og *English (WEB)*.\n" +
+          "• **Søk og referanser:** Søk direkte på vers (f.eks. *'Salme 23'* eller *'Johannes 3:16'*).\n" +
+          "• **Interaktive handlinger:** Klikk på et hvilket som helst vers for å kopiere det, dele det med bønnefellesskapet, eller sende det direkte til meg for en dypere teologisk og profetisk forklaring!\n\n" +
+          "Gå til [Bibelportalen](/student/bible) nå og utforsk Skriftene!";
+      }
       else if (lower.includes("vers") || lower.includes("kapittel") || lower.includes("skriftsted") || lower.includes("sitat") || 
                lower.includes("johannes") || lower.includes("romerne") || lower.includes("salme") || lower.includes("efeserne") || 
-               lower.includes("matteus") || lower.includes("åpenbaring") || lower.includes("korinter") || lower.includes("bibelvers")) {
+               lower.includes("matteus") || lower.includes("åpenbaring") || lower.includes("korinter") || lower.includes("bibelvers") ||
+               lower.includes("bibel") || lower.includes("skriften")) {
         
         let verseText = "";
         if (lower.includes("johannes 3") || lower.includes("joh 3") || lower.includes("så har gud elsket")) {
@@ -1972,7 +1984,8 @@ export const AppProvider = ({ children }) => {
             "*\"Men den som taler profetisk, taler for mennesker til oppbyggelse, formaning og trøst.\"* — **1. Korinterbrev 14:3**";
         }
 
-        replyText = "Her er et vakkert og styrkende skriftsted til deg:\n\n" + verseText;
+        replyText = "Her er et vakkert og styrkende skriftsted til deg:\n\n" + verseText + 
+          "\n\n💡 *Tips: Du kan nå lese og søke i hele Bibelen direkte på vår plattform under [Bibelen](/student/bible) i venstremenyen! Der kan du også enkelt dele vers og be meg om dypere forklaringer.*";
       }
 
       // 5. Biblical Topics / Subjects

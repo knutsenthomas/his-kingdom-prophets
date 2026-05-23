@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { 
-  Compass, BookOpen, Video, CheckSquare, Users, 
+  Compass, BookOpen, Book, Video, CheckSquare, Users, 
   Menu, Bell, Power, Search, Award, GraduationCap, ChevronLeft, User,
   Gift, HelpCircle, X, Globe, ArrowRight
 } from 'lucide-react';
@@ -314,6 +314,7 @@ export default function StudentLayout() {
 
   const navItems = [
     { name: language === 'en' ? 'Dashboard' : 'Dashboard', path: '/student/dashboard', icon: Compass },
+    { name: language === 'en' ? 'Bible' : 'Bibelen', path: '/student/bible', icon: Book },
     { name: language === 'en' ? 'Curriculum & Courses' : 'Studieplan & Kurs', path: '/student/library', icon: BookOpen },
     { name: language === 'en' ? 'Lesson' : 'Leksjon', path: '/student/lesson', icon: GraduationCap },
     { name: language === 'en' ? 'Classroom / Video' : 'Klasserom / Video', path: '/student/video', icon: Video },

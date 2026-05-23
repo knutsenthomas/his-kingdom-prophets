@@ -25,6 +25,7 @@ import LibraryView from '@/pages/LibraryView';
 import AssignmentsPage from '@/pages/AssignmentsPage';
 import CommunityChatView from '@/pages/CommunityChatView';
 import StudentProfile from '@/pages/StudentProfile';
+import BibleView from '@/pages/BibleView';
 
 // Teacher Pages
 import TeacherDashboard from '@/pages/TeacherDashboard';
@@ -176,6 +177,7 @@ function AppRoutes() {
           <Route path="/student/lesson" element={<LessonView />} />
           <Route path="/student/video" element={<VideoView />} />
           <Route path="/student/library" element={<LibraryView />} />
+          <Route path="/student/bible" element={<BibleView />} />
           <Route path="/student/assignments" element={<AssignmentsPage />} />
           <Route path="/student/chat" element={<CommunityChatView />} />
           <Route path="/student/profile" element={<StudentProfile />} />
