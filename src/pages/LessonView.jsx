@@ -6,8 +6,9 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { 
   ArrowLeft, ArrowRight, CheckCircle, PlayCircle, ExternalLink, FileText,
   Eye, EyeOff, Maximize2, Minimize2, BookOpen, Edit3, Trash2, Bold, Italic,
-  List, Quote, ClipboardCopy, Download, X, MessageSquare, Send, Book, Check, Sparkles, RefreshCw, Search
+  List, Quote, ClipboardCopy, Download, X, MessageSquare, Send, Book, Check, Sparkles, RefreshCw, Search, BookMarked
 } from 'lucide-react';
+import { STUDY_BIBLE_DATA, generateDynamicCommentary } from '@/lib/bibleData';
 
 const BIBLE_BOOKS = [
   { id: 'gen', nor: '1. Mosebok', eng: 'Genesis', chapters: 50, testament: 'GT' },
@@ -150,7 +151,7 @@ export default function LessonView() {
   const [activeTab, setActiveTab] = useState('write'); // 'write' or 'preview'
   
   // Bible Drawer State Integration
-  const [sidebarTab, setSidebarTab] = useState('notes'); // 'notes' or 'bible'
+  const [sidebarTab, setSidebarTab] = useState('notes'); // 'notes', 'bible', or 'study'
   const [selectedBibleBook, setSelectedBibleBook] = useState(BIBLE_BOOKS.find(b => b.id === 'joh')); // Johannes default
   const [selectedBibleChapter, setSelectedBibleChapter] = useState(3);
   const [selectedBibleTranslation, setSelectedBibleTranslation] = useState('bibelselskap');
@@ -159,6 +160,44 @@ export default function LessonView() {
   const [isBibleLoading, setIsBibleLoading] = useState(false);
   const [highlightedBibleVerse, setHighlightedBibleVerse] = useState(null);
   const [selectedBibleVerses, setSelectedBibleVerses] = useState([]);
+  
+  // Study Bible state integration
+  const [studyTab, setStudyTab] = useState('overview'); // 'overview', 'commentary', 'cross'
+  const [generatedCommentaries, setGeneratedCommentaries] = useState({});
+  const [isGeneratingCommentary, setIsGeneratingCommentary] = useState(false);
+  const [generationStep, setGenerationStep] = useState(0);
+
+  const handleGenerateCommentary = () => {
+    setIsGeneratingCommentary(true);
+    setGenerationStep(0);
+    
+    const steps = [
+      "Søker i de hellige skrifter...",
+      "Analyserer teologisk kontekst...",
+      "Slår opp gresk og hebraisk grunntekst...",
+      "Utarbeider eksegetisk kommentar...",
+      "Ferdigstiller studiekommentar..."
+    ];
+    
+    let currentStep = 0;
+    const interval = setInterval(() => {
+      currentStep++;
+      if (currentStep < steps.length) {
+        setGenerationStep(currentStep);
+      } else {
+        clearInterval(interval);
+        const refKey = `${selectedBibleBook.id}_${selectedBibleChapter}`;
+        const computed = generateDynamicCommentary(selectedBibleBook, selectedBibleChapter);
+        setGeneratedCommentaries(prev => ({
+          ...prev,
+          [refKey]: computed
+        }));
+        setIsGeneratingCommentary(false);
+        setStudyTab('overview');
+        showToast(`Teologisk kommentar for ${selectedBibleBook.nor} ${selectedBibleChapter} er klar!`);
+      }
+    }, 600);
+  };
   
   const textareaRef = useRef(null);
   const editorRef = useRef(null);
@@ -894,12 +933,17 @@ export default function LessonView() {
       <aside className={`lesson-notes-sidebar bg-white border-l border-outline-variant/20 h-[calc(100vh-80px)] sticky top-20 flex flex-col py-6 px-5 overflow-y-auto shrink-0 transition-all duration-300 ease-in-out z-30 ${isNotesOpen ? 'w-full md:w-96 opacity-100 p-6 lesson-notes-sidebar-open' : 'w-0 opacity-0 pointer-events-none'}`}>
         <div className="flex flex-col h-full space-y-4 min-w-0">
           <div className="flex items-center justify-between pb-3 border-b border-outline-variant/30 shrink-0">
-            <h3 className="font-bold text-primary text-base flex items-center gap-1.5">{sidebarTab === 'notes' ? <><Edit3 size={16} />Mine Notater</> : <><BookOpen size={16} />Bibelverktøy</>}</h3>
+            <h3 className="font-bold text-primary text-base flex items-center gap-1.5">
+              {sidebarTab === 'notes' && <><Edit3 size={16} />Mine Notater</>}
+              {sidebarTab === 'bible' && <><BookOpen size={16} />Bibellesing</>}
+              {sidebarTab === 'study' && <><Sparkles size={16} />Studiebibel</>}
+            </h3>
             <button onClick={() => setIsNotesOpen(false)}><X size={18} /></button>
           </div>
-          <div className="flex bg-slate-100 p-1 rounded-xl text-[11px] font-bold shrink-0">
-            <button onClick={() => setSidebarTab('notes')} className={`flex-1 py-1.5 rounded-lg ${sidebarTab === 'notes' ? 'bg-white' : ''}`}>Mine Notater</button>
-            <button onClick={() => setSidebarTab('bible')} className={`flex-1 py-1.5 rounded-lg ${sidebarTab === 'bible' ? 'bg-white' : ''}`}>Slå opp i Bibelen</button>
+          <div className="flex bg-slate-100 p-1 rounded-xl text-[10px] font-bold shrink-0">
+            <button onClick={() => setSidebarTab('notes')} className={`flex-1 py-1.5 rounded-lg transition-all ${sidebarTab === 'notes' ? 'bg-white text-primary shadow-sm' : 'text-slate-500'}`}>Mine Notater</button>
+            <button onClick={() => setSidebarTab('bible')} className={`flex-1 py-1.5 rounded-lg transition-all ${sidebarTab === 'bible' ? 'bg-white text-primary shadow-sm' : 'text-slate-500'}`}>Bibellesing</button>
+            <button onClick={() => setSidebarTab('study')} className={`flex-1 py-1.5 rounded-lg transition-all ${sidebarTab === 'study' ? 'bg-white text-primary shadow-sm' : 'text-slate-500'}`}>Studiebibel</button>
           </div>
           {sidebarTab === 'notes' ? (
             <>
@@ -955,7 +999,7 @@ export default function LessonView() {
                 </div>
               </div>
             </>
-          ) : (
+          ) : sidebarTab === 'bible' ? (
             <div className="flex flex-col flex-grow min-h-0 min-w-0 space-y-3.5 font-sans">
               <div className="grid grid-cols-2 gap-2 shrink-0">
                 <select 
@@ -1069,6 +1113,192 @@ export default function LessonView() {
                   </div>
                 </div>
               )}
+            </div>
+          ) : (
+            <div className="flex flex-col flex-grow min-h-0 min-w-0 space-y-4 font-sans text-xs">
+              {/* Study Tabs */}
+              <div className="flex bg-slate-50 p-1 rounded-xl text-[10px] font-bold shrink-0">
+                <button 
+                  onClick={() => setStudyTab('overview')}
+                  className={`flex-1 py-1.5 rounded-lg transition-all text-center ${studyTab === 'overview' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-primary'}`}
+                >
+                  Oversikt
+                </button>
+                <button 
+                  onClick={() => setStudyTab('commentary')}
+                  className={`flex-1 py-1.5 rounded-lg transition-all text-center ${studyTab === 'commentary' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-primary'}`}
+                >
+                  Kommentar
+                </button>
+                <button 
+                  onClick={() => setStudyTab('cross')}
+                  className={`flex-1 py-1.5 rounded-lg transition-all text-center ${studyTab === 'cross' ? 'bg-white text-primary shadow-sm' : 'text-slate-500 hover:text-primary'}`}
+                >
+                  Ord & Ref
+                </button>
+              </div>
+
+              {/* Study Bible Content */}
+              {(() => {
+                const refKey = `${selectedBibleBook.id}_${selectedBibleChapter}`;
+                const studyData = STUDY_BIBLE_DATA[refKey] || generatedCommentaries[refKey];
+
+                if (isGeneratingCommentary) {
+                  return (
+                    <div className="flex-grow flex flex-col items-center justify-center py-16 text-center space-y-4">
+                      <RefreshCw className="text-burnt-orange animate-spin" size={28} />
+                      <div className="space-y-1">
+                        <p className="text-xs font-bold text-primary uppercase tracking-wide">Analyserer skriftene...</p>
+                        <p className="text-[11px] text-outline font-medium animate-pulse">
+                          {
+                            generationStep === 0 ? "Søker i de hellige skrifter..." :
+                            generationStep === 1 ? "Analyserer teologisk kontekst..." :
+                            generationStep === 2 ? "Slår opp gresk og hebraisk grunntekst..." :
+                            generationStep === 3 ? "Utarbeider eksegetisk kommentar..." :
+                            "Ferdigstiller studiekommentar..."
+                          }
+                        </p>
+                      </div>
+                    </div>
+                  );
+                }
+
+                if (!studyData) {
+                  return (
+                    <div className="flex-grow flex flex-col items-center justify-center py-12 px-4 text-center space-y-5">
+                      <div className="h-12 w-12 rounded-full bg-burnt-orange/5 flex items-center justify-center text-burnt-orange">
+                        <Sparkles size={22} className="animate-pulse" />
+                      </div>
+                      <div className="space-y-2">
+                        <h4 className="font-serif font-bold text-sm text-primary">Ingen studiekommentar lastet inn</h4>
+                        <p className="text-xs text-on-surface-variant leading-relaxed">
+                          Vil du at HKM teologiske AI-assistent skal utarbeide en eksegetisk og profetisk kommentar av <strong>{selectedBibleBook.nor} {selectedBibleChapter}</strong>?
+                        </p>
+                      </div>
+                      <button
+                        onClick={handleGenerateCommentary}
+                        className="w-full py-2.5 bg-burnt-orange text-white rounded-xl text-xs font-bold hover:bg-burnt-orange-dark shadow-sm active:scale-[0.97] transition-all flex items-center justify-center gap-1.5 cursor-pointer animate-float"
+                      >
+                        <Sparkles size={13} />
+                        <span>Generer studiekommentar</span>
+                      </button>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="flex-grow overflow-y-auto max-h-[480px] pr-1 space-y-4 scrollbar-thin text-xs">
+                    {studyTab === 'overview' && (
+                      <div className="space-y-4 animate-fade-in">
+                        <div className="bg-slate-50 border border-outline-variant/30 p-3.5 rounded-xl space-y-2">
+                          <h5 className="font-serif font-bold text-primary text-xs flex items-center gap-1.5">
+                            <BookOpen size={12} className="text-burnt-orange" />
+                            Teologisk sammendrag
+                          </h5>
+                          <p className="text-on-surface-variant leading-relaxed text-xs">{studyData.overview.context}</p>
+                        </div>
+
+                        <div className="space-y-2">
+                          <h5 className="font-bold text-primary text-[10px] uppercase tracking-wider block">Sentralt åndelig tema</h5>
+                          <ul className="space-y-1.5">
+                            {studyData.overview.themes.map((theme, i) => (
+                              <li key={i} className="flex gap-2 text-on-surface-variant leading-relaxed items-start">
+                                <span className="h-1.5 w-1.5 rounded-full bg-burnt-orange mt-1.5 shrink-0" />
+                                <span>{theme}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div className="space-y-2 pt-2 border-t">
+                          <h5 className="font-bold text-primary text-[10px] uppercase tracking-wider block">Strukturell disposisjon</h5>
+                          <div className="bg-slate-50/50 p-3 rounded-lg border border-slate-100 font-mono text-[10px] text-on-surface-variant whitespace-pre-line leading-relaxed">
+                            {studyData.overview.outline}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {studyTab === 'commentary' && (
+                      <div className="space-y-4 animate-fade-in leading-relaxed text-justify">
+                        {studyData.commentary.map((section, idx) => (
+                          <div key={idx} className="border-b border-slate-100 pb-3 last:border-b-0 space-y-1.5">
+                            <div className="flex justify-between items-center bg-slate-50 px-2.5 py-1 rounded-lg">
+                              <span className="font-bold text-primary text-[10px] uppercase tracking-wider">Vers {section.verses}</span>
+                              <span className="font-serif font-bold text-[11px] text-burnt-orange">{section.title}</span>
+                            </div>
+                            <p className="text-on-surface-variant leading-relaxed text-xs pl-1">
+                              {section.text}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {studyTab === 'cross' && (
+                      <div className="space-y-4 animate-fade-in">
+                        <div className="space-y-2.5">
+                          <h5 className="font-bold text-primary text-[10px] uppercase tracking-wider block">Nøkkelord på grunnteksten</h5>
+                          <div className="space-y-3">
+                            {studyData.wordStudies.map((word, idx) => (
+                              <div key={idx} className="bg-primary/5 border border-primary/10 p-3 rounded-xl space-y-1">
+                                <div className="flex justify-between items-center">
+                                  <span className="font-bold text-primary text-xs">{word.word}</span>
+                                  <span className="text-[10px] text-outline font-semibold font-sans">{word.language}</span>
+                                </div>
+                                <p className="text-on-surface-variant text-[11px] leading-relaxed">
+                                  {word.meaning}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="space-y-2.5 pt-3 border-t">
+                          <h5 className="font-bold text-primary text-[10px] uppercase tracking-wider block">Teologiske Kryssreferanser</h5>
+                          <div className="space-y-2">
+                            {studyData.crossReferences.map((cross, idx) => (
+                              <div 
+                                key={idx} 
+                                onClick={async () => {
+                                  setBibleSearchQuery(cross.ref);
+                                  setSidebarTab('bible');
+                                  showToast(`Søker opp kryssreferanse: ${cross.ref}`);
+                                  const parsedRef = parseBibleReference(cross.ref);
+                                  if (parsedRef) {
+                                    const foundBook = findBibleBook(parsedRef.bookStr);
+                                    if (foundBook) {
+                                      setSelectedBibleBook(foundBook);
+                                      const clampedChapter = Math.max(1, Math.min(parsedRef.chapter, foundBook.chapters));
+                                      setSelectedBibleChapter(clampedChapter);
+                                      if (parsedRef.verse) {
+                                        setHighlightedBibleVerse(parsedRef.verse);
+                                        setSelectedBibleVerses([parsedRef.verse]);
+                                      } else {
+                                        setHighlightedBibleVerse(null);
+                                        setSelectedBibleVerses([]);
+                                      }
+                                    }
+                                  }
+                                }}
+                                className="p-2.5 bg-slate-50 border hover:bg-slate-100 hover:border-primary/20 rounded-xl cursor-pointer transition-all flex flex-col space-y-0.5 group"
+                              >
+                                <span className="font-bold text-primary group-hover:text-burnt-orange transition-colors flex items-center gap-1 text-[11px]">
+                                  <BookOpen size={10} />
+                                  {cross.ref}
+                                </span>
+                                <span className="text-[10px] text-on-surface-variant font-medium leading-relaxed">
+                                  {cross.desc}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           )}
         </div>
