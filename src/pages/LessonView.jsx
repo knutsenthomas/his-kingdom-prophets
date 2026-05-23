@@ -967,7 +967,7 @@ export default function LessonView() {
                     setHighlightedBibleVerse(null);
                     setSelectedBibleVerses([]);
                   }} 
-                  className="w-full bg-slate-50 border p-2 rounded-lg text-xs"
+                  className="w-full bg-slate-50 border p-2 rounded-lg text-xs outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all font-medium text-slate-700"
                 >
                   {BIBLE_BOOKS.map(b => <option key={b.id} value={b.id}>{b.nor}</option>)}
                 </select>
@@ -978,14 +978,38 @@ export default function LessonView() {
                     setHighlightedBibleVerse(null);
                     setSelectedBibleVerses([]);
                   }} 
-                  className="w-full bg-slate-50 border p-2 rounded-lg text-xs"
+                  className="w-full bg-slate-50 border p-2 rounded-lg text-xs outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all font-medium text-slate-700"
                 >
                   {Array.from({ length: selectedBibleBook.chapters }, (_, i) => i + 1).map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
               <div className="flex gap-2 shrink-0">
-                <select value={selectedBibleTranslation} onChange={(e) => setSelectedBibleTranslation(e.target.value)} className="flex-1 bg-slate-50 border p-2 text-xs"><option value="bibelselskap">Bokmål</option><option value="web">WEB</option></select>
-                <form onSubmit={handleBibleSearch} className="flex-[1.2] flex"><input type="text" placeholder="Søk..." value={bibleSearchQuery} onChange={(e) => setBibleSearchQuery(e.target.value)} className="w-full bg-slate-50 border p-2 text-xs" /><button type="submit"><Search size={14} /></button></form>
+                <select 
+                  value={selectedBibleTranslation} 
+                  onChange={(e) => setSelectedBibleTranslation(e.target.value)} 
+                  className="flex-1 bg-slate-50 border p-2 rounded-lg text-xs outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all font-medium text-slate-700"
+                >
+                  <option value="bibelselskap">Bokmål</option>
+                  <option value="web">WEB</option>
+                </select>
+                <form onSubmit={handleBibleSearch} className="flex-[1.2] flex">
+                  <div className="relative w-full">
+                    <input 
+                      type="text" 
+                      placeholder="Søk..." 
+                      value={bibleSearchQuery} 
+                      onChange={(e) => setBibleSearchQuery(e.target.value)} 
+                      className="w-full bg-slate-50 border p-2 pr-8 rounded-lg text-xs outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all font-medium text-slate-700"
+                    />
+                    <button 
+                      type="submit" 
+                      className="absolute right-2 top-0 bottom-0 my-auto flex items-center justify-center p-1.5 text-slate-400 hover:text-primary hover:bg-slate-100 rounded-md transition-all active:scale-[0.9] border-none bg-transparent cursor-pointer"
+                      title="Søk"
+                    >
+                      <Search size={14} />
+                    </button>
+                  </div>
+                </form>
               </div>
               <div className="flex-grow border rounded-xl bg-slate-50/50 overflow-y-auto p-3.5 space-y-1">
                 {isBibleLoading ? (
