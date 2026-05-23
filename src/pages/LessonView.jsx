@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
 import { 
-  ArrowLeft, ArrowRight, CheckCircle, PlayCircle, ExternalLink, FileText 
+  ArrowLeft, ArrowRight, CheckCircle, PlayCircle, ExternalLink, FileText,
+  Eye, EyeOff, Maximize2, Minimize2, BookOpen
 } from 'lucide-react';
 
 export default function LessonView() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { courses, toggleModuleCompleted, showToast } = useApp();
+  const { courses, toggleModuleCompleted, showToast, user } = useApp();
+  
+  const [isFocusMode, setIsFocusMode] = useState(false);
+  const [hideStudyPlan, setHideStudyPlan] = useState(false);
   
   // Determine selected course from location state or default to prop101
   const courseId = location.state?.courseId || 'prop101';
@@ -20,6 +24,30 @@ export default function LessonView() {
   
   const currentModule = course.modules[activeModuleIndex] || course.modules[0];
  
+  const toggleFocusMode = () => {
+    const nextFocusMode = !isFocusMode;
+    setIsFocusMode(nextFocusMode);
+    setHideStudyPlan(nextFocusMode);
+    
+    // Dispatch event to collapse/expand main layout sidebar
+    const eventName = user?.role === 'teacher' ? 'hkm-toggle-teacher-sidebar' : 'hkm-toggle-student-sidebar';
+    window.dispatchEvent(new CustomEvent(eventName, { detail: nextFocusMode }));
+    
+    if (nextFocusMode) {
+      showToast("Fokusmodus aktivert! Sidemenyer skjult.");
+    } else {
+      showToast("Fokusmodus deaktivert.");
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      // Ensure we restore the sidebar when leaving the lesson page
+      const eventName = user?.role === 'teacher' ? 'hkm-toggle-teacher-sidebar' : 'hkm-toggle-student-sidebar';
+      window.dispatchEvent(new CustomEvent(eventName, { detail: false }));
+    };
+  }, [user?.role]);
+
   const handleToggleModule = (modId, e) => {
     e.stopPropagation(); // Avoid selecting module when clicking checkbox
     toggleModuleCompleted(course.id, modId);
@@ -142,7 +170,13 @@ export default function LessonView() {
     <div className="flex flex-1 w-full max-w-[1440px] mx-auto">
       
       {/* Lesson Modules Sidebar */}
-      <aside className="bg-white border-r border-outline-variant/20 w-80 h-[calc(100vh-80px)] sticky top-20 hidden md:flex flex-col py-8 px-6 overflow-y-auto shrink-0">
+      <aside 
+        className={`bg-white border-r border-outline-variant/20 h-[calc(100vh-80px)] sticky top-20 hidden md:flex flex-col py-8 px-6 overflow-y-auto shrink-0 transition-all duration-300 ease-in-out ${
+          hideStudyPlan 
+            ? 'md:w-0 md:opacity-0 md:p-0 md:border-r-0 overflow-hidden' 
+            : 'md:w-80 md:opacity-100'
+        }`}
+      >
         <div className="space-y-6">
           <button 
             onClick={() => navigate('/student/library')} 
@@ -200,6 +234,52 @@ export default function LessonView() {
       {/* Lesson Reading Panel */}
       <main className="flex-1 p-4 sm:p-6 md:p-10 lg:p-12 overflow-x-hidden">
         <div className="max-w-[760px] mx-auto space-y-8">
+          
+          {/* Immersive View Controls Bar */}
+          <div className="flex items-center justify-between bg-white border border-outline-variant/30 px-5 py-3 rounded-xl shadow-sm text-xs font-bold text-primary">
+            <div className="flex items-center gap-2">
+              <BookOpen size={16} className="text-primary animate-pulse" />
+              <span className="font-sans uppercase tracking-wider text-[10px]">Visningsmodus</span>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              {/* Individual study plan toggle */}
+              <button
+                onClick={() => {
+                  const nextHide = !hideStudyPlan;
+                  setHideStudyPlan(nextHide);
+                  showToast(nextHide ? "Studieplan skjult" : "Studieplan vist");
+                  // If we manually show study plan, we exit Focus Mode
+                  if (!nextHide) {
+                    setIsFocusMode(false);
+                  }
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all active:scale-[0.97] font-sans ${
+                  hideStudyPlan 
+                    ? 'bg-primary/5 border-primary/20 text-primary font-bold shadow-sm' 
+                    : 'bg-white border-outline-variant/30 text-on-surface hover:bg-slate-50'
+                }`}
+                title={hideStudyPlan ? "Vis studieplan" : "Skjul studieplan"}
+              >
+                {hideStudyPlan ? <Eye size={14} /> : <EyeOff size={14} />}
+                <span>{hideStudyPlan ? "Vis studieplan" : "Skjul studieplan"}</span>
+              </button>
+
+              {/* Fullscreen Focus Mode toggle */}
+              <button
+                onClick={toggleFocusMode}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all active:scale-[0.97] font-sans ${
+                  isFocusMode 
+                    ? 'bg-burnt-orange/10 border-burnt-orange/20 text-burnt-orange font-bold shadow-sm animate-pulse' 
+                    : 'bg-white border-outline-variant/30 text-on-surface hover:bg-slate-50'
+                }`}
+                title={isFocusMode ? "Avslutt fullskjerm" : "Aktiver fullskjerm"}
+              >
+                {isFocusMode ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+                <span>{isFocusMode ? "Avslutt fullskjerm" : "Fullskjerm (Fokusmodus)"}</span>
+              </button>
+            </div>
+          </div>
           
           {/* Top course info card */}
           <div className="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 flex flex-col md:flex-row md:items-center justify-between gap-4">

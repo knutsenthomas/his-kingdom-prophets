@@ -27,6 +27,18 @@ export default function StudentLayout() {
   }, [isCollapsed]);
 
   useEffect(() => {
+    const handleToggle = (e) => {
+      if (e.detail !== undefined) {
+        setIsCollapsed(e.detail);
+      } else {
+        setIsCollapsed(prev => !prev);
+      }
+    };
+    window.addEventListener('hkm-toggle-student-sidebar', handleToggle);
+    return () => window.removeEventListener('hkm-toggle-student-sidebar', handleToggle);
+  }, []);
+
+  useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 

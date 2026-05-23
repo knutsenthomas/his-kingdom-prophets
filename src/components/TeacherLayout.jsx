@@ -30,6 +30,18 @@ export default function TeacherLayout() {
   }, [isCollapsed]);
 
   useEffect(() => {
+    const handleToggle = (e) => {
+      if (e.detail !== undefined) {
+        setIsCollapsed(e.detail);
+      } else {
+        setIsCollapsed(prev => !prev);
+      }
+    };
+    window.addEventListener('hkm-toggle-teacher-sidebar', handleToggle);
+    return () => window.removeEventListener('hkm-toggle-teacher-sidebar', handleToggle);
+  }, []);
+
+  useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
