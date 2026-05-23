@@ -30,7 +30,7 @@ export default function AssignmentsPage() {
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!submissionText.trim() && !uploadedFile) {
       showToast("Vennligst fyll ut besvarelsen eller last opp en fil.");
@@ -38,17 +38,22 @@ export default function AssignmentsPage() {
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      submitAssignment(selectedId, {
-        studentName: user?.name || 'Student',
-        text: submissionText,
-        fileName: uploadedFile ? uploadedFile.name : 'skriftlig_besvarelse.pdf',
-        submittedAt: new Date().toISOString().replace('T', ' ').substring(0, 16)
-      });
-      setIsSubmitting(false);
+    try {
+      if (submitAssignment) {
+        await submitAssignment(selectedId, {
+          studentName: user?.name || 'Student',
+          text: submissionText,
+          fileName: uploadedFile ? uploadedFile.name : 'skriftlig_besvarelse.pdf',
+          submittedAt: new Date().toISOString().replace('T', ' ').substring(0, 16)
+        });
+      }
       setSubmissionText('');
       setUploadedFile(null);
-    }, 1000);
+    } catch (err) {
+      console.error("Feil ved innsending av oppgave:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const filteredAssignments = assignments.filter(a => a.status === activeTab);

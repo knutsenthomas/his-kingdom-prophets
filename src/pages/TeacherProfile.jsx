@@ -75,27 +75,41 @@ export default function TeacherProfile() {
     setEmailDraft(user?.email || '');
   }, [user]);
 
-  const handleSaveProfile = (event) => {
+  const handleSaveProfile = async (event) => {
     event?.preventDefault();
     if (!draft.name.trim()) {
       showToast('Navn kan ikke være tomt.');
       return;
     }
     setSaving(true);
-    setTimeout(() => {
-      updateUserProfile({ ...draft });
+    try {
+      if (updateUserProfile) {
+        await updateUserProfile({ ...draft });
+      }
+    } catch (err) {
+      console.error("Feil ved lagring av lærerprofil:", err);
+    } finally {
       setSaving(false);
-    }, 400);
+    }
   };
 
-  const handleSaveAccount = (event) => {
+  const handleSaveAccount = async (event) => {
     event?.preventDefault();
     if (pwDraft.next && pwDraft.next !== pwDraft.confirm) {
       showToast('Passordene stemmer ikke overens.');
       return;
     }
-    updateUserProfile({ email: emailDraft });
-    setPwDraft({ current: '', next: '', confirm: '' });
+    setSaving(true);
+    try {
+      if (updateUserProfile) {
+        await updateUserProfile({ email: emailDraft });
+      }
+      setPwDraft({ current: '', next: '', confirm: '' });
+    } catch (err) {
+      console.error("Feil ved lagring av lærer-konto:", err);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const resetDraft = () => {
