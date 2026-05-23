@@ -316,21 +316,8 @@ export const SYSTEM_REVIEWERS = [
 
 export const AppProvider = ({ children }) => {
   // Simulated Authentication Persona State
-  const [user, setUser] = useState({
-    name: "Thomas Knutsen",
-    email: "student@hiskingdomprophets.com",
-    role: "student",
-    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
-    phone: "+47 900 00 000",
-    location: "Kristiansand, Norge",
-    birthYear: "1995",
-    bio: "",
-    ministry: "",
-    socialInstagram: "",
-    socialFacebook: "",
-    onboardingCompleted: true
-  });
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // General App State
   const [selectedInterests, setSelectedInterests] = useState([]);
@@ -916,6 +903,10 @@ export const AppProvider = ({ children }) => {
         } catch (err) {
           console.error("Feil ved lasting av brukerprofil fra Firestore:", err);
         }
+      } else {
+        // Clear user session when logged out
+        setUser(null);
+        setIsLoggedIn(false);
       }
     });
     return () => unsubscribe();
