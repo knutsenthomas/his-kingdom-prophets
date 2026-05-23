@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import worshipHero from '@/assets/worship_hero.png';
@@ -452,18 +452,18 @@ export default function LandingPage() {
           <CmsText slug="landing-footer-copyright" fallback="© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten." as="p" className="text-xs text-on-tertiary opacity-80 max-w-md" />
         </div>
         <nav className="flex flex-wrap justify-center gap-6 text-xs text-center">
-          <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">
+          <Link className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" to="/privacy">
             <CmsText slug="landing-footer-link-privacy" fallback="Personvern" />
-          </a>
-          <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">
+          </Link>
+          <Link className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" to="/terms">
             <CmsText slug="landing-footer-link-terms" fallback="Betingelser" />
-          </a>
-          <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">
+          </Link>
+          <Link className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" to="/accessibility">
             <CmsText slug="landing-footer-link-accessibility" fallback="Tilgjengelighet" />
-          </a>
-          <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">
+          </Link>
+          <Link className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" to="/support">
             <CmsText slug="landing-footer-link-support" fallback="Kontakt Support" />
-          </a>
+          </Link>
         </nav>
       </footer>
     </div>

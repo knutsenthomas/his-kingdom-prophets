@@ -43,6 +43,12 @@ import CMSDashboard from '@/pages/CMSDashboard';
 import AnalyticsDashboard from '@/pages/AnalyticsDashboard';
 import AdminPortal from '@/pages/AdminPortal';
 
+// Legal & Support Pages
+import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
+import TermsOfServicePage from '@/pages/TermsOfServicePage';
+import AccessibilityPage from '@/pages/AccessibilityPage';
+import ContactSupportPage from '@/pages/ContactSupportPage';
+
 // Email Previews
 import EmailPreviews from '@/pages/EmailPreviews';
 
@@ -202,6 +208,12 @@ function AppRoutes() {
 
         {/* Support Article CMS */}
         <Route path="/admin/support-cms" element={<SupportArticleCMS />} />
+
+        {/* Legal & Public Support Pages */}
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms" element={<TermsOfServicePage />} />
+        <Route path="/accessibility" element={<AccessibilityPage />} />
+        <Route path="/support" element={<ContactSupportPage />} />
       </Routes>
     </>
   );
