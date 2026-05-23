@@ -2466,6 +2466,15 @@ export const AppProvider = ({ children }) => {
           "📖 **Skriftsteder:** *Exodus 33:11, Deuteronomium 18:15*\n" +
           "📚 **Relatert undervisning:** *BIBLE 301 (Modul 2: Paktsteologi)*";
       }
+      else if (lower.includes("josef") || lower.includes("joseph")) {
+        replyText = "### 📖 Bibelsk Person: Josef (Drømmeren & Forvalteren)\n\n" +
+          "**Josef**, sønn av Jakob (Israel), er en av de mest sentrale skikkelsene i 1. Mosebok. Han er et klassisk og profetisk bilde på hvordan Gud bruker drømmer, syn og tydning til å bevare sitt folk, samt en sterk type på Jesus Kristus (forfulgt, solgt, men opphøyet til frelser).\n\n" +
+          "• **Drømmetydning:** Josef mottok tidlig profetiske drømmer om sin fremtidige autoritet (1. Mos 37). Senere, i egyptisk fangenskap, tydet han med Guds hjelp drømmene til bakeren, munnsjenken, og til slutt farao selv (de syv fete og syv magre årene). Dette reddet hele regionen fra hungersnød.\n" +
+          "• **Karakter og Guds plan:** Til tross for svik fra sine brødre, falsk anklage og fengsling, forble Josef trofast. Hans berømte ord oppsummerer Guds suverene ledelse: *«Dere tenkte å gjøre ondt mot meg, men Gud tenkte det til det gode»* (1. Mos 50:20).\n" +
+          "• **Nytestamentlige Josef:** Vi ser også Josef (Marias ektemann), som mottok avgjørende profetisk veiledning og instrukser fra engler i drømmer for å beskytte barnet Jesus mot Herodes.\n\n" +
+          "📖 **Skriftsteder:** *1. Mosebok 37-50, Matteus 1:20-24, Apostlenes gjerninger 7:9-16*\n" +
+          "📚 **Relatert undervisning:** *PROP 101 (Modul 3: Åpenbaringsgaver og drømmetydning)*";
+      }
       else if (lower.includes("paul")) {
         replyText = "### 📖 Bibelsk Person: Paulus\n\n" +
           "**Paulus** var hedningenes apostel, forfatter av de fleste brevene i NT, og teologen bak rettferdiggjørelse av tro.\n\n" +
