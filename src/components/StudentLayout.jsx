@@ -289,24 +289,25 @@ export default function StudentLayout() {
       {/* Mobile Navigation Drawer */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <>
-            {/* Backdrop overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 bg-slate-900/60 z-50 md:hidden"
-            />
+          <motion.div
+            key="mobile-drawer-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.5 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="fixed inset-0 bg-slate-900/60 z-50 md:hidden"
+          />
+        )}
 
-            {/* Sliding Menu Panel */}
-            <motion.aside
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 bottom-0 left-0 w-72 bg-white z-50 md:hidden flex flex-col justify-between shadow-2xl border-r border-outline-variant/20 overflow-y-auto"
-            >
+        {isMobileMenuOpen && (
+          <motion.aside
+            key="mobile-drawer-aside"
+            initial={{ x: '-100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed top-0 bottom-0 left-0 w-72 bg-white z-50 md:hidden flex flex-col justify-between shadow-2xl border-r border-outline-variant/20 overflow-y-auto"
+          >
               <div className="py-6 px-6 space-y-6">
                 {/* Header in Drawer */}
                 <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
@@ -395,7 +396,6 @@ export default function StudentLayout() {
                 </div>
               </div>
             </motion.aside>
-          </>
         )}
       </AnimatePresence>
 
