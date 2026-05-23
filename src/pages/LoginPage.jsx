@@ -30,22 +30,20 @@ export default function LoginPage() {
   const handleAuthSuccess = (emailAddress, role, onboardingCompleted) => {
     const checkEmail = emailAddress ? emailAddress.toLowerCase() : '';
     
-    if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(checkEmail)) {
-      navigate('/admin/portal');
+    if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(checkEmail) || role === 'superadmin') {
+      navigate('/teacher/profile');
       return;
     }
     
     const checkRole = role || 'student';
     
     if (checkRole === 'teacher' || checkEmail.includes('teacher') || checkEmail.includes('david')) {
-      navigate('/teacher/dashboard');
-    } else if (checkRole === 'superadmin' || checkEmail.includes('super')) {
-      navigate('/admin/portal');
+      navigate('/teacher/profile');
     } else if (checkRole === 'admin' || checkEmail.includes('admin') || checkEmail.includes('siri')) {
-      navigate('/admin/cms');
+      navigate('/teacher/profile');
     } else {
       if (onboardingCompleted) {
-        navigate('/student/dashboard');
+        navigate('/student/profile');
       } else {
         navigate('/interests');
       }

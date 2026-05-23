@@ -327,7 +327,8 @@ export const AppProvider = ({ children }) => {
     bio: "",
     ministry: "",
     socialInstagram: "",
-    socialFacebook: ""
+    socialFacebook: "",
+    onboardingCompleted: true
   });
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
@@ -699,7 +700,8 @@ export const AppProvider = ({ children }) => {
         bio: "",
         ministry: "",
         socialInstagram: "",
-        socialFacebook: ""
+        socialFacebook: "",
+        onboardingCompleted: true
       });
       setIsLoggedIn(true);
       showToast("Byttet til Student-persona!");
