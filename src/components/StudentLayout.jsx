@@ -13,7 +13,7 @@ import CmsText from '@/components/CmsText';
 export default function StudentLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout, showToast, changePersona, cmsContent, isAdminEditing } = useApp();
+  const { user, setUser, logout, showToast, changePersona, cmsContent, isAdminEditing } = useApp();
   
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
@@ -118,6 +118,37 @@ export default function StudentLayout() {
                 <Bell size={20} />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-burnt-orange rounded-full" style={{ borderRadius: '9999px' }}></span>
               </button>
+              
+              {/* Superadmin System View Switcher */}
+              {(user?.email === 'thomas@tk-design.no' || user?.email?.includes('superadmin')) && (
+                <div className="hidden md:flex items-center gap-1 bg-[#1B4965]/5 p-1 rounded-xl border border-[#1B4965]/20 shrink-0">
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-[#1B4965] px-2">Visning:</span>
+                  {[
+                    { role: 'student', label: 'Elev', path: '/student/dashboard' },
+                    { role: 'teacher', label: 'Mentor', path: '/teacher/dashboard' },
+                    { role: 'superadmin', label: 'Superadmin', path: '/admin/portal' }
+                  ].map(opt => {
+                    const isCurrent = user?.role === opt.role;
+                    return (
+                      <button
+                        key={opt.role}
+                        onClick={() => {
+                          setUser(prev => ({ ...prev, role: opt.role }));
+                          navigate(opt.path);
+                          showToast(`Visning endret til ${opt.label}`);
+                        }}
+                        className={`px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all ${
+                          isCurrent 
+                            ? 'bg-[#1B4965] text-white shadow-sm font-bold' 
+                            : 'text-[#46617b] hover:bg-[#1B4965]/10 hover:text-[#1B4965]'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
               
               <div className="flex items-center gap-2 sm:gap-2.5 pl-2 border-l border-outline-variant/30 shrink-0">
                 <Link

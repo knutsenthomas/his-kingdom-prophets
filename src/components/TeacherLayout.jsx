@@ -13,7 +13,7 @@ import CmsText from '@/components/CmsText';
 export default function TeacherLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout, showToast, students, changePersona } = useApp();
+  const { user, setUser, logout, showToast, students, changePersona } = useApp();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -104,6 +104,38 @@ export default function TeacherLayout() {
 
           {/* User profile, badges and logout */}
           <div className="flex items-center gap-4 text-primary shrink-0">
+            
+            {/* Superadmin System View Switcher */}
+            {(user?.email === 'thomas@tk-design.no' || user?.email?.includes('superadmin')) && (
+              <div className="hidden md:flex items-center gap-1 bg-[#1B4965]/5 p-1 rounded-xl border border-[#1B4965]/20 shrink-0">
+                <span className="text-[9px] font-bold uppercase tracking-wider text-[#1B4965] px-2">Visning:</span>
+                {[
+                  { role: 'student', label: 'Elev', path: '/student/dashboard' },
+                  { role: 'teacher', label: 'Mentor', path: '/teacher/dashboard' },
+                  { role: 'superadmin', label: 'Superadmin', path: '/admin/portal' }
+                ].map(opt => {
+                  const isCurrent = user?.role === opt.role;
+                  return (
+                    <button
+                      key={opt.role}
+                      onClick={() => {
+                        setUser(prev => ({ ...prev, role: opt.role }));
+                        navigate(opt.path);
+                        showToast(`Visning endret til ${opt.label}`);
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all ${
+                        isCurrent 
+                          ? 'bg-[#1B4965] text-white shadow-sm font-bold' 
+                          : 'text-[#46617b] hover:bg-[#1B4965]/10 hover:text-[#1B4965]'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
             <div className="flex items-center gap-3 sm:gap-4 text-primary pl-2 border-l border-outline-variant/30">
               <Link
                 to="/teacher/profile"

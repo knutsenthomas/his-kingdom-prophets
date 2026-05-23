@@ -1334,6 +1334,7 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider value={{
       user,
+      setUser,
       role: user?.role || 'student',
       isLoggedIn,
       selectedInterests,
