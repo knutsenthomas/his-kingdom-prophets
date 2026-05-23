@@ -224,7 +224,7 @@ export default function LessonView() {
       
       // 1. Load from localStorage for instant display
       const savedNotes = localStorage.getItem(`hkm-notes-${courseId}-${currentModule.id}`) || "";
-      const migratedNotes = migrateMarkdownToHtml(savedNotes);
+      const migratedNotes = migrateMarkdownToHtml(savedNotes) || "<p><br/></p>";
       setNotes(migratedNotes);
       
       // Manually set editor innerHTML on load/switch
@@ -241,7 +241,7 @@ export default function LessonView() {
           const noteSnap = await getDoc(noteDocRef);
           if (noteSnap.exists()) {
             const cloudText = noteSnap.data().text || "";
-            const migratedCloud = migrateMarkdownToHtml(cloudText);
+            const migratedCloud = migrateMarkdownToHtml(cloudText) || "<p><br/></p>";
             if (migratedCloud && migratedCloud !== migratedNotes) {
               setNotes(migratedCloud);
               localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, migratedCloud);
@@ -259,6 +259,13 @@ export default function LessonView() {
     };
     loadNotes();
   }, [courseId, currentModule?.id, user?.uid, sidebarTab]);
+
+  // Ensure that pressing Enter in the editor always creates <p> tags rather than divs
+  useEffect(() => {
+    if (editorRef.current && activeTab === 'write') {
+      document.execCommand('defaultParagraphSeparator', false, 'p');
+    }
+  }, [activeTab, sidebarTab]);
 
   // Sync state changes to editor innerHTML ONLY when the change is external (e.g. database load or bibel insert)
   // This completely prevents React from overriding the DOM during typing, avoiding stutters or cursor jumps!
@@ -433,10 +440,13 @@ export default function LessonView() {
       }
     }
     
-    // Fallback: Append directly to state if editor is unmounted
+    // Fallback: Append directly to state if editor is unmounted or selection is lost
     setNotes(prev => {
-      const current = prev ? prev.trim() : "";
-      const separator = current ? "<br/><br/>" : "";
+      let current = prev ? prev.trim() : "";
+      if (current === "<p><br/></p>" || current === "<p></p>" || current === "<br>") {
+        current = "";
+      }
+      const separator = current ? "<br/>" : "";
       const newText = current + separator + html;
       localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newText);
       saveNotesToFirestore(newText);
@@ -446,12 +456,14 @@ export default function LessonView() {
 
   const insertVerseToNotes = (verse) => {
     const transName = selectedBibleTranslation === 'bibelselskap' ? 'N11' : selectedBibleTranslation.toUpperCase();
-    const htmlRef = `<blockquote style="border-left: 4px solid #1B4965; padding-left: 1rem; margin: 0.75rem 0; font-style: italic; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; padding-top: 0.375rem; padding-bottom: 0.375rem;">
-      "${verse.text.trim()}"
-    </blockquote>
-    <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; margin-bottom: 0.75rem;">
-      — <b>${selectedBibleBook.nor} ${verse.chapter}:${verse.verse}</b> (${transName})
-    </p>`;
+    const htmlRef = `<div class="bible-quote-block" contenteditable="false" style="margin: 1rem 0; padding: 0.5rem 0; border-left: 4px solid #1B4965; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; user-select: all;">
+      <blockquote style="margin: 0; padding: 0 1rem; font-style: italic; border: none; background: transparent; color: #1e293b;">
+        "${verse.text.trim()}"
+      </blockquote>
+      <p style="font-size: 0.75rem; color: #64748b; margin: 0.25rem 0 0 1rem; font-style: normal;">
+        — <b>${selectedBibleBook.nor} ${verse.chapter}:${verse.verse}</b> (${transName})
+      </p>
+    </div><p><br/></p>`;
     
     insertHtmlToNotes(htmlRef);
     showToast("Skriftsted limt inn i dine notater!");
@@ -493,12 +505,14 @@ export default function LessonView() {
       : `${sortedVerseNums[0]}-${sortedVerseNums[sortedVerseNums.length - 1]}`;
 
     const transName = selectedBibleTranslation === 'bibelselskap' ? 'N11' : selectedBibleTranslation.toUpperCase();
-    const htmlRef = `<blockquote style="border-left: 4px solid #1B4965; padding-left: 1rem; margin: 0.75rem 0; font-style: italic; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; padding-top: 0.375rem; padding-bottom: 0.375rem;">
-      "${combinedText}"
-    </blockquote>
-    <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; margin-bottom: 0.75rem;">
-      — <b>${selectedBibleBook.nor} ${selectedBibleChapter}:${verseRange}</b> (${transName})
-    </p>`;
+    const htmlRef = `<div class="bible-quote-block" contenteditable="false" style="margin: 1rem 0; padding: 0.5rem 0; border-left: 4px solid #1B4965; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; user-select: all;">
+      <blockquote style="margin: 0; padding: 0 1rem; font-style: italic; border: none; background: transparent; color: #1e293b;">
+        "${combinedText}"
+      </blockquote>
+      <p style="font-size: 0.75rem; color: #64748b; margin: 0.25rem 0 0 1rem; font-style: normal;">
+        — <b>${selectedBibleBook.nor} ${selectedBibleChapter}:${verseRange}</b> (${transName})
+      </p>
+    </div><p><br/></p>`;
     
     insertHtmlToNotes(htmlRef);
     showToast(`${selectedBibleVerses.length} skriftsteder limt inn i dine notater!`);
@@ -515,6 +529,176 @@ export default function LessonView() {
       </div>
     );
   }
+
+  const handleKeyDown = (e) => {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    if (e.key === 'Backspace') {
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        
+        // 1. If editor is empty or just contains a single br, make sure we keep a clean <p><br/></p>
+        if (editor.innerHTML.trim() === "" || editor.innerHTML.trim() === "<br>") {
+          e.preventDefault();
+          editor.innerHTML = "<p><br/></p>";
+          const newRange = document.createRange();
+          newRange.selectNodeContents(editor.firstChild);
+          newRange.collapse(true);
+          selection.removeAllRanges();
+          selection.addRange(newRange);
+          handleContentChange(editor.innerHTML);
+          return;
+        }
+
+        // 2. Check if we are right after a .bible-quote-block
+        let container = range.commonAncestorContainer;
+        if (container.nodeType === Node.TEXT_NODE) {
+          if (range.startOffset === 0) {
+            let blockNode = container.parentNode;
+            while (blockNode && blockNode.parentNode !== editor && blockNode !== editor) {
+              blockNode = blockNode.parentNode;
+            }
+            
+            if (blockNode && blockNode.previousSibling && blockNode.previousSibling.classList?.contains('bible-quote-block')) {
+              e.preventDefault();
+              const blockToDelete = blockNode.previousSibling;
+              editor.removeChild(blockToDelete);
+              
+              // Handle cursor positioning inside the remaining block
+              const newRange = document.createRange();
+              newRange.selectNodeContents(blockNode);
+              newRange.collapse(true);
+              selection.removeAllRanges();
+              selection.addRange(newRange);
+              
+              handleContentChange(editor.innerHTML);
+              return;
+            }
+          }
+        } else if (container === editor) {
+          const offset = range.startOffset;
+          if (offset > 0) {
+            const prevSibling = editor.childNodes[offset - 1];
+            if (prevSibling && prevSibling.classList?.contains('bible-quote-block')) {
+              e.preventDefault();
+              editor.removeChild(prevSibling);
+              
+              // Maintain focus inside a block or create one
+              if (editor.childNodes[offset - 1]) {
+                const newRange = document.createRange();
+                newRange.selectNodeContents(editor.childNodes[offset - 1]);
+                newRange.collapse(false);
+                selection.removeAllRanges();
+                selection.addRange(newRange);
+              } else {
+                editor.innerHTML = "<p><br/></p>";
+                const newRange = document.createRange();
+                newRange.selectNodeContents(editor.firstChild);
+                newRange.collapse(true);
+                selection.removeAllRanges();
+                selection.addRange(newRange);
+              }
+              
+              handleContentChange(editor.innerHTML);
+              return;
+            }
+          }
+        }
+        
+        // 3. Resilient deletion for legacy (non-wrapped) blockquotes and citation paragraphs!
+        let blockNode = container;
+        while (blockNode && blockNode !== editor) {
+          if (['BLOCKQUOTE', 'LI', 'P'].includes(blockNode.nodeName)) {
+            break;
+          }
+          blockNode = blockNode.parentNode;
+        }
+        
+        if (blockNode && blockNode !== editor) {
+          const isAtStart = range.startOffset === 0 && (container.nodeType !== Node.TEXT_NODE || !container.previousSibling);
+          
+          if (isAtStart) {
+            const prevSibling = blockNode.previousSibling;
+            
+            // Scenario A: Cursor is at the start of a paragraph immediately following a blockquote (legacy citation)
+            if (prevSibling && prevSibling.nodeName === 'BLOCKQUOTE') {
+              e.preventDefault();
+              editor.removeChild(prevSibling);
+              editor.removeChild(blockNode);
+              
+              if (editor.innerHTML.trim() === "") {
+                editor.innerHTML = "<p><br/></p>";
+              }
+              
+              const newRange = document.createRange();
+              if (editor.firstChild) {
+                newRange.selectNodeContents(editor.firstChild);
+                newRange.collapse(true);
+              } else {
+                newRange.selectNodeContents(editor);
+                newRange.collapse(true);
+              }
+              selection.removeAllRanges();
+              selection.addRange(newRange);
+              
+              handleContentChange(editor.innerHTML);
+              return;
+            }
+            
+            // Scenario B: Cursor is at the start of a blockquote block
+            if (blockNode.nodeName === 'BLOCKQUOTE') {
+              e.preventDefault();
+              const p = document.createElement("p");
+              p.innerHTML = blockNode.innerHTML;
+              editor.replaceChild(p, blockNode);
+              
+              const newRange = document.createRange();
+              newRange.selectNodeContents(p);
+              newRange.collapse(true);
+              selection.removeAllRanges();
+              selection.addRange(newRange);
+              
+              handleContentChange(editor.innerHTML);
+              return;
+            }
+          }
+          
+          // Original simple clean fallback for completely empty blocks
+          const text = blockNode.textContent.trim();
+          if (text === "") {
+            e.preventDefault();
+            
+            const parent = blockNode.parentNode;
+            const prevSibling = blockNode.previousSibling;
+            
+            parent.removeChild(blockNode);
+            
+            if (prevSibling) {
+              const newRange = document.createRange();
+              newRange.selectNodeContents(prevSibling);
+              newRange.collapse(false);
+              selection.removeAllRanges();
+              selection.addRange(newRange);
+            } else {
+              const p = document.createElement("p");
+              p.innerHTML = "<br/>";
+              editor.insertBefore(p, editor.firstChild);
+              
+              const newRange = document.createRange();
+              newRange.selectNodeContents(p);
+              newRange.collapse(true);
+              selection.removeAllRanges();
+              selection.addRange(newRange);
+            }
+            
+            handleContentChange(editor.innerHTML);
+          }
+        }
+      }
+    }
+  };
 
   const handleContentChange = (val) => {
     setNotes(val);
@@ -627,8 +811,12 @@ export default function LessonView() {
 
   const clearNotes = () => {
     if (window.confirm("Er du sikker på at du vil slette notatene dine for denne leksjonen? Dette kan ikke angres.")) {
-      setNotes("");
-      localStorage.removeItem(`hkm-notes-${courseId}-${currentModule.id}`);
+      setNotes("<p><br/></p>");
+      localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, "<p><br/></p>");
+      saveNotesToFirestore("<p><br/></p>");
+      if (editorRef.current) {
+        editorRef.current.innerHTML = "<p><br/></p>";
+      }
       showToast("Notater slettet.");
     }
   };
@@ -737,6 +925,7 @@ export default function LessonView() {
                       ref={editorRef}
                       contentEditable
                       suppressContentEditableWarning={true}
+                      onKeyDown={handleKeyDown}
                       onBlur={(e) => {
                         const newHtml = e.target.innerHTML;
                         handleContentChange(newHtml);
