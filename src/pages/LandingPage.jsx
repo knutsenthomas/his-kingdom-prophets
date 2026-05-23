@@ -47,10 +47,10 @@ export default function LandingPage() {
               <button 
                 onClick={toggleLanguage}
                 className="px-3 py-1.5 border border-[#1B4965]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#1B4965]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
-                title={language === 'no' ? 'Switch to English' : 'Bytt til Norsk'}
+                title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
               >
                 <Globe size={13} />
-                <span>{language === 'no' ? 'EN' : 'NO'}</span>
+                <span>{language === 'no' ? 'NO' : 'EN'}</span>
               </button>
               <button 
                 onClick={() => navigate('/login')} 
@@ -71,10 +71,10 @@ export default function LandingPage() {
               <button 
                 onClick={toggleLanguage}
                 className="px-2.5 sm:px-3 py-1.5 border border-[#1B4965]/20 hover:border-primary text-[10px] sm:text-xs font-bold uppercase rounded-lg text-primary bg-[#1B4965]/5 transition-all active:scale-95 flex items-center gap-1 shadow-sm shrink-0"
-                title={language === 'no' ? 'Switch to English' : 'Bytt til Norsk'}
+                title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
               >
                 <Globe size={12} />
-                <span>{language === 'no' ? 'EN' : 'NO'}</span>
+                <span>{language === 'no' ? 'NO' : 'EN'}</span>
               </button>
               <button 
                 onClick={() => navigate('/login')} 
