@@ -889,7 +889,7 @@ export default function BibleView() {
   });
 
   return (
-    <main className="flex-grow p-4 md:p-10 space-y-8 overflow-x-hidden" ref={topRef}>
+    <main className="flex-grow p-4 md:p-10 space-y-8" ref={topRef}>
       
       {/* Header and navigation */}
       <section className="space-y-3">
