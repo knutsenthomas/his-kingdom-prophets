@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '@/contexts/AppContext';
 import { MessageSquare, X, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import logo from '@/assets/logo.png';
 
 export default function HkmChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,9 +63,11 @@ export default function HkmChatWidget() {
             {/* Header - Deep Brand Blue */}
             <div className="bg-[#1B4965] text-white px-5 py-4 flex items-center justify-between shadow-sm">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 flex items-center justify-center font-serif font-bold text-sm text-secondary-container bg-white/10" style={{ borderRadius: '9999px' }}>
-                  HKM
-                </div>
+                <img 
+                  src={logo} 
+                  alt="HKM Logo" 
+                  className="w-8 h-8 rounded-full border border-white/15 bg-white/5 object-contain shrink-0"
+                />
                 <div>
                   <h3 className="font-semibold text-sm">HKM Assistent</h3>
                   <span className="text-[10px] text-on-primary-container/80 flex items-center gap-1">
@@ -91,26 +94,42 @@ export default function HkmChatWidget() {
               {assistantMessages.map((msg) => (
                 <div 
                   key={msg.id} 
-                  className={`hkm-message flex flex-col max-w-[80%] ${msg.sender === 'user' ? 'ml-auto items-end' : 'mr-auto items-start'}`}
+                  className={`hkm-message flex gap-2 max-w-[85%] ${msg.sender === 'user' ? 'ml-auto justify-end' : 'mr-auto justify-start'}`}
                 >
-                  <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm ${
-                    msg.sender === 'user' 
-                      ? 'bg-primary text-white rounded-tr-none' 
-                      : 'bg-white text-on-surface border border-outline-variant/60 rounded-tl-none'
-                  }`}>
-                    {msg.text}
+                  {msg.sender !== 'user' && (
+                    <img 
+                      src={logo} 
+                      alt="HKM Logo" 
+                      className="w-7 h-7 rounded-full border border-outline-variant/60 bg-white object-contain shrink-0 self-start mt-0.5" 
+                    />
+                  )}
+                  <div className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
+                    <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm ${
+                      msg.sender === 'user' 
+                        ? 'bg-primary text-white rounded-tr-none' 
+                        : 'bg-white text-on-surface border border-outline-variant/60 rounded-tl-none'
+                    }`}>
+                      {msg.text}
+                    </div>
+                    <span className="text-[10px] text-outline mt-1 px-1 font-mono">{msg.time}</span>
                   </div>
-                  <span className="text-[10px] text-outline mt-1 px-1 font-mono">{msg.time}</span>
                 </div>
               ))}
 
               {/* Typing Dot Animation */}
               {isAssistantTyping && (
-                <div className="hkm-message typing flex flex-col mr-auto items-start max-w-[80%]">
-                  <div className="px-4 py-3 rounded-2xl bg-white border border-outline-variant/60 rounded-tl-none flex items-center gap-1 shadow-sm">
-                    <span className="hkm-typing-dots w-2 h-2 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                    <span className="hkm-typing-dots w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                    <span className="hkm-typing-dots w-2 h-2 bg-primary/80 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                <div className="hkm-message typing flex gap-2 mr-auto justify-start max-w-[85%]">
+                  <img 
+                    src={logo} 
+                    alt="HKM Logo" 
+                    className="w-7 h-7 rounded-full border border-outline-variant/60 bg-white object-contain shrink-0 self-start mt-0.5 animate-pulse" 
+                  />
+                  <div className="flex flex-col items-start">
+                    <div className="px-4 py-3 rounded-2xl bg-white border border-outline-variant/60 rounded-tl-none flex items-center gap-1 shadow-sm">
+                      <span className="hkm-typing-dots w-2 h-2 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                      <span className="hkm-typing-dots w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                      <span className="hkm-typing-dots w-2 h-2 bg-primary/80 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    </div>
                   </div>
                 </div>
               )}

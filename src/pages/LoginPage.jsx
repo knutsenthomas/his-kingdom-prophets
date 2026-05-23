@@ -4,6 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import CmsText from '@/components/CmsText';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, User, Shield, Check, Key, GraduationCap, Users, ShieldAlert } from 'lucide-react';
+import logo from '@/assets/logo.png';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -104,6 +105,14 @@ export default function LoginPage() {
       >
         {/* Title */}
         <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <img 
+              src={logo} 
+              alt="His Kingdom Prophets Logo" 
+              className="w-16 h-16 rounded-full border-2 border-primary/20 bg-white object-contain shadow-md cursor-pointer hover:scale-105 active:scale-95 transition-all"
+              onClick={() => navigate('/')} 
+            />
+          </div>
           <div 
             onClick={() => navigate('/')} 
             className="font-serif text-3xl sm:text-4xl font-bold text-[#00324b] mb-2 cursor-pointer tracking-tight hover:opacity-90 active:scale-[0.99] transition-all"

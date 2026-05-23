@@ -4,6 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
 import { BookOpen, Users, Check, ArrowRight, Award } from 'lucide-react';
 import CmsText from '@/components/CmsText';
+import logo from '@/assets/logo.png';
 
 export default function WelcomePage() {
   const navigate = useNavigate();
@@ -32,7 +33,12 @@ export default function WelcomePage() {
       {/* Header */}
       <header className="bg-white border-b border-outline-variant sticky top-0 z-40 shadow-sm">
         <div className="flex justify-between items-center px-6 md:px-12 h-20 w-full max-w-[1440px] mx-auto">
-          <div className="font-serif text-2xl font-bold text-primary">
+          <div className="font-serif text-2xl font-bold text-primary flex items-center gap-2">
+            <img 
+              src={logo} 
+              alt="His Kingdom Prophets Logo" 
+              className="w-8 h-8 rounded-full border border-primary/10 object-contain shrink-0" 
+            />
             <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
           </div>
           <nav className="flex gap-4">

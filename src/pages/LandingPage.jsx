@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import worshipHero from '@/assets/worship_hero.png';
+import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
 
 export default function LandingPage() {
@@ -12,7 +13,12 @@ export default function LandingPage() {
     <div className="bg-background text-on-background font-sans min-h-screen">
       {/* TopNavBar */}
       <header className="sticky top-0 z-40 flex justify-between items-center w-full px-3 sm:px-6 md:px-12 h-20 max-w-[1440px] mx-auto glass-nav border-b border-outline-variant">
-        <div className="font-serif text-sm min-[360px]:text-base sm:text-2xl text-primary font-bold cursor-pointer shrink-0" onClick={() => navigate('/')}>
+        <div className="font-serif text-sm min-[360px]:text-base sm:text-2xl text-primary font-bold cursor-pointer shrink-0 flex items-center gap-2" onClick={() => navigate('/')}>
+          <img 
+            src={logo} 
+            alt="His Kingdom Prophets Logo" 
+            className="w-8 h-8 rounded-full border border-primary/10 object-contain shrink-0" 
+          />
           <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
         </div>
         <nav className="hidden md:flex items-center gap-8">

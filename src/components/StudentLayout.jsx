@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 import CmsText from '@/components/CmsText';
+import logo from '@/assets/logo.png';
 
 export default function StudentLayout() {
   const navigate = useNavigate();
@@ -89,10 +90,14 @@ export default function StudentLayout() {
               <Menu size={22} />
             </button>
             <div 
-              className="font-serif text-lg sm:text-2xl font-bold text-primary flex items-center gap-1.5 sm:gap-2 cursor-pointer truncate" 
+              className="font-serif text-lg sm:text-2xl font-bold text-primary flex items-center gap-2 cursor-pointer truncate" 
               onClick={() => navigate('/student/dashboard')}
             >
-              <GraduationCap className="text-primary shrink-0 animate-pulse" size={24} />
+              <img 
+                src={logo} 
+                alt="His Kingdom Prophets Logo" 
+                className="w-8 h-8 rounded-full border border-primary/10 object-contain shrink-0" 
+              />
               <span className="truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
             </div>
           </div>
