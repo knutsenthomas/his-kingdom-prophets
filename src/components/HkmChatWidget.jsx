@@ -165,14 +165,14 @@ export default function HkmChatWidget() {
           position: relative !important;
         }
         .hkm-chat-toggle {
-          background: linear-gradient(135deg, #d17d39 0%, #bd4f2a 100%) !important;
+          background: linear-gradient(135deg, #561291 0%, #3c096c 100%) !important;
           transform: translateZ(0) !important;
           backface-visibility: hidden !important;
           transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
         }
         .hkm-chat-toggle:hover {
           transform: translateZ(0) scale(1.05) !important;
-          box-shadow: 0 10px 20px rgba(209, 125, 57, 0.3) !important;
+          box-shadow: 0 10px 20px rgba(86, 18, 145, 0.3) !important;
         }
         .hkm-chat-toggle:active {
           transform: translateZ(0) scale(0.95) !important;
@@ -188,8 +188,8 @@ export default function HkmChatWidget() {
             transition={{ duration: 0.2 }}
             className="hkm-chat-panel bg-white w-[360px] h-[500px] rounded-2xl shadow-2xl border border-outline-variant flex flex-col overflow-hidden mb-4"
           >
-            {/* Header - Deep Brand Blue */}
-            <div className="bg-[#1B4965] text-white px-5 py-4 flex items-center justify-between shadow-sm">
+            {/* Header - Majestic Royal Purple */}
+            <div className="bg-[#561291] text-white px-5 py-4 flex items-center justify-between shadow-sm">
               <div className="flex items-center gap-2.5">
                 <img 
                   src={logo} 
