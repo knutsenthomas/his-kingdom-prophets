@@ -1846,8 +1846,7 @@ export const AppProvider = ({ children }) => {
             "*\"Men den som taler profetisk, taler for mennesker til oppbyggelse, formaning og trøst.\"* — **1. Korinterbrev 14:3**";
         }
 
-        replyText = "Her er et vakkert og styrkende skriftsted til deg:\n\n" + verseText + "\n\n" +
-          "⚠️ **Viktig påminnelse:** *Husk å alltid slå opp i din egen Bibel og undersøke skriftene selv for å bekrefte konteksten og hente full åpenbaring!*";
+        replyText = "Her er et vakkert og styrkende skriftsted til deg:\n\n" + verseText;
       }
 
       // 5. Biblical Topics / Subjects

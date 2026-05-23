@@ -4,6 +4,110 @@ import { MessageSquare, X, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import logo from '@/assets/logo.png';
 
+// Helper to parse bold (**) and italic (*) syntax into React nodes with custom brand colors
+const parseInlineStyles = (text, isAssistant) => {
+  if (!text) return '';
+  const regex = /(\*\*.*?\*\*|\*.*?\*)/g;
+  const tokens = text.split(regex);
+  return tokens.map((token, index) => {
+    if (token.startsWith('**') && token.endsWith('**')) {
+      const content = token.slice(2, -2);
+      return (
+        <strong key={index} className={`font-bold ${isAssistant ? 'text-[#1B4965]' : 'text-white'}`}>
+          {content}
+        </strong>
+      );
+    } else if (token.startsWith('*') && token.endsWith('*')) {
+      const content = token.slice(1, -1);
+      return (
+        <em key={index} className={`italic font-medium ${isAssistant ? 'text-slate-600' : 'text-white/90'}`}>
+          {content}
+        </em>
+      );
+    }
+    return token;
+  });
+};
+
+// Main rich text formatter supporting headers, bullet lists, and paragraphs
+const renderRichText = (text, isAssistant) => {
+  if (!text) return null;
+  
+  const lines = text.split('\n');
+  const renderedElements = [];
+  let listItems = [];
+  let inList = false;
+  
+  const flushList = (key) => {
+    if (listItems.length > 0) {
+      renderedElements.push(
+        <ul key={key} className="list-none space-y-1.5 my-2 pl-1">
+          {listItems}
+        </ul>
+      );
+      listItems = [];
+      inList = false;
+    }
+  };
+
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+    
+    // Header block (### Heading)
+    if (trimmed.startsWith('### ')) {
+      flushList(`list-before-h-${index}`);
+      const headingText = trimmed.slice(4);
+      renderedElements.push(
+        <h3 key={`h-${index}`} className={`text-base font-bold mt-4 mb-2 first:mt-0 flex items-center gap-1.5 leading-snug ${isAssistant ? 'text-[#1B4965]' : 'text-white'}`}>
+          {parseInlineStyles(headingText, isAssistant)}
+        </h3>
+      );
+    }
+    // Bullet point (• or -)
+    else if (trimmed.startsWith('• ') || trimmed.startsWith('- ')) {
+      inList = true;
+      const bulletText = trimmed.slice(2);
+      listItems.push(
+        <li key={`li-${index}`} className={`flex items-start gap-2 text-sm leading-relaxed ${isAssistant ? 'text-slate-700' : 'text-white/90'}`}>
+          <span className={`${isAssistant ? 'text-[#1B4965]' : 'text-white'} shrink-0 mt-1 select-none`}>•</span>
+          <span className="flex-1">{parseInlineStyles(bulletText, isAssistant)}</span>
+        </li>
+      );
+    }
+    // Numbered list item (e.g. 1. )
+    else if (/^\d+\.\s/.test(trimmed)) {
+      inList = true;
+      const match = trimmed.match(/^(\d+)\.\s(.*)/);
+      const num = match[1];
+      const bulletText = match[2];
+      listItems.push(
+        <li key={`li-${index}`} className={`flex items-start gap-2 text-sm leading-relaxed ${isAssistant ? 'text-slate-700' : 'text-white/90'}`}>
+          <span className={`${isAssistant ? 'text-[#1B4965]' : 'text-white'} shrink-0 font-bold text-xs mt-0.5 select-none`}>{num}.</span>
+          <span className="flex-1">{parseInlineStyles(bulletText, isAssistant)}</span>
+        </li>
+      );
+    }
+    // Empty spacing
+    else if (trimmed === '') {
+      flushList(`list-before-blank-${index}`);
+      renderedElements.push(<div key={`blank-${index}`} className="h-2" />);
+    }
+    // Regular text block
+    else {
+      flushList(`list-before-p-${index}`);
+      renderedElements.push(
+        <p key={`p-${index}`} className={`text-sm leading-relaxed my-1 ${isAssistant ? 'text-slate-700' : 'text-white'}`}>
+          {parseInlineStyles(line, isAssistant)}
+        </p>
+      );
+    }
+  });
+  
+  flushList(`list-trailing`);
+  
+  return <div className="space-y-1">{renderedElements}</div>;
+};
+
 export default function HkmChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [inputText, setInputText] = useState('');
@@ -132,7 +236,7 @@ export default function HkmChatWidget() {
                         ? 'bg-primary text-white rounded-tr-none' 
                         : 'bg-white text-on-surface border border-outline-variant/60 rounded-tl-none'
                     }`}>
-                      {msg.text}
+                      {renderRichText(msg.text, msg.sender === 'assistant')}
                     </div>
                     <span className="text-[10px] text-outline mt-1 px-1 font-mono">{msg.time}</span>
                   </div>
