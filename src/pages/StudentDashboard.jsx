@@ -86,9 +86,9 @@ export default function StudentDashboard() {
 
                 <div className="space-y-3 pt-4 border-t border-slate-100">
                   <div className="flex justify-between items-center text-xs font-semibold">
-                    <span className="text-on-surface-variant">Status</span>
-                    <span className={`font-bold ${course.modulesCompleted >= 4 ? 'text-green-600' : 'text-primary'}`}>
-                      {course.modulesCompleted >= 4 ? 'Bestått' : 'Under arbeid'} ({course.modulesCompleted}/{course.totalModules} leksjoner)
+                    <span className="text-on-surface-variant">Faglig Vurdering</span>
+                    <span className={`font-bold ${course.modulesCompleted >= 4 ? 'text-green-600' : 'text-error'}`}>
+                      {course.modulesCompleted >= 4 ? 'Bestått' : 'Ikke bestått'} ({course.modulesCompleted}/{course.totalModules} leksjoner)
                     </span>
                   </div>
                   <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
