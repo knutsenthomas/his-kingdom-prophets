@@ -1256,9 +1256,20 @@ export const AppProvider = ({ children }) => {
       setIsLoggedIn(true);
       showToast("Logget inn med Google!");
     } catch (err) {
-      console.warn("Google login failed, doing offline fallback:", err.message);
-      changePersona(role || 'student');
-      showToast("Offline Google pålogging fullført!");
+      console.error("Google login failed:", err);
+      const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      if (isDev) {
+        changePersona(role || 'student');
+        showToast("Offline Google pålogging fullført! (Utviklingsmodus)");
+      } else {
+        let msg = "Klarte ikke å logge inn med Google. Vennligst sjekk at tredjepartsinformasjonskapsler er tillatt i nettleseren din.";
+        if (err.code === 'auth/popup-blocked') {
+          msg = "Innloggingsvinduet ble blokkert av nettleseren. Vennligst tillat popups for dette nettstedet.";
+        } else if (err.code === 'auth/popup-closed-by-user') {
+          msg = "Innloggingsvinduet ble lukket før påloggingen ble fullført.";
+        }
+        showToast(msg);
+      }
     }
   };
 
@@ -1298,9 +1309,20 @@ export const AppProvider = ({ children }) => {
       setIsLoggedIn(true);
       showToast("Logget inn med Apple!");
     } catch (err) {
-      console.warn("Apple login failed, doing offline fallback:", err.message);
-      changePersona(role || 'student');
-      showToast("Offline Apple pålogging fullført!");
+      console.error("Apple login failed:", err);
+      const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      if (isDev) {
+        changePersona(role || 'student');
+        showToast("Offline Apple pålogging fullført! (Utviklingsmodus)");
+      } else {
+        let msg = "Klarte ikke å logge inn med Apple. Vennligst sjekk at tredjepartsinformasjonskapsler er tillatt i nettleseren din.";
+        if (err.code === 'auth/popup-blocked') {
+          msg = "Innloggingsvinduet ble blokkert av nettleseren. Vennligst tillat popups for dette nettstedet.";
+        } else if (err.code === 'auth/popup-closed-by-user') {
+          msg = "Innloggingsvinduet ble lukket før påloggingen ble fullført.";
+        }
+        showToast(msg);
+      }
     }
   };
 
