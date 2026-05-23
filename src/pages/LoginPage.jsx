@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
+import { auth } from '@/firebase';
 import CmsText from '@/components/CmsText';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Key } from 'lucide-react';
@@ -46,7 +47,24 @@ export default function LoginPage() {
     }
   };
 
-  // Reactive redirect observer - triggers immediately once user context changes (Google, email, Apple)
+  // 1. Direct fail-safe Auth listener for instant redirects bypassing context delays/errors
+  useEffect(() => {
+    // Check immediately if already authenticated on mount
+    if (auth.currentUser && auth.currentUser.email) {
+      handleAuthSuccess(auth.currentUser.email, 'superadmin', true);
+    }
+
+    // Direct listener
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      if (firebaseUser && firebaseUser.email) {
+        console.log("Direct fail-safe auth trigger:", firebaseUser.email);
+        handleAuthSuccess(firebaseUser.email, 'superadmin', true);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // 2. Reactive redirect observer - triggers when user context changes
   useEffect(() => {
     if (user && user.email) {
       handleAuthSuccess(user.email, user.role, user.onboardingCompleted);
