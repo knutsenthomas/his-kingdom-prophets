@@ -274,12 +274,12 @@ export default function CMSDashboard() {
   // Category Tabs metadata and live count computations
   const categories = useMemo(() => {
     return [
-      { id: 'all', title: 'General Strings', section: 'System', icon: Globe, count: assetDefinitions.length },
-      { id: 'landing', title: 'Landing Page', section: 'Hjemmeside', icon: Layout, count: assetDefinitions.filter(d => d.section === 'Hjemmeside').length },
-      { id: 'auth', title: 'Auth Flow', section: 'Innlogging', icon: UserCheck, count: assetDefinitions.filter(d => d.section === 'Innlogging').length },
-      { id: 'student', title: 'Student Portal', section: 'Studentportal', icon: BookOpen, count: assetDefinitions.filter(d => d.section === 'Studentportal').length },
-      { id: 'teacher', title: 'Teacher Portal', section: 'Mentorportal', icon: Users, count: assetDefinitions.filter(d => d.section === 'Mentorportal').length },
-      { id: 'onboarding', title: 'Onboarding Flow', section: 'Onboarding', icon: Rocket, count: assetDefinitions.filter(d => d.section === 'Onboarding').length }
+      { id: 'all', title: 'Systemnøkler', section: 'System', icon: Globe, count: assetDefinitions.length },
+      { id: 'landing', title: 'Hjemmeside / Landingsside', section: 'Hjemmeside', icon: Layout, count: assetDefinitions.filter(d => d.section === 'Hjemmeside').length },
+      { id: 'auth', title: 'Innloggingsflyt', section: 'Innlogging', icon: UserCheck, count: assetDefinitions.filter(d => d.section === 'Innlogging').length },
+      { id: 'student', title: 'Studentportal', section: 'Studentportal', icon: BookOpen, count: assetDefinitions.filter(d => d.section === 'Studentportal').length },
+      { id: 'teacher', title: 'Mentorportal', section: 'Mentorportal', icon: Users, count: assetDefinitions.filter(d => d.section === 'Mentorportal').length },
+      { id: 'onboarding', title: 'Onboardingflyt', section: 'Onboarding', icon: Rocket, count: assetDefinitions.filter(d => d.section === 'Onboarding').length }
     ];
   }, []);
 
@@ -627,12 +627,12 @@ export default function CMSDashboard() {
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   className="bg-slate-50 border border-outline-variant/30 rounded-lg text-xs py-1.5 pl-3 pr-8 focus:ring-primary focus:border-primary font-medium"
                 >
-                  <option value="all">General Strings</option>
-                  <option value="landing">Landing Page</option>
-                  <option value="auth">Auth Flow</option>
-                  <option value="student">Student Portal</option>
-                  <option value="teacher">Teacher Portal</option>
-                  <option value="onboarding">Onboarding Flow</option>
+                  <option value="all">Systemnøkler</option>
+                  <option value="landing">Hjemmeside / Landingsside</option>
+                  <option value="auth">Innloggingsflyt</option>
+                  <option value="student">Studentportal</option>
+                  <option value="teacher">Mentorportal</option>
+                  <option value="onboarding">Onboardingflyt</option>
                 </select>
               </div>
 
@@ -643,10 +643,10 @@ export default function CMSDashboard() {
                   onChange={(e) => setFilterStatus(e.target.value)}
                   className="bg-slate-50 border border-outline-variant/30 rounded-lg text-xs py-1.5 pl-3 pr-8 focus:ring-primary focus:border-primary font-medium"
                 >
-                  <option>All Statuses</option>
-                  <option>Draft</option>
-                  <option>Published</option>
-                  <option>Missing Translation</option>
+                  <option value="All Statuses">Alle statuser</option>
+                  <option value="Draft">Ulagret kladd</option>
+                  <option value="Published">Publisert</option>
+                  <option value="Missing Translation">Mangler engelsk oversettelse</option>
                 </select>
               </div>
               
@@ -657,9 +657,9 @@ export default function CMSDashboard() {
                   onChange={(e) => setSortBy(e.target.value)}
                   className="bg-slate-50 border border-outline-variant/30 rounded-lg text-xs py-1.5 pl-3 pr-8 focus:ring-primary focus:border-primary font-medium"
                 >
-                  <option>Newest First</option>
-                  <option>Alphabetical (Key)</option>
-                  <option>Recently Modified</option>
+                  <option value="Newest First">Nyeste først</option>
+                  <option value="Alphabetical (Key)">Alfabetisk (Nøkkel)</option>
+                  <option value="Recently Modified">Nylig endret</option>
                 </select>
               </div>
             </div>
@@ -793,7 +793,7 @@ export default function CMSDashboard() {
                           className={enTextareaClass}
                           value={valEn}
                           onChange={(e) => handleTextChange(slug, e.target.value, 'en')}
-                          placeholder={isMissing && !valEn.trim() ? "Missing English translation..." : ""}
+                          placeholder={isMissing && !valEn.trim() ? "Mangler engelsk oversettelse..." : ""}
                           rows={asset.type === 'textarea' ? 3 : 2}
                         />
                       </div>
