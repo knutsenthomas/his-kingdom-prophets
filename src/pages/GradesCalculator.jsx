@@ -45,7 +45,7 @@ export default function GradesCalculator() {
 
   useEffect(() => {
     if (!activeAssignment) return;
-    setAssignmentGrade(activeAssignment.grade || 'B');
+    setAssignmentGrade(activeAssignment.grade || 'Bestått');
     setAssignmentScore(activeAssignment.score || '85/100');
     setAssignmentFeedback(activeAssignment.feedback || 'God besvarelse med tydelig refleksjon og god bibelsk forankring. Spiss gjerne konklusjonen enda mer.');
   }, [activeAssignment?.id]);

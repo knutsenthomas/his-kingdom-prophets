@@ -242,7 +242,7 @@ const INITIAL_STANDALONE_ASSIGNMENTS = [
       fileName: 'prosjektskisse_bønnesenter_v1.pdf',
       submittedAt: '2026-04-18 11:15'
     },
-    grade: 'A',
+    grade: 'Bestått',
     feedback: 'En fremragende prosjektskisse med et solid teologisk fundament. Veldig godt spisset, og du viser stor åndelig og praktisk modenhet i din tilnærming. Fortsett det utmerkede arbeidet!',
     score: '96/100',
     source: 'standalone'
