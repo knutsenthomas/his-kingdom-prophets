@@ -122,13 +122,15 @@ export default function HkmChatWidget() {
                   <img 
                     src={logo} 
                     alt="HKM Logo" 
-                    className="w-7 h-7 object-contain shrink-0 self-start mt-0.5 animate-pulse" 
+                    className="w-7 h-7 object-contain shrink-0 self-start mt-0.5" 
                   />
                   <div className="flex flex-col items-start">
-                    <div className="px-4 py-3 rounded-2xl bg-white border border-outline-variant/60 rounded-tl-none flex items-center gap-1 shadow-sm">
-                      <span className="hkm-typing-dots w-2 h-2 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                      <span className="hkm-typing-dots w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                      <span className="hkm-typing-dots w-2 h-2 bg-primary/80 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    <div className="px-4 py-3 rounded-2xl bg-white border border-outline-variant/60 rounded-tl-none flex items-center shadow-sm">
+                      <div className="hkm-typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -166,13 +168,13 @@ export default function HkmChatWidget() {
         )}
       </AnimatePresence>
 
-      {/* Floating Toggle Button - Circular SVG with Solid Deep Blue */}
+      {/* Floating Toggle Button - Circular SVG with Orange Gradient */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 flex items-center justify-center text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+        className="w-14 h-14 flex items-center justify-center text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer animate-fade-in"
         style={{
           borderRadius: '9999px',
-          backgroundColor: '#1B4965',
+          backgroundImage: 'linear-gradient(135deg, #d17d39 0%, #bd4f2a 100%)',
           transform: 'translateZ(0)',
           backfaceVisibility: 'hidden'
         }}
