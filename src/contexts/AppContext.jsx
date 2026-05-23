@@ -1174,13 +1174,17 @@ export const AppProvider = ({ children }) => {
       await signInWithPopup(auth, provider);
       showToast("Logget inn med Google!");
     } catch (err) {
-      console.warn("Google popup login failed, trying redirect fallback...", err);
+      console.error("Google popup login failed:", err);
       if (err.code === 'auth/popup-blocked') {
         showToast("Innloggingsvinduet ble blokkert. Vennligst tillat popups eller prøv igjen.");
         return;
       }
       if (err.code === 'auth/popup-closed-by-user') {
         showToast("Innloggingsvinduet ble lukket.");
+        return;
+      }
+      if (err.code === 'auth/unauthorized-domain') {
+        showToast(`Uautorisert domene: Vennligst legg til "${window.location.hostname}" i Firebase-konsollen under Authorized Domains.`);
         return;
       }
 
@@ -1190,11 +1194,11 @@ export const AppProvider = ({ children }) => {
         provider.setCustomParameters({
           prompt: 'select_account'
         });
-        showToast("Cookies blokkert. Viderekobler til Google...");
+        showToast("Cookies/popups blokkert. Viderekobler til Google...");
         await signInWithRedirect(auth, provider);
       } catch (redirErr) {
         console.error("Redirect fallback failed too:", redirErr);
-        showToast("Kunne ikke koble til Google. Sjekk nettleserinnstillingene.");
+        showToast(`Kunne ikke koble til Google (${redirErr.code || redirErr.message || redirErr}).`);
       }
     }
   };
@@ -1206,13 +1210,17 @@ export const AppProvider = ({ children }) => {
       await signInWithPopup(auth, provider);
       showToast("Logget inn med Apple!");
     } catch (err) {
-      console.warn("Apple popup login failed, trying redirect fallback...", err);
+      console.error("Apple popup login failed:", err);
       if (err.code === 'auth/popup-blocked') {
         showToast("Innloggingsvinduet ble blokkert. Vennligst tillat popups eller prøv igjen.");
         return;
       }
       if (err.code === 'auth/popup-closed-by-user') {
         showToast("Innloggingsvinduet ble lukket.");
+        return;
+      }
+      if (err.code === 'auth/unauthorized-domain') {
+        showToast(`Uautorisert domene: Vennligst legg til "${window.location.hostname}" i Firebase-konsollen under Authorized Domains.`);
         return;
       }
 
@@ -1223,7 +1231,7 @@ export const AppProvider = ({ children }) => {
         await signInWithRedirect(auth, provider);
       } catch (redirErr) {
         console.error("Redirect fallback failed too:", redirErr);
-        showToast("Kunne ikke koble til Apple. Sjekk nettleserinnstillingene.");
+        showToast(`Kunne ikke koble til Apple (${redirErr.code || redirErr.message || redirErr}).`);
       }
     }
   };
