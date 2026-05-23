@@ -1060,7 +1060,7 @@ export default function BibleView() {
                   onClick={() => setShowStudyPanel(!showStudyPanel)}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-all active:scale-[0.97] cursor-pointer ${
                     showStudyPanel 
-                      ? 'bg-burnt-orange text-white border-burnt-orange shadow-md shadow-burnt-orange/15' 
+                      ? 'bg-primary text-white border-primary shadow-md shadow-primary/15' 
                       : 'bg-slate-50 text-primary border-outline-variant/40 hover:bg-slate-100'
                   }`}
                   title="Åpne studiebibel og kommentarer"

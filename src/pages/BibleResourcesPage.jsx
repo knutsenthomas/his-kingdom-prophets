@@ -581,7 +581,7 @@ export default function BibleResourcesPage() {
                         onClick={() => setShowStudyPanel(!showStudyPanel)}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[11px] font-bold transition-all active:scale-[0.97] cursor-pointer ${
                           showStudyPanel 
-                            ? 'bg-burnt-orange text-white border-burnt-orange shadow' 
+                            ? 'bg-primary text-white border-primary shadow' 
                             : 'bg-slate-50 text-primary border-slate-200/60 hover:bg-slate-100'
                         }`}
                       >
