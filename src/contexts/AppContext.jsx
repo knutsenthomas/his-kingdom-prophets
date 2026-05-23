@@ -1783,8 +1783,16 @@ export const AppProvider = ({ children }) => {
           "• *'Vis meg et bibelvers'* eller *'Kan dere be for meg?'*\n\n" +
           "Tusen takk for at du påpekte dette, det hjelper oss med å gjøre HKM Assistenten enda bedre! 🙏";
       }
-      
       // B. Specific Biblical Characters
+      else if (lower.includes("jesus") || lower.includes("kristus") || lower.includes("messias") || lower.includes("frelser") || lower.includes("guds sønn")) {
+        replyText = "### 👑 Vår Herre og Frelser: Jesus Kristus\n\n" +
+          "**Jesus Kristus** er selve sentrum i Guds åpenbaring, skaperverket og vår tro. Han er Guds enbårne Sønn, det inkarnerte Ord som var hos Gud og var Gud (Johannes 1:1), og kongenes Konge.\n\n" +
+          "I den profetiske tjenesten lærer vi at **'Jesu vitnesbyrd er profetiens ånd'** (Johannes' åpenbaring 19:10). All sunn profeti, bibeltolkning og tjenesteutrustning har som sitt ytterste mål å herliggjøre og peke på Jesus Kristus.\n\n" +
+          "• **Hans verk:** Født av en jomfru, levde et syndfritt liv, døde på korset for våre synder, oppstod legemlig på den tredje dag, fór opp til himmelen, sitter ved Faderens høyre hånd og kommer igjen i herlighet!\n" +
+          "• **Hans naturer:** Fullt ut Gud og fullt ut menneske (forent i én person, slik det ble definert under Kirkemøtet i Kalkedon i 451).\n\n" +
+          "📖 **Skriftsteder:** *Johannes 14:6, Kolosserne 2:9, Johannes' åpenbaring 19:10*\n" +
+          "📚 **Relatert undervisning:** *BIBLE 301 (Modul 3: Kristologi & Paktens fullendelse)*";
+      }
       else if (lower.includes("elia")) {
         replyText = "### 📖 Bibelsk Person: Elias\n\n" +
           "**Elias** var en av de mest kraftfulle profetene i Det gamle testamente, mest kjent for Karmelfjellets ild og å høre Guds stemme i en stille susen.\n\n" +
