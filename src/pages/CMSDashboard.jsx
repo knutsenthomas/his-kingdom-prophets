@@ -275,7 +275,7 @@ export default function CMSDashboard() {
   const categories = useMemo(() => {
     return [
       { id: 'all', title: 'Systemnøkler', section: 'System', icon: Globe, count: assetDefinitions.length },
-      { id: 'landing', title: 'Hjemmeside / Landingsside', section: 'Hjemmeside', icon: Layout, count: assetDefinitions.filter(d => d.section === 'Hjemmeside').length },
+      { id: 'landing', title: 'Landingsside', section: 'Hjemmeside', icon: Layout, count: assetDefinitions.filter(d => d.section === 'Hjemmeside').length },
       { id: 'auth', title: 'Innloggingsflyt', section: 'Innlogging', icon: UserCheck, count: assetDefinitions.filter(d => d.section === 'Innlogging').length },
       { id: 'student', title: 'Studentportal', section: 'Studentportal', icon: BookOpen, count: assetDefinitions.filter(d => d.section === 'Studentportal').length },
       { id: 'teacher', title: 'Mentorportal', section: 'Mentorportal', icon: Users, count: assetDefinitions.filter(d => d.section === 'Mentorportal').length },
@@ -628,7 +628,7 @@ export default function CMSDashboard() {
                   className="bg-slate-50 border border-outline-variant/30 rounded-lg text-xs py-1.5 pl-3 pr-8 focus:ring-primary focus:border-primary font-medium"
                 >
                   <option value="all">Systemnøkler</option>
-                  <option value="landing">Hjemmeside / Landingsside</option>
+                  <option value="landing">Landingsside</option>
                   <option value="auth">Innloggingsflyt</option>
                   <option value="student">Studentportal</option>
                   <option value="teacher">Mentorportal</option>
