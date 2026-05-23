@@ -78,6 +78,49 @@ const BIBLE_BOOKS = [
   { id: 'rev', nor: 'Åpenbaringen', eng: 'Revelation', chapters: 22, testament: 'NT' },
 ];
 
+// Robust helpers to parse Bible references (e.g., "1. Joh 5:7", "Johannes 3,16", "Johannes 3 16", "Joh 3")
+const parseBibleReference = (query) => {
+  if (!query) return null;
+  const clean = query.trim();
+  // Match: (Optional Book number with space/dot) (Book name letters/dots) (whitespace) (Chapter number) (optional separators and verse number)
+  // Matches "1. Joh 3:16", "1.Joh 3,16", "Johannes 3 16", "Joh 3"
+  const match = clean.match(/^([1-3]?\s*\.?\s*[a-zA-Z\u00C0-\u00FF]+(?:\s*[a-zA-Z\u00C0-\u00FF]+)*)\s+(\d+)(?:[\s:,v\.\-]+(\d+))?/i);
+  if (!match) return null;
+  
+  return {
+    bookStr: match[1].trim(),
+    chapter: parseInt(match[2], 10),
+    verse: match[3] ? parseInt(match[3], 10) : null
+  };
+};
+
+const findBibleBook = (bookStr) => {
+  if (!bookStr) return null;
+  const cleanStr = bookStr.toLowerCase().replace(/[\.\s]/g, ''); // "1.joh" -> "1joh", "joh" -> "joh"
+  
+  // 1. Exact match (ignoring dots and spaces)
+  let found = BIBLE_BOOKS.find(b => 
+    b.nor.toLowerCase().replace(/[\.\s]/g, '') === cleanStr ||
+    b.eng.toLowerCase().replace(/[\.\s]/g, '') === cleanStr ||
+    b.id.toLowerCase() === cleanStr
+  );
+  if (found) return found;
+
+  // 2. Prefix match
+  found = BIBLE_BOOKS.find(b => 
+    b.nor.toLowerCase().replace(/[\.\s]/g, '').startsWith(cleanStr) ||
+    b.eng.toLowerCase().replace(/[\.\s]/g, '').startsWith(cleanStr)
+  );
+  if (found) return found;
+
+  // 3. Contains match
+  found = BIBLE_BOOKS.find(b => 
+    b.nor.toLowerCase().replace(/[\.\s]/g, '').includes(cleanStr) ||
+    b.eng.toLowerCase().replace(/[\.\s]/g, '').includes(cleanStr)
+  );
+  return found;
+};
+
 export default function LessonView() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -98,6 +141,7 @@ export default function LessonView() {
   const [bibleSearchQuery, setBibleSearchQuery] = useState('');
   const [bibleVerses, setBibleVerses] = useState([]);
   const [isBibleLoading, setIsBibleLoading] = useState(false);
+  const [highlightedBibleVerse, setHighlightedBibleVerse] = useState(null);
   
   const textareaRef = useRef(null);
   const saveTimeoutRef = useRef(null);
@@ -191,6 +235,18 @@ export default function LessonView() {
     }
   }, [selectedBibleBook, selectedBibleChapter, selectedBibleTranslation, sidebarTab, isNotesOpen]);
 
+  // Handle smooth scroll to highlighted verse inside the lesson bible panel when verses finish loading
+  useEffect(() => {
+    if (highlightedBibleVerse && bibleVerses.length > 0) {
+      setTimeout(() => {
+        const el = document.getElementById(`v-lesson-${highlightedBibleVerse}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 400);
+    }
+  }, [highlightedBibleVerse, bibleVerses]);
+
   const fetchBibleChapter = async () => {
     setIsBibleLoading(true);
     setBibleVerses([]);
@@ -215,6 +271,29 @@ export default function LessonView() {
   const handleBibleSearch = async (e) => {
     e.preventDefault();
     if (!bibleSearchQuery.trim()) return;
+
+    // 1. Try parsing as a specific Bible reference (e.g. "Johannes 3:16" or "1. Joh 5:7")
+    const parsedRef = parseBibleReference(bibleSearchQuery);
+    if (parsedRef) {
+      const foundBook = findBibleBook(parsedRef.bookStr);
+      if (foundBook) {
+        setSelectedBibleBook(foundBook);
+        const clampedChapter = Math.max(1, Math.min(parsedRef.chapter, foundBook.chapters));
+        setSelectedBibleChapter(clampedChapter);
+        
+        if (parsedRef.verse) {
+          setHighlightedBibleVerse(parsedRef.verse);
+          showToast(`Viser ${foundBook.nor} ${clampedChapter} med vers ${parsedRef.verse} uthevet!`);
+        } else {
+          setHighlightedBibleVerse(null);
+          showToast(`Viser ${foundBook.nor} ${clampedChapter}!`);
+        }
+        setBibleSearchQuery('');
+        return;
+      }
+    }
+
+    // 2. Fallback to API-based keyword or complex query search
     setIsBibleLoading(true);
     setBibleVerses([]);
     try {
@@ -247,6 +326,18 @@ export default function LessonView() {
             }
           });
           if (resultVerses.length > 0) {
+            // Fail-safe: if the search returned a single verse and we detected the book & chapter,
+            // let's load the entire chapter instead of showing only a single verse!
+            const hasNumbers = /\d+/.test(bibleSearchQuery);
+            if (detectedBook && hasNumbers && resultVerses.length === 1) {
+              setSelectedBibleBook(detectedBook);
+              setSelectedBibleChapter(detectedChapter);
+              setHighlightedBibleVerse(resultVerses[0].verse);
+              showToast(`Viser hele ${detectedBook.nor} ${detectedChapter} med vers ${resultVerses[0].verse} uthevet!`);
+              setBibleSearchQuery('');
+              return;
+            }
+
             setBibleVerses(resultVerses);
             if (detectedBook) {
               setSelectedBibleBook(detectedBook);
@@ -511,19 +602,64 @@ export default function LessonView() {
           ) : (
             <div className="flex flex-col flex-grow min-h-0 min-w-0 space-y-3.5 font-sans">
               <div className="grid grid-cols-2 gap-2 shrink-0">
-                <select value={selectedBibleBook.id} onChange={(e) => { const f = BIBLE_BOOKS.find(b => b.id === e.target.value); setSelectedBibleBook(f); setSelectedBibleChapter(1); }} className="w-full bg-slate-50 border p-2 rounded-lg text-xs">{BIBLE_BOOKS.map(b => <option key={b.id} value={b.id}>{b.nor}</option>)}</select>
-                <select value={selectedBibleChapter} onChange={(e) => setSelectedBibleChapter(Number(e.target.value))} className="w-full bg-slate-50 border p-2 rounded-lg text-xs">{Array.from({ length: selectedBibleBook.chapters }, (_, i) => i + 1).map(c => <option key={c} value={c}>{c}</option>)}</select>
+                <select 
+                  value={selectedBibleBook.id} 
+                  onChange={(e) => { 
+                    const f = BIBLE_BOOKS.find(b => b.id === e.target.value); 
+                    setSelectedBibleBook(f); 
+                    setSelectedBibleChapter(1); 
+                    setHighlightedBibleVerse(null);
+                  }} 
+                  className="w-full bg-slate-50 border p-2 rounded-lg text-xs"
+                >
+                  {BIBLE_BOOKS.map(b => <option key={b.id} value={b.id}>{b.nor}</option>)}
+                </select>
+                <select 
+                  value={selectedBibleChapter} 
+                  onChange={(e) => {
+                    setSelectedBibleChapter(Number(e.target.value));
+                    setHighlightedBibleVerse(null);
+                  }} 
+                  className="w-full bg-slate-50 border p-2 rounded-lg text-xs"
+                >
+                  {Array.from({ length: selectedBibleBook.chapters }, (_, i) => i + 1).map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
               </div>
               <div className="flex gap-2 shrink-0">
                 <select value={selectedBibleTranslation} onChange={(e) => setSelectedBibleTranslation(e.target.value)} className="flex-1 bg-slate-50 border p-2 text-xs"><option value="bibelselskap">Bokmål</option><option value="web">WEB</option></select>
                 <form onSubmit={handleBibleSearch} className="flex-[1.2] flex"><input type="text" placeholder="Søk..." value={bibleSearchQuery} onChange={(e) => setBibleSearchQuery(e.target.value)} className="w-full bg-slate-50 border p-2 text-xs" /><button type="submit"><Search size={14} /></button></form>
               </div>
-              <div className="flex-grow border rounded-xl bg-slate-50/50 overflow-y-auto p-3.5">
-                {isBibleLoading ? <div className="text-center">Laster...</div> : bibleVerses.map(v => (
-                  <div key={v.verse} className="group relative p-2 border-b">
-                    <p className="text-xs">{v.verse} {v.text} <button onClick={() => insertVerseToNotes(v)}><Send size={10} /></button></p>
-                  </div>
-                ))}
+              <div className="flex-grow border rounded-xl bg-slate-50/50 overflow-y-auto p-3.5 space-y-1">
+                {isBibleLoading ? (
+                  <div className="text-center text-xs py-8 text-slate-400">Laster...</div>
+                ) : bibleVerses.length > 0 ? (
+                  bibleVerses.map(v => (
+                    <div 
+                      key={v.verse} 
+                      id={`v-lesson-${v.verse}`}
+                      onClick={() => setHighlightedBibleVerse(highlightedBibleVerse === v.verse ? null : v.verse)}
+                      className={`group relative p-2 border-b cursor-pointer transition-all rounded-lg ${
+                        highlightedBibleVerse === v.verse 
+                          ? 'bg-primary/5 border border-primary/20 shadow-sm' 
+                          : 'hover:bg-slate-100 border border-transparent'
+                      }`}
+                    >
+                      <p className="text-xs text-slate-700 leading-relaxed pr-6">
+                        <span className="font-bold text-primary mr-1.5">{v.verse}</span>
+                        {v.text}
+                      </p>
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); insertVerseToNotes(v); }} 
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-1 text-primary hover:bg-primary/10 rounded transition-all animate-fade-in"
+                        title="Sett inn i notater"
+                      >
+                        <Send size={10} />
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-xs py-8 text-slate-400">Ingen vers funnet.</div>
+                )}
               </div>
             </div>
           )}

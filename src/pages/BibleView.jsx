@@ -85,6 +85,49 @@ const TRANSLATIONS = [
   { id: 'kjv', name: 'English (King James Version)' },
 ];
 
+// Robust helpers to parse Bible references (e.g., "1. Joh 5:7", "Johannes 3,16", "Johannes 3 16", "Joh 3")
+const parseBibleReference = (query) => {
+  if (!query) return null;
+  const clean = query.trim();
+  // Match: (Optional Book number with space/dot) (Book name letters/dots) (whitespace) (Chapter number) (optional separators and verse number)
+  // Matches "1. Joh 3:16", "1.Joh 3,16", "Johannes 3 16", "Joh 3"
+  const match = clean.match(/^([1-3]?\s*\.?\s*[a-zA-Z\u00C0-\u00FF]+(?:\s*[a-zA-Z\u00C0-\u00FF]+)*)\s+(\d+)(?:[\s:,v\.\-]+(\d+))?/i);
+  if (!match) return null;
+  
+  return {
+    bookStr: match[1].trim(),
+    chapter: parseInt(match[2], 10),
+    verse: match[3] ? parseInt(match[3], 10) : null
+  };
+};
+
+const findBibleBook = (bookStr) => {
+  if (!bookStr) return null;
+  const cleanStr = bookStr.toLowerCase().replace(/[\.\s]/g, ''); // "1.joh" -> "1joh", "joh" -> "joh"
+  
+  // 1. Exact match (ignoring dots and spaces)
+  let found = BIBLE_BOOKS.find(b => 
+    b.nor.toLowerCase().replace(/[\.\s]/g, '') === cleanStr ||
+    b.eng.toLowerCase().replace(/[\.\s]/g, '') === cleanStr ||
+    b.id.toLowerCase() === cleanStr
+  );
+  if (found) return found;
+
+  // 2. Prefix match
+  found = BIBLE_BOOKS.find(b => 
+    b.nor.toLowerCase().replace(/[\.\s]/g, '').startsWith(cleanStr) ||
+    b.eng.toLowerCase().replace(/[\.\s]/g, '').startsWith(cleanStr)
+  );
+  if (found) return found;
+
+  // 3. Contains match
+  found = BIBLE_BOOKS.find(b => 
+    b.nor.toLowerCase().replace(/[\.\s]/g, '').includes(cleanStr) ||
+    b.eng.toLowerCase().replace(/[\.\s]/g, '').includes(cleanStr)
+  );
+  return found;
+};
+
 export default function BibleView() {
   const navigate = useNavigate();
   const { showToast, sendAssistantMessage } = useApp();
@@ -104,6 +147,18 @@ export default function BibleView() {
     fetchBibleChapter();
   }, [selectedBook, selectedChapter, selectedTranslation]);
 
+  // Handle smooth scroll to highlighted verse when verses finish loading
+  useEffect(() => {
+    if (highlightedVerse && verses.length > 0) {
+      setTimeout(() => {
+        const el = document.getElementById(`v-${highlightedVerse}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 400);
+    }
+  }, [highlightedVerse, verses]);
+
   const fetchBibleChapter = async () => {
     setIsLoading(true);
     setVerses([]);
@@ -117,7 +172,6 @@ export default function BibleView() {
       }
 
       const data = await response.json();
-      // getbible returnerer en nøkkel per kapittel, vi henter den første
       const keys = Object.keys(data);
       if (keys.length > 0) {
         const chapterData = data[keys[0]];
@@ -135,18 +189,36 @@ export default function BibleView() {
     e.preventDefault();
     if (!searchQuery.trim()) return;
 
+    // 1. Try parsing as a specific Bible reference (e.g. "Johannes 3:16" or "1. Joh 5:7")
+    const parsedRef = parseBibleReference(searchQuery);
+    if (parsedRef) {
+      const foundBook = findBibleBook(parsedRef.bookStr);
+      if (foundBook) {
+        setSelectedBook(foundBook);
+        const clampedChapter = Math.max(1, Math.min(parsedRef.chapter, foundBook.chapters));
+        setSelectedChapter(clampedChapter);
+        
+        if (parsedRef.verse) {
+          setHighlightedVerse(parsedRef.verse);
+          showToast(`Viser ${foundBook.nor} ${clampedChapter} med vers ${parsedRef.verse} uthevet for kontekst!`);
+        } else {
+          setHighlightedVerse(null);
+          showToast(`Viser ${foundBook.nor} ${clampedChapter}!`);
+        }
+        setSearchQuery('');
+        return;
+      }
+    }
+
+    // 2. Fallback to API-based keyword or complex query search
     setIsLoading(true);
     setVerses([]);
     try {
-      // getbible støtter å søke etter referanser som "John 3:16" eller "Salmene 23"
-      // Vi prøver å oversette norske boknavn i søket til engelsk
       let cleanQuery = searchQuery.trim();
-      
-      // Enkel norsk-til-engelsk erstatning for søk
+      // Replace norwegian book names with english for the API
       BIBLE_BOOKS.forEach(book => {
         const norLower = book.nor.toLowerCase();
-        const queryLower = cleanQuery.toLowerCase();
-        if (queryLower.startsWith(norLower)) {
+        if (cleanQuery.toLowerCase().startsWith(norLower)) {
           cleanQuery = cleanQuery.replace(new RegExp(book.nor, 'i'), book.eng);
         }
       });
@@ -171,8 +243,10 @@ export default function BibleView() {
             resultVerses.push(...item.verses);
           }
           if (!detectedBook && item.book_name) {
-            // Prøv å finne boken i vår liste
-            const found = BIBLE_BOOKS.find(b => b.eng.toLowerCase() === item.book_name.toLowerCase() || b.nor.toLowerCase() === item.book_name.toLowerCase());
+            const found = BIBLE_BOOKS.find(b => 
+              b.eng.toLowerCase() === item.book_name.toLowerCase() || 
+              b.nor.toLowerCase() === item.book_name.toLowerCase()
+            );
             if (found) {
               detectedBook = found;
               detectedChapter = item.chapter || 1;
@@ -181,6 +255,19 @@ export default function BibleView() {
         });
 
         if (resultVerses.length > 0) {
+          // If we got verses, let's check if the search query looks like a specific verse query that the API returned
+          // If we detected a single book and chapter, and the user's query contains a number (likely a chapter/verse),
+          // let's load the entire chapter instead of showing only a single verse! This is a wonderful UX fail-safe!
+          const hasNumbers = /\d+/.test(searchQuery);
+          if (detectedBook && hasNumbers && resultVerses.length === 1) {
+            setSelectedBook(detectedBook);
+            setSelectedChapter(detectedChapter);
+            setHighlightedVerse(resultVerses[0].verse);
+            showToast(`Viser hele ${detectedBook.nor} ${detectedChapter} med vers ${resultVerses[0].verse} uthevet!`);
+            setSearchQuery('');
+            return;
+          }
+
           setVerses(resultVerses);
           if (detectedBook) {
             setSelectedBook(detectedBook);
@@ -211,11 +298,8 @@ export default function BibleView() {
 
   const handleShareToChat = (verse) => {
     const shareMessage = `Her er et kraftfullt skriftsted jeg leste i Bibelen:\n\n*"${verse.text.trim()}"*\n— **${selectedBook.nor} ${verse.chapter}:${verse.verse}** (${TRANSLATIONS.find(t => t.id === selectedTranslation)?.name})`;
-    
-    // Save to localStorage for the Community Chat View
     localStorage.setItem('hkm-pending-chat-message', shareMessage);
     showToast('Klar til å deles! Sender deg til bønnefellesskapet...');
-    
     setTimeout(() => {
       navigate('/student/chat');
     }, 1200);
@@ -223,22 +307,19 @@ export default function BibleView() {
 
   const handleSendToAssistant = (verse) => {
     const assistantPrompt = `Jeg leste akkurat ${selectedBook.nor} ${verse.chapter}:${verse.verse} som sier: "${verse.text.trim()}". Kan du gi meg en dypere teologisk og profetisk forklaring av dette skriftstedet og hva det betyr for oss i dag?`;
-    
     sendAssistantMessage(assistantPrompt);
     showToast('Sendt til HKM Assistent! Åpne chatten nede til høyre.');
-    
-    // Dispatch custom event to automatically open the chat panel
     setTimeout(() => {
       window.dispatchEvent(new CustomEvent('hkm-open-chat'));
     }, 500);
   };
 
   const navigateChapter = (direction) => {
+    setHighlightedVerse(null); // Reset highlight when navigating chapters
     if (direction === 'prev') {
       if (selectedChapter > 1) {
         setSelectedChapter(prev => prev - 1);
       } else {
-        // Gå til forrige bok hvis mulig
         const currentIndex = BIBLE_BOOKS.findIndex(b => b.id === selectedBook.id);
         if (currentIndex > 0) {
           const prevBook = BIBLE_BOOKS[currentIndex - 1];
@@ -250,7 +331,6 @@ export default function BibleView() {
       if (selectedChapter < selectedBook.chapters) {
         setSelectedChapter(prev => prev + 1);
       } else {
-        // Gå til neste bok hvis mulig
         const currentIndex = BIBLE_BOOKS.findIndex(b => b.id === selectedBook.id);
         if (currentIndex < BIBLE_BOOKS.length - 1) {
           const nextBook = BIBLE_BOOKS[currentIndex + 1];
@@ -467,6 +547,7 @@ export default function BibleView() {
                     {verses.length > 0 ? (
                       verses.map((verse) => (
                         <div 
+                          id={`v-${verse.verse}`}
                           key={`${verse.chapter}-${verse.verse}`}
                           onClick={() => setHighlightedVerse(highlightedVerse === verse.verse ? null : verse.verse)}
                           className={`group p-2.5 rounded-xl transition-all cursor-pointer relative ${
