@@ -454,10 +454,10 @@ export default function BibleResourcesPage() {
             </div>
 
             {/* Reading Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               
               {/* Left Column: Book selection */}
-              <div className={`${showStudyPanel ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-6`}>
+              <div className={`${showStudyPanel ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-6 lg:sticky lg:top-24`}>
                 <div className="bg-white border border-slate-200/60 rounded-2xl p-5 shadow-sm space-y-5">
                   <h4 className="font-serif font-bold text-sm text-primary flex items-center gap-2 border-b border-slate-100 pb-3">
                     <BookMarked size={16} />
@@ -697,7 +697,7 @@ export default function BibleResourcesPage() {
 
               {/* Right Column: Study Panel (when open) */}
               {showStudyPanel && (
-                <div className="lg:col-span-4 space-y-6 animate-in slide-in-from-right-8 duration-300">
+                <div className="lg:col-span-4 space-y-6 animate-in slide-in-from-right-8 duration-300 lg:sticky lg:top-24">
                   <div className="bg-white border border-slate-200/60 rounded-2xl p-5 shadow-sm flex flex-col min-h-[500px]">
                     
                     {/* Panel Header */}

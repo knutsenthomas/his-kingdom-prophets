@@ -931,10 +931,10 @@ export default function BibleView() {
       </section>
 
       {/* Main interactive grid layout */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* Left Column: Book and chapter selection pane */}
-        <div className={`${showStudyPanel ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-6`}>
+        <div className={`${showStudyPanel ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-6 lg:sticky lg:top-24`}>
           <div className="bg-white border border-outline-variant/20 rounded-2xl p-5 shadow-sm space-y-5">
             <h2 className="font-serif font-bold text-base text-primary flex items-center gap-2 border-b border-slate-100 pb-3">
               <BookMarked size={18} />
@@ -1231,7 +1231,7 @@ export default function BibleView() {
 
         {/* Right Column: Study Bible & Commentary Panel */}
         {showStudyPanel && (
-          <div className="lg:col-span-4 space-y-6 animate-fade-in">
+          <div className="lg:col-span-4 space-y-6 animate-fade-in lg:sticky lg:top-24">
             <div className="bg-white border border-outline-variant/20 rounded-2xl p-5 shadow-sm space-y-4 flex flex-col min-h-[500px]">
               
               {/* Header */}
