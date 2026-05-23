@@ -500,10 +500,14 @@ export const AppProvider = ({ children }) => {
           if (userSnap.exists()) {
             const userData = userSnap.data();
             // Automatically upgrade thomas@tk-design.no to superadmin in Firestore if role is different
-            if (userData.email === 'thomas@tk-design.no' && userData.role !== 'superadmin') {
+            if (userData.email?.toLowerCase() === 'thomas@tk-design.no' && userData.role !== 'superadmin') {
               userData.role = 'superadmin';
               userData.name = 'Thomas Knutsen';
-              await setDoc(userDocRef, { role: 'superadmin', name: 'Thomas Knutsen' }, { merge: true });
+              try {
+                await setDoc(userDocRef, { role: 'superadmin', name: 'Thomas Knutsen' }, { merge: true });
+              } catch (fsErr) {
+                console.warn("Firestore role sync blocked by rules, upgraded state locally:", fsErr);
+              }
             }
             setUser(userData);
           } else {

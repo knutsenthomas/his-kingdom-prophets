@@ -40,10 +40,10 @@ export default function StudentLayout() {
   };
 
   useEffect(() => {
-    if (user?.role && user.role !== 'student') {
+    if (user?.role && user.role !== 'student' && user.role !== 'admin' && user.role !== 'superadmin' && user?.email !== 'thomas@tk-design.no') {
       changePersona('student');
     }
-  }, [user?.role, changePersona]);
+  }, [user?.role, user?.email, changePersona]);
 
   const handleLogOut = () => {
     logout();

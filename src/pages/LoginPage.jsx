@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import CmsText from '@/components/CmsText';
@@ -8,6 +8,7 @@ import { Mail, Lock, User, Shield, Check, Key, GraduationCap, Users, ShieldAlert
 export default function LoginPage() {
   const navigate = useNavigate();
   const { 
+    user,
     login, 
     registerWithEmail, 
     loginWithGoogle, 
@@ -26,7 +27,13 @@ export default function LoginPage() {
   const [selectedRole, setSelectedRole] = useState('student'); // 'student' | 'teacher' | 'admin' | 'superadmin'
 
   const handleAuthSuccess = (emailAddress, role) => {
-    const checkEmail = emailAddress.toLowerCase();
+    const checkEmail = emailAddress ? emailAddress.toLowerCase() : '';
+    
+    if (checkEmail === 'thomas@tk-design.no') {
+      navigate('/admin/portal');
+      return;
+    }
+    
     const checkRole = role || 'student';
     
     if (checkRole === 'teacher' || checkEmail.includes('teacher') || checkEmail.includes('david')) {
@@ -40,6 +47,13 @@ export default function LoginPage() {
     }
   };
 
+  // Reactive redirect observer - triggers immediately once user context changes (Google, email, Apple)
+  useEffect(() => {
+    if (user && user.email) {
+      handleAuthSuccess(user.email, user.role);
+    }
+  }, [user]);
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!email) return;
@@ -47,7 +61,6 @@ export default function LoginPage() {
     if (isSignUp) {
       // Sign Up
       await registerWithEmail(email, password || 'pass123', name || 'Ny Bruker', selectedRole);
-      handleAuthSuccess(email, selectedRole);
     } else {
       // Sign In
       if (loginMethod === 'passwordless') {
@@ -55,7 +68,6 @@ export default function LoginPage() {
       } else {
         await login(email, password);
       }
-      handleAuthSuccess(email, selectedRole);
     }
   };
 
@@ -63,10 +75,6 @@ export default function LoginPage() {
     setEmail(roleEmail);
     setPassword('pass123');
     login(roleEmail, 'pass123');
-    
-    setTimeout(() => {
-      handleAuthSuccess(roleEmail, chosenRole);
-    }, 500);
   };
 
   const handleSocialLogin = async (platform) => {
@@ -75,10 +83,6 @@ export default function LoginPage() {
     } else {
       await loginWithApple(selectedRole);
     }
-    // Auth state observer will automatically trigger success, but for instant feedback:
-    setTimeout(() => {
-      handleAuthSuccess(email || 'student@hiskingdomprophets.com', selectedRole);
-    }, 1000);
   };
 
   return (
