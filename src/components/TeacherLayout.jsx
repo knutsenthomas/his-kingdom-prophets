@@ -106,7 +106,7 @@ export default function TeacherLayout() {
           <div className="flex items-center gap-4 text-primary shrink-0">
             
             {/* Superadmin System View Switcher */}
-            {(user?.email === 'thomas@tk-design.no' || user?.email?.includes('superadmin')) && (
+            {(['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(user?.email?.toLowerCase()) || user?.email?.includes('superadmin')) && (
               <div className="hidden md:flex items-center gap-1 bg-[#1B4965]/5 p-1 rounded-xl border border-[#1B4965]/20 shrink-0">
                 <span className="text-[9px] font-bold uppercase tracking-wider text-[#1B4965] px-2">Visning:</span>
                 {[

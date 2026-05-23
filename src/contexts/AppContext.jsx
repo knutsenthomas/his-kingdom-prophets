@@ -499,8 +499,8 @@ export const AppProvider = ({ children }) => {
           const userSnap = await getDoc(userDocRef);
           if (userSnap.exists()) {
             const userData = userSnap.data();
-            // Automatically upgrade thomas@tk-design.no to superadmin in Firestore if role is different
-            if (userData.email?.toLowerCase() === 'thomas@tk-design.no' && userData.role !== 'superadmin') {
+            // Automatically upgrade superadmins in Firestore if role is different
+            if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(userData.email?.toLowerCase()) && userData.role !== 'superadmin') {
               userData.role = 'superadmin';
               userData.name = 'Thomas Knutsen';
               try {
@@ -517,7 +517,7 @@ export const AppProvider = ({ children }) => {
             name = name.charAt(0).toUpperCase() + name.slice(1);
             let avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
 
-            if (email === 'thomas@tk-design.no') {
+            if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(email?.toLowerCase())) {
               role = 'superadmin';
               name = 'Thomas Knutsen';
               avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
@@ -770,7 +770,7 @@ export const AppProvider = ({ children }) => {
         }
       }
 
-      if (email === 'thomas@tk-design.no') {
+      if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(email?.toLowerCase())) {
         changePersona('superadmin');
       } else if (email.includes('teacher') || email.includes('david')) {
         changePersona('teacher');
@@ -851,12 +851,12 @@ export const AppProvider = ({ children }) => {
       const userSnap = await getDoc(userDocRef);
       if (!userSnap.exists()) {
         const email = firebaseUser.email;
-        const isThomas = email === 'thomas@tk-design.no';
+        const isSuper = ['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(email?.toLowerCase());
         const defaultProfile = {
           uid: firebaseUser.uid,
-          name: isThomas ? 'Thomas Knutsen' : (firebaseUser.displayName || firebaseUser.email.split('@')[0]),
+          name: isSuper ? 'Thomas Knutsen' : (firebaseUser.displayName || firebaseUser.email.split('@')[0]),
           email: firebaseUser.email,
-          role: isThomas ? 'superadmin' : (role || 'student'),
+          role: isSuper ? 'superadmin' : (role || 'student'),
           avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
           phone: "+47 900 00 000",
           location: "Kristiansand, Norge",
@@ -866,7 +866,7 @@ export const AppProvider = ({ children }) => {
         setUser(defaultProfile);
       } else {
         const userData = userSnap.data();
-        if (userData.email === 'thomas@tk-design.no' && userData.role !== 'superadmin') {
+        if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(userData.email?.toLowerCase()) && userData.role !== 'superadmin') {
           userData.role = 'superadmin';
           userData.name = 'Thomas Knutsen';
           await setDoc(userDocRef, { role: 'superadmin', name: 'Thomas Knutsen' }, { merge: true });
@@ -893,12 +893,12 @@ export const AppProvider = ({ children }) => {
       const userSnap = await getDoc(userDocRef);
       if (!userSnap.exists()) {
         const email = firebaseUser.email;
-        const isThomas = email === 'thomas@tk-design.no';
+        const isSuper = ['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(email?.toLowerCase());
         const defaultProfile = {
           uid: firebaseUser.uid,
-          name: isThomas ? 'Thomas Knutsen' : (firebaseUser.displayName || firebaseUser.email.split('@')[0]),
+          name: isSuper ? 'Thomas Knutsen' : (firebaseUser.displayName || firebaseUser.email.split('@')[0]),
           email: firebaseUser.email,
-          role: isThomas ? 'superadmin' : (role || 'student'),
+          role: isSuper ? 'superadmin' : (role || 'student'),
           avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
           phone: "+47 900 00 000",
           location: "Kristiansand, Norge",
@@ -908,7 +908,7 @@ export const AppProvider = ({ children }) => {
         setUser(defaultProfile);
       } else {
         const userData = userSnap.data();
-        if (userData.email === 'thomas@tk-design.no' && userData.role !== 'superadmin') {
+        if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(userData.email?.toLowerCase()) && userData.role !== 'superadmin') {
           userData.role = 'superadmin';
           userData.name = 'Thomas Knutsen';
           await setDoc(userDocRef, { role: 'superadmin', name: 'Thomas Knutsen' }, { merge: true });
@@ -931,7 +931,7 @@ export const AppProvider = ({ children }) => {
       showToast("Løsinnlogging fullført!");
     } catch (err) {
       console.warn("Passwordless login failed or needs registration, fallback active:", err.message);
-      if (email === 'thomas@tk-design.no') {
+      if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(email?.toLowerCase())) {
         changePersona('superadmin');
       } else if (email.includes('teacher') || email.includes('david')) {
         changePersona('teacher');

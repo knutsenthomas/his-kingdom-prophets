@@ -29,7 +29,7 @@ export default function LoginPage() {
   const handleAuthSuccess = (emailAddress, role) => {
     const checkEmail = emailAddress ? emailAddress.toLowerCase() : '';
     
-    if (checkEmail === 'thomas@tk-design.no') {
+    if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(checkEmail)) {
       navigate('/admin/portal');
       return;
     }
