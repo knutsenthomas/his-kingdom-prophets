@@ -496,7 +496,27 @@ export const AppProvider = ({ children }) => {
 
   const [language, setLanguage] = useState(() => {
     try {
-      return localStorage.getItem('hkm-language') || 'no';
+      // Respect manual language choice first
+      const saved = localStorage.getItem('hkm-language');
+      if (saved) return saved;
+
+      // Smart auto-detect Scandinavia: check browser languages
+      const browserLanguages = navigator.languages || [navigator.language || ''];
+      const scandiCodes = ['no', 'nb', 'nn', 'sv', 'da', 'se', 'dk'];
+      const hasScandiLang = browserLanguages.some(lang => {
+        const code = lang.toLowerCase().split('-')[0];
+        return scandiCodes.includes(code);
+      });
+
+      if (hasScandiLang) return 'no';
+
+      // Check timezone as a secondary fallback
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const scandiTimezones = ['Europe/Oslo', 'Europe/Stockholm', 'Europe/Copenhagen'];
+      if (scandiTimezones.includes(tz)) return 'no';
+
+      // Default to English for anyone outside Scandinavia
+      return 'en';
     } catch {
       return 'no';
     }
