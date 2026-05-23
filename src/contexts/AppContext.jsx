@@ -823,15 +823,19 @@ export const AppProvider = ({ children }) => {
           if (userSnap.exists()) {
             userData = userSnap.data();
           } else {
-            // Check if there is an existing pre-created profile in the "users" collection matching this email
-            const querySnapshot = await getDocs(collection(db, "users"));
             let matchedDoc = null;
-            querySnapshot.forEach(docSnap => {
-              const data = docSnap.data();
-              if (data.email?.toLowerCase() === userEmail) {
-                matchedDoc = { id: docSnap.id, data };
-              }
-            });
+            try {
+              // Check if there is an existing pre-created profile in the "users" collection matching this email
+              const querySnapshot = await getDocs(collection(db, "users"));
+              querySnapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                if (data.email?.toLowerCase() === userEmail) {
+                  matchedDoc = { id: docSnap.id, data };
+                }
+              });
+            } catch (queryErr) {
+              console.warn("Could not query all users for migration (Rules constraint), proceeding with fallback...", queryErr);
+            }
 
             if (matchedDoc) {
               // Found a pre-created profile! Let's migrate it to their actual UID!
