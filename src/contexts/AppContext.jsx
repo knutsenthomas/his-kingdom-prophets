@@ -498,8 +498,12 @@ export const AppProvider = ({ children }) => {
         const cmsDocRef = doc(db, "cms_configs", "default");
         const cmsSnap = await getDoc(cmsDocRef);
         if (cmsSnap.exists()) {
-          setCmsContent(cmsSnap.data());
-          localStorage.setItem('hkm-cms-content', JSON.stringify(cmsSnap.data()));
+          const dbData = cmsSnap.data();
+          setCmsContent(prev => {
+            const merged = { ...prev, ...dbData };
+            localStorage.setItem('hkm-cms-content', JSON.stringify(merged));
+            return merged;
+          });
         } else {
           // Document doesn't exist, seed it with the default cmsContent values!
           const initialCms = {
