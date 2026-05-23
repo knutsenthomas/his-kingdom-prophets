@@ -57,6 +57,14 @@ export default function StudentLayout() {
     }
   }, [user?.role, user?.email, changePersona]);
 
+  useEffect(() => {
+    const cachedUser = localStorage.getItem('hkm-current-user');
+    if (!user && !cachedUser) {
+      navigate('/login');
+      showToast(language === 'en' ? "Please log in to access this page." : "Logg inn for å få tilgang til denne siden.");
+    }
+  }, [user, navigate, showToast, language]);
+
   const handleLogOut = () => {
     logout();
     navigate('/');

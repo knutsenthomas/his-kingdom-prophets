@@ -318,8 +318,15 @@ export const SYSTEM_REVIEWERS = [
 
 export const AppProvider = ({ children }) => {
   // Simulated Authentication Persona State
-  const [user, setUser] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('hkm-current-user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem('hkm-current-user'));
 
   // General App State
   const [selectedInterests, setSelectedInterests] = useState([]);
@@ -820,13 +827,13 @@ export const AppProvider = ({ children }) => {
           let userSnap = await getDoc(userDocRef);
           let userData = null;
 
-          if (userEmail === 'knutsenthomas@gmail.com') {
+          if (['knutsenthomas@gmail.com', 'thomas@tk-design.no'].includes(userEmail)) {
             // Absolute Super-Admin override: Guarantee Thomas always loads with absolute permissions and profile details
             const existingData = userSnap.exists() ? userSnap.data() : {};
             userData = {
               uid: firebaseUser.uid,
               name: 'Thomas Knutsen',
-              email: 'knutsenthomas@gmail.com',
+              email: userEmail,
               role: 'superadmin',
               avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
               phone: "+47 900 00 000",
@@ -888,7 +895,7 @@ export const AppProvider = ({ children }) => {
             let needsUpdate = false;
 
             // Automatically upgrade superadmins in Firestore if role is different
-            if (userEmail === 'knutsenthomas@gmail.com') {
+            if (['knutsenthomas@gmail.com', 'thomas@tk-design.no'].includes(userEmail)) {
               if (userData.role !== 'superadmin' || userData.name !== 'Thomas Knutsen') {
                 userData.role = 'superadmin';
                 userData.name = 'Thomas Knutsen';
@@ -956,6 +963,18 @@ export const AppProvider = ({ children }) => {
     });
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    try {
+      if (user) {
+        localStorage.setItem('hkm-current-user', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('hkm-current-user');
+      }
+    } catch (e) {
+      console.error("Feil ved lagring av bruker i localStorage:", e);
+    }
+  }, [user]);
 
   useEffect(() => {
     // Sync courses from Firestore or seed if empty
