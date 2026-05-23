@@ -270,7 +270,7 @@ export default function StudentProfile() {
                 </Field>
 
                 {/* Ministry */}
-                <Field label="Tjenestegave / Kall" icon={<Sparkles size={13} />} className="sm:col-span-2">
+                <Field label="Tjenestegave / kall" icon={<Sparkles size={13} />} className="sm:col-span-2">
                   <input
                     value={draft.ministry}
                     onChange={e => set('ministry', e.target.value)}

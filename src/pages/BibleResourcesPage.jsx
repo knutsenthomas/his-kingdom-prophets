@@ -365,10 +365,10 @@ export default function BibleResourcesPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(224,170,255,0.15),transparent)] pointer-events-none"></div>
         <div className="max-w-[1440px] mx-auto space-y-4 relative z-10 text-center sm:text-left">
           <span className="px-3.5 py-1 rounded-full bg-white/10 text-purple-200 text-xs font-bold uppercase tracking-wider border border-white/15 inline-block">
-            {isEn ? 'Public Study Portal' : 'Offentlig Studieportal'}
+            {isEn ? 'Public Study Portal' : 'Offentlig studieportal'}
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-            {isEn ? 'Biblical & Prophetic Resources' : 'Bibelressurser og Studieportal'}
+            {isEn ? 'Biblical & Prophetic Resources' : 'Bibelressurser og studieportal'}
           </h1>
           <p className="text-sm sm:text-base text-purple-100 max-w-2xl leading-relaxed">
             {isEn 
@@ -382,10 +382,10 @@ export default function BibleResourcesPage() {
       <section className="border-b border-slate-200 bg-white sticky top-20 z-30 shadow-sm">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 flex space-x-8 overflow-x-auto whitespace-nowrap scrollbar-none h-16 items-center">
           {[
-            { id: 'bible', name: isEn ? '📖 Bible Reader & Study Center' : '📖 Interaktiv Studiebibel', icon: BookOpen },
-            { id: 'curriculums', name: isEn ? '📚 Curriculum & Outlines' : '📚 Fagplaner & Studiehefter', icon: BookText },
-            { id: 'video', name: isEn ? '🎙️ Lectures & Seminars' : '🎙️ Lyd- og Videoundervisning', icon: Video },
-            { id: 'fasting', name: isEn ? '📜 Fasting & Prayer Manuals' : '📜 Fastemanualer & Bønneguider', icon: Flame }
+            { id: 'bible', name: isEn ? '📖 Bible Reader & Study Center' : '📖 Interaktiv studiebibel', icon: BookOpen },
+            { id: 'curriculums', name: isEn ? '📚 Curriculum & Outlines' : '📚 Fagplaner og studiehefter', icon: BookText },
+            { id: 'video', name: isEn ? '🎙️ Lectures & Seminars' : '🎙️ Lyd- og videoundervisning', icon: Video },
+            { id: 'fasting', name: isEn ? '📜 Fasting & Prayer Manuals' : '📜 Fastemanualer og bønneguider', icon: Flame }
           ].map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -418,12 +418,12 @@ export default function BibleResourcesPage() {
               <div className="space-y-1">
                 <h3 className="font-serif text-xl font-bold text-primary flex items-center gap-2">
                   <Sparkles size={20} className="text-amber-500" />
-                  {isEn ? 'Interactive Bible Study Suite' : 'Interaktiv Studiebibel'}
+                  {isEn ? 'Interactive Bible Study Suite' : 'Interaktiv studiebibel'}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500 max-w-3xl leading-relaxed">
                   {isEn
                     ? 'Click any verse to copy it or request detailed theological analysis. Open the Study Bible panel to view pre-loaded commentaries, word studies, and make personal notes.'
-                    : 'Trykk på et hvilket som helst vers for å kopiere det. Åpne "Studiebibel"-panelet for ferdige teologiske kommentarer, ordstudier og personlige notater.'}
+                    : 'Trykk på et hvilket som helst vers for å kopiere det. Åpne "studiebibel"-panelet for ferdige teologiske kommentarer, ordstudier og personlige notater.'}
                 </p>
               </div>
               
@@ -523,7 +523,7 @@ export default function BibleResourcesPage() {
                   {/* Chapters Grid */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                      {isEn ? `Select Chapter (1 - ${selectedBook.chapters})` : `Velg Kapittel (1 - ${selectedBook.chapters})`}
+                      {isEn ? `Select Chapter (1 - ${selectedBook.chapters})` : `Velg kapittel (1 - ${selectedBook.chapters})`}
                     </label>
                     <div className="grid grid-cols-5 gap-1.5 max-h-32 overflow-y-auto p-1 scrollbar-thin">
                       {Array.from({ length: selectedBook.chapters }, (_, i) => i + 1).map(chap => (
@@ -806,7 +806,7 @@ export default function BibleResourcesPage() {
                                 className="px-4 py-2 bg-primary text-white font-bold rounded-xl text-[10px] uppercase tracking-wider hover:bg-primary-container active:scale-[0.98] transition-all flex items-center gap-1 shadow-sm shrink-0"
                               >
                                 <Sparkles size={11} />
-                                {isEn ? "Generate Study Notes" : "Generer Studiekommentar"}
+                                {isEn ? "Generate Study Notes" : "Generer studiekommentar"}
                               </button>
                             </div>
                           )}
@@ -898,7 +898,7 @@ export default function BibleResourcesPage() {
           <div className="space-y-10 animate-in fade-in duration-300">
             <div className="text-center max-w-2xl mx-auto space-y-3">
               <h3 className="font-serif text-2xl font-bold text-primary">
-                {isEn ? 'Prophetic Outlines & Curriculum' : 'Studieplaner & Teologiske Fagplaner'}
+                {isEn ? 'Prophetic Outlines & Curriculum' : 'Studieplaner og teologiske fagplaner'}
               </h3>
               <p className="text-sm text-slate-500 leading-relaxed">
                 {isEn
@@ -911,7 +911,7 @@ export default function BibleResourcesPage() {
               {[
                 {
                   code: 'PROP 101',
-                  title: isEn ? 'Prophetic Equipment & Character' : 'Innføring i den Profetiske Tjeneste',
+                  title: isEn ? 'Prophetic Equipment & Character' : 'Innføring i den profetiske tjeneste',
                   desc: isEn 
                     ? 'Understand the ethics, spiritual maturity, and character required to carry revelation. Covers dreams, visions, and biblical prophets.' 
                     : 'Forstå etikken, den åndelige karakteren og modenheten som kreves for å bære åpenbaringskunnskap. Moduler om drømmetydning og bibelsk profeti.',
@@ -922,7 +922,7 @@ export default function BibleResourcesPage() {
                 },
                 {
                   code: 'BIBLE 301',
-                  title: isEn ? 'Advanced Hermeneutics & Exegesis' : 'Avansert Hermeneutikk og Tolkning',
+                  title: isEn ? 'Advanced Hermeneutics & Exegesis' : 'Avansert hermeneutikk og tolkning',
                   desc: isEn 
                     ? 'Deep-dive into historic covenant theology, typologies, and eschatological frameworks. Learn sound exegesis using original text principles.' 
                     : 'Gå dypt inn i historisk paktsteologi, typologier og eskatologiske modeller. Lær sunn bibeltolkning og skriftgransking ut fra grunntekstens prinsipper.',
@@ -933,7 +933,7 @@ export default function BibleResourcesPage() {
                 },
                 {
                   code: 'MIN 201',
-                  title: isEn ? 'Pastoral Care & Inner Healing' : 'Sjelesorg, Bønn og Indre Helbredelse',
+                  title: isEn ? 'Pastoral Care & Inner Healing' : 'Sjelesorg, bønn og indre helbredelse',
                   desc: isEn 
                     ? 'Equipping disciples for inner restoration, spiritual warfare, and prophetic counseling. Walk in the power of the Spirit to heal broken hearts.' 
                     : 'Utruster disipler til indre gjenopprettelse, sjelesorg under Åndens ledelse, og bønnetjeneste. Lær å vandre i Åndens kraft til å helbrede knuste hjerter.',
@@ -973,7 +973,7 @@ export default function BibleResourcesPage() {
                     className="w-full mt-6 py-2.5 bg-slate-50 hover:bg-primary hover:text-white border border-slate-200 hover:border-primary text-primary font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5"
                   >
                     <Calendar size={13} />
-                    <span>{isEn ? 'Apply / Request Info' : 'Søk Studieplass'}</span>
+                    <span>{isEn ? 'Apply / Request Info' : 'Søk studieplass'}</span>
                   </button>
                 </div>
               ))}
@@ -986,7 +986,7 @@ export default function BibleResourcesPage() {
           <div className="space-y-10 animate-in fade-in duration-300">
             <div className="text-center max-w-2xl mx-auto space-y-3">
               <h3 className="font-serif text-2xl font-bold text-primary">
-                {isEn ? 'Theological Lectures & Prophetic Streams' : 'Lyd- og Videoundervisning'}
+                {isEn ? 'Theological Lectures & Prophetic Streams' : 'Lyd- og videoundervisning'}
               </h3>
               <p className="text-sm text-slate-500 leading-relaxed">
                 {isEn
@@ -1006,7 +1006,7 @@ export default function BibleResourcesPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                     <div className="space-y-1">
-                      <span className="px-2 py-0.5 bg-amber-500 text-white font-bold rounded text-[9px] uppercase tracking-wider">Åpent Seminar</span>
+                      <span className="px-2 py-0.5 bg-amber-500 text-white font-bold rounded text-[9px] uppercase tracking-wider">Åpent seminar</span>
                       <h4 className="font-serif font-bold text-white text-base leading-tight">
                         {isEn ? 'Understanding Prophetic Revelation & Ethics' : 'Å forstå profetisk åpenbaring og etikk'}
                       </h4>
@@ -1025,7 +1025,7 @@ export default function BibleResourcesPage() {
                     className="w-full py-2.5 bg-primary text-white font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
                   >
                     <Video size={13} />
-                    <span>{isEn ? 'Watch Lecture (45 min)' : 'Se Forelesning (45 min)'}</span>
+                    <span>{isEn ? 'Watch Lecture (45 min)' : 'Se forelesning (45 min)'}</span>
                   </button>
                 </div>
               </div>
@@ -1059,7 +1059,7 @@ export default function BibleResourcesPage() {
                     className="w-full py-2.5 bg-primary text-white font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
                   >
                     <Video size={13} />
-                    <span>{isEn ? 'Watch Lecture (35 min)' : 'Se Forelesning (35 min)'}</span>
+                    <span>{isEn ? 'Watch Lecture (35 min)' : 'Se forelesning (35 min)'}</span>
                   </button>
                 </div>
               </div>
@@ -1072,7 +1072,7 @@ export default function BibleResourcesPage() {
           <div className="space-y-10 animate-in fade-in duration-300">
             <div className="text-center max-w-2xl mx-auto space-y-3">
               <h3 className="font-serif text-2xl font-bold text-primary">
-                {isEn ? 'Prayer Guides & Spiritual Discipline Manuals' : 'Fastemanualer og Bønneguider'}
+                {isEn ? 'Prayer Guides & Spiritual Discipline Manuals' : 'Fastemanualer og bønneguider'}
               </h3>
               <p className="text-sm text-slate-500 leading-relaxed">
                 {isEn

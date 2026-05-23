@@ -1010,7 +1010,7 @@ export default function BibleView() {
             {/* Chapters Grid */}
             <div className="space-y-2">
               <label className="text-[11px] font-bold text-outline uppercase tracking-wider block">
-                Velg Kapittel (1 - {selectedBook.chapters})
+                Velg kapittel (1 - {selectedBook.chapters})
               </label>
               <div className="grid grid-cols-5 gap-2 max-h-36 overflow-y-auto p-1 scrollbar-thin">
                 {Array.from({ length: selectedBook.chapters }, (_, i) => i + 1).map(chap => (

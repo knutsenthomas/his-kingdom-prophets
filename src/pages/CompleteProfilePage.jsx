@@ -145,7 +145,7 @@ export default function CompleteProfilePage() {
                 </div>
 
                 <div className="text-center w-full">
-                  <label className="text-xs font-bold text-on-surface-variant tracking-wider uppercase block mb-2">Velg Profilbilde</label>
+                  <label className="text-xs font-bold text-on-surface-variant tracking-wider uppercase block mb-2">Velg profilbilde</label>
                   <div className="flex justify-center gap-3">
                     {avatars.map((av, idx) => (
                       <button
@@ -164,7 +164,7 @@ export default function CompleteProfilePage() {
               {/* Input: Institution */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-on-surface uppercase tracking-wider" htmlFor="institution">
-                  Menighetstilknytning / Fellesskap
+                  Menighetstilknytning / fellesskap
                 </label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-outline">
@@ -185,7 +185,7 @@ export default function CompleteProfilePage() {
               {/* Input: Headline */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-on-surface uppercase tracking-wider" htmlFor="headline">
-                  Din Tjenestegave / Kall
+                  Din tjenestegave / kall
                 </label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-outline">

@@ -197,7 +197,7 @@ export default function StudentFollowUp() {
                 
                 {/* Stepper / Toggle Tabs for Templates */}
                 <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-outline block">1. Velg Meldingstype</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-outline block">1. Velg meldingstype</label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 font-sans">
                     <button
                       type="button"
