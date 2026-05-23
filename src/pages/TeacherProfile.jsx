@@ -181,7 +181,7 @@ export default function TeacherProfile() {
             {/* Text section with reduced vertical spacing */}
             <div className="flex-grow pt-1">
               <div className="flex flex-wrap gap-1.5 mb-1" data-purpose="badge-container">
-                <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#eef2ff] text-[#561291] border border-blue-100">Mentor</span>
+                <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#eef2ff] text-[#561291] border border-[#561291]/15">Mentor</span>
                 {draft.department && (
                   <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#fdf6e7] text-[#c5a059] border border-amber-100">{draft.department}</span>
                 )}

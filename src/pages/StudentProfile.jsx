@@ -153,7 +153,7 @@ export default function StudentProfile() {
 
               <div className="min-w-0 pt-1 xl:pt-0" data-purpose="badge-container">
                 <div className="flex flex-wrap gap-1.5 mb-1">
-                  <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#eef2ff] text-[#561291] border border-blue-100">Student</span>
+                  <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#eef2ff] text-[#561291] border border-[#561291]/15">Student</span>
                   {draft.ministry && (
                     <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#fdf6e7] text-[#c5a059] border border-amber-100">{draft.ministry}</span>
                   )}

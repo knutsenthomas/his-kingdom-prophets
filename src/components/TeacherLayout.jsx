@@ -242,7 +242,7 @@ export default function TeacherLayout() {
               {/* Mentor status details */}
               <button
                 onClick={() => navigate('/teacher/profile')}
-                className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
+                className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20"
                 title="Åpne min lærerprofil"
               >
                 <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Mentorveiledning</p>

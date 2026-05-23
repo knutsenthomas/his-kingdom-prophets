@@ -38,3 +38,4 @@ pnpm-debug.log*
 # Stitch export files (avoid committing large zips/raw backup folder)
 stitch_premium_learning_platform.zip
 stitch_premium_learning_platform/
+.vercel

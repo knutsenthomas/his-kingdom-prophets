@@ -485,7 +485,7 @@ export default function StudentLayout() {
             {/* Student profile summary card */}
             <button
               onClick={() => navigate('/student/profile')}
-              className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
+              className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20"
               title="Åpne min profil"
             >
               <div className="flex items-center gap-3 mb-4">
