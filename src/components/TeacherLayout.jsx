@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Compass, Users, AlertTriangle, ClipboardList, BookOpen, 
   Award, Bell, Power, Menu, ChevronLeft, Sliders, Video, User,
-  Languages, BarChart3, TrendingUp, Gift, HelpCircle
+  Languages, BarChart3, TrendingUp, Gift, HelpCircle, X
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 import CmsText from '@/components/CmsText';
@@ -14,6 +14,8 @@ export default function TeacherLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout, showToast, students, changePersona } = useApp();
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Attention status filters for KPI tracking in sidebar
   const atRiskCount = students?.filter(s => s.status === 'Kritisk' || s.status === 'Forsinket').length || 0;
@@ -27,6 +29,18 @@ export default function TeacherLayout() {
   useEffect(() => {
     localStorage.setItem('hkm-teacher-sidebar-collapsed', isCollapsed);
   }, [isCollapsed]);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  const toggleMenu = () => {
+    if (window.innerWidth < 768) {
+      setIsMobileMenuOpen(!isMobileMenuOpen);
+    } else {
+      setIsCollapsed(!isCollapsed);
+    }
+  };
 
   useEffect(() => {
     if (user?.role && user.role !== 'teacher' && user.role !== 'admin' && user.role !== 'superadmin') {
@@ -71,7 +85,7 @@ export default function TeacherLayout() {
           {/* Logo & Toggle Trigger */}
           <div className="flex items-center gap-3 mr-2 truncate">
             <button 
-              onClick={() => setIsCollapsed(!isCollapsed)}
+              onClick={toggleMenu}
               className="p-2 hover:bg-surface-container rounded-lg transition-colors active:scale-[0.97] text-primary shrink-0"
               title={isCollapsed ? "Åpne mentormeny" : "Lukk mentormeny"}
             >
@@ -212,6 +226,102 @@ export default function TeacherLayout() {
         </main>
 
       </div>
+
+      {/* Mobile Navigation Drawer */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-slate-900/60 z-50 md:hidden"
+            />
+
+            {/* Sliding Menu Panel */}
+            <motion.aside
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 bottom-0 left-0 w-72 bg-white z-50 md:hidden flex flex-col justify-between shadow-2xl border-r border-outline-variant/20 overflow-y-auto"
+            >
+              <div className="py-6 px-6 space-y-6">
+                {/* Header in Drawer */}
+                <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
+                  <div className="font-serif text-lg font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => { navigate('/teacher/dashboard'); setIsMobileMenuOpen(false); }}>
+                    <GraduationCap className="text-primary shrink-0 animate-pulse" size={20} />
+                    <span>His Kingdom Prophets</span>
+                  </div>
+                  <button 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="p-1.5 hover:bg-surface-container rounded-lg text-primary"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {/* Mentor status details */}
+                <button
+                  onClick={() => {
+                    navigate('/teacher/profile');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
+                  title="Åpne min lærerprofil"
+                >
+                  <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Mentorveiledning</p>
+                  <div className="bg-surface-container-low rounded-xl p-3 border border-outline-variant/30 space-y-1.5">
+                    <div className="flex justify-between items-center text-[10px] font-bold text-on-surface-variant">
+                      <span>Studentoppfølging</span>
+                      <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${atRiskCount > 0 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
+                        {atRiskCount} kritiske
+                      </span>
+                    </div>
+                    <div className="w-full bg-slate-100 h-1 rounded-full overflow-hidden">
+                      <div className="bg-amber-500 h-full w-[65%]"></div>
+                    </div>
+                  </div>
+                </button>
+
+                {/* Nav Items */}
+                <nav className="space-y-1">
+                  {navItems.map(item => {
+                    const isActive = location.pathname === item.path;
+                    const IconComponent = item.icon;
+                    return (
+                      <button 
+                        key={item.path}
+                        onClick={() => {
+                          navigate(item.path);
+                          setIsMobileMenuOpen(false);
+                        }} 
+                        className={`flex items-center justify-between w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
+                          isActive 
+                            ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
+                            : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
+                          <span>{item.name}</span>
+                        </div>
+                        {item.badge !== undefined && item.badge > 0 && (
+                          <span className="bg-amber-500 text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0">
+                            {item.badge}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </nav>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Global HKM Assistent Chat Widget rendered once at layout level */}
       <HkmChatWidget />

@@ -498,7 +498,14 @@ export const AppProvider = ({ children }) => {
           const userDocRef = doc(db, "users", firebaseUser.uid);
           const userSnap = await getDoc(userDocRef);
           if (userSnap.exists()) {
-            setUser(userSnap.data());
+            const userData = userSnap.data();
+            // Automatically upgrade thomas@tk-design.no to superadmin in Firestore if role is different
+            if (userData.email === 'thomas@tk-design.no' && userData.role !== 'superadmin') {
+              userData.role = 'superadmin';
+              userData.name = 'Thomas Knutsen';
+              await setDoc(userDocRef, { role: 'superadmin', name: 'Thomas Knutsen' }, { merge: true });
+            }
+            setUser(userData);
           } else {
             const email = firebaseUser.email;
             let role = 'student';
@@ -506,7 +513,11 @@ export const AppProvider = ({ children }) => {
             name = name.charAt(0).toUpperCase() + name.slice(1);
             let avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
 
-            if (email.includes('teacher') || email.includes('david')) {
+            if (email === 'thomas@tk-design.no') {
+              role = 'superadmin';
+              name = 'Thomas Knutsen';
+              avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
+            } else if (email.includes('teacher') || email.includes('david')) {
               role = 'teacher';
               name = 'Apostel David Hansen';
               avatar = "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120";

@@ -110,83 +110,9 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col overflow-x-hidden font-sans">
+    <div className="min-h-screen bg-background text-on-background w-full font-sans relative">
       
-      {/* Dynamic Showcase Navigator Shell */}
-      <ShowcaseShell viewportSize={viewportSize} setViewportSize={setViewportSize} />
-
-      {/* Frame Renderer depending on showcase size selection */}
-      <div className="flex-grow flex items-center justify-center p-4 md:p-8 bg-slate-900">
-        
-        <div className="w-full h-full flex justify-center items-center">
-          <AnimatePresence mode="wait">
-            {viewportSize === 'desktop' ? (
-              // Desktop: Render normally at full screen
-              <motion.div 
-                key="desktop"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="w-full min-h-[85vh] bg-background shadow-2xl rounded-xl overflow-hidden border border-slate-700"
-              >
-                <AppRoutes />
-              </motion.div>
-            ) : viewportSize === 'tablet' ? (
-              // Tablet Mockup Bezel Frame
-              <motion.div 
-                key="tablet"
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
-                className="w-[768px] h-[1024px] bg-slate-950 border-[24px] border-slate-950 rounded-[2.5rem] shadow-2xl relative overflow-hidden flex flex-col outline outline-2 outline-slate-800"
-              >
-                {/* Speaker Grill Mockup */}
-                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-1 bg-slate-800 rounded-full" />
-                
-                {/* Screen area */}
-                <div className="flex-grow bg-background overflow-hidden rounded-[1rem] relative h-full w-full">
-                  <iframe 
-                    src={location.pathname} 
-                    className="w-full h-full border-none bg-background overflow-y-auto"
-                    title="His Kingdom Prophets Tablet View"
-                  />
-                </div>
-
-                {/* Home indicator Mockup */}
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-28 h-1 bg-slate-800 rounded-full" />
-              </motion.div>
-            ) : (
-              // Mobile Mockup Bezel Frame (iPhone style)
-              <motion.div 
-                key="mobile"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                className="w-[390px] h-[844px] bg-slate-950 border-[16px] border-slate-950 rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col outline outline-2 outline-slate-800"
-              >
-                {/* Dynamic Island Notch */}
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-28 h-6 bg-slate-950 rounded-full z-50 flex items-center justify-end px-3">
-                  <div className="w-2 h-2 rounded-full bg-slate-900 border border-slate-800" />
-                </div>
-                
-                {/* Screen area */}
-                <div className="flex-grow bg-background overflow-hidden rounded-[2rem] relative h-full w-full">
-                  <iframe 
-                    src={location.pathname} 
-                    className="w-full h-full border-none bg-background overflow-y-auto"
-                    title="His Kingdom Prophets Mobile View"
-                  />
-                </div>
-
-                {/* Home Indicator */}
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-slate-800 rounded-full" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-      </div>
-
+      <AppRoutes />
       <CmsVisualToggle />
 
       {/* Global Branded Toast Manager */}

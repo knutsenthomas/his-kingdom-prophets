@@ -55,6 +55,15 @@ const DEFAULT_USERS = [
     created: "02. Feb 2024",
     status: "AKTIV",
     avatar: ""
+  },
+  {
+    uid: "seed-user-6",
+    name: "Thomas Knutsen",
+    email: "thomas@tk-design.no",
+    role: "superadmin",
+    created: "23. May 2026",
+    status: "AKTIV",
+    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120"
   }
 ];
 

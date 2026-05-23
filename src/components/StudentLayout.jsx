@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Compass, BookOpen, Video, CheckSquare, Users, 
   Menu, Bell, Power, Search, Award, GraduationCap, ChevronLeft, User,
-  Gift, HelpCircle
+  Gift, HelpCircle, X
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 import CmsText from '@/components/CmsText';
@@ -14,6 +14,8 @@ export default function StudentLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout, showToast, changePersona, cmsContent, isAdminEditing } = useApp();
+  
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // Collapse state initialized from localStorage for persistence
   const [isCollapsed, setIsCollapsed] = useState(() => {
@@ -24,6 +26,18 @@ export default function StudentLayout() {
   useEffect(() => {
     localStorage.setItem('hkm-student-sidebar-collapsed', isCollapsed);
   }, [isCollapsed]);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  const toggleMenu = () => {
+    if (window.innerWidth < 768) {
+      setIsMobileMenuOpen(!isMobileMenuOpen);
+    } else {
+      setIsCollapsed(!isCollapsed);
+    }
+  };
 
   useEffect(() => {
     if (user?.role && user.role !== 'student') {
@@ -57,7 +71,7 @@ export default function StudentLayout() {
           {/* Logo & Toggle Trigger */}
           <div className="flex items-center gap-3 mr-2 truncate">
             <button 
-              onClick={() => setIsCollapsed(!isCollapsed)}
+              onClick={toggleMenu}
               className="p-2 hover:bg-surface-container rounded-lg transition-colors active:scale-[0.97] text-primary shrink-0"
               title={isCollapsed ? "Åpne venstremeny" : "Lukk venstremeny"}
             >
@@ -240,6 +254,119 @@ export default function StudentLayout() {
         </main>
 
       </div>
+
+      {/* Mobile Navigation Drawer */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-slate-900/60 z-50 md:hidden"
+            />
+
+            {/* Sliding Menu Panel */}
+            <motion.aside
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 bottom-0 left-0 w-72 bg-white z-50 md:hidden flex flex-col justify-between shadow-2xl border-r border-outline-variant/20 overflow-y-auto"
+            >
+              <div className="py-6 px-6 space-y-6">
+                {/* Header in Drawer */}
+                <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
+                  <div className="font-serif text-lg font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => { navigate('/student/dashboard'); setIsMobileMenuOpen(false); }}>
+                    <GraduationCap className="text-primary shrink-0 animate-pulse" size={20} />
+                    <span>His Kingdom Prophets</span>
+                  </div>
+                  <button 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="p-1.5 hover:bg-surface-container rounded-lg text-primary"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {/* Student profile summary */}
+                <button
+                  onClick={() => {
+                    navigate('/student/profile');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
+                  title="Åpne min profil"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Award className="text-primary animate-pulse" size={16} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-on-surface uppercase tracking-wider">{user?.name}</p>
+                      <p className="text-[10px] text-on-surface-variant font-medium">Aktiv Utrustningsprofil</p>
+                    </div>
+                  </div>
+                  <div className="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+                    <div className="bg-primary h-full w-[45%]" style={{ transition: 'width 0.8s ease-in-out' }}></div>
+                  </div>
+                </button>
+
+                {/* Nav Items */}
+                <nav className="space-y-1">
+                  {navItems.map(item => {
+                    const isActive = location.pathname === item.path;
+                    const IconComponent = item.icon;
+                    return (
+                      <button 
+                        key={item.path}
+                        onClick={() => {
+                          navigate(item.path);
+                          setIsMobileMenuOpen(false);
+                        }} 
+                        className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
+                          isActive 
+                            ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
+                            : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
+                        }`}
+                      >
+                        <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
+                        <span>{item.name}</span>
+                      </button>
+                    );
+                  })}
+                </nav>
+              </div>
+
+              {/* Premium banner at bottom of drawer */}
+              <div className="p-6">
+                <div className="bg-surface-container-low rounded-xl p-4 border border-outline-variant/30 text-center shadow-sm">
+                  <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
+                    <CmsText slug="layout-upgrade-banner-title" fallback="Utvid tjenesten" />
+                  </p>
+                  <CmsText
+                    slug="layout-upgrade-banner-desc"
+                    fallback="Få ubegrenset tilgang til alle studieskrifter og veiledning."
+                    as="p"
+                    className="text-[10px] text-on-surface-variant mb-3 leading-relaxed"
+                  />
+                  <button 
+                    onClick={() => {
+                      showToast("Oppgradering sendt til behandling!");
+                      setIsMobileMenuOpen(false);
+                    }} 
+                    className="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg shadow-sm hover:bg-primary-container transition-all"
+                  >
+                    <CmsText slug="layout-upgrade-banner-btn" fallback="Oppgrader profil" />
+                  </button>
+                </div>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Global HKM Assistent Chat Widget rendered once at layout level */}
       <HkmChatWidget />
