@@ -1100,10 +1100,10 @@ export const AppProvider = ({ children }) => {
             }
           });
 
-          if (invitedDoc) {
-            // Yes! The user is pre-created by the admin in Firestore, but doesn't exist in Firebase Auth.
+          if (invitedDoc || cleanEmail === 'knutsenthomas@gmail.com') {
+            // Yes! The user is pre-created or is the superadmin owner!
             // Let's automatically register/create them in Firebase Auth on the fly!
-            showToast("Oppretter sikker innlogging for din inviterte e-post...");
+            showToast("Oppretter sikker innlogging for din e-post...");
             try {
               await createUserWithEmailAndPassword(auth, cleanEmail, password);
               showToast("Innlogging opprettet! Velkommen!");
