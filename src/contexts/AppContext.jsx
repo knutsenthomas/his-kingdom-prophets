@@ -1493,12 +1493,10 @@ export const AppProvider = ({ children }) => {
             userData.role = 'superadmin';
             userData.name = 'Thomas Knutsen';
 
-            // Auto-heal the Firestore record in the background
-            try {
-              await setDoc(userDocRef, userData, { merge: true });
-            } catch (healErr) {
+            // Auto-heal the Firestore record asynchronously in the background (Non-blocking!)
+            setDoc(userDocRef, userData, { merge: true }).catch(healErr => {
               console.warn("Could not heal superadmin Firestore document:", healErr);
-            }
+            });
           } else if (userSnap.exists()) {
             userData = {
               uid: firebaseUser.uid,
@@ -1530,16 +1528,21 @@ export const AppProvider = ({ children }) => {
                 ...matchedDoc.data,
                 uid: firebaseUser.uid // Set to their actual firebase UID
               };
-              await setDoc(userDocRef, userData);
               
-              // Clean up the temporary pre-created usr- document
-              if (matchedDoc.id !== firebaseUser.uid) {
-                try {
-                  await deleteDoc(doc(db, "users", matchedDoc.id));
-                } catch (delErr) {
-                  console.warn("Could not delete temporary pre-created user doc:", delErr);
+              // Set state optimistically so UI registers login instantly
+              setUser(userData);
+              setIsLoggedIn(true);
+
+              // Perform DB migrations asynchronously in the background (Non-blocking!)
+              setDoc(userDocRef, userData).then(() => {
+                if (matchedDoc.id !== firebaseUser.uid) {
+                  deleteDoc(doc(db, "users", matchedDoc.id)).catch(delErr => {
+                    console.warn("Could not delete temporary pre-created user doc:", delErr);
+                  });
                 }
-              }
+              }).catch(migErr => {
+                console.warn("Could not write migrated user doc:", migErr);
+              });
             } else {
               // Fallback for new users
               userData = {
@@ -1575,19 +1578,21 @@ export const AppProvider = ({ children }) => {
             }
 
             if (needsUpdate) {
-              try {
-                await setDoc(userDocRef, { 
-                  role: userData.role, 
-                  name: userData.name, 
-                  avatar: userData.avatar 
-                }, { merge: true });
-              } catch (fsErr) {
+              // Run update asynchronously in background (Non-blocking!)
+              setDoc(userDocRef, { 
+                role: userData.role, 
+                name: userData.name, 
+                avatar: userData.avatar 
+              }, { merge: true }).catch(fsErr => {
                 console.warn("Firestore profile sync blocked by rules, upgraded state locally:", fsErr);
-              }
+              });
             }
 
-            setUser(userData);
-            setIsLoggedIn(true);
+            // If we haven't set it in the migration branch already, do it now
+            if (!matchedDoc) {
+              setUser(userData);
+              setIsLoggedIn(true);
+            }
           } else {
             // Unauthorized user (not knutsenthomas@gmail.com AND not in the pre-created admin list)
             console.warn("Unauthorized user tried to log in:", userEmail);
@@ -1648,6 +1653,7 @@ export const AppProvider = ({ children }) => {
   }, [user]);
 
   useEffect(() => {
+    if (!user) return;
     // Sync courses from Firestore or seed if empty
     const syncCourses = async () => {
       try {
@@ -1667,9 +1673,10 @@ export const AppProvider = ({ children }) => {
       }
     };
     syncCourses();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
+    if (!user) return;
     // Sync students from Firestore or seed if empty
     const syncStudents = async () => {
       try {
@@ -1689,9 +1696,10 @@ export const AppProvider = ({ children }) => {
       }
     };
     syncStudents();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
+    if (!user) return;
     // Sync module approvals in realtime
     try {
       const approvalsColRef = collection(db, "module_approvals");
@@ -1703,7 +1711,7 @@ export const AppProvider = ({ children }) => {
     } catch (err) {
       console.warn("Klarte ikke lytte på godkjenninger i Firestore:", err);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     // Sync assignment activity
