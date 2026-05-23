@@ -12,7 +12,7 @@ export default function ContactSupportPage() {
   const isEn = language === 'en';
 
   const [form, setForm] = useState({
-    name: user?.name || '',
+    name: '',
     email: user?.email || '',
     subject: '',
     message: ''
@@ -269,7 +269,7 @@ export default function ContactSupportPage() {
 
                   <button
                     onClick={() => {
-                      setForm({ name: user?.name || '', email: user?.email || '', subject: '', message: '' });
+                      setForm({ name: '', email: user?.email || '', subject: '', message: '' });
                       setSuccess(false);
                     }}
                     className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200/80 text-primary text-xs font-bold rounded-lg transition-all active:scale-95"

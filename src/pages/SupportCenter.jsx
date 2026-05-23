@@ -96,7 +96,7 @@ export default function SupportCenter() {
   const [openFaq, setOpenFaq] = useState(null);
 
   // Support Form State
-  const [contactForm, setContactForm] = useState({ name: user?.name || '', email: user?.email || '', msg: '' });
+  const [contactForm, setContactForm] = useState({ name: '', email: user?.email || '', msg: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleContactSubmit = async (e) => {
