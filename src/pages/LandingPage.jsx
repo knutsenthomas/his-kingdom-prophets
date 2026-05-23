@@ -13,34 +13,36 @@ export default function LandingPage() {
   return (
     <div className="bg-background text-on-background font-sans min-h-screen">
       {/* TopNavBar */}
-      <header className="sticky top-0 z-40 flex justify-between items-center w-full px-3 sm:px-6 md:px-12 h-20 max-w-[1440px] mx-auto glass-nav border-b border-outline-variant">
-        <div className="font-serif text-sm min-[360px]:text-base sm:text-2xl text-primary font-bold cursor-pointer shrink-0 flex items-center gap-2" onClick={() => navigate('/')}>
-          <img 
-            src={logo} 
-            alt="His Kingdom Prophets Logo" 
-            className="w-8 h-8 object-contain shrink-0" 
-          />
-          <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
-        </div>
-        <nav className="hidden md:flex items-center gap-8">
-          <a className="font-semibold text-primary border-b-2 border-primary cursor-pointer transition-colors duration-200" href="#programs">Studielinjer</a>
-          <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#faculty">Mentorer</a>
-          <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#research">Bibelressurser</a>
-          <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#admissions">Søk Opptak</a>
-        </nav>
-        <div className="flex items-center gap-1 min-[360px]:gap-2 sm:gap-4">
-          <button 
-            onClick={() => navigate('/login')} 
-            className="px-2 sm:px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors text-[10px] min-[360px]:text-xs sm:text-sm shrink-0"
-          >
-            Logg inn
-          </button>
-          <button 
-            onClick={() => navigate('/login')} 
-            className="px-2.5 sm:px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-[10px] min-[360px]:text-xs sm:text-sm shrink-0"
-          >
-            Søk Nå
-          </button>
+      <header className="sticky top-0 z-40 w-full glass-nav border-b border-outline-variant">
+        <div className="flex justify-between items-center w-full px-3 sm:px-6 md:px-12 h-20 max-w-[1440px] mx-auto">
+          <div className="font-serif text-sm min-[360px]:text-base sm:text-2xl text-primary font-bold cursor-pointer shrink-0 flex items-center gap-2" onClick={() => navigate('/')}>
+            <img 
+              src={logo} 
+              alt="His Kingdom Prophets Logo" 
+              className="w-8 h-8 object-contain shrink-0" 
+            />
+            <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
+          </div>
+          <nav className="hidden md:flex items-center gap-8">
+            <a className="font-semibold text-primary border-b-2 border-primary cursor-pointer transition-colors duration-200" href="#programs">Studielinjer</a>
+            <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#faculty">Mentorer</a>
+            <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#research">Bibelressurser</a>
+            <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#admissions">Søk Opptak</a>
+          </nav>
+          <div className="flex items-center gap-1 min-[360px]:gap-2 sm:gap-4">
+            <button 
+              onClick={() => navigate('/login')} 
+              className="px-2 sm:px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors text-[10px] min-[360px]:text-xs sm:text-sm shrink-0"
+            >
+              Logg inn
+            </button>
+            <button 
+              onClick={() => navigate('/login')} 
+              className="px-2.5 sm:px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-[10px] min-[360px]:text-xs sm:text-sm shrink-0"
+            >
+              Søk Nå
+            </button>
+          </div>
         </div>
       </header>
 
