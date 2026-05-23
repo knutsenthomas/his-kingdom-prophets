@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '@/contexts/AppContext';
+import { useLocation } from 'react-router-dom';
 import { MessageSquare, X, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import logo from '@/assets/logo.png';
@@ -13,7 +14,7 @@ const parseInlineStyles = (text, isAssistant) => {
     if (token.startsWith('**') && token.endsWith('**')) {
       const content = token.slice(2, -2);
       return (
-        <strong key={index} className={`font-bold ${isAssistant ? 'text-[#561291]' : 'text-white'}`}>
+        <strong key={index} className={`font-bold ${isAssistant ? 'text-[#1B4965]' : 'text-white'}`}>
           {content}
         </strong>
       );
@@ -58,7 +59,7 @@ const renderRichText = (text, isAssistant) => {
       flushList(`list-before-h-${index}`);
       const headingText = trimmed.slice(4);
       renderedElements.push(
-        <h3 key={`h-${index}`} className={`text-base font-bold mt-4 mb-2 first:mt-0 flex items-center gap-1.5 leading-snug ${isAssistant ? 'text-[#561291]' : 'text-white'}`}>
+        <h3 key={`h-${index}`} className={`text-base font-bold mt-4 mb-2 first:mt-0 flex items-center gap-1.5 leading-snug ${isAssistant ? 'text-[#1B4965]' : 'text-white'}`}>
           {parseInlineStyles(headingText, isAssistant)}
         </h3>
       );
@@ -69,7 +70,7 @@ const renderRichText = (text, isAssistant) => {
       const bulletText = trimmed.slice(2);
       listItems.push(
         <li key={`li-${index}`} className={`flex items-start gap-2 text-sm leading-relaxed ${isAssistant ? 'text-slate-700' : 'text-white/90'}`}>
-          <span className={`${isAssistant ? 'text-[#561291]' : 'text-white'} shrink-0 mt-1 select-none`}>•</span>
+          <span className={`${isAssistant ? 'text-[#1B4965]' : 'text-white'} shrink-0 mt-1 select-none`}>•</span>
           <span className="flex-1">{parseInlineStyles(bulletText, isAssistant)}</span>
         </li>
       );
@@ -82,7 +83,7 @@ const renderRichText = (text, isAssistant) => {
       const bulletText = match[2];
       listItems.push(
         <li key={`li-${index}`} className={`flex items-start gap-2 text-sm leading-relaxed ${isAssistant ? 'text-slate-700' : 'text-white/90'}`}>
-          <span className={`${isAssistant ? 'text-[#561291]' : 'text-white'} shrink-0 font-bold text-xs mt-0.5 select-none`}>{num}.</span>
+          <span className={`${isAssistant ? 'text-[#1B4965]' : 'text-white'} shrink-0 font-bold text-xs mt-0.5 select-none`}>{num}.</span>
           <span className="flex-1">{parseInlineStyles(bulletText, isAssistant)}</span>
         </li>
       );
@@ -111,8 +112,9 @@ const renderRichText = (text, isAssistant) => {
 export default function HkmChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [inputText, setInputText] = useState('');
-  const { assistantMessages, isAssistantTyping, sendAssistantMessage } = useApp();
+  const { assistantMessages, isAssistantTyping, sendAssistantMessage, assistantContext, setAssistantContext } = useApp();
   const chatBodyRef = useRef(null);
+  const location = useLocation();
 
   // Trigger smooth scroll when messages change or typing status changes
   useEffect(() => {
@@ -141,6 +143,83 @@ export default function HkmChatWidget() {
     return () => window.removeEventListener('hkm-open-chat', handleOpen);
   }, []);
 
+  // Intelligent, dynamic DOM scraper to feed assistantContext on route change
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const pageTitle = document.title || "His Kingdom Prophets";
+      const h1El = document.querySelector('h1');
+      const heading = h1El ? h1El.textContent.trim() : pageTitle;
+
+      // Select main content containers
+      const mainContainer = document.querySelector('main') || document.querySelector('.flex-1') || document.body;
+      if (!mainContainer) return;
+
+      // Scan all text-carrying tags within mainContainer
+      const elements = mainContainer.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, td, span.content-text');
+      const textChunks = [];
+      const seenTexts = new Set();
+
+      elements.forEach(el => {
+        // Exclude inputs, navigation, menus, footer, forms, and sensitive/admin components
+        if (el.closest('.hkm-chat-panel') || 
+            el.closest('.hkm-chat-toggle') || 
+            el.closest('nav') || 
+            el.closest('aside') || 
+            el.closest('footer') || 
+            el.closest('form') ||
+            el.closest('.sensitive') ||
+            el.closest('[data-sensitive]') ||
+            el.closest('.profile-edit') ||
+            el.closest('.admin-portal') ||
+            el.closest('.admin-table') ||
+            el.tagName === 'INPUT' || 
+            el.tagName === 'TEXTAREA' || 
+            el.tagName === 'SELECT') {
+          return;
+        }
+
+        const text = el.textContent.trim();
+        if (text && text.length > 6 && text.length < 500 && !seenTexts.has(text)) {
+          const lower = text.toLowerCase();
+          // Skip standard repetitive buttons or sidebar links
+          if (lower === 'logg ut' || 
+              lower === 'min profil' || 
+              lower === 'skjul meny' || 
+              lower === 'hovedmeny' ||
+              lower === 'hjem' ||
+              lower === 'innstillinger' ||
+              lower.includes('hkm assistent') ||
+              lower.includes('student layout') ||
+              lower.includes('copyright') ||
+              lower.includes('alle rettigheter')) {
+            return;
+          }
+
+          seenTexts.add(text);
+          textChunks.push(text);
+        }
+      });
+
+      const pageText = textChunks.join('\n\n');
+
+      setAssistantContext(prev => {
+        // Maintain custom page-level contexts (bible, lesson, support) unless we navigated away
+        if (prev && prev.pageType !== 'dynamic' && (prev.pageType === 'bible' || prev.pageType === 'lesson' || prev.pageType === 'support_article')) {
+          return prev;
+        }
+
+        return {
+          title: heading,
+          content: pageText.substring(0, 3000), // safe limit for response parsing context
+          pageType: 'dynamic',
+          url: location.pathname
+        };
+      });
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname, setAssistantContext]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!inputText.trim()) return;
@@ -165,14 +244,14 @@ export default function HkmChatWidget() {
           position: relative !important;
         }
         .hkm-chat-toggle {
-          background: linear-gradient(135deg, #561291 0%, #3c096c 100%) !important;
+          background: linear-gradient(135deg, #d17d39 0%, #bd4f2a 100%) !important;
           transform: translateZ(0) !important;
           backface-visibility: hidden !important;
           transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
         }
         .hkm-chat-toggle:hover {
           transform: translateZ(0) scale(1.05) !important;
-          box-shadow: 0 10px 20px rgba(86, 18, 145, 0.3) !important;
+          box-shadow: 0 10px 20px rgba(209, 125, 57, 0.3) !important;
         }
         .hkm-chat-toggle:active {
           transform: translateZ(0) scale(0.95) !important;
@@ -188,8 +267,8 @@ export default function HkmChatWidget() {
             transition={{ duration: 0.2 }}
             className="hkm-chat-panel bg-white w-[360px] h-[500px] rounded-2xl shadow-2xl border border-outline-variant flex flex-col overflow-hidden mb-4"
           >
-            {/* Header - Majestic Royal Purple */}
-            <div className="bg-[#561291] text-white px-5 py-4 flex items-center justify-between shadow-sm">
+            {/* Header - Mandal Regnskapskontor Dark Blue (#1B4965) */}
+            <div className="bg-[#1B4965] text-white px-5 py-4 flex items-center justify-between shadow-sm">
               <div className="flex items-center gap-2.5">
                 <img 
                   src={logo} 
@@ -276,7 +355,7 @@ export default function HkmChatWidget() {
                   placeholder="Skriv din melding her..."
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  className="w-full bg-slate-50 border border-outline-variant rounded-xl pl-4 pr-12 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all font-medium text-on-surface"
+                  className="w-full bg-slate-50 border border-outline-variant rounded-xl pl-4 pr-12 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#1B4965] focus:border-[#1B4965] transition-all font-medium text-on-surface"
                 />
                 <button
                   type="submit"

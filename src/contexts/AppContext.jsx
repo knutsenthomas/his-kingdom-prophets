@@ -2428,7 +2428,9 @@ export const AppProvider = ({ children }) => {
             `💡 *Hvis du trenger ytterligere hjelp, kan du også opprette en support-billett direkte fra [Support-senteret](/student/support).*`;
         } else {
           replyText = `### 🧭 Aktiv side: ${assistantContext.title}\n\n` +
-            `${assistantContext.content}\n\n` +
+            (assistantContext.content && assistantContext.content.trim().length > 0 
+              ? `${assistantContext.content}\n\n`
+              : `Du ser for øyeblikket på siden **${assistantContext.title}**.\n\nSpør meg gjerne om emner eller funksjoner tilknyttet denne siden!\n\n`) +
             `Si fra hvis det er noe jeg kan utdype eller hjelpe deg med her!`;
         }
       }
@@ -2706,6 +2708,45 @@ export const AppProvider = ({ children }) => {
           "• **Fokus:** Bibelsk eskatologi skal aldri skape frykt, men gi et levende og salig håp om Kristi endelige seier!";
       }
 
+      // Smart Dynamic Page Content Matching (Contextual local search fallback)
+      else if (assistantContext && assistantContext.content && assistantContext.content.trim().length > 10) {
+        const paragraphs = assistantContext.content.split('\n\n').map(p => p.trim()).filter(Boolean);
+        const queryWords = lower.split(/\s+/).filter(w => w.length > 3);
+        
+        let bestParagraph = null;
+        let highestMatchCount = 0;
+        
+        paragraphs.forEach(p => {
+          const pLower = p.toLowerCase();
+          let matchCount = 0;
+          queryWords.forEach(word => {
+            const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"");
+            if (cleanWord.length > 2 && pLower.includes(cleanWord)) {
+              matchCount++;
+            }
+          });
+          
+          if (matchCount > highestMatchCount) {
+            highestMatchCount = matchCount;
+            bestParagraph = p;
+          }
+        });
+
+        const threshold = queryWords.length <= 1 ? 1 : 2;
+        
+        if (bestParagraph && highestMatchCount >= threshold) {
+          replyText = `### 🔍 Svar funnet på siden: ${assistantContext.title}\n\n` +
+            `Jeg skannet innholdet på denne siden og fant dette som kan være relevant for deg:\n\n` +
+            `> *${bestParagraph}*\n\n` +
+            `💡 *Hvis du ønsker at jeg skal utdype dette eller forklare mer, er det bare å si ifra!*`;
+        } else {
+          replyText = "Jeg forstod ikke helt det spørsmålet, men jeg hjelper deg gjerne! Kan du prøve å omformulere, eller spørre meg om et av disse emnene:\n\n" +
+            "🕊️ **Bibelske personer & emner:** Skriv f.eks. *'fortell om Elias'*, *'hva er eskatologi?'* eller *'hva er reformasjonen?'*\n" +
+            "📖 **Bibelvers:** Skriv *'vis meg et vers'* eller et bibelboknavn (f.eks. *'Salme 23'*)\n" +
+            "🧭 **Navigasjon:** Skriv f.eks. *'hvor er leksjonene mine?'* eller *'hvor er oppgavene?'*\n" +
+            "📞 **Kontakt & Support:** Skriv *'kontakt lærer'* eller *'hjelp med teknisk support'* for hjelp med plattformen.";
+        }
+      }
       // Default Fallback
       else {
         replyText = "Jeg forstod ikke helt det spørsmålet, men jeg hjelper deg gjerne! Kan du prøve å omformulere, eller spørre meg om et av disse emnene:\n\n" +
