@@ -82,6 +82,15 @@ export default function App() {
     }
   }, [location.pathname, isEmbedded]);
 
+  // Scroll to top of window and reset all layout scroll containers on route changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const scrollContainers = document.querySelectorAll('.overflow-y-auto, main, aside, section');
+    scrollContainers.forEach(container => {
+      container.scrollTop = 0;
+    });
+  }, [location.pathname]);
+
   // Handle messages in parent window from the iframe
   useEffect(() => {
     if (!isEmbedded) {
