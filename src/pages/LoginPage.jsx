@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import CmsText from '@/components/CmsText';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, User, Shield, Check, Key, GraduationCap, Users, ShieldAlert } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Mail, Lock, Key } from 'lucide-react';
 import logo from '@/assets/logo.png';
 
 export default function LoginPage() {
@@ -11,21 +11,17 @@ export default function LoginPage() {
   const { 
     user,
     login, 
-    registerWithEmail, 
     loginWithGoogle, 
     loginWithApple, 
     loginPasswordless,
     showToast 
   } = useApp();
 
-  const [isSignUp, setIsSignUp] = useState(false);
   const [loginMethod, setLoginMethod] = useState('password'); // 'password' | 'passwordless'
   
   // Fields
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [selectedRole, setSelectedRole] = useState('student'); // 'student' | 'teacher' | 'admin' | 'superadmin'
 
   const handleAuthSuccess = (emailAddress, role, onboardingCompleted) => {
     const checkEmail = emailAddress ? emailAddress.toLowerCase() : '';
@@ -61,30 +57,18 @@ export default function LoginPage() {
     e.preventDefault();
     if (!email) return;
 
-    if (isSignUp) {
-      // Sign Up
-      await registerWithEmail(email, password || 'pass123', name || 'Ny Bruker', selectedRole);
+    if (loginMethod === 'passwordless') {
+      await loginPasswordless(email);
     } else {
-      // Sign In
-      if (loginMethod === 'passwordless') {
-        await loginPasswordless(email, selectedRole);
-      } else {
-        await login(email, password);
-      }
+      await login(email, password);
     }
-  };
-
-  const handleQuickLogin = (roleEmail, chosenRole) => {
-    setEmail(roleEmail);
-    setPassword('pass123');
-    login(roleEmail, 'pass123');
   };
 
   const handleSocialLogin = async (platform) => {
     if (platform === 'google') {
-      await loginWithGoogle(selectedRole);
+      await loginWithGoogle();
     } else {
-      await loginWithApple(selectedRole);
+      await loginWithApple();
     }
   };
 
@@ -118,39 +102,8 @@ export default function LoginPage() {
             <CmsText slug="login-title" fallback="His Kingdom Prophets" />
           </div>
           <p className="text-sm text-[#46617b] max-w-md mx-auto">
-            {isSignUp 
-              ? 'Opprett en ny profil på vår åpenbaringsportal for å starte din åndelige og profetiske utrustning.' 
-              : 'Logg inn for å få tilgang til dine kurs, studieguider og administrative verktøy.'}
+            Logg inn for å få tilgang til dine kurs, studieguider og administrative verktøy.
           </p>
-        </div>
-
-        {/* Tab Selector: Sign In vs Sign Up */}
-        <div className="flex bg-[#eaeef2] p-1 rounded-full mb-8 max-w-sm mx-auto w-full relative">
-          <button
-            onClick={() => setIsSignUp(false)}
-            className={`flex-1 py-2.5 rounded-full text-sm font-semibold transition-all relative z-10 ${
-              !isSignUp ? 'text-[#00324b] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
-            }`}
-          >
-            Logg inn
-          </button>
-          <button
-            onClick={() => setIsSignUp(true)}
-            className={`flex-1 py-2.5 rounded-full text-sm font-semibold transition-all relative z-10 ${
-              isSignUp ? 'text-[#00324b] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
-            }`}
-          >
-            Registrer deg
-          </button>
-          
-          {/* Animated Tab Background Indicator */}
-          <motion.div
-            className="absolute top-1 bottom-1 left-1 bg-white rounded-full shadow-sm"
-            layoutId="activeTabIndicator"
-            style={{ width: 'calc(50% - 4px)' }}
-            animate={{ x: isSignUp ? '100%' : '0%' }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          />
         </div>
 
         {/* Social Authentication Options */}
@@ -199,263 +152,87 @@ export default function LoginPage() {
         </div>
 
         {/* Main Authentication Flow */}
-        <AnimatePresence mode="wait">
-          {!isSignUp ? (
-            <motion.div
-              key="signin"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.3 }}
+        <div>
+          {/* Login Method Toggle: Password vs Passwordless */}
+          <div className="flex gap-4 border-b border-[#c1c7ce]/40 mb-6">
+            <button
+              type="button"
+              onClick={() => setLoginMethod('password')}
+              className={`pb-2.5 text-xs uppercase tracking-wider font-bold transition-all relative ${
+                loginMethod === 'password' ? 'text-[#00324b]' : 'text-[#72787e] hover:text-[#41474d]'
+              }`}
             >
-              {/* Login Method Toggle: Password vs Passwordless */}
-              <div className="flex gap-4 border-b border-[#c1c7ce]/40 mb-6">
-                <button
-                  type="button"
-                  onClick={() => setLoginMethod('password')}
-                  className={`pb-2.5 text-xs uppercase tracking-wider font-bold transition-all relative ${
-                    loginMethod === 'password' ? 'text-[#00324b]' : 'text-[#72787e] hover:text-[#41474d]'
-                  }`}
-                >
-                  Passord
-                  {loginMethod === 'password' && (
-                    <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00324b]" layoutId="loginMethodLine" />
-                  )}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLoginMethod('passwordless')}
-                  className={`pb-2.5 text-xs uppercase tracking-wider font-bold transition-all relative ${
-                    loginMethod === 'passwordless' ? 'text-[#00324b]' : 'text-[#72787e] hover:text-[#41474d]'
-                  }`}
-                >
-                  Løsinnlogging (Uten Passord)
-                  {loginMethod === 'passwordless' && (
-                    <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00324b]" layoutId="loginMethodLine" />
-                  )}
-                </button>
+              Passord
+              {loginMethod === 'password' && (
+                <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00324b]" layoutId="loginMethodLine" />
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setLoginMethod('passwordless')}
+              className={`pb-2.5 text-xs uppercase tracking-wider font-bold transition-all relative ${
+                loginMethod === 'passwordless' ? 'text-[#00324b]' : 'text-[#72787e] hover:text-[#41474d]'
+              }`}
+            >
+              Løsinnlogging (Uten Passord)
+              {loginMethod === 'passwordless' && (
+                <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00324b]" layoutId="loginMethodLine" />
+              )}
+            </button>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleFormSubmit} className="space-y-5">
+            <div className="form-field-stable">
+              <label className="block text-xs font-bold text-[#41474d] uppercase tracking-wider mb-2">E-postadresse</label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#72787e]" />
+                <input
+                  type="email"
+                  placeholder="knutsenthomas@gmail.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
+                  required
+                />
               </div>
+            </div>
 
-              {/* Form */}
-              <form onSubmit={handleFormSubmit} className="space-y-5">
-                <div className="form-field-stable">
-                  <label className="block text-xs font-bold text-[#41474d] uppercase tracking-wider mb-2">E-postadresse</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#72787e]" />
-                    <input
-                      type="email"
-                      placeholder="knutsenthomas@gmail.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
-                      required
-                    />
-                  </div>
+            {loginMethod === 'password' && (
+              <div className="form-field-stable">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-xs font-bold text-[#41474d] uppercase tracking-wider">Passord</label>
+                  <button 
+                    type="button" 
+                    onClick={() => showToast('Passordgjenoppretting er sendt til din e-post!')}
+                    className="text-xs text-[#00324b] hover:underline font-semibold"
+                  >
+                    Glemt passord?
+                  </button>
                 </div>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#72787e]" />
+                  <input
+                    type="password"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
+                    required
+                  />
+                </div>
+              </div>
+            )}
 
-                {loginMethod === 'password' && (
-                  <div className="form-field-stable">
-                    <div className="flex justify-between items-center mb-2">
-                      <label className="block text-xs font-bold text-[#41474d] uppercase tracking-wider">Passord</label>
-                      <button 
-                        type="button" 
-                        onClick={() => showToast('Passordgjenoppretting er sendt til din e-post!')}
-                        className="text-xs text-[#00324b] hover:underline font-semibold"
-                      >
-                        Glemt passord?
-                      </button>
-                    </div>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#72787e]" />
-                      <input
-                        type="password"
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
-                        required
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  className="w-full bg-[#00324b] text-white py-3.5 rounded-xl hover:opacity-95 transition-all font-bold text-sm active:scale-[0.99] shadow-md mt-6 flex items-center justify-center gap-2"
-                >
-                  <Key className="w-4 h-4" />
-                  {loginMethod === 'password' ? 'Logg inn med passord' : 'Send meg magisk lenke'}
-                </button>
-              </form>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="signup"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-6"
+            <button
+              type="submit"
+              className="w-full bg-[#00324b] text-white py-3.5 rounded-xl hover:opacity-95 transition-all font-bold text-sm active:scale-[0.99] shadow-md mt-6 flex items-center justify-center gap-2"
             >
-              <form onSubmit={handleFormSubmit} className="space-y-5">
-                <div className="form-field-stable">
-                  <label className="block text-xs font-bold text-[#41474d] uppercase tracking-wider mb-2">Fullt Navn</label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#72787e]" />
-                    <input
-                      type="text"
-                      placeholder="Erik Johansen"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="form-field-stable">
-                  <label className="block text-xs font-bold text-[#41474d] uppercase tracking-wider mb-2">E-postadresse</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#72787e]" />
-                    <input
-                      type="email"
-                      placeholder="knutsenthomas@gmail.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="form-field-stable">
-                  <label className="block text-xs font-bold text-[#41474d] uppercase tracking-wider mb-2">Passord</label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#72787e]" />
-                    <input
-                      type="password"
-                      placeholder="Min. 8 tegn"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Granular 4-Card Role Selector */}
-                <div className="space-y-3 pt-2">
-                  <label className="block text-xs font-bold text-[#41474d] uppercase tracking-wider">Velg din rolle på plattformen</label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    
-                    {/* Card 1: Student */}
-                    <div
-                      onClick={() => setSelectedRole('student')}
-                      className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 hover:bg-[#f6fafe] ${
-                        selectedRole === 'student'
-                          ? 'border-[#00324b] bg-[#cee5ff]/20'
-                          : 'border-[#c1c7ce]/50 bg-white'
-                      }`}
-                    >
-                      <div className={`p-2 rounded-lg ${selectedRole === 'student' ? 'bg-[#00324b] text-white' : 'bg-[#eaeef2] text-[#41474d]'}`}>
-                        <GraduationCap className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-bold text-sm text-[#00324b] flex items-center justify-between">
-                          Student
-                          {selectedRole === 'student' && <Check className="w-4 h-4 text-[#00324b]" />}
-                        </p>
-                        <p className="text-[11px] text-[#72787e] mt-1 leading-normal">
-                          Tilgang til kursleksjoner, oppgaver og studentfellesskap.
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Card 2: Lærer */}
-                    <div
-                      onClick={() => setSelectedRole('teacher')}
-                      className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 hover:bg-[#f6fafe] ${
-                        selectedRole === 'teacher'
-                          ? 'border-[#00324b] bg-[#cee5ff]/20'
-                          : 'border-[#c1c7ce]/50 bg-white'
-                      }`}
-                    >
-                      <div className={`p-2 rounded-lg ${selectedRole === 'teacher' ? 'bg-[#00324b] text-white' : 'bg-[#eaeef2] text-[#41474d]'}`}>
-                        <Users className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-bold text-sm text-[#00324b] flex items-center justify-between">
-                          Lærer / Mentor
-                          {selectedRole === 'teacher' && <Check className="w-4 h-4 text-[#00324b]" />}
-                        </p>
-                        <p className="text-[11px] text-[#72787e] mt-1 leading-normal">
-                          Veilede studenter, rette oppgaver og godkjenne moduler.
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Card 3: Admin */}
-                    <div
-                      onClick={() => setSelectedRole('admin')}
-                      className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 hover:bg-[#f6fafe] ${
-                        selectedRole === 'admin'
-                          ? 'border-[#00324b] bg-[#cee5ff]/20'
-                          : 'border-[#c1c7ce]/50 bg-white'
-                      }`}
-                    >
-                      <div className={`p-2 rounded-lg ${selectedRole === 'admin' ? 'bg-[#00324b] text-white' : 'bg-[#eaeef2] text-[#41474d]'}`}>
-                        <Shield className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-bold text-sm text-[#00324b] flex items-center justify-between">
-                          Administrator
-                          {selectedRole === 'admin' && <Check className="w-4 h-4 text-[#00324b]" />}
-                        </p>
-                        <p className="text-[11px] text-[#72787e] mt-1 leading-normal">
-                          Administrere sider (CMS), administrere studenter og systemet.
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Card 4: Super Admin */}
-                    <div
-                      onClick={() => setSelectedRole('superadmin')}
-                      className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 hover:bg-[#f6fafe] ${
-                        selectedRole === 'superadmin'
-                          ? 'border-[#00324b] bg-[#cee5ff]/20'
-                          : 'border-[#c1c7ce]/50 bg-white'
-                      }`}
-                    >
-                      <div className={`p-2 rounded-lg ${selectedRole === 'superadmin' ? 'bg-[#00324b] text-white' : 'bg-[#eaeef2] text-[#41474d]'}`}>
-                        <ShieldAlert className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-bold text-sm text-[#00324b] flex items-center justify-between">
-                          Super Admin
-                          {selectedRole === 'superadmin' && <Check className="w-4 h-4 text-[#00324b]" />}
-                        </p>
-                        <p className="text-[11px] text-[#72787e] mt-1 leading-normal">
-                          Full systemkontroll, global rettighetsstyring og lisensinnstillinger.
-                        </p>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-[#00324b] text-white py-3.5 rounded-xl hover:opacity-95 transition-all font-bold text-sm active:scale-[0.99] shadow-md mt-6 flex items-center justify-center gap-2"
-                >
-                  <User className="w-4 h-4" />
-                  Opprett profil nå
-                </button>
-              </form>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-
+              <Key className="w-4 h-4" />
+              {loginMethod === 'password' ? 'Logg inn med passord' : 'Send meg magisk lenke'}
+            </button>
+          </form>
+        </div>
 
       </motion.div>
     </div>
