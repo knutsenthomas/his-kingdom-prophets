@@ -936,7 +936,7 @@ export default function BibleView() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="space-y-5 text-justify select-text font-serif leading-loose"
+                    className="space-y-2 text-justify select-text font-serif leading-loose"
                   >
                     {verses.length > 0 ? (
                       verses.map((verse) => (
@@ -944,7 +944,7 @@ export default function BibleView() {
                           id={`v-${verse.verse}`}
                           key={`${verse.chapter}-${verse.verse}`}
                           onClick={() => toggleVerseSelection(verse.verse)}
-                          className={`group p-2.5 rounded-xl transition-all cursor-pointer relative border ${
+                          className={`group py-1.5 px-3 rounded-xl transition-all cursor-pointer relative border ${
                             selectedVerses.includes(verse.verse) || highlightedVerse === verse.verse 
                               ? 'bg-primary/5 border-primary/20 shadow-sm shadow-primary/5' 
                               : 'hover:bg-slate-50/80 border-transparent'
