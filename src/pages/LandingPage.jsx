@@ -12,6 +12,8 @@ export default function LandingPage() {
   const { user, cmsContent, language, toggleLanguage } = useApp();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('programs');
+  
+  const portalPath = user?.role === 'teacher' || user?.role === 'admin' || user?.role === 'superadmin' ? '/teacher/dashboard' : '/student/dashboard';
 
   const navItems = [
     { slug: 'landing-nav-programs', fallback: 'Studielinjer', href: '#programs', id: 'programs' },
@@ -125,18 +127,30 @@ export default function LandingPage() {
                 <Globe size={13} />
                 <span>{language === 'no' ? 'NO' : 'EN'}</span>
               </button>
-              <button 
-                onClick={() => navigate('/login')} 
-                className="px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors text-sm shrink-0"
-              >
-                <CmsText slug="landing-btn-login" fallback="Logg inn" />
-              </button>
-              <button 
-                onClick={() => navigate('/login')} 
-                className="px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-sm shrink-0"
-              >
-                <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
-              </button>
+              {user ? (
+                <button 
+                  onClick={() => navigate(portalPath)} 
+                  className="px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-sm shrink-0 flex items-center gap-1"
+                >
+                  <CmsText slug="landing-btn-portal" fallback="Gå til portal" />
+                  <ArrowRight size={14} />
+                </button>
+              ) : (
+                <>
+                  <button 
+                    onClick={() => navigate('/login')} 
+                    className="px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors text-sm shrink-0"
+                  >
+                    <CmsText slug="landing-btn-login" fallback="Logg inn" />
+                  </button>
+                  <button 
+                    onClick={() => navigate('/login')} 
+                    className="px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-sm shrink-0"
+                  >
+                    <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
+                  </button>
+                </>
+              )}
             </div>
             
             {/* Mobile/Tablet Actions & Toggle */}
@@ -149,12 +163,22 @@ export default function LandingPage() {
                 <Globe size={12} />
                 <span>{language === 'no' ? 'NO' : 'EN'}</span>
               </button>
-              <button 
-                onClick={() => navigate('/login')} 
-                className="px-2.5 sm:px-4 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-[10px] min-[360px]:text-xs shrink-0"
-              >
-                <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
-              </button>
+              {user ? (
+                <button 
+                  onClick={() => navigate(portalPath)} 
+                  className="px-2.5 sm:px-4 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-[10px] min-[360px]:text-xs shrink-0 flex items-center gap-0.5"
+                >
+                  <CmsText slug="landing-btn-portal" fallback="Gå til portal" />
+                  <ArrowRight size={12} />
+                </button>
+              ) : (
+                <button 
+                  onClick={() => navigate('/login')} 
+                  className="px-2.5 sm:px-4 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-[10px] min-[360px]:text-xs shrink-0"
+                >
+                  <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
+                </button>
+              )}
               <button 
                 onClick={() => setIsMobileMenuOpen(true)}
                 className="p-2 hover:bg-primary/5 rounded-lg text-primary transition-all shrink-0 active:scale-95"
@@ -242,18 +266,30 @@ export default function LandingPage() {
                   <Globe size={14} />
                   <span>{language === 'no' ? 'Bytt til Engelsk (EN)' : 'Switch to Norwegian (NO)'}</span>
                 </button>
-                <button
-                  onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
-                  className="w-full py-3 border border-outline-variant text-primary hover:bg-primary/5 font-bold rounded-xl text-xs transition-all active:scale-[0.98]"
-                >
-                  <CmsText slug="landing-btn-login" fallback="Logg inn" />
-                </button>
-                <button
-                  onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
-                  className="w-full py-3 bg-primary text-white font-bold rounded-xl text-xs transition-all active:scale-[0.98] shadow-md"
-                >
-                  <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
-                </button>
+                {user ? (
+                  <button
+                    onClick={() => { navigate(portalPath); setIsMobileMenuOpen(false); }}
+                    className="w-full py-3 bg-primary text-white font-bold rounded-xl text-xs transition-all active:scale-[0.98] shadow-md flex items-center justify-center gap-1.5"
+                  >
+                    <CmsText slug="landing-btn-portal" fallback="Gå til portal" />
+                    <ArrowRight size={14} />
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
+                      className="w-full py-3 border border-outline-variant text-primary hover:bg-primary/5 font-bold rounded-xl text-xs transition-all active:scale-[0.98]"
+                    >
+                      <CmsText slug="landing-btn-login" fallback="Logg inn" />
+                    </button>
+                    <button
+                      onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
+                      className="w-full py-3 bg-primary text-white font-bold rounded-xl text-xs transition-all active:scale-[0.98] shadow-md"
+                    >
+                      <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
+                    </button>
+                  </>
+                )}
               </div>
             </motion.aside>
           </div>

@@ -34,6 +34,7 @@ const assetDefinitions = [
   { slug: 'landing-nav-resources', title: 'Navigasjonslenke Bibelressurser', section: 'Hjemmeside', type: 'text', description: 'Tekst på menylenken for bibelressurser.' },
   { slug: 'landing-nav-admissions', title: 'Navigasjonslenke Søk Opptak', section: 'Hjemmeside', type: 'text', description: 'Tekst på menylenken for søknad.' },
   { slug: 'landing-btn-login', title: 'Knappetekst Logg Inn', section: 'Hjemmeside', type: 'text', description: 'Tekst på logg-inn knappen i topplinjen.' },
+  { slug: 'landing-btn-portal', title: 'Knappetekst Gå til Portal', section: 'Hjemmeside', type: 'text', description: 'Tekst på portal-knappen som vises når man er pålogget.' },
   { slug: 'landing-btn-apply', title: 'Knappetekst Søk Nå', section: 'Hjemmeside', type: 'text', description: 'Tekst på søknadsknappen i topplinjen.' },
   { slug: 'landing-network-btn', title: 'Nettverk Handlingsknapp', section: 'Hjemmeside', type: 'text', description: 'Tekst på knappen i det globale nettverksbanneret.' },
   
