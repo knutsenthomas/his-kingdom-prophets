@@ -106,7 +106,20 @@ export default function AdminPortal() {
   const isAuthorized = currentUser?.role === 'admin' || currentUser?.role === 'superadmin';
 
   // --- TAB 1: USERS STATE ---
-  const [usersList, setUsersList] = useState([]);
+  const [usersList, setUsersList] = useState(() => {
+    try {
+      const cached = localStorage.getItem('hkm-admin-portal-users');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.warn("Could not load cached users for AdminPortal:", e);
+    }
+    return DEFAULT_USERS;
+  });
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('ALL'); // 'ALL' | 'student' | 'teacher' | 'admin' | 'superadmin'
   const [statusFilter, setStatusFilter] = useState('ALL'); // 'ALL' | 'AKTIV' | 'VENTER' | 'INAKTIV'
@@ -128,6 +141,28 @@ export default function AdminPortal() {
   // Sync users database
   useEffect(() => {
     if (!isAuthorized) return;
+
+    // Immediately inject the logged-in superadmin and ensure local state has defaults so the table is never empty/frozen!
+    setUsersList(prev => {
+      let list = [...prev];
+      if (list.length === 0) {
+        list = [...DEFAULT_USERS];
+      }
+      if (currentUser && !list.some(u => u.email?.toLowerCase() === currentUser.email?.toLowerCase())) {
+        list.push({
+          uid: currentUser.uid || 'current-admin',
+          name: currentUser.name || 'Thomas Knutsen',
+          email: currentUser.email,
+          role: currentUser.role || 'superadmin',
+          created: '23. May 2026',
+          status: 'AKTIV',
+          avatar: currentUser.avatar || ''
+        });
+      }
+      localStorage.setItem('hkm-admin-portal-users', JSON.stringify(list));
+      return list;
+    });
+
     const fetchUsers = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "users"));
@@ -145,15 +180,18 @@ export default function AdminPortal() {
               avatar: currentUser.avatar || ''
             });
           }
-          for (const u of list) {
+          // Set state and cache instantly so UI is never blank/frozen!
+          setUsersList(list);
+          localStorage.setItem('hkm-admin-portal-users', JSON.stringify(list));
+
+          // Seed Firestore in the background without blocking the UI
+          list.forEach(async (u) => {
             try {
               await setDoc(doc(db, "users", u.uid), u);
             } catch (wErr) {
-              console.warn("Could not seed user:", u.email, wErr);
+              console.warn("Could not seed user in background:", u.email, wErr);
             }
-          }
-          setUsersList(list);
-          localStorage.setItem('hkm-admin-portal-users', JSON.stringify(list));
+          });
         } else {
           const loaded = querySnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
           // Ensure current user is in the list

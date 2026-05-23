@@ -47,6 +47,21 @@ export default function HkmChatWidget() {
 
   return (
     <div className="fixed bottom-6 right-6 z-[99] font-sans">
+      {/* Chrome Jitter Fix Layer Isolation stylesheet */}
+      <style>{`
+        .hkm-chat-panel {
+          transform: translateZ(0) !important;
+          backface-visibility: hidden !important;
+        }
+        .hkm-chat-panel input {
+          transform: translateZ(0) !important;
+          backface-visibility: hidden !important;
+        }
+        .hkm-chat-body {
+          position: relative !important;
+        }
+      `}</style>
+
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -55,10 +70,6 @@ export default function HkmChatWidget() {
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.2 }}
             className="hkm-chat-panel bg-white w-[360px] h-[500px] rounded-2xl shadow-2xl border border-outline-variant flex flex-col overflow-hidden mb-4"
-            style={{
-              transform: 'translateZ(0)',
-              backfaceVisibility: 'hidden'
-            }}
           >
             {/* Header - Deep Brand Blue */}
             <div className="bg-[#1B4965] text-white px-5 py-4 flex items-center justify-between shadow-sm">
@@ -89,7 +100,6 @@ export default function HkmChatWidget() {
             <div 
               ref={chatBodyRef}
               className="hkm-chat-body flex-grow p-4 overflow-y-auto space-y-4 bg-slate-50"
-              style={{ position: 'relative' }}
             >
               {assistantMessages.map((msg) => (
                 <div 
@@ -150,10 +160,6 @@ export default function HkmChatWidget() {
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
                   className="w-full bg-slate-50 border border-outline-variant rounded-xl pl-4 pr-12 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all font-medium text-on-surface"
-                  style={{
-                    transform: 'translateZ(0)',
-                    backfaceVisibility: 'hidden'
-                  }}
                 />
                 <button
                   type="submit"

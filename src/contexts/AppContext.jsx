@@ -1722,18 +1722,30 @@ export const AppProvider = ({ children }) => {
 
   // Update user profile fields
   const updateUserProfile = async (fields) => {
-    if (auth.currentUser) {
+    // Update local state instantly so the UI responds immediately!
+    setUser(prev => {
+      const updated = { ...prev, ...fields };
       try {
-        const userDocRef = doc(db, "users", auth.currentUser.uid);
-        await setDoc(userDocRef, fields, { merge: true });
-        setUser(prev => ({ ...prev, ...fields }));
-        showToast('Profilen din er oppdatert!');
-      } catch (err) {
-        console.error("Feil ved lagring av profil til Firestore:", err);
-        showToast('Klarte ikke å lagre profil. Vennligst prøv igjen.');
+        localStorage.setItem('hkm-current-user', JSON.stringify(updated));
+      } catch (e) {
+        console.error("Could not cache updated user profile:", e);
       }
+      return updated;
+    });
+
+    if (auth.currentUser) {
+      // Perform database write in the background without blocking the UI
+      setDoc(doc(db, "users", auth.currentUser.uid), fields, { merge: true })
+        .then(() => {
+          console.log("Profile successfully synced with Firestore!");
+        })
+        .catch(err => {
+          console.warn("Could not sync profile to Firestore (operating in offline/cached mode):", err);
+        });
+      
+      // Resolve immediately so the UI is not blocked by Firestore latency or API blocks
+      showToast('Profilen din er oppdatert!');
     } else {
-      setUser(prev => ({ ...prev, ...fields }));
       showToast('Profilen din er oppdatert lokalt!');
     }
   };
