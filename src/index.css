@@ -187,23 +187,12 @@ button {
   scrollbar-width: none;
 }
 
-/* Shift or hide floating widgets when Lesson Sidebar is open to prevent overlapping action buttons */
-@media (min-width: 768px) {
-  body:has(.lesson-notes-sidebar-open) .hkm-chat-widget-container {
-    right: 408px !important;
-  }
-  body:has(.lesson-notes-sidebar-open) .cms-visual-toggle-container {
-    right: 408px !important;
-  }
+/* Hide floating widgets completely when Lesson Sidebar is open to ensure a clean, distraction-free study and writing workspace */
+body:has(.lesson-notes-sidebar-open) .hkm-chat-widget-container {
+  display: none !important;
 }
-
-@media (max-width: 767px) {
-  body:has(.lesson-notes-sidebar-open) .hkm-chat-widget-container {
-    display: none !important;
-  }
-  body:has(.lesson-notes-sidebar-open) .cms-visual-toggle-container {
-    display: none !important;
-  }
+body:has(.lesson-notes-sidebar-open) .cms-visual-toggle-container {
+  display: none !important;
 }
 
 /* Ensure smooth transitions for floating widgets */
