@@ -264,6 +264,12 @@ export default function AdminPortal() {
   };
 
   const handleUpdateUserRole = async (uid, role) => {
+    const targetUser = usersList.find(u => u.uid === uid);
+    if (targetUser?.email?.toLowerCase() === 'knutsenthomas@gmail.com') {
+      showToast("Super-Admin-rollen til Thomas Knutsen kan ikke endres!");
+      return;
+    }
+
     const updated = usersList.map(u => u.uid === uid ? { ...u, role } : u);
     setUsersList(updated);
     localStorage.setItem('hkm-admin-portal-users', JSON.stringify(updated));
@@ -277,6 +283,12 @@ export default function AdminPortal() {
   };
 
   const handleUpdateUserStatus = async (uid, status) => {
+    const targetUser = usersList.find(u => u.uid === uid);
+    if (targetUser?.email?.toLowerCase() === 'knutsenthomas@gmail.com') {
+      showToast("Statusen til Thomas Knutsen kan ikke settes til inaktiv!");
+      return;
+    }
+
     const updated = usersList.map(u => u.uid === uid ? { ...u, status } : u);
     setUsersList(updated);
     localStorage.setItem('hkm-admin-portal-users', JSON.stringify(updated));
@@ -290,6 +302,12 @@ export default function AdminPortal() {
   };
 
   const handleDeleteUser = async (uid, name) => {
+    const targetUser = usersList.find(u => u.uid === uid);
+    if (targetUser?.email?.toLowerCase() === 'knutsenthomas@gmail.com') {
+      showToast("Super-Admin Thomas Knutsen kan ikke slettes!");
+      return;
+    }
+
     if (!window.confirm(`Er du sikker på at du vil slette ${name}?`)) return;
     const updated = usersList.filter(u => u.uid !== uid);
     setUsersList(updated);
@@ -559,16 +577,22 @@ export default function AdminPortal() {
 
                           {/* Role Selection */}
                           <td className="px-6 py-4">
-                            <select
-                              value={userItem.role}
-                              onChange={(e) => handleUpdateUserRole(userItem.uid, e.target.value)}
-                              className="bg-[#f0f4f8] border-none text-xs font-semibold text-[#00324b] rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-[#1b4965] transition-all outline-none"
-                            >
-                              <option value="student">Student</option>
-                              <option value="teacher">Lærer / Mentor</option>
-                              <option value="admin">Admin</option>
-                              <option value="superadmin">Super Admin</option>
-                            </select>
+                            {userItem.email?.toLowerCase() === 'knutsenthomas@gmail.com' ? (
+                              <span className="text-xs font-bold text-[#ba1a1a] bg-red-50 border border-red-200 rounded-lg px-2.5 py-1">
+                                Super Admin (Låst)
+                              </span>
+                            ) : (
+                              <select
+                                value={userItem.role}
+                                onChange={(e) => handleUpdateUserRole(userItem.uid, e.target.value)}
+                                className="bg-[#f0f4f8] border-none text-xs font-semibold text-[#00324b] rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-[#1b4965] transition-all outline-none"
+                              >
+                                <option value="student">Student</option>
+                                <option value="teacher">Lærer / Mentor</option>
+                                <option value="admin">Admin</option>
+                                <option value="superadmin">Super Admin</option>
+                              </select>
+                            )}
                           </td>
 
                           {/* Created */}
@@ -578,19 +602,25 @@ export default function AdminPortal() {
 
                           {/* Status */}
                           <td className="px-6 py-4">
-                            <select
-                              value={userItem.status}
-                              onChange={(e) => handleUpdateUserStatus(userItem.uid, e.target.value)}
-                              className={`text-[10px] font-bold rounded-full px-3 py-1 outline-none border-none focus:ring-1 focus:ring-[#1b4965] cursor-pointer ${
-                                userItem.status === 'AKTIV' ? 'bg-green-100 text-green-800' :
-                                userItem.status === 'VENTER' ? 'bg-amber-100 text-amber-800' :
-                                'bg-red-100 text-red-800'
-                              }`}
-                            >
-                              <option value="AKTIV">AKTIV</option>
-                              <option value="VENTER">VENTER</option>
-                              <option value="INAKTIV">INAKTIV</option>
-                            </select>
+                            {userItem.email?.toLowerCase() === 'knutsenthomas@gmail.com' ? (
+                              <span className="text-[10px] font-bold rounded-full px-3 py-1 bg-green-100 text-green-800 border border-green-200">
+                                AKTIV
+                              </span>
+                            ) : (
+                              <select
+                                value={userItem.status}
+                                onChange={(e) => handleUpdateUserStatus(userItem.uid, e.target.value)}
+                                className={`text-[10px] font-bold rounded-full px-3 py-1 outline-none border-none focus:ring-1 focus:ring-[#1b4965] cursor-pointer ${
+                                  userItem.status === 'AKTIV' ? 'bg-green-100 text-green-800' :
+                                  userItem.status === 'VENTER' ? 'bg-amber-100 text-amber-800' :
+                                  'bg-red-100 text-red-800'
+                                }`}
+                              >
+                                <option value="AKTIV">AKTIV</option>
+                                <option value="VENTER">VENTER</option>
+                                <option value="INAKTIV">INAKTIV</option>
+                              </select>
+                            )}
                           </td>
 
                           {/* Actions */}
@@ -607,13 +637,15 @@ export default function AdminPortal() {
                                 <Mail className="w-4 h-4" />
                               </button>
                               
-                              <button
-                                onClick={() => handleDeleteUser(userItem.uid, userItem.name)}
-                                className="p-1.5 hover:text-[#ba1a1a] text-[#72787e] transition-colors hover:bg-red-50 rounded-lg"
-                                title="Slett Bruker"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                              {userItem.email?.toLowerCase() !== 'knutsenthomas@gmail.com' && (
+                                <button
+                                  onClick={() => handleDeleteUser(userItem.uid, userItem.name)}
+                                  className="p-1.5 hover:text-[#ba1a1a] text-[#72787e] transition-colors hover:bg-red-50 rounded-lg"
+                                  title="Slett Bruker"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              )}
                             </div>
                           </td>
                         </tr>
