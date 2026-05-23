@@ -142,6 +142,7 @@ export default function LessonView() {
   const [bibleVerses, setBibleVerses] = useState([]);
   const [isBibleLoading, setIsBibleLoading] = useState(false);
   const [highlightedBibleVerse, setHighlightedBibleVerse] = useState(null);
+  const [selectedBibleVerses, setSelectedBibleVerses] = useState([]);
   
   const textareaRef = useRef(null);
   const saveTimeoutRef = useRef(null);
@@ -281,9 +282,11 @@ export default function LessonView() {
         
         if (parsedRef.verse) {
           setHighlightedBibleVerse(parsedRef.verse);
+          setSelectedBibleVerses([parsedRef.verse]); // Auto-select searched verse!
           showToast(`Viser ${foundBook.nor} ${clampedChapter} med vers ${parsedRef.verse} uthevet!`);
         } else {
           setHighlightedBibleVerse(null);
+          setSelectedBibleVerses([]);
           showToast(`Viser ${foundBook.nor} ${clampedChapter}!`);
         }
         setBibleSearchQuery('');
@@ -331,6 +334,7 @@ export default function LessonView() {
               setSelectedBibleBook(detectedBook);
               setSelectedBibleChapter(detectedChapter);
               setHighlightedBibleVerse(resultVerses[0].verse);
+              setSelectedBibleVerses([resultVerses[0].verse]); // Auto-select searched verse!
               showToast(`Viser hele ${detectedBook.nor} ${detectedChapter} med vers ${resultVerses[0].verse} uthevet!`);
               setBibleSearchQuery('');
               return;
@@ -374,7 +378,64 @@ export default function LessonView() {
       saveNotesToFirestore(newText);
     }
     showToast("Skriftsted limt inn i dine notater!");
+    setSelectedBibleVerses([]); // Clear selection when single verse is added
     setSidebarTab('notes');
+  };
+
+  const toggleVerseSelection = (verseNum) => {
+    setSelectedBibleVerses(prev => {
+      if (prev.includes(verseNum)) {
+        return prev.filter(num => num !== verseNum);
+      } else {
+        return [...prev, verseNum].sort((a, b) => a - b);
+      }
+    });
+  };
+
+  const insertSelectedVersesToNotes = () => {
+    if (selectedBibleVerses.length === 0) return;
+    
+    // Sort verse numbers in ascending order
+    const sortedVerseNums = [...selectedBibleVerses].sort((a, b) => a - b);
+    
+    // Get corresponding verse objects
+    const targetVerses = sortedVerseNums
+      .map(num => bibleVerses.find(v => v.verse === num))
+      .filter(Boolean);
+      
+    if (targetVerses.length === 0) return;
+
+    // Combine text neatly: "16 For så har Gud... 17 for Gud sendte..."
+    const combinedText = targetVerses
+      .map(v => `${v.verse} ${v.text.trim()}`)
+      .join(' ');
+
+    // Create the range string: f.eks. "16-17" or "16"
+    const verseRange = sortedVerseNums.length === 1 
+      ? `${sortedVerseNums[0]}` 
+      : `${sortedVerseNums[0]}-${sortedVerseNums[sortedVerseNums.length - 1]}`;
+
+    const transName = selectedBibleTranslation === 'bibelselskap' ? 'N11' : selectedBibleTranslation.toUpperCase();
+    const verseRef = `\n> *"${combinedText}"* — **${selectedBibleBook.nor} ${selectedBibleChapter}:${verseRange}** (${transName})\n\n`;
+    
+    const textarea = textareaRef.current;
+    if (textarea) {
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const newText = notes.substring(0, start) + verseRef + notes.substring(end);
+      setNotes(newText);
+      localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newText);
+      saveNotesToFirestore(newText);
+    } else {
+      const newText = notes + verseRef;
+      setNotes(newText);
+      localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newText);
+      saveNotesToFirestore(newText);
+    }
+    
+    showToast(`${selectedBibleVerses.length} skriftsted${selectedBibleVerses.length > 1 ? 'er' : ''} limt inn i dine notater!`);
+    setSelectedBibleVerses([]); // Clear selection
+    setSidebarTab('notes'); // Switch to notes tab
   };
 
   if (!course || !currentModule) {
@@ -607,6 +668,7 @@ export default function LessonView() {
                     setSelectedBibleBook(f); 
                     setSelectedBibleChapter(1); 
                     setHighlightedBibleVerse(null);
+                    setSelectedBibleVerses([]);
                   }} 
                   className="w-full bg-slate-50 border p-2 rounded-lg text-xs"
                 >
@@ -617,6 +679,7 @@ export default function LessonView() {
                   onChange={(e) => {
                     setSelectedBibleChapter(Number(e.target.value));
                     setHighlightedBibleVerse(null);
+                    setSelectedBibleVerses([]);
                   }} 
                   className="w-full bg-slate-50 border p-2 rounded-lg text-xs"
                 >
@@ -635,10 +698,10 @@ export default function LessonView() {
                     <div 
                       key={v.verse} 
                       id={`v-lesson-${v.verse}`}
-                      onClick={() => setHighlightedBibleVerse(highlightedBibleVerse === v.verse ? null : v.verse)}
+                      onClick={() => toggleVerseSelection(v.verse)}
                       className={`group relative p-2 border-b cursor-pointer transition-all rounded-lg ${
-                        highlightedBibleVerse === v.verse 
-                          ? 'bg-primary/5 border border-primary/20 shadow-sm' 
+                        selectedBibleVerses.includes(v.verse) || highlightedBibleVerse === v.verse
+                          ? 'bg-[#1B4965]/5 border border-[#1B4965]/20 shadow-sm' 
                           : 'hover:bg-slate-100 border border-transparent'
                       }`}
                     >
@@ -659,6 +722,30 @@ export default function LessonView() {
                   <div className="text-center text-xs py-8 text-slate-400">Ingen vers funnet.</div>
                 )}
               </div>
+              
+              {/* Floating control bar for multi-verse selection */}
+              {selectedBibleVerses.length > 0 && (
+                <div className="bg-[#1B4965]/5 border border-[#1B4965]/20 p-3 rounded-xl flex items-center justify-between gap-2 shrink-0 animate-fade-in">
+                  <div className="text-[11px] font-bold text-[#1B4965]">
+                    {selectedBibleVerses.length} {selectedBibleVerses.length === 1 ? 'vers' : 'vers'} valgt
+                  </div>
+                  <div className="flex gap-1.5 text-[11px]">
+                    <button 
+                      onClick={() => setSelectedBibleVerses([])}
+                      className="px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white font-medium text-slate-500 hover:bg-slate-50 active:scale-[0.97] transition-all"
+                    >
+                      Nullstill
+                    </button>
+                    <button 
+                      onClick={insertSelectedVersesToNotes}
+                      className="px-3 py-1.5 bg-[#1B4965] text-white rounded-lg font-bold flex items-center gap-1 hover:bg-[#1B4965]/90 active:scale-[0.97] transition-all shadow-sm"
+                    >
+                      <Send size={10} />
+                      <span>Legg til</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
