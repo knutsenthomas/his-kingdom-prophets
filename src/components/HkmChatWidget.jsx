@@ -13,7 +13,7 @@ const parseInlineStyles = (text, isAssistant) => {
     if (token.startsWith('**') && token.endsWith('**')) {
       const content = token.slice(2, -2);
       return (
-        <strong key={index} className={`font-bold ${isAssistant ? 'text-[#1B4965]' : 'text-white'}`}>
+        <strong key={index} className={`font-bold ${isAssistant ? 'text-[#561291]' : 'text-white'}`}>
           {content}
         </strong>
       );
@@ -58,7 +58,7 @@ const renderRichText = (text, isAssistant) => {
       flushList(`list-before-h-${index}`);
       const headingText = trimmed.slice(4);
       renderedElements.push(
-        <h3 key={`h-${index}`} className={`text-base font-bold mt-4 mb-2 first:mt-0 flex items-center gap-1.5 leading-snug ${isAssistant ? 'text-[#1B4965]' : 'text-white'}`}>
+        <h3 key={`h-${index}`} className={`text-base font-bold mt-4 mb-2 first:mt-0 flex items-center gap-1.5 leading-snug ${isAssistant ? 'text-[#561291]' : 'text-white'}`}>
           {parseInlineStyles(headingText, isAssistant)}
         </h3>
       );
@@ -69,7 +69,7 @@ const renderRichText = (text, isAssistant) => {
       const bulletText = trimmed.slice(2);
       listItems.push(
         <li key={`li-${index}`} className={`flex items-start gap-2 text-sm leading-relaxed ${isAssistant ? 'text-slate-700' : 'text-white/90'}`}>
-          <span className={`${isAssistant ? 'text-[#1B4965]' : 'text-white'} shrink-0 mt-1 select-none`}>•</span>
+          <span className={`${isAssistant ? 'text-[#561291]' : 'text-white'} shrink-0 mt-1 select-none`}>•</span>
           <span className="flex-1">{parseInlineStyles(bulletText, isAssistant)}</span>
         </li>
       );
@@ -82,7 +82,7 @@ const renderRichText = (text, isAssistant) => {
       const bulletText = match[2];
       listItems.push(
         <li key={`li-${index}`} className={`flex items-start gap-2 text-sm leading-relaxed ${isAssistant ? 'text-slate-700' : 'text-white/90'}`}>
-          <span className={`${isAssistant ? 'text-[#1B4965]' : 'text-white'} shrink-0 font-bold text-xs mt-0.5 select-none`}>{num}.</span>
+          <span className={`${isAssistant ? 'text-[#561291]' : 'text-white'} shrink-0 font-bold text-xs mt-0.5 select-none`}>{num}.</span>
           <span className="flex-1">{parseInlineStyles(bulletText, isAssistant)}</span>
         </li>
       );
@@ -165,7 +165,7 @@ export default function HkmChatWidget() {
           position: relative !important;
         }
         .hkm-chat-toggle {
-          background: #1B4965 !important;
+          background: #561291 !important;
           transform: translateZ(0) !important;
           backface-visibility: hidden !important;
           transition: background-color 0.2s ease, transform 0.2s ease !important;
@@ -189,7 +189,7 @@ export default function HkmChatWidget() {
             className="hkm-chat-panel bg-white w-[360px] h-[500px] rounded-2xl shadow-2xl border border-outline-variant flex flex-col overflow-hidden mb-4"
           >
             {/* Header - Deep Brand Blue */}
-            <div className="bg-[#1B4965] text-white px-5 py-4 flex items-center justify-between shadow-sm">
+            <div className="bg-[#561291] text-white px-5 py-4 flex items-center justify-between shadow-sm">
               <div className="flex items-center gap-2.5">
                 <img 
                   src={logo} 

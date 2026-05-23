@@ -126,8 +126,8 @@ export default function TeacherLayout() {
             
             {/* Superadmin System View Switcher */}
             {(['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(user?.email?.toLowerCase()) || user?.email?.includes('superadmin')) && (
-              <div className="hidden md:flex items-center gap-1 bg-[#1B4965]/5 p-1 rounded-xl border border-[#1B4965]/20 shrink-0">
-                <span className="text-[9px] font-bold uppercase tracking-wider text-[#1B4965] px-2">Visning:</span>
+              <div className="hidden md:flex items-center gap-1 bg-[#561291]/5 p-1 rounded-xl border border-[#561291]/20 shrink-0">
+                <span className="text-[9px] font-bold uppercase tracking-wider text-[#561291] px-2">Visning:</span>
                 {[
                   { role: 'student', label: 'Elev', path: '/student/dashboard' },
                   { role: 'teacher', label: 'Mentor', path: '/teacher/dashboard' },
@@ -144,8 +144,8 @@ export default function TeacherLayout() {
                       }}
                       className={`px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all ${
                         isCurrent 
-                          ? 'bg-[#1B4965] text-white shadow-sm font-bold' 
-                          : 'text-[#46617b] hover:bg-[#1B4965]/10 hover:text-[#1B4965]'
+                          ? 'bg-[#561291] text-white shadow-sm font-bold' 
+                          : 'text-[#46617b] hover:bg-[#561291]/10 hover:text-[#561291]'
                       }`}
                     >
                       {opt.label}

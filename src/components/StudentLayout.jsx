@@ -401,8 +401,8 @@ export default function StudentLayout() {
               
               {/* Superadmin System View Switcher */}
               {(['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(user?.email?.toLowerCase()) || user?.email?.includes('superadmin')) && (
-                <div className="hidden md:flex items-center gap-1 bg-[#1B4965]/5 p-1 rounded-xl border border-[#1B4965]/20 shrink-0">
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-[#1B4965] px-2">Visning:</span>
+                <div className="hidden md:flex items-center gap-1 bg-[#561291]/5 p-1 rounded-xl border border-[#561291]/20 shrink-0">
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-[#561291] px-2">Visning:</span>
                   {[
                     { role: 'student', label: 'Elev', path: '/student/dashboard' },
                     { role: 'teacher', label: 'Mentor', path: '/teacher/dashboard' },
@@ -419,8 +419,8 @@ export default function StudentLayout() {
                         }}
                         className={`px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all ${
                           isCurrent 
-                            ? 'bg-[#1B4965] text-white shadow-sm font-bold' 
-                            : 'text-[#46617b] hover:bg-[#1B4965]/10 hover:text-[#1B4965]'
+                            ? 'bg-[#561291] text-white shadow-sm font-bold' 
+                            : 'text-[#46617b] hover:bg-[#561291]/10 hover:text-[#561291]'
                         }`}
                       >
                         {opt.label}
@@ -696,7 +696,7 @@ export default function StudentLayout() {
             >
               {/* Top Search bar inside modal */}
               <div className="flex items-center px-6 py-4 border-b border-outline-variant/30 gap-3">
-                <Search className="text-[#1B4965] shrink-0" size={20} />
+                <Search className="text-[#561291] shrink-0" size={20} />
                 <input 
                   type="text"
                   className="flex-grow bg-transparent border-none focus:ring-0 text-base outline-none font-medium placeholder-outline"
@@ -734,7 +734,7 @@ export default function StudentLayout() {
                     }}
                     className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all active:scale-[0.97] ${
                       searchFilter === chip.id 
-                        ? 'bg-[#1B4965] text-white shadow-sm' 
+                        ? 'bg-[#561291] text-white shadow-sm' 
                         : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
                     }`}
                   >
@@ -787,7 +787,7 @@ export default function StudentLayout() {
                         onClick={() => setSelectedSearchItem(item)}
                         className={`p-4 rounded-2xl border transition-all cursor-pointer text-left ${
                           selectedSearchItem?.id === item.id 
-                            ? 'bg-white border-[#1B4965] shadow-md ring-1 ring-[#1B4965]/20' 
+                            ? 'bg-white border-[#561291] shadow-md ring-1 ring-[#561291]/20' 
                             : 'bg-white border-slate-100 hover:border-slate-300 hover:shadow-sm'
                         }`}
                       >
@@ -822,7 +822,7 @@ export default function StudentLayout() {
                           {/* Back button for mobile view */}
                           <button 
                             onClick={() => setSelectedSearchItem(null)}
-                            className="md:hidden flex items-center gap-1 text-xs font-bold text-[#1B4965] mb-3 hover:underline"
+                            className="md:hidden flex items-center gap-1 text-xs font-bold text-[#561291] mb-3 hover:underline"
                           >
                             <ChevronLeft size={16} />
                             {language === 'en' ? "Back to list" : "Tilbake til listen"}
@@ -839,10 +839,10 @@ export default function StudentLayout() {
                               {selectedSearchItem.category}
                             </span>
                             {selectedSearchItem.relatedCourse && (
-                              <span className="text-[10px] font-semibold text-[#1B4965]">{selectedSearchItem.relatedCourse}</span>
+                              <span className="text-[10px] font-semibold text-[#561291]">{selectedSearchItem.relatedCourse}</span>
                             )}
                           </div>
-                          <h3 className="font-serif font-bold text-xl text-[#1B4965] leading-tight">{selectedSearchItem.title}</h3>
+                          <h3 className="font-serif font-bold text-xl text-[#561291] leading-tight">{selectedSearchItem.title}</h3>
                           <p className="text-xs text-outline font-medium mt-1 italic">{selectedSearchItem.subtitle}</p>
                         </div>
 
@@ -875,7 +875,7 @@ export default function StudentLayout() {
                       <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-2 mt-6">
                         <button
                           onClick={() => handleAskAssistant(selectedSearchItem)}
-                          className="flex-1 bg-[#1B4965] hover:bg-[#123247] text-white py-2.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-[0.98] shadow-sm cursor-pointer"
+                          className="flex-1 bg-[#561291] hover:bg-[#123247] text-white py-2.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-[0.98] shadow-sm cursor-pointer"
                         >
                           <MessageSquare size={14} />
                           {language === 'en' ? "Ask HKM Assistant" : "Spør HKM Assistent"}
@@ -886,7 +886,7 @@ export default function StudentLayout() {
                               setIsSearchOpen(false);
                               navigate(selectedSearchItem.route);
                             }}
-                            className="bg-white border border-[#1B4965] text-[#1B4965] hover:bg-[#1B4965]/5 py-2.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-[0.98] cursor-pointer"
+                            className="bg-white border border-[#561291] text-[#561291] hover:bg-[#561291]/5 py-2.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-[0.98] cursor-pointer"
                           >
                             {language === 'en' ? "Open Resource" : "Åpne Ressurs"}
                             <ArrowRight size={14} />

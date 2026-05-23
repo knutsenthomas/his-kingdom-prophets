@@ -1645,7 +1645,7 @@ export const AppProvider = ({ children }) => {
           text: `Ny henvendelse fra ${ticketData.name} (${ticketData.email}):\n\n${ticketData.message}`,
           html: `
             <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; border: 1px solid #eee; border-radius: 8px;">
-              <h2 style="color: #1B4965; border-bottom: 2px solid #1B4965; padding-bottom: 10px; margin-top: 0;">Ny support-henvendelse</h2>
+              <h2 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 10px; margin-top: 0;">Ny support-henvendelse</h2>
               <p><strong>Navn:</strong> ${ticketData.name}</p>
               <p><strong>E-post:</strong> <a href="mailto:${ticketData.email}">${ticketData.email}</a></p>
               <p><strong>Kilde:</strong> ${ticketData.source === 'support_center' ? 'Studentportal / Hjelpesenter' : 'Offentlig kontaktside'}</p>

@@ -29,7 +29,7 @@ export default function StudentDashboard() {
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-primary to-[#1B4965] rounded-2xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden"
+        className="bg-gradient-to-r from-primary to-[#561291] rounded-2xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden"
       >
         <div className="absolute right-0 bottom-0 opacity-10 translate-x-12 translate-y-12">
           <GraduationCap size={240} />

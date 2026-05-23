@@ -9,10 +9,10 @@ export default {
     extend: {
       colors: {
         // Core theme colors from design system
-        primary: "#00324b",
-        "primary-container": "#1b4965",
+        primary: "#3c096c",
+        "primary-container": "#561291",
         "on-primary": "#ffffff",
-        "on-primary-container": "#8eb8d8",
+        "on-primary-container": "#e0aaff",
         
         secondary: "#46617b",
         "secondary-container": "#c4e0fe",
@@ -50,15 +50,15 @@ export default {
         
         "inverse-surface": "#2c3134",
         "inverse-on-surface": "#edf1f5",
-        "inverse-primary": "#a1cced",
+        "inverse-primary": "#d8b4fe",
         
         // Fixed variants
-        "primary-fixed": "#c9e6ff",
-        "primary-fixed-dim": "#a1cced",
+        "primary-fixed": "#f3e8ff",
+        "primary-fixed-dim": "#d8b4fe",
         "on-primary-fixed": "#001e2f",
-        "on-primary-fixed-variant": "#1d4b67",
+        "on-primary-fixed-variant": "#561291",
         
-        "secondary-fixed": "#cee5ff",
+        "secondary-fixed": "#f3e8ff",
         "secondary-fixed-dim": "#aec9e7",
         "on-secondary-fixed": "#001d32",
         "on-secondary-fixed-variant": "#2e4962",

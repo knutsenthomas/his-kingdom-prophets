@@ -124,7 +124,7 @@ export default function CourseInsights() {
         <div className="bg-white border border-outline-variant/30 rounded-2xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
           <div className="space-y-1">
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">Gjennomsnittlig Tidsbruk</p>
-            <h3 className="text-lg font-bold font-serif text-[#00324b]">1t 12m</h3>
+            <h3 className="text-lg font-bold font-serif text-[#3c096c]">1t 12m</h3>
             <p className="text-[9px] text-[#866324] font-semibold flex items-center gap-0.5">
               <Clock size={10} /> Per leksjonsmodul
             </p>
@@ -137,7 +137,7 @@ export default function CourseInsights() {
         <div className="bg-white border border-outline-variant/30 rounded-2xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
           <div className="space-y-1">
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">Gjennomføringsindeks</p>
-            <h3 className="text-lg font-bold font-serif text-[#00324b]">74.5%</h3>
+            <h3 className="text-lg font-bold font-serif text-[#3c096c]">74.5%</h3>
             <p className="text-[9px] text-green-600 font-semibold flex items-center gap-0.5">
               <TrendingUp size={10} /> +2.4% denne måneden
             </p>
@@ -150,7 +150,7 @@ export default function CourseInsights() {
         <div className="bg-white border border-outline-variant/30 rounded-2xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
           <div className="space-y-1">
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">Kritiske Drops</p>
-            <h3 className="text-lg font-bold font-serif text-[#00324b]">3 moduler</h3>
+            <h3 className="text-lg font-bold font-serif text-[#3c096c]">3 moduler</h3>
             <p className="text-[9px] text-red-600 font-semibold flex items-center gap-0.5">
               <AlertTriangle size={10} /> Har over 25% frafall
             </p>
@@ -163,7 +163,7 @@ export default function CourseInsights() {
         <div className="bg-white border border-outline-variant/30 rounded-2xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
           <div className="space-y-1">
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">Støttefrekvens</p>
-            <h3 className="text-lg font-bold font-serif text-[#00324b]">88%</h3>
+            <h3 className="text-lg font-bold font-serif text-[#3c096c]">88%</h3>
             <p className="text-[9px] text-blue-600 font-semibold flex items-center gap-0.5">
               <CheckCircle size={10} /> Oppfølging innen 24t
             </p>
@@ -283,7 +283,7 @@ export default function CourseInsights() {
                       <span className="text-red-500 font-mono">{student.daysInactive} dager inaktiv</span>
                       <button
                         onClick={() => handleOpenOutreach(student)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#1B4965] hover:bg-[#0f344c] text-white rounded shadow-sm hover:shadow transition-all active:scale-[0.97]"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#561291] hover:bg-[#0f344c] text-white rounded shadow-sm hover:shadow transition-all active:scale-[0.97]"
                       >
                         <MessageSquare size={11} />
                         <span>Send oppfølging</span>
@@ -316,7 +316,7 @@ export default function CourseInsights() {
               style={{ transform: 'translateZ(0) !important', backfaceVisibility: 'hidden !important' }}
             >
               {/* Modal Header */}
-              <div className="bg-[#1B4965] p-5 text-white flex justify-between items-center">
+              <div className="bg-[#561291] p-5 text-white flex justify-between items-center">
                 <div>
                   <h3 className="font-serif font-bold text-base flex items-center gap-1.5">
                     <Sparkles size={16} className="text-[#c5a059]" /> Send disippelskaps-oppfølging
@@ -353,14 +353,14 @@ export default function CourseInsights() {
                   <button
                     type="button"
                     onClick={() => setSelectedStudent(null)}
-                    className="px-4 py-2 border border-outline-variant/30 rounded-lg text-xs font-bold text-[#1B4965] hover:bg-slate-50 transition-colors uppercase tracking-wider active:scale-[0.98]"
+                    className="px-4 py-2 border border-outline-variant/30 rounded-lg text-xs font-bold text-[#561291] hover:bg-slate-50 transition-colors uppercase tracking-wider active:scale-[0.98]"
                   >
                     Avbryt
                   </button>
                   <button
                     type="submit"
                     disabled={isSending}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-[#1B4965] hover:bg-[#0f344c] text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow transition-all active:scale-[0.97] disabled:opacity-50"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-[#561291] hover:bg-[#0f344c] text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow transition-all active:scale-[0.97] disabled:opacity-50"
                   >
                     {isSending ? (
                       <span>Sender...</span>

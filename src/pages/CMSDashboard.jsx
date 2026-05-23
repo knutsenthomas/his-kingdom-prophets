@@ -512,7 +512,7 @@ export default function CMSDashboard() {
           <button 
             onClick={handlePublish}
             disabled={isPublishing}
-            className="px-6 py-2 bg-[#1B4965] hover:bg-[#1B4965]/90 text-white text-xs font-bold uppercase rounded-lg shadow-sm flex items-center gap-1.5 transition-all active:scale-95 disabled:opacity-60 shrink-0"
+            className="px-6 py-2 bg-[#561291] hover:bg-[#561291]/90 text-white text-xs font-bold uppercase rounded-lg shadow-sm flex items-center gap-1.5 transition-all active:scale-95 disabled:opacity-60 shrink-0"
           >
             {isPublishing ? (
               <>
@@ -749,7 +749,7 @@ export default function CMSDashboard() {
                   className={`group bg-white border transition-all p-5 rounded-xl flex flex-col gap-4 shadow-sm hover:shadow ${
                     isMissing 
                       ? 'border-dashed border-red-300 hover:border-red-500' 
-                      : 'border-outline-variant/30 hover:border-[#1B4965]'
+                      : 'border-outline-variant/30 hover:border-[#561291]'
                   }`}
                 >
                   <div className="grid grid-cols-1 grid-flow-row md:grid-cols-12 gap-4 items-start" style={{ display: 'block' }}>
@@ -902,7 +902,7 @@ export default function CMSDashboard() {
                         onClick={() => setCurrentPage(page)}
                         className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold transition-all ${
                           isCurrent 
-                            ? 'bg-[#1B4965] text-white shadow-sm' 
+                            ? 'bg-[#561291] text-white shadow-sm' 
                             : 'hover:bg-slate-50 text-on-surface'
                         }`}
                       >
@@ -1015,7 +1015,7 @@ export default function CMSDashboard() {
                       setTimeout(() => setShowToast(false), 3000);
                     }
                   }}
-                  className="w-full py-3 bg-[#1B4965] hover:bg-[#1B4965]/90 text-white text-xs font-bold uppercase rounded-lg shadow active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-[#561291] hover:bg-[#561291]/90 text-white text-xs font-bold uppercase rounded-lg shadow active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                 >
                   <RotateCcw size={16} /> Gjenopprett forrige revisjon (#3)
                 </button>

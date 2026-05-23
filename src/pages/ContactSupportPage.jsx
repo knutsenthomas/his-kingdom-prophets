@@ -60,7 +60,7 @@ export default function ContactSupportPage() {
           <div className="flex items-center gap-4">
             <button 
               onClick={toggleLanguage}
-              className="px-3 py-1.5 border border-[#1B4965]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#1B4965]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
+              className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
               title={isEn ? 'Bytt til norsk (Switch to Norwegian)' : 'Bytt til engelsk (Switch to English)'}
             >
               <Globe size={13} />
@@ -84,10 +84,10 @@ export default function ContactSupportPage() {
           {/* Left Column - Contact Details */}
           <div className="lg:col-span-5 space-y-6 sm:space-y-8 flex flex-col justify-center">
             <div className="space-y-4">
-              <span className="px-3.5 py-1 rounded-full bg-[#1B4965]/10 text-primary text-[10px] font-bold uppercase tracking-wider border border-[#1B4965]/20">
+              <span className="px-3.5 py-1 rounded-full bg-[#561291]/10 text-primary text-[10px] font-bold uppercase tracking-wider border border-[#561291]/20">
                 {isEn ? 'Direct Support' : 'Brukerstøtte'}
               </span>
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#1B4965] leading-tight">
+              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#561291] leading-tight">
                 {isEn ? 'Get in Touch with Us' : 'Kontakt Kundestøtte'}
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-medium">
@@ -285,7 +285,7 @@ export default function ContactSupportPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-8 bg-[#1B4965] text-white/80 text-center text-xs mt-12 border-t border-slate-700/30 font-medium">
+      <footer className="w-full py-8 bg-[#561291] text-white/80 text-center text-xs mt-12 border-t border-slate-700/30 font-medium">
         <p>© 2026 His Kingdom Prophets. All rights reserved.</p>
       </footer>
     </div>

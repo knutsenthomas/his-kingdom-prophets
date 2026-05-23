@@ -235,7 +235,7 @@ export default function AffiliatePortal() {
             </div>
           </div>
 
-          <div className="bg-[#1B4965]/5 border border-[#1B4965]/10 rounded-2xl p-6 space-y-3.5">
+          <div className="bg-[#561291]/5 border border-[#561291]/10 rounded-2xl p-6 space-y-3.5">
             <h3 className="text-xs font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
               <HelpCircle size={14} className="text-[#c5a059]" /> Slik fungerer det
             </h3>
@@ -259,7 +259,7 @@ function StatCard({ label, value, desc, icon }) {
     <div className="bg-white border border-outline-variant/30 rounded-2xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
       <div className="space-y-1">
         <p className="text-[10px] font-bold uppercase tracking-wider text-outline">{label}</p>
-        <h3 className="text-lg font-bold font-serif text-[#00324b]">{value}</h3>
+        <h3 className="text-lg font-bold font-serif text-[#3c096c]">{value}</h3>
         <p className="text-[9px] text-[#8a682d] font-semibold">{desc}</p>
       </div>
       <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-center shrink-0 shadow-inner">

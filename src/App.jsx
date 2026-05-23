@@ -138,7 +138,7 @@ export default function App() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-8 left-8 z-[200] bg-[#00324b] text-white border-b-4 border-[#c5a059] px-6 py-4 rounded-lg shadow-2xl flex items-center gap-3.5 max-w-sm"
+            className="fixed bottom-8 left-8 z-[200] bg-[#3c096c] text-white border-b-4 border-[#c5a059] px-6 py-4 rounded-lg shadow-2xl flex items-center gap-3.5 max-w-sm"
           >
             <div className="p-1.5 bg-[#c5a059]/20 text-[#c5a059] rounded-full shrink-0">
               <Sparkles size={16} />

@@ -324,7 +324,7 @@ export default function MarketingGrowth() {
               <Gift size={18} className="text-[#c5a059]" /> Gjensidig henvisningsprogram (Referrals)
             </h3>
             
-            <div className="bg-[#f6fafe] border-l-4 border-[#00324b] p-4 rounded-r-xl text-xs font-semibold text-[#46617b] mb-6 flex gap-2.5 items-start">
+            <div className="bg-[#f6fafe] border-l-4 border-[#3c096c] p-4 rounded-r-xl text-xs font-semibold text-[#46617b] mb-6 flex gap-2.5 items-start">
               <Info size={16} className="text-primary shrink-0 mt-0.5" />
               <p>
                 Studenter som deler sin personlige henvisningslenke belønnes med 100 vekstpoeng. Den inviterte studenten får automatisk 20% rabatt på sitt første semester.
@@ -345,7 +345,7 @@ export default function MarketingGrowth() {
                 <tbody className="divide-y divide-[#c1c7ce]/20 text-xs font-semibold text-[#41474d]">
                   {referrals.map((ref) => (
                     <tr key={ref.id} className="hover:bg-[#f6fafe]/60 transition-colors">
-                      <td className="px-4 py-3 font-bold text-[#00324b]">{ref.referrer}</td>
+                      <td className="px-4 py-3 font-bold text-[#3c096c]">{ref.referrer}</td>
                       <td className="px-4 py-3">{ref.referee}</td>
                       <td className="px-4 py-3 text-outline">{ref.date}</td>
                       <td className="px-4 py-3 text-[#c5a059] font-bold">+{ref.points}</td>
@@ -426,7 +426,7 @@ export default function MarketingGrowth() {
 
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-1.5 bg-[#00324b] hover:opacity-95 text-white py-2 rounded-lg text-xs font-bold transition-all active:scale-[0.98] shadow"
+                className="w-full flex items-center justify-center gap-1.5 bg-[#3c096c] hover:opacity-95 text-white py-2 rounded-lg text-xs font-bold transition-all active:scale-[0.98] shadow"
               >
                 <Plus size={14} />
                 Aktiver Kampanje
@@ -439,7 +439,7 @@ export default function MarketingGrowth() {
                 <div key={camp.id} className="p-4 border border-outline-variant/40 rounded-xl hover:border-primary/50 hover:bg-[#f6fafe]/30 transition-all duration-300">
                   <div className="flex justify-between items-start gap-2">
                     <div>
-                      <h4 className="font-bold text-sm text-[#00324b] flex items-center gap-1.5">
+                      <h4 className="font-bold text-sm text-[#3c096c] flex items-center gap-1.5">
                         {camp.name}
                         <span className={`text-[8px] font-bold uppercase px-2 py-0.5 rounded-full ${
                           camp.status === 'Aktiv' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'
@@ -465,7 +465,7 @@ export default function MarketingGrowth() {
                     </span>
                     <button
                       onClick={() => copyToClipboard(window.location.origin + camp.link, camp.id)}
-                      className="shrink-0 flex items-center gap-1 px-3 py-1.5 bg-[#00324b]/10 text-[#00324b] hover:bg-[#00324b] hover:text-white rounded-lg text-[10px] font-bold transition-colors"
+                      className="shrink-0 flex items-center gap-1 px-3 py-1.5 bg-[#3c096c]/10 text-[#3c096c] hover:bg-[#3c096c] hover:text-white rounded-lg text-[10px] font-bold transition-colors"
                     >
                       {copiedId === camp.id ? <Check size={10} /> : <Copy size={10} />}
                       Kopier

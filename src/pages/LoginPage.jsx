@@ -94,8 +94,8 @@ export default function LoginPage() {
     <div className="bg-[#f6fafe] text-[#171c1f] font-sans min-h-screen flex items-center justify-center p-4 sm:p-8 relative overflow-hidden">
       
       {/* Background blobs for premium glassmorphic effect */}
-      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#1b4965]/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[#cee5ff]/30 blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#561291]/10 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[#f3e8ff]/30 blur-[120px] pointer-events-none" />
 
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
@@ -115,7 +115,7 @@ export default function LoginPage() {
           </div>
           <div 
             onClick={() => navigate('/')} 
-            className="font-serif text-3xl sm:text-4xl font-bold text-[#00324b] mb-2 cursor-pointer tracking-tight hover:opacity-90 active:scale-[0.99] transition-all"
+            className="font-serif text-3xl sm:text-4xl font-bold text-[#3c096c] mb-2 cursor-pointer tracking-tight hover:opacity-90 active:scale-[0.99] transition-all"
           >
             <CmsText slug="login-title" fallback="His Kingdom Prophets" />
           </div>
@@ -177,24 +177,24 @@ export default function LoginPage() {
               type="button"
               onClick={() => setLoginMethod('password')}
               className={`pb-2.5 text-xs uppercase tracking-wider font-bold transition-all relative ${
-                loginMethod === 'password' ? 'text-[#00324b]' : 'text-[#72787e] hover:text-[#41474d]'
+                loginMethod === 'password' ? 'text-[#3c096c]' : 'text-[#72787e] hover:text-[#41474d]'
               }`}
             >
               Passord
               {loginMethod === 'password' && (
-                <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00324b]" layoutId="loginMethodLine" />
+                <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#3c096c]" layoutId="loginMethodLine" />
               )}
             </button>
             <button
               type="button"
               onClick={() => setLoginMethod('passwordless')}
               className={`pb-2.5 text-xs uppercase tracking-wider font-bold transition-all relative ${
-                loginMethod === 'passwordless' ? 'text-[#00324b]' : 'text-[#72787e] hover:text-[#41474d]'
+                loginMethod === 'passwordless' ? 'text-[#3c096c]' : 'text-[#72787e] hover:text-[#41474d]'
               }`}
             >
               Løsinnlogging (Uten Passord)
               {loginMethod === 'passwordless' && (
-                <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00324b]" layoutId="loginMethodLine" />
+                <motion.div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#3c096c]" layoutId="loginMethodLine" />
               )}
             </button>
           </div>
@@ -210,7 +210,7 @@ export default function LoginPage() {
                   placeholder="knutsenthomas@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
+                  className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#561291] focus:outline-none transition-all"
                   required
                 />
               </div>
@@ -223,7 +223,7 @@ export default function LoginPage() {
                   <button 
                     type="button" 
                     onClick={() => showToast('Passordgjenoppretting er sendt til din e-post!')}
-                    className="text-xs text-[#00324b] hover:underline font-semibold"
+                    className="text-xs text-[#3c096c] hover:underline font-semibold"
                   >
                     Glemt passord?
                   </button>
@@ -235,7 +235,7 @@ export default function LoginPage() {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
+                    className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#561291] focus:outline-none transition-all"
                     required
                   />
                 </div>
@@ -244,7 +244,7 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-full bg-[#00324b] text-white py-3.5 rounded-xl hover:opacity-95 transition-all font-bold text-sm active:scale-[0.99] shadow-md mt-6 flex items-center justify-center gap-2"
+              className="w-full bg-[#3c096c] text-white py-3.5 rounded-xl hover:opacity-95 transition-all font-bold text-sm active:scale-[0.99] shadow-md mt-6 flex items-center justify-center gap-2"
             >
               <Key className="w-4 h-4" />
               {loginMethod === 'password' ? 'Logg inn med passord' : 'Send meg magisk lenke'}

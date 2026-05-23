@@ -159,7 +159,7 @@ export default function TeacherDashboard() {
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">
               <CmsText slug="teacher-kpi1-label" fallback="Aktive studenter" />
             </p>
-            <h3 className="text-3xl font-bold font-serif text-[#00324b]">{students.length + 45}</h3>
+            <h3 className="text-3xl font-bold font-serif text-[#3c096c]">{students.length + 45}</h3>
             <p className="text-[10px] text-green-600 font-semibold flex items-center gap-1">
               <TrendingUp size={12} /> +12% fra forrige måned
             </p>
@@ -175,9 +175,9 @@ export default function TeacherDashboard() {
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">
               <CmsText slug="teacher-kpi2-label" fallback="Faglig Snittfremdrift" />
             </p>
-            <h3 className="text-3xl font-bold font-serif text-[#00324b]">48%</h3>
+            <h3 className="text-3xl font-bold font-serif text-[#3c096c]">48%</h3>
             <div className="h-1.5 w-24 bg-slate-100 rounded-full overflow-hidden mt-2">
-              <div className="h-full bg-[#00324b] w-[48%]" />
+              <div className="h-full bg-[#3c096c] w-[48%]" />
             </div>
           </div>
           <div className="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
@@ -191,7 +191,7 @@ export default function TeacherDashboard() {
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">
               <CmsText slug="teacher-kpi3-label" fallback="Evalueringssnitt" />
             </p>
-            <h3 className="text-3xl font-bold font-serif text-[#00324b]">A-</h3>
+            <h3 className="text-3xl font-bold font-serif text-[#3c096c]">A-</h3>
             <p className="text-[10px] text-outline font-semibold">Basert på siste innleveringer</p>
           </div>
           <div className="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
@@ -266,7 +266,7 @@ export default function TeacherDashboard() {
                       <span className="text-slate-300">•</span>
                       <span>Lærer: {item.instructor}</span>
                       <span className="text-slate-300">•</span>
-                      <span className="flex items-center gap-1 text-[#00324b]">
+                      <span className="flex items-center gap-1 text-[#3c096c]">
                         <Users size={12} /> {item.studentsCount} studenter
                       </span>
                     </div>
@@ -277,7 +277,7 @@ export default function TeacherDashboard() {
                     className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all shrink-0 active:scale-95 shadow-sm ${
                       item.status === 'live'
                         ? 'bg-[#c5a059] hover:bg-[#b08b45] text-white'
-                        : 'bg-[#00324b] hover:opacity-95 text-white'
+                        : 'bg-[#3c096c] hover:opacity-95 text-white'
                     }`}
                   >
                     <Video size={14} />
@@ -303,7 +303,7 @@ export default function TeacherDashboard() {
             {submittedAssignments.length === 0 ? (
               <div className="text-center py-10 border border-dashed border-outline-variant/50 rounded-xl bg-slate-50">
                 <CheckCircle size={32} className="text-green-500 mx-auto mb-3" />
-                <p className="text-sm font-bold text-[#00324b]">Alle oppgaver er vurdert!</p>
+                <p className="text-sm font-bold text-[#3c096c]">Alle oppgaver er vurdert!</p>
                 <p className="text-xs text-outline font-semibold mt-1">Gode mentorer holder orden i studieplanen.</p>
               </div>
             ) : (
@@ -315,7 +315,7 @@ export default function TeacherDashboard() {
                   >
                     <div className="space-y-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[9px] font-bold bg-[#f0f4f8] text-[#00324b] px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        <span className="text-[9px] font-bold bg-[#f0f4f8] text-[#3c096c] px-2 py-0.5 rounded-full uppercase tracking-wider">
                           {assignment.courseCode}
                         </span>
                         <span className="text-[10px] text-outline font-semibold">
@@ -324,7 +324,7 @@ export default function TeacherDashboard() {
                       </div>
                       <h4 className="font-serif text-base font-bold text-primary truncate pr-4">{assignment.title}</h4>
                       <p className="text-xs text-on-surface-variant font-medium">
-                        Student: <span className="font-bold text-[#00324b]">Thomas Knutsen</span> (Student-persona)
+                        Student: <span className="font-bold text-[#3c096c]">Thomas Knutsen</span> (Student-persona)
                       </p>
                       <div className="flex items-center gap-1.5 text-xs text-[#c5a059] font-bold pt-1.5">
                         <FileText size={12} />
@@ -334,7 +334,7 @@ export default function TeacherDashboard() {
 
                     <button
                       onClick={() => handleOpenGrader(assignment)}
-                      className="flex items-center gap-1 px-4 py-2 bg-[#00324b] hover:opacity-95 text-white rounded-lg text-xs font-bold transition-all shrink-0 active:scale-95"
+                      className="flex items-center gap-1 px-4 py-2 bg-[#3c096c] hover:opacity-95 text-white rounded-lg text-xs font-bold transition-all shrink-0 active:scale-95"
                     >
                       <span>Vurder besvarelse</span>
                       <ChevronRight size={14} />
@@ -490,7 +490,7 @@ export default function TeacherDashboard() {
               className="bg-white rounded-3xl border border-outline-variant/30 max-w-2xl w-full overflow-hidden shadow-2xl relative z-10 text-on-surface flex flex-col max-h-[90vh]"
             >
               {/* Header */}
-              <div className="bg-[#00324b] text-white px-6 py-4 flex justify-between items-center">
+              <div className="bg-[#3c096c] text-white px-6 py-4 flex justify-between items-center">
                 <div className="space-y-0.5">
                   <span className="text-[9px] font-bold bg-white/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
                     {selectedGradingAssignment.courseCode} • Sensur
@@ -566,7 +566,7 @@ export default function TeacherDashboard() {
                 {/* Submit button */}
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-1.5 bg-[#00324b] hover:opacity-95 text-white py-3 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
+                  className="w-full flex items-center justify-center gap-1.5 bg-[#3c096c] hover:opacity-95 text-white py-3 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
                 >
                   <CheckCircle size={16} />
                   Lagre og publiser vurdering
@@ -596,7 +596,7 @@ export default function TeacherDashboard() {
               className="bg-white rounded-3xl border border-outline-variant/30 max-w-md w-full overflow-hidden shadow-2xl relative z-10 text-on-surface"
             >
               {/* Header */}
-              <div className="bg-[#00324b] text-white px-6 py-4 flex justify-between items-center">
+              <div className="bg-[#3c096c] text-white px-6 py-4 flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   <AlertTriangle size={18} className="text-[#c5a059]" />
                   <h3 className="font-serif text-sm sm:text-base font-bold">Pastoral oppmuntring & Veiledning</h3>
@@ -647,7 +647,7 @@ export default function TeacherDashboard() {
                   <button
                     type="submit"
                     disabled={isSendingOutreach}
-                    className="flex-grow flex items-center justify-center gap-1.5 bg-[#00324b] hover:opacity-95 disabled:opacity-50 text-white py-2.5 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
+                    className="flex-grow flex items-center justify-center gap-1.5 bg-[#3c096c] hover:opacity-95 disabled:opacity-50 text-white py-2.5 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
                   >
                     <Send size={12} />
                     {isSendingOutreach ? 'Sender...' : 'Send melding'}

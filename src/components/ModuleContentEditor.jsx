@@ -215,7 +215,7 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
       >
 
         {/* ── Header ─────────────────────────────────────────────────────── */}
-        <div className="bg-[#1B4965] text-white px-6 py-5 flex items-start justify-between gap-4 shrink-0">
+        <div className="bg-[#561291] text-white px-6 py-5 flex items-start justify-between gap-4 shrink-0">
           <div className="min-w-0">
             <p className="text-[9px] font-bold uppercase tracking-widest text-white/50 mb-1">Innholdsredigerer</p>
             <h2 className="font-serif text-lg md:text-xl font-bold leading-snug truncate">{mod.title}</h2>

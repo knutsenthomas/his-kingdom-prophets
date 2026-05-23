@@ -46,7 +46,7 @@ export default function LandingPage() {
             <div className="hidden lg:flex items-center gap-4">
               <button 
                 onClick={toggleLanguage}
-                className="px-3 py-1.5 border border-[#1B4965]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#1B4965]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
+                className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
                 title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
               >
                 <Globe size={13} />
@@ -70,7 +70,7 @@ export default function LandingPage() {
             <div className="lg:hidden flex items-center gap-1.5 sm:gap-3">
               <button 
                 onClick={toggleLanguage}
-                className="px-2.5 sm:px-3 py-1.5 border border-[#1B4965]/20 hover:border-primary text-[10px] sm:text-xs font-bold uppercase rounded-lg text-primary bg-[#1B4965]/5 transition-all active:scale-95 flex items-center gap-1 shadow-sm shrink-0"
+                className="px-2.5 sm:px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-[10px] sm:text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1 shadow-sm shrink-0"
                 title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
               >
                 <Globe size={12} />
@@ -159,7 +159,7 @@ export default function LandingPage() {
               <div className="pt-6 border-t border-slate-100 space-y-3.5">
                 <button
                   onClick={toggleLanguage}
-                  className="w-full py-3 border border-[#1B4965]/20 text-primary hover:bg-[#1B4965]/5 font-bold rounded-xl text-xs transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 bg-white shadow-sm"
+                  className="w-full py-3 border border-[#561291]/20 text-primary hover:bg-[#561291]/5 font-bold rounded-xl text-xs transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 bg-white shadow-sm"
                 >
                   <Globe size={14} />
                   <span>{language === 'no' ? 'Bytt til Engelsk (EN)' : 'Switch to Norwegian (NO)'}</span>
@@ -249,10 +249,10 @@ export default function LandingPage() {
           {/* Exactly 3 Symmetrical, Balanced Pillars */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Pillar 1 */}
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(27,73,101,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#1B4965]/20 hover:shadow-[0_12px_32px_rgba(27,73,101,0.06)] transition-all duration-300 ease-out min-h-[360px]">
-              <span className="absolute top-6 right-8 font-serif text-5xl font-extrabold text-[#1B4965]/5 select-none pointer-events-none group-hover:text-[#1B4965]/10 transition-colors duration-300">01</span>
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(27,73,101,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#561291]/20 hover:shadow-[0_12px_32px_rgba(27,73,101,0.06)] transition-all duration-300 ease-out min-h-[360px]">
+              <span className="absolute top-6 right-8 font-serif text-5xl font-extrabold text-[#561291]/5 select-none pointer-events-none group-hover:text-[#561291]/10 transition-colors duration-300">01</span>
               <div>
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1B4965]/10 to-[#1B4965]/5 flex items-center justify-center text-[#1B4965] mb-6 group-hover:scale-105 transition-transform duration-300">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#561291]/10 to-[#561291]/5 flex items-center justify-center text-[#561291] mb-6 group-hover:scale-105 transition-transform duration-300">
                   <Sparkles size={22} />
                 </div>
                 <CmsText 
@@ -285,10 +285,10 @@ export default function LandingPage() {
             </div>
 
             {/* Pillar 2 */}
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(27,73,101,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#1B4965]/20 hover:shadow-[0_12px_32px_rgba(27,73,101,0.06)] transition-all duration-300 ease-out min-h-[360px]">
-              <span className="absolute top-6 right-8 font-serif text-5xl font-extrabold text-[#1B4965]/5 select-none pointer-events-none group-hover:text-[#1B4965]/10 transition-colors duration-300">02</span>
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(27,73,101,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#561291]/20 hover:shadow-[0_12px_32px_rgba(27,73,101,0.06)] transition-all duration-300 ease-out min-h-[360px]">
+              <span className="absolute top-6 right-8 font-serif text-5xl font-extrabold text-[#561291]/5 select-none pointer-events-none group-hover:text-[#561291]/10 transition-colors duration-300">02</span>
               <div>
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1B4965]/10 to-[#1B4965]/5 flex items-center justify-center text-[#1B4965] mb-6 group-hover:scale-105 transition-transform duration-300">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#561291]/10 to-[#561291]/5 flex items-center justify-center text-[#561291] mb-6 group-hover:scale-105 transition-transform duration-300">
                   <BookOpen size={22} />
                 </div>
                 <CmsText 
@@ -321,10 +321,10 @@ export default function LandingPage() {
             </div>
 
             {/* Pillar 3 */}
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(27,73,101,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#1B4965]/20 hover:shadow-[0_12px_32px_rgba(27,73,101,0.06)] transition-all duration-300 ease-out min-h-[360px]">
-              <span className="absolute top-6 right-8 font-serif text-5xl font-extrabold text-[#1B4965]/5 select-none pointer-events-none group-hover:text-[#1B4965]/10 transition-colors duration-300">03</span>
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(27,73,101,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#561291]/20 hover:shadow-[0_12px_32px_rgba(27,73,101,0.06)] transition-all duration-300 ease-out min-h-[360px]">
+              <span className="absolute top-6 right-8 font-serif text-5xl font-extrabold text-[#561291]/5 select-none pointer-events-none group-hover:text-[#561291]/10 transition-colors duration-300">03</span>
               <div>
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1B4965]/10 to-[#1B4965]/5 flex items-center justify-center text-[#1B4965] mb-6 group-hover:scale-105 transition-transform duration-300">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#561291]/10 to-[#561291]/5 flex items-center justify-center text-[#561291] mb-6 group-hover:scale-105 transition-transform duration-300">
                   <UserCheck size={22} />
                 </div>
                 <CmsText 
@@ -358,20 +358,20 @@ export default function LandingPage() {
           </div>
           
           {/* Symmetrical full-width global network banner below */}
-          <div className="mt-12 bg-gradient-to-r from-[#1B4965]/5 to-transparent border border-[#1B4965]/10 rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-[#1B4965]/20 transition-all duration-300 shadow-sm relative overflow-hidden group">
+          <div className="mt-12 bg-gradient-to-r from-[#561291]/5 to-transparent border border-[#561291]/10 rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-[#561291]/20 transition-all duration-300 shadow-sm relative overflow-hidden group">
             <div className="flex items-center gap-4 sm:gap-6 relative z-10">
-              <div className="w-14 h-14 rounded-full bg-white text-[#1B4965] shadow-sm flex items-center justify-center border border-slate-100 flex-shrink-0 animate-float">
-                <Globe size={26} className="text-[#1B4965]" />
+              <div className="w-14 h-14 rounded-full bg-white text-[#561291] shadow-sm flex items-center justify-center border border-slate-100 flex-shrink-0 animate-float">
+                <Globe size={26} className="text-[#561291]" />
               </div>
               <div className="space-y-1">
-                <CmsText slug="landing-network-title" fallback="Globale Profetiske Nettverk" as="h4" className="font-serif text-lg text-[#1B4965] font-bold" />
+                <CmsText slug="landing-network-title" fallback="Globale Profetiske Nettverk" as="h4" className="font-serif text-lg text-[#561291] font-bold" />
                 <CmsText slug="landing-network-desc" fallback="Koble deg til bønnenettverk, misjonsreiser og tjenester over hele verden for å utvide ditt åndelige perspektiv." as="p" className="text-xs sm:text-sm text-[#46617b] leading-relaxed max-w-2xl" />
               </div>
             </div>
             
             <button 
               onClick={() => navigate('/login')}
-              className="relative z-10 shrink-0 px-6 py-3 bg-[#1B4965] hover:bg-[#00324b] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm hover:shadow active:scale-[0.98] flex items-center gap-2 group-hover:translate-x-0.5"
+              className="relative z-10 shrink-0 px-6 py-3 bg-[#561291] hover:bg-[#3c096c] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm hover:shadow active:scale-[0.98] flex items-center gap-2 group-hover:translate-x-0.5"
             >
               <CmsText slug="landing-network-btn" fallback="Bli en Del" />
               <ArrowRight size={14} />

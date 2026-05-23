@@ -24,7 +24,7 @@ export default function TermsOfServicePage() {
           <div className="flex items-center gap-4">
             <button 
               onClick={toggleLanguage}
-              className="px-3 py-1.5 border border-[#1B4965]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#1B4965]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
+              className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
               title={isEn ? 'Bytt til norsk (Switch to Norwegian)' : 'Bytt til engelsk (Switch to English)'}
             >
               <Globe size={13} />
@@ -182,7 +182,7 @@ export default function TermsOfServicePage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-8 bg-[#1B4965] text-white/80 text-center text-xs mt-12 border-t border-slate-700/30 font-medium">
+      <footer className="w-full py-8 bg-[#561291] text-white/80 text-center text-xs mt-12 border-t border-slate-700/30 font-medium">
         <p>© 2026 His Kingdom Prophets. All rights reserved.</p>
       </footer>
     </div>

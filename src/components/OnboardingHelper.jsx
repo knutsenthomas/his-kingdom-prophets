@@ -104,7 +104,7 @@ export default function OnboardingHelper() {
               <div 
                 key={idx} 
                 className={`h-full flex-grow transition-all duration-300 ${
-                  idx <= currentStep ? 'bg-[#00324b]' : 'bg-slate-200'
+                  idx <= currentStep ? 'bg-[#3c096c]' : 'bg-slate-200'
                 }`}
               />
             ))}
@@ -113,7 +113,7 @@ export default function OnboardingHelper() {
           {/* Close trigger */}
           <button 
             onClick={handleComplete}
-            className="absolute top-4 right-4 p-2 text-outline hover:text-[#00324b] hover:bg-[#eaeef2] transition-colors rounded-full"
+            className="absolute top-4 right-4 p-2 text-outline hover:text-[#3c096c] hover:bg-[#eaeef2] transition-colors rounded-full"
             title="Lukk introduksjon"
           >
             <X size={18} />
@@ -133,7 +133,7 @@ export default function OnboardingHelper() {
 
             {/* Step Content */}
             <div className="space-y-3">
-              <h3 className="font-serif text-2xl font-bold text-[#00324b] tracking-tight px-4">
+              <h3 className="font-serif text-2xl font-bold text-[#3c096c] tracking-tight px-4">
                 {steps[currentStep].title}
               </h3>
               <p className="text-sm text-on-surface-variant font-medium leading-relaxed max-w-sm mx-auto">
@@ -142,7 +142,7 @@ export default function OnboardingHelper() {
             </div>
 
             {/* Highlight Alert Box */}
-            <div className="w-full bg-[#f6fafe] border-l-4 border-[#00324b] p-4 rounded-r-xl text-left text-xs font-semibold text-[#46617b] leading-relaxed">
+            <div className="w-full bg-[#f6fafe] border-l-4 border-[#3c096c] p-4 rounded-r-xl text-left text-xs font-semibold text-[#46617b] leading-relaxed">
               {steps[currentStep].highlight}
             </div>
           </div>
@@ -152,7 +152,7 @@ export default function OnboardingHelper() {
             {/* Skip Option */}
             <button 
               onClick={handleComplete}
-              className="text-xs font-bold text-outline hover:text-[#00324b] uppercase tracking-wider transition-colors active:scale-95"
+              className="text-xs font-bold text-outline hover:text-[#3c096c] uppercase tracking-wider transition-colors active:scale-95"
             >
               Hopp over
             </button>
@@ -171,7 +171,7 @@ export default function OnboardingHelper() {
 
               <button
                 onClick={handleNext}
-                className="flex items-center gap-1 px-5 py-2.5 bg-[#00324b] hover:opacity-95 text-white rounded-xl text-xs font-bold shadow-md transition-all active:scale-[0.97]"
+                className="flex items-center gap-1 px-5 py-2.5 bg-[#3c096c] hover:opacity-95 text-white rounded-xl text-xs font-bold shadow-md transition-all active:scale-[0.97]"
               >
                 {currentStep === steps.length - 1 ? (
                   <>

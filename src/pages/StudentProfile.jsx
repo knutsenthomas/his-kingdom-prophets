@@ -153,12 +153,12 @@ export default function StudentProfile() {
 
               <div className="min-w-0 pt-1 xl:pt-0" data-purpose="badge-container">
                 <div className="flex flex-wrap gap-1.5 mb-1">
-                  <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#eef2ff] text-[#1B4965] border border-blue-100">Student</span>
+                  <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#eef2ff] text-[#561291] border border-blue-100">Student</span>
                   {draft.ministry && (
                     <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#fdf6e7] text-[#c5a059] border border-amber-100">{draft.ministry}</span>
                   )}
                 </div>
-                <h1 className="font-serif text-2xl xl:text-3xl font-bold text-[#1B4965] leading-tight break-words tracking-tight">
+                <h1 className="font-serif text-2xl xl:text-3xl font-bold text-[#561291] leading-tight break-words tracking-tight">
                   {draft.name || 'Student'}
                 </h1>
                 <p className="text-sm text-gray-500 font-medium mt-0.5 leading-snug flex items-center gap-1.5">
@@ -176,12 +176,12 @@ export default function StudentProfile() {
               <div className="relative w-14 h-14">
                 <svg className="w-14 h-14 -rotate-90" viewBox="0 0 56 56">
                   <circle cx="28" cy="28" r="24" fill="none" stroke="#e2e8f0" strokeWidth="4" />
-                  <circle cx="28" cy="28" r="24" fill="none" stroke="#1B4965" strokeWidth="4"
+                  <circle cx="28" cy="28" r="24" fill="none" stroke="#561291" strokeWidth="4"
                     strokeDasharray={`${2 * Math.PI * 24}`}
                     strokeDashoffset={`${2 * Math.PI * 24 * (1 - completionPct / 100)}`}
                     strokeLinecap="round" />
                 </svg>
-                <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-[#1B4965]">{completionPct}%</span>
+                <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-[#561291]">{completionPct}%</span>
               </div>
               <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider text-center">Profil</span>
             </div>
@@ -324,11 +324,11 @@ export default function StudentProfile() {
               key="contact-section"
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-2xl overflow-hidden shadow-sm border-2 border-[#1B4965]/15"
+              className="bg-white rounded-2xl overflow-hidden shadow-sm border-2 border-[#561291]/15"
             >
               {/* Header: vises ulikt basert på rolle */}
               {isAdmin ? (
-                <div className="flex items-center gap-3 px-6 py-3 bg-[#1B4965] text-white">
+                <div className="flex items-center gap-3 px-6 py-3 bg-[#561291] text-white">
                   <ShieldCheck size={15} className="shrink-0" />
                   <div>
                     <p className="text-[11px] font-bold uppercase tracking-widest">Admin-tilgang</p>
@@ -337,16 +337,16 @@ export default function StudentProfile() {
                   <span className="ml-auto px-2 py-0.5 rounded-full text-[9px] font-bold bg-white/15 uppercase tracking-wider">{user?.role}</span>
                 </div>
               ) : (
-                <div className="flex items-center gap-3 px-5 py-2.5 bg-[#1B4965]/05 border-b border-[#1B4965]/10">
-                  <Lock size={13} className="text-[#1B4965]/50 shrink-0" />
-                  <p className="text-[10px] font-semibold text-[#1B4965]/70">
+                <div className="flex items-center gap-3 px-5 py-2.5 bg-[#561291]/05 border-b border-[#561291]/10">
+                  <Lock size={13} className="text-[#561291]/50 shrink-0" />
+                  <p className="text-[10px] font-semibold text-[#561291]/70">
                     Disse opplysningene er <strong>private</strong> — kun synlig for administratorer, aldri for andre studenter eller lærere.
                   </p>
                 </div>
               )}
 
               <div className="p-6">
-                <h2 className="font-serif text-base font-bold text-[#1B4965] mb-5 flex items-center gap-2">
+                <h2 className="font-serif text-base font-bold text-[#561291] mb-5 flex items-center gap-2">
                   <Lock size={16} className="text-[#c5a059]" /> Privat kontaktinformasjon
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -378,7 +378,7 @@ export default function StudentProfile() {
                     />
                   </Field>
                 </div>
-                <p className="mt-4 text-[10px] text-[#1B4965]/50 font-semibold flex items-center gap-1.5">
+                <p className="mt-4 text-[10px] text-[#561291]/50 font-semibold flex items-center gap-1.5">
                   <Lock size={10} />
                   Lagret kryptert • Kun lesbart for administratorer
                 </p>
@@ -529,7 +529,7 @@ export default function StudentProfile() {
               className="bg-white rounded-2xl shadow-2xl w-full max-w-sm z-10 overflow-hidden"
               style={{ transform: 'translateZ(0) !important', backfaceVisibility: 'hidden !important' }}
             >
-              <div className="bg-[#1B4965] text-white px-6 py-5 flex items-center justify-between">
+              <div className="bg-[#561291] text-white px-6 py-5 flex items-center justify-between">
                 <div>
                   <h3 className="font-serif text-lg font-bold">Velg profilbilde</h3>
                   <p className="text-[11px] text-white/65 font-medium mt-0.5">Klikk på et bilde for å velge det</p>

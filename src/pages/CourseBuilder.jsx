@@ -32,7 +32,7 @@ const PROGRESSION_RULES = [
 
 function FileIcon({ type, size = 16 }) {
   switch (type) {
-    case 'video': return <PlayCircle size={size} className="text-[#1B4965]" />;
+    case 'video': return <PlayCircle size={size} className="text-[#561291]" />;
     case 'pdf':   return <FileText   size={size} className="text-red-500" />;
     case 'image': return <ImageIcon  size={size} className="text-emerald-600" />;
     case 'audio': return <Music      size={size} className="text-amber-600" />;
@@ -129,7 +129,7 @@ function ApprovalModal({ mod, courseId, onClose }) {
         style={{ transform: 'translateZ(0) !important', backfaceVisibility: 'hidden !important' }}
       >
         {/* Header */}
-        <div className="bg-[#1B4965] text-white px-6 py-5 flex items-start justify-between gap-3">
+        <div className="bg-[#561291] text-white px-6 py-5 flex items-start justify-between gap-3">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <ShieldAlert size={18} className="text-[#c5a059]" />
@@ -676,7 +676,7 @@ export default function CourseBuilder() {
               className="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-[120] flex flex-col"
               style={{ transform: 'translateZ(0) !important', backfaceVisibility: 'hidden !important' }}
             >
-              <div className="flex items-center justify-between p-5 border-b border-outline-variant/20 bg-[#1B4965] text-white shrink-0">
+              <div className="flex items-center justify-between p-5 border-b border-outline-variant/20 bg-[#561291] text-white shrink-0">
                 <div>
                   <div className="flex items-center gap-2"><MediaIcon size={17} className="text-[#c5a059]" /><h3 className="font-serif text-lg font-bold">Koble Medieressurser</h3></div>
                   <p className="text-[11px] text-white/65 font-medium mt-0.5">Velg filer å knytte til modulen</p>

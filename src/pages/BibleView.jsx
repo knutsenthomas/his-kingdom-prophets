@@ -1184,7 +1184,7 @@ export default function BibleView() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
-                  className="bg-[#1B4965]/95 backdrop-blur border border-[#1B4965]/20 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 text-white shadow-xl mt-6 font-sans pointer-events-auto shrink-0"
+                  className="bg-[#561291]/95 backdrop-blur border border-[#561291]/20 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 text-white shadow-xl mt-6 font-sans pointer-events-auto shrink-0"
                   style={{ transform: 'translateZ(0)' }}
                 >
                   <div className="flex items-center gap-2">
@@ -1480,7 +1480,7 @@ export default function BibleView() {
                               <button
                                 onClick={handleShareNoteToChat}
                                 disabled={!noteText.trim()}
-                                className="py-2 px-3 bg-[#1B4965]/90 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl text-[10px] font-bold hover:bg-[#1B4965] shadow-sm active:scale-[0.97] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                                className="py-2 px-3 bg-[#561291]/90 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl text-[10px] font-bold hover:bg-[#561291] shadow-sm active:scale-[0.97] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                               >
                                 <Send size={11} />
                                 <span>Del i chat</span>

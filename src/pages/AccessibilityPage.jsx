@@ -24,7 +24,7 @@ export default function AccessibilityPage() {
           <div className="flex items-center gap-4">
             <button 
               onClick={toggleLanguage}
-              className="px-3 py-1.5 border border-[#1B4965]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#1B4965]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
+              className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
               title={isEn ? 'Bytt til norsk (Switch to Norwegian)' : 'Bytt til engelsk (Switch to English)'}
             >
               <Globe size={13} />
@@ -114,7 +114,7 @@ export default function AccessibilityPage() {
                 <section className="space-y-3">
                   <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">2. Accessibility Standards</h2>
                   <p>
-                    We target the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA requirements. Our features include high contrast support (such as our `#1B4965` primary brand color against light backgrounds), aria-labels for assistive screen readers, and robust semantic structures.
+                    We target the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA requirements. Our features include high contrast support (such as our `#561291` primary brand color against light backgrounds), aria-labels for assistive screen readers, and robust semantic structures.
                   </p>
                 </section>
 
@@ -144,7 +144,7 @@ export default function AccessibilityPage() {
                 <section className="space-y-3">
                   <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">2. Standarder for tilgjengelighet</h2>
                   <p>
-                    Vi sikter mot å oppfylle kravene i Web Content Accessibility Guidelines (WCAG) 2.1 Nivå AA. Våre løsninger inkluderer gode fargekontraster (som vår `#1B4965` mørkeblå profilfarge mot lyse bakgrunner), aria-labels for skjermlesere og solid semantisk HTML-struktur.
+                    Vi sikter mot å oppfylle kravene i Web Content Accessibility Guidelines (WCAG) 2.1 Nivå AA. Våre løsninger inkluderer gode fargekontraster (som vår `#561291` mørkeblå profilfarge mot lyse bakgrunner), aria-labels for skjermlesere og solid semantisk HTML-struktur.
                   </p>
                 </section>
 
@@ -168,7 +168,7 @@ export default function AccessibilityPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-8 bg-[#1B4965] text-white/80 text-center text-xs mt-12 border-t border-slate-700/30 font-medium">
+      <footer className="w-full py-8 bg-[#561291] text-white/80 text-center text-xs mt-12 border-t border-slate-700/30 font-medium">
         <p>© 2026 His Kingdom Prophets. All rights reserved.</p>
       </footer>
     </div>

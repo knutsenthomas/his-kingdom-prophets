@@ -181,12 +181,12 @@ export default function TeacherProfile() {
             {/* Text section with reduced vertical spacing */}
             <div className="flex-grow pt-1">
               <div className="flex flex-wrap gap-1.5 mb-1" data-purpose="badge-container">
-                <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#eef2ff] text-[#1B4965] border border-blue-100">Mentor</span>
+                <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#eef2ff] text-[#561291] border border-blue-100">Mentor</span>
                 {draft.department && (
                   <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#fdf6e7] text-[#c5a059] border border-amber-100">{draft.department}</span>
                 )}
               </div>
-              <h1 className="text-2xl md:text-3xl font-serif text-[#1B4965] mb-0.5 tracking-tight font-bold font-serif" id="teacher-name">
+              <h1 className="text-2xl md:text-3xl font-serif text-[#561291] mb-0.5 tracking-tight font-bold font-serif" id="teacher-name">
                 {draft.name || 'Min lærerprofil'}
               </h1>
               <p className="text-sm text-gray-500 font-medium flex items-center gap-1.5">
@@ -201,17 +201,17 @@ export default function TeacherProfile() {
             {/* Statistics cards with reduced padding and size */}
             <div className="flex flex-row gap-2 mt-2 lg:mt-0 overflow-x-auto pb-1 lg:pb-0 no-scrollbar" data-purpose="stats-overview">
               <div className="stat-card flex flex-col items-center justify-center min-w-[70px] lg:min-w-[85px] p-2 bg-slate-50 border border-gray-100 rounded-xl" data-purpose="stat-item">
-                <span className="text-xl font-serif font-bold text-[#1B4965]">{mentorStudents}</span>
+                <span className="text-xl font-serif font-bold text-[#561291]">{mentorStudents}</span>
                 <span className="text-[8px] font-bold tracking-widest text-gray-400 uppercase">Studenter</span>
               </div>
               
               <div className="stat-card flex flex-col items-center justify-center min-w-[70px] lg:min-w-[85px] p-2 bg-slate-50 border border-gray-100 rounded-xl" data-purpose="stat-item">
-                <span className="text-xl font-serif font-bold text-[#1B4965]">{activeCourses}</span>
+                <span className="text-xl font-serif font-bold text-[#561291]">{activeCourses}</span>
                 <span className="text-[8px] font-bold tracking-widest text-gray-400 uppercase">Kurs</span>
               </div>
 
               <div className="stat-card flex flex-col items-center justify-center min-w-[70px] lg:min-w-[85px] p-2 bg-slate-50 border border-gray-100 rounded-xl" data-purpose="stat-item">
-                <span className="text-xl font-serif font-bold text-[#1B4965]">{completionPct}%</span>
+                <span className="text-xl font-serif font-bold text-[#561291]">{completionPct}%</span>
                 <div className="w-full bg-gray-200 h-0.5 rounded-full mt-1 mb-0.5 overflow-hidden">
                   <div className="bg-[#c5a059] h-full" style={{ width: `${completionPct}%`, transition: 'width 0.4s ease' }} />
                 </div>
@@ -304,10 +304,10 @@ export default function TeacherProfile() {
                 key="contact-section-teacher"
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl overflow-hidden shadow-sm border-2 border-[#1B4965]/15"
+                className="bg-white rounded-2xl overflow-hidden shadow-sm border-2 border-[#561291]/15"
               >
                 {isAdmin ? (
-                  <div className="flex items-center gap-3 px-6 py-3 bg-[#1B4965] text-white">
+                  <div className="flex items-center gap-3 px-6 py-3 bg-[#561291] text-white">
                     <ShieldCheck size={15} className="shrink-0" />
                     <div>
                       <p className="text-[11px] font-bold uppercase tracking-widest">Admin-tilgang</p>
@@ -316,16 +316,16 @@ export default function TeacherProfile() {
                     <span className="ml-auto px-2 py-0.5 rounded-full text-[9px] font-bold bg-white/15 uppercase tracking-wider">{user?.role}</span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-3 px-5 py-2.5 bg-[#1B4965]/05 border-b border-[#1B4965]/10">
-                    <Lock size={13} className="text-[#1B4965]/50 shrink-0" />
-                    <p className="text-[10px] font-semibold text-[#1B4965]/70">
+                  <div className="flex items-center gap-3 px-5 py-2.5 bg-[#561291]/05 border-b border-[#561291]/10">
+                    <Lock size={13} className="text-[#561291]/50 shrink-0" />
+                    <p className="text-[10px] font-semibold text-[#561291]/70">
                       Disse opplysningene er <strong>private</strong> — kun synlig for administratorer, aldri for studenter.
                     </p>
                   </div>
                 )}
 
                 <div className="p-6">
-                  <h2 className="font-serif text-base font-bold text-[#1B4965] mb-5 flex items-center gap-2">
+                  <h2 className="font-serif text-base font-bold text-[#561291] mb-5 flex items-center gap-2">
                     <Lock size={16} className="text-[#c5a059]" /> Privat kontaktinformasjon
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -357,7 +357,7 @@ export default function TeacherProfile() {
                       />
                     </Field>
                   </div>
-                  <p className="mt-4 text-[10px] text-[#1B4965]/50 font-semibold flex items-center gap-1.5">
+                  <p className="mt-4 text-[10px] text-[#561291]/50 font-semibold flex items-center gap-1.5">
                     <Lock size={10} />
                     Lagret kryptert • Kun lesbart for administratorer
                   </p>

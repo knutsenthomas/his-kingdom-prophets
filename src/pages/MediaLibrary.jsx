@@ -202,7 +202,7 @@ export default function MediaLibrary() {
 
   const getFileIcon = (type) => {
     switch (type) {
-      case 'video': return <PlayCircle size={20} className="text-[#1B4965]" />;
+      case 'video': return <PlayCircle size={20} className="text-[#561291]" />;
       case 'pdf': return <FileText size={20} className="text-red-500" />;
       case 'image': return <ImageIcon size={20} className="text-emerald-600" />;
       case 'audio': return <Music size={20} className="text-amber-600" />;

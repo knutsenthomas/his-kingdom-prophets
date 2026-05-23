@@ -39,7 +39,7 @@ export default function CmsVisualToggle() {
               setIsMinimized(false);
               localStorage.setItem('hkm-cms-minimized', 'false');
             }}
-            className="relative flex items-center justify-center h-12 w-12 rounded-full bg-primary/95 dark:bg-[#1B4965]/95 hover:bg-primary dark:hover:bg-[#1B4965] text-white border border-white/20 shadow-xl hover:shadow-2xl transition-all active:scale-[0.94] group"
+            className="relative flex items-center justify-center h-12 w-12 rounded-full bg-primary/95 dark:bg-[#561291]/95 hover:bg-primary dark:hover:bg-[#561291] text-white border border-white/20 shadow-xl hover:shadow-2xl transition-all active:scale-[0.94] group"
             title="Vis CMS Editor"
             style={{ transform: 'translateZ(0)' }}
           >

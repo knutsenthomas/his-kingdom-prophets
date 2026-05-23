@@ -147,7 +147,7 @@ export default function SupportCenter() {
       </div>
 
       {/* Hero Search Section */}
-      <div className="bg-gradient-to-r from-[#1B4965] to-[#0b293c] rounded-2xl p-6 sm:p-10 text-white relative overflow-hidden shadow-lg border border-slate-800">
+      <div className="bg-gradient-to-r from-[#561291] to-[#240046] rounded-2xl p-6 sm:p-10 text-white relative overflow-hidden shadow-lg border border-slate-800">
         <div className="absolute inset-0 opacity-15"
           style={{ backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(197, 160, 89, 0.5), transparent 70%)' }} />
         
@@ -163,7 +163,7 @@ export default function SupportCenter() {
           </p>
 
           <div className="relative flex items-center bg-white text-slate-800 rounded-xl overflow-hidden shadow-md px-4 py-3.5 border border-slate-100 group focus-within:ring-2 focus-within:ring-[#c5a059]/40 transition-all">
-            <Search size={18} className="text-slate-400 group-focus-within:text-[#1B4965] transition-colors shrink-0 mr-2.5" />
+            <Search size={18} className="text-slate-400 group-focus-within:text-[#561291] transition-colors shrink-0 mr-2.5" />
             <input
               type="text"
               value={searchQuery}
@@ -357,7 +357,7 @@ export default function SupportCenter() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#1B4965] hover:bg-[#0f344c] text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow transition-all active:scale-[0.97] disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#561291] hover:bg-[#0f344c] text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow transition-all active:scale-[0.97] disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <span>Sender...</span>

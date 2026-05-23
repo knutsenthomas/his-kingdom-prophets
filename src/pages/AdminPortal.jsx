@@ -284,13 +284,13 @@ export default function AdminPortal() {
           <div className="w-16 h-16 bg-red-50 text-[#ba1a1a] rounded-full flex items-center justify-center mx-auto shadow-inner">
             <Lock className="w-8 h-8" />
           </div>
-          <h2 className="font-serif text-2xl font-bold text-[#00324b]">Adgang Avvist</h2>
+          <h2 className="font-serif text-2xl font-bold text-[#3c096c]">Adgang Avvist</h2>
           <p className="text-sm text-[#41474d] leading-relaxed">
             Kun administratorer og super admin har tilgang til denne portalen. Vennligst logg på med en autorisert konto for å administrere systemet.
           </p>
           <button
             onClick={() => window.location.href = '/login'}
-            className="w-full bg-[#00324b] text-white py-3 rounded-xl font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow"
+            className="w-full bg-[#3c096c] text-white py-3 rounded-xl font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow"
           >
             Til Logg Inn
           </button>
@@ -477,7 +477,7 @@ export default function AdminPortal() {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 border-b border-[#c1c7ce]/40 pb-6">
         <div>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#00324b] mb-2 tracking-tight">Admin Portal</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#3c096c] mb-2 tracking-tight">Admin Portal</h1>
           <p className="text-sm text-[#46617b]">
             Overordnet system- og brukerhåndtering for His Kingdom Prophets.
           </p>
@@ -488,7 +488,7 @@ export default function AdminPortal() {
           <button
             onClick={() => setActiveTab('users')}
             className={`px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all relative z-10 ${
-              activeTab === 'users' ? 'text-[#00324b] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
+              activeTab === 'users' ? 'text-[#3c096c] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
             }`}
           >
             Brukerhåndtering
@@ -496,7 +496,7 @@ export default function AdminPortal() {
           <button
             onClick={() => setActiveTab('permissions')}
             className={`px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all relative z-10 ${
-              activeTab === 'permissions' ? 'text-[#00324b] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
+              activeTab === 'permissions' ? 'text-[#3c096c] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
             }`}
           >
             Rettighetsstyring
@@ -526,11 +526,11 @@ export default function AdminPortal() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-white border border-[#c1c7ce]/40 p-5 rounded-2xl shadow-sm">
                 <p className="text-xs text-[#72787e] font-bold uppercase tracking-wider">Totalt antall brukere</p>
-                <p className="text-3xl font-serif font-bold text-[#00324b] mt-2">{(usersList || []).length}</p>
+                <p className="text-3xl font-serif font-bold text-[#3c096c] mt-2">{(usersList || []).length}</p>
               </div>
               <div className="bg-white border border-[#c1c7ce]/40 p-5 rounded-2xl shadow-sm">
                 <p className="text-xs text-[#72787e] font-bold uppercase tracking-wider">Studenter</p>
-                <p className="text-3xl font-serif font-bold text-[#1b4965] mt-2">{(usersList || []).filter(u=>u?.role==='student').length}</p>
+                <p className="text-3xl font-serif font-bold text-[#561291] mt-2">{(usersList || []).filter(u=>u?.role==='student').length}</p>
               </div>
               <div className="bg-white border border-[#c1c7ce]/40 p-5 rounded-2xl shadow-sm">
                 <p className="text-xs text-[#72787e] font-bold uppercase tracking-wider">Mentorer / Lærere</p>
@@ -554,7 +554,7 @@ export default function AdminPortal() {
                     placeholder="Søk på navn, e-post, ID..."
                     value={searchQuery}
                     onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                    className="w-full bg-[#f0f4f8] border border-[#c1c7ce]/60 rounded-xl pl-11 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
+                    className="w-full bg-[#f0f4f8] border border-[#c1c7ce]/60 rounded-xl pl-11 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-[#561291] focus:outline-none transition-all"
                     style={{ transform: 'translateZ(0) !important', backfaceVisibility: 'hidden !important' }}
                   />
                 </div>
@@ -569,7 +569,7 @@ export default function AdminPortal() {
                         onClick={() => { setRoleFilter(r); setCurrentPage(1); }}
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all ${
                           roleFilter === r 
-                            ? 'bg-white text-[#00324b] shadow-sm' 
+                            ? 'bg-white text-[#3c096c] shadow-sm' 
                             : 'text-[#41474d] hover:text-[#171c1f]'
                         }`}
                       >
@@ -585,7 +585,7 @@ export default function AdminPortal() {
                   <select
                     value={statusFilter}
                     onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                    className="bg-[#eaeef2] border-none rounded-xl px-4 py-2 text-xs font-semibold text-[#00324b] focus:ring-2 focus:ring-[#1b4965] outline-none"
+                    className="bg-[#eaeef2] border-none rounded-xl px-4 py-2 text-xs font-semibold text-[#3c096c] focus:ring-2 focus:ring-[#561291] outline-none"
                   >
                     <option value="ALL">Alle statuser</option>
                     <option value="AKTIV">Aktiv</option>
@@ -608,7 +608,7 @@ export default function AdminPortal() {
                 
                 <button
                   onClick={() => setIsAddModalOpen(true)}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-[#00324b] hover:opacity-95 text-white rounded-xl text-xs font-bold active:scale-[0.98] transition-all shadow-md"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[#3c096c] hover:opacity-95 text-white rounded-xl text-xs font-bold active:scale-[0.98] transition-all shadow-md"
                 >
                   <Plus className="w-4 h-4" />
                   Legg til ny bruker
@@ -646,12 +646,12 @@ export default function AdminPortal() {
                                   className="w-10 h-10 rounded-full border border-[#c1c7ce] object-cover shadow-sm"
                                 />
                               ) : (
-                                <div className="w-10 h-10 rounded-full bg-[#1b4965]/10 flex items-center justify-center font-bold text-[#1b4965] text-xs shadow-inner">
+                                <div className="w-10 h-10 rounded-full bg-[#561291]/10 flex items-center justify-center font-bold text-[#561291] text-xs shadow-inner">
                                   {(userItem.name || '').split(' ').map(n=>n[0] || '').join('').slice(0, 2).toUpperCase()}
                                 </div>
                               )}
                               <div>
-                                <p className="font-bold text-sm text-[#00324b]">{userItem.name}</p>
+                                <p className="font-bold text-sm text-[#3c096c]">{userItem.name}</p>
                                 <p className="text-xs text-[#72787e]">{userItem.email}</p>
                               </div>
                             </div>
@@ -667,7 +667,7 @@ export default function AdminPortal() {
                               <select
                                 value={userItem.role}
                                 onChange={(e) => handleUpdateUserRole(userItem.uid, e.target.value)}
-                                className="bg-[#f0f4f8] border-none text-xs font-semibold text-[#00324b] rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-[#1b4965] transition-all outline-none"
+                                className="bg-[#f0f4f8] border-none text-xs font-semibold text-[#3c096c] rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-[#561291] transition-all outline-none"
                               >
                                 <option value="student">Student</option>
                                 <option value="teacher">Lærer / Mentor</option>
@@ -692,7 +692,7 @@ export default function AdminPortal() {
                               <select
                                 value={userItem.status}
                                 onChange={(e) => handleUpdateUserStatus(userItem.uid, e.target.value)}
-                                className={`text-[10px] font-bold rounded-full px-3 py-1 outline-none border-none focus:ring-1 focus:ring-[#1b4965] cursor-pointer ${
+                                className={`text-[10px] font-bold rounded-full px-3 py-1 outline-none border-none focus:ring-1 focus:ring-[#561291] cursor-pointer ${
                                   userItem.status === 'AKTIV' ? 'bg-green-100 text-green-800' :
                                   userItem.status === 'VENTER' ? 'bg-amber-100 text-amber-800' :
                                   'bg-red-100 text-red-800'
@@ -713,7 +713,7 @@ export default function AdminPortal() {
                                   navigator.clipboard.writeText(userItem.email);
                                   showToast("E-post kopiert til utklippstavlen!");
                                 }}
-                                className="p-1.5 hover:text-[#00324b] text-[#72787e] transition-colors hover:bg-slate-100 rounded-lg"
+                                className="p-1.5 hover:text-[#3c096c] text-[#72787e] transition-colors hover:bg-slate-100 rounded-lg"
                                 title="Kopier E-post"
                               >
                                 <Mail className="w-4 h-4" />
@@ -762,7 +762,7 @@ export default function AdminPortal() {
                       onClick={() => setCurrentPage(page)}
                       className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
                         currentPage === page
-                          ? 'bg-[#00324b] text-white shadow-sm font-bold'
+                          ? 'bg-[#3c096c] text-white shadow-sm font-bold'
                           : 'text-[#46617b] hover:bg-[#eaeef2]'
                       }`}
                     >
@@ -782,8 +782,8 @@ export default function AdminPortal() {
 
             {/* Academic Widgets Alerts */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-              <div className="bg-white border-l-4 border-[#00324b] p-6 rounded-r-2xl border border-[#c1c7ce]/40 shadow-sm space-y-2">
-                <div className="flex items-center gap-3 text-[#00324b]">
+              <div className="bg-white border-l-4 border-[#3c096c] p-6 rounded-r-2xl border border-[#c1c7ce]/40 shadow-sm space-y-2">
+                <div className="flex items-center gap-3 text-[#3c096c]">
                   <Info className="w-5 h-5 shrink-0" />
                   <h3 className="font-bold text-sm">Lisensstatus</h3>
                 </div>
@@ -791,8 +791,8 @@ export default function AdminPortal() {
                   Du bruker for øyeblikket 84% av dine tilgjengelige studentlisenser. Vurder å oppgradere før neste semester.
                 </p>
               </div>
-              <div className="bg-white border-l-4 border-[#1b4965] p-6 rounded-r-2xl border border-[#c1c7ce]/40 shadow-sm space-y-2">
-                <div className="flex items-center gap-3 text-[#1b4965]">
+              <div className="bg-white border-l-4 border-[#561291] p-6 rounded-r-2xl border border-[#c1c7ce]/40 shadow-sm space-y-2">
+                <div className="flex items-center gap-3 text-[#561291]">
                   <Key className="w-5 h-5 shrink-0" />
                   <h3 className="font-bold text-sm">Pro-tips for administratorer</h3>
                 </div>
@@ -827,7 +827,7 @@ export default function AdminPortal() {
                 <p className="text-xs text-[#72787e] font-bold uppercase tracking-widest">Velg rolle for rettighetsstyring</p>
                 <button
                   onClick={() => showToast("Vennligst opprett rollen i Firestore før du konfigurerer rettigheter.")}
-                  className="flex items-center gap-1.5 text-xs text-[#00324b] hover:underline font-bold"
+                  className="flex items-center gap-1.5 text-xs text-[#3c096c] hover:underline font-bold"
                 >
                   <Plus className="w-4 h-4" />
                   Lag tilpasset rolle
@@ -840,14 +840,14 @@ export default function AdminPortal() {
                 <div 
                   onClick={() => setSelectedRole('student')}
                   className={`bg-white border-2 rounded-2xl p-5 hover:bg-[#f6fafe]/50 cursor-pointer shadow-sm relative overflow-hidden transition-all group ${
-                    selectedRole === 'student' ? 'border-[#00324b] ring-2 ring-[#00324b]/10 bg-[#cee5ff]/10' : 'border-[#c1c7ce]/40'
+                    selectedRole === 'student' ? 'border-[#3c096c] ring-2 ring-[#3c096c]/10 bg-[#f3e8ff]/10' : 'border-[#c1c7ce]/40'
                   }`}
                 >
                   <div className="flex items-center gap-3.5 mb-2">
                     <div className="p-2 rounded-lg bg-[#eaeef2] text-[#41474d]">
                       <Users className="w-5 h-5" />
                     </div>
-                    <h3 className="font-bold text-base text-[#00324b]">Student</h3>
+                    <h3 className="font-bold text-base text-[#3c096c]">Student</h3>
                   </div>
                   <p className="text-[11px] text-[#72787e] leading-relaxed">
                     Utrustningsgrensesnitt. Har tilgang til kurs, leksjoner og studiegrupper.
@@ -862,20 +862,20 @@ export default function AdminPortal() {
                 <div 
                   onClick={() => setSelectedRole('teacher')}
                   className={`bg-white border-2 rounded-2xl p-5 hover:bg-[#f6fafe]/50 cursor-pointer shadow-sm relative overflow-hidden transition-all group ${
-                    selectedRole === 'teacher' ? 'border-[#00324b] ring-2 ring-[#00324b]/10 bg-[#cee5ff]/10' : 'border-[#c1c7ce]/40'
+                    selectedRole === 'teacher' ? 'border-[#3c096c] ring-2 ring-[#3c096c]/10 bg-[#f3e8ff]/10' : 'border-[#c1c7ce]/40'
                   }`}
                 >
                   <div className="flex items-center gap-3.5 mb-2">
                     <div className="p-2 rounded-lg bg-[#eaeef2] text-[#41474d]">
                       <BookOpen className="w-5 h-5" />
                     </div>
-                    <h3 className="font-bold text-base text-[#00324b]">Lærer / Mentor</h3>
+                    <h3 className="font-bold text-base text-[#3c096c]">Lærer / Mentor</h3>
                   </div>
                   <p className="text-[11px] text-[#72787e] leading-relaxed">
                     Undervisning og evaluering. Kan rette oppgaver og administrere klasser.
                   </p>
                   <div className="mt-4 flex items-center justify-between">
-                    <span className="text-[9px] font-bold uppercase bg-[#cee5ff] text-[#00324b] px-2.5 py-0.5 rounded-full">Akademisk</span>
+                    <span className="text-[9px] font-bold uppercase bg-[#f3e8ff] text-[#3c096c] px-2.5 py-0.5 rounded-full">Akademisk</span>
                     <span className="text-[10px] text-[#72787e] font-bold">148 Brukere</span>
                   </div>
                 </div>
@@ -884,14 +884,14 @@ export default function AdminPortal() {
                 <div 
                   onClick={() => setSelectedRole('admin')}
                   className={`bg-white border-2 rounded-2xl p-5 hover:bg-[#f6fafe]/50 cursor-pointer shadow-sm relative overflow-hidden transition-all group ${
-                    selectedRole === 'admin' ? 'border-[#00324b] ring-2 ring-[#00324b]/10 bg-[#cee5ff]/10' : 'border-[#c1c7ce]/40'
+                    selectedRole === 'admin' ? 'border-[#3c096c] ring-2 ring-[#3c096c]/10 bg-[#f3e8ff]/10' : 'border-[#c1c7ce]/40'
                   }`}
                 >
                   <div className="flex items-center gap-3.5 mb-2">
                     <div className="p-2 rounded-lg bg-[#eaeef2] text-[#41474d]">
                       <Shield className="w-5 h-5" />
                     </div>
-                    <h3 className="font-bold text-base text-[#00324b]">Administrator</h3>
+                    <h3 className="font-bold text-base text-[#3c096c]">Administrator</h3>
                   </div>
                   <p className="text-[11px] text-[#72787e] leading-relaxed">
                     Plattformledelse. Har full tilgang til CMS, videoer og analyse.
@@ -906,14 +906,14 @@ export default function AdminPortal() {
                 <div 
                   onClick={() => setSelectedRole('superadmin')}
                   className={`bg-white border-2 rounded-2xl p-5 hover:bg-[#f6fafe]/50 cursor-pointer shadow-sm relative overflow-hidden transition-all group ${
-                    selectedRole === 'superadmin' ? 'border-[#00324b] ring-2 ring-[#00324b]/10 bg-[#cee5ff]/10' : 'border-[#c1c7ce]/40'
+                    selectedRole === 'superadmin' ? 'border-[#3c096c] ring-2 ring-[#3c096c]/10 bg-[#f3e8ff]/10' : 'border-[#c1c7ce]/40'
                   }`}
                 >
                   <div className="flex items-center gap-3.5 mb-2">
                     <div className="p-2 rounded-lg bg-[#eaeef2] text-[#41474d]">
                       <ShieldAlert className="w-5 h-5" />
                     </div>
-                    <h3 className="font-bold text-base text-[#00324b]">Super Administrator</h3>
+                    <h3 className="font-bold text-base text-[#3c096c]">Super Administrator</h3>
                   </div>
                   <p className="text-[11px] text-[#72787e] leading-relaxed">
                     Eierkonto. Kan endre systeminnstillinger, API-nøkler og slette data.
@@ -931,12 +931,12 @@ export default function AdminPortal() {
             <div className="bg-white border border-[#c1c7ce]/40 rounded-3xl overflow-hidden shadow-sm">
               <div className="border-b border-[#c1c7ce]/30 bg-[#eaeef2]/40 px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className="flex gap-6 text-xs uppercase tracking-wider font-bold text-[#72787e]">
-                  <button className="text-[#00324b] border-b-2 border-[#00324b] pb-4 -mb-[18px]">Rettighetsmatrise</button>
-                  <button onClick={() => showToast("Visning av tildelte brukere er utilgjengelig offline.")} className="hover:text-[#00324b] pb-4 -mb-[18px]">Tildelte Brukere</button>
-                  <button onClick={() => showToast("Sikkerhetsloggen laster inn...")} className="hover:text-[#00324b] pb-4 -mb-[18px]">Endringslogg</button>
+                  <button className="text-[#3c096c] border-b-2 border-[#3c096c] pb-4 -mb-[18px]">Rettighetsmatrise</button>
+                  <button onClick={() => showToast("Visning av tildelte brukere er utilgjengelig offline.")} className="hover:text-[#3c096c] pb-4 -mb-[18px]">Tildelte Brukere</button>
+                  <button onClick={() => showToast("Sikkerhetsloggen laster inn...")} className="hover:text-[#3c096c] pb-4 -mb-[18px]">Endringslogg</button>
                 </div>
                 <div className="flex items-center gap-2 text-xs font-semibold text-[#46617b]">
-                  <Info className="w-4 h-4 text-[#1b4965]" />
+                  <Info className="w-4 h-4 text-[#561291]" />
                   <span>Modifisering av '{selectedRole.toUpperCase()}' påvirker alle brukere i denne gruppen.</span>
                 </div>
               </div>
@@ -961,8 +961,8 @@ export default function AdminPortal() {
                         onClick={() => setActivePermissionGroup(cat.id)}
                         className={`w-full flex items-center justify-between p-3.5 rounded-xl text-xs font-bold transition-all text-left ${
                           activePermissionGroup === cat.id
-                            ? 'bg-[#00324b] text-white shadow-md'
-                            : 'text-[#41474d] hover:bg-[#f0f4f8] hover:text-[#00324b]'
+                            ? 'bg-[#3c096c] text-white shadow-md'
+                            : 'text-[#41474d] hover:bg-[#f0f4f8] hover:text-[#3c096c]'
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -978,7 +978,7 @@ export default function AdminPortal() {
                 {/* Right checklist toggles */}
                 <div className="col-span-12 md:col-span-9 space-y-6">
                   <div className="flex justify-between items-center border-b border-[#c1c7ce]/30 pb-3">
-                    <h3 className="font-serif text-lg font-bold text-[#00324b]">
+                    <h3 className="font-serif text-lg font-bold text-[#3c096c]">
                       {activePermissionGroup === 'course' ? 'Rettigheter for Kursutvikling' :
                        activePermissionGroup === 'user' ? 'Rettigheter for Brukerhåndtering' :
                        activePermissionGroup === 'media' ? 'Rettigheter for Mediebibliotek' :
@@ -1010,7 +1010,7 @@ export default function AdminPortal() {
                           }}
                           className="sr-only peer"
                         />
-                        <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#00324b]" />
+                        <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#3c096c]" />
                       </label>
                     </div>
                   </div>
@@ -1047,14 +1047,14 @@ export default function AdminPortal() {
                       return (
                         <div 
                           key={capKey} 
-                          className="flex items-start justify-between p-5 bg-[#f6fafe] border border-[#c1c7ce]/30 rounded-2xl hover:border-[#1b4965]/40 transition-all gap-4"
+                          className="flex items-start justify-between p-5 bg-[#f6fafe] border border-[#c1c7ce]/30 rounded-2xl hover:border-[#561291]/40 transition-all gap-4"
                         >
                           <div className="flex gap-4">
-                            <div className="mt-1 flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-[#c1c7ce]/30 text-[#00324b]">
+                            <div className="mt-1 flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-[#c1c7ce]/30 text-[#3c096c]">
                               <Check className="w-4 h-4" />
                             </div>
                             <div>
-                              <h5 className="font-bold text-sm text-[#00324b]">{title}</h5>
+                              <h5 className="font-bold text-sm text-[#3c096c]">{title}</h5>
                               <p className="text-xs text-[#72787e] mt-1 leading-relaxed">{description}</p>
                               
                               <div className="flex gap-2 mt-2">
@@ -1077,7 +1077,7 @@ export default function AdminPortal() {
                               onChange={() => togglePermission(selectedRole, activePermissionGroup, capKey)}
                               className="sr-only peer"
                             />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00324b]" />
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#3c096c]" />
                           </label>
                         </div>
                       );
@@ -1101,7 +1101,7 @@ export default function AdminPortal() {
                 </button>
                 <button
                   onClick={handleSavePermissions}
-                  className="flex items-center gap-2 px-6 py-2.5 bg-[#00324b] text-white hover:opacity-95 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
+                  className="flex items-center gap-2 px-6 py-2.5 bg-[#3c096c] text-white hover:opacity-95 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
                 >
                   <Save className="w-4 h-4" />
                   Lagre Endringer
@@ -1125,13 +1125,13 @@ export default function AdminPortal() {
             >
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="absolute top-4 right-4 p-1.5 hover:bg-slate-100 rounded-lg text-[#72787e] hover:text-[#00324b] transition-all"
+                className="absolute top-4 right-4 p-1.5 hover:bg-slate-100 rounded-lg text-[#72787e] hover:text-[#3c096c] transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              <h3 className="font-serif text-xl font-bold text-[#00324b] mb-2 flex items-center gap-2">
-                <Users className="w-5 h-5 text-[#1b4965]" />
+              <h3 className="font-serif text-xl font-bold text-[#3c096c] mb-2 flex items-center gap-2">
+                <Users className="w-5 h-5 text-[#561291]" />
                 Legg til ny bruker
               </h3>
               <p className="text-xs text-[#72787e] mb-6">
@@ -1147,7 +1147,7 @@ export default function AdminPortal() {
                     placeholder="Anders Berg"
                     value={newUserName}
                     onChange={(e)=>setNewUserName(e.target.value)}
-                    className="w-full bg-[#f6fafe] border border-[#c1c7ce]/80 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
+                    className="w-full bg-[#f6fafe] border border-[#c1c7ce]/80 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#561291] focus:outline-none transition-all"
                     style={{ transform: 'translateZ(0) !important', backfaceVisibility: 'hidden !important' }}
                   />
                 </div>
@@ -1160,7 +1160,7 @@ export default function AdminPortal() {
                     placeholder="anders@hiskingdomprophets.com"
                     value={newUserEmail}
                     onChange={(e)=>setNewUserEmail(e.target.value)}
-                    className="w-full bg-[#f6fafe] border border-[#c1c7ce]/80 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#1b4965] focus:outline-none transition-all"
+                    className="w-full bg-[#f6fafe] border border-[#c1c7ce]/80 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#561291] focus:outline-none transition-all"
                     style={{ transform: 'translateZ(0) !important', backfaceVisibility: 'hidden !important' }}
                   />
                 </div>
@@ -1171,7 +1171,7 @@ export default function AdminPortal() {
                     <select
                       value={newUserRole}
                       onChange={(e)=>setNewUserRole(e.target.value)}
-                      className="w-full bg-[#f6fafe] border border-[#c1c7ce]/80 rounded-xl px-3 py-2.5 text-xs font-semibold text-[#00324b] focus:ring-2 focus:ring-[#1b4965] outline-none"
+                      className="w-full bg-[#f6fafe] border border-[#c1c7ce]/80 rounded-xl px-3 py-2.5 text-xs font-semibold text-[#3c096c] focus:ring-2 focus:ring-[#561291] outline-none"
                     >
                       <option value="student">Student</option>
                       <option value="teacher">Lærer</option>
@@ -1185,7 +1185,7 @@ export default function AdminPortal() {
                     <select
                       value={newUserStatus}
                       onChange={(e)=>setNewUserStatus(e.target.value)}
-                      className="w-full bg-[#f6fafe] border border-[#c1c7ce]/80 rounded-xl px-3 py-2.5 text-xs font-semibold text-[#00324b] focus:ring-2 focus:ring-[#1b4965] outline-none"
+                      className="w-full bg-[#f6fafe] border border-[#c1c7ce]/80 rounded-xl px-3 py-2.5 text-xs font-semibold text-[#3c096c] focus:ring-2 focus:ring-[#561291] outline-none"
                     >
                       <option value="AKTIV">Aktiv</option>
                       <option value="VENTER">Venter</option>
@@ -1204,7 +1204,7 @@ export default function AdminPortal() {
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2.5 bg-[#00324b] text-white hover:opacity-95 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
+                    className="px-6 py-2.5 bg-[#3c096c] text-white hover:opacity-95 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
                   >
                     Opprett Bruker
                   </button>

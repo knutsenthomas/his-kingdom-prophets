@@ -131,7 +131,7 @@ const migrateMarkdownToHtml = (text) => {
   let html = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-  html = html.replace(/^&gt;\s+(.*?)$/gm, '<blockquote style="border-left: 4px solid #1B4965; padding-left: 1rem; margin: 0.75rem 0; font-style: italic; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; padding-top: 0.375rem; padding-bottom: 0.375rem;">$1</blockquote>');
+  html = html.replace(/^&gt;\s+(.*?)$/gm, '<blockquote style="border-left: 4px solid #561291; padding-left: 1rem; margin: 0.75rem 0; font-style: italic; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; padding-top: 0.375rem; padding-bottom: 0.375rem;">$1</blockquote>');
   html = html.replace(/^-\s+(.*?)$/gm, '<li style="margin-left: 1.25rem; list-style-type: disc; margin-top: 0.25rem; margin-bottom: 0.25rem;">$1</li>');
   html = html.replace(/\n/g, '<br />');
   return html;
@@ -456,7 +456,7 @@ export default function LessonView() {
 
   const insertVerseToNotes = (verse) => {
     const transName = selectedBibleTranslation === 'bibelselskap' ? 'N11' : selectedBibleTranslation.toUpperCase();
-    const htmlRef = `<div class="bible-quote-block" contenteditable="false" style="margin: 1rem 0; padding: 0.5rem 0; border-left: 4px solid #1B4965; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; user-select: all;">
+    const htmlRef = `<div class="bible-quote-block" contenteditable="false" style="margin: 1rem 0; padding: 0.5rem 0; border-left: 4px solid #561291; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; user-select: all;">
       <blockquote style="margin: 0; padding: 0 1rem; font-style: italic; border: none; background: transparent; color: #1e293b;">
         "${verse.text.trim()}"
       </blockquote>
@@ -496,7 +496,7 @@ export default function LessonView() {
 
     // Combine text neatly
     const combinedText = targetVerses
-      .map(v => `<span style="font-weight: bold; color: #1B4965; margin-right: 0.25rem;">${v.verse}</span>${v.text.trim()}`)
+      .map(v => `<span style="font-weight: bold; color: #561291; margin-right: 0.25rem;">${v.verse}</span>${v.text.trim()}`)
       .join(' ');
 
     // Create the range string: f.eks. "16-17" or "16"
@@ -505,7 +505,7 @@ export default function LessonView() {
       : `${sortedVerseNums[0]}-${sortedVerseNums[sortedVerseNums.length - 1]}`;
 
     const transName = selectedBibleTranslation === 'bibelselskap' ? 'N11' : selectedBibleTranslation.toUpperCase();
-    const htmlRef = `<div class="bible-quote-block" contenteditable="false" style="margin: 1rem 0; padding: 0.5rem 0; border-left: 4px solid #1B4965; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; user-select: all;">
+    const htmlRef = `<div class="bible-quote-block" contenteditable="false" style="margin: 1rem 0; padding: 0.5rem 0; border-left: 4px solid #561291; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; user-select: all;">
       <blockquote style="margin: 0; padding: 0 1rem; font-style: italic; border: none; background: transparent; color: #1e293b;">
         "${combinedText}"
       </blockquote>
@@ -743,7 +743,7 @@ export default function LessonView() {
       setTimeout(() => {
         const bqs = editor.querySelectorAll('blockquote');
         bqs.forEach(bq => {
-          bq.style.borderLeft = '4px solid #1B4965';
+          bq.style.borderLeft = '4px solid #561291';
           bq.style.paddingLeft = '1rem';
           bq.style.margin = '0.75rem 0';
           bq.style.fontStyle = 'italic';
@@ -826,7 +826,7 @@ export default function LessonView() {
     let html = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    html = html.replace(/^&gt;\s+(.*?)$/gm, '<blockquote class="border-l-4 border-[#1B4965] pl-4 py-1.5 my-3 italic text-on-surface-variant bg-slate-50 rounded-r">$1</blockquote>');
+    html = html.replace(/^&gt;\s+(.*?)$/gm, '<blockquote class="border-l-4 border-[#561291] pl-4 py-1.5 my-3 italic text-on-surface-variant bg-slate-50 rounded-r">$1</blockquote>');
     html = html.replace(/^-\s+(.*?)$/gm, '<li class="ml-5 list-disc my-1">$1</li>');
     html = html.replace(/\n/g, '<br />');
     return `<div class="font-sans text-xs space-y-2 leading-relaxed text-on-surface p-1">${html}</div>`;
@@ -878,8 +878,8 @@ export default function LessonView() {
             <div className="flex items-center gap-2"><BookOpen size={16} className="text-primary animate-pulse" /><span>Visningsmodus</span></div>
             <div className="flex items-center gap-3">
               <button onClick={() => { setHideStudyPlan(!hideStudyPlan); setIsFocusMode(false); }} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${hideStudyPlan ? 'bg-primary/5 border-primary/20 text-primary' : 'bg-white border-outline-variant/30'}`}><Eye size={14} /><span>{hideStudyPlan ? "Vis studieplan" : "Skjul studieplan"}</span></button>
-              <button onClick={() => { setIsNotesOpen(true); setSidebarTab('notes'); }} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${isNotesOpen && sidebarTab === 'notes' ? 'bg-[#1B4965] text-white' : 'bg-white'}`}><Edit3 size={14} /><span>Notater</span></button>
-              <button onClick={() => { setIsNotesOpen(true); setSidebarTab('bible'); }} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${isNotesOpen && sidebarTab === 'bible' ? 'bg-[#1B4965] text-white' : 'bg-white'}`}><BookOpen size={14} /><span>Bibel</span></button>
+              <button onClick={() => { setIsNotesOpen(true); setSidebarTab('notes'); }} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${isNotesOpen && sidebarTab === 'notes' ? 'bg-[#561291] text-white' : 'bg-white'}`}><Edit3 size={14} /><span>Notater</span></button>
+              <button onClick={() => { setIsNotesOpen(true); setSidebarTab('bible'); }} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${isNotesOpen && sidebarTab === 'bible' ? 'bg-[#561291] text-white' : 'bg-white'}`}><BookOpen size={14} /><span>Bibel</span></button>
               <button onClick={toggleFocusMode} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${isFocusMode ? 'bg-burnt-orange/10 border-burnt-orange/20 text-burnt-orange' : 'bg-white'}`}><Maximize2 size={14} /><span>{isFocusMode ? "Avslutt fullskjerm" : "Fullskjerm"}</span></button>
             </div>
           </div>
@@ -907,8 +907,8 @@ export default function LessonView() {
                 <div className="flex items-center gap-1.5 text-on-surface-variant"><span className={`w-2 h-2 rounded-full ${isSaving ? 'bg-amber-500' : 'bg-green-500'}`}></span><span>{isSaving ? 'Lagrer...' : 'Lagret'}</span></div>
               </div>
               <div className="flex border-b border-outline-variant/20 text-xs font-bold shrink-0">
-                <button onClick={() => setActiveTab('write')} className={`flex-1 py-2 ${activeTab === 'write' ? 'border-[#1B4965] text-[#1B4965]' : ''}`}>Skriv</button>
-                <button onClick={() => setActiveTab('preview')} className={`flex-1 py-2 ${activeTab === 'preview' ? 'border-[#1B4965] text-[#1B4965]' : ''}`}>Forhåndsvisning</button>
+                <button onClick={() => setActiveTab('write')} className={`flex-1 py-2 ${activeTab === 'write' ? 'border-[#561291] text-[#561291]' : ''}`}>Skriv</button>
+                <button onClick={() => setActiveTab('preview')} className={`flex-1 py-2 ${activeTab === 'preview' ? 'border-[#561291] text-[#561291]' : ''}`}>Forhåndsvisning</button>
               </div>
               <div className="flex-grow flex flex-col min-h-0 min-w-0">
                 {activeTab === 'write' ? (
@@ -934,7 +934,7 @@ export default function LessonView() {
                         const newHtml = e.target.innerHTML;
                         handleContentChange(newHtml);
                       }}
-                      className="w-full flex-grow p-3 border outline-none overflow-y-auto bg-slate-50 rounded-lg min-h-[200px] text-xs font-sans focus:bg-white focus:border-[#1B4965] transition-all"
+                      className="w-full flex-grow p-3 border outline-none overflow-y-auto bg-slate-50 rounded-lg min-h-[200px] text-xs font-sans focus:bg-white focus:border-[#561291] transition-all"
                     />
                   </div>
                 ) : (
@@ -998,7 +998,7 @@ export default function LessonView() {
                       onClick={() => toggleVerseSelection(v.verse)}
                       className={`group relative p-2 border-b cursor-pointer transition-all rounded-lg ${
                         selectedBibleVerses.includes(Number(v.verse)) || selectedBibleVerses.includes(v.verse) || highlightedBibleVerse === v.verse
-                          ? 'bg-[#1B4965]/5 border border-[#1B4965]/20 shadow-sm' 
+                          ? 'bg-[#561291]/5 border border-[#561291]/20 shadow-sm' 
                           : 'hover:bg-slate-100 border border-transparent'
                       }`}
                     >
@@ -1024,8 +1024,8 @@ export default function LessonView() {
               
               {/* Floating control bar for multi-verse selection */}
               {selectedBibleVerses.length > 0 && (
-                <div className="bg-[#1B4965]/5 border border-[#1B4965]/20 p-3 rounded-xl flex items-center justify-between gap-2 shrink-0 animate-fade-in">
-                  <div className="text-[11px] font-bold text-[#1B4965]">
+                <div className="bg-[#561291]/5 border border-[#561291]/20 p-3 rounded-xl flex items-center justify-between gap-2 shrink-0 animate-fade-in">
+                  <div className="text-[11px] font-bold text-[#561291]">
                     {selectedBibleVerses.length} {selectedBibleVerses.length === 1 ? 'vers' : 'vers'} valgt
                   </div>
                   <div className="flex gap-1.5 text-[11px]">
@@ -1037,7 +1037,7 @@ export default function LessonView() {
                     </button>
                     <button 
                       onClick={insertSelectedVersesToNotes}
-                      className="px-3 py-1.5 bg-[#1B4965] text-white rounded-lg font-bold flex items-center gap-1 hover:bg-[#1B4965]/90 active:scale-[0.97] transition-all shadow-sm"
+                      className="px-3 py-1.5 bg-[#561291] text-white rounded-lg font-bold flex items-center gap-1 hover:bg-[#561291]/90 active:scale-[0.97] transition-all shadow-sm"
                     >
                       <Send size={10} />
                       <span>Legg til</span>

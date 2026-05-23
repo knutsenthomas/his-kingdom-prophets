@@ -91,7 +91,7 @@ button {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1b4965;
+  background: #561291;
 }
 
 /* Custom animations */
@@ -126,7 +126,7 @@ button {
 .hkm-typing-dots span {
   width: 6px;
   height: 6px;
-  background-color: #1b4965;
+  background-color: #561291;
   border-radius: 50%;
   display: inline-block;
   animation: hkm-typing 1.4s infinite both;
@@ -148,7 +148,7 @@ button {
 
 /* Subtle gradient for academic banner background */
 .banner-gradient {
-  background: linear-gradient(135deg, #1B4965 0%, #0b293c 100%);
+  background: linear-gradient(135deg, #561291 0%, #240046 100%);
   position: relative;
   overflow: hidden;
 }

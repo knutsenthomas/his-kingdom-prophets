@@ -82,7 +82,7 @@ export default function LibraryView() {
           >
             <div>
               {/* Mock banner */}
-              <div className="h-44 bg-gradient-to-br from-primary-container to-[#1B4965] relative flex items-center justify-center p-6 text-white text-center overflow-hidden">
+              <div className="h-44 bg-gradient-to-br from-primary-container to-[#561291] relative flex items-center justify-center p-6 text-white text-center overflow-hidden">
                 <div className="absolute inset-0 bg-black/10"></div>
                 <BookIcon size={48} className="text-white/20 absolute -right-2 -bottom-2" />
                 <h3 className="font-serif font-bold text-lg leading-tight relative z-10">{course.title}</h3>

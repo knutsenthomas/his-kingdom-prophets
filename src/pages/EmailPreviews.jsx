@@ -146,7 +146,7 @@ export default function EmailPreviews() {
               <div className="bg-white w-full max-w-[600px] border border-outline-variant shadow-sm rounded flex flex-col">
                 
                 {/* Brand Banner */}
-                <div className="bg-[#00324b] text-white p-8 text-center border-b-4 border-[#c5a059]">
+                <div className="bg-[#3c096c] text-white p-8 text-center border-b-4 border-[#c5a059]">
                   <h1 className="font-serif text-2xl font-bold tracking-wider">His Kingdom Prophets</h1>
                   <p className="text-[10px] tracking-widest uppercase font-semibold text-slate-300 mt-1">
                     Profetisk Utrustning & Dyp Bibelundervisning
@@ -173,7 +173,7 @@ export default function EmailPreviews() {
                         Ditt personlige dashboard er konfigurert med dine åndelige gaver og interesser. Du har nå full tilgang til leksjonsbiblioteket, bønne-chatten og bibelkalkulatoren.
                       </p>
                       
-                      <button className="bg-[#00324b] hover:bg-[#1b4965] text-white font-bold py-3 px-6 rounded text-xs uppercase tracking-wider text-center block w-full transition-all">
+                      <button className="bg-[#3c096c] hover:bg-[#561291] text-white font-bold py-3 px-6 rounded text-xs uppercase tracking-wider text-center block w-full transition-all">
                         ÅPNE MITT DASHBOARD
                       </button>
                     </>
@@ -197,7 +197,7 @@ export default function EmailPreviews() {
                             <span className="text-slate-900">25% (2 av 8 moduler)</span>
                           </div>
                           <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
-                            <div className="h-full bg-[#00324b] w-[25%]" />
+                            <div className="h-full bg-[#3c096c] w-[25%]" />
                           </div>
                         </div>
 
@@ -207,7 +207,7 @@ export default function EmailPreviews() {
                             <span className="text-slate-900">75% (6 av 8 moduler)</span>
                           </div>
                           <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
-                            <div className="h-full bg-[#00324b] w-[75%]" />
+                            <div className="h-full bg-[#3c096c] w-[75%]" />
                           </div>
                         </div>
                       </div>
@@ -216,7 +216,7 @@ export default function EmailPreviews() {
                         Neste anbefalte leksjon er "Modul 7: Johannes Åpenbaring og eskatologiske typologier" i bibelstudiet.
                       </p>
 
-                      <button className="bg-[#00324b] hover:bg-[#1b4965] text-white font-bold py-3 px-6 rounded text-xs uppercase tracking-wider text-center block w-full transition-all">
+                      <button className="bg-[#3c096c] hover:bg-[#561291] text-white font-bold py-3 px-6 rounded text-xs uppercase tracking-wider text-center block w-full transition-all">
                         FORTSETT LÆRINGSLØPET
                       </button>
                     </>
@@ -253,21 +253,21 @@ export default function EmailPreviews() {
                       <p>
                         Hei {user?.name.split(' ')[0]},
                       </p>
-                      <div className="bg-slate-50 border-l-4 border-[#00324b] p-4 rounded-r text-xs italic text-slate-600 leading-relaxed font-serif">
+                      <div className="bg-slate-50 border-l-4 border-[#3c096c] p-4 rounded-r text-xs italic text-slate-600 leading-relaxed font-serif">
                         "Jeg legger merke til at du har hatt en litt roligere periode i Innføring i den Profetiske Tjeneste i det siste. Jeg vil gjerne forsikre meg om at alt går bra med din åndelige vandring og studiene. Si gjerne ifra om det er områder av utrustningen du opplever utfordrende, eller om du ønsker bønneoppfølging."
                       </div>
                       <p>
                         Du kan svare på denne oppfølgingen direkte ved å logge inn på plattformen og sende en melding i studiechatten eller ta kontakt på neste seminar.
                       </p>
 
-                      <button className="bg-[#00324b] hover:bg-[#1b4965] text-white font-bold py-3 px-6 rounded text-xs uppercase tracking-wider text-center block w-full transition-all">
+                      <button className="bg-[#3c096c] hover:bg-[#561291] text-white font-bold py-3 px-6 rounded text-xs uppercase tracking-wider text-center block w-full transition-all">
                         ÅPNE STUDIECHAT
                       </button>
                     </>
                   )}
 
                   <p className="text-[11px] text-slate-500 text-center border-t border-slate-200 pt-6">
-                    Trenger du hjelp? Kontakt <a className="text-[#00324b] underline" href="#help">support@hiskingdomprophets.com</a> eller logg inn på plattformen.
+                    Trenger du hjelp? Kontakt <a className="text-[#3c096c] underline" href="#help">support@hiskingdomprophets.com</a> eller logg inn på plattformen.
                   </p>
                 </div>
 

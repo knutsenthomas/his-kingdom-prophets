@@ -147,7 +147,7 @@ export default function QuizBuilder() {
         
         <button
           onClick={() => showToast("Quiz-konfigurasjon er lagret i databasen ✓")}
-          className="flex items-center gap-1.5 px-6 py-2.5 bg-[#00324b] hover:opacity-95 text-white rounded-xl text-xs font-bold shadow-md transition-all active:scale-95"
+          className="flex items-center gap-1.5 px-6 py-2.5 bg-[#3c096c] hover:opacity-95 text-white rounded-xl text-xs font-bold shadow-md transition-all active:scale-95"
         >
           <Save size={14} />
           Lagre Endringer
@@ -211,7 +211,7 @@ export default function QuizBuilder() {
                     onClick={() => setActiveType(t.id)}
                     className={`flex items-center justify-center gap-1.5 flex-grow py-2 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all ${
                       activeType === t.id
-                        ? 'bg-white text-[#00324b] shadow-sm'
+                        ? 'bg-white text-[#3c096c] shadow-sm'
                         : 'text-on-surface-variant hover:text-primary'
                     }`}
                   >
@@ -352,7 +352,7 @@ export default function QuizBuilder() {
         {/* RIGHT COLUMN: Live Preview Canvas (6 cols) */}
         <div className="lg:col-span-6 flex flex-col gap-6">
           <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm">
-            <h3 className="font-serif text-lg font-bold text-[#00324b] mb-4 flex items-center gap-2">
+            <h3 className="font-serif text-lg font-bold text-[#3c096c] mb-4 flex items-center gap-2">
               <Eye size={18} className="text-[#c5a059]" /> Forhåndsvisning for Student (Live Canvas)
             </h3>
 
@@ -378,7 +378,7 @@ export default function QuizBuilder() {
                     </div>
                     
                     <div className="flex-grow space-y-3 min-w-0 pr-4">
-                      <h4 className="font-bold text-sm text-[#00324b] leading-relaxed pr-6">{question.title}</h4>
+                      <h4 className="font-bold text-sm text-[#3c096c] leading-relaxed pr-6">{question.title}</h4>
                       
                       {/* Interactive visual inputs based on preview type */}
                       {question.type === 'multiple-choice' && (
@@ -413,7 +413,7 @@ export default function QuizBuilder() {
                             {question.choices.map((choice, cIdx) => (
                               <div 
                                 key={cIdx} 
-                                className="px-3 py-1.5 bg-white border border-[#c1c7ce] text-[11px] font-bold text-[#00324b] rounded-lg shadow-sm hover:border-primary cursor-grab active:cursor-grabbing transition-colors"
+                                className="px-3 py-1.5 bg-white border border-[#c1c7ce] text-[11px] font-bold text-[#3c096c] rounded-lg shadow-sm hover:border-primary cursor-grab active:cursor-grabbing transition-colors"
                               >
                                 {choice}
                               </div>
