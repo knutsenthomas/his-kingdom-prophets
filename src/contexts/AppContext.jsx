@@ -1440,9 +1440,16 @@ export const AppProvider = ({ children }) => {
             'profile-placeholder-social-username': 'brukernavn',
             'profile-placeholder-social-username-en': 'username'
           };
-          await setDoc(cmsDocRef, initialCms);
+          // Document doesn't exist, use default cmsContent values locally without blocking (guests are unauthenticated!)
           setCmsContent(initialCms);
           localStorage.setItem('hkm-cms-content', JSON.stringify(initialCms));
+
+          // Seed the Firestore record asynchronously in the background only if authenticated as superadmin/admin (Non-blocking!)
+          if (auth.currentUser && ['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(auth.currentUser.email?.toLowerCase())) {
+            setDoc(cmsDocRef, initialCms).catch(seedErr => {
+              console.warn("Could not seed CMS configs to Firestore:", seedErr);
+            });
+          }
         }
       } catch (err) {
         console.warn("Klarte ikke koble til Firestore for CMS-innhold. Bruker localStorage eller fallback:", err);
