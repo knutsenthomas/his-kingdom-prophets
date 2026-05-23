@@ -343,13 +343,7 @@ export const AppProvider = ({ children }) => {
 
   // Centralized Headless CMS Content State
   const [cmsContent, setCmsContent] = useState(() => {
-    try {
-      const saved = localStorage.getItem('hkm-cms-content');
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      console.error('Klarte ikke hente cms content fra localStorage:', e);
-    }
-    return {
+    const defaults = {
       'landing-hero-title': 'His Kingdom prophets',
       'landing-hero-tagline': 'Profetisk tjeneste og åndelig dybde',
       'landing-hero-description': 'En åpenbaringsskole for profetisk utrustning, bibelundervisning og åndelig vekst, hvor solid bibelsk teologi møter den levende Ånd.',
@@ -487,6 +481,15 @@ export const AppProvider = ({ children }) => {
       'layout-upgrade-banner-desc': 'Få ubegrenset tilgang til alle studieskrifter og veiledning.',
       'layout-upgrade-banner-btn': 'Oppgrader profil'
     };
+    try {
+      const saved = localStorage.getItem('hkm-cms-content');
+      if (saved) {
+        return { ...defaults, ...JSON.parse(saved) };
+      }
+    } catch (e) {
+      console.error('Klarte ikke hente cms content fra localStorage:', e);
+    }
+    return defaults;
   });
 
   const [isAdminEditing, setIsAdminEditing] = useState(false);
