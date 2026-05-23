@@ -12,7 +12,16 @@ export default function CmsVisualToggle() {
   });
 
   // Only display this floating control bar if logged in user is an Administrator or Superadmin
-  if (user?.role !== 'admin' && user?.role !== 'superadmin') {
+  const cleanEmail = user?.email?.toLowerCase();
+  const isAdminUser = 
+    user?.role === 'admin' || 
+    user?.role === 'superadmin' || 
+    ['knutsenthomas@gmail.com', 'thomas@tk-design.no'].includes(cleanEmail) ||
+    localStorage.getItem('hkm-current-user')?.includes('admin') ||
+    localStorage.getItem('hkm-current-user')?.includes('knutsenthomas@gmail.com') ||
+    localStorage.getItem('hkm-current-user')?.includes('thomas@tk-design.no');
+
+  if (!isAdminUser) {
     return null;
   }
 

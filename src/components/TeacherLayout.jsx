@@ -69,41 +69,41 @@ export default function TeacherLayout() {
   };
 
   const navItems = [
-    { isHeader: true, name: cmsContent['sidebar-mentor-tools'] || (language === 'en' ? 'Mentor Tools' : 'Mentorverktøy') },
-    { name: cmsContent['nav.dashboard.title'] || (language === 'en' ? 'Mentor Dashboard' : 'Lærer Dashboard'), path: '/teacher/dashboard', icon: Compass },
-    { name: cmsContent['sidebar-followup'] || (language === 'en' ? 'Ministry Follow-up' : 'Tjenesteoppfølging'), path: '/teacher/follow-up', icon: AlertTriangle, badge: atRiskCount },
-    { name: cmsContent['sidebar-course-builder'] || (language === 'en' ? 'Course Builder' : 'Kursbygger'), path: '/teacher/course-builder', icon: Sliders },
-    { name: cmsContent['sidebar-quiz-builder'] || (language === 'en' ? 'Quiz Builder' : 'Prøvebygger'), path: '/teacher/quiz-builder', icon: ClipboardList },
-    { name: cmsContent['sidebar-insights'] || (language === 'en' ? 'Course Insights' : 'Kursinnsikt'), path: '/teacher/insights', icon: BarChart3 },
-    { name: language === 'en' ? 'Marketing' : 'Markedsføring', path: '/teacher/marketing', icon: TrendingUp },
+    { isHeader: true, slug: 'sidebar-mentor-tools', fallback: 'Mentorverktøy' },
+    { slug: 'nav.dashboard.title', fallback: 'Lærer Dashboard', path: '/teacher/dashboard', icon: Compass },
+    { slug: 'sidebar-followup', fallback: 'Tjenesteoppfølging', path: '/teacher/follow-up', icon: AlertTriangle, badge: atRiskCount },
+    { slug: 'sidebar-course-builder', fallback: 'Kursbygger', path: '/teacher/course-builder', icon: Sliders },
+    { slug: 'sidebar-quiz-builder', fallback: 'Prøvebygger', path: '/teacher/quiz-builder', icon: ClipboardList },
+    { slug: 'sidebar-insights', fallback: 'Kursinnsikt', path: '/teacher/insights', icon: BarChart3 },
+    { slug: 'sidebar-marketing', fallback: 'Markedsføring', path: '/teacher/marketing', icon: TrendingUp },
     
     // Elev- og studieressurser (Studieportal)
-    { isHeader: true, name: cmsContent['sidebar-student-portal'] || (language === 'en' ? 'Study Portal' : 'Studieportal') },
-    { name: cmsContent['sidebar-bible'] || (language === 'en' ? 'The Bible' : 'Bibelen'), path: '/student/bible', icon: Book },
-    { name: cmsContent['sidebar-curriculum'] || (language === 'en' ? 'Curriculum & Courses' : 'Studieplan & kurs'), path: '/student/library', icon: BookOpen },
-    { name: cmsContent['sidebar-lesson'] || (language === 'en' ? 'Lesson' : 'Leksjon'), path: '/student/lesson', icon: GraduationCap },
-    { name: cmsContent['sidebar-video'] || (language === 'en' ? 'Classroom / Video' : 'Klasserom / Video'), path: '/student/video', icon: Video },
-    { name: cmsContent['sidebar-assignments'] || (language === 'en' ? 'Assignments' : 'Oppgaver'), path: '/student/assignments', icon: CheckSquare },
-    { name: cmsContent['sidebar-community'] || (language === 'en' ? 'Prayer Fellowship' : 'Bønnefellesskap'), path: '/student/chat', icon: Users },
+    { isHeader: true, slug: 'sidebar-student-portal', fallback: 'Studieportal' },
+    { slug: 'sidebar-bible', fallback: 'Bibelen', path: '/student/bible', icon: Book },
+    { slug: 'sidebar-curriculum', fallback: 'Studieplan & kurs', path: '/student/library', icon: BookOpen },
+    { slug: 'sidebar-lesson', fallback: 'Leksjon', path: '/student/lesson', icon: GraduationCap },
+    { slug: 'sidebar-video', fallback: 'Klasserom / Video', path: '/student/video', icon: Video },
+    { slug: 'sidebar-assignments', fallback: 'Oppgaver', path: '/student/assignments', icon: CheckSquare },
+    { slug: 'sidebar-community', fallback: 'Bønnefellesskap', path: '/student/chat', icon: Users },
     
     // Fakultetsverktøy
-    { isHeader: true, name: cmsContent['sidebar-faculty-tools'] || (language === 'en' ? 'Faculty Tools' : 'Fakultetsverktøy') },
-    { name: language === 'en' ? 'Media Library' : 'Mediebibliotek', path: '/teacher/media-library', icon: Video },
-    { name: language === 'en' ? 'Bible Calculator' : 'Bibelkalkulator', path: '/teacher/grading', icon: Award },
-    { name: language === 'en' ? 'Partner Portal' : 'Partnerportal', path: '/teacher/partner', icon: Gift },
-    { name: cmsContent['sidebar-support'] || (language === 'en' ? 'Help & Support' : 'Hjelp & support'), path: '/teacher/support', icon: HelpCircle },
-    { name: language === 'en' ? 'Notification Center' : 'Varslingssenter', path: '/teacher/notifications', icon: Bell },
-    { name: language === 'en' ? 'My Mentor Profile' : 'Min lærerprofil', path: '/teacher/profile', icon: User }
+    { isHeader: true, slug: 'sidebar-faculty-tools', fallback: 'Fakultetsverktøy' },
+    { slug: 'sidebar-media-library', fallback: 'Mediebibliotek', path: '/teacher/media-library', icon: Video },
+    { slug: 'sidebar-grading', fallback: 'Bibelkalkulator', path: '/teacher/grading', icon: Award },
+    { slug: 'sidebar-partner', fallback: 'Partnerportal', path: '/teacher/partner', icon: Gift },
+    { slug: 'sidebar-support', fallback: 'Hjelp & support', path: '/teacher/support', icon: HelpCircle },
+    { slug: 'sidebar-notifications', fallback: 'Varslingssenter', path: '/teacher/notifications', icon: Bell },
+    { slug: 'sidebar-teacher-profile', fallback: 'Min lærerprofil', path: '/teacher/profile', icon: User }
   ];
 
   if (user?.role === 'admin' || user?.role === 'superadmin') {
-    navItems.push({ isHeader: true, name: cmsContent['sidebar-administration'] || (language === 'en' ? 'Administration' : 'Administrasjon') });
-    navItems.push({ name: cmsContent['sidebar-cms-editor'] || (language === 'en' ? 'Global CMS Management' : 'Global CMS Styring'), path: '/admin/cms', icon: Languages });
-    navItems.push({ name: language === 'en' ? 'Analytics Dashboard' : 'Analytics Dashboard', path: '/admin/analytics', icon: BarChart3 });
-    navItems.push({ name: cmsContent['sidebar-user-admin'] || (language === 'en' ? 'User Management' : 'Brukerhåndtering'), path: '/admin/portal', icon: Users });
+    navItems.push({ isHeader: true, slug: 'sidebar-administration', fallback: 'Administrasjon' });
+    navItems.push({ slug: 'sidebar-cms-editor', fallback: 'Global CMS Styring', path: '/admin/cms', icon: Languages });
+    navItems.push({ slug: 'sidebar-analytics', fallback: 'Analytics Dashboard', path: '/admin/analytics', icon: BarChart3 });
+    navItems.push({ slug: 'sidebar-user-admin', fallback: 'Brukerhåndtering', path: '/admin/portal', icon: Users });
   } else if (user?.role === 'teacher') {
-    navItems.push({ isHeader: true, name: cmsContent['sidebar-administration'] || (language === 'en' ? 'Administration' : 'Administrasjon') });
-    navItems.push({ name: cmsContent['sidebar-cms-editor'] || (language === 'en' ? 'Global CMS Management' : 'Global CMS Styring'), path: '/admin/cms', icon: Languages });
+    navItems.push({ isHeader: true, slug: 'sidebar-administration', fallback: 'Administrasjon' });
+    navItems.push({ slug: 'sidebar-cms-editor', fallback: 'Global CMS Styring', path: '/admin/cms', icon: Languages });
   }
 
   return (
@@ -265,10 +265,10 @@ export default function TeacherLayout() {
                   if (item.isHeader) {
                     return (
                       <div 
-                        key={item.name + '-' + idx} 
+                        key={item.slug + '-' + idx} 
                         className="text-[10px] font-bold text-primary uppercase tracking-wider pt-4 pb-1 px-4 select-none"
                       >
-                        {item.name}
+                        <CmsText slug={item.slug} fallback={item.fallback} />
                       </div>
                     );
                   }
@@ -286,7 +286,7 @@ export default function TeacherLayout() {
                     >
                       <div className="flex items-center gap-3">
                         <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
-                        <span>{item.name}</span>
+                        <span><CmsText slug={item.slug} fallback={item.fallback} /></span>
                       </div>
                       {item.badge !== undefined && item.badge > 0 && (
                         <span className="bg-amber-500 text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0">
@@ -383,10 +383,10 @@ export default function TeacherLayout() {
                 if (item.isHeader) {
                   return (
                     <div 
-                      key={item.name + '-' + idx} 
+                      key={item.slug + '-' + idx} 
                       className="text-[10px] font-bold text-primary uppercase tracking-wider pt-4 pb-1 px-4 select-none"
                     >
-                      {item.name}
+                      <CmsText slug={item.slug} fallback={item.fallback} />
                     </div>
                   );
                 }
@@ -407,7 +407,7 @@ export default function TeacherLayout() {
                   >
                     <div className="flex items-center gap-3">
                       <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
-                      <span>{item.name}</span>
+                      <span><CmsText slug={item.slug} fallback={item.fallback} /></span>
                     </div>
                     {item.badge !== undefined && item.badge > 0 && (
                       <span className="bg-amber-500 text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0">

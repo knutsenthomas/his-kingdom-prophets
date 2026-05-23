@@ -313,16 +313,16 @@ export default function StudentLayout() {
   };
 
   const navItems = [
-    { name: cmsContent['nav.dashboard.title'] || (language === 'en' ? 'Dashboard' : 'Oversikt'), path: '/student/dashboard', icon: Compass },
-    { name: cmsContent['sidebar-bible'] || (language === 'en' ? 'The Bible' : 'Bibelen'), path: '/student/bible', icon: Book },
-    { name: cmsContent['sidebar-curriculum'] || (language === 'en' ? 'Curriculum & Courses' : 'Studieplan & kurs'), path: '/student/library', icon: BookOpen },
-    { name: cmsContent['sidebar-lesson'] || (language === 'en' ? 'Lesson' : 'Leksjon'), path: '/student/lesson', icon: GraduationCap },
-    { name: cmsContent['sidebar-video'] || (language === 'en' ? 'Classroom / Video' : 'Klasserom / Video'), path: '/student/video', icon: Video },
-    { name: cmsContent['sidebar-assignments'] || (language === 'en' ? 'Assignments' : 'Oppgaver'), path: '/student/assignments', icon: CheckSquare },
-    { name: cmsContent['sidebar-community'] || (language === 'en' ? 'Prayer Fellowship' : 'Bønnefellesskap'), path: '/student/chat', icon: Users },
-    { name: language === 'en' ? 'Partner Portal' : 'Partnerportal', path: '/student/partner', icon: Gift },
-    { name: cmsContent['sidebar-support'] || (language === 'en' ? 'Help & Support' : 'Hjelp & support'), path: '/student/support', icon: HelpCircle },
-    { name: cmsContent['nav.settings.account'] || (language === 'en' ? 'My Profile' : 'Min profil'), path: '/student/profile', icon: User },
+    { slug: 'nav.dashboard.title', fallback: 'Oversikt', path: '/student/dashboard', icon: Compass },
+    { slug: 'sidebar-bible', fallback: 'Bibelen', path: '/student/bible', icon: Book },
+    { slug: 'sidebar-curriculum', fallback: 'Studieplan & kurs', path: '/student/library', icon: BookOpen },
+    { slug: 'sidebar-lesson', fallback: 'Leksjon', path: '/student/lesson', icon: GraduationCap },
+    { slug: 'sidebar-video', fallback: 'Klasserom / Video', path: '/student/video', icon: Video },
+    { slug: 'sidebar-assignments', fallback: 'Oppgaver', path: '/student/assignments', icon: CheckSquare },
+    { slug: 'sidebar-community', fallback: 'Bønnefellesskap', path: '/student/chat', icon: Users },
+    { slug: 'sidebar-partner', fallback: 'Partnerportal', path: '/student/partner', icon: Gift },
+    { slug: 'sidebar-support', fallback: 'Hjelp & support', path: '/student/support', icon: HelpCircle },
+    { slug: 'nav.settings.account', fallback: 'Min profil', path: '/student/profile', icon: User },
   ];
 
   return (
@@ -519,7 +519,7 @@ export default function StudentLayout() {
                     }`}
                   >
                     <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
-                    <span>{item.name}</span>
+                    <span><CmsText slug={item.slug} fallback={item.fallback} /></span>
                   </button>
                 );
               })}
@@ -624,7 +624,7 @@ export default function StudentLayout() {
                     }`}
                   >
                     <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
-                    <span>{item.name}</span>
+                    <span><CmsText slug={item.slug} fallback={item.fallback} /></span>
                   </button>
                 );
               })}
