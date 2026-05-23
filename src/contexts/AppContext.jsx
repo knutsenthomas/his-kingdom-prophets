@@ -766,7 +766,9 @@ export const AppProvider = ({ children }) => {
         }
       }
 
-      if (email.includes('teacher') || email.includes('david')) {
+      if (email === 'thomas@tk-design.no') {
+        changePersona('superadmin');
+      } else if (email.includes('teacher') || email.includes('david')) {
         changePersona('teacher');
       } else if (email.includes('super') || email.includes('superadmin')) {
         changePersona('superadmin');
@@ -925,7 +927,9 @@ export const AppProvider = ({ children }) => {
       showToast("Løsinnlogging fullført!");
     } catch (err) {
       console.warn("Passwordless login failed or needs registration, fallback active:", err.message);
-      if (email.includes('teacher') || email.includes('david')) {
+      if (email === 'thomas@tk-design.no') {
+        changePersona('superadmin');
+      } else if (email.includes('teacher') || email.includes('david')) {
         changePersona('teacher');
       } else if (email.includes('super') || email.includes('superadmin')) {
         changePersona('superadmin');
