@@ -28,6 +28,54 @@ const assetDefinitions = [
   { slug: 'landing-network-title', title: 'Nettverk Tittel', section: 'Hjemmeside', type: 'text', description: 'Tittel for nettverksseksjonen nederst på landingssiden.' },
   { slug: 'landing-network-desc', title: 'Nettverk Beskrivelse', section: 'Hjemmeside', type: 'textarea', description: 'Beskrivelse av det globale profetiske nettverket.' },
   
+  // Hjemmeside Lenker & Knapper
+  { slug: 'landing-nav-programs', title: 'Navigasjonslenke Studielinjer', section: 'Hjemmeside', type: 'text', description: 'Tekst på menylenken for studielinjer.' },
+  { slug: 'landing-nav-faculty', title: 'Navigasjonslenke Mentorer', section: 'Hjemmeside', type: 'text', description: 'Tekst på menylenken for mentorer.' },
+  { slug: 'landing-nav-resources', title: 'Navigasjonslenke Bibelressurser', section: 'Hjemmeside', type: 'text', description: 'Tekst på menylenken for bibelressurser.' },
+  { slug: 'landing-nav-admissions', title: 'Navigasjonslenke Søk Opptak', section: 'Hjemmeside', type: 'text', description: 'Tekst på menylenken for søknad.' },
+  { slug: 'landing-btn-login', title: 'Knappetekst Logg Inn', section: 'Hjemmeside', type: 'text', description: 'Tekst på logg-inn knappen i topplinjen.' },
+  { slug: 'landing-btn-apply', title: 'Knappetekst Søk Nå', section: 'Hjemmeside', type: 'text', description: 'Tekst på søknadsknappen i topplinjen.' },
+  { slug: 'landing-network-btn', title: 'Nettverk Handlingsknapp', section: 'Hjemmeside', type: 'text', description: 'Tekst på knappen i det globale nettverksbanneret.' },
+  
+  // Hjemmeside Kulepunkter (Søyler)
+  { slug: 'landing-pillar1-bullet1', title: 'Søyle 1 Kulepunkt 1', section: 'Hjemmeside', type: 'text', description: 'Første kulepunkt under søyle 1 (Profetisk Utrustning).' },
+  { slug: 'landing-pillar1-bullet2', title: 'Søyle 1 Kulepunkt 2', section: 'Hjemmeside', type: 'text', description: 'Andre kulepunkt under søyle 1 (Profetisk Utrustning).' },
+  { slug: 'landing-pillar1-bullet3', title: 'Søyle 1 Kulepunkt 3', section: 'Hjemmeside', type: 'text', description: 'Tredje kulepunkt under søyle 1 (Profetisk Utrustning).' },
+  
+  { slug: 'landing-pillar2-bullet1', title: 'Søyle 2 Kulepunkt 1', section: 'Hjemmeside', type: 'text', description: 'Første kulepunkt under søyle 2 (Bibelundervisning).' },
+  { slug: 'landing-pillar2-bullet2', title: 'Søyle 2 Kulepunkt 2', section: 'Hjemmeside', type: 'text', description: 'Andre kulepunkt under søyle 2 (Bibelundervisning).' },
+  { slug: 'landing-pillar2-bullet3', title: 'Søyle 2 Kulepunkt 3', section: 'Hjemmeside', type: 'text', description: 'Tredje kulepunkt under søyle 2 (Bibelundervisning).' },
+  
+  { slug: 'landing-pillar3-bullet1', title: 'Søyle 3 Kulepunkt 1', section: 'Hjemmeside', type: 'text', description: 'Første kulepunkt under søyle 3 (Åndelig Veiledning).' },
+  { slug: 'landing-pillar3-bullet2', title: 'Søyle 3 Kulepunkt 2', section: 'Hjemmeside', type: 'text', description: 'Andre kulepunkt under søyle 3 (Åndelig Veiledning).' },
+  { slug: 'landing-pillar3-bullet3', title: 'Søyle 3 Kulepunkt 3', section: 'Hjemmeside', type: 'text', description: 'Tredje kulepunkt under søyle 3 (Åndelig Veiledning).' },
+  
+  // Hjemmeside Vitnesbyrd
+  { slug: 'landing-testimonials-title', title: 'Vitnesbyrd Seksjonstittel', section: 'Hjemmeside', type: 'text', description: 'Hovedtittel for vitnesbyrd- og referanseseksjonen.' },
+  { slug: 'landing-testimonials-desc', title: 'Vitnesbyrd Seksjonsbeskrivelse', section: 'Hjemmeside', type: 'textarea', description: 'Introduksjonstekst under tittel på vitnesbyrdseksjonen.' },
+  { slug: 'landing-testimonial1-name', title: 'Vitnesbyrd 1 Navn', section: 'Hjemmeside', type: 'text', description: 'Navn på den første personen i vitnesbyrdene.' },
+  { slug: 'landing-testimonial1-role', title: 'Vitnesbyrd 1 Rolle/Tittel', section: 'Hjemmeside', type: 'text', description: 'Stilling/rolle for den første personen.' },
+  { slug: 'landing-testimonial1-quote', title: 'Vitnesbyrd 1 Sitat', section: 'Hjemmeside', type: 'textarea', description: 'Det fullstendige sitatet / vitnesbyrdet til person 1.' },
+  
+  { slug: 'landing-testimonial2-name', title: 'Vitnesbyrd 2 Navn', section: 'Hjemmeside', type: 'text', description: 'Navn på den andre personen i vitnesbyrdene.' },
+  { slug: 'landing-testimonial2-role', title: 'Vitnesbyrd 2 Rolle/Tittel', section: 'Hjemmeside', type: 'text', description: 'Stilling/rolle for den andre personen.' },
+  { slug: 'landing-testimonial2-quote', title: 'Vitnesbyrd 2 Sitat', section: 'Hjemmeside', type: 'textarea', description: 'Det fullstendige sitatet / vitnesbyrdet til person 2.' },
+  
+  // Hjemmeside Siste CTA
+  { slug: 'landing-cta-tagline', title: 'CTA Seksjon Tagline', section: 'Hjemmeside', type: 'text', description: 'Liten tekst øverst i siste handlingsseksjon (f.eks. Opptak Åpent...).' },
+  { slug: 'landing-cta-title', title: 'CTA Seksjon Tittel', section: 'Hjemmeside', type: 'text', description: 'Hovedoverskrift for den avsluttende handlingsseksjonen.' },
+  { slug: 'landing-cta-desc', title: 'CTA Seksjon Beskrivelse', section: 'Hjemmeside', type: 'textarea', description: 'Beskrivende avsnitt under overskrift i siste handlingsseksjon.' },
+  { slug: 'landing-cta-btn-primary', title: 'CTA Seksjon Primærknapp', section: 'Hjemmeside', type: 'text', description: 'Tekst på primærknappen for opptak.' },
+  { slug: 'landing-cta-btn-secondary', title: 'CTA Seksjon Sekundærknapp', section: 'Hjemmeside', type: 'text', description: 'Tekst på sekundærknappen for fagplan.' },
+  
+  // Hjemmeside Footer
+  { slug: 'landing-footer-title', title: 'Footer Hovedoverskrift', section: 'Hjemmeside', type: 'text', description: 'Logo/tittel nederst i footeren på landingssiden.' },
+  { slug: 'landing-footer-copyright', title: 'Footer Copyright-paragraf', section: 'Hjemmeside', type: 'textarea', description: 'Copyright og generell systemrettighets-paragraf.' },
+  { slug: 'landing-footer-link-privacy', title: 'Footer Lenke Personvern', section: 'Hjemmeside', type: 'text', description: 'Tekst på lenken for personvern.' },
+  { slug: 'landing-footer-link-terms', title: 'Footer Lenke Betingelser', section: 'Hjemmeside', type: 'text', description: 'Tekst på lenken for vilkår/betingelser.' },
+  { slug: 'landing-footer-link-accessibility', title: 'Footer Lenke Tilgjengelighet', section: 'Hjemmeside', type: 'text', description: 'Tekst på lenken for universell utforming.' },
+  { slug: 'landing-footer-link-support', title: 'Footer Lenke Kontakt', section: 'Hjemmeside', type: 'text', description: 'Tekst på lenken for kundestøtte/support.' },
+  
   // Innlogging (Auth Flow)
   { slug: 'login-title', title: 'Tittel (Innlogging)', section: 'Innlogging', type: 'text', description: 'Hovedtittel som vises på innloggingsskjermen.' },
   { slug: 'login-subtitle', title: 'Undertittel (Innlogging)', section: 'Innlogging', type: 'text', description: 'Undertittel som vises på innloggingsskjermen.' },

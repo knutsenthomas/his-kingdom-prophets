@@ -27,10 +27,18 @@ export default function LandingPage() {
           </div>
           
           <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-            <a className="font-semibold text-primary border-b-2 border-primary cursor-pointer transition-colors duration-200" href="#programs">Studielinjer</a>
-            <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#faculty">Mentorer</a>
-            <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#research">Bibelressurser</a>
-            <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#admissions">Søk Opptak</a>
+            <a className="font-semibold text-primary border-b-2 border-primary cursor-pointer transition-colors duration-200" href="#programs">
+              <CmsText slug="landing-nav-programs" fallback="Studielinjer" />
+            </a>
+            <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#faculty">
+              <CmsText slug="landing-nav-faculty" fallback="Mentorer" />
+            </a>
+            <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#research">
+              <CmsText slug="landing-nav-resources" fallback="Bibelressurser" />
+            </a>
+            <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#admissions">
+              <CmsText slug="landing-nav-admissions" fallback="Søk Opptak" />
+            </a>
           </nav>
 
           <div className="flex items-center gap-1 min-[360px]:gap-2 sm:gap-4">
@@ -40,13 +48,13 @@ export default function LandingPage() {
                 onClick={() => navigate('/login')} 
                 className="px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors text-sm shrink-0"
               >
-                Logg inn
+                <CmsText slug="landing-btn-login" fallback="Logg inn" />
               </button>
               <button 
                 onClick={() => navigate('/login')} 
                 className="px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-sm shrink-0"
               >
-                Søk Nå
+                <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
               </button>
             </div>
             
@@ -56,7 +64,7 @@ export default function LandingPage() {
                 onClick={() => navigate('/login')} 
                 className="px-2.5 sm:px-4 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-[10px] min-[360px]:text-xs shrink-0"
               >
-                Søk Nå
+                <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
               </button>
               <button 
                 onClick={() => setIsMobileMenuOpen(true)}
@@ -100,7 +108,7 @@ export default function LandingPage() {
                       alt="His Kingdom Prophets Logo" 
                       className="w-7 h-7 object-contain shrink-0" 
                     />
-                    <span>His Kingdom Prophets</span>
+                    <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
                   </div>
                   <button 
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -114,13 +122,13 @@ export default function LandingPage() {
                 {/* Navigation Links */}
                 <nav className="flex flex-col gap-2">
                   {[
-                    { name: 'Studielinjer', href: '#programs' },
-                    { name: 'Mentorer', href: '#faculty' },
-                    { name: 'Bibelressurser', href: '#research' },
-                    { name: 'Søk Opptak', href: '#admissions' }
+                    { name: <CmsText slug="landing-nav-programs" fallback="Studielinjer" />, href: '#programs' },
+                    { name: <CmsText slug="landing-nav-faculty" fallback="Mentorer" />, href: '#faculty' },
+                    { name: <CmsText slug="landing-nav-resources" fallback="Bibelressurser" />, href: '#research' },
+                    { name: <CmsText slug="landing-nav-admissions" fallback="Søk Opptak" />, href: '#admissions' }
                   ].map(item => (
                     <a
-                      key={item.name}
+                      key={item.href}
                       href={item.href}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="px-4 py-3.5 text-sm font-semibold text-on-surface-variant hover:text-primary hover:bg-[#f6fafe] rounded-xl transition-all"
@@ -137,13 +145,13 @@ export default function LandingPage() {
                   onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
                   className="w-full py-3 border border-[#c1c7ce] text-primary hover:bg-slate-50 font-bold rounded-xl text-xs transition-all active:scale-[0.98]"
                 >
-                  Logg inn
+                  <CmsText slug="landing-btn-login" fallback="Logg inn" />
                 </button>
                 <button
                   onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
                   className="w-full py-3 bg-primary text-white font-bold rounded-xl text-xs transition-all active:scale-[0.98] shadow-md"
                 >
-                  Søk Nå
+                  <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
                 </button>
               </div>
             </motion.aside>
@@ -240,15 +248,15 @@ export default function LandingPage() {
               <ul className="space-y-2.5 border-t border-slate-100/55 pt-6 text-xs text-on-surface-variant font-medium font-sans">
                 <li className="flex items-center gap-2">
                   <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
-                  <span>Åndelig skjelneevne og etikk</span>
+                  <CmsText slug="landing-pillar1-bullet1" fallback="Åndelig skjelneevne og etikk" />
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
-                  <span>Drømmetydning & Åpenbaring</span>
+                  <CmsText slug="landing-pillar1-bullet2" fallback="Drømmetydning & Åpenbaring" />
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
-                  <span>Etisk karakter og modenhet</span>
+                  <CmsText slug="landing-pillar1-bullet3" fallback="Etisk karakter og modenhet" />
                 </li>
               </ul>
             </div>
@@ -276,15 +284,15 @@ export default function LandingPage() {
               <ul className="space-y-2.5 border-t border-slate-100/55 pt-6 text-xs text-on-surface-variant font-medium font-sans">
                 <li className="flex items-center gap-2">
                   <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
-                  <span>Historisk-grammatisk hermeneutikk</span>
+                  <CmsText slug="landing-pillar2-bullet1" fallback="Historisk-grammatisk hermeneutikk" />
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
-                  <span>Paktsteologi & Eskatologi</span>
+                  <CmsText slug="landing-pillar2-bullet2" fallback="Paktsteologi & Eskatologi" />
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
-                  <span>Sunn eksegese og Skriftlære</span>
+                  <CmsText slug="landing-pillar2-bullet3" fallback="Sunn eksegese og Skriftlære" />
                 </li>
               </ul>
             </div>
@@ -312,15 +320,15 @@ export default function LandingPage() {
               <ul className="space-y-2.5 border-t border-slate-100/55 pt-6 text-xs text-on-surface-variant font-medium font-sans">
                 <li className="flex items-center gap-2">
                   <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
-                  <span>1-til-1 oppfølging & mentorsamtaler</span>
+                  <CmsText slug="landing-pillar3-bullet1" fallback="1-til-1 oppfølging & mentorsamtaler" />
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
-                  <span>Personlig disippelskapsprogram</span>
+                  <CmsText slug="landing-pillar3-bullet2" fallback="Personlig disippelskapsprogram" />
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
-                  <span>Karakterutvikling & Åndelig vekst</span>
+                  <CmsText slug="landing-pillar3-bullet3" fallback="Karakterutvikling & Åndelig vekst" />
                 </li>
               </ul>
             </div>
@@ -342,18 +350,17 @@ export default function LandingPage() {
               onClick={() => navigate('/login')}
               className="relative z-10 shrink-0 px-6 py-3 bg-[#1B4965] hover:bg-[#00324b] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm hover:shadow active:scale-[0.98] flex items-center gap-2 group-hover:translate-x-0.5"
             >
-              <span>Bli en Del</span>
+              <CmsText slug="landing-network-btn" fallback="Bli en Del" />
               <ArrowRight size={14} />
             </button>
           </div>
         </section>
 
-        {/* Testimonials Section */}
         <section id="faculty" className="py-24 bg-surface-container-low overflow-hidden">
           <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12">
             <div className="mb-12 max-w-2xl">
-              <h2 className="font-serif text-3xl text-primary font-bold mb-4">Vitnesbyrd & Erfaringer</h2>
-              <p className="text-on-surface-variant">Hør hva våre studenter og mentorer sier om det profetiske fellesskapet.</p>
+              <CmsText slug="landing-testimonials-title" fallback="Vitnesbyrd & Erfaringer" as="h2" className="font-serif text-3xl text-primary font-bold mb-4" />
+              <CmsText slug="landing-testimonials-desc" fallback="Hør hva våre studenter og mentorer sier om det profetiske fellesskapet." as="p" className="text-on-surface-variant" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="p-6 sm:p-8 bg-white rounded-2xl shadow-sm border border-outline-variant relative">
@@ -364,13 +371,11 @@ export default function LandingPage() {
                     src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120"
                   />
                   <div>
-                    <h4 className="font-serif text-lg text-primary font-bold">Apostel David Hansen</h4>
-                    <p className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Grunnlegger & Hovedmentor</p>
+                    <CmsText slug="landing-testimonial1-name" fallback="Apostel David Hansen" as="h4" className="font-serif text-lg text-primary font-bold" />
+                    <CmsText slug="landing-testimonial1-role" fallback="Grunnlegger & Hovedmentor" as="p" className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold" />
                   </div>
                 </div>
-                <p className="font-serif italic text-on-surface leading-relaxed text-sm md:text-base">
-                  "Det profetiske fellesskapet her er helt unikt. Plattformen gir studentene de nødvendige åndelige og teologiske rammene for å vokse inn i sin tjeneste."
-                </p>
+                <CmsText slug="landing-testimonial1-quote" fallback="&quot;Det profetiske fellesskapet her er helt unikt. Plattformen gir studentene de nødvendige åndelige og teologiske rammene for å vokse inn i sin tjeneste.&quot;" as="p" className="font-serif italic text-on-surface leading-relaxed text-sm md:text-base" />
               </div>
 
               <div className="p-6 sm:p-8 bg-white rounded-2xl shadow-sm border border-outline-variant relative">
@@ -381,43 +386,36 @@ export default function LandingPage() {
                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120"
                   />
                   <div>
-                    <h4 className="font-serif text-lg text-primary font-bold">Pastor Siri Knutsen</h4>
-                    <p className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Fagansvarlig for Sjelesorg & Menighet</p>
+                    <CmsText slug="landing-testimonial2-name" fallback="Pastor Siri Knutsen" as="h4" className="font-serif text-lg text-primary font-bold" />
+                    <CmsText slug="landing-testimonial2-role" fallback="Fagansvarlig for Sjelesorg & Menighet" as="p" className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold" />
                   </div>
                 </div>
-                <p className="font-serif italic text-on-surface leading-relaxed text-sm md:text-base">
-                  "Å bygge bro mellom solid bibellære og praktisk betjening i menigheten er kjernen i mitt hjerte. Mentorskapet her gir studentene retning og soliditet."
-                </p>
+                <CmsText slug="landing-testimonial2-quote" fallback="&quot;Å bygge bro mellom solid bibellære og praktisk betjening i menigheten er kjernen i mitt hjerte. Mentorskapet her gir studentene retning og soliditet.&quot;" as="p" className="font-serif italic text-on-surface leading-relaxed text-sm md:text-base" />
               </div>
             </div>
           </div>
         </section>
 
-        {/* Final CTA Section */}
         <section id="admissions" className="py-24 bg-background border-t border-outline-variant text-center">
           <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12">
             <div className="inline-flex items-center gap-2 mb-6 text-primary">
               <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>stars</span>
-              <span className="text-xs font-semibold tracking-widest uppercase">Opptak Åpent for Høsten 2026</span>
+              <CmsText slug="landing-cta-tagline" fallback="Opptak Åpent for Høsten 2026" as="span" className="text-xs font-semibold tracking-widest uppercase" />
             </div>
-            <h2 className="font-serif text-3xl md:text-4xl text-primary font-bold mb-6 max-w-2xl mx-auto">
-              Er du klar til å tre inn i din gudgitte tjeneste?
-            </h2>
-            <p className="text-base text-on-surface-variant mb-10 max-w-xl mx-auto">
-              Bli en del av et levende og solid læringsmiljø dedikert til bibelundervisning og åndelig utrustning.
-            </p>
+            <CmsText slug="landing-cta-title" fallback="Er du klar til å tre inn i din gudgitte tjeneste?" as="h2" className="font-serif text-3xl md:text-4xl text-primary font-bold mb-6 max-w-2xl mx-auto" />
+            <CmsText slug="landing-cta-desc" fallback="Bli en del av et levende og solid læringsmiljø dedikert til bibelundervisning og åndelig utrustning." as="p" className="text-base text-on-surface-variant mb-10 max-w-xl mx-auto" />
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <button 
                 onClick={() => navigate('/login')} 
                 className="w-full sm:w-auto px-8 py-4 bg-primary text-on-primary font-semibold rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
               >
-                Søk Opptak 2026
+                <CmsText slug="landing-cta-btn-primary" fallback="Søk Opptak 2026" />
               </button>
               <button 
                 onClick={() => navigate('/student/library')} 
                 className="w-full sm:w-auto px-8 py-4 bg-surface-container border border-outline-variant text-primary font-semibold rounded-xl hover:bg-surface-container-high transition-all"
               >
-                Se Fagplan
+                <CmsText slug="landing-cta-btn-secondary" fallback="Se Fagplan" />
               </button>
             </div>
           </div>
@@ -427,16 +425,22 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="w-full py-12 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6 bg-tertiary text-white">
         <div className="flex flex-col gap-2 text-center md:text-left">
-          <div className="font-serif text-lg font-bold text-on-tertiary">His Kingdom Prophets</div>
-          <p className="text-xs text-on-tertiary opacity-80 max-w-md">
-            © 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten.
-          </p>
+          <CmsText slug="landing-footer-title" fallback="His Kingdom Prophets" as="div" className="font-serif text-lg font-bold text-on-tertiary" />
+          <CmsText slug="landing-footer-copyright" fallback="© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten." as="p" className="text-xs text-on-tertiary opacity-80 max-w-md" />
         </div>
         <nav className="flex flex-wrap justify-center gap-6 text-xs text-center">
-          <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">Personvern</a>
-          <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">Betingelser</a>
-          <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">Tilgjengelighet</a>
-          <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">Kontakt Support</a>
+          <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">
+            <CmsText slug="landing-footer-link-privacy" fallback="Personvern" />
+          </a>
+          <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">
+            <CmsText slug="landing-footer-link-terms" fallback="Betingelser" />
+          </a>
+          <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">
+            <CmsText slug="landing-footer-link-accessibility" fallback="Tilgjengelighet" />
+          </a>
+          <a className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" href="#">
+            <CmsText slug="landing-footer-link-support" fallback="Kontakt Support" />
+          </a>
         </nav>
       </footer>
     </div>
