@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { 
   Compass, BookOpen, Video, CheckSquare, Users, 
   Menu, Bell, Power, Search, Award, GraduationCap, ChevronLeft, User,
-  Gift, HelpCircle, X
+  Gift, HelpCircle, X, Globe
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 import CmsText from '@/components/CmsText';
@@ -13,7 +13,7 @@ import logo from '@/assets/logo.png';
 export default function StudentLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, setUser, logout, showToast, changePersona, cmsContent, isAdminEditing } = useApp();
+  const { user, setUser, logout, showToast, changePersona, cmsContent, isAdminEditing, language, toggleLanguage } = useApp();
   
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
@@ -63,15 +63,15 @@ export default function StudentLayout() {
   };
 
   const navItems = [
-    { name: 'Dashboard', path: '/student/dashboard', icon: Compass },
-    { name: 'Studieplan & Kurs', path: '/student/library', icon: BookOpen },
-    { name: 'Leksjon', path: '/student/lesson', icon: GraduationCap },
-    { name: 'Klasserom / Video', path: '/student/video', icon: Video },
-    { name: 'Oppgaver', path: '/student/assignments', icon: CheckSquare },
-    { name: 'Bønnefellesskap', path: '/student/chat', icon: Users },
-    { name: 'Partnerportal', path: '/student/partner', icon: Gift },
-    { name: 'Hjelpesenter', path: '/student/support', icon: HelpCircle },
-    { name: 'Min profil', path: '/student/profile', icon: User },
+    { name: language === 'en' ? 'Dashboard' : 'Dashboard', path: '/student/dashboard', icon: Compass },
+    { name: language === 'en' ? 'Curriculum & Courses' : 'Studieplan & Kurs', path: '/student/library', icon: BookOpen },
+    { name: language === 'en' ? 'Lesson' : 'Leksjon', path: '/student/lesson', icon: GraduationCap },
+    { name: language === 'en' ? 'Classroom / Video' : 'Klasserom / Video', path: '/student/video', icon: Video },
+    { name: language === 'en' ? 'Assignments' : 'Oppgaver', path: '/student/assignments', icon: CheckSquare },
+    { name: language === 'en' ? 'Prayer Community' : 'Bønnefellesskap', path: '/student/chat', icon: Users },
+    { name: language === 'en' ? 'Partner Portal' : 'Partnerportal', path: '/student/partner', icon: Gift },
+    { name: language === 'en' ? 'Help Center' : 'Hjelpesenter', path: '/student/support', icon: HelpCircle },
+    { name: language === 'en' ? 'My Profile' : 'Min profil', path: '/student/profile', icon: User },
   ];
 
   return (
@@ -128,8 +128,16 @@ export default function StudentLayout() {
             
             <div className="flex items-center gap-3 sm:gap-4 text-primary">
               <button 
+                onClick={toggleLanguage}
+                className="p-1.5 hover:bg-surface-container rounded-full shrink-0 text-primary transition-all active:scale-95 flex items-center justify-center"
+                title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
+              >
+                <Globe size={20} />
+              </button>
+              
+              <button 
                 className="relative hover:opacity-80 transition-all p-1.5 hover:bg-surface-container rounded-full shrink-0"
-                onClick={() => showToast("Ingen nye varsler")}
+                onClick={() => showToast(language === 'en' ? "No new notifications" : "Ingen nye varsler")}
               >
                 <Bell size={20} />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-burnt-orange rounded-full" style={{ borderRadius: '9999px' }}></span>

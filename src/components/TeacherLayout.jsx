@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { 
   Compass, Users, AlertTriangle, ClipboardList, BookOpen, 
   Award, Bell, Power, Menu, ChevronLeft, Sliders, Video, User,
-  Languages, BarChart3, TrendingUp, Gift, HelpCircle, X, GraduationCap
+  Languages, BarChart3, TrendingUp, Gift, HelpCircle, X, GraduationCap, Globe
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 import CmsText from '@/components/CmsText';
@@ -13,7 +13,7 @@ import logo from '@/assets/logo.png';
 export default function TeacherLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, setUser, logout, showToast, students, changePersona } = useApp();
+  const { user, setUser, logout, showToast, students, changePersona, language, toggleLanguage } = useApp();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -66,26 +66,26 @@ export default function TeacherLayout() {
   };
 
   const navItems = [
-    { name: 'Lærer Dashboard', path: '/teacher/dashboard', icon: Compass },
-    { name: 'Tjenesteoppfølging', path: '/teacher/follow-up', icon: AlertTriangle, badge: atRiskCount },
-    { name: 'Kursbygger', path: '/teacher/course-builder', icon: Sliders },
-    { name: 'Prøvebygger', path: '/teacher/quiz-builder', icon: ClipboardList },
-    { name: 'Kursinnsikt', path: '/teacher/insights', icon: BarChart3 },
-    { name: 'Markedsføring', path: '/teacher/marketing', icon: TrendingUp },
-    { name: 'Mediebibliotek', path: '/teacher/media-library', icon: Video },
-    { name: 'Bibelkalkulator', path: '/teacher/grading', icon: Award },
-    { name: 'Partnerportal', path: '/teacher/partner', icon: Gift },
-    { name: 'Hjelpesenter', path: '/teacher/support', icon: HelpCircle },
-    { name: 'Varslingssenter', path: '/teacher/notifications', icon: Bell },
-    { name: 'Min lærerprofil', path: '/teacher/profile', icon: User }
+    { name: language === 'en' ? 'Mentor Dashboard' : 'Lærer Dashboard', path: '/teacher/dashboard', icon: Compass },
+    { name: language === 'en' ? 'Ministry Follow-up' : 'Tjenesteoppfølging', path: '/teacher/follow-up', icon: AlertTriangle, badge: atRiskCount },
+    { name: language === 'en' ? 'Course Builder' : 'Kursbygger', path: '/teacher/course-builder', icon: Sliders },
+    { name: language === 'en' ? 'Quiz Builder' : 'Prøvebygger', path: '/teacher/quiz-builder', icon: ClipboardList },
+    { name: language === 'en' ? 'Course Insights' : 'Kursinnsikt', path: '/teacher/insights', icon: BarChart3 },
+    { name: language === 'en' ? 'Marketing' : 'Markedsføring', path: '/teacher/marketing', icon: TrendingUp },
+    { name: language === 'en' ? 'Media Library' : 'Mediebibliotek', path: '/teacher/media-library', icon: Video },
+    { name: language === 'en' ? 'Bible Calculator' : 'Bibelkalkulator', path: '/teacher/grading', icon: Award },
+    { name: language === 'en' ? 'Partner Portal' : 'Partnerportal', path: '/teacher/partner', icon: Gift },
+    { name: language === 'en' ? 'Help Center' : 'Hjelpesenter', path: '/teacher/support', icon: HelpCircle },
+    { name: language === 'en' ? 'Notification Center' : 'Varslingssenter', path: '/teacher/notifications', icon: Bell },
+    { name: language === 'en' ? 'My Mentor Profile' : 'Min lærerprofil', path: '/teacher/profile', icon: User }
   ];
 
   if (user?.role === 'admin' || user?.role === 'teacher' || user?.role === 'superadmin') {
-    navItems.push({ name: 'Global CMS Styring', path: '/admin/cms', icon: Languages });
+    navItems.push({ name: language === 'en' ? 'Global CMS Management' : 'Global CMS Styring', path: '/admin/cms', icon: Languages });
   }
   if (user?.role === 'admin' || user?.role === 'superadmin') {
-    navItems.push({ name: 'Analytics Dashboard', path: '/admin/analytics', icon: BarChart3 });
-    navItems.push({ name: 'Brukerhåndtering', path: '/admin/portal', icon: Users });
+    navItems.push({ name: language === 'en' ? 'Analytics Dashboard' : 'Analytics Dashboard', path: '/admin/analytics', icon: BarChart3 });
+    navItems.push({ name: language === 'en' ? 'User Management' : 'Brukerhåndtering', path: '/admin/portal', icon: Users });
   }
 
   return (
@@ -154,11 +154,19 @@ export default function TeacherLayout() {
             )}
 
             <div className="flex items-center gap-3 sm:gap-4 text-primary pl-2 border-l border-outline-variant/30">
+              <button 
+                onClick={toggleLanguage}
+                className="p-1.5 hover:bg-surface-container rounded-full shrink-0 text-primary transition-all active:scale-95 flex items-center justify-center"
+                title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
+              >
+                <Globe size={20} />
+              </button>
+              
               <Link
                 to="/teacher/profile"
                 className="group flex items-center gap-2.5 rounded-xl px-1.5 py-1 hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all active:scale-[0.98]"
-                title="Åpne min lærerprofil"
-                aria-label="Åpne min lærerprofil"
+                title={language === 'en' ? "Open my mentor profile" : "Åpne min lærerprofil"}
+                aria-label={language === 'en' ? "Open my mentor profile" : "Åpne min lærerprofil"}
               >
                 <span className="text-right hidden sm:block min-w-0">
                   <span className="block text-xs font-bold text-primary group-hover:underline whitespace-nowrap md:max-w-none">
