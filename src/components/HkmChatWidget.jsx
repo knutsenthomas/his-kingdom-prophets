@@ -60,6 +60,11 @@ export default function HkmChatWidget() {
         .hkm-chat-body {
           position: relative !important;
         }
+        .hkm-chat-toggle {
+          background: linear-gradient(135deg, #d17d39 0%, #bd4f2a 100%) !important;
+          transform: translateZ(0) !important;
+          backface-visibility: hidden !important;
+        }
       `}</style>
 
       <AnimatePresence>
@@ -177,12 +182,9 @@ export default function HkmChatWidget() {
       {/* Floating Toggle Button - Circular SVG with Orange Gradient */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 flex items-center justify-center text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer animate-fade-in"
+        className="hkm-chat-toggle w-14 h-14 flex items-center justify-center text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer animate-fade-in"
         style={{
-          borderRadius: '9999px',
-          backgroundImage: 'linear-gradient(135deg, #d17d39 0%, #bd4f2a 100%)',
-          transform: 'translateZ(0)',
-          backfaceVisibility: 'hidden'
+          borderRadius: '9999px'
         }}
       >
         {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
