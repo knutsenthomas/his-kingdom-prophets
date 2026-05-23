@@ -9,7 +9,7 @@ import { Sparkles, BookOpen, UserCheck, Globe, ArrowRight, Check, Menu, X } from
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const { user, cmsContent } = useApp();
+  const { user, cmsContent, language, toggleLanguage } = useApp();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -45,6 +45,14 @@ export default function LandingPage() {
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-4">
               <button 
+                onClick={toggleLanguage}
+                className="px-3 py-1.5 border border-[#1B4965]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#1B4965]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
+                title={language === 'no' ? 'Switch to English' : 'Bytt til Norsk'}
+              >
+                <Globe size={13} />
+                <span>{language === 'no' ? 'EN' : 'NO'}</span>
+              </button>
+              <button 
                 onClick={() => navigate('/login')} 
                 className="px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors text-sm shrink-0"
               >
@@ -60,6 +68,14 @@ export default function LandingPage() {
             
             {/* Mobile/Tablet Actions & Toggle */}
             <div className="lg:hidden flex items-center gap-1.5 sm:gap-3">
+              <button 
+                onClick={toggleLanguage}
+                className="px-2.5 sm:px-3 py-1.5 border border-[#1B4965]/20 hover:border-primary text-[10px] sm:text-xs font-bold uppercase rounded-lg text-primary bg-[#1B4965]/5 transition-all active:scale-95 flex items-center gap-1 shadow-sm shrink-0"
+                title={language === 'no' ? 'Switch to English' : 'Bytt til Norsk'}
+              >
+                <Globe size={12} />
+                <span>{language === 'no' ? 'EN' : 'NO'}</span>
+              </button>
               <button 
                 onClick={() => navigate('/login')} 
                 className="px-2.5 sm:px-4 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-[10px] min-[360px]:text-xs shrink-0"
@@ -141,6 +157,13 @@ export default function LandingPage() {
 
               {/* Footer Actions inside Drawer */}
               <div className="pt-6 border-t border-slate-100 space-y-3.5">
+                <button
+                  onClick={toggleLanguage}
+                  className="w-full py-3 border border-[#1B4965]/20 text-primary hover:bg-[#1B4965]/5 font-bold rounded-xl text-xs transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 bg-white shadow-sm"
+                >
+                  <Globe size={14} />
+                  <span>{language === 'no' ? 'Bytt til Engelsk (EN)' : 'Switch to Norwegian (NO)'}</span>
+                </button>
                 <button
                   onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
                   className="w-full py-3 border border-[#c1c7ce] text-primary hover:bg-slate-50 font-bold rounded-xl text-xs transition-all active:scale-[0.98]"

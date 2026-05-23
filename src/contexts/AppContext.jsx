@@ -494,6 +494,26 @@ export const AppProvider = ({ children }) => {
 
   const [isAdminEditing, setIsAdminEditing] = useState(false);
 
+  const [language, setLanguage] = useState(() => {
+    try {
+      return localStorage.getItem('hkm-language') || 'no';
+    } catch {
+      return 'no';
+    }
+  });
+
+  const toggleLanguage = () => {
+    setLanguage(prev => {
+      const next = prev === 'no' ? 'en' : 'no';
+      try {
+        localStorage.setItem('hkm-language', next);
+      } catch (e) {
+        console.error('Klarte ikke lagre språk i localStorage:', e);
+      }
+      return next;
+    });
+  };
+
   // Firestore Realtime / Seed subscriptions
   useEffect(() => {
     const fetchCmsContent = async () => {
@@ -1540,7 +1560,9 @@ export const AppProvider = ({ children }) => {
       cmsContent,
       updateCmsContent,
       isAdminEditing,
-      setIsAdminEditing
+      setIsAdminEditing,
+      language,
+      toggleLanguage
     }}>
       {children}
     </AppContext.Provider>

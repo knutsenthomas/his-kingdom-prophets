@@ -8,8 +8,16 @@ export default function CmsText({
   as: Component = 'span', 
   replaceObj = null 
 }) {
-  const { cmsContent, updateCmsContent, isAdminEditing, showToast } = useApp();
-  const rawText = cmsContent?.[slug] || fallback;
+  const { cmsContent, updateCmsContent, isAdminEditing, showToast, language } = useApp();
+  
+  const getCmsText = () => {
+    if (language === 'en') {
+      return cmsContent?.[slug + '-en'] || cmsContent?.[slug] || fallback;
+    }
+    return cmsContent?.[slug] || fallback;
+  };
+  
+  const rawText = getCmsText();
   
   // Apply placeholders (e.g., {name}) ONLY when NOT editing
   let displayText = rawText;
@@ -41,7 +49,7 @@ export default function CmsText({
     }
 
     if (newText !== rawText) {
-      updateCmsContent(slug, newText);
+      updateCmsContent(language === 'en' ? slug + '-en' : slug, newText);
       showToast(`Oppdatert felt "${slug}"!`);
     }
   };
