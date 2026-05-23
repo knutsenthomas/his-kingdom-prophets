@@ -392,11 +392,11 @@ export default function StudentLayout() {
               </button>
               
               <button 
-                className="relative hover:opacity-80 transition-all p-1.5 hover:bg-surface-container rounded-full shrink-0 flex items-center justify-center"
-                onClick={() => showToast(language === 'en' ? "No new notifications" : "Ingen nye varsler")}
+                onClick={() => navigate('/student/chat')}
+                className="relative hover:opacity-80 transition-all p-1.5 hover:bg-surface-container rounded-full shrink-0 flex items-center justify-center text-primary"
+                title={language === 'en' ? "Messages / Prayer Community" : "Meldinger / Bønnefellesskap"}
               >
                 <Bell size={20} />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-burnt-orange rounded-full" style={{ borderRadius: '9999px' }}></span>
               </button>
               
               {/* Superadmin System View Switcher */}

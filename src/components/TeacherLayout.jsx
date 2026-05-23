@@ -4,7 +4,8 @@ import { useApp } from '@/contexts/AppContext';
 import { 
   Compass, Users, AlertTriangle, ClipboardList, BookOpen, 
   Award, Bell, Power, Menu, ChevronLeft, Sliders, Video, User,
-  Languages, BarChart3, TrendingUp, Gift, HelpCircle, X, GraduationCap, Globe
+  Languages, BarChart3, TrendingUp, Gift, HelpCircle, X, GraduationCap, Globe,
+  Book, CheckSquare
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 import CmsText from '@/components/CmsText';
@@ -68,12 +69,25 @@ export default function TeacherLayout() {
   };
 
   const navItems = [
+    { isHeader: true, name: language === 'en' ? 'Mentor Tools' : 'Mentorverktøy' },
     { name: language === 'en' ? 'Mentor Dashboard' : 'Lærer Dashboard', path: '/teacher/dashboard', icon: Compass },
     { name: language === 'en' ? 'Ministry Follow-up' : 'Tjenesteoppfølging', path: '/teacher/follow-up', icon: AlertTriangle, badge: atRiskCount },
     { name: language === 'en' ? 'Course Builder' : 'Kursbygger', path: '/teacher/course-builder', icon: Sliders },
     { name: language === 'en' ? 'Quiz Builder' : 'Prøvebygger', path: '/teacher/quiz-builder', icon: ClipboardList },
     { name: language === 'en' ? 'Course Insights' : 'Kursinnsikt', path: '/teacher/insights', icon: BarChart3 },
     { name: language === 'en' ? 'Marketing' : 'Markedsføring', path: '/teacher/marketing', icon: TrendingUp },
+    
+    // Elev- og studieressurser (Studieportal)
+    { isHeader: true, name: language === 'en' ? 'Study Portal' : 'Studieportal' },
+    { name: language === 'en' ? 'Bible' : 'Bibelen', path: '/student/bible', icon: Book },
+    { name: language === 'en' ? 'Curriculum & Courses' : 'Studieplan & Kurs', path: '/student/library', icon: BookOpen },
+    { name: language === 'en' ? 'Lesson' : 'Leksjon', path: '/student/lesson', icon: GraduationCap },
+    { name: language === 'en' ? 'Classroom / Video' : 'Klasserom / Video', path: '/student/video', icon: Video },
+    { name: language === 'en' ? 'Assignments' : 'Oppgaver', path: '/student/assignments', icon: CheckSquare },
+    { name: language === 'en' ? 'Prayer Community' : 'Bønnefellesskap', path: '/student/chat', icon: Users },
+    
+    // Fakultetsverktøy
+    { isHeader: true, name: language === 'en' ? 'Faculty Tools' : 'Fakultetsverktøy' },
     { name: language === 'en' ? 'Media Library' : 'Mediebibliotek', path: '/teacher/media-library', icon: Video },
     { name: language === 'en' ? 'Bible Calculator' : 'Bibelkalkulator', path: '/teacher/grading', icon: Award },
     { name: language === 'en' ? 'Partner Portal' : 'Partnerportal', path: '/teacher/partner', icon: Gift },
@@ -82,12 +96,14 @@ export default function TeacherLayout() {
     { name: language === 'en' ? 'My Mentor Profile' : 'Min lærerprofil', path: '/teacher/profile', icon: User }
   ];
 
-  if (user?.role === 'admin' || user?.role === 'teacher' || user?.role === 'superadmin') {
-    navItems.push({ name: language === 'en' ? 'Global CMS Management' : 'Global CMS Styring', path: '/admin/cms', icon: Languages });
-  }
   if (user?.role === 'admin' || user?.role === 'superadmin') {
+    navItems.push({ isHeader: true, name: language === 'en' ? 'Administration' : 'Administrasjon' });
+    navItems.push({ name: language === 'en' ? 'Global CMS Management' : 'Global CMS Styring', path: '/admin/cms', icon: Languages });
     navItems.push({ name: language === 'en' ? 'Analytics Dashboard' : 'Analytics Dashboard', path: '/admin/analytics', icon: BarChart3 });
     navItems.push({ name: language === 'en' ? 'User Management' : 'Brukerhåndtering', path: '/admin/portal', icon: Users });
+  } else if (user?.role === 'teacher') {
+    navItems.push({ isHeader: true, name: language === 'en' ? 'Administration' : 'Administrasjon' });
+    navItems.push({ name: language === 'en' ? 'Global CMS Management' : 'Global CMS Styring', path: '/admin/cms', icon: Languages });
   }
 
   return (
@@ -163,6 +179,14 @@ export default function TeacherLayout() {
               >
                 <Globe size={20} />
               </button>
+
+              <button 
+                onClick={() => navigate('/student/chat')}
+                className="relative hover:opacity-80 transition-all p-1.5 hover:bg-surface-container rounded-full shrink-0 flex items-center justify-center text-primary"
+                title={language === 'en' ? "Messages / Prayer Community" : "Meldinger / Bønnefellesskap"}
+              >
+                <Bell size={20} />
+              </button>
               
               <Link
                 to="/teacher/profile"
@@ -205,7 +229,7 @@ export default function TeacherLayout() {
         
         {/* Collapsible Left Sidebar for Mentor portal */}
         <aside 
-          className="bg-white border-r border-outline-variant/20 sticky top-20 hidden md:flex flex-col justify-between shrink-0 transition-all duration-300 ease-in-out overflow-hidden z-30"
+          className="bg-white border-r border-outline-variant/20 sticky top-20 hidden md:flex flex-col shrink-0 transition-all duration-300 ease-in-out overflow-hidden z-30 h-[calc(100vh-80px)]"
           style={{ 
             width: isCollapsed ? '0px' : '288px',
             opacity: isCollapsed ? 0 : 1,
@@ -213,62 +237,71 @@ export default function TeacherLayout() {
             backfaceVisibility: 'hidden'
           }}
         >
-          <div className="py-8 px-6 space-y-8 w-72 shrink-0">
-            {/* Mentor status details */}
-            <button
-              onClick={() => navigate('/teacher/profile')}
-              className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
-              title="Åpne min lærerprofil"
-            >
-              <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Mentorveiledning</p>
-              <div className="bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/30 space-y-2">
-                <div className="flex justify-between items-center text-[11px] font-bold text-on-surface-variant">
-                  <span>Studentoppfølging</span>
-                  <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${atRiskCount > 0 ? 'bg-amber-100 text-amber-700 animate-pulse' : 'bg-green-100 text-green-700'}`}>
-                    {atRiskCount} kritiske
-                  </span>
+          <div className="py-8 px-6 flex flex-col justify-between h-full w-72 shrink-0 overflow-y-auto">
+            <div className="space-y-6">
+              {/* Mentor status details */}
+              <button
+                onClick={() => navigate('/teacher/profile')}
+                className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
+                title="Åpne min lærerprofil"
+              >
+                <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Mentorveiledning</p>
+                <div className="bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/30 space-y-2">
+                  <div className="flex justify-between items-center text-[11px] font-bold text-on-surface-variant">
+                    <span>Studentoppfølging</span>
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${atRiskCount > 0 ? 'bg-amber-100 text-amber-700 animate-pulse' : 'bg-green-100 text-green-700'}`}>
+                      {atRiskCount} kritiske
+                    </span>
+                  </div>
+                  <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div className="bg-amber-500 h-full w-[65%]"></div>
+                  </div>
                 </div>
-                <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                  <div className="bg-amber-500 h-full w-[65%]"></div>
-                </div>
-              </div>
-            </button>
+              </button>
 
-            {/* Side Navigation Menu */}
-            <nav className="space-y-1.5">
-              {navItems.map(item => {
-                const isActive = location.pathname === item.path;
-                const IconComponent = item.icon;
-                return (
-                  <button 
-                    key={item.path}
-                    onClick={() => navigate(item.path)} 
-                    className={`flex items-center justify-between w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
-                      isActive 
-                        ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
-                        : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
-                      <span>{item.name}</span>
-                    </div>
-                    {item.badge !== undefined && item.badge > 0 && (
-                      <span className="bg-amber-500 text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0">
-                        {item.badge}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
+              {/* Side Navigation Menu */}
+              <nav className="space-y-1.5">
+                {navItems.map((item, idx) => {
+                  if (item.isHeader) {
+                    return (
+                      <div 
+                        key={item.name + '-' + idx} 
+                        className="text-[10px] font-bold text-primary uppercase tracking-wider pt-4 pb-1 px-4 select-none"
+                      >
+                        {item.name}
+                      </div>
+                    );
+                  }
+                  const isActive = location.pathname === item.path;
+                  const IconComponent = item.icon;
+                  return (
+                    <button 
+                      key={item.path}
+                      onClick={() => navigate(item.path)} 
+                      className={`flex items-center justify-between w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
+                        isActive 
+                          ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
+                          : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
+                        <span>{item.name}</span>
+                      </div>
+                      {item.badge !== undefined && item.badge > 0 && (
+                        <span className="bg-amber-500 text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0">
+                          {item.badge}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
 
-          {/* Sidebar footer collapse option */}
-          <div className="p-6 w-72 shrink-0">
             <button
               onClick={() => setIsCollapsed(true)}
-              className="flex items-center justify-center gap-1.5 w-full py-2 border-t border-slate-100 text-[10px] uppercase font-bold tracking-widest text-on-surface-variant hover:text-primary transition-all"
+              className="flex items-center justify-center gap-1.5 w-full py-2 border-t border-slate-100 text-[10px] uppercase font-bold tracking-widest text-on-surface-variant hover:text-primary transition-all mt-6"
             >
               <ChevronLeft size={14} />
               <span>Skjul mentormeny</span>
@@ -346,7 +379,17 @@ export default function TeacherLayout() {
 
             {/* Nav Items */}
             <nav className="space-y-1">
-              {navItems.map(item => {
+              {navItems.map((item, idx) => {
+                if (item.isHeader) {
+                  return (
+                    <div 
+                      key={item.name + '-' + idx} 
+                      className="text-[10px] font-bold text-primary uppercase tracking-wider pt-4 pb-1 px-4 select-none"
+                    >
+                      {item.name}
+                    </div>
+                  );
+                }
                 const isActive = location.pathname === item.path;
                 const IconComponent = item.icon;
                 return (
