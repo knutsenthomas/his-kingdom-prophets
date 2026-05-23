@@ -36,17 +36,17 @@ export default function TeacherProfile() {
   const [showPw, setShowPw] = useState({ current: false, next: false, confirm: false });
   const [draft, setDraft] = useState({
     name: user?.name || '',
-    title: user?.title || 'Faglærer og mentor',
-    department: user?.department || 'Profetisk utrustning',
-    expertise: user?.expertise || 'Profetisk tjeneste, bibelsk veiledning og disippelskap',
-    officeHours: user?.officeHours || 'Tirsdag og torsdag 12:00-15:00',
-    zoomLink: user?.zoomLink || 'https://zoom.us/j/9270778606',
-    location: user?.location || 'Kristiansand, Norge',
+    title: user?.title || '',
+    department: user?.department || '',
+    expertise: user?.expertise || '',
+    officeHours: user?.officeHours || '',
+    zoomLink: user?.zoomLink || '',
+    location: user?.location || '',
     phone: user?.phone || '',
     address: user?.address || '',
     birthDate: user?.birthDate || '',
     bio: user?.bio || '',
-    avatar: user?.avatar || AVATAR_OPTIONS[0],
+    avatar: user?.avatar || '',
   });
 
   const isAdmin = user?.role === 'admin' || user?.role === 'superadmin';
@@ -60,17 +60,17 @@ export default function TeacherProfile() {
   useEffect(() => {
     setDraft({
       name: user?.name || '',
-      title: user?.title || 'Faglærer og mentor',
-      department: user?.department || 'Profetisk utrustning',
-      expertise: user?.expertise || 'Profetisk tjeneste, bibelsk veiledning og disippelskap',
-      officeHours: user?.officeHours || 'Tirsdag og torsdag 12:00-15:00',
-      zoomLink: user?.zoomLink || 'https://zoom.us/j/9270778606',
-      location: user?.location || 'Kristiansand, Norge',
+      title: user?.title || '',
+      department: user?.department || '',
+      expertise: user?.expertise || '',
+      officeHours: user?.officeHours || '',
+      zoomLink: user?.zoomLink || '',
+      location: user?.location || '',
       phone: user?.phone || '',
       address: user?.address || '',
       birthDate: user?.birthDate || '',
       bio: user?.bio || '',
-      avatar: user?.avatar || AVATAR_OPTIONS[0],
+      avatar: user?.avatar || '',
     });
     setEmailDraft(user?.email || '');
   }, [user]);
@@ -115,17 +115,17 @@ export default function TeacherProfile() {
   const resetDraft = () => {
     setDraft({
       name: user?.name || '',
-      title: user?.title || 'Faglærer og mentor',
-      department: user?.department || 'Profetisk utrustning',
-      expertise: user?.expertise || 'Profetisk tjeneste, bibelsk veiledning og disippelskap',
-      officeHours: user?.officeHours || 'Tirsdag og torsdag 12:00-15:00',
-      zoomLink: user?.zoomLink || 'https://zoom.us/j/9270778606',
-      location: user?.location || 'Kristiansand, Norge',
+      title: user?.title || '',
+      department: user?.department || '',
+      expertise: user?.expertise || '',
+      officeHours: user?.officeHours || '',
+      zoomLink: user?.zoomLink || '',
+      location: user?.location || '',
       phone: user?.phone || '',
       address: user?.address || '',
       birthDate: user?.birthDate || '',
       bio: user?.bio || '',
-      avatar: user?.avatar || AVATAR_OPTIONS[0],
+      avatar: user?.avatar || '',
     });
   };
 
@@ -147,14 +147,23 @@ export default function TeacherProfile() {
             {/* Inline-sitting profile image with minimal overlap */}
             <div className="profile-img-container flex-shrink-0 -mt-8 md:-mt-10 relative z-20" data-purpose="image-wrapper">
               <div className="relative inline-block group">
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border-4 border-white overflow-hidden shadow-md bg-gray-200">
-                  <img 
-                    alt={draft.name || 'Apostel David Hansen'} 
-                    className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
-                    src={draft.avatar} 
-                    style={{ objectPosition: 'top center', transform: 'scale(1.1)' }}
-                    onClick={() => setShowAvatarPicker(true)}
-                  />
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border-4 border-white overflow-hidden shadow-md bg-slate-100 flex items-center justify-center">
+                  {draft.avatar ? (
+                    <img 
+                      alt={draft.name || 'Min lærerprofil'} 
+                      className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
+                      src={draft.avatar} 
+                      style={{ objectPosition: 'top center', transform: 'scale(1.1)' }}
+                      onClick={() => setShowAvatarPicker(true)}
+                    />
+                  ) : (
+                    <div 
+                      className="w-full h-full flex items-center justify-center bg-primary/10 text-primary cursor-pointer"
+                      onClick={() => setShowAvatarPicker(true)}
+                    >
+                      <User size={40} />
+                    </div>
+                  )}
                 </div>
                 <button 
                   onClick={() => setShowAvatarPicker(true)}
@@ -173,17 +182,19 @@ export default function TeacherProfile() {
             <div className="flex-grow pt-1">
               <div className="flex flex-wrap gap-1.5 mb-1" data-purpose="badge-container">
                 <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#eef2ff] text-[#1B4965] border border-blue-100">Mentor</span>
-                <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#fdf6e7] text-[#c5a059] border border-amber-100">{draft.department || 'Profetisk Linje'}</span>
+                {draft.department && (
+                  <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#fdf6e7] text-[#c5a059] border border-amber-100">{draft.department}</span>
+                )}
               </div>
               <h1 className="text-2xl md:text-3xl font-serif text-[#1B4965] mb-0.5 tracking-tight font-bold font-serif" id="teacher-name">
-                {draft.name || 'Apostel David Hansen'}
+                {draft.name || 'Min lærerprofil'}
               </h1>
               <p className="text-sm text-gray-500 font-medium flex items-center gap-1.5">
                 <svg className="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
                   <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
                 </svg>
-                {draft.title || 'Faglig leder og mentor'} • {draft.location || 'Kristiansand, Norge'}
+                {draft.title || 'Tittel'} {draft.location && `• ${draft.location}`}
               </p>
             </div>
 
@@ -359,10 +370,16 @@ export default function TeacherProfile() {
                 <h2 className="font-serif text-base font-bold text-primary mb-4">Forhåndsvisning</h2>
                 <div className="border border-outline-variant/40 rounded-xl p-4 bg-surface-container-lowest">
                   <div className="flex items-center gap-3">
-                    <img src={draft.avatar} alt={draft.name} className="w-14 h-14 rounded-xl object-cover border border-outline-variant/40" />
+                    {draft.avatar ? (
+                      <img src={draft.avatar} alt={draft.name} className="w-14 h-14 rounded-xl object-cover border border-outline-variant/40 animate-fade-in" />
+                    ) : (
+                      <div className="w-14 h-14 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-outline-variant/40">
+                        <User size={24} />
+                      </div>
+                    )}
                     <div className="min-w-0">
-                      <p className="font-serif font-bold text-primary truncate">{draft.name || 'Lærer'}</p>
-                      <p className="text-[11px] text-on-surface-variant font-semibold truncate">{draft.title}</p>
+                      <p className="font-serif font-bold text-primary truncate">{draft.name || 'Ditt navn'}</p>
+                      <p className="text-[11px] text-on-surface-variant font-semibold truncate">{draft.title || 'Tittel ikke angitt'}</p>
                     </div>
                   </div>
                   <div className="mt-4 space-y-2 text-[11px] font-semibold text-on-surface-variant">
