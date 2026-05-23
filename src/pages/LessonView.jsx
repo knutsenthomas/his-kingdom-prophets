@@ -281,7 +281,7 @@ export default function LessonView() {
   };
 
   return (
-    <div className="flex flex-1 w-full max-w-[1440px] mx-auto">
+    <div className="flex flex-1 w-full max-w-[1440px] mx-auto items-start">
       
       {/* Lesson Modules Sidebar */}
       <aside 
