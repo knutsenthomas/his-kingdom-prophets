@@ -126,64 +126,73 @@ export default function StudentProfile() {
       </div>
 
       {/* ── Profile hero card ── */}
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden" data-purpose="profile-header">
-        {/* Cover strip – same .banner-gradient class as TeacherProfile */}
-        <section className="banner-gradient h-16 md:h-20" data-purpose="hero-banner" />
+      <div className="bg-white border border-gray-100 rounded-2xl shadow-md overflow-hidden" data-purpose="profile-header">
+        {/* Cover strip – Majestic deep lilla gradient banner with shimmers */}
+        <section className="h-32 md:h-44 relative overflow-hidden bg-gradient-to-br from-[#3c096c] via-[#561291] to-[#7b2cbf]" data-purpose="hero-banner">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 w-48 h-48 bg-[#c5a059]/10 rounded-full blur-2xl pointer-events-none" />
+        </section>
 
-        <div className="px-4 md:px-6 pb-5 pt-0 relative z-10" data-purpose="profile-details-section">
-          <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
-            <div className="flex flex-col xl:flex-row xl:items-center gap-4 min-w-0">
-              {/* Avatar with click-to-change */}
-              <div className="relative w-20 h-20 shrink-0 -mt-8 md:-mt-10 z-10" data-purpose="image-wrapper">
+        <div className="px-6 md:px-8 pb-6 pt-0 relative z-10" data-purpose="profile-details-section">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div className="flex flex-col md:flex-row md:items-center gap-6 min-w-0">
+              {/* Circular Avatar with minimal white border & drop shadow */}
+              <div className="relative w-24 h-24 md:w-32 md:h-32 shrink-0 -mt-12 md:-mt-16 z-10" data-purpose="image-wrapper">
                 <img
                   src={draft.avatar}
                   alt={draft.name}
-                  className="w-20 h-20 rounded-xl border-4 border-white shadow-md object-cover bg-gray-200 cursor-pointer hover:opacity-90 transition-opacity"
+                  className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-xl object-cover bg-gray-200 cursor-pointer hover:opacity-95 transition-all hover:scale-[1.01]"
                   style={{ objectPosition: 'top center' }}
                   onClick={() => setShowAvatarPicker(true)}
                 />
                 <button
                   onClick={() => setShowAvatarPicker(true)}
-                  className="absolute -bottom-1 -right-1 w-7 h-7 rounded-lg bg-[#c5a059] text-white flex items-center justify-center shadow-md hover:bg-[#b8904a] transition-colors"
+                  className="absolute bottom-1 right-1 w-8 h-8 rounded-full bg-[#c5a059] text-white flex items-center justify-center shadow-lg hover:bg-[#b8904a] transition-all hover:scale-105 active:scale-95"
                   title="Endre profilbilde"
                 >
-                  <Camera size={13} />
+                  <Camera size={14} />
                 </button>
               </div>
 
-              <div className="min-w-0 pt-1 xl:pt-0" data-purpose="badge-container">
-                <div className="flex flex-wrap gap-1.5 mb-1">
-                  <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#eef2ff] text-[#561291] border border-[#561291]/15">Student</span>
-                  {draft.ministry && (
-                    <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#fdf6e7] text-[#c5a059] border border-amber-100">{draft.ministry}</span>
-                  )}
-                </div>
-                <h1 className="font-serif text-2xl xl:text-3xl font-bold text-[#561291] leading-tight break-words tracking-tight">
+              <div className="min-w-0 pt-2 md:pt-0" data-purpose="badge-container">
+                <h1 className="font-serif text-2xl md:text-3.5xl font-extrabold text-[#561291] leading-tight break-words tracking-tight">
                   {draft.name || 'Student'}
                 </h1>
-                <p className="text-sm text-gray-500 font-medium mt-0.5 leading-snug flex items-center gap-1.5">
-                  <svg className="h-3.5 w-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                  </svg>
-                  {draft.location || 'Sted ikke angitt'}
-                </p>
+                
+                {/* Premium layout badges under name with breathing room */}
+                <div className="flex flex-wrap items-center gap-2 mt-2.5">
+                  <span className="px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-[#561291]/5 text-[#561291] border border-[#561291]/15">
+                    Student
+                  </span>
+                  {draft.ministry && (
+                    <span className="px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-[#c5a059]/5 text-[#c5a059] border border-[#c5a059]/20 shadow-sm">
+                      {draft.ministry}
+                    </span>
+                  )}
+                  <span className="text-xs text-on-surface-variant font-medium flex items-center gap-1 ml-1">
+                    <MapPin size={13} className="text-outline shrink-0" />
+                    {draft.location || 'Sted ikke angitt'}
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Profile completion ring */}
-            <div className="shrink-0 flex flex-row xl:flex-col items-center gap-2 xl:gap-1 self-start xl:self-auto" data-purpose="stat-item">
-              <div className="relative w-14 h-14">
-                <svg className="w-14 h-14 -rotate-90" viewBox="0 0 56 56">
-                  <circle cx="28" cy="28" r="24" fill="none" stroke="#e2e8f0" strokeWidth="4" />
-                  <circle cx="28" cy="28" r="24" fill="none" stroke="#561291" strokeWidth="4"
-                    strokeDasharray={`${2 * Math.PI * 24}`}
-                    strokeDashoffset={`${2 * Math.PI * 24 * (1 - completionPct / 100)}`}
+            {/* Profile completion glassmorphic card */}
+            <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex items-center gap-4 shadow-sm self-start md:self-auto min-w-[200px]" data-purpose="stat-item">
+              <div className="relative w-12 h-12 shrink-0">
+                <svg className="w-12 h-12 -rotate-90" viewBox="0 0 52 52">
+                  <circle cx="26" cy="26" r="22" fill="none" stroke="#e2e8f0" strokeWidth="4" />
+                  <circle cx="26" cy="26" r="22" fill="none" stroke="#561291" strokeWidth="4"
+                    strokeDasharray={`${2 * Math.PI * 22}`}
+                    strokeDashoffset={`${2 * Math.PI * 22 * (1 - completionPct / 100)}`}
                     strokeLinecap="round" />
                 </svg>
-                <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-[#561291]">{completionPct}%</span>
+                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold text-[#561291]">{completionPct}%</span>
               </div>
-              <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider text-center">Profil</span>
+              <div className="space-y-0.5">
+                <span className="text-[9px] font-bold text-outline uppercase tracking-wider block">Fullføringsgrad</span>
+                <span className="text-xs font-bold text-on-surface">Min Profil</span>
+              </div>
             </div>
           </div>
         </div>

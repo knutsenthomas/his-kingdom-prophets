@@ -137,94 +137,97 @@ export default function TeacherProfile() {
         <span className="text-primary font-bold">Min lærerprofil</span>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100" data-purpose="profile-header">
-        {/* Reduced banner height to h-16 / h-20 matching academic pattern */}
-        <section className="banner-gradient h-16 md:h-20 flex items-center px-6 relative" data-purpose="hero-banner" />
+      <div className="bg-white border border-gray-100 rounded-2xl shadow-md overflow-hidden" data-purpose="profile-header">
+        {/* Cover strip – Majestic deep lilla gradient banner with shimmers */}
+        <section className="h-32 md:h-44 relative overflow-hidden bg-gradient-to-br from-[#3c096c] via-[#561291] to-[#7b2cbf]" data-purpose="hero-banner">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 w-48 h-48 bg-[#c5a059]/10 rounded-full blur-2xl pointer-events-none" />
+        </section>
 
-        {/* Tightened details padding and layout */}
-        <section className="px-4 pb-3 pt-0 relative" data-purpose="profile-details-section">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-            {/* Inline-sitting profile image with minimal overlap */}
-            <div className="profile-img-container flex-shrink-0 -mt-8 md:-mt-10 relative z-20" data-purpose="image-wrapper">
-              <div className="relative inline-block group">
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border-4 border-white overflow-hidden shadow-md bg-slate-100 flex items-center justify-center">
-                  {draft.avatar ? (
-                    <img 
-                      alt={draft.name || 'Min lærerprofil'} 
-                      className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
-                      src={draft.avatar} 
-                      style={{ objectPosition: 'top center', transform: 'scale(1.1)' }}
-                      onClick={() => setShowAvatarPicker(true)}
-                    />
-                  ) : (
-                    <div 
-                      className="w-full h-full flex items-center justify-center bg-primary/10 text-primary cursor-pointer"
-                      onClick={() => setShowAvatarPicker(true)}
-                    >
-                      <User size={40} />
-                    </div>
-                  )}
-                </div>
-                <button 
+        <div className="px-6 md:px-8 pb-6 pt-0 relative z-10" data-purpose="profile-details-section">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div className="flex flex-col md:flex-row md:items-center gap-6 min-w-0">
+              {/* Circular Avatar with minimal white border & drop shadow */}
+              <div className="relative w-24 h-24 md:w-32 md:h-32 shrink-0 -mt-12 md:-mt-16 z-10" data-purpose="image-wrapper">
+                {draft.avatar ? (
+                  <img
+                    src={draft.avatar}
+                    alt={draft.name || 'Min lærerprofil'}
+                    className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-xl object-cover bg-gray-200 cursor-pointer hover:opacity-95 transition-all hover:scale-[1.01]"
+                    style={{ objectPosition: 'top center' }}
+                    onClick={() => setShowAvatarPicker(true)}
+                  />
+                ) : (
+                  <div
+                    className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-xl bg-primary/10 text-primary flex items-center justify-center cursor-pointer hover:opacity-95 transition-all"
+                    onClick={() => setShowAvatarPicker(true)}
+                  >
+                    <User size={40} />
+                  </div>
+                )}
+                <button
                   onClick={() => setShowAvatarPicker(true)}
-                  className="absolute bottom-0 right-0 bg-[#c5a059] text-white p-1 rounded-lg shadow-md hover:bg-opacity-90 transition-all duration-200" 
-                  title="Endre bilde"
+                  className="absolute bottom-1 right-1 w-8 h-8 rounded-full bg-[#c5a059] text-white flex items-center justify-center shadow-lg hover:bg-[#b8904a] transition-all hover:scale-105 active:scale-95"
+                  title="Endre profilbilde"
                 >
-                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-                    <path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-                  </svg>
+                  <Camera size={14} />
                 </button>
               </div>
-            </div>
 
-            {/* Text section with reduced vertical spacing */}
-            <div className="flex-grow pt-1">
-              <div className="flex flex-wrap gap-1.5 mb-1" data-purpose="badge-container">
-                <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#eef2ff] text-[#561291] border border-[#561291]/15">Mentor</span>
-                {draft.department && (
-                  <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-[#fdf6e7] text-[#c5a059] border border-amber-100">{draft.department}</span>
-                )}
+              <div className="min-w-0 pt-2 md:pt-0" data-purpose="badge-container">
+                <h1 className="font-serif text-2xl md:text-3.5xl font-extrabold text-[#561291] leading-tight break-words tracking-tight" id="teacher-name">
+                  {draft.name || 'Min lærerprofil'}
+                </h1>
+                
+                {/* Premium layout badges under name with breathing room */}
+                <div className="flex flex-wrap items-center gap-2 mt-2.5">
+                  <span className="px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-[#561291]/5 text-[#561291] border border-[#561291]/15">
+                    Mentor
+                  </span>
+                  {draft.department && (
+                    <span className="px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-[#c5a059]/5 text-[#c5a059] border border-[#c5a059]/20 shadow-sm">
+                      {draft.department}
+                    </span>
+                  )}
+                  <span className="text-xs text-on-surface-variant font-medium flex items-center gap-1 ml-1">
+                    <MapPin size={13} className="text-outline shrink-0" />
+                    {draft.location || 'Sted ikke angitt'}
+                  </span>
+                </div>
               </div>
-              <h1 className="text-2xl md:text-3xl font-serif text-[#561291] mb-0.5 tracking-tight font-bold font-serif" id="teacher-name">
-                {draft.name || 'Min lærerprofil'}
-              </h1>
-              <p className="text-sm text-gray-500 font-medium flex items-center gap-1.5">
-                <svg className="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-                  <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-                </svg>
-                {draft.title || 'Tittel'} {draft.location && `• ${draft.location}`}
-              </p>
             </div>
 
-            {/* Statistics cards with reduced padding and size */}
-            <div className="flex flex-row gap-2 mt-2 lg:mt-0 overflow-x-auto pb-1 lg:pb-0 no-scrollbar" data-purpose="stats-overview">
-              <div className="stat-card flex flex-col items-center justify-center min-w-[70px] lg:min-w-[85px] p-2 bg-slate-50 border border-gray-100 rounded-xl" data-purpose="stat-item">
-                <span className="text-xl font-serif font-bold text-[#561291]">{mentorStudents}</span>
-                <span className="text-[8px] font-bold tracking-widest text-gray-400 uppercase">Studenter</span>
+            {/* Teacher statistics cards layout */}
+            <div className="flex flex-row gap-3 mt-2 md:mt-0 overflow-x-auto pb-1 md:pb-0 no-scrollbar" data-purpose="stats-overview">
+              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center min-w-[95px] lg:min-w-[105px] shadow-sm">
+                <span className="text-2xl font-serif font-bold text-[#561291]">{mentorStudents}</span>
+                <span className="text-[9px] font-bold tracking-wider text-[#561291]/80 uppercase mt-0.5">Studenter</span>
+                <span className="text-[8px] font-semibold text-outline text-center mt-1">Aktiv oppfølging</span>
               </div>
               
-              <div className="stat-card flex flex-col items-center justify-center min-w-[70px] lg:min-w-[85px] p-2 bg-slate-50 border border-gray-100 rounded-xl" data-purpose="stat-item">
-                <span className="text-xl font-serif font-bold text-[#561291]">{activeCourses}</span>
-                <span className="text-[8px] font-bold tracking-widest text-gray-400 uppercase">Kurs</span>
+              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center min-w-[95px] lg:min-w-[105px] shadow-sm">
+                <span className="text-2xl font-serif font-bold text-[#561291]">{activeCourses}</span>
+                <span className="text-[9px] font-bold tracking-wider text-[#561291]/80 uppercase mt-0.5">Kurs</span>
+                <span className="text-[8px] font-semibold text-outline text-center mt-1">Fagmoduler</span>
               </div>
 
-              <div className="stat-card flex flex-col items-center justify-center min-w-[70px] lg:min-w-[85px] p-2 bg-slate-50 border border-gray-100 rounded-xl" data-purpose="stat-item">
-                <span className="text-xl font-serif font-bold text-[#561291]">{completionPct}%</span>
-                <div className="w-full bg-gray-200 h-0.5 rounded-full mt-1 mb-0.5 overflow-hidden">
+              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col items-center justify-center min-w-[95px] lg:min-w-[105px] shadow-sm">
+                <span className="text-2xl font-serif font-bold text-[#561291]">{completionPct}%</span>
+                <span className="text-[9px] font-bold tracking-wider text-[#561291]/80 uppercase mt-0.5">Profil</span>
+                <div className="w-full bg-slate-200 h-1 rounded-full mt-2 overflow-hidden min-w-[50px]">
                   <div className="bg-[#c5a059] h-full" style={{ width: `${completionPct}%`, transition: 'width 0.4s ease' }} />
                 </div>
-                <span className="text-[8px] font-bold tracking-widest text-gray-400 uppercase">Profil</span>
               </div>
             </div>
           </div>
-        </section>
+        </div>
 
         {!isAdmin && completionPct < 100 && (
           <div className="mx-4 mb-3 flex items-center gap-2.5 px-4 py-2 bg-amber-50/50 border border-amber-200/50 rounded-xl">
             <Sparkles size={12} className="text-amber-600 shrink-0" />
-            <p className="text-[10px] font-semibold text-amber-800">Fullfør lærerprofilen slik at studentene lettere finner veiledning, kontortid og fagområde.</p>
+            <p className="text-[10px] font-semibold text-amber-800">
+              Fullfør lærerprofilen slik at studentene lettere finner veiledning, kontortid og fagområde.
+            </p>
           </div>
         )}
       </div>
