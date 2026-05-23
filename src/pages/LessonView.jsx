@@ -226,6 +226,12 @@ export default function LessonView() {
       const savedNotes = localStorage.getItem(`hkm-notes-${courseId}-${currentModule.id}`) || "";
       const migratedNotes = migrateMarkdownToHtml(savedNotes);
       setNotes(migratedNotes);
+      
+      // Manually set editor innerHTML on load/switch
+      if (editorRef.current) {
+        editorRef.current.innerHTML = migratedNotes;
+      }
+      
       setActiveTab('write'); // Reset tab
 
       // 2. Fetch from Firestore for cloud sync if user is logged in
@@ -239,6 +245,11 @@ export default function LessonView() {
             if (migratedCloud && migratedCloud !== migratedNotes) {
               setNotes(migratedCloud);
               localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, migratedCloud);
+              
+              // Sync to editor DOM manually on cloud load
+              if (editorRef.current) {
+                editorRef.current.innerHTML = migratedCloud;
+              }
             }
           }
         } catch (err) {
@@ -247,7 +258,16 @@ export default function LessonView() {
       }
     };
     loadNotes();
-  }, [courseId, currentModule?.id, user?.uid]);
+  }, [courseId, currentModule?.id, user?.uid, sidebarTab]);
+
+  // Sync state changes to editor innerHTML ONLY when the change is external (e.g. database load or bibel insert)
+  // This completely prevents React from overriding the DOM during typing, avoiding stutters or cursor jumps!
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (editor && editor.innerHTML !== notes) {
+      editor.innerHTML = notes;
+    }
+  }, [notes]);
 
   useEffect(() => {
     if (isNotesOpen && sidebarTab === 'bible') {
@@ -716,7 +736,7 @@ export default function LessonView() {
                     <div 
                       ref={editorRef}
                       contentEditable
-                      dangerouslySetInnerHTML={{ __html: notes }}
+                      suppressContentEditableWarning={true}
                       onBlur={(e) => {
                         const newHtml = e.target.innerHTML;
                         handleContentChange(newHtml);
