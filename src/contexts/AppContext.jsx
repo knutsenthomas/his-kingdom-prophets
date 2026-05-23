@@ -827,6 +827,15 @@ export const AppProvider = ({ children }) => {
           let userSnap = await getDoc(userDocRef);
           let userData = null;
 
+          // Retrieve local cache to merge and preserve saved profile info
+          let cachedData = {};
+          try {
+            const saved = localStorage.getItem('hkm-current-user');
+            if (saved) cachedData = JSON.parse(saved);
+          } catch (e) {
+            console.warn("Could not read local cache for merge:", e);
+          }
+
           if (['knutsenthomas@gmail.com', 'thomas@tk-design.no'].includes(userEmail)) {
             // Absolute Super-Admin override: Guarantee Thomas always loads with absolute permissions and profile details
             const existingData = userSnap.exists() ? userSnap.data() : {};
@@ -843,7 +852,8 @@ export const AppProvider = ({ children }) => {
               ministry: "",
               socialInstagram: "",
               socialFacebook: "",
-              ...existingData
+              ...cachedData,   // Merge cache first
+              ...existingData  // Merge Firestore data on top
             };
             // Force strict values
             userData.role = 'superadmin';
@@ -856,7 +866,15 @@ export const AppProvider = ({ children }) => {
               console.warn("Could not heal superadmin Firestore document:", healErr);
             }
           } else if (userSnap.exists()) {
-            userData = userSnap.data();
+            userData = {
+              uid: firebaseUser.uid,
+              email: userEmail,
+              name: firebaseUser.displayName || 'Ny Bruker',
+              role: 'student',
+              avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
+              ...cachedData,   // Merge cache first
+              ...userSnap.data() // Merge Firestore data on top
+            };
           } else {
             let matchedDoc = null;
             try {
@@ -875,6 +893,7 @@ export const AppProvider = ({ children }) => {
             if (matchedDoc) {
               // Found a pre-created profile! Let's migrate it to their actual UID!
               userData = {
+                ...cachedData,
                 ...matchedDoc.data,
                 uid: firebaseUser.uid // Set to their actual firebase UID
               };
@@ -888,6 +907,16 @@ export const AppProvider = ({ children }) => {
                   console.warn("Could not delete temporary pre-created user doc:", delErr);
                 }
               }
+            } else {
+              // Fallback for new users
+              userData = {
+                uid: firebaseUser.uid,
+                email: userEmail,
+                name: firebaseUser.displayName || 'Ny Bruker',
+                role: 'student',
+                avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
+                ...cachedData
+              };
             }
           }
 
@@ -942,15 +971,24 @@ export const AppProvider = ({ children }) => {
           if (firebaseUser) {
             const cleanEmail = firebaseUser.email?.toLowerCase();
             const fallbackRole = (cleanEmail === 'knutsenthomas@gmail.com' || cleanEmail === 'thomas@tk-design.no') ? 'superadmin' : 'student';
+            
+            // Retrieve local cache to merge and preserve saved profile info
+            let cachedData = {};
+            try {
+              const saved = localStorage.getItem('hkm-current-user');
+              if (saved) cachedData = JSON.parse(saved);
+            } catch (e) {}
+
             const fallbackUserData = {
               uid: firebaseUser.uid,
               email: firebaseUser.email,
               name: firebaseUser.displayName || (cleanEmail === 'knutsenthomas@gmail.com' ? 'Thomas Knutsen' : 'Ny Bruker'),
               role: fallbackRole,
               onboardingCompleted: true,
-              avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120"
+              avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
+              ...cachedData // Merge local cache
             };
-            console.log("Local profile fallback activated:", fallbackUserData);
+            console.log("Local profile fallback activated with cached details:", fallbackUserData);
             setUser(fallbackUserData);
             setIsLoggedIn(true);
           }
