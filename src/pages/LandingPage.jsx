@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
+import { motion, AnimatePresence } from 'framer-motion';
 import worshipHero from '@/assets/worship_hero.png';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
-import { Sparkles, BookOpen, UserCheck, Globe, ArrowRight, Check } from 'lucide-react';
+import { Sparkles, BookOpen, UserCheck, Globe, ArrowRight, Check, Menu, X } from 'lucide-react';
 
 export default function LandingPage() {
   const navigate = useNavigate();
   const { user, cmsContent } = useApp();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <div className="bg-background text-on-background font-sans min-h-screen">
@@ -23,28 +25,131 @@ export default function LandingPage() {
             />
             <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
           </div>
+          
           <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
             <a className="font-semibold text-primary border-b-2 border-primary cursor-pointer transition-colors duration-200" href="#programs">Studielinjer</a>
             <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#faculty">Mentorer</a>
             <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#research">Bibelressurser</a>
             <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#admissions">Søk Opptak</a>
           </nav>
+
           <div className="flex items-center gap-1 min-[360px]:gap-2 sm:gap-4">
-            <button 
-              onClick={() => navigate('/login')} 
-              className="px-2 sm:px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors text-[10px] min-[360px]:text-xs sm:text-sm shrink-0"
-            >
-              Logg inn
-            </button>
-            <button 
-              onClick={() => navigate('/login')} 
-              className="px-2.5 sm:px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-[10px] min-[360px]:text-xs sm:text-sm shrink-0"
-            >
-              Søk Nå
-            </button>
+            {/* Desktop Actions */}
+            <div className="hidden lg:flex items-center gap-4">
+              <button 
+                onClick={() => navigate('/login')} 
+                className="px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors text-sm shrink-0"
+              >
+                Logg inn
+              </button>
+              <button 
+                onClick={() => navigate('/login')} 
+                className="px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-sm shrink-0"
+              >
+                Søk Nå
+              </button>
+            </div>
+            
+            {/* Mobile/Tablet Actions & Toggle */}
+            <div className="lg:hidden flex items-center gap-1.5 sm:gap-3">
+              <button 
+                onClick={() => navigate('/login')} 
+                className="px-2.5 sm:px-4 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-[10px] min-[360px]:text-xs shrink-0"
+              >
+                Søk Nå
+              </button>
+              <button 
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="p-2 hover:bg-slate-100 rounded-lg text-primary transition-all shrink-0 active:scale-95"
+                aria-label="Åpne meny"
+              >
+                <Menu size={22} />
+              </button>
+            </div>
           </div>
         </div>
       </header>
+
+      {/* Mobile Navigation Drawer */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
+            {/* Backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="absolute inset-0 bg-[#001e2f]/45 backdrop-blur-sm"
+            />
+
+            {/* Slide-in Panel */}
+            <motion.aside
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 26, stiffness: 220 }}
+              className="absolute top-0 bottom-0 right-0 w-80 bg-white shadow-2xl flex flex-col justify-between p-6 border-l border-slate-100 overflow-y-auto"
+            >
+              <div className="space-y-8">
+                {/* Header */}
+                <div className="flex justify-between items-center pb-4 border-b border-outline-variant/30">
+                  <div className="font-serif text-base font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => { navigate('/'); setIsMobileMenuOpen(false); }}>
+                    <img 
+                      src={logo} 
+                      alt="His Kingdom Prophets Logo" 
+                      className="w-7 h-7 object-contain shrink-0" 
+                    />
+                    <span>His Kingdom Prophets</span>
+                  </div>
+                  <button 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="p-1.5 hover:bg-slate-100 rounded-lg text-primary transition-colors active:scale-95"
+                    aria-label="Lukk meny"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {/* Navigation Links */}
+                <nav className="flex flex-col gap-2">
+                  {[
+                    { name: 'Studielinjer', href: '#programs' },
+                    { name: 'Mentorer', href: '#faculty' },
+                    { name: 'Bibelressurser', href: '#research' },
+                    { name: 'Søk Opptak', href: '#admissions' }
+                  ].map(item => (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="px-4 py-3.5 text-sm font-semibold text-on-surface-variant hover:text-primary hover:bg-[#f6fafe] rounded-xl transition-all"
+                    >
+                      {item.name}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+
+              {/* Footer Actions inside Drawer */}
+              <div className="pt-6 border-t border-slate-100 space-y-3.5">
+                <button
+                  onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
+                  className="w-full py-3 border border-[#c1c7ce] text-primary hover:bg-slate-50 font-bold rounded-xl text-xs transition-all active:scale-[0.98]"
+                >
+                  Logg inn
+                </button>
+                <button
+                  onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
+                  className="w-full py-3 bg-primary text-white font-bold rounded-xl text-xs transition-all active:scale-[0.98] shadow-md"
+                >
+                  Søk Nå
+                </button>
+              </div>
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
 
       <main>
         {/* Hero Section */}
