@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
-import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Compass, Users, AlertTriangle, ClipboardList, BookOpen, 
   Award, Bell, Power, Menu, ChevronLeft, Sliders, Video, User,
@@ -260,104 +259,97 @@ export default function TeacherLayout() {
       </div>
 
       {/* Mobile Navigation Drawer */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            key="mobile-drawer-container-teacher"
-            className="fixed inset-0 z-50 md:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {/* Backdrop overlay */}
-            <div
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="absolute inset-0 bg-slate-900/60"
-            />
+      <div 
+        className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ease-in-out ${
+          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        {/* Backdrop overlay */}
+        <div
+          onClick={() => setIsMobileMenuOpen(false)}
+          className={`absolute inset-0 bg-slate-900/60 transition-opacity duration-300 ${
+            isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
 
-            {/* Sliding Menu Panel */}
-            <motion.aside
-              key="mobile-drawer-aside-teacher"
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="absolute top-0 bottom-0 left-0 w-72 bg-white flex flex-col justify-between shadow-2xl border-r border-outline-variant/20 overflow-y-auto h-full"
-            >
-              <div className="py-6 px-6 space-y-6">
-                {/* Header in Drawer */}
-                <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
-                  <div className="font-serif text-lg font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => { navigate('/teacher/dashboard'); setIsMobileMenuOpen(false); }}>
-                    <GraduationCap className="text-primary shrink-0 animate-pulse" size={20} />
-                    <span>His Kingdom Prophets</span>
-                  </div>
-                  <button 
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-1.5 hover:bg-surface-container rounded-lg text-primary"
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-
-                {/* Mentor status details */}
-                <button
-                  onClick={() => {
-                    navigate('/teacher/profile');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
-                  title="Åpne min lærerprofil"
-                >
-                  <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Mentorveiledning</p>
-                  <div className="bg-surface-container-low rounded-xl p-3 border border-outline-variant/30 space-y-1.5">
-                    <div className="flex justify-between items-center text-[10px] font-bold text-on-surface-variant">
-                      <span>Studentoppfølging</span>
-                      <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${atRiskCount > 0 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
-                        {atRiskCount} kritiske
-                      </span>
-                    </div>
-                    <div className="w-full bg-slate-100 h-1 rounded-full overflow-hidden">
-                      <div className="bg-amber-500 h-full w-[65%]"></div>
-                    </div>
-                  </div>
-                </button>
-
-                {/* Nav Items */}
-                <nav className="space-y-1">
-                  {navItems.map(item => {
-                    const isActive = location.pathname === item.path;
-                    const IconComponent = item.icon;
-                    return (
-                      <button 
-                        key={item.path}
-                        onClick={() => {
-                          navigate(item.path);
-                          setIsMobileMenuOpen(false);
-                        }} 
-                        className={`flex items-center justify-between w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
-                          isActive 
-                            ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
-                            : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
-                          <span>{item.name}</span>
-                        </div>
-                        {item.badge !== undefined && item.badge > 0 && (
-                          <span className="bg-amber-500 text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0">
-                            {item.badge}
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </nav>
+        {/* Sliding Menu Panel */}
+        <aside
+          className={`absolute top-0 bottom-0 left-0 w-72 bg-white flex flex-col justify-between shadow-2xl border-r border-outline-variant/20 overflow-y-auto h-full transition-transform duration-300 ease-out transform ${
+            isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          <div className="py-6 px-6 space-y-6">
+            {/* Header in Drawer */}
+            <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
+              <div className="font-serif text-lg font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => { navigate('/teacher/dashboard'); setIsMobileMenuOpen(false); }}>
+                <GraduationCap className="text-primary shrink-0 animate-pulse" size={20} />
+                <span>His Kingdom Prophets</span>
               </div>
-            </motion.aside>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <button 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-1.5 hover:bg-surface-container rounded-lg text-primary"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Mentor status details */}
+            <button
+              onClick={() => {
+                navigate('/teacher/profile');
+                setIsMobileMenuOpen(false);
+              }}
+              className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
+              title="Åpne min lærerprofil"
+            >
+              <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Mentorveiledning</p>
+              <div className="bg-surface-container-low rounded-xl p-3 border border-outline-variant/30 space-y-1.5">
+                <div className="flex justify-between items-center text-[10px] font-bold text-on-surface-variant">
+                  <span>Studentoppfølging</span>
+                  <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${atRiskCount > 0 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
+                    {atRiskCount} kritiske
+                  </span>
+                </div>
+                <div className="w-full bg-slate-100 h-1 rounded-full overflow-hidden">
+                  <div className="bg-amber-500 h-full w-[65%]"></div>
+                </div>
+              </div>
+            </button>
+
+            {/* Nav Items */}
+            <nav className="space-y-1">
+              {navItems.map(item => {
+                const isActive = location.pathname === item.path;
+                const IconComponent = item.icon;
+                return (
+                  <button 
+                    key={item.path}
+                    onClick={() => {
+                      navigate(item.path);
+                      setIsMobileMenuOpen(false);
+                    }} 
+                    className={`flex items-center justify-between w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
+                      isActive 
+                        ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
+                        : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
+                      <span>{item.name}</span>
+                    </div>
+                    {item.badge !== undefined && item.badge > 0 && (
+                      <span className="bg-amber-500 text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0">
+                        {item.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+        </aside>
+      </div>
 
       {/* Global HKM Assistent Chat Widget rendered once at layout level */}
       <HkmChatWidget />

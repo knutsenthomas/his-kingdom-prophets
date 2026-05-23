@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
-import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Compass, BookOpen, Video, CheckSquare, Users, 
   Menu, Bell, Power, Search, Award, GraduationCap, ChevronLeft, User,
@@ -287,121 +286,114 @@ export default function StudentLayout() {
       </div>
 
       {/* Mobile Navigation Drawer */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            key="mobile-drawer-container"
-            className="fixed inset-0 z-50 md:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {/* Backdrop overlay */}
-            <div
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="absolute inset-0 bg-slate-900/60"
-            />
+      <div 
+        className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ease-in-out ${
+          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        {/* Backdrop overlay */}
+        <div
+          onClick={() => setIsMobileMenuOpen(false)}
+          className={`absolute inset-0 bg-slate-900/60 transition-opacity duration-300 ${
+            isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
 
-            {/* Sliding Menu Panel */}
-            <motion.aside
-              key="mobile-drawer-aside"
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="absolute top-0 bottom-0 left-0 w-72 bg-white flex flex-col justify-between shadow-2xl border-r border-outline-variant/20 overflow-y-auto h-full"
-            >
-              <div className="py-6 px-6 space-y-6">
-                {/* Header in Drawer */}
-                <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
-                  <div className="font-serif text-lg font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => { navigate('/student/dashboard'); setIsMobileMenuOpen(false); }}>
-                    <GraduationCap className="text-primary shrink-0 animate-pulse" size={20} />
-                    <span>His Kingdom Prophets</span>
-                  </div>
-                  <button 
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-1.5 hover:bg-surface-container rounded-lg text-primary"
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-
-                {/* Student profile summary */}
-                <button
-                  onClick={() => {
-                    navigate('/student/profile');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
-                  title="Åpne min profil"
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Award className="text-primary animate-pulse" size={16} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-on-surface uppercase tracking-wider">{user?.name}</p>
-                      <p className="text-[10px] text-on-surface-variant font-medium">Aktiv Utrustningsprofil</p>
-                    </div>
-                  </div>
-                  <div className="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
-                    <div className="bg-primary h-full w-[45%]" style={{ transition: 'width 0.8s ease-in-out' }}></div>
-                  </div>
-                </button>
-
-                {/* Nav Items */}
-                <nav className="space-y-1">
-                  {navItems.map(item => {
-                    const isActive = location.pathname === item.path;
-                    const IconComponent = item.icon;
-                    return (
-                      <button 
-                        key={item.path}
-                        onClick={() => {
-                          navigate(item.path);
-                          setIsMobileMenuOpen(false);
-                        }} 
-                        className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
-                          isActive 
-                            ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
-                            : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
-                        }`}
-                      >
-                        <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
-                        <span>{item.name}</span>
-                      </button>
-                    );
-                  })}
-                </nav>
+        {/* Sliding Menu Panel */}
+        <aside
+          className={`absolute top-0 bottom-0 left-0 w-72 bg-white flex flex-col justify-between shadow-2xl border-r border-outline-variant/20 overflow-y-auto h-full transition-transform duration-300 ease-out transform ${
+            isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          <div className="py-6 px-6 space-y-6">
+            {/* Header in Drawer */}
+            <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
+              <div className="font-serif text-lg font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => { navigate('/student/dashboard'); setIsMobileMenuOpen(false); }}>
+                <GraduationCap className="text-primary shrink-0 animate-pulse" size={20} />
+                <span>His Kingdom Prophets</span>
               </div>
+              <button 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-1.5 hover:bg-surface-container rounded-lg text-primary"
+              >
+                <X size={20} />
+              </button>
+            </div>
 
-              {/* Premium banner at bottom of drawer */}
-              <div className="p-6">
-                <div className="bg-surface-container-low rounded-xl p-4 border border-outline-variant/30 text-center shadow-sm">
-                  <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                    <CmsText slug="layout-upgrade-banner-title" fallback="Utvid tjenesten" />
-                  </p>
-                  <CmsText
-                    slug="layout-upgrade-banner-desc"
-                    fallback="Få ubegrenset tilgang til alle studieskrifter og veiledning."
-                    as="p"
-                    className="text-[10px] text-on-surface-variant mb-3 leading-relaxed"
-                  />
+            {/* Student profile summary */}
+            <button
+              onClick={() => {
+                navigate('/student/profile');
+                setIsMobileMenuOpen(false);
+              }}
+              className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
+              title="Åpne min profil"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Award className="text-primary animate-pulse" size={16} />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-on-surface uppercase tracking-wider">{user?.name}</p>
+                  <p className="text-[10px] text-on-surface-variant font-medium">Aktiv Utrustningsprofil</p>
+                </div>
+              </div>
+              <div className="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+                <div className="bg-primary h-full w-[45%]" style={{ transition: 'width 0.8s ease-in-out' }}></div>
+              </div>
+            </button>
+
+            {/* Nav Items */}
+            <nav className="space-y-1">
+              {navItems.map(item => {
+                const isActive = location.pathname === item.path;
+                const IconComponent = item.icon;
+                return (
                   <button 
+                    key={item.path}
                     onClick={() => {
-                      showToast("Oppgradering sendt til behandling!");
+                      navigate(item.path);
                       setIsMobileMenuOpen(false);
                     }} 
-                    className="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg shadow-sm hover:bg-primary-container transition-all"
+                    className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
+                      isActive 
+                        ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
+                        : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
+                    }`}
                   >
-                    <CmsText slug="layout-upgrade-banner-btn" fallback="Oppgrader profil" />
+                    <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
+                    <span>{item.name}</span>
                   </button>
-                </div>
-              </div>
-            </motion.aside>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Premium banner at bottom of drawer */}
+          <div className="p-6">
+            <div className="bg-surface-container-low rounded-xl p-4 border border-outline-variant/30 text-center shadow-sm">
+              <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
+                <CmsText slug="layout-upgrade-banner-title" fallback="Utvid tjenesten" />
+              </p>
+              <CmsText
+                slug="layout-upgrade-banner-desc"
+                fallback="Få ubegrenset tilgang til alle studieskrifter og veiledning."
+                as="p"
+                className="text-[10px] text-on-surface-variant mb-3 leading-relaxed"
+              />
+              <button 
+                onClick={() => {
+                  showToast("Oppgradering sendt til behandling!");
+                  setIsMobileMenuOpen(false);
+                }} 
+                className="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg shadow-sm hover:bg-primary-container transition-all"
+              >
+                <CmsText slug="layout-upgrade-banner-btn" fallback="Oppgrader profil" />
+              </button>
+            </div>
+          </div>
+        </aside>
+      </div>
 
       {/* Global HKM Assistent Chat Widget rendered once at layout level */}
       <HkmChatWidget />
