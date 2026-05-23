@@ -16,14 +16,18 @@ export default function LandingPage() {
   const navItems = [
     { slug: 'landing-nav-programs', fallback: 'Studielinjer', href: '#programs', id: 'programs' },
     { slug: 'landing-nav-faculty', fallback: 'Mentorer', href: '#faculty', id: 'faculty' },
-    { slug: 'landing-nav-resources', fallback: 'Bibelressurser', href: '#research', id: 'research' },
+    { slug: 'landing-nav-resources', fallback: 'Bibelressurser', href: '/bible-resources', id: 'research' },
     { slug: 'landing-nav-admissions', fallback: 'Søk Opptak', href: '#admissions', id: 'admissions' }
   ];
 
-  const handleNavClick = (e, id) => {
+  const handleNavClick = (e, item) => {
+    if (item.href.startsWith('/')) {
+      navigate(item.href);
+      return;
+    }
     e.preventDefault();
-    setActiveSection(id);
-    const element = document.getElementById(id);
+    setActiveSection(item.id);
+    const element = document.getElementById(item.id);
     if (element) {
       const offset = 80;
       const bodyRect = document.body.getBoundingClientRect().top;
@@ -97,7 +101,7 @@ export default function LandingPage() {
                 <a
                   key={item.href}
                   href={item.href}
-                  onClick={(e) => handleNavClick(e, item.id)}
+                  onClick={(e) => handleNavClick(e, item)}
                   className={`font-semibold cursor-pointer pb-1 border-b-2 transition-all duration-200 ${
                     isActive 
                       ? 'text-primary border-primary' 
@@ -213,7 +217,7 @@ export default function LandingPage() {
                         key={item.href}
                         href={item.href}
                         onClick={(e) => {
-                          handleNavClick(e, item.id);
+                          handleNavClick(e, item);
                           setIsMobileMenuOpen(false);
                         }}
                         className={`px-4 py-3.5 text-sm font-semibold rounded-xl transition-all ${

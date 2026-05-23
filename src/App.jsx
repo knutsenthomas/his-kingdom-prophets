@@ -49,6 +49,7 @@ import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
 import TermsOfServicePage from '@/pages/TermsOfServicePage';
 import AccessibilityPage from '@/pages/AccessibilityPage';
 import ContactSupportPage from '@/pages/ContactSupportPage';
+import BibleResourcesPage from '@/pages/BibleResourcesPage';
 
 // Email Previews
 import EmailPreviews from '@/pages/EmailPreviews';
@@ -225,6 +226,7 @@ function AppRoutes() {
         <Route path="/terms" element={<TermsOfServicePage />} />
         <Route path="/accessibility" element={<AccessibilityPage />} />
         <Route path="/support" element={<ContactSupportPage />} />
+        <Route path="/bible-resources" element={<BibleResourcesPage />} />
       </Routes>
     </>
   );
