@@ -251,15 +251,13 @@ export default function LessonView() {
     setIsBibleLoading(true);
     setBibleVerses([]);
     try {
-      const refString = `${selectedBibleBook.eng} ${selectedBibleChapter}`;
-      const url = `https://query.getbible.net/v2/${selectedBibleTranslation}/${encodeURIComponent(refString)}`;
+      const bookIndex = BIBLE_BOOKS.findIndex(b => b.id === selectedBibleBook.id);
+      const bookNumber = bookIndex + 1;
+      const url = `https://api.getbible.net/v2/${selectedBibleTranslation}/${bookNumber}/${selectedBibleChapter}.json`;
       const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
-        const keys = Object.keys(data);
-        if (keys.length > 0) {
-          setBibleVerses(data[keys[0]].verses || []);
-        }
+        setBibleVerses(data.verses || []);
       }
     } catch (err) {
       console.error("Klarte ikke hente bibelkapittel i verktøyet:", err);

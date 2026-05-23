@@ -163,8 +163,9 @@ export default function BibleView() {
     setIsLoading(true);
     setVerses([]);
     try {
-      const refString = `${selectedBook.eng} ${selectedChapter}`;
-      const url = `https://query.getbible.net/v2/${selectedTranslation}/${encodeURIComponent(refString)}`;
+      const bookIndex = BIBLE_BOOKS.findIndex(b => b.id === selectedBook.id);
+      const bookNumber = bookIndex + 1;
+      const url = `https://api.getbible.net/v2/${selectedTranslation}/${bookNumber}/${selectedChapter}.json`;
       const response = await fetch(url);
       
       if (!response.ok) {
@@ -172,11 +173,7 @@ export default function BibleView() {
       }
 
       const data = await response.json();
-      const keys = Object.keys(data);
-      if (keys.length > 0) {
-        const chapterData = data[keys[0]];
-        setVerses(chapterData.verses || []);
-      }
+      setVerses(data.verses || []);
     } catch (err) {
       console.error(err);
       showToast('Klarte ikke å laste bibelkapittelet. Sjekk internettforbindelsen.');
