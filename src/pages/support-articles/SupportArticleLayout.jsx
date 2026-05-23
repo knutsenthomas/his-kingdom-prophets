@@ -33,10 +33,22 @@ export default function SupportArticleLayout({
   cta,
   feedback
 }) {
-  const { user, showToast } = useApp();
+  const { user, showToast, setAssistantContext } = useApp();
   const [showBubble, setShowBubble] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
   const [stats, setStats] = useState({ yes: 0, no: 0 });
+
+  useEffect(() => {
+    if (title) {
+      setAssistantContext({
+        pageType: 'support_article',
+        title: title,
+        category: breadcrumbs[breadcrumbs.length - 1]?.label || 'Hjelpeartikler',
+        content: `Brukeren leser supportartikkelen "${title}".`
+      });
+    }
+    return () => setAssistantContext(null);
+  }, [title, breadcrumbs, setAssistantContext]);
 
   useEffect(() => {
     const voted = localStorage.getItem(`hkm-feedback-voted-${title}`) === 'true';

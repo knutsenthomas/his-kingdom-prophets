@@ -141,7 +141,7 @@ const migrateMarkdownToHtml = (text) => {
 export default function LessonView() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { courses, toggleModuleCompleted, showToast, user, sendAssistantMessage } = useApp();
+  const { courses, toggleModuleCompleted, showToast, user, sendAssistantMessage, setAssistantContext } = useApp();
   
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [hideStudyPlan, setHideStudyPlan] = useState(false);
@@ -235,6 +235,22 @@ export default function LessonView() {
       window.dispatchEvent(new CustomEvent(eventName, { detail: false }));
     };
   }, [user?.role]);
+
+  useEffect(() => {
+    if (currentModule && course) {
+      setAssistantContext({
+        pageType: 'lesson',
+        title: currentModule.title,
+        courseTitle: course.title,
+        courseCode: course.code,
+        moduleIndex: activeModuleIndex,
+        description: currentModule.description,
+        learningGoals: currentModule.learningGoals,
+        content: `Brukeren studerer leksjonen "${currentModule.title}" i kurset "${course.title}".`
+      });
+    }
+    return () => setAssistantContext(null);
+  }, [currentModule, course, activeModuleIndex, setAssistantContext]);
 
   // Save notes securely to Firestore
   const saveNotesToFirestore = async (val) => {

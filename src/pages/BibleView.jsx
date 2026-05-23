@@ -411,7 +411,7 @@ const findBibleBook = (bookStr) => {
 
 export default function BibleView() {
   const navigate = useNavigate();
-  const { showToast, sendAssistantMessage, user } = useApp();
+  const { showToast, sendAssistantMessage, user, setAssistantContext } = useApp();
   const [selectedBook, setSelectedBook] = useState(BIBLE_BOOKS.find(b => b.id === 'joh'));
   const [selectedChapter, setSelectedChapter] = useState(3);
   const [selectedTranslation, setSelectedTranslation] = useState('bibelselskap');
@@ -437,6 +437,22 @@ export default function BibleView() {
   const [noteText, setNoteText] = useState('');
   const [noteSaveStatus, setNoteSaveStatus] = useState('idle'); // idle, loading, saving, saved, error
   const saveTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    if (selectedBook && selectedChapter) {
+      const transName = TRANSLATIONS.find(t => t.id === selectedTranslation)?.name || selectedTranslation.toUpperCase();
+      setAssistantContext({
+        pageType: 'bible',
+        title: `Bibelen: ${selectedBook.nor} ${selectedChapter}`,
+        book: selectedBook.nor,
+        chapter: selectedChapter,
+        translation: selectedTranslation,
+        translationName: transName,
+        content: `Brukeren leser ${selectedBook.nor} kapittel ${selectedChapter} i oversettelsen ${transName}.`
+      });
+    }
+    return () => setAssistantContext(null);
+  }, [selectedBook, selectedChapter, selectedTranslation, setAssistantContext]);
 
   // Load notes for current book and chapter
   useEffect(() => {

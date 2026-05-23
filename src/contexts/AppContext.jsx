@@ -339,6 +339,7 @@ export const AppProvider = ({ children }) => {
   const [isAssistantTyping, setIsAssistantTyping] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
   const [moduleApprovals, setModuleApprovals] = useState([]);
+  const [assistantContext, setAssistantContext] = useState(null);
 
   // Centralized Headless CMS Content State
   const [cmsContent, setCmsContent] = useState(() => {
@@ -2404,10 +2405,42 @@ export const AppProvider = ({ children }) => {
       let replyText = "";
       const lower = text.toLowerCase().trim();
 
+      // Context-aware Page Queries
+      if (assistantContext && (lower.includes("hva handler") || lower.includes("hva ser jeg på") || lower.includes("hva er denne siden") || lower.includes("hva er dette") || lower.includes("hvor er jeg") || lower.includes("forklar siden") || lower.includes("lese på") || lower.includes("kontekst"))) {
+        if (assistantContext.pageType === 'lesson') {
+          replyText = `### 📖 Leksjonskontekst: ${assistantContext.title}\n\n` +
+            `Du ser for øyeblikket på **Modul ${assistantContext.moduleIndex + 1}: ${assistantContext.title}** i kurset *${assistantContext.courseTitle}* (${assistantContext.courseCode}).\n\n` +
+            `Denne leksjonen handler om: **${assistantContext.description || 'Undervisning i profetisk og bibelsk tjeneste.'}**\n\n` +
+            `Læringsmålene for denne modulen er:\n` +
+            (assistantContext.learningGoals && assistantContext.learningGoals.length > 0
+              ? assistantContext.learningGoals.map(goal => `• *${goal}*`).join('\n')
+              : `• *Legge et solid teologiske og praktiske fundament*`) + `\n\n` +
+            `💡 *Trenger du hjelp med noe spesifikt i denne leksjonen, eller vil du at jeg skal utdype noen av læringsmålene?*`;
+        } else if (assistantContext.pageType === 'bible') {
+          replyText = `### 📜 Bibelkontekst: ${assistantContext.book} ${assistantContext.chapter}\n\n` +
+            `Du leser for øyeblikket i **${assistantContext.book} kapittel ${assistantContext.chapter}** på oversettelsen *${assistantContext.translationName}*.\n\n` +
+            `Dette er et utmerket kapittel for studie! Du kan bruke fanene i Studiebibelen på høyre side til å lese kommentarer, gjøre ordstudier på grunnteksten eller se kryssreferanser.\n\n` +
+            `💡 *Vil du at jeg skal utdype et bestemt vers i ${assistantContext.book} ${assistantContext.chapter} for deg?*`;
+        } else if (assistantContext.pageType === 'support_article') {
+          replyText = `### 📞 Support-artikkel: ${assistantContext.title}\n\n` +
+            `Du leser for øyeblikket support-artikkelen **"${assistantContext.title}"** i kategorien *${assistantContext.category}*.\n\n` +
+            `Denne artikkelen gir deg veiledning om plattformens funksjoner for å sikre en problemfri opplevelse.\n\n` +
+            `💡 *Hvis du trenger ytterligere hjelp, kan du også opprette en support-billett direkte fra [Support-senteret](/student/support).*`;
+        } else {
+          replyText = `### 🧭 Aktiv side: ${assistantContext.title}\n\n` +
+            `${assistantContext.content}\n\n` +
+            `Si fra hvis det er noe jeg kan utdype eller hjelpe deg med her!`;
+        }
+      }
       // A. Greetings / Conversational Help
-      if (lower.includes("hei") || lower.includes("hallo") || lower.includes("god dag") || lower.includes("heisann") || lower.includes("morn") || lower.includes("yo") || lower.includes("hvem er du") || lower.includes("hjelp") || lower.includes("hva kan du")) {
-        replyText = "Hei! 👋 Jeg er din **HKM Assistent**. Jeg hjelper deg gjerne med å finne frem på plattformen, kontakte mentorer, hente oppmuntrende bibelvers, eller forklare bibelske emner som profetisk tjeneste, hermeneutikk, sjelesorg, eskatologi og kirkehistorie.\n\n" +
-          "Hva kan jeg bistå deg med i dag?";
+      else if (lower.includes("hei") || lower.includes("hallo") || lower.includes("god dag") || lower.includes("heisann") || lower.includes("morn") || lower.includes("yo") || lower.includes("hvem er du") || lower.includes("hjelp") || lower.includes("hva kan du")) {
+        let greeting = "Hei! 👋 Jeg er din **HKM Assistent**. Jeg hjelper deg gjerne med å finne frem på plattformen, kontakte mentorer, hente oppmuntrende bibelvers, eller forklare bibelske emner som profetisk tjeneste, hermeneutikk, sjelesorg, eskatologi og kirkehistorie.\n\n";
+        
+        if (assistantContext) {
+          greeting += `🔔 **Aktiv sidekontekst:** Du er inne på siden **${assistantContext.title}** akkurat nå. Spør meg gjerne om emner knyttet til denne! (Skriv f.eks. *'hva handler denne siden om?'* eller *'hva lærer vi her?'*).\n\n`;
+        }
+        
+        replyText = greeting + "Hva kan jeg bistå deg med i dag?";
       }
       
       // A2. User loop test case handler - direct self-aware reply
@@ -2736,7 +2769,9 @@ export const AppProvider = ({ children }) => {
       isAdminEditing,
       setIsAdminEditing,
       language,
-      toggleLanguage
+      toggleLanguage,
+      assistantContext,
+      setAssistantContext
     }}>
       {children}
     </AppContext.Provider>
