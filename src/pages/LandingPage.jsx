@@ -15,15 +15,15 @@ export default function LandingPage() {
       {/* TopNavBar */}
       <header className="sticky top-0 z-40 w-full glass-nav border-b border-outline-variant">
         <div className="flex justify-between items-center w-full px-3 sm:px-6 md:px-12 h-20 max-w-[1440px] mx-auto">
-          <div className="font-serif text-sm min-[360px]:text-base sm:text-2xl text-primary font-bold cursor-pointer shrink-0 flex items-center gap-2" onClick={() => navigate('/')}>
+          <div className="font-serif text-xs min-[360px]:text-sm sm:text-lg md:text-xl lg:text-2xl text-primary font-bold cursor-pointer shrink-0 flex items-center gap-1.5 sm:gap-2.5" onClick={() => navigate('/')}>
             <img 
               src={logo} 
               alt="His Kingdom Prophets Logo" 
-              className="w-8 h-8 object-contain shrink-0" 
+              className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0" 
             />
             <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
           </div>
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
             <a className="font-semibold text-primary border-b-2 border-primary cursor-pointer transition-colors duration-200" href="#programs">Studielinjer</a>
             <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#faculty">Mentorer</a>
             <a className="text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200" href="#research">Bibelressurser</a>
