@@ -222,34 +222,45 @@ export default function AdminPortal() {
     e.preventDefault();
     if (!newUserName || !newUserEmail) return;
 
+    // Capture the values locally to prevent losing them on state reset
+    const userName = newUserName;
+    const userEmail = newUserEmail;
+    const userRole = newUserRole;
+    const userStatus = newUserStatus;
+
+    // Reset input fields and close modal immediately to prevent multiple submissions
+    setNewUserName('');
+    setNewUserEmail('');
+    setNewUserRole('student');
+    setNewUserStatus('AKTIV');
+    setIsAddModalOpen(false);
+
     const newUid = "usr-" + Date.now();
     const newUser = {
       uid: newUid,
-      name: newUserName,
-      email: newUserEmail,
-      role: newUserRole,
+      name: userName,
+      email: userEmail,
+      role: userRole,
       created: new Date().toLocaleDateString('no-NO', { day: '2-digit', month: 'short', year: 'numeric' }),
-      status: newUserStatus,
+      status: userStatus,
       avatar: ""
     };
 
-    const updatedList = [newUser, ...usersList];
-    setUsersList(updatedList);
-    localStorage.setItem('hkm-admin-portal-users', JSON.stringify(updatedList));
+    // Update local state instantly so the user sees the list update immediately!
+    setUsersList(prev => {
+      const updated = [newUser, ...prev];
+      localStorage.setItem('hkm-admin-portal-users', JSON.stringify(updated));
+      return updated;
+    });
 
+    // Write to Firestore in the background
     try {
       await setDoc(doc(db, "users", newUid), newUser);
-      showToast(`Brukeren ${newUserName} ble opprettet!`);
+      showToast(`Brukeren ${userName} ble opprettet!`);
     } catch (err) {
       console.warn("Could not save new user to Firestore:", err);
       showToast("Lokal opprettelse vellykket! (Frakoblet)");
     }
-
-    // Reset fields
-    setNewUserName('');
-    setNewUserEmail('');
-    setNewUserRole('student');
-    setIsAddModalOpen(false);
   };
 
   const handleUpdateUserRole = async (uid, role) => {
