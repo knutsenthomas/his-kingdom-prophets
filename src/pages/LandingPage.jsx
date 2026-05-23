@@ -4,6 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import worshipHero from '@/assets/worship_hero.png';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
+import { Sparkles, BookOpen, UserCheck, Globe, ArrowRight, Check } from 'lucide-react';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -90,7 +91,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Pillars Section (Bento Layout) */}
+        {/* Pillars Section (Redesigned Cohesive Symmetrical Grid & Banner) */}
         <section id="programs" className="py-16 md:py-24 px-4 sm:px-6 md:px-12 max-w-[1440px] mx-auto">
           <div className="text-center mb-16 max-w-3xl mx-auto">
             <CmsText 
@@ -106,63 +107,87 @@ export default function LandingPage() {
               className="text-base md:text-lg text-on-surface-variant" 
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          
+          {/* Exactly 3 Symmetrical, Balanced Pillars */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Pillar 1 */}
-            <div className="md:col-span-8 group bento-card bg-surface-container-lowest border border-outline-variant p-6 sm:p-8 md:p-12 flex flex-col justify-between overflow-hidden relative rounded-2xl min-h-[320px]">
-              <div className="relative z-10">
-                <div className="w-14 h-14 bg-primary-fixed rounded-xl flex items-center justify-center text-primary mb-6 group-hover:scale-105 transition-transform">
-                  <span className="material-symbols-outlined text-3xl">campaign</span>
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(27,73,101,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#1B4965]/20 hover:shadow-[0_12px_32px_rgba(27,73,101,0.06)] transition-all duration-300 ease-out min-h-[360px]">
+              <span className="absolute top-6 right-8 font-serif text-5xl font-extrabold text-[#1B4965]/5 select-none pointer-events-none group-hover:text-[#1B4965]/10 transition-colors duration-300">01</span>
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1B4965]/10 to-[#1B4965]/5 flex items-center justify-center text-[#1B4965] mb-6 group-hover:scale-105 transition-transform duration-300">
+                  <Sparkles size={22} />
                 </div>
                 <CmsText 
                   slug="landing-pillar1-title" 
                   fallback="Profetisk Utrustning og Tjeneste" 
                   as="h3" 
-                  className="font-serif text-2xl text-primary font-bold mb-3" 
+                  className="font-serif text-xl text-primary font-bold mb-3" 
                 />
                 <CmsText 
                   slug="landing-pillar1-desc" 
-                  fallback="Lær å høre Guds stemme, tyde syner og drømmer, og formidle åpenbaringskunnskap med sunne bibelske rammer og etisk modenhet." 
+                  fallback="Lær å høre Guds stemme, tyde syner og drømmer, og formidle åpenbaringskunnskap med sunne bibelske rammer." 
                   as="p" 
-                  className="text-on-surface-variant max-w-md text-sm md:text-base leading-relaxed" 
+                  className="text-sm text-on-surface-variant leading-relaxed mb-6" 
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 w-1/2 h-1/2 opacity-10 group-hover:opacity-30 transition-all duration-700">
-                <span className="material-symbols-outlined text-[150px] text-primary">auto_awesome</span>
-              </div>
+              <ul className="space-y-2.5 border-t border-slate-100/55 pt-6 text-xs text-on-surface-variant font-medium font-sans">
+                <li className="flex items-center gap-2">
+                  <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
+                  <span>Åndelig skjelneevne og etikk</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
+                  <span>Drømmetydning & Åpenbaring</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
+                  <span>Etisk karakter og modenhet</span>
+                </li>
+              </ul>
             </div>
 
             {/* Pillar 2 */}
-            <div className="md:col-span-4 group bento-card bg-primary text-white p-6 sm:p-8 flex flex-col justify-between rounded-2xl min-h-[320px]">
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(27,73,101,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#1B4965]/20 hover:shadow-[0_12px_32px_rgba(27,73,101,0.06)] transition-all duration-300 ease-out min-h-[360px]">
+              <span className="absolute top-6 right-8 font-serif text-5xl font-extrabold text-[#1B4965]/5 select-none pointer-events-none group-hover:text-[#1B4965]/10 transition-colors duration-300">02</span>
               <div>
-                <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-white mb-6 border border-white/20">
-                  <span className="material-symbols-outlined text-2xl">menu_book</span>
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1B4965]/10 to-[#1B4965]/5 flex items-center justify-center text-[#1B4965] mb-6 group-hover:scale-105 transition-transform duration-300">
+                  <BookOpen size={22} />
                 </div>
                 <CmsText 
                   slug="landing-pillar2-title" 
                   fallback="Dyp Bibelundervisning" 
                   as="h3" 
-                  className="font-serif text-xl font-bold mb-3" 
+                  className="font-serif text-xl text-primary font-bold mb-3" 
                 />
                 <CmsText 
                   slug="landing-pillar2-desc" 
                   fallback="Gå i dybden på paktsteologi, eskatologi og hermeneutiske verktøy som ruster deg til å dele sannhetens ord rett." 
                   as="p" 
-                  className="text-on-primary-container text-sm leading-relaxed" 
+                  className="text-sm text-on-surface-variant leading-relaxed mb-6" 
                 />
               </div>
-              <div className="pt-6">
-                <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-primary-fixed-dim w-[85%]"></div>
-                </div>
-                <p className="mt-3 text-xs font-semibold text-primary-fixed-dim uppercase tracking-wider">85% Kjernefokus Skriftlære</p>
-              </div>
+              <ul className="space-y-2.5 border-t border-slate-100/55 pt-6 text-xs text-on-surface-variant font-medium font-sans">
+                <li className="flex items-center gap-2">
+                  <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
+                  <span>Historisk-grammatisk hermeneutikk</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
+                  <span>Paktsteologi & Eskatologi</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
+                  <span>Sunn eksegese og Skriftlære</span>
+                </li>
+              </ul>
             </div>
 
             {/* Pillar 3 */}
-            <div className="md:col-span-5 group bento-card bg-surface-container border border-outline-variant p-6 sm:p-8 flex flex-col justify-between rounded-2xl min-h-[260px]">
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(27,73,101,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#1B4965]/20 hover:shadow-[0_12px_32px_rgba(27,73,101,0.06)] transition-all duration-300 ease-out min-h-[360px]">
+              <span className="absolute top-6 right-8 font-serif text-5xl font-extrabold text-[#1B4965]/5 select-none pointer-events-none group-hover:text-[#1B4965]/10 transition-colors duration-300">03</span>
               <div>
-                <div className="w-12 h-12 bg-primary text-white rounded-xl flex items-center justify-center mb-6">
-                  <span className="material-symbols-outlined text-2xl">favorite</span>
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1B4965]/10 to-[#1B4965]/5 flex items-center justify-center text-[#1B4965] mb-6 group-hover:scale-105 transition-transform duration-300">
+                  <UserCheck size={22} />
                 </div>
                 <CmsText 
                   slug="landing-pillar3-title" 
@@ -174,31 +199,45 @@ export default function LandingPage() {
                   slug="landing-pillar3-desc" 
                   fallback="Personlig oppfølging og disippelskap for din tjeneste. Vi hjelper deg å vokse i karakter og finne ditt spesifikke kall." 
                   as="p" 
-                  className="text-on-surface-variant text-sm leading-relaxed" 
+                  className="text-sm text-on-surface-variant leading-relaxed mb-6" 
                 />
+              </div>
+              <ul className="space-y-2.5 border-t border-slate-100/55 pt-6 text-xs text-on-surface-variant font-medium font-sans">
+                <li className="flex items-center gap-2">
+                  <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
+                  <span>1-til-1 oppfølging & mentorsamtaler</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
+                  <span>Personlig disippelskapsprogram</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
+                  <span>Karakterutvikling & Åndelig vekst</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          {/* Symmetrical full-width global network banner below */}
+          <div className="mt-12 bg-gradient-to-r from-[#1B4965]/5 to-transparent border border-[#1B4965]/10 rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-[#1B4965]/20 transition-all duration-300 shadow-sm relative overflow-hidden group">
+            <div className="flex items-center gap-4 sm:gap-6 relative z-10">
+              <div className="w-14 h-14 rounded-full bg-white text-[#1B4965] shadow-sm flex items-center justify-center border border-slate-100 flex-shrink-0 animate-float">
+                <Globe size={26} className="text-[#1B4965]" />
+              </div>
+              <div className="space-y-1">
+                <CmsText slug="landing-network-title" fallback="Globale Profetiske Nettverk" as="h4" className="font-serif text-lg text-[#1B4965] font-bold" />
+                <CmsText slug="landing-network-desc" fallback="Koble deg til bønnenettverk, misjonsreiser og tjenester over hele verden for å utvide ditt åndelige perspektiv." as="p" className="text-xs sm:text-sm text-[#46617b] leading-relaxed max-w-2xl" />
               </div>
             </div>
-
-            {/* Accent Piece */}
-            <div className="md:col-span-7 bento-card bg-tertiary-fixed border border-outline-variant p-6 sm:p-8 flex items-center justify-between rounded-2xl overflow-hidden relative min-h-[260px]">
-              <div className="flex-1 z-10">
-                <CmsText 
-                  slug="landing-network-title" 
-                  fallback="Globale Profetiske Nettverk" 
-                  as="h4" 
-                  className="font-serif text-xl text-primary font-bold mb-2" 
-                />
-                <CmsText 
-                  slug="landing-network-desc" 
-                  fallback="Koble deg til bønnenettverk, misjonsreiser og tjenester over hele verden for å utvide ditt åndelige perspektiv." 
-                  as="p" 
-                  className="text-on-surface-variant text-sm leading-relaxed max-w-sm" 
-                />
-              </div>
-              <div className="flex-shrink-0 z-10 h-24 w-24 rounded-full border-4 border-white/50 bg-primary/10 flex items-center justify-center">
-                <span className="material-symbols-outlined text-4xl text-primary animate-pulse">language</span>
-              </div>
-            </div>
+            
+            <button 
+              onClick={() => navigate('/login')}
+              className="relative z-10 shrink-0 px-6 py-3 bg-[#1B4965] hover:bg-[#00324b] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm hover:shadow active:scale-[0.98] flex items-center gap-2 group-hover:translate-x-0.5"
+            >
+              <span>Bli en Del</span>
+              <ArrowRight size={14} />
+            </button>
           </div>
         </section>
 
