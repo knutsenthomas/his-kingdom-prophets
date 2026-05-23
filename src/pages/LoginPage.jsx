@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
-import { auth } from '@/firebase';
+import { auth, db } from '@/firebase';
+import { doc, getDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import CmsText from '@/components/CmsText';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Key } from 'lucide-react';
@@ -46,6 +47,61 @@ export default function LoginPage() {
       }
     }
   };
+
+  // 1. Direct fail-safe Auth listener with Firestore role query to prevent context lag or loops
+  useEffect(() => {
+    const handleDirectRedirect = async (firebaseUser) => {
+      if (firebaseUser && firebaseUser.email) {
+        const email = firebaseUser.email.toLowerCase();
+        console.log("Direct Auth observer triggered for:", email);
+
+        // Instant Superadmin fallback to bypass any firestore reads completely
+        if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(email)) {
+          handleAuthSuccess(firebaseUser.email, 'superadmin', true);
+          return;
+        }
+
+        try {
+          // Query Firestore by UID first
+          const userDocRef = doc(db, "users", firebaseUser.uid);
+          const userSnap = await getDoc(userDocRef);
+          if (userSnap.exists()) {
+            const data = userSnap.data();
+            handleAuthSuccess(firebaseUser.email, data.role || 'student', data.onboardingCompleted !== false);
+            return;
+          }
+
+          // Fallback to query Firestore by Email
+          const q = query(collection(db, "users"), where("email", "==", email));
+          const querySnapshot = await getDocs(q);
+          let matchedRole = 'student';
+          let matchedOnboarding = false;
+          querySnapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            matchedRole = data.role || 'student';
+            matchedOnboarding = data.onboardingCompleted !== false;
+          });
+          handleAuthSuccess(firebaseUser.email, matchedRole, matchedOnboarding);
+        } catch (err) {
+          console.warn("Direct role fetch failed, fallback to student:", err);
+          handleAuthSuccess(firebaseUser.email, 'student', true);
+        }
+      }
+    };
+
+    // Check immediately on mount if already authenticated
+    if (auth.currentUser) {
+      handleDirectRedirect(auth.currentUser);
+    }
+
+    // Direct listener
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      if (firebaseUser) {
+        handleDirectRedirect(firebaseUser);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   // 2. Reactive redirect observer - triggers when user context changes
   useEffect(() => {
