@@ -18,7 +18,9 @@ import {
   collection, 
   getDocs, 
   onSnapshot,
-  deleteDoc
+  deleteDoc,
+  query,
+  where
 } from 'firebase/firestore';
 
 // Context API Sikkerhetsnett: Initialiser med tom brakett for å unngå "White screen of death"
@@ -1511,15 +1513,14 @@ export const AppProvider = ({ children }) => {
             let matchedDoc = null;
             try {
               // Check if there is an existing pre-created profile in the "users" collection matching this email
-              const querySnapshot = await getDocs(collection(db, "users"));
+              const q = query(collection(db, "users"), where("email", "==", userEmail));
+              const querySnapshot = await getDocs(q);
               querySnapshot.forEach(docSnap => {
                 const data = docSnap.data();
-                if (data.email?.toLowerCase() === userEmail) {
-                  matchedDoc = { id: docSnap.id, data };
-                }
+                matchedDoc = { id: docSnap.id, data };
               });
             } catch (queryErr) {
-              console.warn("Could not query all users for migration (Rules constraint), proceeding with fallback...", queryErr);
+              console.warn("Could not query users by email for migration, proceeding with fallback...", queryErr);
             }
 
             if (matchedDoc) {
@@ -1813,13 +1814,12 @@ export const AppProvider = ({ children }) => {
       // Auto-provisioning: If the user doesn't exist in Firebase Auth yet, let's check if they exist in Firestore
       if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
         try {
-          const querySnapshot = await getDocs(collection(db, "users"));
+          const q = query(collection(db, "users"), where("email", "==", cleanEmail));
+          const querySnapshot = await getDocs(q);
           let invitedDoc = null;
           querySnapshot.forEach(docSnap => {
             const data = docSnap.data();
-            if (data.email?.toLowerCase() === cleanEmail) {
-              invitedDoc = { id: docSnap.id, data };
-            }
+            invitedDoc = { id: docSnap.id, data };
           });
 
           if (invitedDoc || cleanEmail === 'knutsenthomas@gmail.com') {
@@ -1871,14 +1871,13 @@ export const AppProvider = ({ children }) => {
       if (checkEmail === 'knutsenthomas@gmail.com') {
         isInvited = true;
       } else {
-        const querySnapshot = await getDocs(collection(db, "users"));
+        const q = query(collection(db, "users"), where("email", "==", checkEmail));
+        const querySnapshot = await getDocs(q);
         querySnapshot.forEach(docSnap => {
           const data = docSnap.data();
-          if (data.email?.toLowerCase() === checkEmail) {
-            isInvited = true;
-            invitedProfile = data;
-            docId = docSnap.id;
-          }
+          isInvited = true;
+          invitedProfile = data;
+          docId = docSnap.id;
         });
       }
 
