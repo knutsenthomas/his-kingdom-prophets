@@ -126,7 +126,61 @@ const assetDefinitions = [
   { slug: 'btn.submit.primary', title: 'Send endringer action-knapp', section: 'System', type: 'text', description: 'Primær handlingsknapp som brukes i skjema-modaler.' },
   { slug: 'msg.welcome.student', title: 'Student Hovedhilsen', section: 'Studentportal', type: 'textarea', description: 'Velkomsthilsen som vises ved innlogging for studenter.' },
   { slug: 'error.auth.forbidden', title: 'Ingen Tilgang Feilmelding', section: 'System', type: 'textarea', description: 'Feilmelding som vises når en bruker prøver å åpne sperrede ressurser.' },
-  { slug: 'nav.settings.account', title: 'Kontoinnstillinger Link', section: 'System', type: 'text', description: 'Lenke til brukerprofil og kontopreferanser.' }
+  { slug: 'nav.settings.account', title: 'Kontoinnstillinger Link', section: 'System', type: 'text', description: 'Lenke til brukerprofil og kontopreferanser.' },
+
+  // Sidemeny og navigasjon (Systemnøkler)
+  { slug: 'sidebar-student-portal', title: 'Sidemeny Elevportal Overskrift', section: 'System', type: 'text', description: 'Overskrift for elev-seksjonen i sidepanelet.' },
+  { slug: 'sidebar-mentor-tools', title: 'Sidemeny Mentorverktøy Overskrift', section: 'System', type: 'text', description: 'Overskrift for mentorverktøy i sidepanelet.' },
+  { slug: 'sidebar-faculty-tools', title: 'Sidemeny Fakultetsverktøy Overskrift', section: 'System', type: 'text', description: 'Overskrift for fakultetsverktøy i sidepanelet.' },
+  { slug: 'sidebar-administration', title: 'Sidemeny Administrasjon Overskrift', section: 'System', type: 'text', description: 'Overskrift for administrasjon i sidepanelet.' },
+  { slug: 'sidebar-bible', title: 'Sidemeny Bibel Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til Bibelen i sidepanelet.' },
+  { slug: 'sidebar-curriculum', title: 'Sidemeny Studieplan Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til studieplanen i sidepanelet.' },
+  { slug: 'sidebar-lesson', title: 'Sidemeny Leksjon Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til gjeldende leksjon.' },
+  { slug: 'sidebar-video', title: 'Sidemeny Klasserom Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til videoklasserommet.' },
+  { slug: 'sidebar-assignments', title: 'Sidemeny Oppgaver Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til oppgavesiden.' },
+  { slug: 'sidebar-community', title: 'Sidemeny Fellesskap Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til bønnefellesskapet.' },
+  { slug: 'sidebar-grades', title: 'Sidemeny Karakterutregning Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til karakterkalkulatoren.' },
+  { slug: 'sidebar-insights', title: 'Sidemeny Kursinnsikt Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til kursinnsikt.' },
+  { slug: 'sidebar-followup', title: 'Sidemeny Oppfølging Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til oppfølgingssiden.' },
+  { slug: 'sidebar-course-builder', title: 'Sidemeny Kursbygger Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til kursbyggeren.' },
+  { slug: 'sidebar-quiz-builder', title: 'Sidemeny Quizbygger Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til quizbyggeren.' },
+  { slug: 'sidebar-user-admin', title: 'Sidemeny Brukeradm Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til brukeradministrasjon.' },
+  { slug: 'sidebar-cms-editor', title: 'Sidemeny CMS Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til CMS-editoren.' },
+  { slug: 'sidebar-support', title: 'Sidemeny Support Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til support og hjelpesenter.' },
+
+  // Studentportal og dashbord
+  { slug: 'student-status-badge', title: 'Studie-status merkelapp', section: 'Studentportal', type: 'text', description: 'Liten status-etikett over velkomsthilsen.' },
+  { slug: 'student-view-all', title: 'Vis alle knapp', section: 'Studentportal', type: 'text', description: 'Knapp for å vise alle aktive kurs.' },
+  { slug: 'student-academic-eval', title: 'Faglig vurdering label', section: 'Studentportal', type: 'text', description: 'Etikett for elevens karakter/evalueringsstatus.' },
+  { slug: 'student-continue-lesson', title: 'Fortsett leksjon knapp', section: 'Studentportal', type: 'text', description: 'Knapp for å fortsette påbegynt leksjon.' },
+  { slug: 'student-live-header', title: 'Neste Live Samling tittel', section: 'Studentportal', type: 'text', description: 'Header for Zoom live-samlinger.' },
+  { slug: 'student-join-zoom', title: 'Bli med via Zoom lenke', section: 'Studentportal', type: 'text', description: 'Zoom-handlingsknapp i dashbordet.' },
+  { slug: 'student-stats-hours', title: 'Timer studert etikett', section: 'Studentportal', type: 'text', description: 'Statistikk-label på dashbordet.' },
+  { slug: 'student-stats-completed', title: 'Fullførte leksjoner etikett', section: 'Studentportal', type: 'text', description: 'Statistikk-label på dashbordet.' },
+  { slug: 'student-stats-goal', title: 'Ukemål fremdriftslabel', section: 'Studentportal', type: 'text', description: 'Fremdriftslinje-label på dashbordet.' },
+  { slug: 'student-stats-reached', title: 'Nådd prosentetikett', section: 'Studentportal', type: 'text', description: 'Tekst-label for fullført prosentandel.' },
+
+  // Mentorportal og dashbord
+  { slug: 'teacher-academic-year-label', title: 'Studieår etikett', section: 'Mentorportal', type: 'text', description: 'Studieår-etikett øverst i mentorportalen.' },
+  { slug: 'teacher-kpi1-trend', title: 'KPI 1 Trendlinje', section: 'Mentorportal', type: 'text', description: 'Trend/økning-tekst for aktive studenter.' },
+  { slug: 'teacher-kpi3-desc', title: 'KPI 3 Evalueringsbeskrivelse', section: 'Mentorportal', type: 'text', description: 'Tekst under gjennomføringsrate KPI.' },
+  { slug: 'teacher-kpi4-desc', title: 'KPI 4 Oppfølgingsvarsel', section: 'Mentorportal', type: 'text', description: 'Hjelpetekst under oppfølging KPI.' },
+  { slug: 'teacher-risk-title', title: 'Studenter til oppfølging Tittel', section: 'Mentorportal', type: 'text', description: 'Header for risikostudenter-listen.' },
+  { slug: 'teacher-risk-subtitle', title: 'Studenter til oppfølging Beskrivelse', section: 'Mentorportal', type: 'textarea', description: 'Undertekst for risikostudenter-listen.' },
+  { slug: 'teacher-incoming-title', title: 'Innkomne oppgaver Tittel', section: 'Mentorportal', type: 'text', description: 'Overskrift for listen over oppgaver til sensur.' },
+  { slug: 'teacher-incoming-subtitle', title: 'Innkomne oppgaver Beskrivelse', section: 'Mentorportal', type: 'textarea', description: 'Undertekst for oppgaver til sensur.' },
+  { slug: 'teacher-classes-title', title: 'Dagens forelesninger Tittel', section: 'Mentorportal', type: 'text', description: 'Header for dagens Zoom-klasser.' },
+  { slug: 'teacher-classes-subtitle', title: 'Dagens forelesninger Beskrivelse', section: 'Mentorportal', type: 'textarea', description: 'Undertekst for dagens Zoom-klasser.' },
+  { slug: 'teacher-btn-start-class', title: 'Start Zoom-klasse knapp', section: 'Mentorportal', type: 'text', description: 'Handlingsknapp for å starte Zoom-klasse.' },
+
+  // Oppgaver og vurderinger
+  { slug: 'student-assignments-outstanding', title: 'Utestående oppgaver fane', section: 'Studentportal', type: 'text', description: 'Etikett på fanen for utestående oppgaver.' },
+  { slug: 'student-assignments-submitted', title: 'Innsendte oppgaver fane', section: 'Studentportal', type: 'text', description: 'Etikett på fanen for leverte oppgaver.' },
+  { slug: 'student-assignments-graded', title: 'Vurderte oppgaver fane', section: 'Studentportal', type: 'text', description: 'Etikett på fanen for vurderte oppgaver.' },
+  { slug: 'student-assignments-not-submitted', title: 'Ikke innlevert statusbadge', section: 'Studentportal', type: 'text', description: 'Status-tekst for ikke-leverte oppgaver.' },
+  { slug: 'student-assignments-waiting-grade', title: 'Venter på sensur statusbadge', section: 'Studentportal', type: 'text', description: 'Status-tekst for oppgaver til sensur.' },
+  { slug: 'student-assignments-result', title: 'Resultat rubrikklabel', section: 'Studentportal', type: 'text', description: 'Tekst-label for vurderingsresultat.' },
+  { slug: 'student-assignments-deadline', title: 'Innleveringsfrist rubrikklabel', section: 'Studentportal', type: 'text', description: 'Tekst-label for frister.' }
 ];
 
 export default function CMSDashboard() {

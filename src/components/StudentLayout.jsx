@@ -313,16 +313,16 @@ export default function StudentLayout() {
   };
 
   const navItems = [
-    { name: language === 'en' ? 'Dashboard' : 'Dashboard', path: '/student/dashboard', icon: Compass },
-    { name: language === 'en' ? 'Bible' : 'Bibelen', path: '/student/bible', icon: Book },
-    { name: language === 'en' ? 'Curriculum & Courses' : 'Studieplan & Kurs', path: '/student/library', icon: BookOpen },
-    { name: language === 'en' ? 'Lesson' : 'Leksjon', path: '/student/lesson', icon: GraduationCap },
-    { name: language === 'en' ? 'Classroom / Video' : 'Klasserom / Video', path: '/student/video', icon: Video },
-    { name: language === 'en' ? 'Assignments' : 'Oppgaver', path: '/student/assignments', icon: CheckSquare },
-    { name: language === 'en' ? 'Prayer Community' : 'Bønnefellesskap', path: '/student/chat', icon: Users },
+    { name: cmsContent['nav.dashboard.title'] || (language === 'en' ? 'Dashboard' : 'Oversikt'), path: '/student/dashboard', icon: Compass },
+    { name: cmsContent['sidebar-bible'] || (language === 'en' ? 'The Bible' : 'Bibelen'), path: '/student/bible', icon: Book },
+    { name: cmsContent['sidebar-curriculum'] || (language === 'en' ? 'Curriculum & Courses' : 'Studieplan & Kurs'), path: '/student/library', icon: BookOpen },
+    { name: cmsContent['sidebar-lesson'] || (language === 'en' ? 'Lesson' : 'Leksjon'), path: '/student/lesson', icon: GraduationCap },
+    { name: cmsContent['sidebar-video'] || (language === 'en' ? 'Classroom / Video' : 'Klasserom / Video'), path: '/student/video', icon: Video },
+    { name: cmsContent['sidebar-assignments'] || (language === 'en' ? 'Assignments' : 'Oppgaver'), path: '/student/assignments', icon: CheckSquare },
+    { name: cmsContent['sidebar-community'] || (language === 'en' ? 'Prayer Fellowship' : 'Bønnefellesskap'), path: '/student/chat', icon: Users },
     { name: language === 'en' ? 'Partner Portal' : 'Partnerportal', path: '/student/partner', icon: Gift },
-    { name: language === 'en' ? 'Help Center' : 'Hjelpesenter', path: '/student/support', icon: HelpCircle },
-    { name: language === 'en' ? 'My Profile' : 'Min profil', path: '/student/profile', icon: User },
+    { name: cmsContent['sidebar-support'] || (language === 'en' ? 'Help & Support' : 'Hjelp & Support'), path: '/student/support', icon: HelpCircle },
+    { name: cmsContent['nav.settings.account'] || (language === 'en' ? 'My Profile' : 'Min profil'), path: '/student/profile', icon: User },
   ];
 
   return (

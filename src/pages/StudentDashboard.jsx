@@ -10,7 +10,7 @@ import CmsText from '@/components/CmsText';
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
-  const { courses, toggleModuleCompleted, showToast, cmsContent, user } = useApp();
+  const { courses, toggleModuleCompleted, showToast, cmsContent, user, language } = useApp();
   const [todoList, setTodoList] = useState([
     { id: 1, text: 'Lese Modul 3 i Profetisk 101', done: false },
     { id: 2, text: 'Johannes åpenbaring kapittel 4 tolkning', done: true },
@@ -35,7 +35,9 @@ export default function StudentDashboard() {
           <GraduationCap size={240} />
         </div>
         <div className="max-w-xl space-y-2.5">
-          <span className="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase inline-block">Studie-status</span>
+          <span className="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase inline-block">
+            <CmsText slug="student-status-badge" fallback="Studie-status" />
+          </span>
           <h1 className="font-serif text-2xl md:text-3xl font-bold tracking-tight">
             <CmsText slug="student-welcome-title" fallback="Velkommen tilbake," /> {user?.name || 'Thomas'}!
           </h1>
@@ -58,7 +60,7 @@ export default function StudentDashboard() {
               <CmsText slug="student-active-courses-title" fallback="Mine aktive kurs" />
             </h2>
             <button onClick={() => navigate('/student/library')} className="text-primary hover:text-primary-container text-xs font-bold flex items-center gap-1">
-              Vis alle
+              <CmsText slug="student-view-all" fallback="Vis alle" />
               <ArrowRight size={14} />
             </button>
           </div>
@@ -86,9 +88,11 @@ export default function StudentDashboard() {
 
                 <div className="space-y-3 pt-4 border-t border-slate-100">
                   <div className="flex justify-between items-center text-xs font-semibold">
-                    <span className="text-on-surface-variant">Faglig Vurdering</span>
+                    <span className="text-on-surface-variant">
+                      <CmsText slug="student-academic-eval" fallback="Faglig Vurdering" />
+                    </span>
                     <span className={`font-bold ${course.modulesCompleted >= 4 ? 'text-green-600' : 'text-error'}`}>
-                      {course.modulesCompleted >= 4 ? 'Bestått' : 'Ikke bestått'} ({course.modulesCompleted}/{course.totalModules} leksjoner)
+                      {course.modulesCompleted >= 4 ? (language === 'en' ? 'Passed' : 'Bestått') : (language === 'en' ? 'Failed' : 'Ikke bestått')} ({course.modulesCompleted}/{course.totalModules} {language === 'en' ? 'lessons' : 'leksjoner'})
                     </span>
                   </div>
                   <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
@@ -99,7 +103,7 @@ export default function StudentDashboard() {
                   </div>
                   <div className="flex justify-end pt-2">
                     <button className="text-xs font-bold text-primary flex items-center gap-1 hover:gap-1.5 transition-all">
-                      Fortsett leksjon
+                      <CmsText slug="student-continue-lesson" fallback="Fortsett leksjon" />
                       <ArrowRight size={14} />
                     </button>
                   </div>
@@ -119,7 +123,9 @@ export default function StudentDashboard() {
             <div className="bg-surface-container-low p-4 rounded-lg flex items-start gap-3 border-l-4 border-burnt-orange">
               <PlayCircle className="text-burnt-orange shrink-0 animate-pulse mt-0.5" size={20} />
               <div>
-                <h4 className="text-xs font-bold text-primary uppercase tracking-wide">Neste Live Samling</h4>
+                <h4 className="text-xs font-bold text-primary uppercase tracking-wide">
+                  <CmsText slug="student-live-header" fallback="Neste Live Samling" />
+                </h4>
                 <p className="text-sm font-serif font-bold text-on-surface mt-1">PROP 101: Høre Guds stemme</p>
                 <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">Startet kl. 12:15 med Apostel David Hansen</p>
                 <a 
@@ -128,7 +134,7 @@ export default function StudentDashboard() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 mt-3 text-xs font-bold text-burnt-orange hover:underline cursor-pointer"
                 >
-                  Bli med via Zoom
+                  <CmsText slug="student-join-zoom" fallback="Bli med via Zoom" />
                   <ExternalLink size={12} />
                 </a>
               </div>
@@ -208,18 +214,24 @@ export default function StudentDashboard() {
             <div className="grid grid-cols-2 gap-4 text-center">
               <div className="bg-surface-container-low p-4 rounded-lg">
                 <p className="text-2xl font-serif font-bold text-primary">14.5</p>
-                <p className="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider mt-1">Timer studert</p>
+                <p className="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider mt-1">
+                  <CmsText slug="student-stats-hours" fallback="Timer studert" />
+                </p>
               </div>
               <div className="bg-surface-container-low p-4 rounded-lg">
                 <p className="text-2xl font-serif font-bold text-primary">8</p>
-                <p className="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider mt-1">Fullførte leksjoner</p>
+                <p className="text-[10px] text-on-surface-variant font-semibold uppercase tracking-wider mt-1">
+                  <CmsText slug="student-stats-completed" fallback="Fullførte leksjoner" />
+                </p>
               </div>
             </div>
 
             <div className="space-y-2 mt-6 pt-4 border-t border-slate-100">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-on-surface-variant font-medium">Ukemål (20t)</span>
-                <span className="text-primary font-bold">72% nådd</span>
+                <span className="text-on-surface-variant font-medium">
+                  <CmsText slug="student-stats-goal" fallback="Ukemål (20t)" />
+                </span>
+                <span className="text-primary font-bold">72% <CmsText slug="student-stats-reached" fallback="nådd" /></span>
               </div>
               <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
                 <div className="bg-burnt-orange h-full rounded-full" style={{ width: '72%' }}></div>

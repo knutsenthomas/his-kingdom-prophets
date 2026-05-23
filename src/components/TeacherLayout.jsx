@@ -14,7 +14,7 @@ import logo from '@/assets/logo.png';
 export default function TeacherLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, setUser, logout, showToast, students, changePersona, language, toggleLanguage } = useApp();
+  const { user, setUser, logout, showToast, students, changePersona, language, toggleLanguage, cmsContent } = useApp();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -69,41 +69,41 @@ export default function TeacherLayout() {
   };
 
   const navItems = [
-    { isHeader: true, name: language === 'en' ? 'Mentor Tools' : 'Mentorverktøy' },
-    { name: language === 'en' ? 'Mentor Dashboard' : 'Lærer Dashboard', path: '/teacher/dashboard', icon: Compass },
-    { name: language === 'en' ? 'Ministry Follow-up' : 'Tjenesteoppfølging', path: '/teacher/follow-up', icon: AlertTriangle, badge: atRiskCount },
-    { name: language === 'en' ? 'Course Builder' : 'Kursbygger', path: '/teacher/course-builder', icon: Sliders },
-    { name: language === 'en' ? 'Quiz Builder' : 'Prøvebygger', path: '/teacher/quiz-builder', icon: ClipboardList },
-    { name: language === 'en' ? 'Course Insights' : 'Kursinnsikt', path: '/teacher/insights', icon: BarChart3 },
+    { isHeader: true, name: cmsContent['sidebar-mentor-tools'] || (language === 'en' ? 'Mentor Tools' : 'Mentorverktøy') },
+    { name: cmsContent['nav.dashboard.title'] || (language === 'en' ? 'Mentor Dashboard' : 'Lærer Dashboard'), path: '/teacher/dashboard', icon: Compass },
+    { name: cmsContent['sidebar-followup'] || (language === 'en' ? 'Ministry Follow-up' : 'Tjenesteoppfølging'), path: '/teacher/follow-up', icon: AlertTriangle, badge: atRiskCount },
+    { name: cmsContent['sidebar-course-builder'] || (language === 'en' ? 'Course Builder' : 'Kursbygger'), path: '/teacher/course-builder', icon: Sliders },
+    { name: cmsContent['sidebar-quiz-builder'] || (language === 'en' ? 'Quiz Builder' : 'Prøvebygger'), path: '/teacher/quiz-builder', icon: ClipboardList },
+    { name: cmsContent['sidebar-insights'] || (language === 'en' ? 'Course Insights' : 'Kursinnsikt'), path: '/teacher/insights', icon: BarChart3 },
     { name: language === 'en' ? 'Marketing' : 'Markedsføring', path: '/teacher/marketing', icon: TrendingUp },
     
     // Elev- og studieressurser (Studieportal)
-    { isHeader: true, name: language === 'en' ? 'Study Portal' : 'Studieportal' },
-    { name: language === 'en' ? 'Bible' : 'Bibelen', path: '/student/bible', icon: Book },
-    { name: language === 'en' ? 'Curriculum & Courses' : 'Studieplan & Kurs', path: '/student/library', icon: BookOpen },
-    { name: language === 'en' ? 'Lesson' : 'Leksjon', path: '/student/lesson', icon: GraduationCap },
-    { name: language === 'en' ? 'Classroom / Video' : 'Klasserom / Video', path: '/student/video', icon: Video },
-    { name: language === 'en' ? 'Assignments' : 'Oppgaver', path: '/student/assignments', icon: CheckSquare },
-    { name: language === 'en' ? 'Prayer Community' : 'Bønnefellesskap', path: '/student/chat', icon: Users },
+    { isHeader: true, name: cmsContent['sidebar-student-portal'] || (language === 'en' ? 'Study Portal' : 'Studieportal') },
+    { name: cmsContent['sidebar-bible'] || (language === 'en' ? 'The Bible' : 'Bibelen'), path: '/student/bible', icon: Book },
+    { name: cmsContent['sidebar-curriculum'] || (language === 'en' ? 'Curriculum & Courses' : 'Studieplan & Kurs'), path: '/student/library', icon: BookOpen },
+    { name: cmsContent['sidebar-lesson'] || (language === 'en' ? 'Lesson' : 'Leksjon'), path: '/student/lesson', icon: GraduationCap },
+    { name: cmsContent['sidebar-video'] || (language === 'en' ? 'Classroom / Video' : 'Klasserom / Video'), path: '/student/video', icon: Video },
+    { name: cmsContent['sidebar-assignments'] || (language === 'en' ? 'Assignments' : 'Oppgaver'), path: '/student/assignments', icon: CheckSquare },
+    { name: cmsContent['sidebar-community'] || (language === 'en' ? 'Prayer Fellowship' : 'Bønnefellesskap'), path: '/student/chat', icon: Users },
     
     // Fakultetsverktøy
-    { isHeader: true, name: language === 'en' ? 'Faculty Tools' : 'Fakultetsverktøy' },
+    { isHeader: true, name: cmsContent['sidebar-faculty-tools'] || (language === 'en' ? 'Faculty Tools' : 'Fakultetsverktøy') },
     { name: language === 'en' ? 'Media Library' : 'Mediebibliotek', path: '/teacher/media-library', icon: Video },
     { name: language === 'en' ? 'Bible Calculator' : 'Bibelkalkulator', path: '/teacher/grading', icon: Award },
     { name: language === 'en' ? 'Partner Portal' : 'Partnerportal', path: '/teacher/partner', icon: Gift },
-    { name: language === 'en' ? 'Help Center' : 'Hjelpesenter', path: '/teacher/support', icon: HelpCircle },
+    { name: cmsContent['sidebar-support'] || (language === 'en' ? 'Help Center' : 'Hjelpesenter'), path: '/teacher/support', icon: HelpCircle },
     { name: language === 'en' ? 'Notification Center' : 'Varslingssenter', path: '/teacher/notifications', icon: Bell },
     { name: language === 'en' ? 'My Mentor Profile' : 'Min lærerprofil', path: '/teacher/profile', icon: User }
   ];
 
   if (user?.role === 'admin' || user?.role === 'superadmin') {
-    navItems.push({ isHeader: true, name: language === 'en' ? 'Administration' : 'Administrasjon' });
-    navItems.push({ name: language === 'en' ? 'Global CMS Management' : 'Global CMS Styring', path: '/admin/cms', icon: Languages });
+    navItems.push({ isHeader: true, name: cmsContent['sidebar-administration'] || (language === 'en' ? 'Administration' : 'Administrasjon') });
+    navItems.push({ name: cmsContent['sidebar-cms-editor'] || (language === 'en' ? 'Global CMS Management' : 'Global CMS Styring'), path: '/admin/cms', icon: Languages });
     navItems.push({ name: language === 'en' ? 'Analytics Dashboard' : 'Analytics Dashboard', path: '/admin/analytics', icon: BarChart3 });
-    navItems.push({ name: language === 'en' ? 'User Management' : 'Brukerhåndtering', path: '/admin/portal', icon: Users });
+    navItems.push({ name: cmsContent['sidebar-user-admin'] || (language === 'en' ? 'User Management' : 'Brukerhåndtering'), path: '/admin/portal', icon: Users });
   } else if (user?.role === 'teacher') {
-    navItems.push({ isHeader: true, name: language === 'en' ? 'Administration' : 'Administrasjon' });
-    navItems.push({ name: language === 'en' ? 'Global CMS Management' : 'Global CMS Styring', path: '/admin/cms', icon: Languages });
+    navItems.push({ isHeader: true, name: cmsContent['sidebar-administration'] || (language === 'en' ? 'Administration' : 'Administrasjon') });
+    navItems.push({ name: cmsContent['sidebar-cms-editor'] || (language === 'en' ? 'Global CMS Management' : 'Global CMS Styring'), path: '/admin/cms', icon: Languages });
   }
 
   return (

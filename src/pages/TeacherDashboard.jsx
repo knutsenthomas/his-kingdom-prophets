@@ -20,7 +20,8 @@ export default function TeacherDashboard() {
     assignments, 
     gradeAssignment, 
     sendSupportMessage,
-    showToast 
+    showToast,
+    language
   } = useApp();
 
   // Filter out at-risk students (Kritisk or Forsinket)
@@ -141,8 +142,8 @@ export default function TeacherDashboard() {
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-xs text-on-surface-variant font-semibold bg-[#eaeef2] px-3 py-1.5 rounded-full border border-outline-variant/30">
-            <CmsText slug="teacher-academic-year" fallback="Studieår: 2026" />
+          <span className="text-xs text-on-surface-variant font-semibold bg-[#eaeef2] px-3 py-1.5 rounded-full border border-outline-variant/30 font-mono">
+            <CmsText slug="teacher-academic-year-label" fallback="Studieår" />: 2026
           </span>
           <span className="text-xs text-white font-bold bg-[#c5a059] px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1">
             <Sparkles size={12} />
@@ -161,7 +162,7 @@ export default function TeacherDashboard() {
             </p>
             <h3 className="text-3xl font-bold font-serif text-[#3c096c]">{students.length + 45}</h3>
             <p className="text-[10px] text-green-600 font-semibold flex items-center gap-1">
-              <TrendingUp size={12} /> +12% fra forrige måned
+              <TrendingUp size={12} /> <CmsText slug="teacher-kpi1-trend" fallback="+12% fra forrige måned" />
             </p>
           </div>
           <div className="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
@@ -192,7 +193,9 @@ export default function TeacherDashboard() {
               <CmsText slug="teacher-kpi3-label" fallback="Gjennomføringsrate" />
             </p>
             <h3 className="text-3xl font-bold font-serif text-[#3c096c]">95%</h3>
-            <p className="text-[10px] text-outline font-semibold">Bestått-andel for aktive disipler</p>
+            <p className="text-[10px] text-outline font-semibold">
+              <CmsText slug="teacher-kpi3-desc" fallback="Bestått-andel for aktive disipler" />
+            </p>
           </div>
           <div className="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
             <Award size={22} />
@@ -207,7 +210,7 @@ export default function TeacherDashboard() {
             </p>
             <h3 className="text-3xl font-bold font-serif text-error">{atRiskStudents.length}</h3>
             <p className="text-[10px] text-error font-semibold flex items-center gap-1">
-              <AlertTriangle size={12} /> Kritisk eller forsinket framdrift
+              <AlertTriangle size={12} /> <CmsText slug="teacher-kpi4-desc" fallback="Kritisk eller forsinket framdrift" />
             </p>
           </div>
           <div className="w-12 h-12 bg-error-container/30 rounded-lg flex items-center justify-center text-error">
@@ -227,11 +230,11 @@ export default function TeacherDashboard() {
             <div className="flex justify-between items-center mb-6">
               <h3 className="font-serif text-lg md:text-xl font-bold text-primary flex items-center gap-2">
                 <Video size={20} className="text-[#c5a059]" />
-                <span>Kommende Live-undervisning & Bønn</span>
+                <span><CmsText slug="teacher-classes-title" fallback="Dagens forelesninger & live-rom" /></span>
               </h3>
               <span className="text-[10px] bg-red-100 text-red-600 font-bold px-2 py-1 rounded-full uppercase tracking-wider flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-red-500 animate-ping inline-block" />
-                Live i dag
+                {language === 'en' ? 'Live Today' : 'Live i dag'}
               </span>
             </div>
 
@@ -281,7 +284,7 @@ export default function TeacherDashboard() {
                     }`}
                   >
                     <Video size={14} />
-                    {item.status === 'live' ? 'Bli med / Start leksjon' : 'Start Zoom'}
+                    {item.status === 'live' ? (language === 'en' ? 'Join / Start Lecture' : 'Bli med / Start leksjon') : <CmsText slug="teacher-btn-start-class" fallback="Start forelesning (Zoom)" />}
                   </button>
                 </div>
               ))}
@@ -293,10 +296,10 @@ export default function TeacherDashboard() {
             <div className="flex justify-between items-center mb-6">
               <h3 className="font-serif text-lg md:text-xl font-bold text-primary flex items-center gap-2">
                 <ClipboardList size={20} className="text-[#c5a059]" />
-                <span>Uleste oppgaver & Eksamensbesvarelser</span>
+                <span><CmsText slug="teacher-incoming-title" fallback="Innkomne oppgaver til sensur" /></span>
               </h3>
               <span className="text-xs bg-[#eaeef2] text-primary font-bold px-3 py-1 rounded-full border border-outline-variant/30">
-                {submittedAssignments.length} venter på sensur
+                {submittedAssignments.length} <CmsText slug="student-assignments-waiting-grade" fallback="venter på sensur" />
               </span>
             </div>
 
@@ -355,13 +358,13 @@ export default function TeacherDashboard() {
             <div className="flex justify-between items-center mb-6">
               <h3 className="font-serif text-lg font-bold text-primary flex items-center gap-2">
                 <AlertTriangle size={18} className="text-error" />
-                <span>Prioritert oppfølging</span>
+                <span><CmsText slug="teacher-risk-title" fallback="Studenter som krever oppfølging" /></span>
               </h3>
               <button 
                 onClick={() => navigate('/teacher/follow-up')}
                 className="text-[10px] text-primary font-bold uppercase tracking-wider hover:underline"
               >
-                Vis alle
+                <CmsText slug="student-view-all" fallback="Vis alle" />
               </button>
             </div>
 

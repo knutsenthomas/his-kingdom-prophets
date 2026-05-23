@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import CmsText from '@/components/CmsText';
 import { 
   Calendar, Clock, Award, CheckCircle2, 
   AlertCircle, ChevronRight, UploadCloud, Send
@@ -9,7 +10,7 @@ import {
 
 export default function AssignmentsPage() {
   const navigate = useNavigate();
-  const { user, showToast, assignments, submitAssignment } = useApp();
+  const { user, showToast, assignments, submitAssignment, cmsContent, language } = useApp();
   const [activeTab, setActiveTab] = useState('pending'); // pending, submitted, graded
   const [submissionText, setSubmissionText] = useState('');
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -72,9 +73,9 @@ export default function AssignmentsPage() {
           {/* Sliding Segmented Control Tabs */}
           <div className="flex bg-surface-container-low p-1 rounded-lg border border-outline-variant mb-6">
             {[
-              { id: 'pending', label: 'Utestående' },
-              { id: 'submitted', label: 'Innsendt' },
-              { id: 'graded', label: 'Vurdert' }
+              { id: 'pending', label: cmsContent['student-assignments-outstanding'] || 'Utestående' },
+              { id: 'submitted', label: cmsContent['student-assignments-submitted'] || 'Innsendt' },
+              { id: 'graded', label: cmsContent['student-assignments-graded'] || 'Vurdert' }
             ].map(tab => (
               <button
                 key={tab.id}
@@ -172,17 +173,17 @@ export default function AssignmentsPage() {
                 </span>
                 {activeAssignment.status === 'pending' && (
                   <span className="text-xs font-semibold px-3 py-1 bg-error-container text-on-error-container rounded-full flex items-center gap-1">
-                    <AlertCircle size={12} /> Ikke innlevert
+                    <AlertCircle size={12} /> <CmsText slug="student-assignments-not-submitted" fallback="Ikke innlevert" />
                   </span>
                 )}
                 {activeAssignment.status === 'submitted' && (
                   <span className="text-xs font-semibold px-3 py-1 bg-secondary-container/50 text-on-secondary-container rounded-full flex items-center gap-1">
-                    <Clock size={12} /> Venter på sensur
+                    <Clock size={12} /> <CmsText slug="student-assignments-waiting-grade" fallback="Venter på sensur" />
                   </span>
                 )}
                 {activeAssignment.status === 'graded' && (
                   <span className="text-xs font-semibold px-3 py-1 bg-green-100 text-green-800 rounded-full flex items-center gap-1">
-                    <Award size={12} /> Resultat: {activeAssignment.grade === 'Ikke bestått' || activeAssignment.grade === 'F' ? 'Ikke bestått' : 'Bestått'}
+                    <Award size={12} /> <CmsText slug="student-assignments-result" fallback="Resultat" />: {activeAssignment.grade === 'Ikke bestått' || activeAssignment.grade === 'F' ? (language === 'en' ? 'Failed' : 'Ikke bestått') : (language === 'en' ? 'Passed' : 'Bestått')}
                   </span>
                 )}
               </div>
@@ -309,16 +310,22 @@ export default function AssignmentsPage() {
 
             {activeAssignment.status === 'graded' && (
               <div className="border-t border-outline-variant pt-6 space-y-5">
-                <h3 className="font-serif text-lg font-bold text-primary">Vurderingsresultat</h3>
+                <h3 className="font-serif text-lg font-bold text-primary">
+                  <CmsText slug="student-academic-eval" fallback="Vurderingsresultat" />
+                </h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Grade box */}
                   <div className="bg-primary/5 border border-primary/20 rounded-lg p-5 flex flex-col items-center justify-center text-center">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary mb-1">Resultat</span>
-                    <span className="text-3xl font-bold font-serif text-primary leading-none mb-2">
-                      {activeAssignment.grade === 'Ikke bestått' || activeAssignment.grade === 'F' ? 'Ikke bestått' : 'Bestått'}
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary mb-1">
+                      <CmsText slug="student-assignments-result" fallback="Resultat" />
                     </span>
-                    <span className="text-xs font-semibold text-secondary">Vurdering: {activeAssignment.score}</span>
+                    <span className="text-3xl font-bold font-serif text-primary leading-none mb-2">
+                      {activeAssignment.grade === 'Ikke bestått' || activeAssignment.grade === 'F' ? (language === 'en' ? 'Failed' : 'Ikke bestått') : (language === 'en' ? 'Passed' : 'Bestått')}
+                    </span>
+                    <span className="text-xs font-semibold text-secondary">
+                      <CmsText slug="student-assignments-deadline" fallback="Vurdering" />: {activeAssignment.score}
+                    </span>
                   </div>
 
                   {/* Meta box */}
