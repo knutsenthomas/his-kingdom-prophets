@@ -109,7 +109,7 @@ export default function LoginPage() {
             <img 
               src={logo} 
               alt="His Kingdom Prophets Logo" 
-              className="w-16 h-16 rounded-full border-2 border-primary/20 bg-white object-contain shadow-md cursor-pointer hover:scale-105 active:scale-95 transition-all"
+              className="w-16 h-16 object-contain cursor-pointer hover:scale-105 active:scale-95 transition-all"
               onClick={() => navigate('/')} 
             />
           </div>

@@ -96,7 +96,7 @@ export default function StudentLayout() {
               <img 
                 src={logo} 
                 alt="His Kingdom Prophets Logo" 
-                className="w-8 h-8 rounded-full border border-primary/10 object-contain shrink-0" 
+                className="w-8 h-8 object-contain shrink-0" 
               />
               <span className="truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
             </div>

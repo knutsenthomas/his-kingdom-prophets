@@ -66,7 +66,7 @@ export default function HkmChatWidget() {
                 <img 
                   src={logo} 
                   alt="HKM Logo" 
-                  className="w-8 h-8 rounded-full border border-white/15 bg-white/5 object-contain shrink-0"
+                  className="w-8 h-8 object-contain shrink-0"
                 />
                 <div>
                   <h3 className="font-semibold text-sm">HKM Assistent</h3>
@@ -100,7 +100,7 @@ export default function HkmChatWidget() {
                     <img 
                       src={logo} 
                       alt="HKM Logo" 
-                      className="w-7 h-7 rounded-full border border-outline-variant/60 bg-white object-contain shrink-0 self-start mt-0.5" 
+                      className="w-7 h-7 object-contain shrink-0 self-start mt-0.5" 
                     />
                   )}
                   <div className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
@@ -122,7 +122,7 @@ export default function HkmChatWidget() {
                   <img 
                     src={logo} 
                     alt="HKM Logo" 
-                    className="w-7 h-7 rounded-full border border-outline-variant/60 bg-white object-contain shrink-0 self-start mt-0.5 animate-pulse" 
+                    className="w-7 h-7 object-contain shrink-0 self-start mt-0.5 animate-pulse" 
                   />
                   <div className="flex flex-col items-start">
                     <div className="px-4 py-3 rounded-2xl bg-white border border-outline-variant/60 rounded-tl-none flex items-center gap-1 shadow-sm">
