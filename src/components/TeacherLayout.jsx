@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { 
   Compass, Users, AlertTriangle, ClipboardList, BookOpen, 
   Award, Bell, Power, Menu, ChevronLeft, Sliders, Video, User,
-  Languages, BarChart3, TrendingUp, Gift, HelpCircle, X
+  Languages, BarChart3, TrendingUp, Gift, HelpCircle, X, GraduationCap
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 import CmsText from '@/components/CmsText';
