@@ -87,7 +87,7 @@ export default function OnboardingHelper() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={handleComplete}
-          className="absolute inset-0 bg-[#001e2f]/80 backdrop-blur-sm"
+          className="absolute inset-0 bg-[#3c096c]/80 backdrop-blur-sm"
         />
 
         {/* Modal Card */}
@@ -142,13 +142,13 @@ export default function OnboardingHelper() {
             </div>
 
             {/* Highlight Alert Box */}
-            <div className="w-full bg-[#f6fafe] border-l-4 border-[#3c096c] p-4 rounded-r-xl text-left text-xs font-semibold text-[#46617b] leading-relaxed">
+            <div className="w-full bg-background border-l-4 border-[#3c096c] p-4 rounded-r-xl text-left text-xs font-semibold text-on-surface-variant leading-relaxed">
               {steps[currentStep].highlight}
             </div>
           </div>
 
           {/* Control Footer */}
-          <div className="bg-[#eaeef2]/60 px-8 py-5 flex items-center justify-between border-t border-outline-variant/30">
+          <div className="bg-surface-container-low/60 px-8 py-5 flex items-center justify-between border-t border-outline-variant/30">
             {/* Skip Option */}
             <button 
               onClick={handleComplete}
@@ -162,7 +162,7 @@ export default function OnboardingHelper() {
               {currentStep > 0 && (
                 <button
                   onClick={handlePrev}
-                  className="flex items-center gap-1 px-4 py-2 border border-[#c1c7ce] rounded-xl text-xs font-bold text-[#46617b] hover:bg-white transition-all active:scale-[0.97]"
+                  className="flex items-center gap-1 px-4 py-2 border border-outline-variant rounded-xl text-xs font-bold text-on-surface-variant hover:bg-white transition-all active:scale-[0.97]"
                 >
                   <ChevronLeft size={14} />
                   Forrige

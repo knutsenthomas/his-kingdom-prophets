@@ -121,7 +121,7 @@ export default function TeacherDashboard() {
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 md:px-12 py-6 md:py-12 flex flex-col gap-6 md:gap-8 font-sans bg-[#f6fafe]/30">
+    <div className="w-full px-4 sm:px-6 md:px-12 py-6 md:py-12 flex flex-col gap-6 md:gap-8 font-sans bg-background/30">
       
       {/* 1. Header Area */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant/30 pb-6">
@@ -482,7 +482,7 @@ export default function TeacherDashboard() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedGradingAssignment(null)}
-              className="absolute inset-0 bg-[#001e2f]/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-[#240046]/75 backdrop-blur-sm"
             />
 
             <motion.div
@@ -587,7 +587,7 @@ export default function TeacherDashboard() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedOutreachStudent(null)}
-              className="absolute inset-0 bg-[#001e2f]/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-[#240046]/75 backdrop-blur-sm"
             />
 
             <motion.div

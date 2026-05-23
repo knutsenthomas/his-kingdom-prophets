@@ -84,7 +84,7 @@ export default function LandingPage() {
               </button>
               <button 
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="p-2 hover:bg-slate-100 rounded-lg text-primary transition-all shrink-0 active:scale-95"
+                className="p-2 hover:bg-primary/5 rounded-lg text-primary transition-all shrink-0 active:scale-95"
                 aria-label="Åpne meny"
               >
                 <Menu size={22} />
@@ -104,7 +104,7 @@ export default function LandingPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="absolute inset-0 bg-[#001e2f]/45 backdrop-blur-sm"
+              className="absolute inset-0 bg-[#3c096c]/45 backdrop-blur-sm"
             />
 
             {/* Slide-in Panel */}
@@ -113,7 +113,7 @@ export default function LandingPage() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 26, stiffness: 220 }}
-              className="absolute top-0 bottom-0 right-0 w-80 bg-white shadow-2xl flex flex-col justify-between p-6 border-l border-slate-100 overflow-y-auto"
+              className="absolute top-0 bottom-0 right-0 w-80 bg-white shadow-2xl flex flex-col justify-between p-6 border-l border-surface-container overflow-y-auto"
             >
               <div className="space-y-8">
                 {/* Header */}
@@ -128,7 +128,7 @@ export default function LandingPage() {
                   </div>
                   <button 
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-1.5 hover:bg-slate-100 rounded-lg text-primary transition-colors active:scale-95"
+                    className="p-1.5 hover:bg-primary/5 rounded-lg text-primary transition-colors active:scale-95"
                     aria-label="Lukk meny"
                   >
                     <X size={20} />
@@ -147,7 +147,7 @@ export default function LandingPage() {
                       key={item.href}
                       href={item.href}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="px-4 py-3.5 text-sm font-semibold text-on-surface-variant hover:text-primary hover:bg-[#f6fafe] rounded-xl transition-all"
+                      className="px-4 py-3.5 text-sm font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-xl transition-all"
                     >
                       {item.name}
                     </a>
@@ -156,7 +156,7 @@ export default function LandingPage() {
               </div>
 
               {/* Footer Actions inside Drawer */}
-              <div className="pt-6 border-t border-slate-100 space-y-3.5">
+              <div className="pt-6 border-t border-surface-container space-y-3.5">
                 <button
                   onClick={toggleLanguage}
                   className="w-full py-3 border border-[#561291]/20 text-primary hover:bg-[#561291]/5 font-bold rounded-xl text-xs transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 bg-white shadow-sm"
@@ -166,7 +166,7 @@ export default function LandingPage() {
                 </button>
                 <button
                   onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
-                  className="w-full py-3 border border-[#c1c7ce] text-primary hover:bg-slate-50 font-bold rounded-xl text-xs transition-all active:scale-[0.98]"
+                  className="w-full py-3 border border-outline-variant text-primary hover:bg-primary/5 font-bold rounded-xl text-xs transition-all active:scale-[0.98]"
                 >
                   <CmsText slug="landing-btn-login" fallback="Logg inn" />
                 </button>
@@ -249,7 +249,7 @@ export default function LandingPage() {
           {/* Exactly 3 Symmetrical, Balanced Pillars */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Pillar 1 */}
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(27,73,101,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#561291]/20 hover:shadow-[0_12px_32px_rgba(27,73,101,0.06)] transition-all duration-300 ease-out min-h-[360px]">
+            <div className="bg-white rounded-2xl border border-surface-container shadow-[0_4px_20px_-4px_rgba(86,18,145,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#561291]/20 hover:shadow-[0_12px_32px_rgba(86,18,145,0.07)] transition-all duration-300 ease-out min-h-[360px]">
               <span className="absolute top-6 right-8 font-serif text-5xl font-extrabold text-[#561291]/5 select-none pointer-events-none group-hover:text-[#561291]/10 transition-colors duration-300">01</span>
               <div>
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#561291]/10 to-[#561291]/5 flex items-center justify-center text-[#561291] mb-6 group-hover:scale-105 transition-transform duration-300">
@@ -268,7 +268,7 @@ export default function LandingPage() {
                   className="text-sm text-on-surface-variant leading-relaxed mb-6" 
                 />
               </div>
-              <ul className="space-y-2.5 border-t border-slate-100/55 pt-6 text-xs text-on-surface-variant font-medium font-sans">
+              <ul className="space-y-2.5 border-t border-outline-variant/30 pt-6 text-xs text-on-surface-variant font-medium font-sans">
                 <li className="flex items-center gap-2">
                   <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
                   <CmsText slug="landing-pillar1-bullet1" fallback="Åndelig skjelneevne og etikk" />
@@ -285,7 +285,7 @@ export default function LandingPage() {
             </div>
 
             {/* Pillar 2 */}
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(27,73,101,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#561291]/20 hover:shadow-[0_12px_32px_rgba(27,73,101,0.06)] transition-all duration-300 ease-out min-h-[360px]">
+            <div className="bg-white rounded-2xl border border-surface-container shadow-[0_4px_20px_-4px_rgba(86,18,145,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#561291]/20 hover:shadow-[0_12px_32px_rgba(86,18,145,0.07)] transition-all duration-300 ease-out min-h-[360px]">
               <span className="absolute top-6 right-8 font-serif text-5xl font-extrabold text-[#561291]/5 select-none pointer-events-none group-hover:text-[#561291]/10 transition-colors duration-300">02</span>
               <div>
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#561291]/10 to-[#561291]/5 flex items-center justify-center text-[#561291] mb-6 group-hover:scale-105 transition-transform duration-300">
@@ -304,7 +304,7 @@ export default function LandingPage() {
                   className="text-sm text-on-surface-variant leading-relaxed mb-6" 
                 />
               </div>
-              <ul className="space-y-2.5 border-t border-slate-100/55 pt-6 text-xs text-on-surface-variant font-medium font-sans">
+              <ul className="space-y-2.5 border-t border-outline-variant/30 pt-6 text-xs text-on-surface-variant font-medium font-sans">
                 <li className="flex items-center gap-2">
                   <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
                   <CmsText slug="landing-pillar2-bullet1" fallback="Historisk-grammatisk hermeneutikk" />
@@ -321,7 +321,7 @@ export default function LandingPage() {
             </div>
 
             {/* Pillar 3 */}
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(27,73,101,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#561291]/20 hover:shadow-[0_12px_32px_rgba(27,73,101,0.06)] transition-all duration-300 ease-out min-h-[360px]">
+            <div className="bg-white rounded-2xl border border-surface-container shadow-[0_4px_20px_-4px_rgba(86,18,145,0.04)] p-8 sm:p-10 flex flex-col justify-between relative group hover:border-[#561291]/20 hover:shadow-[0_12px_32px_rgba(86,18,145,0.07)] transition-all duration-300 ease-out min-h-[360px]">
               <span className="absolute top-6 right-8 font-serif text-5xl font-extrabold text-[#561291]/5 select-none pointer-events-none group-hover:text-[#561291]/10 transition-colors duration-300">03</span>
               <div>
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#561291]/10 to-[#561291]/5 flex items-center justify-center text-[#561291] mb-6 group-hover:scale-105 transition-transform duration-300">
@@ -340,7 +340,7 @@ export default function LandingPage() {
                   className="text-sm text-on-surface-variant leading-relaxed mb-6" 
                 />
               </div>
-              <ul className="space-y-2.5 border-t border-slate-100/55 pt-6 text-xs text-on-surface-variant font-medium font-sans">
+              <ul className="space-y-2.5 border-t border-outline-variant/30 pt-6 text-xs text-on-surface-variant font-medium font-sans">
                 <li className="flex items-center gap-2">
                   <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={12} /></span>
                   <CmsText slug="landing-pillar3-bullet1" fallback="1-til-1 oppfølging & mentorsamtaler" />
@@ -360,12 +360,12 @@ export default function LandingPage() {
           {/* Symmetrical full-width global network banner below */}
           <div className="mt-12 bg-gradient-to-r from-[#561291]/5 to-transparent border border-[#561291]/10 rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-[#561291]/20 transition-all duration-300 shadow-sm relative overflow-hidden group">
             <div className="flex items-center gap-4 sm:gap-6 relative z-10">
-              <div className="w-14 h-14 rounded-full bg-white text-[#561291] shadow-sm flex items-center justify-center border border-slate-100 flex-shrink-0 animate-float">
+              <div className="w-14 h-14 rounded-full bg-white text-[#561291] shadow-sm flex items-center justify-center border border-outline-variant/30 flex-shrink-0 animate-float">
                 <Globe size={26} className="text-[#561291]" />
               </div>
               <div className="space-y-1">
                 <CmsText slug="landing-network-title" fallback="Globale Profetiske Nettverk" as="h4" className="font-serif text-lg text-[#561291] font-bold" />
-                <CmsText slug="landing-network-desc" fallback="Koble deg til bønnenettverk, misjonsreiser og tjenester over hele verden for å utvide ditt åndelige perspektiv." as="p" className="text-xs sm:text-sm text-[#46617b] leading-relaxed max-w-2xl" />
+                <CmsText slug="landing-network-desc" fallback="Koble deg til bønnenettverk, misjonsreiser og tjenester over hele verden for å utvide ditt åndelige perspektiv." as="p" className="text-xs sm:text-sm text-on-surface-variant leading-relaxed max-w-2xl" />
               </div>
             </div>
             

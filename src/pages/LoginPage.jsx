@@ -91,7 +91,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="bg-[#f6fafe] text-[#171c1f] font-sans min-h-screen flex items-center justify-center p-4 sm:p-8 relative overflow-hidden">
+    <div className="bg-background text-on-background font-sans min-h-screen flex items-center justify-center p-4 sm:p-8 relative overflow-hidden">
       
       {/* Background blobs for premium glassmorphic effect */}
       <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#561291]/10 blur-[120px] pointer-events-none" />
@@ -101,7 +101,7 @@ export default function LoginPage() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="w-full max-w-2xl bg-white/80 backdrop-blur-md rounded-3xl border border-[#c1c7ce]/50 shadow-2xl overflow-hidden flex flex-col p-6 sm:p-10 relative z-10"
+        className="w-full max-w-2xl bg-white/80 backdrop-blur-md rounded-3xl border border-outline-variant/50 shadow-2xl overflow-hidden flex flex-col p-6 sm:p-10 relative z-10"
       >
         {/* Title */}
         <div className="text-center mb-8">
@@ -119,7 +119,7 @@ export default function LoginPage() {
           >
             <CmsText slug="login-title" fallback="His Kingdom Prophets" />
           </div>
-          <p className="text-sm text-[#46617b] max-w-md mx-auto">
+          <p className="text-sm text-on-surface-variant max-w-md mx-auto">
             Logg inn for å få tilgang til dine kurs, studieguider og administrative verktøy.
           </p>
         </div>
@@ -128,7 +128,7 @@ export default function LoginPage() {
         <div className="grid grid-cols-2 gap-4 mb-6">
           <button
             onClick={() => handleSocialLogin('google')}
-            className="flex items-center justify-center gap-3 px-4 py-3 bg-white border border-[#c1c7ce] rounded-xl hover:bg-[#f6fafe] active:scale-[0.98] transition-all font-semibold text-sm text-[#41474d] shadow-sm"
+            className="flex items-center justify-center gap-3 px-4 py-3 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-low active:scale-[0.98] transition-all font-semibold text-sm text-[#41474d] shadow-sm"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -153,7 +153,7 @@ export default function LoginPage() {
           
           <button
             onClick={() => handleSocialLogin('apple')}
-            className="flex items-center justify-center gap-3 px-4 py-3 bg-white border border-[#c1c7ce] rounded-xl hover:bg-[#f6fafe] active:scale-[0.98] transition-all font-semibold text-sm text-[#41474d] shadow-sm"
+            className="flex items-center justify-center gap-3 px-4 py-3 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-low active:scale-[0.98] transition-all font-semibold text-sm text-[#41474d] shadow-sm"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.22.67-2.94 1.51-.62.73-1.16 1.87-1.01 2.98 1.1.09 2.22-.55 2.96-1.43z" />
@@ -164,15 +164,15 @@ export default function LoginPage() {
 
         {/* Separator */}
         <div className="flex items-center gap-4 my-4">
-          <div className="flex-1 h-[1px] bg-[#c1c7ce]/50" />
+          <div className="flex-1 h-[1px] bg-outline-variant/50" />
           <span className="text-xs text-[#72787e] uppercase tracking-wider font-bold">Eller med e-post</span>
-          <div className="flex-1 h-[1px] bg-[#c1c7ce]/50" />
+          <div className="flex-1 h-[1px] bg-outline-variant/50" />
         </div>
 
         {/* Main Authentication Flow */}
         <div>
           {/* Login Method Toggle: Password vs Passwordless */}
-          <div className="flex gap-4 border-b border-[#c1c7ce]/40 mb-6">
+          <div className="flex gap-4 border-b border-outline-variant/40 mb-6">
             <button
               type="button"
               onClick={() => setLoginMethod('password')}
@@ -210,7 +210,7 @@ export default function LoginPage() {
                   placeholder="knutsenthomas@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#561291] focus:outline-none transition-all"
+                  className="w-full bg-background border border-outline-variant rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#561291] focus:outline-none transition-all"
                   required
                 />
               </div>
@@ -235,7 +235,7 @@ export default function LoginPage() {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-[#f6fafe] border border-[#c1c7ce] rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#561291] focus:outline-none transition-all"
+                    className="w-full bg-background border border-outline-variant rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-[#561291] focus:outline-none transition-all"
                     required
                   />
                 </div>

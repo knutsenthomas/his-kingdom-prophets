@@ -8,66 +8,66 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Core theme colors from design system
+        // Core theme colors from design system (Majestic Royal Purple theme)
         primary: "#3c096c",
         "primary-container": "#561291",
         "on-primary": "#ffffff",
         "on-primary-container": "#e0aaff",
         
-        secondary: "#46617b",
-        "secondary-container": "#c4e0fe",
+        secondary: "#7b2cbf",
+        "secondary-container": "#f3e8ff",
         "on-secondary": "#ffffff",
-        "on-secondary-container": "#48637d",
+        "on-secondary-container": "#561291",
         
-        tertiary: "#1d3141",
-        "tertiary-container": "#344759",
+        tertiary: "#240046",
+        "tertiary-container": "#3c096c",
         "on-tertiary": "#ffffff",
-        "on-tertiary-container": "#a1b5ca",
+        "on-tertiary-container": "#f3e8ff",
         
         error: "#ba1a1a",
         "error-container": "#ffdad6",
         "on-error": "#ffffff",
         "on-error-container": "#93000a",
         
-        background: "#f6fafe",
-        "on-background": "#171c1f",
+        background: "#faf7fc",
+        "on-background": "#240046",
         
-        surface: "#f6fafe",
-        "on-surface": "#171c1f",
-        "on-surface-variant": "#41474d",
-        "surface-dim": "#d6dade",
-        "surface-bright": "#f6fafe",
-        "surface-tint": "#386380",
+        surface: "#faf7fc",
+        "on-surface": "#240046",
+        "on-surface-variant": "#5a4d66",
+        "surface-dim": "#dec2ef",
+        "surface-bright": "#faf7fc",
+        "surface-tint": "#561291",
         
         "surface-container-lowest": "#ffffff",
-        "surface-container-low": "#f0f4f8",
-        "surface-container": "#eaeef2",
-        "surface-container-high": "#e4e9ed",
-        "surface-container-highest": "#dfe3e7",
+        "surface-container-low": "#f5eefb",
+        "surface-container": "#eedff7",
+        "surface-container-high": "#e6d1f3",
+        "surface-container-highest": "#dec2ef",
         
-        outline: "#72787e",
-        "outline-variant": "#c1c7ce",
+        outline: "#7e6d8a",
+        "outline-variant": "#dec2ef",
         
-        "inverse-surface": "#2c3134",
-        "inverse-on-surface": "#edf1f5",
+        "inverse-surface": "#32273c",
+        "inverse-on-surface": "#f5eefb",
         "inverse-primary": "#d8b4fe",
         
         // Fixed variants
         "primary-fixed": "#f3e8ff",
         "primary-fixed-dim": "#d8b4fe",
-        "on-primary-fixed": "#001e2f",
+        "on-primary-fixed": "#240046",
         "on-primary-fixed-variant": "#561291",
         
         "secondary-fixed": "#f3e8ff",
-        "secondary-fixed-dim": "#aec9e7",
-        "on-secondary-fixed": "#001d32",
-        "on-secondary-fixed-variant": "#2e4962",
+        "secondary-fixed-dim": "#d8b4fe",
+        "on-secondary-fixed": "#240046",
+        "on-secondary-fixed-variant": "#7b2cbf",
         
-        "tertiary-fixed": "#d0e5fb",
-        "tertiary-fixed-dim": "#b5c9de",
-        "on-tertiary-fixed": "#081d2d",
-        "on-tertiary-fixed-variant": "#36495a",
-
+        "tertiary-fixed": "#f3e8ff",
+        "tertiary-fixed-dim": "#d8b4fe",
+        "on-tertiary-fixed": "#ffffff",
+        "on-tertiary-fixed-variant": "#3c096c",
+ 
         // Burnt orange gradient colors for premium accents & visual editor
         "burnt-orange": "#d17d39",
         "burnt-orange-dark": "#bd4f2a"

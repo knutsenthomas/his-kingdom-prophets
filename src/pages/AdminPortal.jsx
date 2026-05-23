@@ -275,11 +275,11 @@ export default function AdminPortal() {
 
   if (!isAuthorized) {
     return (
-      <div className="min-h-screen bg-[#f6fafe] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white p-8 rounded-3xl border border-[#c1c7ce] max-w-md w-full shadow-2xl text-center space-y-6"
+          className="bg-white p-8 rounded-3xl border border-outline-variant/60 max-w-md w-full shadow-2xl text-center space-y-6"
         >
           <div className="w-16 h-16 bg-red-50 text-[#ba1a1a] rounded-full flex items-center justify-center mx-auto shadow-inner">
             <Lock className="w-8 h-8" />
@@ -472,13 +472,13 @@ export default function AdminPortal() {
   const groupPermissions = rolePermissions?.[activePermissionGroup] || DEFAULT_PERMISSIONS[selectedRole]?.[activePermissionGroup] || {};
 
   return (
-    <div className="min-h-screen bg-[#f6fafe] p-4 sm:p-8 max-w-[1440px] mx-auto text-[#171c1f]">
+    <div className="min-h-screen bg-background p-4 sm:p-8 max-w-[1440px] mx-auto text-on-background">
       
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 border-b border-[#c1c7ce]/40 pb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 border-b border-outline-variant/40 pb-6">
         <div>
           <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#3c096c] mb-2 tracking-tight">Admin Portal</h1>
-          <p className="text-sm text-[#46617b]">
+          <p className="text-sm text-on-surface-variant">
             Overordnet system- og brukerhåndtering for His Kingdom Prophets.
           </p>
         </div>
@@ -524,21 +524,21 @@ export default function AdminPortal() {
           >
             {/* Quick KPI Row */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="bg-white border border-[#c1c7ce]/40 p-5 rounded-2xl shadow-sm">
-                <p className="text-xs text-[#72787e] font-bold uppercase tracking-wider">Totalt antall brukere</p>
+              <div className="bg-white border border-outline-variant/40 p-5 rounded-2xl shadow-sm">
+                <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Totalt antall brukere</p>
                 <p className="text-3xl font-serif font-bold text-[#3c096c] mt-2">{(usersList || []).length}</p>
               </div>
-              <div className="bg-white border border-[#c1c7ce]/40 p-5 rounded-2xl shadow-sm">
-                <p className="text-xs text-[#72787e] font-bold uppercase tracking-wider">Studenter</p>
+              <div className="bg-white border border-outline-variant/40 p-5 rounded-2xl shadow-sm">
+                <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Studenter</p>
                 <p className="text-3xl font-serif font-bold text-[#561291] mt-2">{(usersList || []).filter(u=>u?.role==='student').length}</p>
               </div>
-              <div className="bg-white border border-[#c1c7ce]/40 p-5 rounded-2xl shadow-sm">
-                <p className="text-xs text-[#72787e] font-bold uppercase tracking-wider">Mentorer / Lærere</p>
-                <p className="text-3xl font-serif font-bold text-[#46617b] mt-2">{(usersList || []).filter(u=>u?.role==='teacher').length}</p>
+              <div className="bg-white border border-outline-variant/40 p-5 rounded-2xl shadow-sm">
+                <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Mentorer / Lærere</p>
+                <p className="text-3xl font-serif font-bold text-secondary mt-2">{(usersList || []).filter(u=>u?.role==='teacher').length}</p>
               </div>
-              <div className="bg-white border border-[#c1c7ce]/40 p-5 rounded-2xl shadow-sm">
-                <p className="text-xs text-[#72787e] font-bold uppercase tracking-wider">Administratorer</p>
-                <p className="text-3xl font-serif font-bold text-[#001e2f] mt-2">{(usersList || []).filter(u=>u?.role==='admin' || u?.role==='superadmin').length}</p>
+              <div className="bg-white border border-outline-variant/40 p-5 rounded-2xl shadow-sm">
+                <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Administratorer</p>
+                <p className="text-3xl font-serif font-bold text-tertiary mt-2">{(usersList || []).filter(u=>u?.role==='admin' || u?.role==='superadmin').length}</p>
               </div>
             </div>
 
@@ -1116,12 +1116,12 @@ export default function AdminPortal() {
       {/* --- ADD USER MODAL --- */}
       <AnimatePresence>
         {isAddModalOpen && (
-          <div className="fixed inset-0 bg-[#001e2f]/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="fixed inset-0 bg-[#3c096c]/45 backdrop-blur-sm flex items-center justify-center p-4 z-50">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="bg-white rounded-3xl border border-[#c1c7ce]/50 max-w-md w-full p-6 sm:p-8 shadow-2xl relative"
+              className="bg-white rounded-3xl border border-outline-variant/50 max-w-md w-full p-6 sm:p-8 shadow-2xl relative"
             >
               <button
                 onClick={() => setIsAddModalOpen(false)}
