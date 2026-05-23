@@ -1703,17 +1703,20 @@ export const AppProvider = ({ children }) => {
 
   // Update user profile fields
   const updateUserProfile = async (fields) => {
-    setUser(prev => ({ ...prev, ...fields }));
-
     if (auth.currentUser) {
       try {
         const userDocRef = doc(db, "users", auth.currentUser.uid);
         await setDoc(userDocRef, fields, { merge: true });
+        setUser(prev => ({ ...prev, ...fields }));
+        showToast('Profilen din er oppdatert!');
       } catch (err) {
         console.error("Feil ved lagring av profil til Firestore:", err);
+        showToast('Klarte ikke å lagre profil. Vennligst prøv igjen.');
       }
+    } else {
+      setUser(prev => ({ ...prev, ...fields }));
+      showToast('Profilen din er oppdatert lokalt!');
     }
-    showToast('Profilen din er oppdatert!');
   };
 
   // Send message in HKM Assistant widget
