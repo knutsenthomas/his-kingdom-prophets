@@ -364,17 +364,24 @@ export default function BibleResourcesPage() {
       <section className="bg-gradient-to-br from-[#3c096c] to-[#561291] text-white py-16 md:py-20 px-4 sm:px-6 md:px-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(224,170,255,0.15),transparent)] pointer-events-none"></div>
         <div className="max-w-[1440px] mx-auto space-y-4 relative z-10 text-center sm:text-left">
-          <span className="px-3.5 py-1 rounded-full bg-white/10 text-purple-200 text-xs font-bold uppercase tracking-wider border border-white/15 inline-block">
-            {isEn ? 'Public Study Portal' : 'Offentlig studieportal'}
-          </span>
-          <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-            {isEn ? 'Biblical & Prophetic Resources' : 'Bibelressurser og studieportal'}
-          </h1>
-          <p className="text-sm sm:text-base text-purple-100 max-w-2xl leading-relaxed">
-            {isEn 
-              ? 'Deep theological curriculum, interactive scriptures, and study aids to equip your calling. Click through our tabs below to explore public resources.' 
-              : 'Dyp bibelundervisning, interaktiv studiebibel og verktøy som ruster deg til din tjeneste. Utforsk våre åpne bibelressurser under.'}
-          </p>
+          <CmsText 
+            slug="resources-hero-tagline" 
+            fallback="Offentlig studieportal" 
+            as="span" 
+            className="px-3.5 py-1 rounded-full bg-white/10 text-purple-200 text-xs font-bold uppercase tracking-wider border border-white/15 inline-block" 
+          />
+          <CmsText 
+            slug="resources-hero-title" 
+            fallback="Bibelressurser og studieportal" 
+            as="h1" 
+            className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight" 
+          />
+          <CmsText 
+            slug="resources-hero-desc" 
+            fallback="Dyp bibelundervisning, interaktiv studiebibel og verktøy som ruster deg til din tjeneste. Utforsk våre åpne bibelressurser under." 
+            as="p" 
+            className="text-sm sm:text-base text-purple-100 max-w-2xl leading-relaxed" 
+          />
         </div>
       </section>
 
@@ -382,10 +389,10 @@ export default function BibleResourcesPage() {
       <section className="border-b border-slate-200 bg-white sticky top-20 z-30 shadow-sm">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 flex space-x-8 overflow-x-auto whitespace-nowrap scrollbar-none h-16 items-center">
           {[
-            { id: 'bible', name: isEn ? '📖 Bible Reader & Study Center' : '📖 Interaktiv studiebibel', icon: BookOpen },
-            { id: 'curriculums', name: isEn ? '📚 Curriculum & Outlines' : '📚 Fagplaner og studiehefter', icon: BookText },
-            { id: 'video', name: isEn ? '🎙️ Lectures & Seminars' : '🎙️ Lyd- og videoundervisning', icon: Video },
-            { id: 'fasting', name: isEn ? '📜 Fasting & Prayer Manuals' : '📜 Fastemanualer og bønneguider', icon: Flame }
+            { id: 'bible', fallback: '📖 Interaktiv studiebibel', icon: BookOpen },
+            { id: 'curriculums', fallback: '📚 Fagplaner og studiehefter', icon: BookText },
+            { id: 'video', fallback: '🎙️ Lyd- og videoundervisning', icon: Video },
+            { id: 'fasting', fallback: '📜 Fastemanualer og bønneguider', icon: Flame }
           ].map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -400,7 +407,9 @@ export default function BibleResourcesPage() {
                 }`}
               >
                 <Icon size={16} />
-                <span>{tab.name}</span>
+                <span>
+                  <CmsText slug={`resources-tab-${tab.id}`} fallback={tab.fallback} />
+                </span>
               </button>
             );
           })}
@@ -418,13 +427,14 @@ export default function BibleResourcesPage() {
               <div className="space-y-1">
                 <h3 className="font-serif text-xl font-bold text-primary flex items-center gap-2">
                   <Sparkles size={20} className="text-amber-500" />
-                  {isEn ? 'Interactive Bible Study Suite' : 'Interaktiv studiebibel'}
+                  <CmsText slug="resources-bible-title" fallback="Interaktiv studiebibel" />
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-500 max-w-3xl leading-relaxed">
-                  {isEn
-                    ? 'Click any verse to copy it or request detailed theological analysis. Open the Study Bible panel to view pre-loaded commentaries, word studies, and make personal notes.'
-                    : 'Trykk på et hvilket som helst vers for å kopiere det. Åpne "studiebibel"-panelet for ferdige teologiske kommentarer, ordstudier og personlige notater.'}
-                </p>
+                <CmsText 
+                  slug="resources-bible-desc" 
+                  fallback="Trykk på et hvilket som helst vers for å kopiere det. Åpne &quot;studiebibel&quot;-panelet for ferdige teologiske kommentarer, ordstudier og personlige notater." 
+                  as="p" 
+                  className="text-xs sm:text-sm text-slate-500 max-w-3xl leading-relaxed" 
+                />
               </div>
               
               <form onSubmit={handleSearch} className="w-full md:w-80 shrink-0">
@@ -897,14 +907,18 @@ export default function BibleResourcesPage() {
         {activeTab === 'curriculums' && (
           <div className="space-y-10 animate-in fade-in duration-300">
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <h3 className="font-serif text-2xl font-bold text-primary">
-                {isEn ? 'Prophetic Outlines & Curriculum' : 'Studieplaner og teologiske fagplaner'}
-              </h3>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                {isEn
-                  ? 'We balance heavy academic exegesis with the flow of the Holy Spirit. Explore the structural outlines of our three core streams.'
-                  : 'Vi forener dyp akademisk eksegese med Den Hellige Ånds gaverolle. Her er en oversikt over studieheftene og modulene i våre tre hovedlinjer.'}
-              </p>
+              <CmsText 
+                slug="resources-curriculums-title" 
+                fallback="Studieplaner og teologiske fagplaner" 
+                as="h3" 
+                className="font-serif text-2xl font-bold text-primary" 
+              />
+              <CmsText 
+                slug="resources-curriculums-desc" 
+                fallback="Vi forener dyp akademisk eksegese med Den Hellige Ånds gaverolle. Her er en oversikt over studieheftene og modulene i våre tre hovedlinjer." 
+                as="p" 
+                className="text-sm text-slate-500 leading-relaxed" 
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -985,14 +999,18 @@ export default function BibleResourcesPage() {
         {activeTab === 'video' && (
           <div className="space-y-10 animate-in fade-in duration-300">
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <h3 className="font-serif text-2xl font-bold text-primary">
-                {isEn ? 'Theological Lectures & Prophetic Streams' : 'Lyd- og videoundervisning'}
-              </h3>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                {isEn
-                  ? 'Access sample theological seminars, live prayer streams, and biblical teaching packages.'
-                  : 'Få tilgang til åpne seminarer, live-strømmer av bønnesamlinger, og smakebiter av vår ukentlige video-undervisning.'}
-              </p>
+              <CmsText 
+                slug="resources-video-title" 
+                fallback="Lyd- og videoundervisning" 
+                as="h3" 
+                className="font-serif text-2xl font-bold text-primary" 
+              />
+              <CmsText 
+                slug="resources-video-desc" 
+                fallback="Få tilgang til åpne seminarer, live-strømmer av bønnesamlinger, og smakebiter av vår ukentlige video-undervisning." 
+                as="p" 
+                className="text-sm text-slate-500 leading-relaxed" 
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -1071,14 +1089,18 @@ export default function BibleResourcesPage() {
         {activeTab === 'fasting' && (
           <div className="space-y-10 animate-in fade-in duration-300">
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <h3 className="font-serif text-2xl font-bold text-primary">
-                {isEn ? 'Prayer Guides & Spiritual Discipline Manuals' : 'Fastemanualer og bønneguider'}
-              </h3>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                {isEn
-                  ? 'Practical biblical tools for spiritual discipline, fasting, and prophetic intercession.'
-                  : 'Praktiske, bibelske verktøy som ruster deg til åndelig disiplin, bibelske fasteperioder, og profetisk forbønn under Åndens ledelse.'}
-              </p>
+              <CmsText 
+                slug="resources-fasting-title" 
+                fallback="Fastemanualer og bønneguider" 
+                as="h3" 
+                className="font-serif text-2xl font-bold text-primary" 
+              />
+              <CmsText 
+                slug="resources-fasting-desc" 
+                fallback="Praktiske, bibelske verktøy som ruster deg til åndelig disiplin, bibelske fasteperioder, og profetisk forbønn under Åndens ledelse." 
+                as="p" 
+                className="text-sm text-slate-500 leading-relaxed" 
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

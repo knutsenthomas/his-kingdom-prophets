@@ -180,7 +180,24 @@ const assetDefinitions = [
   { slug: 'student-assignments-not-submitted', title: 'Ikke innlevert statusbadge', section: 'Studentportal', type: 'text', description: 'Status-tekst for ikke-leverte oppgaver.' },
   { slug: 'student-assignments-waiting-grade', title: 'Venter på sensur statusbadge', section: 'Studentportal', type: 'text', description: 'Status-tekst for oppgaver til sensur.' },
   { slug: 'student-assignments-result', title: 'Resultat rubrikklabel', section: 'Studentportal', type: 'text', description: 'Tekst-label for vurderingsresultat.' },
-  { slug: 'student-assignments-deadline', title: 'Innleveringsfrist rubrikklabel', section: 'Studentportal', type: 'text', description: 'Tekst-label for frister.' }
+  { slug: 'student-assignments-deadline', title: 'Innleveringsfrist rubrikklabel', section: 'Studentportal', type: 'text', description: 'Tekst-label for frister.' },
+
+  // Bibelressurser (Public Bible Resources Page)
+  { slug: 'resources-hero-tagline', title: 'Ressurser Hero Tagline', section: 'Bibelressurser', type: 'text', description: 'Undertekst / tagline i lilla banner på bibelressursersiden.' },
+  { slug: 'resources-hero-title', title: 'Ressurser Hero Tittel', section: 'Bibelressurser', type: 'text', description: 'Hovedoverskriften i det lilla banneret på bibelressursersiden.' },
+  { slug: 'resources-hero-desc', title: 'Ressurser Hero Beskrivelse', section: 'Bibelressurser', type: 'textarea', description: 'Beskrivende avsnitt under hovedtittelen på bibelressursersiden.' },
+  { slug: 'resources-tab-bible', title: 'Tab 1: Studiebibel', section: 'Bibelressurser', type: 'text', description: 'Tittel på første fane (Interaktiv studiebibel).' },
+  { slug: 'resources-tab-curriculums', title: 'Tab 2: Fagplaner', section: 'Bibelressurser', type: 'text', description: 'Tittel på andre fane (Fagplaner og studiehefter).' },
+  { slug: 'resources-tab-video', title: 'Tab 3: Videoundervisning', section: 'Bibelressurser', type: 'text', description: 'Tittel på tredje fane (Lyd- og videoundervisning).' },
+  { slug: 'resources-tab-fasting', title: 'Tab 4: Fastemanualer', section: 'Bibelressurser', type: 'text', description: 'Tittel på fjerde fane (Fastemanualer og bønneguider).' },
+  { slug: 'resources-bible-title', title: 'Studiebibel Innholdstittel', section: 'Bibelressurser', type: 'text', description: 'Overskrift inni den interaktive studiebibel-fanen.' },
+  { slug: 'resources-bible-desc', title: 'Studiebibel Innholdsbeskrivelse', section: 'Bibelressurser', type: 'textarea', description: 'Instruksjonsbeskrivelse inni studiebibel-fanen.' },
+  { slug: 'resources-curriculums-title', title: 'Fagplaner Innholdstittel', section: 'Bibelressurser', type: 'text', description: 'Overskrift inni fagplaner-fanen.' },
+  { slug: 'resources-curriculums-desc', title: 'Fagplaner Innholdsbeskrivelse', section: 'Bibelressurser', type: 'textarea', description: 'Beskrivelse inni fagplaner-fanen.' },
+  { slug: 'resources-video-title', title: 'Video Innholdstittel', section: 'Bibelressurser', type: 'text', description: 'Overskrift inni video-fanen.' },
+  { slug: 'resources-video-desc', title: 'Video Innholdsbeskrivelse', section: 'Bibelressurser', type: 'textarea', description: 'Beskrivelse inni video-fanen.' },
+  { slug: 'resources-fasting-title', title: 'Faste Innholdstittel', section: 'Bibelressurser', type: 'text', description: 'Overskrift inni faste/bønn-fanen.' },
+  { slug: 'resources-fasting-desc', title: 'Faste Innholdsbeskrivelse', section: 'Bibelressurser', type: 'textarea', description: 'Beskrivelse inni faste/bønn-fanen.' }
 ];
 
 export default function CMSDashboard() {
@@ -333,7 +350,8 @@ export default function CMSDashboard() {
       { id: 'auth', title: 'Innloggingsflyt', section: 'Innlogging', icon: UserCheck, count: assetDefinitions.filter(d => d.section === 'Innlogging').length },
       { id: 'student', title: 'Studentportal', section: 'Studentportal', icon: BookOpen, count: assetDefinitions.filter(d => d.section === 'Studentportal').length },
       { id: 'teacher', title: 'Mentorportal', section: 'Mentorportal', icon: Users, count: assetDefinitions.filter(d => d.section === 'Mentorportal').length },
-      { id: 'onboarding', title: 'Onboardingflyt', section: 'Onboarding', icon: Rocket, count: assetDefinitions.filter(d => d.section === 'Onboarding').length }
+      { id: 'onboarding', title: 'Onboardingflyt', section: 'Onboarding', icon: Rocket, count: assetDefinitions.filter(d => d.section === 'Onboarding').length },
+      { id: 'resources', title: 'Bibelressurser', section: 'Bibelressurser', icon: BookOpen, count: assetDefinitions.filter(d => d.section === 'Bibelressurser').length }
     ];
   }, []);
 
@@ -348,6 +366,7 @@ export default function CMSDashboard() {
           student: 'Studentportal',
           teacher: 'Mentorportal',
           onboarding: 'Onboarding',
+          resources: 'Bibelressurser',
           system: 'System'
         };
         if (asset.section !== mapping[selectedCategory]) {
