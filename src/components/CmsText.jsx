@@ -69,6 +69,13 @@ export default function CmsText({
     document.execCommand('insertText', false, text);
   };
 
+  const handleClick = (e) => {
+    if (isAdminEditing) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
   if (!isAdminEditing) {
     return <Component className={className}>{displayText}</Component>;
   }
@@ -81,6 +88,7 @@ export default function CmsText({
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
       onPaste={handlePaste}
+      onClick={handleClick}
       className={`${className} inline-block outline-none border border-dashed border-burnt-orange/50 hover:border-burnt-orange focus:border-burnt-orange focus:bg-burnt-orange/5 focus:ring-1 focus:ring-burnt-orange rounded px-1.5 -mx-1.5 transition-all cursor-text relative group min-h-[1em]`}
       title={`Klikk for å redigere "${slug}" direkte på siden`}
     >

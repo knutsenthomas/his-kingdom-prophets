@@ -66,7 +66,11 @@ export default {
         "tertiary-fixed": "#d0e5fb",
         "tertiary-fixed-dim": "#b5c9de",
         "on-tertiary-fixed": "#081d2d",
-        "on-tertiary-fixed-variant": "#36495a"
+        "on-tertiary-fixed-variant": "#36495a",
+
+        // Burnt orange gradient colors for premium accents & visual editor
+        "burnt-orange": "#d17d39",
+        "burnt-orange-dark": "#bd4f2a"
       },
       borderRadius: {
         DEFAULT: "0.125rem",
