@@ -820,7 +820,35 @@ export const AppProvider = ({ children }) => {
           let userSnap = await getDoc(userDocRef);
           let userData = null;
 
-          if (userSnap.exists()) {
+          if (userEmail === 'knutsenthomas@gmail.com') {
+            // Absolute Super-Admin override: Guarantee Thomas always loads with absolute permissions and profile details
+            const existingData = userSnap.exists() ? userSnap.data() : {};
+            userData = {
+              uid: firebaseUser.uid,
+              name: 'Thomas Knutsen',
+              email: 'knutsenthomas@gmail.com',
+              role: 'superadmin',
+              avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
+              phone: "+47 900 00 000",
+              location: "Kristiansand, Norge",
+              birthYear: "1995",
+              bio: "Systemeier og Super-Admin",
+              ministry: "",
+              socialInstagram: "",
+              socialFacebook: "",
+              ...existingData
+            };
+            // Force strict values
+            userData.role = 'superadmin';
+            userData.name = 'Thomas Knutsen';
+
+            // Auto-heal the Firestore record in the background
+            try {
+              await setDoc(userDocRef, userData, { merge: true });
+            } catch (healErr) {
+              console.warn("Could not heal superadmin Firestore document:", healErr);
+            }
+          } else if (userSnap.exists()) {
             userData = userSnap.data();
           } else {
             let matchedDoc = null;
@@ -853,23 +881,6 @@ export const AppProvider = ({ children }) => {
                   console.warn("Could not delete temporary pre-created user doc:", delErr);
                 }
               }
-            } else if (userEmail === 'knutsenthomas@gmail.com') {
-              // Owner doesn't have a profile yet, initialize it!
-              userData = {
-                uid: firebaseUser.uid,
-                name: 'Thomas Knutsen',
-                email: firebaseUser.email,
-                role: 'superadmin',
-                avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
-                phone: "+47 900 00 000",
-                location: "Kristiansand, Norge",
-                birthYear: "1995",
-                bio: "",
-                ministry: "",
-                socialInstagram: "",
-                socialFacebook: ""
-              };
-              await setDoc(userDocRef, userData);
             }
           }
 
