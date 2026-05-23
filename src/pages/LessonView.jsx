@@ -27,12 +27,12 @@ export default function LessonView() {
   
   // Determine selected course from location state or default to prop101
   const courseId = location.state?.courseId || 'prop101';
-  const course = courses.find(c => c.id === courseId) || courses[0];
+  const course = courses?.find(c => c.id === courseId) || courses?.[0];
   
   // Keep track of the active selected module in the lesson reading screen
   const [activeModuleIndex, setActiveModuleIndex] = useState(2); // Default to Module 3
   
-  const currentModule = course.modules[activeModuleIndex] || course.modules[0];
+  const currentModule = course?.modules?.[activeModuleIndex] || course?.modules?.[0];
  
   const toggleFocusMode = () => {
     const nextFocusMode = !isFocusMode;
@@ -81,6 +81,8 @@ export default function LessonView() {
   // Load notes from localStorage first, then sync with Firestore cloud
   useEffect(() => {
     const loadNotes = async () => {
+      if (!courseId || !currentModule?.id) return;
+      
       // 1. Load from localStorage for instant display
       const savedNotes = localStorage.getItem(`hkm-notes-${courseId}-${currentModule.id}`) || "";
       setNotes(savedNotes);
@@ -105,7 +107,18 @@ export default function LessonView() {
     };
 
     loadNotes();
-  }, [courseId, currentModule.id, user?.uid]);
+  }, [courseId, currentModule?.id, user?.uid]);
+
+  // Loading guard placed safely AFTER all hook declarations to comply with React Hook Rules
+  if (!course || !currentModule) {
+    return (
+      <div className="flex flex-1 items-center justify-center p-12 text-primary font-bold text-sm bg-background min-h-screen">
+        <div className="animate-pulse flex items-center gap-2">
+          <span>Laster leksjonsmateriale...</span>
+        </div>
+      </div>
+    );
+  }
 
   // Handle note change with autosave debounce to local and firestore
   const handleNotesChange = (e) => {
