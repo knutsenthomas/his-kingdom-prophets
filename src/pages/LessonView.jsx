@@ -3,11 +3,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { db } from '@/firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { motion } from 'framer-motion';
 import { 
   ArrowLeft, ArrowRight, CheckCircle, PlayCircle, ExternalLink, FileText,
   Eye, EyeOff, Maximize2, Minimize2, BookOpen, Edit3, Trash2, Bold, Italic,
-  List, Quote, ClipboardCopy, Download, X
+  List, Quote, ClipboardCopy, Download, X, MessageSquare, Send
 } from 'lucide-react';
 
 export default function LessonView() {
@@ -534,15 +533,12 @@ export default function LessonView() {
           </div>
 
           {/* Main scholarly text */}
-          <motion.div 
+          <div 
             key={currentModule.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="bg-white border border-outline-variant/20 shadow-sm p-5 sm:p-8 md:p-12 rounded-xl sm:rounded-2xl"
+            className="bg-white border border-outline-variant/20 shadow-sm p-5 sm:p-8 md:p-12 rounded-xl sm:rounded-2xl animate-fade-in"
           >
             {getModuleText(currentModule.title)}
-          </motion.div>
+          </div>
 
           {/* Stepper Navigation Buttons */}
           <div className="flex justify-between items-center pt-6 border-t border-slate-100 text-xs font-bold">
