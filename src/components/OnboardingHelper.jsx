@@ -39,7 +39,7 @@ export default function OnboardingHelper() {
       desc: "Bruk venstremenyen til å hoppe mellom de ulike modulene. Her finner du dine leksjoner, oppgaver, bibelkalkulator og din personlige profil.",
       icon: Compass,
       color: "from-blue-500 to-indigo-600",
-      highlight: "Under 'Studieplan & Kurs' kan du starte nye emner og følge din generelle progresjon."
+      highlight: "Under 'Studieplan & kurs' kan du starte nye emner og følge din generelle progresjon."
     },
     {
       title: "Din AI-assistent (HKM Assistent)",

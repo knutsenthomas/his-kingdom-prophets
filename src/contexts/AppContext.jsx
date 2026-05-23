@@ -549,7 +549,7 @@ export const AppProvider = ({ children }) => {
       'sidebar-administration-en': 'ADMINISTRATION',
       'sidebar-bible': 'Bibelen',
       'sidebar-bible-en': 'The Bible',
-      'sidebar-curriculum': 'Studieplan & Kurs',
+      'sidebar-curriculum': 'Studieplan & kurs',
       'sidebar-curriculum-en': 'Curriculum & Courses',
       'sidebar-lesson': 'Leksjon',
       'sidebar-lesson-en': 'Lesson',
@@ -573,7 +573,7 @@ export const AppProvider = ({ children }) => {
       'sidebar-user-admin-en': 'User Administration',
       'sidebar-cms-editor': 'Global CMS',
       'sidebar-cms-editor-en': 'Global CMS',
-      'sidebar-support': 'Hjelp & Support',
+      'sidebar-support': 'Hjelp & support',
       'sidebar-support-en': 'Help & Support',
 
       // Studentportal og dashbord
@@ -916,7 +916,7 @@ export const AppProvider = ({ children }) => {
             'sidebar-administration-en': 'ADMINISTRATION',
             'sidebar-bible': 'Bibelen',
             'sidebar-bible-en': 'The Bible',
-            'sidebar-curriculum': 'Studieplan & Kurs',
+            'sidebar-curriculum': 'Studieplan & kurs',
             'sidebar-curriculum-en': 'Curriculum & Courses',
             'sidebar-lesson': 'Leksjon',
             'sidebar-lesson-en': 'Lesson',
@@ -940,7 +940,7 @@ export const AppProvider = ({ children }) => {
             'sidebar-user-admin-en': 'User Administration',
             'sidebar-cms-editor': 'Global CMS',
             'sidebar-cms-editor-en': 'Global CMS',
-            'sidebar-support': 'Hjelp & Support',
+            'sidebar-support': 'Hjelp & support',
             'sidebar-support-en': 'Help & Support',
 
             // Studentportal og dashbord

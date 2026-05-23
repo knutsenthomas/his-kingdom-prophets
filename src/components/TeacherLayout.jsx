@@ -80,7 +80,7 @@ export default function TeacherLayout() {
     // Elev- og studieressurser (Studieportal)
     { isHeader: true, name: cmsContent['sidebar-student-portal'] || (language === 'en' ? 'Study Portal' : 'Studieportal') },
     { name: cmsContent['sidebar-bible'] || (language === 'en' ? 'The Bible' : 'Bibelen'), path: '/student/bible', icon: Book },
-    { name: cmsContent['sidebar-curriculum'] || (language === 'en' ? 'Curriculum & Courses' : 'Studieplan & Kurs'), path: '/student/library', icon: BookOpen },
+    { name: cmsContent['sidebar-curriculum'] || (language === 'en' ? 'Curriculum & Courses' : 'Studieplan & kurs'), path: '/student/library', icon: BookOpen },
     { name: cmsContent['sidebar-lesson'] || (language === 'en' ? 'Lesson' : 'Leksjon'), path: '/student/lesson', icon: GraduationCap },
     { name: cmsContent['sidebar-video'] || (language === 'en' ? 'Classroom / Video' : 'Klasserom / Video'), path: '/student/video', icon: Video },
     { name: cmsContent['sidebar-assignments'] || (language === 'en' ? 'Assignments' : 'Oppgaver'), path: '/student/assignments', icon: CheckSquare },
@@ -91,7 +91,7 @@ export default function TeacherLayout() {
     { name: language === 'en' ? 'Media Library' : 'Mediebibliotek', path: '/teacher/media-library', icon: Video },
     { name: language === 'en' ? 'Bible Calculator' : 'Bibelkalkulator', path: '/teacher/grading', icon: Award },
     { name: language === 'en' ? 'Partner Portal' : 'Partnerportal', path: '/teacher/partner', icon: Gift },
-    { name: cmsContent['sidebar-support'] || (language === 'en' ? 'Help Center' : 'Hjelpesenter'), path: '/teacher/support', icon: HelpCircle },
+    { name: cmsContent['sidebar-support'] || (language === 'en' ? 'Help & Support' : 'Hjelp & support'), path: '/teacher/support', icon: HelpCircle },
     { name: language === 'en' ? 'Notification Center' : 'Varslingssenter', path: '/teacher/notifications', icon: Bell },
     { name: language === 'en' ? 'My Mentor Profile' : 'Min lærerprofil', path: '/teacher/profile', icon: User }
   ];
