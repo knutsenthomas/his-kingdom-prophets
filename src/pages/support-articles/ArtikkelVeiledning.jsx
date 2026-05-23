@@ -1,28 +1,48 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import SupportArticleLayout from '@/pages/support-articles/SupportArticleLayout';
 
 export default function ArtikkelVeiledning() {
+  const navigate = useNavigate();
+
+  const handleOpenChat = () => {
+    const event = new CustomEvent('hkm-open-chat');
+    window.dispatchEvent(event);
+  };
+
   return (
     <SupportArticleLayout
       title="Hvordan bestille digital veiledningstid"
       breadcrumbs={[
-        { label: 'Støttesenter', href: '#' },
-        { label: 'Studentressurser', href: '#' },
+        { label: 'Hjem', to: '/student/dashboard' },
+        { label: 'Hjelpesenter', to: '/student/support' },
         { label: 'Digital Veiledning', active: true }
       ]}
       relatedArticles={[
-        { title: 'Tekniske krav for videosamtaler', href: '#', meta: 'WebRTC' },
-        { title: 'Avbestilling av veiledning', href: '#', meta: '24-timers frist' },
-        { title: 'Hvordan dele skjerm', href: '#', meta: 'Vis frem arbeidet ditt' }
+        { title: 'Slik logger du på for første gang', href: '/support/artikkel-logginn', meta: 'Lest av 1.2k brukere' },
+        { title: 'Navigering i Bønnefellesskapet', href: '/support/artikkel-chat', meta: 'Lest av 840 brukere' },
+        { title: 'Feilsøking ved Zoom- og videostrømmer', href: '/support/artikkel-zoom', meta: 'Lest av 650 brukere' }
       ]}
       cta={
-        <section className="bg-secondary-container p-6 rounded-lg mt-12">
+        <section className="bg-secondary-container p-6 rounded-lg mt-12 text-left">
           <h3 className="font-headline-sm text-headline-sm text-on-secondary-container mb-4">Trenger du mer hjelp?</h3>
           <p className="text-body-md text-on-secondary-container/80 mb-6">Vår supportavdeling er tilgjengelig mandag til fredag 08:00 - 16:00.</p>
-          <button className="w-full bg-primary text-white font-label-md py-3 rounded-lg hover:bg-primary-container transition-all flex items-center justify-center gap-2">
-            <span className="material-symbols-outlined">chat</span>
-            Start en chat
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button 
+              onClick={handleOpenChat}
+              className="flex-1 bg-primary text-white font-label-md py-3 rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2 font-bold"
+            >
+              <span className="material-symbols-outlined">chat</span>
+              Start en chat
+            </button>
+            <button 
+              onClick={() => navigate('/student/support')}
+              className="flex-1 border border-primary text-primary font-label-md py-3 rounded-lg hover:bg-primary/5 transition-all flex items-center justify-center gap-2 font-bold"
+            >
+              <span className="material-symbols-outlined">mail</span>
+              Kontakt support
+            </button>
+          </div>
         </section>
       }
     >

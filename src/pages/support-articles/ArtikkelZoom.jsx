@@ -1,34 +1,48 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import SupportArticleLayout from '@/pages/support-articles/SupportArticleLayout';
 
 export default function ArtikkelZoom() {
+  const navigate = useNavigate();
+
+  const handleOpenChat = () => {
+    const event = new CustomEvent('hkm-open-chat');
+    window.dispatchEvent(event);
+  };
+
   return (
     <SupportArticleLayout
       title="Feilsøking ved Zoom- og videostrømmer"
       breadcrumbs={[
-        { label: 'Hjelpesenter', href: '#' },
-        { label: 'Teknisk støtte', href: '#' },
+        { label: 'Hjem', to: '/student/dashboard' },
+        { label: 'Hjelpesenter', to: '/student/support' },
         { label: 'Videostrømmer', active: true }
       ]}
       relatedArticles={[
-        { title: 'Slik setter du opp din første Zoom-time', href: '#', meta: 'Lestid: 4 min' },
-        { title: 'Krav til nettleser og maskinvare', href: '#', meta: 'Lestid: 3 min' },
-        { title: 'Feilsøking av skjermdeling', href: '#', meta: 'Lestid: 5 min' }
+        { title: 'Slik logger du på for første gang', href: '/support/artikkel-logginn', meta: 'Lest av 1.2k brukere' },
+        { title: 'Navigering i Bønnefellesskapet', href: '/support/artikkel-chat', meta: 'Lest av 840 brukere' },
+        { title: 'Bruk av Bibelkalkulatoren for karakterer', href: '/support/artikkel-bibelkalkulator', meta: 'Lest av 920 brukere' }
       ]}
       cta={
         <div className="bg-primary text-on-primary rounded-xl p-6 relative overflow-hidden mt-10">
-          <div className="relative z-10">
+          <div className="relative z-10 text-left">
             <h4 className="font-headline-sm text-headline-sm mb-2">Trenger du direkte hjelp?</h4>
             <p className="text-body-sm opacity-90 mb-6">Våre supportagenter er tilgjengelige mandag til fredag, 08:00 - 16:00.</p>
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-4">
+              <button 
+                onClick={handleOpenChat}
+                className="flex items-center gap-3 w-fit text-left hover:text-[#c5a059] transition-colors focus:outline-none"
+              >
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>chat</span>
-                <span className="text-body-sm">Start en live-chat</span>
-              </div>
-              <div className="flex items-center gap-3">
+                <span className="text-body-sm font-bold">Start en live-chat</span>
+              </button>
+              <button 
+                onClick={() => navigate('/student/support')}
+                className="flex items-center gap-3 w-fit text-left hover:text-[#c5a059] transition-colors focus:outline-none"
+              >
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>mail</span>
-                <span className="text-body-sm">support@scholastic.no</span>
-              </div>
+                <span className="text-body-sm font-bold">Kontakt support via skjema</span>
+              </button>
             </div>
           </div>
           <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary-container rounded-full opacity-50 blur-xl"></div>

@@ -229,7 +229,7 @@ export default function TeacherLayout() {
         
         {/* Collapsible Left Sidebar for Mentor portal */}
         <aside 
-          className="bg-white border-r border-outline-variant/20 sticky top-20 hidden md:flex flex-col shrink-0 transition-all duration-300 ease-in-out overflow-hidden z-30 h-[calc(100vh-80px)]"
+          className="bg-white border-r border-outline-variant/20 sticky top-20 hidden md:flex flex-col shrink-0 transition-all duration-300 ease-in-out overflow-hidden z-30 h-[calc(100vh-80px)] self-start"
           style={{ 
             width: isCollapsed ? '0px' : '288px',
             opacity: isCollapsed ? 0 : 1,

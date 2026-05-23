@@ -1465,187 +1465,136 @@ export const AppProvider = ({ children }) => {
         if (firebaseUser) {
           const userEmail = firebaseUser.email?.toLowerCase();
           
+          // 1. Instantly retrieve local cache to construct optimistic user profile
+          let cachedData = {};
           try {
-            const userDocRef = doc(db, "users", firebaseUser.uid);
-            let userSnap = await getDoc(userDocRef);
-            let userData = null;
+            const saved = localStorage.getItem('hkm-current-user');
+            if (saved) cachedData = JSON.parse(saved);
+          } catch (e) {
+            console.warn("Could not read local cache for merge:", e);
+          }
 
-            // Retrieve local cache to merge and preserve saved profile info
-            let cachedData = {};
+          const fallbackRole = (userEmail === 'knutsenthomas@gmail.com' || userEmail === 'thomas@tk-design.no') ? 'superadmin' : 'student';
+          
+          const optimisticUserData = {
+            uid: firebaseUser.uid,
+            email: userEmail,
+            name: firebaseUser.displayName || (userEmail === 'knutsenthomas@gmail.com' ? 'Thomas Knutsen' : 'Ny Bruker'),
+            role: fallbackRole,
+            onboardingCompleted: true,
+            avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
+            ...cachedData
+          };
+
+          // Strict Super-Admin override with robust default profile fallbacks
+          if (['knutsenthomas@gmail.com', 'thomas@tk-design.no'].includes(userEmail)) {
+            optimisticUserData.role = 'superadmin';
+            optimisticUserData.name = 'Thomas Knutsen';
+            optimisticUserData.title = optimisticUserData.title || 'Systemeier & Utvikler';
+            optimisticUserData.department = optimisticUserData.department || 'Administrasjon';
+            optimisticUserData.location = optimisticUserData.location || 'Kristiansand, Norge';
+            optimisticUserData.phone = optimisticUserData.phone || '+47 900 00 000';
+            optimisticUserData.bio = optimisticUserData.bio || 'Systemeier, Fullstack-utvikler og Super-Admin for His Kingdom Prophets.';
+            optimisticUserData.expertise = optimisticUserData.expertise || 'Systemarkitektur, Fullstack-utvikling, UI/UX-design';
+            optimisticUserData.officeHours = optimisticUserData.officeHours || 'Mandag - Fredag 09:00 - 17:00';
+            optimisticUserData.zoomLink = optimisticUserData.zoomLink || 'https://zoom.us/j/9270778606';
+          }
+
+          // 2. Set State IMMEDIATELY (0ms latency!)
+          setUser(optimisticUserData);
+          setIsLoggedIn(true);
+          setIsAuthReady(true); // Allow other components to know auth is ready instantly!
+
+          // 3. Sync full profile from Firestore asynchronously in the background (Non-blocking!)
+          const syncProfileInBackground = async () => {
             try {
-              const saved = localStorage.getItem('hkm-current-user');
-              if (saved) cachedData = JSON.parse(saved);
-            } catch (e) {
-              console.warn("Could not read local cache for merge:", e);
-            }
+              const userDocRef = doc(db, "users", firebaseUser.uid);
+              const userSnap = await getDoc(userDocRef);
+              let finalUserData = null;
 
-            if (['knutsenthomas@gmail.com', 'thomas@tk-design.no'].includes(userEmail)) {
-              // Absolute Super-Admin override: Guarantee Thomas always loads with absolute permissions and profile details
-              const existingData = userSnap.exists() ? userSnap.data() : {};
-              userData = {
-                uid: firebaseUser.uid,
-                name: 'Thomas Knutsen',
-                email: userEmail,
-                role: 'superadmin',
-                avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
-                phone: "+47 900 00 000",
-                location: "Kristiansand, Norge",
-                birthYear: "1995",
-                bio: "Systemeier og Super-Admin",
-                ministry: "",
-                socialInstagram: "",
-                socialFacebook: "",
-                ...cachedData,   // Merge cache first
-                ...existingData  // Merge Firestore data on top
-              };
-              // Force strict values
-              userData.role = 'superadmin';
-              userData.name = 'Thomas Knutsen';
-
-              // Auto-heal the Firestore record asynchronously in the background (Non-blocking!)
-              setDoc(userDocRef, userData, { merge: true }).catch(healErr => {
-                console.warn("Could not heal superadmin Firestore document:", healErr);
-              });
-            } else if (userSnap.exists()) {
-              userData = {
-                uid: firebaseUser.uid,
-                email: userEmail,
-                name: firebaseUser.displayName || 'Ny Bruker',
-                role: 'student',
-                avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
-                ...cachedData,   // Merge cache first
-                ...userSnap.data() // Merge Firestore data on top
-              };
-            } else {
-              let matchedDoc = null;
-              try {
-                // Check if there is an existing pre-created profile in the "users" collection matching this email
-                const q = query(collection(db, "users"), where("email", "==", userEmail));
-                const querySnapshot = await getDocs(q);
-                querySnapshot.forEach(docSnap => {
-                  const data = docSnap.data();
-                  matchedDoc = { id: docSnap.id, data };
-                });
-              } catch (queryErr) {
-                console.warn("Could not query users by email for migration, proceeding with fallback...", queryErr);
-              }
-
-              if (matchedDoc) {
-                // Found a pre-created profile! Let's migrate it to their actual UID!
-                userData = {
-                  ...cachedData,
-                  ...matchedDoc.data,
-                  uid: firebaseUser.uid // Set to their actual firebase UID
-                };
-                
-                // Set state optimistically so UI registers login instantly
-                setUser(userData);
-                setIsLoggedIn(true);
-
-                // Perform DB migrations asynchronously in the background (Non-blocking!)
-                setDoc(userDocRef, userData).then(() => {
-                  if (matchedDoc.id !== firebaseUser.uid) {
-                    deleteDoc(doc(db, "users", matchedDoc.id)).catch(delErr => {
-                      console.warn("Could not delete temporary pre-created user doc:", delErr);
-                    });
-                  }
-                }).catch(migErr => {
-                  console.warn("Could not write migrated user doc:", migErr);
-                });
-              } else {
-                // Fallback for new users
-                userData = {
-                  uid: firebaseUser.uid,
-                  email: userEmail,
-                  name: firebaseUser.displayName || 'Ny Bruker',
-                  role: 'student',
-                  avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
-                  ...cachedData
-                };
-              }
-            }
-
-            if (userData) {
-              let needsUpdate = false;
-
-              // Automatically upgrade superadmins in Firestore if role is different
               if (['knutsenthomas@gmail.com', 'thomas@tk-design.no'].includes(userEmail)) {
-                if (userData.role !== 'superadmin' || userData.name !== 'Thomas Knutsen') {
-                  userData.role = 'superadmin';
-                  userData.name = 'Thomas Knutsen';
-                  needsUpdate = true;
+                // Absolute Super-Admin override: Guarantee Thomas always loads with absolute permissions and profile details
+                const existingData = userSnap.exists() ? userSnap.data() : {};
+                finalUserData = {
+                  ...optimisticUserData,
+                  ...existingData
+                };
+                finalUserData.role = 'superadmin';
+                finalUserData.name = 'Thomas Knutsen';
+
+                // Heal the Firestore doc in the background (Non-blocking!)
+                setDoc(userDocRef, finalUserData, { merge: true }).catch(healErr => {
+                  console.warn("Background Super-Admin heal failed:", healErr);
+                });
+              } else if (userSnap.exists()) {
+                finalUserData = {
+                  ...optimisticUserData,
+                  ...userSnap.data()
+                };
+              } else {
+                let matchedDoc = null;
+                try {
+                  // Check if there is an existing pre-created profile in the "users" collection matching this email
+                  const q = query(collection(db, "users"), where("email", "==", userEmail));
+                  const querySnapshot = await getDocs(q);
+                  querySnapshot.forEach(docSnap => {
+                    matchedDoc = { id: docSnap.id, data: docSnap.data() };
+                  });
+                } catch (qErr) {
+                  console.warn("Could not query matching invited email in background:", qErr);
+                }
+
+                if (matchedDoc) {
+                  finalUserData = {
+                    ...optimisticUserData,
+                    ...matchedDoc.data,
+                    uid: firebaseUser.uid
+                  };
+                  
+                  // Migrate invited user to permanent UID in the background
+                  setDoc(userDocRef, finalUserData).then(() => {
+                    if (matchedDoc.id !== firebaseUser.uid) {
+                      deleteDoc(doc(db, "users", matchedDoc.id)).catch(err => console.warn(err));
+                    }
+                  }).catch(err => console.warn(err));
+                } else {
+                  finalUserData = optimisticUserData;
                 }
               }
 
-              // Reset mock avatars to default student/user avatar
-              const mockAvatars = [
-                "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120"
-              ];
-              if (mockAvatars.includes(userData.avatar)) {
-                userData.avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
-                needsUpdate = true;
-              }
+              if (finalUserData) {
+                // Reset mock avatar if needed
+                const mockAvatars = [
+                  "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120"
+                ];
+                let needsUpdate = false;
+                if (mockAvatars.includes(finalUserData.avatar)) {
+                  finalUserData.avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
+                  needsUpdate = true;
+                }
 
-              if (needsUpdate) {
-                // Run update asynchronously in background (Non-blocking!)
-                setDoc(userDocRef, { 
-                  role: userData.role, 
-                  name: userData.name, 
-                  avatar: userData.avatar 
-                }, { merge: true }).catch(fsErr => {
-                  console.warn("Firestore profile sync blocked by rules, upgraded state locally:", fsErr);
-                });
-              }
+                if (needsUpdate) {
+                  updateDoc(userDocRef, { avatar: finalUserData.avatar }).catch(err => console.warn(err));
+                }
 
-              // If we haven't set it in the migration branch already, do it now
-              if (!matchedDoc) {
-                setUser(userData);
-                setIsLoggedIn(true);
+                setUser(finalUserData);
               }
-            } else {
-              // Unauthorized user (not knutsenthomas@gmail.com AND not in the pre-created admin list)
-              console.warn("Unauthorized user tried to log in:", userEmail);
-              setUser(null);
-              setIsLoggedIn(false);
-              await signOut(auth);
-              showToast("Tilgang nektet: Din e-postadresse er ikke registrert i systemet.");
+            } catch (err) {
+              console.warn("Background profile fetch failed, staying with optimistic data:", err);
             }
-          } catch (err) {
-            console.error("Feil ved lasting av brukerprofil fra Firestore:", err);
-            
-            // Bulletproof Fallback: Even if Firestore fails (offline, permission errors, rule constraints), 
-            // let's construct a profile locally so they are never stuck!
-            if (firebaseUser) {
-              const cleanEmail = firebaseUser.email?.toLowerCase();
-              const fallbackRole = (cleanEmail === 'knutsenthomas@gmail.com' || cleanEmail === 'thomas@tk-design.no') ? 'superadmin' : 'student';
-              
-              // Retrieve local cache to merge and preserve saved profile info
-              let cachedData = {};
-              try {
-                const saved = localStorage.getItem('hkm-current-user');
-                if (saved) cachedData = JSON.parse(saved);
-              } catch (e) {}
+          };
 
-              const fallbackUserData = {
-                uid: firebaseUser.uid,
-                email: firebaseUser.email,
-                name: firebaseUser.displayName || (cleanEmail === 'knutsenthomas@gmail.com' ? 'Thomas Knutsen' : 'Ny Bruker'),
-                role: fallbackRole,
-                onboardingCompleted: true,
-                avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
-                ...cachedData // Merge local cache
-              };
-              console.log("Local profile fallback activated with cached details:", fallbackUserData);
-              setUser(fallbackUserData);
-              setIsLoggedIn(true);
-            }
-          }
+          // Trigger sync in background without awaiting it!
+          syncProfileInBackground();
+
         } else {
           // Clear user session when logged out
           setUser(null);
           setIsLoggedIn(false);
+          setIsAuthReady(true);
         }
-      } finally {
+      } catch (err) {
+        console.error("Auth state synchronization error:", err);
         setIsAuthReady(true);
       }
     });

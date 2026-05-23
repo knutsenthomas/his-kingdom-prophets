@@ -1,13 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import SupportArticleLayout from '@/pages/support-articles/SupportArticleLayout';
 
 export default function ArtikkelChat() {
+  const navigate = useNavigate();
+
   return (
     <SupportArticleLayout
       title="Navigering i Bønnefellesskapet og chatten"
       breadcrumbs={[
-        { label: 'Hjem', href: '#' },
-        { label: 'Hjelpesenter', href: '#' },
+        { label: 'Hjem', to: '/student/dashboard' },
+        { label: 'Hjelpesenter', to: '/student/support' },
         { label: 'Studentportal', active: true }
       ]}
       relatedArticles={[
@@ -19,7 +22,10 @@ export default function ArtikkelChat() {
         <div className="mt-20 p-10 bg-surface-container rounded-xl border border-outline-variant text-center">
           <h4 className="font-headline-md text-headline-md text-primary mb-4">Trenger du mer hjelp?</h4>
           <p className="font-body-md text-body-md text-on-surface-variant mb-8 max-w-md mx-auto">Kontakt vårt support-team for spørsmål om chat og fellesskap.</p>
-          <button className="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md text-label-md font-bold hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 flex items-center gap-2 mx-auto">
+          <button 
+            onClick={() => navigate('/student/support')}
+            className="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md text-label-md font-bold hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 flex items-center gap-2 mx-auto"
+          >
             <span className="material-symbols-outlined">support_agent</span>
             Kontakt support
           </button>

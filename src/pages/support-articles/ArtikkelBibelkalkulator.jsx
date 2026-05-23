@@ -1,31 +1,45 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import SupportArticleLayout from '@/pages/support-articles/SupportArticleLayout';
 
 export default function ArtikkelBibelkalkulator() {
+  const navigate = useNavigate();
+
+  const handleOpenChat = () => {
+    const event = new CustomEvent('hkm-open-chat');
+    window.dispatchEvent(event);
+  };
+
   return (
     <SupportArticleLayout
       title="Bruk av Bibelkalkulatoren for karakterer"
       breadcrumbs={[
-        { label: 'Hjem', href: '#' },
-        { label: 'Administrasjon', href: '#' },
+        { label: 'Hjem', to: '/student/dashboard' },
+        { label: 'Hjelpesenter', to: '/student/support' },
         { label: 'Karakterberegning', active: true }
       ]}
       relatedArticles={[
-        { title: 'Oppretting av egne vurderingsrubrikker', href: '#', meta: 'Lest av 450 administratorer' },
-        { title: 'Eksport av karakterdata til Excel', href: '#', meta: 'Steg-for-steg guide' },
-        { title: 'Håndtering av klager på karakterer', href: '#', meta: 'Akademisk policy' }
+        { title: 'Slik logger du på for første gang', href: '/support/artikkel-logginn', meta: 'Lest av 1.2k brukere' },
+        { title: 'Navigering i Bønnefellesskapet', href: '/support/artikkel-chat', meta: 'Lest av 840 brukere' },
+        { title: 'Feilsøking ved Zoom- og videostrømmer', href: '/support/artikkel-zoom', meta: 'Lest av 650 brukere' }
       ]}
       cta={
         <section className="mt-10 bg-primary p-8 rounded-lg text-on-primary flex items-center justify-between shadow-lg">
-          <div className="max-w-md">
+          <div className="max-w-md text-left">
             <h4 className="font-headline-sm text-headline-sm mb-2">Trenger du ytterligere assistanse?</h4>
             <p className="text-body-sm opacity-90">Våre eksperter på akademisk administrasjon er tilgjengelige for å hjelpe deg med oppsettet av ditt vurderingssystem.</p>
           </div>
           <div className="flex gap-4">
-            <button className="bg-on-primary text-primary px-6 py-3 rounded font-bold hover:bg-opacity-90 transition-all flex items-center gap-2">
+            <button 
+              onClick={() => navigate('/student/support')}
+              className="bg-on-primary text-primary px-6 py-3 rounded font-bold hover:bg-opacity-90 transition-all flex items-center gap-2"
+            >
               <span className="material-symbols-outlined">mail</span> Kontakt Support
             </button>
-            <button className="border border-on-primary px-6 py-3 rounded font-bold hover:bg-white/10 transition-all flex items-center gap-2">
+            <button 
+              onClick={handleOpenChat}
+              className="border border-on-primary px-6 py-3 rounded font-bold hover:bg-white/10 transition-all flex items-center gap-2"
+            >
               <span className="material-symbols-outlined">forum</span> Live Chat
             </button>
           </div>

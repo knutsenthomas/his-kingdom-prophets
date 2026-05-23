@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function SupportArticleLayout({
   title,
@@ -20,7 +21,9 @@ export default function SupportArticleLayout({
               {idx > 0 && (
                 <span className="material-symbols-outlined text-[16px] align-middle">chevron_right</span>
               )}
-              {bc.href ? (
+              {bc.to ? (
+                <Link to={bc.to} className="hover:text-primary transition-colors">{bc.label}</Link>
+              ) : bc.href ? (
                 <a href={bc.href} className="hover:text-primary transition-colors">{bc.label}</a>
               ) : (
                 <span className={bc.active ? 'font-bold text-primary' : ''}>{bc.label}</span>
@@ -42,8 +45,8 @@ export default function SupportArticleLayout({
         </article>
         {feedback}
       </main>
-      {/* Sidebar */}
-      <aside className="w-full lg:w-[320px] space-y-8 pt-24 pb-20 px-8">
+      {/* Sticky Right Sidebar on desktop */}
+      <aside className="w-full lg:w-[320px] space-y-8 lg:pt-24 pb-20 px-8 lg:sticky lg:top-24 lg:self-start">
         {relatedArticles.length > 0 && (
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm">
             <h4 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4 border-b border-outline-variant pb-2">Relaterte artikler</h4>

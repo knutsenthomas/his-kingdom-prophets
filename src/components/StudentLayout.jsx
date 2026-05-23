@@ -473,7 +473,7 @@ export default function StudentLayout() {
         
         {/* Collapsible Left Sidebar */}
         <aside 
-          className="bg-white border-r border-outline-variant/20 sticky top-20 hidden md:flex flex-col justify-between shrink-0 transition-all duration-300 ease-in-out overflow-hidden z-30"
+          className="bg-white border-r border-outline-variant/20 sticky top-20 hidden md:flex flex-col shrink-0 transition-all duration-300 ease-in-out overflow-hidden z-30 h-[calc(100vh-80px)] self-start"
           style={{ 
             width: isCollapsed ? '0px' : '288px',
             opacity: isCollapsed ? 0 : 1,
@@ -481,56 +481,56 @@ export default function StudentLayout() {
             backfaceVisibility: 'hidden'
           }}
         >
-          <div className="py-8 px-6 space-y-8 w-72 shrink-0">
-            {/* Student profile summary card */}
-            <button
-              onClick={() => navigate('/student/profile')}
-              className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20"
-              title="Åpne min profil"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Award className="text-primary animate-pulse" size={20} />
+          <div className="py-8 px-6 flex flex-col justify-between h-full w-72 shrink-0 overflow-y-auto">
+            <div className="space-y-8">
+              {/* Student profile summary card */}
+              <button
+                onClick={() => navigate('/student/profile')}
+                className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20"
+                title="Åpne min profil"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Award className="text-primary animate-pulse" size={20} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-on-surface uppercase tracking-wider">{user?.name}</p>
+                    <p className="text-[11px] text-on-surface-variant font-medium">Aktiv Utrustningsprofil</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-bold text-on-surface uppercase tracking-wider">{user?.name}</p>
-                  <p className="text-[11px] text-on-surface-variant font-medium">Aktiv Utrustningsprofil</p>
+                <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+                  <div className="bg-primary h-full w-[45%]" style={{ transition: 'width 0.8s ease-in-out' }}></div>
                 </div>
-              </div>
-              <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
-                <div className="bg-primary h-full w-[45%]" style={{ transition: 'width 0.8s ease-in-out' }}></div>
-              </div>
-              <p className="text-[10px] text-on-surface-variant font-semibold mt-2">45% Total fullføringsgrad</p>
-            </button>
+                <p className="text-[10px] text-on-surface-variant font-semibold mt-2">45% Total fullføringsgrad</p>
+              </button>
 
-            {/* Side Navigation Menu */}
-            <nav className="space-y-1.5">
-              {navItems.map(item => {
-                const isActive = location.pathname === item.path;
-                const IconComponent = item.icon;
-                return (
-                  <button 
-                    key={item.path}
-                    onClick={() => navigate(item.path)} 
-                    className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
-                      isActive 
-                        ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
-                        : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
-                    }`}
-                  >
-                    <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
-                    <span><CmsText slug={item.slug} fallback={item.fallback} /></span>
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
+              {/* Side Navigation Menu */}
+              <nav className="space-y-1.5">
+                {navItems.map(item => {
+                  const isActive = location.pathname === item.path;
+                  const IconComponent = item.icon;
+                  return (
+                    <button 
+                      key={item.path}
+                      onClick={() => navigate(item.path)} 
+                      className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
+                        isActive 
+                          ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
+                          : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
+                      }`}
+                    >
+                      <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
+                      <span><CmsText slug={item.slug} fallback={item.fallback} /></span>
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
 
-          {/* Sidebar footer with minimize trigger */}
-          <div className="p-6 w-72 shrink-0">
+            {/* Sidebar footer with minimize trigger */}
             <button
               onClick={() => setIsCollapsed(true)}
-              className="flex items-center justify-center gap-1.5 w-full py-1.5 text-[10px] uppercase font-bold tracking-widest text-on-surface-variant hover:text-primary transition-all"
+              className="flex items-center justify-center gap-1.5 w-full py-2 border-t border-slate-100 text-[10px] uppercase font-bold tracking-widest text-on-surface-variant hover:text-primary transition-all mt-6"
             >
               <ChevronLeft size={14} />
               <span>Skjul meny</span>
