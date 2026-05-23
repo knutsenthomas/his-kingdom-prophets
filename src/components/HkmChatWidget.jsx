@@ -61,9 +61,17 @@ export default function HkmChatWidget() {
           position: relative !important;
         }
         .hkm-chat-toggle {
-          background: linear-gradient(135deg, #d17d39 0%, #bd4f2a 100%) !important;
+          background: #1B4965 !important;
           transform: translateZ(0) !important;
           backface-visibility: hidden !important;
+          transition: background-color 0.2s ease, transform 0.2s ease !important;
+        }
+        .hkm-chat-toggle:hover {
+          background: #123247 !important;
+          transform: translateZ(0) scale(1.05) !important;
+        }
+        .hkm-chat-toggle:active {
+          transform: translateZ(0) scale(0.95) !important;
         }
       `}</style>
 
@@ -182,7 +190,7 @@ export default function HkmChatWidget() {
       {/* Floating Toggle Button - Circular SVG with Orange Gradient */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="hkm-chat-toggle w-14 h-14 flex items-center justify-center text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer animate-fade-in"
+        className="hkm-chat-toggle w-14 h-14 flex items-center justify-center text-white shadow-xl hover:shadow-2xl cursor-pointer animate-fade-in"
         style={{
           borderRadius: '9999px'
         }}
