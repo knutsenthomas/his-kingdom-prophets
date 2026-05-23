@@ -35,23 +35,7 @@ export default function ArtikkelLoggInn() {
           </button>
         </div>
       }
-      feedback={
-        <div className="fixed bottom-6 right-24 flex flex-col items-end gap-4 z-40">
-          <div className="hidden bg-white p-4 rounded-xl shadow-xl border border-outline-variant w-64" id="feedback-bubble">
-            <p className="font-label-md text-label-md text-primary mb-2">Var denne artikkelen nyttig?</p>
-            <div className="flex gap-2">
-              <button className="flex-1 py-1 bg-surface-container rounded hover:bg-green-100 transition-colors">Ja</button>
-              <button className="flex-1 py-1 bg-surface-container rounded hover:bg-red-100 transition-colors">Nei</button>
-            </div>
-          </div>
-          <button className="w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all" onClick={() => {
-            const el = document.getElementById('feedback-bubble');
-            if (el) el.classList.toggle('hidden');
-          }}>
-            <span className="material-symbols-outlined">thumb_up</span>
-          </button>
-        </div>
-      }
+
     >
       <div className="font-serif-editor text-body-lg text-on-surface-variant leading-relaxed mb-10">
         <p>Velkommen til Scholastic Premium! Vi er glade for at du har valgt å starte din læringsreise hos oss. Denne guiden vil ta deg gjennom de grunnleggende stegene for å finne, melde deg på og starte din første leksjon i plattformen vår.</p>
