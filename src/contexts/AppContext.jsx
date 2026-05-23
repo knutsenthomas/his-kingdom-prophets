@@ -1081,13 +1081,52 @@ export const AppProvider = ({ children }) => {
 
   // Login handler with Firebase Authentication
   const login = async (email, password) => {
+    const cleanEmail = email?.trim().toLowerCase();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, cleanEmail, password);
       showToast("Logget inn via Firebase!");
     } catch (err) {
-      console.error("Firebase Auth login failed:", err.message);
+      console.error("Firebase Auth login failed:", err.code, err.message);
+      
+      // Auto-provisioning: If the user doesn't exist in Firebase Auth yet, let's check if they exist in Firestore
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
+        try {
+          const querySnapshot = await getDocs(collection(db, "users"));
+          let invitedDoc = null;
+          querySnapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            if (data.email?.toLowerCase() === cleanEmail) {
+              invitedDoc = { id: docSnap.id, data };
+            }
+          });
+
+          if (invitedDoc) {
+            // Yes! The user is pre-created by the admin in Firestore, but doesn't exist in Firebase Auth.
+            // Let's automatically register/create them in Firebase Auth on the fly!
+            showToast("Oppretter sikker innlogging for din inviterte e-post...");
+            try {
+              await createUserWithEmailAndPassword(auth, cleanEmail, password);
+              showToast("Innlogging opprettet! Velkommen!");
+              return; // Successful auto-creation automatically triggers onAuthStateChanged which handles migration
+            } catch (createErr) {
+              console.error("Auto-provisioning in Firebase Auth failed:", createErr);
+              if (createErr.code === 'auth/email-already-in-use') {
+                // If already exists, then the password they typed was simply wrong
+                showToast("Ugyldig passord for denne e-posten.");
+                throw err;
+              } else if (createErr.code === 'auth/weak-password') {
+                showToast("Passordet er for svakt (minimum 6 tegn).");
+                throw createErr;
+              }
+            }
+          }
+        } catch (fsErr) {
+          console.error("Failed to query Firestore for auto-provisioning:", fsErr);
+        }
+      }
+
       let msg = "Feil ved innlogging. Vennligst sjekk e-post og passord.";
-      if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
+      if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
         msg = "Ugyldig e-post eller passord.";
       } else if (err.code === 'auth/invalid-email') {
         msg = "Ugyldig e-postformat.";
