@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
 import { 
   ArrowLeft, ArrowRight, CheckCircle, PlayCircle, ExternalLink, FileText,
-  Eye, EyeOff, Maximize2, Minimize2, BookOpen
+  Eye, EyeOff, Maximize2, Minimize2, BookOpen, Edit3, Trash2, Bold, Italic,
+  List, Quote, ClipboardCopy, Download, X
 } from 'lucide-react';
 
 export default function LessonView() {
@@ -14,6 +15,13 @@ export default function LessonView() {
   
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [hideStudyPlan, setHideStudyPlan] = useState(false);
+  const [isNotesOpen, setIsNotesOpen] = useState(false);
+  const [notes, setNotes] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState('write'); // 'write' or 'preview'
+  
+  const textareaRef = useRef(null);
+  const saveTimeoutRef = useRef(null);
   
   // Determine selected course from location state or default to prop101
   const courseId = location.state?.courseId || 'prop101';
@@ -47,6 +55,112 @@ export default function LessonView() {
       window.dispatchEvent(new CustomEvent(eventName, { detail: false }));
     };
   }, [user?.role]);
+
+  // Load notes when courseId or currentModule changes
+  useEffect(() => {
+    const savedNotes = localStorage.getItem(`hkm-notes-${courseId}-${currentModule.id}`) || "";
+    setNotes(savedNotes);
+    setActiveTab('write'); // Reset tab
+  }, [courseId, currentModule.id]);
+
+  // Handle note change with autosave debounce
+  const handleNotesChange = (e) => {
+    const val = e.target.value;
+    setNotes(val);
+    setIsSaving(true);
+    
+    localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, val);
+    
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    saveTimeoutRef.current = setTimeout(() => {
+      setIsSaving(false);
+    }, 600);
+  };
+
+  // Cursor formatting helper for Rich Text actions
+  const insertFormatting = (syntax) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    const selected = text.substring(start, end);
+    
+    let replacement = "";
+    if (syntax === 'bold') {
+      replacement = `**${selected || 'fet tekst'}**`;
+    } else if (syntax === 'italic') {
+      replacement = `*${selected || 'kursiv tekst'}*`;
+    } else if (syntax === 'list') {
+      replacement = `\n- ${selected || 'punkt'}`;
+    } else if (syntax === 'quote') {
+      replacement = `\n> ${selected || 'sitat'}`;
+    }
+
+    const newText = text.substring(0, start) + replacement + text.substring(end);
+    setNotes(newText);
+    localStorage.setItem(`hkm-notes-${courseId}-${currentModule.id}`, newText);
+    
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + replacement.length, start + replacement.length);
+    }, 50);
+  };
+
+  // Downloader for Markdown file
+  const downloadNotes = () => {
+    if (!notes.trim()) {
+      showToast("Ingen notater å laste ned!");
+      return;
+    }
+    const blob = new Blob([notes], { type: 'text/markdown;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Notat-${currentModule.title.replace(/\s+/g, '_')}.md`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast("Notater lastet ned!");
+  };
+
+  // Clipboard copy action
+  const copyNotesToClipboard = () => {
+    if (!notes.trim()) {
+      showToast("Ingen notater å kopiere!");
+      return;
+    }
+    navigator.clipboard.writeText(notes);
+    showToast("Notater kopiert til utklippstavlen!");
+  };
+
+  // Clear notes with confirmation dialog
+  const clearNotes = () => {
+    if (window.confirm("Er du sikker på at du vil slette notatene dine for denne leksjonen? Dette kan ikke angres.")) {
+      setNotes("");
+      localStorage.removeItem(`hkm-notes-${courseId}-${currentModule.id}`);
+      showToast("Notater slettet.");
+    }
+  };
+
+  // Safe client-side markdown to html parser
+  const parseMarkdown = (text) => {
+    if (!text.trim()) return '<p class="text-outline italic text-xs py-4 text-center">Ingen notater skrevet ennå... Begynn å skrive i "Skriv" fanen!</p>';
+    
+    let html = text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+      
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    html = html.replace(/^&gt;\s+(.*?)$/gm, '<blockquote class="border-l-4 border-[#1B4965] pl-4 py-1.5 my-3 italic text-on-surface-variant bg-slate-50 rounded-r">$1</blockquote>');
+    html = html.replace(/^-\s+(.*?)$/gm, '<li class="ml-5 list-disc my-1">$1</li>');
+    html = html.replace(/\n/g, '<br />');
+    
+    return `<div class="font-sans text-xs space-y-2 leading-relaxed text-on-surface p-1">${html}</div>`;
+  };
 
   const handleToggleModule = (modId, e) => {
     e.stopPropagation(); // Avoid selecting module when clicking checkbox
@@ -265,6 +379,23 @@ export default function LessonView() {
                 <span>{hideStudyPlan ? "Vis studieplan" : "Skjul studieplan"}</span>
               </button>
 
+              {/* Notes Panel toggle */}
+              <button
+                onClick={() => {
+                  setIsNotesOpen(!isNotesOpen);
+                  showToast(isNotesOpen ? "Notater lukket" : "Notatfelt åpnet");
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all active:scale-[0.97] font-sans ${
+                  isNotesOpen 
+                    ? 'bg-[#1B4965] border-[#1B4965] text-white font-bold shadow-sm animate-fade-in' 
+                    : 'bg-white border-outline-variant/30 text-on-surface hover:bg-slate-50'
+                }`}
+                title={isNotesOpen ? "Lukk notater" : "Åpne notatfelt"}
+              >
+                <Edit3 size={14} />
+                <span>Notater</span>
+              </button>
+
               {/* Fullscreen Focus Mode toggle */}
               <button
                 onClick={toggleFocusMode}
@@ -339,6 +470,154 @@ export default function LessonView() {
 
         </div>
       </main>
+
+      {/* Right Side Notes Drawer */}
+      <aside 
+        className={`bg-white border-l border-outline-variant/20 h-[calc(100vh-80px)] sticky top-20 flex flex-col py-6 px-5 overflow-y-auto shrink-0 transition-all duration-300 ease-in-out z-30 ${
+          isNotesOpen 
+            ? 'w-full md:w-96 opacity-100 p-6' 
+            : 'w-0 opacity-0 pointer-events-none border-l-0 p-0 overflow-hidden'
+        }`}
+      >
+        <div className="flex flex-col h-full space-y-4 min-w-0">
+          
+          {/* Header */}
+          <div className="flex items-center justify-between pb-3 border-b border-outline-variant/30 shrink-0">
+            <div>
+              <h3 className="font-serif font-bold text-primary text-base flex items-center gap-1.5">
+                <Edit3 size={16} className="text-burnt-orange shrink-0" />
+                <span>Mine Notater</span>
+              </h3>
+              <p className="text-[10px] text-outline font-medium truncate max-w-[200px] mt-0.5">Leksjon: {currentModule.title}</p>
+            </div>
+            
+            <button 
+              onClick={() => setIsNotesOpen(false)}
+              className="p-1 hover:bg-surface-container rounded-lg text-primary transition-colors shrink-0"
+              title="Lukk notater"
+            >
+              <X size={18} />
+            </button>
+          </div>
+
+          {/* Autosave and Info */}
+          <div className="flex items-center justify-between text-[10px] shrink-0 font-medium">
+            <div className="flex items-center gap-1.5 text-on-surface-variant">
+              <span className={`w-2 h-2 rounded-full ${isSaving ? 'bg-amber-500 animate-pulse' : 'bg-green-500'}`}></span>
+              <span>{isSaving ? 'Lagrer notater...' : 'Autolagret i nettleser'}</span>
+            </div>
+            <span className="text-outline font-bold uppercase tracking-wider">{notes.trim().split(/\s+/).filter(Boolean).length} ord</span>
+          </div>
+
+          {/* Tab Selector */}
+          <div className="flex border-b border-outline-variant/20 text-xs font-bold shrink-0">
+            <button
+              onClick={() => setActiveTab('write')}
+              className={`flex-1 py-2 text-center border-b-2 transition-all ${
+                activeTab === 'write' 
+                  ? 'border-[#1B4965] text-[#1B4965] font-bold' 
+                  : 'border-transparent text-outline hover:text-[#1B4965]'
+              }`}
+            >
+              Skriv
+            </button>
+            <button
+              onClick={() => setActiveTab('preview')}
+              className={`flex-1 py-2 text-center border-b-2 transition-all ${
+                activeTab === 'preview' 
+                  ? 'border-[#1B4965] text-[#1B4965] font-bold' 
+                  : 'border-transparent text-outline hover:text-[#1B4965]'
+              }`}
+            >
+              Forhåndsvisning
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          <div className="flex-1 flex flex-col min-h-0 min-w-0">
+            {activeTab === 'write' ? (
+              <div className="flex flex-col flex-1 min-h-0 min-w-0 space-y-2">
+                {/* Toolbar */}
+                <div className="flex items-center gap-1 bg-surface-container-low p-1.5 rounded-lg border border-outline-variant/20 shrink-0">
+                  <button
+                    onClick={() => insertFormatting('bold')}
+                    className="p-1 hover:bg-white rounded hover:shadow-xs text-primary font-bold font-serif text-xs min-w-6"
+                    title="Fet skrift"
+                  >
+                    B
+                  </button>
+                  <button
+                    onClick={() => insertFormatting('italic')}
+                    className="p-1 hover:bg-white rounded hover:shadow-xs text-primary italic font-serif text-xs min-w-6"
+                    title="Kursiv"
+                  >
+                    I
+                  </button>
+                  <button
+                    onClick={() => insertFormatting('list')}
+                    className="p-1 hover:bg-white rounded hover:shadow-xs text-primary flex justify-center min-w-6"
+                    title="Punktliste"
+                  >
+                    <List size={14} />
+                  </button>
+                  <button
+                    onClick={() => insertFormatting('quote')}
+                    className="p-1 hover:bg-white rounded hover:shadow-xs text-primary flex justify-center min-w-6"
+                    title="Sitatblokk"
+                  >
+                    <Quote size={14} />
+                  </button>
+                  
+                  <div className="flex-grow"></div>
+                  
+                  <button
+                    onClick={clearNotes}
+                    className="p-1 hover:bg-red-50 text-red-500 hover:text-red-600 rounded flex justify-center min-w-6 transition-colors"
+                    title="Tøm alle notater"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+
+                {/* Textarea */}
+                <textarea
+                  ref={textareaRef}
+                  value={notes}
+                  onChange={handleNotesChange}
+                  placeholder="Skriv dine leksjonsnotater her... Støtter markdown formatting (**fet**, *kursiv*, - punkter og > sitater)."
+                  className="w-full flex-1 p-3 rounded-xl border border-outline-variant/30 shadow-xs focus:border-primary focus:ring-1 focus:ring-primary/20 text-xs font-sans leading-relaxed outline-none resize-none bg-surface-container-lowest/30"
+                />
+              </div>
+            ) : (
+              <div 
+                className="w-full flex-1 p-3 rounded-xl border border-outline-variant/20 bg-surface-container-lowest/10 overflow-y-auto min-h-0 min-w-0"
+                dangerouslySetInnerHTML={{ __html: parseMarkdown(notes) }}
+              />
+            )}
+          </div>
+
+          {/* Footer Actions */}
+          <div className="grid grid-cols-2 gap-2 shrink-0 pt-3 border-t border-outline-variant/20 text-xs font-bold font-sans">
+            <button
+              onClick={copyNotesToClipboard}
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 border border-outline-variant/30 rounded-lg bg-white text-on-surface hover:bg-slate-50 transition-all active:scale-[0.97]"
+              title="Kopier til utklippstavle"
+            >
+              <ClipboardCopy size={14} />
+              <span>Kopier</span>
+            </button>
+            <button
+              onClick={downloadNotes}
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-primary text-white rounded-lg hover:bg-primary-container transition-all active:scale-[0.97]"
+              title="Last ned som markdown-fil"
+            >
+              <Download size={14} />
+              <span>Last ned (.md)</span>
+            </button>
+          </div>
+
+        </div>
+      </aside>
     </div>
   );
 }
