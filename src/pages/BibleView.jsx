@@ -743,12 +743,9 @@ export default function BibleView() {
     }
   };
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return;
-
-    // 1. Try parsing as a specific Bible reference (e.g. "Johannes 3:16" or "1. Joh 5:7")
-    const parsedRef = parseBibleReference(searchQuery);
+  const loadBibleReference = (refString) => {
+    if (!refString) return false;
+    const parsedRef = parseBibleReference(refString);
     if (parsedRef) {
       const foundBook = findBibleBook(parsedRef.bookStr);
       if (foundBook) {
@@ -758,14 +755,33 @@ export default function BibleView() {
         
         if (parsedRef.verse) {
           setHighlightedVerse(parsedRef.verse);
-          showToast(`Viser ${foundBook.nor} ${clampedChapter} med vers ${parsedRef.verse} uthevet for kontekst!`);
+          showToast(`Viser ${foundBook.nor} ${clampedChapter} med vers ${parsedRef.verse} uthevet!`);
         } else {
           setHighlightedVerse(null);
           showToast(`Viser ${foundBook.nor} ${clampedChapter}!`);
         }
-        setSearchQuery('');
-        return;
+        
+        // Scroll the reading pane into focus so the user sees it immediately
+        setTimeout(() => {
+          if (readerRef.current) {
+            readerRef.current.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 150);
+        return true;
       }
+    }
+    return false;
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    // 1. Try loading directly as a specific Bible reference
+    const success = loadBibleReference(searchQuery);
+    if (success) {
+      setSearchQuery('');
+      return;
     }
 
     // 2. Fallback to API-based keyword or complex query search
@@ -1433,8 +1449,11 @@ export default function BibleView() {
                                   <div 
                                     key={idx} 
                                     onClick={() => {
-                                      setSearchQuery(cross.ref);
-                                      showToast(`Søker opp kryssreferanse: ${cross.ref}`);
+                                      loadBibleReference(cross.ref);
+                                      // On mobile screens, close the bottom sheet drawer so the highlighted scripture is visible immediately!
+                                      if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+                                        setShowStudyPanel(false);
+                                      }
                                     }}
                                     className="p-2.5 bg-slate-50 border hover:bg-slate-100 hover:border-primary/20 rounded-xl cursor-pointer transition-all flex flex-col space-y-0.5 group"
                                   >
