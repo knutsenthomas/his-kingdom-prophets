@@ -54,44 +54,44 @@ def create_fasting_pdf(output_path):
 
     styles = getSampleStyleSheet()
     
-    # Custom Styles highly optimized for a perfect single-page fit
+    # Premium large typography filling the page beautifully
     title_style = ParagraphStyle(
         'DocTitle',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=15,
-        leading=18,
+        fontSize=20,
+        leading=24,
         textColor=colors.HexColor("#3c096c"),
-        spaceAfter=4
+        spaceAfter=3
     )
     
     subtitle_style = ParagraphStyle(
         'DocSubTitle',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=9,
-        leading=11,
+        fontSize=10.5,
+        leading=14,
         textColor=colors.HexColor("#c5a059"),
-        spaceAfter=6
+        spaceAfter=4
     )
 
     h1_style = ParagraphStyle(
         'Heading1',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=11,
-        leading=14,
+        fontSize=12,
+        leading=16,
         textColor=colors.HexColor("#3c096c"),
-        spaceBefore=6,
-        spaceAfter=3
+        spaceBefore=5,
+        spaceAfter=2
     )
 
     body_style = ParagraphStyle(
         'Body',
         parent=styles['Normal'],
         fontName='Helvetica',
-        fontSize=8.5,
-        leading=11.5,
+        fontSize=9.5,
+        leading=13.5,
         textColor=colors.HexColor("#333333"),
         spaceAfter=4
     )
@@ -108,7 +108,7 @@ def create_fasting_pdf(output_path):
     
     story.append(Paragraph("Bibelsk Faste og Åndelig Disiplin", title_style))
     story.append(Paragraph("En praktisk og teologisk guide til fasting, bønn og åpenbaring", subtitle_style))
-    story.append(HRFlowable(width="100%", thickness=0.75, color=colors.HexColor("#c5a059"), spaceAfter=6))
+    story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor("#c5a059"), spaceAfter=5))
 
     # Intro Section
     intro_text = (
@@ -141,17 +141,17 @@ def create_fasting_pdf(output_path):
         ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#3c096c")),
         ('TEXTCOLOR', (0,0), (-1,0), colors.white),
         ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0,0), (-1,0), 8),
-        ('TOPPADDING', (0,0), (-1,-1), 2),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 2),
+        ('FONTSIZE', (0,0), (-1,0), 8.5),
+        ('TOPPADDING', (0,0), (-1,-1), 1.5),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 1.5),
         ('BACKGROUND', (0,1), (-1,-1), colors.HexColor("#fdfbf7")),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#dec2ef")),
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
         ('FONTNAME', (0,1), (-1,-1), 'Helvetica'),
-        ('FONTSIZE', (0,1), (-1,-1), 7.5),
+        ('FONTSIZE', (0,1), (-1,-1), 8),
     ]))
     story.append(t)
-    story.append(Spacer(1, 4))
+    story.append(Spacer(1, 2))
 
     # Section 2
     story.append(Paragraph("2. Praktiske retningslinjer for faste", h1_style))
@@ -189,43 +189,44 @@ def create_intercession_pdf(output_path):
 
     styles = getSampleStyleSheet()
     
+    # Premium large typography filling the page beautifully
     title_style = ParagraphStyle(
         'DocTitle',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=15,
-        leading=18,
+        fontSize=20,
+        leading=24,
         textColor=colors.HexColor("#3c096c"),
-        spaceAfter=4
+        spaceAfter=3
     )
     
     subtitle_style = ParagraphStyle(
         'DocSubTitle',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=9,
-        leading=11,
+        fontSize=10.5,
+        leading=14,
         textColor=colors.HexColor("#c5a059"),
-        spaceAfter=6
+        spaceAfter=4
     )
 
     h1_style = ParagraphStyle(
         'Heading1',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=11,
-        leading=14,
+        fontSize=12,
+        leading=16,
         textColor=colors.HexColor("#3c096c"),
-        spaceBefore=6,
-        spaceAfter=3
+        spaceBefore=5,
+        spaceAfter=2
     )
 
     body_style = ParagraphStyle(
         'Body',
         parent=styles['Normal'],
         fontName='Helvetica',
-        fontSize=8.5,
-        leading=11.5,
+        fontSize=9.5,
+        leading=13.5,
         textColor=colors.HexColor("#333333"),
         spaceAfter=4
     )
@@ -242,11 +243,11 @@ def create_intercession_pdf(output_path):
     
     story.append(Paragraph("Profetisk Forbønn og Bønneskjold", title_style))
     story.append(Paragraph("Å be strategisk under Helligåndens inspirasjon og reise et bønnevern", subtitle_style))
-    story.append(HRFlowable(width="100%", thickness=0.75, color=colors.HexColor("#c5a059"), spaceAfter=6))
+    story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor("#c5a059"), spaceAfter=5))
 
     # Intro Section
     intro_text = (
-        "Profetisk forbønn handler om å lytte to Guds hjerte før vi ber, slik at våre bønner samstemmer "
+        "Profetisk forbønn handler om å lytte til Guds hjerte før vi ber, slik at våre bønner samstemmer "
         "med Hans vilje i himmelen. Når vi ber det Gud viser oss, utløses en enorm åndelig autoritet. "
         "Dette studieheftet gir deg det bibelske grunnlaget for å bygge et personlig og menighetsbasert "
         "bønneskjold."
@@ -276,17 +277,17 @@ def create_intercession_pdf(output_path):
         ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#3c096c")),
         ('TEXTCOLOR', (0,0), (-1,0), colors.white),
         ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0,0), (-1,0), 8),
-        ('TOPPADDING', (0,0), (-1,-1), 2),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 2),
+        ('FONTSIZE', (0,0), (-1,0), 8.5),
+        ('TOPPADDING', (0,0), (-1,-1), 1.5),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 1.5),
         ('BACKGROUND', (0,1), (-1,-1), colors.HexColor("#fdfbf7")),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#dec2ef")),
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
         ('FONTNAME', (0,1), (-1,-1), 'Helvetica'),
-        ('FONTSIZE', (0,1), (-1,-1), 7.5),
+        ('FONTSIZE', (0,1), (-1,-1), 8),
     ]))
     story.append(t)
-    story.append(Spacer(1, 4))
+    story.append(Spacer(1, 2))
 
     # Section 2
     story.append(Paragraph("2. Å etablere et bønneskjold", h1_style))
