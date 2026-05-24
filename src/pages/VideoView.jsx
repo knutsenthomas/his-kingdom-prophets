@@ -142,11 +142,59 @@ export default function VideoView() {
           <div ref={playerRef} className="relative bg-black rounded-2xl overflow-hidden aspect-video shadow-xl group border border-outline-variant/10">
             {/* Thumbnail / Video Stream Mock */}
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-tr from-slate-950 via-[#240046] to-[#561291]">
-              <div className="text-center bg-[#240046]/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 max-w-md space-y-3.5 relative z-20 mx-4 shadow-2xl animate-fade-in">
-                <p className="text-[10px] sm:text-xs uppercase tracking-widest font-bold text-[#dec2ef]">{classroomCourse?.title}</p>
-                <h3 className="font-serif text-lg sm:text-2.5xl font-extrabold text-white leading-snug tracking-tight">{classroomModule?.title}</h3>
-                <p className="text-xs text-white/80 font-semibold">Foreleser: {classroomCourse?.instructor}</p>
-              </div>
+              {isPlaying ? (
+                <div className="text-center space-y-4 relative z-20 mx-4 p-6 animate-fade-in flex flex-col items-center">
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#561291]/30 border border-[#561291]/50 text-[#e0aaff] text-[10px] font-bold tracking-widest uppercase animate-pulse">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block animate-ping" />
+                    Spiller av undervisning
+                  </div>
+                  <h3 className="font-serif text-base sm:text-xl font-bold text-white/90 max-w-md">{classroomModule?.title}</h3>
+                  
+                  {/* Premium live simulated equalizer / audio waveform */}
+                  <div className="flex items-end justify-center gap-1.5 h-10 my-2 select-none">
+                    {[16, 28, 14, 35, 18, 38, 22, 32, 15, 26, 12, 20].map((h, i) => (
+                      <motion.div 
+                        key={i}
+                        animate={{ 
+                          height: [10, h, 10] 
+                        }}
+                        transition={{ 
+                          duration: 0.6 + i * 0.05, 
+                          repeat: Infinity,
+                          repeatType: "reverse",
+                          ease: "easeInOut"
+                        }}
+                        className="w-1 sm:w-1.5 bg-[#c5a059] rounded-full"
+                      />
+                    ))}
+                  </div>
+                  
+                  <p className="text-[10px] text-white/50 font-mono">Tid: {currentTime} / 45:00</p>
+                  <button 
+                    onClick={() => setIsPlaying(false)}
+                    className="px-4 py-2 rounded-full bg-white text-[#3c096c] text-[11px] font-bold uppercase tracking-wider active:scale-95 transition-all shadow-md hover:bg-slate-50 flex items-center gap-1.5"
+                  >
+                    <Pause size={12} className="fill-[#3c096c] text-[#3c096c]" />
+                    Pause undervisning
+                  </button>
+                </div>
+              ) : (
+                <div className="text-center bg-[#240046]/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 max-w-md space-y-3.5 relative z-20 mx-4 shadow-2xl animate-fade-in flex flex-col items-center">
+                  <p className="text-[10px] sm:text-xs uppercase tracking-widest font-bold text-[#dec2ef]">{classroomCourse?.title}</p>
+                  <h3 className="font-serif text-lg sm:text-2.5xl font-extrabold text-white leading-snug tracking-tight">{classroomModule?.title}</h3>
+                  <p className="text-xs text-white/80 font-semibold font-sans">Foreleser: {classroomCourse?.instructor}</p>
+                  <div className="pt-2 flex justify-center">
+                    <button 
+                      type="button"
+                      onClick={() => setIsPlaying(true)} 
+                      className="h-14 w-14 rounded-full bg-[#c5a059] hover:bg-[#b08b45] text-white flex items-center justify-center shadow-lg active:scale-95 transition-all hover:scale-105 relative z-30"
+                      title="Spill av video"
+                    >
+                      <Play size={24} className="fill-white translate-x-0.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
               {/* Glowing background scripture elements - extremely subtle watermark */}
               <div className="absolute inset-0 opacity-[0.03] font-serif text-white flex items-center justify-center text-3xl md:text-4xl whitespace-pre-wrap select-none p-12 pointer-events-none z-10">
                 {"Apostlenes gjerninger 2:17\nÅpenbaringen 1:1\n1. Kor 14"}
@@ -189,12 +237,7 @@ export default function VideoView() {
               </div>
             </div>
 
-            {/* Central Play button */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity z-10">
-              <button onClick={() => setIsPlaying(!isPlaying)} className="h-16 w-16 bg-primary/95 text-white rounded-full flex items-center justify-center backdrop-blur-sm pointer-events-auto shadow-lg">
-                {isPlaying ? <Pause size={28} /> : <Play size={28} className="translate-x-0.5" />}
-              </button>
-            </div>
+
           </div>
 
           {/* Classroom resource tabs */}
