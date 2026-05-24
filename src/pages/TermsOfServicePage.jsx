@@ -4,6 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
 import { Scale, ArrowLeft, Globe, HelpCircle, AlertOctagon, UserPlus } from 'lucide-react';
 import logo from '@/assets/logo.png';
+import CmsText from '@/components/CmsText';
 
 export default function TermsOfServicePage() {
   const navigate = useNavigate();
@@ -16,9 +17,14 @@ export default function TermsOfServicePage() {
       {/* Header */}
       <header className="bg-white border-b border-slate-200/80 sticky top-0 z-40 shadow-sm">
         <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-12 h-20 max-w-[1440px] mx-auto">
-          <div className="font-serif text-xl sm:text-2xl text-primary font-bold cursor-pointer flex items-center gap-2.5" onClick={() => navigate('/')}>
-            <img src={logo} alt="His Kingdom Prophets Logo" className="w-8 h-8 object-contain shrink-0" />
-            <span>His Kingdom Prophets</span>
+          <div className="font-serif text-xs min-[360px]:text-sm sm:text-lg md:text-xl lg:text-2xl text-primary font-bold cursor-pointer shrink-0 flex items-center gap-1.5 sm:gap-2.5" onClick={() => navigate('/')}>
+            <img src={logo} alt="His Kingdom Prophets Logo" className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0" />
+            <span className="hidden sm:inline">
+              <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
+            </span>
+            <span className="inline sm:hidden">
+              <CmsText slug="layout-logo-mobile-title" fallback="HKP" />
+            </span>
           </div>
 
           <div className="flex items-center gap-4">
@@ -53,7 +59,7 @@ export default function TermsOfServicePage() {
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mx-auto sm:mx-0">
               <Scale size={24} />
             </div>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-primary">
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary break-words">
               {isEn ? 'Terms of Service' : 'Vilkår og Betingelser'}
             </h1>
             <p className="text-sm text-slate-500 font-medium">
