@@ -35,8 +35,7 @@ export function generateFastingPdf(cmsContent, language) {
     format: 'a4'
   });
 
-  // Numbered Canvas Page Setup (A4 size: 595.28 x 841.89 points)
-  // Left margin = 54, right margin = 541, printable width = 487 pt
+  // A4 size: 595.28 x 841.89 points
   const startX = 54;
   const endX = 541;
   const printWidth = 487;
@@ -50,53 +49,6 @@ export function generateFastingPdf(cmsContent, language) {
   doc.setLineWidth(0.75);
   doc.line(startX, 58, endX, 58);
 
-  // Core drawing position y
-  let y = 92;
-  const leading = 16.5;
-
-  const drawParagraph = (text, options = {}) => {
-    const fontSize = options.fontSize || 10.5;
-    const fontStyle = options.fontStyle || 'normal';
-    const color = options.color || '#333333';
-    const spaceAfter = options.spaceAfter !== undefined ? options.spaceAfter : 10;
-    const spaceBefore = options.spaceBefore !== undefined ? options.spaceBefore : 0;
-    
-    y += spaceBefore;
-    doc.setFont('helvetica', fontStyle);
-    doc.setFontSize(fontSize);
-    doc.setTextColor(color);
-    
-    const lines = doc.splitTextToSize(text, printWidth);
-    lines.forEach((line) => {
-      doc.text(line, startX, y);
-      y += leading;
-    });
-    
-    y += spaceAfter - leading;
-  };
-
-  // 1. Doc Title
-  drawParagraph(title, { fontSize: 22, fontStyle: 'bold', color: '#3c096c', spaceAfter: 8 });
-  
-  // 2. Subtitle
-  drawParagraph(subtitle, { fontSize: 11.5, fontStyle: 'bold', color: '#c5a059', spaceAfter: 12 });
-  
-  // 3. Gold Line divider
-  doc.setDrawColor('#c5a059');
-  doc.setLineWidth(1.25);
-  doc.line(startX, y, endX, y);
-  y += 16;
-
-  // 4. Intro Text
-  drawParagraph(intro, { spaceAfter: 18 });
-
-  // 5. Section 1 Title
-  drawParagraph(sec1Title, { fontSize: 13, fontStyle: 'bold', color: '#3c096c', spaceBefore: 12, spaceAfter: 8 });
-
-  // 6. Section 1 Text
-  drawParagraph(sec1Text, { spaceAfter: 18 });
-
-  // 7. Table of Fasts
   const tableData = isEn ? [
     ["Fasting Type", "Scripture", "Purpose & Result"],
     ["Moses' fast (40 days)", "Exo 34:28", "Receive God's law, intimate fellowship with God."],
@@ -110,70 +62,146 @@ export function generateFastingPdf(cmsContent, language) {
     ["Esters faste (3 dager)", "Est 4,16", "Krisebønn, beskyttelse og gjennombrudd."],
     ["Jesu faste (40 dager)", "Luk 4,1-2", "Utrustning før tjenestestart, seier over fristelse."]
   ];
-  
+
   const colWidths = [125, 83, 279]; // sum = 487 pt
-  let tableY = y + 4;
-  
-  tableData.forEach((row, rowIndex) => {
-    const isHeader = rowIndex === 0;
-    let currentX = startX;
-    
-    // Calculate max lines for this row to set height dynamically
-    let maxLines = 1;
-    colWidths.forEach((w, colIndex) => {
-      const text = row[colIndex];
-      const lines = doc.splitTextToSize(text, w - 12);
-      if (lines.length > maxLines) {
-        maxLines = lines.length;
-      }
-    });
-    
-    const rowHeight = isHeader ? 22 : (maxLines * 13 + 11);
-    
-    colWidths.forEach((w, colIndex) => {
-      // Draw background
-      doc.setFillColor(isHeader ? '#3c096c' : '#fdfbf7');
-      doc.rect(currentX, tableY, w, rowHeight, 'F');
-      
-      // Draw grid borders
-      doc.setDrawColor('#dec2ef');
-      doc.setLineWidth(0.5);
-      doc.rect(currentX, tableY, w, rowHeight, 'D');
-      
-      // Write text
-      doc.setFont('helvetica', isHeader ? 'bold' : 'normal');
-      doc.setFontSize(isHeader ? 9 : 8.5);
-      doc.setTextColor(isHeader ? '#ffffff' : '#333333');
-      
-      const lines = doc.splitTextToSize(row[colIndex], w - 12);
-      lines.forEach((line, lineIndex) => {
-        // Vertical centering alignment
-        const textY = tableY + (isHeader ? 14 : 12.5) + (lineIndex * 13);
-        doc.text(line, currentX + 6, textY);
-      });
-      
-      currentX += w;
-    });
-    tableY += rowHeight;
-  });
-  y = tableY + 18;
 
-  // 8. Section 2 Title
-  drawParagraph(sec2Title, { fontSize: 13, fontStyle: 'bold', color: '#3c096c', spaceBefore: 12, spaceAfter: 8 });
+  // Define layout items for visual flex layout engine
+  const layoutItems = [];
+  layoutItems.push({ type: 'text', text: title, fontSize: 22, fontStyle: 'bold', color: '#3c096c', leading: 26, weightAfter: 0.4 });
+  layoutItems.push({ type: 'text', text: subtitle, fontSize: 11.5, fontStyle: 'bold', color: '#c5a059', leading: 15, weightAfter: 0.6 });
+  layoutItems.push({ type: 'divider', height: 1.25, weightAfter: 0.8 });
+  layoutItems.push({ type: 'text', text: intro, fontSize: 10.5, leading: 17, weightAfter: 1.4 });
+  layoutItems.push({ type: 'text', text: sec1Title, fontSize: 13, fontStyle: 'bold', color: '#3c096c', leading: 18, weightAfter: 0.5 });
+  layoutItems.push({ type: 'text', text: sec1Text, fontSize: 10.5, leading: 17, weightAfter: 1.2 });
+  layoutItems.push({ type: 'table', tableData, colWidths, weightAfter: 1.4 });
+  layoutItems.push({ type: 'text', text: sec2Title, fontSize: 13, fontStyle: 'bold', color: '#3c096c', leading: 18, weightAfter: 0.5 });
 
-  // 9. Section 2 Text (interpreting <br/> tags properly)
   const sec2Paragraphs = sec2Text.split(/<br\s*\/?>/i);
-  sec2Paragraphs.forEach((pText) => {
-    const cleanText = pText.replace(/<\/?b>/gi, "");
-    drawParagraph(cleanText, { spaceAfter: 10 });
+  sec2Paragraphs.forEach((pText, pIndex) => {
+    const cleanText = pText.replace(/<\/?b>/gi, "").trim();
+    if (!cleanText) return;
+    const isLast = pIndex === sec2Paragraphs.length - 1;
+    layoutItems.push({ 
+      type: 'text', 
+      text: cleanText, 
+      fontSize: 10.5, 
+      leading: 17, 
+      weightAfter: isLast ? 1.2 : 0.8 
+    });
   });
-  y += 8;
 
-  // 10. Prayer / Proclamation
-  drawParagraph(prayerTitle, { fontSize: 10.5, fontStyle: 'bold', spaceBefore: 12, spaceAfter: 6 });
-  drawParagraph(prayerText, { fontSize: 10.5, fontStyle: 'italic', color: '#555555', spaceAfter: 0 });
+  layoutItems.push({ type: 'text', text: prayerTitle, fontSize: 10.5, fontStyle: 'bold', leading: 15, weightAfter: 0.5 });
+  layoutItems.push({ type: 'text', text: prayerText, fontSize: 10.5, fontStyle: 'italic', color: '#555555', leading: 17, weightAfter: 0 });
 
-  // Draw Footer Page Number at the bottom of A4 (y = 805)
+  // 1. Calculate heights
+  let totalItemsHeight = 0;
+  layoutItems.forEach(item => {
+    if (item.type === 'text') {
+      doc.setFont('helvetica', item.fontStyle || 'normal');
+      doc.setFontSize(item.fontSize);
+      const lines = doc.splitTextToSize(item.text, printWidth);
+      item.computedHeight = lines.length * item.leading;
+    } else if (item.type === 'divider') {
+      item.computedHeight = item.height;
+    } else if (item.type === 'table') {
+      let tableH = 0;
+      item.tableData.forEach((row, rowIndex) => {
+        const isHeader = rowIndex === 0;
+        let maxLines = 1;
+        item.colWidths.forEach((w, colIndex) => {
+          doc.setFont('helvetica', isHeader ? 'bold' : 'normal');
+          doc.setFontSize(isHeader ? 9 : 8.5);
+          const lines = doc.splitTextToSize(row[colIndex], w - 12);
+          if (lines.length > maxLines) maxLines = lines.length;
+        });
+        tableH += isHeader ? 22 : (maxLines * 13 + 11);
+      });
+      item.computedHeight = tableH;
+    }
+    totalItemsHeight += item.computedHeight;
+  });
+
+  // 2. Flex distribution
+  const startY = 100;
+  const endY = 780;
+  const availableHeight = endY - startY;
+  const remainingSpace = Math.max(0, availableHeight - totalItemsHeight);
+
+  let totalWeight = 0;
+  layoutItems.forEach(item => {
+    if (item.weightAfter > 0) {
+      totalWeight += item.weightAfter;
+    }
+  });
+
+  const gapUnit = totalWeight > 0 ? (remainingSpace / totalWeight) : 0;
+
+  // 3. Render
+  let currentY = startY;
+  layoutItems.forEach(item => {
+    if (item.type === 'text') {
+      doc.setFont('helvetica', item.fontStyle || 'normal');
+      doc.setFontSize(item.fontSize);
+      doc.setTextColor(item.color || '#333333');
+      
+      const lines = doc.splitTextToSize(item.text, printWidth);
+      lines.forEach(line => {
+        // Vertical baseline adjustment
+        doc.text(line, startX, currentY + item.fontSize * 0.85);
+        currentY += item.leading;
+      });
+    } else if (item.type === 'divider') {
+      doc.setDrawColor('#c5a059');
+      doc.setLineWidth(item.computedHeight);
+      doc.line(startX, currentY, endX, currentY);
+      currentY += item.computedHeight;
+    } else if (item.type === 'table') {
+      let tableY = currentY;
+      item.tableData.forEach((row, rowIndex) => {
+        const isHeader = rowIndex === 0;
+        let colX = startX;
+        
+        let maxLines = 1;
+        item.colWidths.forEach((w, colIndex) => {
+          doc.setFont('helvetica', isHeader ? 'bold' : 'normal');
+          doc.setFontSize(isHeader ? 9 : 8.5);
+          const lines = doc.splitTextToSize(row[colIndex], w - 12);
+          if (lines.length > maxLines) maxLines = lines.length;
+        });
+        
+        const rowHeight = isHeader ? 22 : (maxLines * 13 + 11);
+        
+        item.colWidths.forEach((w, colIndex) => {
+          doc.setFillColor(isHeader ? '#3c096c' : '#fdfbf7');
+          doc.rect(colX, tableY, w, rowHeight, 'F');
+          
+          doc.setDrawColor('#dec2ef');
+          doc.setLineWidth(0.5);
+          doc.rect(colX, tableY, w, rowHeight, 'D');
+          
+          doc.setFont('helvetica', isHeader ? 'bold' : 'normal');
+          doc.setFontSize(isHeader ? 9 : 8.5);
+          doc.setTextColor(isHeader ? '#ffffff' : '#333333');
+          
+          const lines = doc.splitTextToSize(row[colIndex], w - 12);
+          lines.forEach((line, lineIndex) => {
+            const textY = tableY + (isHeader ? 14 : 12.5) + (lineIndex * 13);
+            doc.text(line, colX + 6, textY);
+          });
+          
+          colX += w;
+        });
+        tableY += rowHeight;
+      });
+      currentY += item.computedHeight;
+    }
+
+    if (item.weightAfter > 0) {
+      currentY += gapUnit * item.weightAfter;
+    }
+  });
+
+  // Draw Footer Page Number at bottom of A4
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8.5);
   doc.setTextColor('#666666');
@@ -219,8 +247,7 @@ export function generateIntercessionPdf(cmsContent, language) {
     format: 'a4'
   });
 
-  // Numbered Canvas Page Setup (A4 size: 595.28 x 841.89 points)
-  // Left margin = 54, right margin = 541, printable width = 487 pt
+  // A4 size: 595.28 x 841.89 points
   const startX = 54;
   const endX = 541;
   const printWidth = 487;
@@ -234,53 +261,6 @@ export function generateIntercessionPdf(cmsContent, language) {
   doc.setLineWidth(0.75);
   doc.line(startX, 58, endX, 58);
 
-  // Core drawing position y
-  let y = 92;
-  const leading = 16.5;
-
-  const drawParagraph = (text, options = {}) => {
-    const fontSize = options.fontSize || 10.5;
-    const fontStyle = options.fontStyle || 'normal';
-    const color = options.color || '#333333';
-    const spaceAfter = options.spaceAfter !== undefined ? options.spaceAfter : 10;
-    const spaceBefore = options.spaceBefore !== undefined ? options.spaceBefore : 0;
-    
-    y += spaceBefore;
-    doc.setFont('helvetica', fontStyle);
-    doc.setFontSize(fontSize);
-    doc.setTextColor(color);
-    
-    const lines = doc.splitTextToSize(text, printWidth);
-    lines.forEach((line) => {
-      doc.text(line, startX, y);
-      y += leading;
-    });
-    
-    y += spaceAfter - leading;
-  };
-
-  // 1. Doc Title
-  drawParagraph(title, { fontSize: 22, fontStyle: 'bold', color: '#3c096c', spaceAfter: 8 });
-  
-  // 2. Subtitle
-  drawParagraph(subtitle, { fontSize: 11.5, fontStyle: 'bold', color: '#c5a059', spaceAfter: 12 });
-  
-  // 3. Gold Line divider
-  doc.setDrawColor('#c5a059');
-  doc.setLineWidth(1.25);
-  doc.line(startX, y, endX, y);
-  y += 16;
-
-  // 4. Intro Text
-  drawParagraph(intro, { spaceAfter: 18 });
-
-  // 5. Section 1 Title
-  drawParagraph(sec1Title, { fontSize: 13, fontStyle: 'bold', color: '#3c096c', spaceBefore: 12, spaceAfter: 8 });
-
-  // 6. Section 1 Text
-  drawParagraph(sec1Text, { spaceAfter: 18 });
-
-  // 7. Table of Intercession elements
   const tableData = isEn ? [
     ["Step", "Activity", "Scripture", "Description"],
     ["1", "Quiet listening", "Psalm 46:10", "Be still and know that the Lord is God. Wait for the Spirit's impulse."],
@@ -294,66 +274,145 @@ export function generateIntercessionPdf(cmsContent, language) {
     ["3", "Proklamasjon", "Job 22,28", "Tal ut det Herren har vist deg med frimodighet og autoritet."],
     ["4", "Takk & Lovpris", "Fil 4,6", "Fullfør bønnen med tilbedelse, i tro på at Gud har hørt."]
   ];
-  
+
   const colWidths = [35, 90, 83, 279]; // sum = 487 pt
-  let tableY = y + 4;
-  
-  tableData.forEach((row, rowIndex) => {
-    const isHeader = rowIndex === 0;
-    let currentX = startX;
-    
-    // Calculate max lines for this row to set height dynamically
-    let maxLines = 1;
-    colWidths.forEach((w, colIndex) => {
-      const text = row[colIndex];
-      const lines = doc.splitTextToSize(text, w - 12);
-      if (lines.length > maxLines) {
-        maxLines = lines.length;
-      }
+
+  // Define layout items for visual flex layout engine
+  const layoutItems = [];
+  layoutItems.push({ type: 'text', text: title, fontSize: 22, fontStyle: 'bold', color: '#3c096c', leading: 26, weightAfter: 0.4 });
+  layoutItems.push({ type: 'text', text: subtitle, fontSize: 11.5, fontStyle: 'bold', color: '#c5a059', leading: 15, weightAfter: 0.6 });
+  layoutItems.push({ type: 'divider', height: 1.25, weightAfter: 0.8 });
+  layoutItems.push({ type: 'text', text: intro, fontSize: 10.5, leading: 17, weightAfter: 1.4 });
+  layoutItems.push({ type: 'text', text: sec1Title, fontSize: 13, fontStyle: 'bold', color: '#3c096c', leading: 18, weightAfter: 0.5 });
+  layoutItems.push({ type: 'text', text: sec1Text, fontSize: 10.5, leading: 17, weightAfter: 1.2 });
+  layoutItems.push({ type: 'table', tableData, colWidths, weightAfter: 1.4 });
+  layoutItems.push({ type: 'text', text: sec2Title, fontSize: 13, fontStyle: 'bold', color: '#3c096c', leading: 18, weightAfter: 0.5 });
+
+  const sec2Paragraphs = sec2Text.split(/<br\s*\/?>/i);
+  sec2Paragraphs.forEach((pText, pIndex) => {
+    const cleanText = pText.replace(/<\/?b>/gi, "").trim();
+    if (!cleanText) return;
+    const isLast = pIndex === sec2Paragraphs.length - 1;
+    layoutItems.push({ 
+      type: 'text', 
+      text: cleanText, 
+      fontSize: 10.5, 
+      leading: 17, 
+      weightAfter: isLast ? 1.2 : 0.8 
     });
-    
-    const rowHeight = isHeader ? 22 : (maxLines * 13 + 11);
-    
-    colWidths.forEach((w, colIndex) => {
-      // Draw background
-      doc.setFillColor(isHeader ? '#3c096c' : '#fdfbf7');
-      doc.rect(currentX, tableY, w, rowHeight, 'F');
-      
-      // Draw grid borders
-      doc.setDrawColor('#dec2ef');
-      doc.setLineWidth(0.5);
-      doc.rect(currentX, tableY, w, rowHeight, 'D');
-      
-      // Write text
-      doc.setFont('helvetica', isHeader ? 'bold' : 'normal');
-      doc.setFontSize(isHeader ? 9 : 8.5);
-      doc.setTextColor(isHeader ? '#ffffff' : '#333333');
-      
-      const lines = doc.splitTextToSize(row[colIndex], w - 12);
-      lines.forEach((line, lineIndex) => {
-        // Vertical centering alignment
-        const textY = tableY + (isHeader ? 14 : 12.5) + (lineIndex * 13);
-        doc.text(line, currentX + 6, textY);
-      });
-      
-      currentX += w;
-    });
-    tableY += rowHeight;
   });
-  y = tableY + 18;
 
-  // 8. Section 2 Title
-  drawParagraph(sec2Title, { fontSize: 13, fontStyle: 'bold', color: '#3c096c', spaceBefore: 12, spaceAfter: 8 });
+  layoutItems.push({ type: 'text', text: prayerTitle, fontSize: 10.5, fontStyle: 'bold', leading: 15, weightAfter: 0.5 });
+  layoutItems.push({ type: 'text', text: prayerText, fontSize: 10.5, fontStyle: 'italic', color: '#555555', leading: 17, weightAfter: 0 });
 
-  // 9. Section 2 Text
-  drawParagraph(sec2Text, { spaceAfter: 10 });
-  y += 8;
+  // 1. Calculate heights
+  let totalItemsHeight = 0;
+  layoutItems.forEach(item => {
+    if (item.type === 'text') {
+      doc.setFont('helvetica', item.fontStyle || 'normal');
+      doc.setFontSize(item.fontSize);
+      const lines = doc.splitTextToSize(item.text, printWidth);
+      item.computedHeight = lines.length * item.leading;
+    } else if (item.type === 'divider') {
+      item.computedHeight = item.height;
+    } else if (item.type === 'table') {
+      let tableH = 0;
+      item.tableData.forEach((row, rowIndex) => {
+        const isHeader = rowIndex === 0;
+        let maxLines = 1;
+        item.colWidths.forEach((w, colIndex) => {
+          doc.setFont('helvetica', isHeader ? 'bold' : 'normal');
+          doc.setFontSize(isHeader ? 9 : 8.5);
+          const lines = doc.splitTextToSize(row[colIndex], w - 12);
+          if (lines.length > maxLines) maxLines = lines.length;
+        });
+        tableH += isHeader ? 22 : (maxLines * 13 + 11);
+      });
+      item.computedHeight = tableH;
+    }
+    totalItemsHeight += item.computedHeight;
+  });
 
-  // 10. Prayer / Proclamation
-  drawParagraph(prayerTitle, { fontSize: 10.5, fontStyle: 'bold', spaceBefore: 12, spaceAfter: 6 });
-  drawParagraph(prayerText, { fontSize: 10.5, fontStyle: 'italic', color: '#555555', spaceAfter: 0 });
+  // 2. Flex distribution
+  const startY = 100;
+  const endY = 780;
+  const availableHeight = endY - startY;
+  const remainingSpace = Math.max(0, availableHeight - totalItemsHeight);
 
-  // Draw Footer Page Number at the bottom of A4 (y = 805)
+  let totalWeight = 0;
+  layoutItems.forEach(item => {
+    if (item.weightAfter > 0) {
+      totalWeight += item.weightAfter;
+    }
+  });
+
+  const gapUnit = totalWeight > 0 ? (remainingSpace / totalWeight) : 0;
+
+  // 3. Render
+  let currentY = startY;
+  layoutItems.forEach(item => {
+    if (item.type === 'text') {
+      doc.setFont('helvetica', item.fontStyle || 'normal');
+      doc.setFontSize(item.fontSize);
+      doc.setTextColor(item.color || '#333333');
+      
+      const lines = doc.splitTextToSize(item.text, printWidth);
+      lines.forEach(line => {
+        doc.text(line, startX, currentY + item.fontSize * 0.85);
+        currentY += item.leading;
+      });
+    } else if (item.type === 'divider') {
+      doc.setDrawColor('#c5a059');
+      doc.setLineWidth(item.computedHeight);
+      doc.line(startX, currentY, endX, currentY);
+      currentY += item.computedHeight;
+    } else if (item.type === 'table') {
+      let tableY = currentY;
+      item.tableData.forEach((row, rowIndex) => {
+        const isHeader = rowIndex === 0;
+        let colX = startX;
+        
+        let maxLines = 1;
+        item.colWidths.forEach((w, colIndex) => {
+          doc.setFont('helvetica', isHeader ? 'bold' : 'normal');
+          doc.setFontSize(isHeader ? 9 : 8.5);
+          const lines = doc.splitTextToSize(row[colIndex], w - 12);
+          if (lines.length > maxLines) maxLines = lines.length;
+        });
+        
+        const rowHeight = isHeader ? 22 : (maxLines * 13 + 11);
+        
+        item.colWidths.forEach((w, colIndex) => {
+          doc.setFillColor(isHeader ? '#3c096c' : '#fdfbf7');
+          doc.rect(colX, tableY, w, rowHeight, 'F');
+          
+          doc.setDrawColor('#dec2ef');
+          doc.setLineWidth(0.5);
+          doc.rect(colX, tableY, w, rowHeight, 'D');
+          
+          doc.setFont('helvetica', isHeader ? 'bold' : 'normal');
+          doc.setFontSize(isHeader ? 9 : 8.5);
+          doc.setTextColor(isHeader ? '#ffffff' : '#333333');
+          
+          const lines = doc.splitTextToSize(row[colIndex], w - 12);
+          lines.forEach((line, lineIndex) => {
+            const textY = tableY + (isHeader ? 14 : 12.5) + (lineIndex * 13);
+            doc.text(line, colX + 6, textY);
+          });
+          
+          colX += w;
+        });
+        tableY += rowHeight;
+      });
+      currentY += item.computedHeight;
+    }
+
+    if (item.weightAfter > 0) {
+      currentY += gapUnit * item.weightAfter;
+    }
+  });
+
+  // Draw Footer Page Number at bottom of A4
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8.5);
   doc.setTextColor('#666666');
