@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { 
   Play, Pause, SkipForward, Volume2, MessageSquare, Download, 
   Send, Calendar, Clock, FileText, ClipboardList, BookOpen, ExternalLink,
-  Maximize, Minimize
+  Maximize, Minimize, ChevronLeft, Users
 } from 'lucide-react';
 
 export default function VideoView() {
@@ -49,50 +49,106 @@ export default function VideoView() {
     }
   };
   const [activeClassroomTab, setActiveClassroomTab] = useState('transcript');
-  const [discussionList, setDiscussionList] = useState([
-    {
-      id: 1,
-      sender: "Profet Jon Arild",
-      text: "Flott spørsmål, Thomas. Tolkningen forutsetter at vi forstår den historiske konteksten i Efesos på Johannes' tid. Jeg har lagt til en teologisk studieguide om apokalyptisk symbolspråk under ressursfanen.",
-      time: "1 time siden",
-      isInstructor: true,
-      initials: "JA"
-    },
-    {
-      id: 2,
-      sender: "Thomas Knutsen",
-      text: "Kan noen avklare tolkningen av de syv lysestakene ved 12:45? @JonArild",
-      time: "2 timer siden",
-      isInstructor: false,
-      initials: "TK"
-    },
-    {
-      id: 3,
-      sender: "Sarah J.",
-      text: "08:15-merket binder virkelig alt vi diskuterte i modul 2 om endetiden sammen. Fantastisk dybde.",
-      time: "5 timer siden",
-      isInstructor: false,
-      initials: "SJ"
-    }
+  
+  const [chatTab, setChatTab] = useState('group'); // 'group' | 'dm'
+  const [activeDmUser, setActiveDmUser] = useState(null); // selected participant for DM
+  const [newChatMessage, setNewChatMessage] = useState("");
+
+  const participants = [
+    { id: 'u_ja', name: 'Profet Jon Arild', role: 'teacher', initials: 'JA', status: 'Aktiv nå', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100' },
+    { id: 'u_ab', name: 'Anders Berg', role: 'student', initials: 'AB', status: 'Pålogget', avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=100' },
+    { id: 'u_in', name: 'Ingrid Nilsen', role: 'student', initials: 'IN', status: 'Aktiv nå', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100' },
+    { id: 'u_sj', name: 'Sarah J.', role: 'student', initials: 'SJ', status: 'Borte', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=100' }
+  ];
+
+  const [groupMessages, setGroupMessages] = useState([
+    { id: 1, sender: "Profet Jon Arild", text: "Velkommen til felles studiegruppe for Avansert Hermeneutikk! Her kan vi diskutere oppgavene og tolkningene løpende.", time: "3 timer siden", isInstructor: true, initials: "JA" },
+    { id: 2, sender: "Sarah J.", text: "08:15-merket i videoen om endetidsavtaler og paktsteologi er helt fantastisk! Er det noen andre som tok fyldige notater der?", time: "2 timer siden", isInstructor: false, initials: "SJ" },
+    { id: 3, sender: "Anders Berg", text: "Ja, Sarah! Jeg har samlet notatene mine i et eget dokument. Kan dele det her hvis dere vil?", time: "1 time siden", isInstructor: false, initials: "AB" }
   ]);
-  const [newComment, setNewComment] = useState("");
 
-  const handlePostComment = (e) => {
-    e.preventDefault();
-    if (!newComment.trim()) return;
+  const [dmThreads, setDmThreads] = useState({
+    'u_ja': [
+      { id: 1, sender: "Profet Jon Arild", text: "Hei Thomas! Hvordan går det med forberedelsene til Hermeneutikk-oppgaven? Si ifra om du trenger veiledning.", time: "I går", isInstructor: true, initials: "JA" }
+    ],
+    'u_ab': [
+      { id: 1, sender: "Anders Berg", text: "Hei Thomas! Skal vi studere sammen på biblioteket på tirsdag?", time: "2 dager siden", isInstructor: false, initials: "AB" }
+    ],
+    'u_in': [],
+    'u_sj': []
+  });
 
-    const comment = {
+  const handleSendMessage = (e) => {
+    e?.preventDefault();
+    if (!newChatMessage.trim()) return;
+
+    const newMsg = {
       id: Date.now(),
-      sender: user?.name || "Student",
-      text: newComment,
+      sender: user?.name || "Thomas Knutsen",
+      text: newChatMessage,
       time: "Akkurat nå",
       isInstructor: false,
-      initials: user?.name ? user.name.split(' ').map(n => n[0]).join('') : "ST"
+      initials: user?.name ? user.name.split(' ').map(n => n[0]).join('') : "TK"
     };
 
-    setDiscussionList(prev => [...prev, comment]);
-    setNewComment("");
-    showToast("Kommentar lagt til i diskusjonen!");
+    if (chatTab === 'group') {
+      setGroupMessages(prev => [...prev, newMsg]);
+      showToast("Melding sendt til gruppen!");
+      setNewChatMessage("");
+      
+      // Simulate classmate response after 2.5 seconds
+      setTimeout(() => {
+        const randomReplies = [
+          "Helt enig med deg der! Det kaster et veldig spennende lys over profetene.",
+          "Interessant vinkling, Thomas. Har du sett hva det står i Jeremia 29 om dette?",
+          "Takk for at du deler! Skal sjekke ut skriftstedet med en gang.",
+          "Fantastisk refleksjon! Dette må vi ta opp på neste livesamling med Jon Arild."
+        ];
+        const randomReplier = participants.filter(p => p.role === 'student')[Math.floor(Math.random() * 3)];
+        
+        const autoReply = {
+          id: Date.now() + 1,
+          sender: randomReplier.name,
+          text: randomReplies[Math.floor(Math.random() * randomReplies.length)],
+          time: "Akkurat nå",
+          isInstructor: false,
+          initials: randomReplier.initials
+        };
+        setGroupMessages(prev => [...prev, autoReply]);
+      }, 2500);
+
+    } else if (chatTab === 'dm' && activeDmUser) {
+      setDmThreads(prev => ({
+        ...prev,
+        [activeDmUser.id]: [...(prev[activeDmUser.id] || []), newMsg]
+      }));
+      showToast(`Privat melding sendt til ${activeDmUser.name.split(' ')[0]}`);
+      setNewChatMessage("");
+
+      // Simulate private reply from selected participant after 2 seconds
+      setTimeout(() => {
+        let replyText = "";
+        if (activeDmUser.role === 'teacher') {
+          replyText = "Takk for meldingen din, Thomas! Dette er et utmerket teologisk poeng. La oss ta en prat om det på Zoom i morgen eller i min neste kontortid.";
+        } else {
+          replyText = `Hei Thomas! Takk for meldingen. Sitter akkurat og studerer modul 6 selv nå. Kjempegøy at du også ser på dette!`;
+        }
+        
+        const autoReply = {
+          id: Date.now() + 1,
+          sender: activeDmUser.name,
+          text: replyText,
+          time: "Akkurat nå",
+          isInstructor: activeDmUser.role === 'teacher',
+          initials: activeDmUser.initials
+        };
+        
+        setDmThreads(prev => ({
+          ...prev,
+          [activeDmUser.id]: [...(prev[activeDmUser.id] || []), autoReply]
+        }));
+      }, 2000);
+    }
   };
 
   const handleJumpTime = (time) => {
@@ -361,57 +417,195 @@ export default function VideoView() {
         {/* Right sidebar column: Discussion & interactions */}
         <div className="lg:col-span-4 space-y-6">
           
-          {/* Discussion Box */}
-          <div className="bg-white border border-outline-variant/30 rounded-2xl flex flex-col h-[480px] shadow-sm overflow-hidden">
-            <div className="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between text-xs font-bold">
-              <div className="flex items-center gap-1.5 text-primary">
-                <MessageSquare size={16} />
-                <span>Leksjonsdiskusjon</span>
-                <span className="bg-primary text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">{discussionList.length}</span>
-              </div>
-              <span className="text-outline">Siste først</span>
+          {/* Discussion Box -> Studiegruppe Chat & DM */}
+          <div className="bg-white border border-outline-variant/30 rounded-2xl flex flex-col h-[480px] shadow-sm overflow-hidden font-sans">
+            {/* Header: Dual tabs for 'Studiegruppe' (group) vs 'Direktemeldinger' (dm) */}
+            <div className="border-b border-slate-100 bg-slate-50 flex items-center justify-between text-xs font-bold shrink-0">
+              <button 
+                type="button"
+                onClick={() => { setChatTab('group'); setActiveDmUser(null); }}
+                className={`flex-1 py-3 text-center flex items-center justify-center gap-1.5 border-b-2 transition-all ${
+                  chatTab === 'group' 
+                    ? 'text-primary border-primary bg-white' 
+                    : 'text-on-surface-variant border-transparent hover:text-primary'
+                }`}
+              >
+                <Users size={14} />
+                <span>Studiegruppe</span>
+              </button>
+              <button 
+                type="button"
+                onClick={() => setChatTab('dm')}
+                className={`flex-1 py-3 text-center flex items-center justify-center gap-1.5 border-b-2 transition-all ${
+                  chatTab === 'dm' 
+                    ? 'text-primary border-primary bg-white' 
+                    : 'text-on-surface-variant border-transparent hover:text-primary'
+                }`}
+              >
+                <MessageSquare size={14} />
+                <span>Direktemeldinger</span>
+              </button>
             </div>
 
-            {/* Comments Stream */}
+            {/* Chat Body */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {discussionList.map((disc) => (
-                <div key={disc.id} className="flex gap-2.5 items-start text-xs leading-relaxed">
-                  <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold font-mono text-[11px] shrink-0 border border-primary/10">
-                    {disc.initials}
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-on-surface">{disc.sender}</span>
-                      {disc.isInstructor && (
-                        <span className="bg-primary text-white text-[8px] font-bold px-1 py-0.5 rounded">LÆRER</span>
-                      )}
-                      <span className="text-[10px] text-outline">{disc.time}</span>
-                    </div>
-                    <p className="text-on-surface-variant font-medium">{disc.text}</p>
-                  </div>
+              {chatTab === 'group' ? (
+                /* Group Chat Messages */
+                <div className="space-y-4">
+                  {groupMessages.map((msg) => {
+                    const isCurrentUser = msg.sender === (user?.name || "Thomas Knutsen");
+                    return (
+                      <div key={msg.id} className={`flex gap-2.5 items-start text-xs leading-relaxed ${isCurrentUser ? 'flex-row-reverse' : ''}`}>
+                        {!isCurrentUser && (
+                          <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold font-mono text-[11px] shrink-0 border border-primary/10">
+                            {msg.initials}
+                          </div>
+                        )}
+                        <div className={`space-y-1 ${isCurrentUser ? 'text-right' : ''}`}>
+                          <div className={`flex items-center gap-1.5 flex-wrap ${isCurrentUser ? 'justify-end' : 'justify-start'}`}>
+                            <span className="font-bold text-on-surface">{msg.sender}</span>
+                            {msg.isInstructor && (
+                              <span className="bg-primary text-white text-[8px] font-bold px-1 py-0.5 rounded">LÆRER</span>
+                            )}
+                            <span className="text-[10px] text-outline">{msg.time}</span>
+                          </div>
+                          <div className={`p-2.5 rounded-2xl max-w-[220px] sm:max-w-[240px] text-[11.5px] font-medium leading-relaxed ${
+                            isCurrentUser 
+                              ? 'bg-primary text-white rounded-tr-none text-left' 
+                              : 'bg-slate-100 text-slate-800 rounded-tl-none'
+                          }`}>
+                            {msg.text}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
+              ) : (
+                /* DM mode */
+                activeDmUser ? (
+                  /* Active 1-to-1 Chat Thread */
+                  <div className="space-y-4 h-full flex flex-col">
+                    {/* Active DM Header with back button */}
+                    <div className="-mx-4 -mt-4 p-3 bg-slate-50 border-b border-slate-100 flex items-center gap-2 text-xs font-bold text-primary shrink-0">
+                      <button 
+                        type="button"
+                        onClick={() => setActiveDmUser(null)} 
+                        className="p-1 hover:bg-slate-200 rounded-lg text-outline transition-colors"
+                        title="Tilbake til chatliste"
+                      >
+                        <ChevronLeft size={16} />
+                      </button>
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-[9px]">
+                          {activeDmUser.initials}
+                        </div>
+                        <div>
+                          <p className="font-bold leading-tight">{activeDmUser.name}</p>
+                          <p className="text-[8px] text-green-600 flex items-center gap-1 mt-0.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block animate-pulse" />
+                            {activeDmUser.status}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* DM Messages stream */}
+                    <div className="flex-1 space-y-4 pt-2">
+                      {(dmThreads[activeDmUser.id] || []).length === 0 ? (
+                        <div className="text-center py-10 text-outline text-[11px] font-semibold italic">
+                          Ingen meldinger ennå. Skriv en melding under for å starte samtalen!
+                        </div>
+                      ) : (
+                        (dmThreads[activeDmUser.id] || []).map((msg) => {
+                          const isCurrentUser = msg.sender === (user?.name || "Thomas Knutsen");
+                          return (
+                            <div key={msg.id} className={`flex gap-2.5 items-start text-xs leading-relaxed ${isCurrentUser ? 'flex-row-reverse' : ''}`}>
+                              {!isCurrentUser && (
+                                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold font-mono text-[11px] shrink-0 border border-primary/10">
+                                  {msg.initials}
+                                </div>
+                              )}
+                              <div className={`space-y-1 ${isCurrentUser ? 'text-right' : ''}`}>
+                                <div className={`flex items-center gap-1.5 flex-wrap ${isCurrentUser ? 'justify-end' : 'justify-start'}`}>
+                                  <span className="font-bold text-on-surface">{msg.sender}</span>
+                                  <span className="text-[10px] text-outline">{msg.time}</span>
+                                </div>
+                                <div className={`p-2.5 rounded-2xl max-w-[220px] sm:max-w-[240px] text-[11.5px] font-medium leading-relaxed ${
+                                  isCurrentUser 
+                                    ? 'bg-primary text-white rounded-tr-none text-left' 
+                                    : 'bg-[#f3e8ff]/70 text-slate-800 rounded-tl-none border border-[#dec2ef]/30'
+                                }`}>
+                                  {msg.text}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  /* Classmates chat list for DM */
+                  <div className="space-y-3">
+                    <p className="text-[10px] text-outline font-bold uppercase tracking-wider mb-2">Velg en faglærer eller student:</p>
+                    <div className="space-y-2">
+                      {participants.map((p) => (
+                        <button
+                          key={p.id}
+                          type="button"
+                          onClick={() => setActiveDmUser(p)}
+                          className="w-full p-2.5 text-left border border-outline-variant/30 hover:border-primary/45 bg-[#f8fafc] hover:bg-[#f3e8ff]/20 rounded-xl transition-all flex gap-3 items-center group active:scale-[0.98]"
+                        >
+                          <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 relative border border-primary/5">
+                            {p.initials}
+                            <span className={`absolute -right-0.5 -bottom-0.5 w-2.5 h-2.5 rounded-full border border-white ${
+                              p.status === 'Borte' ? 'bg-amber-400' : 'bg-green-500'
+                            }`} />
+                          </div>
+                          <div className="min-w-0 flex-grow">
+                            <div className="flex items-center justify-between gap-2">
+                              <h4 className="text-xs font-bold text-primary truncate leading-tight group-hover:text-primary transition-colors">{p.name}</h4>
+                              <span className="text-[8px] bg-primary/5 text-primary border border-primary/10 rounded px-1.5 py-0.5 font-bold uppercase tracking-wider shrink-0">{p.role === 'teacher' ? 'Lærer' : 'Student'}</span>
+                            </div>
+                            <p className="text-[9px] text-[#72787e] font-semibold mt-0.5 truncate flex items-center gap-1">
+                              {p.status}
+                            </p>
+                          </div>
+                          <ChevronLeft size={14} className="rotate-180 text-outline group-hover:text-primary transition-colors shrink-0" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )
+              )}
             </div>
 
-            {/* Input area */}
-            <form onSubmit={handlePostComment} className="p-3 border-t border-slate-100 bg-slate-50 block">
-              <div className="relative w-full">
-                <textarea 
-                  placeholder="Still et åndelig eller teologisk spørsmål..."
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  rows={2}
-                  className="w-full bg-white border border-outline-variant/30 rounded-xl pl-4 pr-12 py-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all font-medium text-on-surface resize-none"
-                />
-                <button 
-                  type="submit"
-                  disabled={!newComment.trim()}
-                  className="absolute right-2.5 bottom-2.5 p-2 bg-primary text-white rounded-lg hover:bg-primary-container disabled:opacity-40 transition-colors"
-                >
-                  <Send size={12} />
-                </button>
-              </div>
-            </form>
+            {/* Input area - conditionally shown when in Group chat OR in an Active DM thread */}
+            {(chatTab === 'group' || (chatTab === 'dm' && activeDmUser)) && (
+              <form onSubmit={handleSendMessage} className="p-3 border-t border-slate-100 bg-slate-50 block shrink-0">
+                <div className="relative w-full">
+                  <textarea 
+                    placeholder={
+                      chatTab === 'group' 
+                        ? "Skriv en melding til studiegruppen..." 
+                        : `Send en privat melding til ${activeDmUser?.name.split(' ')[0]}...`
+                    }
+                    value={newChatMessage}
+                    onChange={(e) => setNewChatMessage(e.target.value)}
+                    rows={2}
+                    className="w-full bg-white border border-outline-variant/30 rounded-xl pl-4 pr-12 py-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all font-medium text-on-surface resize-none"
+                  />
+                  <button 
+                    type="submit"
+                    disabled={!newChatMessage.trim()}
+                    className="absolute right-2.5 bottom-2.5 p-2 bg-primary text-white rounded-lg hover:bg-primary-container disabled:opacity-40 transition-colors"
+                  >
+                    <Send size={12} />
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
 
           {/* Upcoming live theological calendar inside Sidebar */}
