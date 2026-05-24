@@ -1635,15 +1635,15 @@ export default function BibleResourcesPage() {
             initial={{ opacity: 0, y: 40, x: '-50%' }}
             animate={{ opacity: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, y: 40, x: '-50%' }}
-            className="fixed bottom-6 left-1/2 z-40 bg-[#1B4965]/95 backdrop-blur-md text-white border border-white/10 px-4 py-2.5 rounded-full flex items-center justify-between gap-3 shadow-2xl w-[90vw] max-w-sm sm:hidden pointer-events-auto"
+            className="fixed bottom-6 left-1/2 z-40 bg-white/95 backdrop-blur-md text-slate-800 border border-slate-200/80 px-3 py-1 rounded-full flex items-center justify-between gap-2 shadow-lg w-[75vw] max-w-[260px] sm:hidden pointer-events-auto"
             style={{ transform: 'translate3d(-50%, 0, 0)' }}
           >
             <button 
               onClick={() => navigateChapter('prev')}
-              className="p-2 text-white hover:text-blue-200 active:scale-[0.9] transition-all cursor-pointer bg-transparent border-none outline-none"
+              className="p-1.5 text-slate-500 hover:text-slate-800 active:scale-[0.9] transition-all cursor-pointer bg-transparent border-none outline-none flex items-center justify-center shrink-0"
               title={isEn ? "Previous chapter" : "Forrige kapittel"}
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={16} />
             </button>
 
             <button 
@@ -1652,18 +1652,18 @@ export default function BibleResourcesPage() {
                 setSelectorSearch('');
                 setShowMobileSelector(true);
               }}
-              className="flex-grow text-center font-serif font-extrabold text-sm hover:text-blue-200 active:scale-[0.97] transition-all flex items-center gap-1.5 justify-center py-1 px-3 bg-transparent border-none outline-none text-white cursor-pointer"
+              className="flex-grow text-center font-serif font-extrabold text-[13px] hover:text-slate-900 active:scale-[0.97] transition-all flex items-center gap-1 justify-center py-1 px-2 bg-transparent border-none outline-none text-slate-800 cursor-pointer select-none"
             >
               <span>{selectedBook.nor} {selectedChapter}</span>
-              <ChevronDown size={12} className="text-white/60" />
+              <ChevronDown size={10} className="text-slate-400" />
             </button>
 
             <button 
               onClick={() => navigateChapter('next')}
-              className="p-2 text-white hover:text-blue-200 active:scale-[0.9] transition-all cursor-pointer bg-transparent border-none outline-none"
+              className="p-1.5 text-slate-500 hover:text-slate-800 active:scale-[0.9] transition-all cursor-pointer bg-transparent border-none outline-none flex items-center justify-center shrink-0"
               title={isEn ? "Next chapter" : "Neste kapittel"}
             >
-              <ArrowRight size={18} />
+              <ArrowRight size={16} />
             </button>
           </motion.div>
         )}
