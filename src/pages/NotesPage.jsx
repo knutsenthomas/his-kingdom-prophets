@@ -577,8 +577,12 @@ export default function NotesPage() {
   };
 
   // Ask AI Widget synergy
-  const handleSendToAI = (note) => {
-    const content = note.type === 'lesson' ? stripHtml(note.text) : stripHtml(note.content);
+  const handleSendToAI = (note, textOverride = null) => {
+    const rawContent = textOverride !== null 
+      ? textOverride 
+      : (note.type === 'lesson' ? note.text : note.content);
+
+    const content = stripHtml(rawContent);
     if (!content.trim()) {
       showToast(language === 'en' ? "Note is empty." : "Notatet er tomt.");
       return;
@@ -602,8 +606,12 @@ export default function NotesPage() {
   };
 
   // Share to Chat
-  const handleShareToChat = (note) => {
-    const content = note.type === 'lesson' ? stripHtml(note.text) : stripHtml(note.content);
+  const handleShareToChat = (note, textOverride = null) => {
+    const rawContent = textOverride !== null 
+      ? textOverride 
+      : (note.type === 'lesson' ? note.text : note.content);
+
+    const content = stripHtml(rawContent);
     if (!content.trim()) {
       showToast(language === 'en' ? "Note is empty." : "Notatet er tomt.");
       return;
@@ -627,14 +635,16 @@ export default function NotesPage() {
   };
 
   // Export note as Text file download
-  const handleExportText = (note) => {
+  const handleExportText = (note, textOverride = null) => {
     const title = note.type === 'bible' 
       ? `${note.bookName} ${note.chapter}` 
       : note.type === 'lesson' 
         ? note.moduleTitle 
         : note.title;
 
-    const rawContent = note.type === 'lesson' ? stripHtml(note.text) : stripHtml(note.content);
+    const rawContent = textOverride !== null 
+      ? stripHtml(textOverride) 
+      : (note.type === 'lesson' ? stripHtml(note.text) : stripHtml(note.content));
     const categoryName = note.type === 'bible' 
       ? 'Bibelstudie' 
       : note.type === 'lesson' 
@@ -1033,7 +1043,7 @@ ${rawContent}
                   {/* Editor actions menu */}
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => handleSendToAI(selectedNote)}
+                      onClick={() => handleSendToAI(selectedNote, editorText)}
                       className="p-2 bg-[#f3e8ff]/70 text-[#561291] border border-[#561291]/15 hover:bg-[#f3e8ff] rounded-xl flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider transition-all"
                       title={language === 'en' ? "Consult AI assistant" : "Spør HKM Assistent"}
                     >
@@ -1042,7 +1052,7 @@ ${rawContent}
                     </button>
 
                     <button
-                      onClick={() => handleShareToChat(selectedNote)}
+                      onClick={() => handleShareToChat(selectedNote, editorText)}
                       className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider transition-all"
                       title={language === 'en' ? "Share in community chat" : "Del i bønnefellesskapet"}
                     >
@@ -1051,7 +1061,7 @@ ${rawContent}
                     </button>
 
                     <button
-                      onClick={() => handleExportText(selectedNote)}
+                      onClick={() => handleExportText(selectedNote, editorText)}
                       className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider transition-all"
                       title={language === 'en' ? "Export as txt" : "Eksporter"}
                     >
