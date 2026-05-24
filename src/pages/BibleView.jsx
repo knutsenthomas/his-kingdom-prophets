@@ -1190,64 +1190,36 @@ export default function BibleView() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="space-y-2 text-justify select-text font-serif leading-loose"
+                    className="select-text text-slate-800 font-serif text-[15px] sm:text-[17px] md:text-lg leading-relaxed sm:leading-loose md:leading-loose space-y-4 pr-1"
                   >
                     {verses.length > 0 ? (
-                      verses.map((verse) => (
-                        <div 
-                          id={`v-${verse.verse}`}
-                          key={`${verse.chapter}-${verse.verse}`}
-                          onClick={() => toggleVerseSelection(verse.verse)}
-                          className={`group py-1.5 px-3 rounded-xl transition-all cursor-pointer relative border ${
-                            selectedVerses.includes(verse.verse) || highlightedVerse === verse.verse 
-                              ? 'bg-primary/5 border-primary/20 shadow-sm shadow-primary/5' 
-                              : 'hover:bg-slate-50/80 border-transparent'
-                          }`}
-                        >
-                          <p className="text-sm md:text-base text-on-surface leading-relaxed pr-10 sm:pr-24">
-                            <span className="font-sans font-bold text-primary select-none mr-2.5 text-xs inline-block text-center w-5 h-5 leading-5 rounded bg-slate-100/80 group-hover:bg-primary group-hover:text-white transition-colors">
-                              {verse.verse}
+                      <p className="text-justify md:text-left">
+                        {verses.map((verse) => {
+                          const isSelected = selectedVerses.includes(verse.verse);
+                          const isHighlighted = highlightedVerse === verse.verse;
+                          return (
+                            <span
+                              key={`${verse.chapter}-${verse.verse}`}
+                              id={`v-${verse.verse}`}
+                              onClick={() => toggleVerseSelection(verse.verse)}
+                              className={`inline cursor-pointer transition-all duration-200 rounded px-1.5 py-0.5 mx-0.5 select-text ${
+                                isSelected 
+                                  ? 'bg-primary/10 text-primary border-b border-primary/40 font-semibold' 
+                                  : isHighlighted
+                                    ? 'bg-amber-100 text-amber-900 border-b border-amber-400 font-semibold'
+                                    : 'hover:bg-slate-100/70'
+                              }`}
+                            >
+                              <sup className={`text-[10px] sm:text-[11px] font-extrabold font-sans mr-1 select-none ${
+                                isSelected ? 'text-primary' : isHighlighted ? 'text-amber-600' : 'text-slate-400'
+                              }`}>
+                                {verse.verse}
+                              </sup>
+                              {verse.text.trim()}{' '}
                             </span>
-                            {verse.text}
-                          </p>
-
-                          {/* Quick Actions (only visible on hover or click) */}
-                          <div className={`absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-white border border-outline-variant/40 p-1 rounded-lg shadow-sm transition-all duration-200 ${
-                            highlightedVerse === verse.verse ? 'opacity-100 animate-fade-in' : 'opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto'
-                          }`}>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCopy(verse);
-                              }}
-                              className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-primary rounded-md transition-colors cursor-pointer"
-                              title="Kopier vers"
-                            >
-                              {copiedId === verse.verse ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleSendToAssistant(verse);
-                              }}
-                              className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-burnt-orange rounded-md transition-colors cursor-pointer"
-                              title="Spør HKM Assistent"
-                            >
-                              <Sparkles size={14} />
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleShareToChat(verse);
-                              }}
-                              className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-primary rounded-md transition-colors cursor-pointer"
-                              title="Del med Bønnefellesskap"
-                            >
-                              <Send size={14} />
-                            </button>
-                          </div>
-                        </div>
-                      ))
+                          );
+                        })}
+                      </p>
                     ) : (
                       <div className="text-center py-12 text-outline font-medium text-sm">
                         Ingen vers tilgjengelig. Prøv å laste på nytt.

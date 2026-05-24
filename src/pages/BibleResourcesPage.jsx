@@ -703,7 +703,7 @@ export default function BibleResourcesPage() {
                   )}
 
                   {/* Reading Body */}
-                  <div className="flex-grow relative">
+                  <div className="flex-grow relative mt-2">
                     <AnimatePresence mode="wait">
                       {isLoading ? (
                         <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4 min-h-[300px]">
@@ -716,50 +716,35 @@ export default function BibleResourcesPage() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: 0.2 }}
-                          className="space-y-2 select-text"
+                          className="select-text text-slate-800 font-serif text-[15px] sm:text-[17px] md:text-lg leading-relaxed sm:leading-loose md:leading-loose space-y-4 pr-1"
                         >
-                          {verses.map((verse) => {
-                            const isSelected = selectedVerses.includes(verse.verse);
-                            const isHighlighted = highlightedVerse === verse.verse;
-                            return (
-                              <div
-                                key={verse.verse}
-                                id={`v-${verse.verse}`}
-                                onClick={() => toggleVerseSelection(verse.verse)}
-                                className={`group py-1.5 px-3 rounded-lg cursor-pointer transition-all flex items-start gap-3 select-text ${
-                                  isSelected 
-                                    ? 'bg-primary/5 border-l-4 border-primary' 
-                                    : isHighlighted
-                                      ? 'bg-amber-50 border-l-4 border-amber-500'
-                                      : 'hover:bg-slate-50/80 border-l-4 border-transparent'
-                                }`}
-                              >
-                                <span className={`text-[10px] font-bold font-mono shrink-0 mt-0.5 w-5 text-center ${
-                                  isSelected ? 'text-primary' : isHighlighted ? 'text-amber-600' : 'text-slate-400'
-                                }`}>
-                                  {verse.verse}
+                          <p className="text-justify md:text-left">
+                            {verses.map((verse) => {
+                              const isSelected = selectedVerses.includes(verse.verse);
+                              const isHighlighted = highlightedVerse === verse.verse;
+                              return (
+                                <span
+                                  key={verse.verse}
+                                  id={`v-${verse.verse}`}
+                                  onClick={() => toggleVerseSelection(verse.verse)}
+                                  className={`inline cursor-pointer transition-all duration-200 rounded px-1.5 py-0.5 mx-0.5 select-text ${
+                                    isSelected 
+                                      ? 'bg-primary/10 text-primary border-b border-primary/40 font-semibold' 
+                                      : isHighlighted
+                                        ? 'bg-amber-100 text-amber-900 border-b border-amber-400 font-semibold'
+                                        : 'hover:bg-slate-100/70'
+                                  }`}
+                                >
+                                  <sup className={`text-[10px] sm:text-[11px] font-extrabold font-sans mr-1 select-none ${
+                                    isSelected ? 'text-primary' : isHighlighted ? 'text-amber-600' : 'text-slate-400'
+                                  }`}>
+                                    {verse.verse}
+                                  </sup>
+                                  {verse.text.trim()}{' '}
                                 </span>
-                                <p className={`text-sm leading-relaxed flex-grow text-slate-700 font-sans ${
-                                  isSelected ? 'text-primary font-medium' : ''
-                                }`}>
-                                  {verse.text}
-                                </p>
-                                
-                                <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-all shrink-0">
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleSingleCopy(verse);
-                                    }}
-                                    className="p-1 text-slate-400 hover:text-primary hover:bg-slate-100 rounded transition-all"
-                                    title={isEn ? "Copy verse" : "Kopier vers"}
-                                  >
-                                    {copiedId === verse.verse ? <Check size={12} className="text-green-600" /> : <Copy size={12} />}
-                                  </button>
-                                </div>
-                              </div>
-                            );
-                          })}
+                              );
+                            })}
+                          </p>
                         </motion.div>
                       )}
                     </AnimatePresence>
