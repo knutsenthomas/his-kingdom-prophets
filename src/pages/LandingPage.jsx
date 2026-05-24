@@ -332,7 +332,7 @@ export default function LandingPage() {
                   <CmsText slug="landing-hero-cta-primary" fallback="Begynn Din Reise" />
                 </button>
                 <button 
-                  onClick={() => navigate('/student/video')} 
+                  onClick={() => navigate(user ? '/student/video' : '/login')} 
                   className="px-8 py-4 border border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all group flex items-center justify-center gap-2 text-sm active:scale-[0.98]"
                 >
                   <CmsText slug="landing-hero-cta-secondary" fallback="Se Introduksjon" />
@@ -549,7 +549,7 @@ export default function LandingPage() {
                 <CmsText slug="landing-cta-btn-primary" fallback="Søk Opptak 2026" />
               </button>
               <button 
-                onClick={() => navigate('/student/library')} 
+                onClick={() => navigate(user ? '/student/library' : (language === 'en' ? '/admission' : '/opptak'))} 
                 className="w-full sm:w-auto px-8 py-4 bg-surface-container border border-outline-variant text-primary font-semibold rounded-xl hover:bg-surface-container-high transition-all"
               >
                 <CmsText slug="landing-cta-btn-secondary" fallback="Se Fagplan" />

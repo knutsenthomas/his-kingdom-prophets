@@ -983,7 +983,7 @@ export default function BibleResourcesPage() {
                   </div>
 
                   <button
-                    onClick={() => navigate('/login')}
+                    onClick={() => navigate(isEn ? '/admission' : '/opptak')}
                     className="w-full mt-6 py-2.5 bg-slate-50 hover:bg-primary hover:text-white border border-slate-200 hover:border-primary text-primary font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5"
                   >
                     <Calendar size={13} />
@@ -1039,7 +1039,7 @@ export default function BibleResourcesPage() {
                       : "En 45-minutters introduksjonsforelesning med Apostel David Hansen som tar for seg det bibelske fundamentet for den profetiske gave, og hvordan gaverollen må underlegges sunn teologisk testing og karakter."}
                   </p>
                   <button
-                    onClick={() => navigate('/student/video')}
+                    onClick={() => navigate(user ? '/student/video' : '/login')}
                     className="w-full py-2.5 bg-primary text-white font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
                   >
                     <Video size={13} />
@@ -1073,7 +1073,7 @@ export default function BibleResourcesPage() {
                       : "Lær hvordan det gamle testamentets skygger og løfter peker fram mot Kristus i det nye testamentet. En innføringsklasse i paktsteologi som dekker abrahamspakten og den nye pakt."}
                   </p>
                   <button
-                    onClick={() => navigate('/student/video')}
+                    onClick={() => navigate(user ? '/student/video' : '/login')}
                     className="w-full py-2.5 bg-primary text-white font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
                   >
                     <Video size={13} />
@@ -1150,13 +1150,14 @@ export default function BibleResourcesPage() {
                       </ul>
                     </div>
 
-                    <button
-                      onClick={() => navigate('/login')}
-                      className="w-full mt-6 py-2.5 bg-primary text-white font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
+                    <a
+                      href={index === 0 ? "/Bibelsk_Faste_og_Aandelig_Disiplin.pdf" : "/Profetisk_Forboenn_og_Boenneskjold.pdf"}
+                      download
+                      className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center"
                     >
                       <FileText size={13} />
                       <span>{isEn ? 'Download Resources' : 'Last ned studiehefte'}</span>
-                    </button>
+                    </a>
                   </div>
                 );
               })}
