@@ -1776,14 +1776,14 @@ export default function BibleResourcesPage() {
             animate={{ opacity: 1, y: 0, x: '-50%', scale: 1 }}
             exit={{ opacity: 0, y: 50, x: '-50%', scale: 0.95 }}
             transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-            className="fixed bottom-8 left-1/2 z-[100] bg-[#1B4965]/95 backdrop-blur-md border border-white/10 px-4 sm:px-6 py-3 rounded-2xl flex items-center justify-between gap-3 sm:gap-4 text-white shadow-2xl font-sans max-w-[92vw] sm:max-w-md w-max pointer-events-auto"
+            className="fixed bottom-8 left-1/2 z-[100] bg-white/95 backdrop-blur-md border border-slate-200/80 px-4 sm:px-6 py-3 rounded-2xl flex items-center justify-between gap-3 sm:gap-4 text-slate-800 shadow-2xl font-sans max-w-[92vw] sm:max-w-md w-max pointer-events-auto"
             style={{ transform: 'translate3d(-50%, 0, 0)' }}
           >
-            <div className="flex items-center gap-2 border-r border-white/10 pr-2.5 sm:pr-3 shrink-0">
-              <span className="h-6 w-6 rounded-full bg-[#d17d39] text-white flex items-center justify-center text-xs font-bold font-mono">
+            <div className="flex items-center gap-2 border-r border-slate-200/80 pr-2.5 sm:pr-3 shrink-0">
+              <span className="h-6 w-6 rounded-full bg-[#1B4965] text-white flex items-center justify-center text-xs font-bold font-mono">
                 {selectedVerses.length}
               </span>
-              <span className="text-[11px] sm:text-xs font-bold hidden min-[360px]:inline">
+              <span className="text-[11px] sm:text-xs font-extrabold text-slate-800 hidden min-[360px]:inline">
                 {selectedVerses.length === 1 ? 'vers' : 'vers'} valgt
               </span>
             </div>
@@ -1791,7 +1791,7 @@ export default function BibleResourcesPage() {
             <div className="flex items-center gap-1.5 sm:gap-2.5">
               <button 
                 onClick={handleBulkCopy}
-                className="px-2.5 sm:px-3 py-1.5 hover:bg-white/15 active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer text-white text-[11px] sm:text-xs border border-transparent bg-transparent"
+                className="px-2.5 sm:px-3 py-1.5 hover:bg-slate-100 active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer text-slate-700 hover:text-slate-900 text-[11px] sm:text-xs border border-transparent bg-transparent"
               >
                 <Copy size={13} />
                 <span>Kopier</span>
@@ -1799,7 +1799,7 @@ export default function BibleResourcesPage() {
 
               <button 
                 onClick={() => navigate('/login')}
-                className="px-2.5 sm:px-3 py-1.5 bg-[#d17d39] hover:bg-[#bd4f2a] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm shadow-[#d17d39]/20 cursor-pointer text-white text-[11px] sm:text-xs border-none"
+                className="px-2.5 sm:px-3 py-1.5 bg-[#1B4965] hover:bg-[#153b52] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm shadow-[#1B4965]/20 cursor-pointer text-white text-[11px] sm:text-xs border-none"
               >
                 <Sparkles size={13} />
                 <span>Logg inn</span>
@@ -1807,7 +1807,7 @@ export default function BibleResourcesPage() {
 
               <button 
                 onClick={() => setSelectedVerses([])}
-                className="p-1.5 text-slate-300 hover:text-white rounded-xl transition-all cursor-pointer font-bold shrink-0 bg-transparent border-none outline-none"
+                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl transition-all cursor-pointer font-bold shrink-0 bg-transparent border-none outline-none"
                 title="Nullstill"
               >
                 <X size={15} />
