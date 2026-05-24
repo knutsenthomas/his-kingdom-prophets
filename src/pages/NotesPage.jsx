@@ -12,7 +12,7 @@ import {
   FileText, Send, Sparkles, Download, ArrowLeft, 
   Plus, Check, Edit, Save, FileEdit, AlertCircle,
   Bold, Italic, Underline, List, ListOrdered, Quote,
-  Heading2, Heading3, Palette, Calendar, Eraser,
+  Heading1, Heading2, Heading3, Palette, Calendar, Eraser,
   AlignLeft, AlignCenter, AlignRight
 } from 'lucide-react';
 import CmsText from '@/components/CmsText';
@@ -1345,6 +1345,14 @@ ${rawContent}
                       
                       <button 
                         type="button"
+                        onClick={() => execEditorCommand('formatBlock', 'h1')}
+                        className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
+                        title="Overskrift H1"
+                      >
+                        <Heading1 size={14} />
+                      </button>
+                      <button 
+                        type="button"
                         onClick={() => execEditorCommand('formatBlock', 'h2')}
                         className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
                         title="Overskrift H2"
@@ -1355,7 +1363,7 @@ ${rawContent}
                         type="button"
                         onClick={() => execEditorCommand('formatBlock', 'h3')}
                         className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
-                        title="Undertittel H3"
+                        title="Overskrift H3"
                       >
                         <Heading3 size={14} />
                       </button>
