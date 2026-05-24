@@ -15,7 +15,7 @@ export default function CommunityChatView() {
   
   // Responsive sidebar toggles for mobile view
   const [showSidebar, setShowSidebar] = useState(true);
-  const [showDeltakere, setShowDeltakere] = useState(false);
+  const [showDeltakere, setShowDeltakere] = useState(true);
   const [rightTab, setRightTab] = useState('deltakere'); // 'deltakere' | 'gjoeremaal'
   const [newTodoText, setNewTodoText] = useState('');
   
