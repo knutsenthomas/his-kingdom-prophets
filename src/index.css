@@ -178,6 +178,15 @@ body:has(.lesson-notes-sidebar-open) .cms-visual-toggle-container {
   display: none !important;
 }
 
+/* Hide floating widgets completely in bible reader fullscreen mode */
+.bible-reader-fullscreen .hkm-chat-widget-container,
+.bible-reader-fullscreen .cms-visual-toggle-container,
+.bible-reader-fullscreen .hkm-chat-panel,
+.bible-reader-fullscreen .hkm-chat-toggle {
+  display: none !important;
+}
+
+
 
 /* Ensure smooth transitions for floating widgets */
 .hkm-chat-widget-container,

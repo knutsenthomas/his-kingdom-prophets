@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BookOpen, Search, ArrowLeft, ArrowRight, Share2, Copy, Send, Check, RefreshCw, Sparkles, BookMarked, X,
-  Trash2, Save, Loader2, ChevronDown, Maximize2, Minimize2, Type
+  Trash2, Save, Loader2, ChevronDown, Maximize2, Minimize2, Type, Edit3
 } from 'lucide-react';
 import { db } from '@/firebase';
 import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
@@ -411,7 +411,30 @@ const findBibleBook = (bookStr) => {
 
 export default function BibleView() {
   const navigate = useNavigate();
-  const { showToast, sendAssistantMessage, user, setAssistantContext } = useApp();
+  const { showToast, sendAssistantMessage, user, setAssistantContext, isAdminEditing, setIsAdminEditing } = useApp();
+
+  // Check admin status from both AppContext user AND localStorage (needed for public pages)
+  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no'];
+  const cleanEmail = user?.email?.toLowerCase();
+  const localStorageUser = (() => {
+    try {
+      const raw = localStorage.getItem('hkm-current-user');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  })();
+  const localEmail = localStorageUser?.email?.toLowerCase();
+  const localRole = localStorageUser?.role;
+
+  const isAdminUser = 
+    user?.role === 'admin' || 
+    user?.role === 'superadmin' || 
+    ADMIN_EMAILS.includes(cleanEmail) ||
+    localRole === 'admin' ||
+    localRole === 'superadmin' ||
+    ADMIN_EMAILS.includes(localEmail);
+
   const [selectedBook, setSelectedBook] = useState(BIBLE_BOOKS.find(b => b.id === 'joh'));
   const [selectedChapter, setSelectedChapter] = useState(3);
   const [selectedTranslation, setSelectedTranslation] = useState('bibelselskap');
@@ -449,15 +472,18 @@ export default function BibleView() {
     localStorage.setItem('hkm-bible-text-size', textSize);
   }, [textSize]);
 
-  // Lock body scroll in fullscreen mode
+  // Lock body scroll in fullscreen mode and toggle body class
   useEffect(() => {
     if (isFullscreenReading) {
       document.body.style.overflow = 'hidden';
+      document.body.classList.add('bible-reader-fullscreen');
     } else {
       document.body.style.overflow = '';
+      document.body.classList.remove('bible-reader-fullscreen');
     }
     return () => {
       document.body.style.overflow = '';
+      document.body.classList.remove('bible-reader-fullscreen');
     };
   }, [isFullscreenReading]);
 
@@ -1196,6 +1222,29 @@ export default function BibleView() {
                   <Type size={16} />
                   <span className="text-[10px] font-bold uppercase">{textSize.toUpperCase()}</span>
                 </button>
+
+                {/* Admin CMS Edit Toggle */}
+                {isAdminUser && !isFullscreenReading && (
+                  <button
+                    onClick={() => {
+                      const nextState = !isAdminEditing;
+                      setIsAdminEditing(nextState);
+                      if (nextState) {
+                        showToast("Visuell CMS-redigering aktivert! Klikk på tekster for å endre dem.");
+                      } else {
+                        showToast("Visuell redigering avsluttet. Endringer lagret.");
+                      }
+                    }}
+                    className={`p-2 rounded-xl border active:scale-[0.97] transition-all cursor-pointer flex items-center justify-center ${
+                      isAdminEditing 
+                        ? 'bg-[#d17d39] text-white border-[#d17d39] hover:bg-[#bd4f2a] shadow-sm shadow-[#d17d39]/20' 
+                        : 'bg-slate-50 text-primary border-outline-variant/40 hover:bg-slate-100'
+                    }`}
+                    title="Aktiver visuell CMS-redigering"
+                  >
+                    <Edit3 size={16} className={isAdminEditing ? "animate-pulse" : ""} />
+                  </button>
+                )}
 
                 {/* Fullscreen toggle */}
                 <button

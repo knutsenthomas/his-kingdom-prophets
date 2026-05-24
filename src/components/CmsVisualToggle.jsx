@@ -37,7 +37,9 @@ export default function CmsVisualToggle() {
     localRole === 'superadmin' ||
     ADMIN_EMAILS.includes(localEmail);
 
-  if (!isAdminUser) {
+  const isBiblePage = location.pathname === '/student/bible' || location.pathname === '/bible-resources';
+
+  if (!isAdminUser || isBiblePage) {
     return null;
   }
 

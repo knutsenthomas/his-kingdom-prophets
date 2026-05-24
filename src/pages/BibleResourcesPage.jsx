@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BookOpen, Search, ArrowLeft, ArrowRight, Copy, Check, RefreshCw, Sparkles, BookMarked, X,
   Trash2, Save, Globe, Video, FileText, Calendar, Compass, UserCheck, Flame, BookText, Settings,
-  ChevronDown, Maximize2, Minimize2, Type
+  ChevronDown, Maximize2, Minimize2, Type, Edit3
 } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
@@ -17,8 +17,30 @@ import {
 
 export default function BibleResourcesPage() {
   const navigate = useNavigate();
-  const { language, toggleLanguage, user, cmsContent } = useApp();
+  const { language, toggleLanguage, user, cmsContent, isAdminEditing, setIsAdminEditing, showToast } = useApp();
   const isEn = language === 'en';
+
+  // Check admin status from both AppContext user AND localStorage (needed for public pages)
+  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no'];
+  const cleanEmail = user?.email?.toLowerCase();
+  const localStorageUser = (() => {
+    try {
+      const raw = localStorage.getItem('hkm-current-user');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  })();
+  const localEmail = localStorageUser?.email?.toLowerCase();
+  const localRole = localStorageUser?.role;
+
+  const isAdminUser = 
+    user?.role === 'admin' || 
+    user?.role === 'superadmin' || 
+    ADMIN_EMAILS.includes(cleanEmail) ||
+    localRole === 'admin' ||
+    localRole === 'superadmin' ||
+    ADMIN_EMAILS.includes(localEmail);
 
   // Navigation tab for the resource hub
   const [activeTab, setActiveTab] = useState('bible'); // bible, curriculums, video, fasting
@@ -62,15 +84,18 @@ export default function BibleResourcesPage() {
     localStorage.setItem('hkm-bible-text-size', textSize);
   }, [textSize]);
 
-  // Lock body scroll in fullscreen mode
+  // Lock body scroll in fullscreen mode and toggle body class
   useEffect(() => {
     if (isFullscreenReading) {
       document.body.style.overflow = 'hidden';
+      document.body.classList.add('bible-reader-fullscreen');
     } else {
       document.body.style.overflow = '';
+      document.body.classList.remove('bible-reader-fullscreen');
     }
     return () => {
       document.body.style.overflow = '';
+      document.body.classList.remove('bible-reader-fullscreen');
     };
   }, [isFullscreenReading]);
 
@@ -729,6 +754,29 @@ export default function BibleResourcesPage() {
                         <Type size={14} />
                         <span className="text-[9px] font-bold uppercase">{textSize.toUpperCase()}</span>
                       </button>
+
+                      {/* Admin CMS Edit Toggle */}
+                      {isAdminUser && !isFullscreenReading && (
+                        <button
+                          onClick={() => {
+                            const nextState = !isAdminEditing;
+                            setIsAdminEditing(nextState);
+                            if (nextState) {
+                              showToast(isEn ? "Visual CMS-redigering aktivert! Klikk på tekster for å endre dem." : "Visuell CMS-redigering aktivert! Klikk på tekster for å endre dem.");
+                            } else {
+                              showToast(isEn ? "Visuell redigering avsluttet. Endringer lagret." : "Visuell redigering avsluttet. Endringer lagret.");
+                            }
+                          }}
+                          className={`p-2 rounded-xl border active:scale-[0.97] transition-all cursor-pointer flex items-center justify-center ${
+                            isAdminEditing 
+                              ? 'bg-[#d17d39] text-white border-[#d17d39] hover:bg-[#bd4f2a] shadow-sm shadow-[#d17d39]/20' 
+                              : 'bg-slate-50 text-primary border-slate-200/60 hover:bg-slate-100'
+                          }`}
+                          title={isEn ? "Toggle Visual CMS Editing" : "Aktiver visuell CMS-redigering"}
+                        >
+                          <Edit3 size={14} className={isAdminEditing ? "animate-pulse" : ""} />
+                        </button>
+                      )}
 
                       {/* Fullscreen toggle */}
                       <button
