@@ -582,7 +582,8 @@ export default function StudentLayout() {
             <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
               <div className="font-serif text-lg font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => { navigate('/student/dashboard'); setIsMobileMenuOpen(false); }}>
                 <GraduationCap className="text-primary shrink-0 animate-pulse" size={20} />
-                <span>His Kingdom Prophets</span>
+                <span className="hidden sm:inline"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
+                <span className="inline sm:hidden"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
               </div>
               <button 
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -591,6 +592,40 @@ export default function StudentLayout() {
                 <X size={20} />
               </button>
             </div>
+
+            {/* Superadmin System View Switcher for Mobile Drawer */}
+            {(['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(user?.email?.toLowerCase()) || user?.email?.includes('superadmin')) && (
+              <div className="flex flex-col gap-2 p-3 bg-[#561291]/5 rounded-xl border border-[#561291]/20">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#561291] px-1">Endre Visningsrolle</span>
+                <div className="grid grid-cols-3 gap-1">
+                  {[
+                    { role: 'student', label: 'Elev', path: '/student/dashboard' },
+                    { role: 'teacher', label: 'Mentor', path: '/teacher/dashboard' },
+                    { role: 'superadmin', label: 'Superadmin', path: '/admin/portal' }
+                  ].map(opt => {
+                    const isCurrent = user?.role === opt.role;
+                    return (
+                      <button
+                        key={opt.role}
+                        onClick={() => {
+                          setUser(prev => ({ ...prev, role: opt.role }));
+                          navigate(opt.path);
+                          setIsMobileMenuOpen(false);
+                          showToast(`Visning endret til ${opt.label}`);
+                        }}
+                        className={`py-2 rounded-lg text-[9px] font-bold uppercase tracking-wider text-center transition-all ${
+                          isCurrent 
+                            ? 'bg-[#561291] text-white shadow-sm font-bold' 
+                            : 'bg-white/60 text-[#46617b] hover:bg-[#561291]/10 hover:text-[#561291]'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Student profile summary */}
             <button

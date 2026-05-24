@@ -360,6 +360,40 @@ export default function TeacherLayout() {
               </button>
             </div>
 
+            {/* Superadmin System View Switcher for Mobile Drawer */}
+            {(['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(user?.email?.toLowerCase()) || user?.email?.includes('superadmin')) && (
+              <div className="flex flex-col gap-2 p-3 bg-[#561291]/5 rounded-xl border border-[#561291]/20">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#561291] px-1">Endre Visningsrolle</span>
+                <div className="grid grid-cols-3 gap-1">
+                  {[
+                    { role: 'student', label: 'Elev', path: '/student/dashboard' },
+                    { role: 'teacher', label: 'Mentor', path: '/teacher/dashboard' },
+                    { role: 'superadmin', label: 'Superadmin', path: '/admin/portal' }
+                  ].map(opt => {
+                    const isCurrent = user?.role === opt.role;
+                    return (
+                      <button
+                        key={opt.role}
+                        onClick={() => {
+                          setUser(prev => ({ ...prev, role: opt.role }));
+                          navigate(opt.path);
+                          setIsMobileMenuOpen(false);
+                          showToast(`Visning endret til ${opt.label}`);
+                        }}
+                        className={`py-2 rounded-lg text-[9px] font-bold uppercase tracking-wider text-center transition-all ${
+                          isCurrent 
+                            ? 'bg-[#561291] text-white shadow-sm font-bold' 
+                            : 'bg-white/60 text-[#46617b] hover:bg-[#561291]/10 hover:text-[#561291]'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Mentor status details */}
             <button
               onClick={() => {
