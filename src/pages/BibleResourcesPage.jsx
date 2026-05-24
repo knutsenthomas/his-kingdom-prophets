@@ -34,6 +34,7 @@ export default function BibleResourcesPage() {
   const [testamentFilter, setTestamentFilter] = useState('all'); // all, GT, NT
   const topRef = useRef(null);
   const readerRef = useRef(null);
+  const tabsRef = useRef(null);
   const [previousReference, setPreviousReference] = useState(null);
 
   // Study Panel States
@@ -369,6 +370,28 @@ export default function BibleResourcesPage() {
     }
   }, [highlightedVerse, verses]);
 
+  // Scroll smoothly back to the tab controller top when switching tabs
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    
+    if (tabsRef.current) {
+      const offset = 80; // Height of the sticky public header
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = tabsRef.current.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  }, [activeTab]);
+
   const filteredBooks = BIBLE_BOOKS.filter(book => {
     if (testamentFilter === 'all') return true;
     return book.testament === testamentFilter;
@@ -437,7 +460,7 @@ export default function BibleResourcesPage() {
       </section>
 
       {/* Tabs Controller */}
-      <section className="border-b border-slate-200 bg-white sticky top-20 z-30 shadow-sm">
+      <section ref={tabsRef} className="border-b border-slate-200 bg-white sticky top-20 z-30 shadow-sm">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 flex space-x-8 overflow-x-auto whitespace-nowrap scrollbar-none h-16 items-center">
           {[
             { id: 'bible', fallback: 'Interaktiv studiebibel', icon: BookOpen },
