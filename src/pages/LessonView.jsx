@@ -204,7 +204,34 @@ export default function LessonView() {
   const saveTimeoutRef = useRef(null);
   
   // Determine selected course from location state or default to prop101
-  const courseId = location.state?.courseId || 'prop101';
+  const rawCourseId = location.state?.courseId || 'prop101';
+  
+  // Guard courseId for students to ensure they only view paid/accessible courses
+  const getAccessibleCourseId = () => {
+    if (!user || user.role !== 'student') return rawCourseId;
+    
+    const paidList = user.paidCourses || user.purchasedCourses || user.enrolledCourses || [];
+    const validIds = [];
+    if (Array.isArray(paidList)) {
+      validIds.push(...paidList);
+    }
+    if (user.courseId) {
+      validIds.push(user.courseId);
+    }
+    
+    const hasAnyCourseField = 'paidCourses' in user || 'purchasedCourses' in user || 'enrolledCourses' in user || 'courseId' in user;
+    if (validIds.length === 0 && !hasAnyCourseField) {
+      validIds.push('prop101');
+    }
+    
+    if (validIds.includes(rawCourseId)) {
+      return rawCourseId;
+    }
+    
+    return validIds[0] || 'prop101';
+  };
+
+  const courseId = getAccessibleCourseId();
   const course = courses?.find(c => c.id === courseId) || courses?.[0];
   
   // Keep track of the active selected module in the lesson reading screen

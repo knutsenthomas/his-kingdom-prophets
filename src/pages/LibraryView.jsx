@@ -8,10 +8,26 @@ import {
 
 export default function LibraryView() {
   const navigate = useNavigate();
-  const { courses, showToast } = useApp();
+  const { courses, showToast, user } = useApp();
   const [activeFilter, setActiveFilter] = useState('All');
 
-  const filteredCourses = courses.filter(course => {
+  // Filter courses so students only see what they have paid for
+  const studentCourses = courses.filter(course => {
+    if (!user || user.role !== 'student') return true;
+    
+    const paidList = user.paidCourses || user.purchasedCourses || user.enrolledCourses || [];
+    if (Array.isArray(paidList) && paidList.includes(course.id)) return true;
+    if (user.courseId && user.courseId === course.id) return true;
+    
+    const hasAnyCourseField = 'paidCourses' in user || 'purchasedCourses' in user || 'enrolledCourses' in user || 'courseId' in user;
+    if (!hasAnyCourseField) {
+      return course.id === 'prop101'; // Default onboarding course
+    }
+    
+    return false;
+  });
+
+  const filteredCourses = studentCourses.filter(course => {
     if (activeFilter === 'All') return true;
     if (activeFilter === 'Profetisk') return course.id === 'prop101';
     if (activeFilter === 'Bibelstudier') return course.id === 'bible301';

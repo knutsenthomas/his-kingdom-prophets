@@ -11,6 +11,23 @@ import CmsText from '@/components/CmsText';
 export default function StudentDashboard() {
   const navigate = useNavigate();
   const { courses, toggleModuleCompleted, showToast, cmsContent, user, language } = useApp();
+
+  // Filter courses so students only see what they have paid for
+  const studentCourses = courses.filter(course => {
+    if (!user || user.role !== 'student') return true;
+    
+    const paidList = user.paidCourses || user.purchasedCourses || user.enrolledCourses || [];
+    if (Array.isArray(paidList) && paidList.includes(course.id)) return true;
+    if (user.courseId && user.courseId === course.id) return true;
+    
+    const hasAnyCourseField = 'paidCourses' in user || 'purchasedCourses' in user || 'enrolledCourses' in user || 'courseId' in user;
+    if (!hasAnyCourseField) {
+      return course.id === 'prop101'; // Default onboarding course
+    }
+    
+    return false;
+  });
+
   const [todoList, setTodoList] = useState([
     { id: 1, text: 'Lese Modul 3 i Profetisk 101', done: false },
     { id: 2, text: 'Johannes åpenbaring kapittel 4 tolkning', done: true },
@@ -66,7 +83,7 @@ export default function StudentDashboard() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {courses.map((course) => (
+            {studentCourses.map((course) => (
               <motion.div 
                 key={course.id}
                 whileHover={{ y: -3 }}
@@ -129,7 +146,7 @@ export default function StudentDashboard() {
                 <p className="text-sm font-serif font-bold text-on-surface mt-1">PROP 101: Høre Guds stemme</p>
                 <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">Startet kl. 12:15 med Apostel David Hansen</p>
                 <a 
-                  href={courses[0]?.zoomLink || "https://zoom.us"} 
+                  href={studentCourses[0]?.zoomLink || "https://zoom.us"} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 mt-3 text-xs font-bold text-burnt-orange hover:underline cursor-pointer"
