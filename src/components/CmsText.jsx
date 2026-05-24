@@ -11,10 +11,19 @@ export default function CmsText({
   const { cmsContent, updateCmsContent, isAdminEditing, showToast, language } = useApp();
   
   const getCmsText = () => {
+    let text = "";
     if (language === 'en') {
-      return cmsContent?.[slug + '-en'] || fallback;
+      text = cmsContent?.[slug + '-en'] || fallback;
+    } else {
+      text = cmsContent?.[slug] || fallback;
     }
-    return cmsContent?.[slug] || fallback;
+
+    // Defensiv sjekk: fjern ledende emojier fra faner for å unngå doble symboler
+    if (slug.startsWith('resources-tab-') && typeof text === 'string') {
+      text = text.replace(/^[📖📚🎙️📜\s]+/gu, '').trim();
+    }
+
+    return text;
   };
   
   const rawText = getCmsText();
