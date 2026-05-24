@@ -485,7 +485,7 @@ export default function LandingPage() {
             </div>
             
             <button 
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/hkm')}
               className="relative z-10 shrink-0 px-6 py-3 bg-[#561291] hover:bg-[#3c096c] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm hover:shadow active:scale-[0.98] flex items-center gap-2 group-hover:translate-x-0.5"
             >
               <CmsText slug="landing-network-btn" fallback="Bli en Del" />
@@ -550,8 +550,8 @@ export default function LandingPage() {
                 <CmsText slug="landing-cta-btn-primary" fallback="Søk Opptak 2026" />
               </button>
               <button 
-                onClick={() => navigate(user ? '/student/library' : (language === 'en' ? '/admission' : '/opptak'))} 
-                className="w-full sm:w-auto px-8 py-4 bg-surface-container border border-outline-variant text-primary font-semibold rounded-xl hover:bg-surface-container-high transition-all"
+                onClick={() => navigate('/admission')} 
+                className="w-full sm:w-auto px-8 py-4 bg-surface-container border border-outline-variant text-primary font-semibold rounded-xl hover:bg-surface-container-high transition-all active:scale-[0.98]"
               >
                 <CmsText slug="landing-cta-btn-secondary" fallback="Se Fagplan" />
               </button>

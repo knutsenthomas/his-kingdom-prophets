@@ -53,6 +53,7 @@ import ContactSupportPage from '@/pages/ContactSupportPage';
 import BibleResourcesPage from '@/pages/BibleResourcesPage';
 import AdmissionPage from '@/pages/AdmissionPage';
 import AboutPage from '@/pages/AboutPage';
+import HkmAboutPage from '@/pages/HkmAboutPage';
 
 // Email Previews
 import EmailPreviews from '@/pages/EmailPreviews';
@@ -234,6 +235,7 @@ function AppRoutes() {
         <Route path="/admission" element={<AdmissionPage />} />
         <Route path="/opptak" element={<AdmissionPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/hkm" element={<HkmAboutPage />} />
       </Routes>
     </>
   );
