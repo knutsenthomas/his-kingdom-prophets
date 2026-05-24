@@ -1192,11 +1192,7 @@ export default function BibleView() {
                   setSelectorSearch('');
                   setShowMobileSelector(true);
                 }}
-                className={`text-center flex flex-col items-center select-none group border border-transparent transition-all px-4 py-1.5 rounded-2xl ${
-                  isFullscreenReading 
-                    ? 'pointer-events-none cursor-default' 
-                    : 'pointer-events-none sm:pointer-events-auto cursor-default sm:cursor-pointer sm:hover:bg-slate-50 sm:active:scale-[0.97] sm:hover:border-slate-100'
-                }`}
+                className="hidden"
                 title="Velg bok og kapittel"
               >
                 <h2 className="font-serif font-extrabold text-lg md:text-2xl text-primary leading-tight flex items-center gap-1 sm:gap-2 justify-center">
@@ -1938,7 +1934,7 @@ export default function BibleView() {
             initial={{ opacity: 0, y: 40, x: '-50%' }}
             animate={{ opacity: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, y: 40, x: '-50%' }}
-            className={`fixed bottom-6 left-1/2 z-[55] bg-white/95 backdrop-blur-md text-slate-800 border border-slate-200/80 px-3 py-1 rounded-full flex items-center justify-between gap-2 shadow-lg w-[75vw] max-w-[260px] pointer-events-auto ${isFullscreenReading ? '' : 'sm:hidden'}`}
+            className="fixed bottom-6 left-1/2 z-[55] bg-white/95 backdrop-blur-md text-slate-800 border border-slate-200/80 px-3 py-1 rounded-full flex items-center justify-between gap-2 shadow-lg w-[75vw] max-w-[260px] pointer-events-auto"
             style={{ transform: 'translate3d(-50%, 0, 0)' }}
           >
             <button 
