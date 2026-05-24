@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -54,6 +54,90 @@ export default function StudentProfile() {
     socialFacebook:  user?.socialFacebook  || '',
     avatar:          user?.avatar          || AVATAR_OPTIONS[0],
   });
+
+  const [addressSuggestions, setAddressSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
+
+  // Fetch address suggestions from Nominatim (OpenStreetMap) with Photon as fallback!
+  const fetchAddressSuggestions = async (query) => {
+    if (!query || query.trim().length < 3) {
+      setAddressSuggestions([]);
+      return;
+    }
+
+    setLoadingSuggestions(true);
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&addressdetails=1`;
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'HisKingdomProphets/1.0 (thomas@tk-design.no)'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data.length > 0) {
+          const suggestions = data.map(item => item.display_name);
+          setAddressSuggestions(suggestions);
+          setLoadingSuggestions(false);
+          return;
+        }
+      }
+      
+      const fallbackUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`;
+      const fallbackResponse = await fetch(fallbackUrl);
+      if (fallbackResponse.ok) {
+        const data = await fallbackResponse.json();
+        if (data && data.features && data.features.length > 0) {
+          const suggestions = data.features.map(f => {
+            const props = f.properties;
+            const parts = [
+              props.street ? `${props.street} ${props.housenumber || ''}`.trim() : '',
+              props.postcode || '',
+              props.city || props.town || props.village || '',
+              props.country || ''
+            ].filter(Boolean);
+            return parts.join(', ');
+          }).filter(Boolean);
+          setAddressSuggestions(suggestions);
+        }
+      }
+    } catch (error) {
+      console.warn("Could not fetch address suggestions:", error);
+    } finally {
+      setLoadingSuggestions(false);
+    }
+  };
+
+  // Debounce query input to avoid spamming the APIs
+  useEffect(() => {
+    if (!draft.address || draft.address.trim().length < 3) {
+      setAddressSuggestions([]);
+      return;
+    }
+
+    if (!showSuggestions) return;
+
+    const delayDebounce = setTimeout(() => {
+      fetchAddressSuggestions(draft.address);
+    }, 400);
+
+    return () => clearTimeout(delayDebounce);
+  }, [draft.address]);
 
   // Admin check helper
   const isAdmin = user?.role === 'admin' || user?.role === 'superadmin';
@@ -391,12 +475,40 @@ export default function StudentProfile() {
                   </Field>
 
                   <Field label={<CmsText slug="profile-field-address" fallback="Adresse" />} icon={<Home size={13} />} className="sm:col-span-2">
-                    <input
-                      value={draft.address}
-                      onChange={e => set('address', e.target.value)}
-                      placeholder={getPlaceholder('profile-placeholder-address', 'f.eks. Gateveien 12, 4500 Kristiansand')}
-                      className="field-input"
-                    />
+                    <div className="relative w-full" ref={dropdownRef}>
+                      <input
+                        value={draft.address}
+                        onChange={e => {
+                          set('address', e.target.value);
+                          setShowSuggestions(true);
+                        }}
+                        onFocus={() => setShowSuggestions(true)}
+                        placeholder={getPlaceholder('profile-placeholder-address', 'f.eks. Gateveien 12, 4500 Kristiansand')}
+                        className="field-input w-full pr-10"
+                      />
+                      {loadingSuggestions && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
+                          <span className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></span>
+                        </div>
+                      )}
+                      
+                      {showSuggestions && addressSuggestions.length > 0 && (
+                        <ul className="absolute left-0 right-0 z-50 top-full mt-1.5 bg-white border border-outline-variant/40 rounded-xl shadow-xl overflow-hidden max-h-60 overflow-y-auto divide-y divide-slate-100 animate-fade-in animate-fade-in">
+                          {addressSuggestions.map((item, idx) => (
+                            <li 
+                              key={idx} 
+                              onClick={() => {
+                                set('address', item);
+                                setShowSuggestions(false);
+                              }}
+                              className="px-4 py-3 text-xs text-slate-700 hover:bg-[#f3e8ff] hover:text-[#561291] cursor-pointer transition-colors leading-relaxed"
+                            >
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   </Field>
                 </div>
                 <p className="mt-4 text-[10px] text-[#561291]/50 font-semibold flex items-center gap-1.5">
