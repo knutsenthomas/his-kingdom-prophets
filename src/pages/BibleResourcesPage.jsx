@@ -33,6 +33,8 @@ export default function BibleResourcesPage() {
   const [highlightedVerse, setHighlightedVerse] = useState(null);
   const [testamentFilter, setTestamentFilter] = useState('all'); // all, GT, NT
   const topRef = useRef(null);
+  const readerRef = useRef(null);
+  const [previousReference, setPreviousReference] = useState(null);
 
   // Study Panel States
   const [showStudyPanel, setShowStudyPanel] = useState(false);
@@ -113,6 +115,7 @@ export default function BibleResourcesPage() {
   }, [selectedBook, selectedChapter]);
 
   const toggleVerseSelection = (verseNum) => {
+    setHighlightedVerse(verseNum); // Sett denne som aktivt fokusvers for studier og kryssreferanser
     setSelectedVerses(prev => {
       if (prev.includes(verseNum)) {
         return prev.filter(num => num !== verseNum);
@@ -202,14 +205,20 @@ export default function BibleResourcesPage() {
     }
   };
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return;
-
-    const parsedRef = parseBibleReference(searchQuery);
+  const loadBibleReference = (refString) => {
+    if (!refString) return false;
+    const parsedRef = parseBibleReference(refString);
     if (parsedRef) {
       const foundBook = findBibleBook(parsedRef.bookStr);
       if (foundBook) {
+        // Lagre nåværende posisjon (inkludert aktivt vers) før vi navigerer
+        const sourceVerse = highlightedVerse || (selectedVerses.length > 0 ? selectedVerses[selectedVerses.length - 1] : null);
+        setPreviousReference({
+          book: selectedBook,
+          chapter: selectedChapter,
+          verse: sourceVerse
+        });
+
         setSelectedBook(foundBook);
         const clampedChapter = Math.max(1, Math.min(parsedRef.chapter, foundBook.chapters));
         setSelectedChapter(clampedChapter);
@@ -219,9 +228,43 @@ export default function BibleResourcesPage() {
         } else {
           setHighlightedVerse(null);
         }
-        setSearchQuery('');
-        return;
+        
+        // Scroll leseren i fokus
+        setTimeout(() => {
+          if (readerRef.current) {
+            readerRef.current.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 150);
+        return true;
       }
+    }
+    return false;
+  };
+
+  const handleGoBackToReference = () => {
+    if (!previousReference) return;
+    setSelectedBook(previousReference.book);
+    setSelectedChapter(previousReference.chapter);
+    setHighlightedVerse(previousReference.verse);
+    
+    setTimeout(() => {
+      if (readerRef.current) {
+        readerRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 150);
+    
+    setPreviousReference(null);
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    // 1. Prøv å laste direkte som en spesifikk bibelreferanse
+    const success = loadBibleReference(searchQuery);
+    if (success) {
+      setSearchQuery('');
+      return;
     }
 
     setIsLoading(true);
@@ -306,7 +349,9 @@ export default function BibleResourcesPage() {
         }
       }
     }
-    topRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (readerRef.current) {
+      readerRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   useEffect(() => {
@@ -561,7 +606,7 @@ export default function BibleResourcesPage() {
               </div>
 
               {/* Middle Column: Reading Panel */}
-              <div className={`${showStudyPanel ? 'lg:col-span-5' : 'lg:col-span-8'} space-y-6`}>
+              <div className={`${showStudyPanel ? 'lg:col-span-5' : 'lg:col-span-8'} space-y-6 scroll-mt-24`} ref={readerRef}>
                 <div className="bg-white border border-slate-200/60 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]">
                   
                   {/* Reading Header */}
@@ -603,6 +648,21 @@ export default function BibleResourcesPage() {
                       </button>
                     </div>
                   </div>
+
+                  {/* Back to previous reference button */}
+                  {previousReference && (
+                    <div className="mb-4 flex animate-fade-in justify-start select-none">
+                      <button
+                        onClick={handleGoBackToReference}
+                        className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-primary to-[#2c6e91] hover:from-[#153b52] hover:to-[#225672] text-white shadow-md shadow-primary/10 rounded-full text-xs font-extrabold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] cursor-pointer"
+                      >
+                        <ArrowLeft size={12} className="stroke-[3]" />
+                        <span>
+                          Tilbake til {previousReference.book.nor} {previousReference.chapter}{previousReference.verse ? `:${previousReference.verse}` : ''}
+                        </span>
+                      </button>
+                    </div>
+                  )}
 
                   {/* Reading Body */}
                   <div className="flex-grow relative">
@@ -793,7 +853,17 @@ export default function BibleResourcesPage() {
                             <div className="space-y-3 animate-in fade-in duration-200">
                               <span className="font-bold text-slate-800 uppercase tracking-wider text-[9px] block">Tilknyttede skriftsteder</span>
                               {activeCommentary.crossReferences.map((ref, idx) => (
-                                <div key={idx} className="p-3 bg-slate-50 border border-slate-200/50 rounded-xl space-y-1 hover:border-primary/20 transition-all cursor-pointer" onClick={() => setSearchQuery(ref.ref)}>
+                                <div 
+                                  key={idx} 
+                                  className="p-3 bg-slate-50 border border-slate-200/50 rounded-xl space-y-1 hover:border-primary/20 transition-all cursor-pointer" 
+                                  onClick={() => {
+                                    loadBibleReference(ref.ref);
+                                    // Lukk studiepanelet på mobil slik at skriften er umiddelbart synlig
+                                    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+                                      setShowStudyPanel(false);
+                                    }
+                                  }}
+                                >
                                   <p className="font-bold text-primary text-[11px] flex items-center gap-1.5">
                                     <BookOpen size={11} /> {ref.ref}
                                   </p>
@@ -1228,6 +1298,28 @@ export default function BibleResourcesPage() {
         )}
 
       </main>
+
+      {/* Flytende gå-tilbake-knapp sentrert nederst på skjermen */}
+      <AnimatePresence>
+        {previousReference && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: 50, x: '-50%' }}
+            className="fixed bottom-6 left-1/2 z-50 select-none pointer-events-auto"
+          >
+            <button
+              onClick={handleGoBackToReference}
+              className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-primary to-[#2c6e91] hover:from-[#153b52] hover:to-[#225672] text-white shadow-xl shadow-primary/25 rounded-full text-xs font-extrabold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.95] cursor-pointer border-2 border-white/20 backdrop-blur-sm"
+            >
+              <ArrowLeft size={14} className="stroke-[3] animate-pulse" />
+              <span>
+                Tilbake til {previousReference.book.nor} {previousReference.chapter}{previousReference.verse ? `:${previousReference.verse}` : ''}
+              </span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Footer */}
       <footer className="w-full py-12 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6 bg-tertiary text-white">
