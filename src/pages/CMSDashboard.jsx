@@ -11,6 +11,7 @@ import {
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/firebase';
 import CmsText from '@/components/CmsText';
+import { generateFastingPdf, generateIntercessionPdf } from '@/utils/pdfGenerator';
 
 // Definition of all CMS strings with labels, categories, and explanatory descriptions
 const assetDefinitions = [
@@ -845,14 +846,29 @@ export default function CMSDashboard() {
                     }`}>
                       {isActiveCustom ? 'Egendefinert' : 'Systemstandard'}
                     </span>
-                    <a 
-                      href={currentUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
-                    >
-                      <Info size={12} /> <CmsText slug="admin-doc-preview-link" fallback="Se aktiv PDF" />
-                    </a>
+                    {isActiveCustom ? (
+                      <a 
+                        href={customUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
+                      >
+                        <Info size={12} /> <CmsText slug="admin-doc-preview-link" fallback="Se aktiv PDF" />
+                      </a>
+                    ) : (
+                      <button 
+                        onClick={() => {
+                          if (doc.id === 'fasting') {
+                            generateFastingPdf(cmsContent, 'no');
+                          } else {
+                            generateIntercessionPdf(cmsContent, 'no');
+                          }
+                        }}
+                        className="text-xs font-bold text-primary hover:underline flex items-center gap-1 cursor-pointer bg-transparent border-none p-0 outline-none select-none font-sans"
+                      >
+                        <Info size={12} /> <CmsText slug="admin-doc-preview-link" fallback="Se aktiv PDF" />
+                      </button>
+                    )}
                   </div>
 
                   <h3 className="font-serif text-base font-bold text-primary mb-1">
