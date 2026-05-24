@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
@@ -28,11 +28,18 @@ export default function StudentDashboard() {
     return false;
   });
 
-  const [todoList, setTodoList] = useState([
-    { id: 1, text: 'Lese Modul 3 i Profetisk 101', done: false },
-    { id: 2, text: 'Johannes åpenbaring kapittel 4 tolkning', done: true },
-    { id: 3, text: 'Forberede bønneseminar', done: false }
-  ]);
+  const [todoList, setTodoList] = useState(() => {
+    const saved = localStorage.getItem('hkm-assignments-todo-list');
+    return saved ? JSON.parse(saved) : [
+      { id: 1, text: 'Lese Modul 3 i Profetisk 101', done: false, category: 'PROP 101' },
+      { id: 2, text: 'Johannes åpenbaring kapittel 4 tolkning', done: true, category: 'BIBLE 301' },
+      { id: 3, text: 'Forberede bønneseminar for studiegruppen', done: false, category: 'Bønn' }
+    ];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('hkm-assignments-todo-list', JSON.stringify(todoList));
+  }, [todoList]);
 
   const handleToggleTodo = (id) => {
     setTodoList(prev => prev.map(item => item.id === id ? { ...item, done: !item.done } : item));
