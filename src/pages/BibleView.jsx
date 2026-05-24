@@ -1100,7 +1100,7 @@ export default function BibleView() {
           <div className="bg-white border border-outline-variant/20 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]">
             
             {/* Reading header with next/prev buttons and study panel toggle */}
-            <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-6 sticky top-[64px] bg-white z-20 -mx-4 px-4 sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 pt-2 rounded-t-2xl">
               <button 
                 onClick={() => navigateChapter('prev')}
                 className="p-2 bg-slate-50 text-primary border border-outline-variant/40 rounded-xl hover:bg-slate-100 hover:text-primary-container active:scale-[0.97] transition-all cursor-pointer"

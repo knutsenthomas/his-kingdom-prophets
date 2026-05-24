@@ -610,7 +610,7 @@ export default function BibleResourcesPage() {
                 <div className="bg-white border border-slate-200/60 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]">
                   
                   {/* Reading Header */}
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-6 sticky top-[144px] bg-white z-20 -mx-6 px-6 md:-mx-8 md:px-8 pt-2 rounded-t-2xl">
                     <button 
                       onClick={() => navigateChapter('prev')}
                       className="p-2 bg-slate-50 text-primary border border-slate-200/60 rounded-xl hover:bg-slate-100 active:scale-[0.97] transition-all cursor-pointer"
