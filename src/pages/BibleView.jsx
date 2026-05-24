@@ -896,7 +896,10 @@ export default function BibleView() {
         }
       }
     }
-    topRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Only scroll back to the top if the user has actually scrolled down, to prevent page jumping
+    if (typeof window !== 'undefined' && window.scrollY > 150) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const filteredBooks = BIBLE_BOOKS.filter(book => {
