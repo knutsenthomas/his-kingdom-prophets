@@ -327,7 +327,7 @@ export default function LandingPage() {
               />
               <div className="flex flex-col sm:flex-row gap-4">
                 <button 
-                  onClick={() => navigate('/login')} 
+                  onClick={(e) => handleNavClick(e, { href: '#programs', id: 'programs' })} 
                   className="px-8 py-4 bg-white text-primary font-semibold rounded-xl hover:bg-primary-fixed transition-all shadow-lg hover:-translate-y-0.5 text-sm active:scale-[0.98]"
                 >
                   <CmsText slug="landing-hero-cta-primary" fallback="Begynn Din Reise" />
