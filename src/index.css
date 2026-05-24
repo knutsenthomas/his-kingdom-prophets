@@ -178,9 +178,21 @@ body:has(.lesson-notes-sidebar-open) .cms-visual-toggle-container {
   display: none !important;
 }
 
+
 /* Ensure smooth transitions for floating widgets */
 .hkm-chat-widget-container,
 .cms-visual-toggle-container {
   transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease, opacity 0.3s ease !important;
 }
 
+/* Hide scrollbars globally across the entire application (including active scroll states) */
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+* {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
