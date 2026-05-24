@@ -13,7 +13,7 @@ import {
   Plus, Check, Edit, Save, FileEdit, AlertCircle,
   Bold, Italic, Underline, List, ListOrdered, Quote,
   Heading1, Heading2, Heading3, Palette, Calendar, Eraser,
-  AlignLeft, AlignCenter, AlignRight, Library
+  AlignLeft, AlignCenter, AlignRight, Library, LayoutGrid
 } from 'lucide-react';
 import CmsText from '@/components/CmsText';
 
@@ -94,6 +94,9 @@ export default function NotesPage() {
   const { user, showToast, language, sendAssistantMessage, courses } = useApp();
   const [activeTab, setActiveTab] = useState('all'); // all, bible, lesson, general
   const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState(() => {
+    return localStorage.getItem('hkm-notes-view-mode') || 'grid';
+  });
   
   // Loading & Data States
   const [bibleNotes, setBibleNotes] = useState([]);
@@ -887,7 +890,7 @@ ${rawContent}
           </button>
 
           {/* Global search input */}
-          <div className="relative w-full sm:w-64 md:w-80">
+          <div className="relative w-full sm:w-64 md:w-80 flex-grow sm:flex-grow-0">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-outline" size={16} />
             <input
               type="text"
@@ -896,6 +899,38 @@ ${rawContent}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none placeholder:text-outline font-semibold transition-all"
             />
+          </div>
+
+          {/* View Mode Toggle Buttons */}
+          <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 shrink-0 select-none items-center self-center sm:self-auto justify-center">
+            <button
+              onClick={() => {
+                setViewMode('grid');
+                localStorage.setItem('hkm-notes-view-mode', 'grid');
+              }}
+              className={`p-1.5 rounded-lg transition-all ${
+                viewMode === 'grid'
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-outline hover:text-primary'
+              }`}
+              title={language === 'en' ? "Grid View" : "Rutenett-visning"}
+            >
+              <LayoutGrid size={15} />
+            </button>
+            <button
+              onClick={() => {
+                setViewMode('list');
+                localStorage.setItem('hkm-notes-view-mode', 'list');
+              }}
+              className={`p-1.5 rounded-lg transition-all ${
+                viewMode === 'list'
+                  ? 'bg-white text-primary shadow-sm'
+                  : 'text-outline hover:text-primary'
+              }`}
+              title={language === 'en' ? "List View" : "Liste-visning"}
+            >
+              <List size={15} />
+            </button>
           </div>
         </div>
       </div>
@@ -1018,7 +1053,7 @@ ${rawContent}
             </button>
           )}
         </div>
-      ) : (
+      ) : viewMode === 'grid' ? (
         /* Notes Cards Grid */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
           <AnimatePresence mode="popLayout">
@@ -1124,6 +1159,137 @@ ${rawContent}
                       {formatDate(note.updatedAt)}
                     </span>
                     <span className="text-primary font-bold uppercase tracking-wider group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
+                      {language === 'en' ? "Edit" : "Rediger"} <ArrowLeft size={10} className="rotate-180" />
+                    </span>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+      ) : (
+        /* Notes Sleek List View */
+        <div className="flex flex-col gap-3">
+          <AnimatePresence mode="popLayout">
+            {activeNotes.map((note) => {
+              const title = note.type === 'bible' 
+                ? `${note.bookName} ${note.chapter}` 
+                : note.type === 'lesson' 
+                  ? note.moduleTitle 
+                  : note.title;
+
+              const rawSnippet = note.type === 'lesson' ? (note.text || '') : (note.content || '');
+              const cleanSnippet = stripHtml(rawSnippet);
+              const textSnippet = cleanSnippet.replace(/\*\*/g, '').replace(/\*/g, '');
+              const metadata = note.type === 'bible' 
+                ? 'Bibelstudie' 
+                : note.type === 'lesson' 
+                  ? `${note.courseCode} - ${note.courseTitle}` 
+                  : 'Personlig notat';
+              
+              return (
+                <motion.div
+                  key={note.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  onClick={() => handleOpenEditor(note)}
+                  className="bg-white border border-outline-variant/30 rounded-xl p-4 hover:shadow-md hover:border-primary/25 cursor-pointer flex flex-col md:flex-row md:items-center justify-between group active:scale-[0.995] transition-all gap-4 relative"
+                >
+                  {/* Left Section: Icon & Details */}
+                  <div className="flex items-center gap-4 min-w-0 flex-1">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
+                      note.type === 'bible' 
+                        ? 'bg-purple-50 text-primary border-purple-100' 
+                        : note.type === 'lesson'
+                          ? 'bg-cyan-50 text-cyan-700 border-cyan-100'
+                          : 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                    }`}>
+                      {note.type === 'bible' && <Book size={18} />}
+                      {note.type === 'lesson' && <GraduationCap size={18} />}
+                      {note.type === 'general' && <FileText size={18} />}
+                    </div>
+
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <div className="flex items-center flex-wrap gap-2">
+                        <h3 className="font-serif font-extrabold text-primary text-sm group-hover:text-[#561291] transition-colors truncate">
+                          {title}
+                        </h3>
+                        <span className={`text-[8px] font-bold uppercase px-1.5 py-0.5 rounded border tracking-wider shrink-0 ${
+                          note.type === 'bible' 
+                            ? 'bg-purple-50 text-primary border-purple-100' 
+                            : note.type === 'lesson'
+                              ? 'bg-cyan-50 text-cyan-700 border-cyan-100'
+                              : 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                        }`}>
+                          {metadata}
+                        </span>
+
+                        {/* Linked badges */}
+                        {note.linkedBookId && (
+                          <span className="text-[8px] font-bold bg-amber-50 text-amber-700 border border-amber-100 rounded px-1.5 py-0.2 uppercase tracking-wide flex items-center gap-0.5">
+                            <Book size={8} />
+                            {note.linkedBookName} {note.linkedChapter}{note.linkedVerses ? `:${note.linkedVerses}` : ''}
+                          </span>
+                        )}
+                        {note.linkedComment && (
+                          <span className="text-[8px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 rounded px-1.5 py-0.2 uppercase tracking-wide flex items-center gap-0.5 max-w-[120px] truncate" title={note.linkedComment}>
+                            <Sparkles size={8} />
+                            Ref: {note.linkedComment}
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="text-xs text-on-surface-variant truncate max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl">
+                        {textSnippet || (language === 'en' ? "Empty note reflection..." : "Tomt studie-notat...")}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Right Section: Time, Actions, and Edit */}
+                  <div className="flex items-center justify-between md:justify-end gap-4 border-t md:border-t-0 border-slate-100 pt-3 md:pt-0 shrink-0">
+                    <div className="flex items-center gap-4">
+                      {/* Clock / Last Updated */}
+                      <span className="flex items-center gap-1 text-[10px] text-outline font-semibold select-none">
+                        <Clock size={11} />
+                        {formatDate(note.updatedAt)}
+                      </span>
+
+                      {/* Hover actions group */}
+                      <div className="flex items-center gap-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleExportText(note); }}
+                          className="p-1 hover:bg-slate-100 text-outline hover:text-primary rounded-lg"
+                          title={language === 'en' ? "Export note" : "Eksporter notat"}
+                        >
+                          <Download size={13} />
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleSendToAI(note); }}
+                          className="p-1 hover:bg-[#f3e8ff] text-outline hover:text-primary rounded-lg"
+                          title={language === 'en' ? "Consult AI assistant" : "Spør HKM Assistent"}
+                        >
+                          <Sparkles size={13} />
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleShareToChat(note); }}
+                          className="p-1 hover:bg-slate-100 text-outline hover:text-[#561291] rounded-lg"
+                          title={language === 'en' ? "Share in community chat" : "Del i bønnefellesskapet"}
+                        >
+                          <Send size={13} />
+                        </button>
+                        <button
+                          onClick={(e) => handleDeleteNote(note, e)}
+                          className="p-1 hover:bg-red-50 text-outline hover:text-red-600 rounded-lg"
+                          title={language === 'en' ? "Delete note" : "Slett notat"}
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Edit Link */}
+                    <span className="text-primary font-bold uppercase tracking-wider group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5 text-[10px] select-none">
                       {language === 'en' ? "Edit" : "Rediger"} <ArrowLeft size={10} className="rotate-180" />
                     </span>
                   </div>
