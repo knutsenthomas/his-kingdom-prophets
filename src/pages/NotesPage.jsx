@@ -533,7 +533,7 @@ ${rawContent}
           {/* Create Note Trigger Button */}
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="px-4 py-2.5 bg-[#1B4965] hover:bg-[#14374b] text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2 group shrink-0"
+            className="px-4 py-2.5 bg-primary hover:bg-[#561291] text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2 group shrink-0"
           >
             <Plus size={15} className="group-hover:rotate-90 transition-transform duration-200" />
             <span>{language === 'en' ? "New Note" : "Nytt notat"}</span>
@@ -916,11 +916,11 @@ ${rawContent}
               {/* Modal Header */}
               <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-[#1B4965]/10 text-[#1B4965] rounded-xl">
+                  <div className="p-2.5 bg-primary/10 text-primary rounded-xl">
                     <FileEdit size={20} className="animate-pulse" />
                   </div>
                   <div>
-                    <h3 className="font-serif font-extrabold text-[#1B4965] text-lg">
+                    <h3 className="font-serif font-extrabold text-primary text-lg">
                       {language === 'en' ? "Create New Note" : "Opprett nytt notat"}
                     </h3>
                     <p className="text-[10px] text-outline font-semibold">
@@ -957,8 +957,8 @@ ${rawContent}
                     onClick={() => setNewNoteType('lesson')}
                     className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2 ${
                       newNoteType === 'lesson'
-                        ? 'bg-white text-[#1B4965] shadow-sm'
-                        : 'text-outline hover:text-[#1B4965]'
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-outline hover:text-primary'
                     }`}
                   >
                     <GraduationCap size={15} />
@@ -1115,7 +1115,7 @@ ${rawContent}
                   type="button"
                   onClick={handleCreateNote}
                   disabled={isCreating || (newNoteType === 'lesson' && (!selectedCourseId || !selectedModuleId))}
-                  className="px-5 py-2.5 bg-[#1B4965] hover:bg-[#14374b] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-5 py-2.5 bg-primary hover:bg-[#561291] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isCreating ? (
                     <>
