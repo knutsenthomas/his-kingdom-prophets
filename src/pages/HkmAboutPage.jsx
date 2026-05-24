@@ -43,7 +43,7 @@ export default function HkmAboutPage() {
       desc: isEn ? "Spreading solid biblical teachings digitally" : "Solid bibelsk undervisning spredt digitalt"
     },
     {
-      icon: <Users size={24} className="text-[#1B4965]" />,
+      icon: <Users size={24} className="text-primary" />,
       number: "500+",
       label: isEn ? "Gatherings & Meetings" : "Møter & samlinger",
       desc: isEn ? "Prayer meetings, seminars and conferences" : "Bønnemøter, seminarer og nasjonale samlinger"
@@ -51,7 +51,7 @@ export default function HkmAboutPage() {
   ];
 
   return (
-    <div className="bg-[#faf8fd] text-[#240046] font-sans min-h-screen flex flex-col justify-between">
+    <div className="bg-[#faf7fc] text-[#240046] font-sans min-h-screen flex flex-col justify-between">
       
       {/* Brand Header Navigation */}
       <header className="sticky top-0 z-40 w-full bg-white/85 backdrop-blur-md border-b border-[#dec2ef]/50 px-6 py-4 shadow-sm select-none">
@@ -69,7 +69,7 @@ export default function HkmAboutPage() {
             {/* Language Switcher Toggle */}
             <button 
               onClick={toggleLanguage}
-              className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-[#561291] bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
+              className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
               title={isEn ? 'Bytt til norsk (Switch to Norwegian)' : 'Bytt til engelsk (Switch to English)'}
             >
               <Globe size={13} />
@@ -78,7 +78,7 @@ export default function HkmAboutPage() {
 
             <button 
               onClick={() => navigate('/')} 
-              className="px-4 py-2 hover:bg-[#dec2ef]/20 rounded-xl text-xs font-bold uppercase tracking-wider text-[#561291] flex items-center gap-1 transition-all active:scale-95"
+              className="px-4 py-2 hover:bg-[#dec2ef]/20 rounded-xl text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1 transition-all active:scale-95"
             >
               <ArrowLeft size={14} />
               <span>{isEn ? "Back" : "Tilbake"}</span>
@@ -88,7 +88,7 @@ export default function HkmAboutPage() {
       </header>
 
       {/* Hero Header Section with vibrant blending colors */}
-      <section className="relative bg-gradient-to-br from-[#1B4965] via-[#561291] to-[#240046] text-white py-20 px-6 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary via-[#561291] to-[#240046] text-white py-20 px-6 overflow-hidden">
         {/* Glow rings and absolute blobs */}
         <div className="absolute top-[-30%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#d17d39]/10 blur-3xl pointer-events-none" />
         <div className="absolute bottom-[-20%] left-[-15%] w-[450px] h-[450px] rounded-full bg-primary/20 blur-3xl pointer-events-none" />
@@ -132,11 +132,11 @@ export default function HkmAboutPage() {
         {/* SECTION 1: ABOUT US & STORY */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#1B4965]/10 text-[#1B4965] rounded-full text-xs font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold uppercase tracking-wider">
               {isEn ? "About the NGO" : "Bli kjent med oss"}
             </div>
             
-            <h2 className="font-serif text-3xl font-bold text-[#1B4965] leading-tight">
+            <h2 className="font-serif text-3xl font-bold text-primary leading-tight">
               {isEn ? "A Church Without Walls - Built for Growth" : "En kirke uten vegger - bygget for vekst"}
             </h2>
             
@@ -161,7 +161,7 @@ export default function HkmAboutPage() {
                 <Award size={24} />
               </div>
               <div className="space-y-4">
-                <h4 className="font-serif text-lg font-bold text-[#1B4965]">
+                <h4 className="font-serif text-lg font-bold text-primary">
                   {isEn ? "Core NGO Strategy" : "Sentralt fokusområde"}
                 </h4>
                 <div className="space-y-3.5 text-xs font-semibold text-slate-600">
@@ -191,7 +191,7 @@ export default function HkmAboutPage() {
               <div className="w-12 h-12 rounded-xl bg-orange-50 text-[#d17d39] flex items-center justify-center transition-colors group-hover:bg-[#d17d39]/10">
                 <Compass size={22} />
               </div>
-              <h3 className="font-serif text-xl font-bold text-[#1B4965]">
+              <h3 className="font-serif text-xl font-bold text-primary">
                 {isEn ? "Our Mission" : "Vårt oppdrag"}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-semibold">
@@ -208,10 +208,10 @@ export default function HkmAboutPage() {
           {/* History Card */}
           <div className="bg-white border border-[#dec2ef]/30 p-8 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-5 flex flex-col justify-between group">
             <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#1B4965] flex items-center justify-center transition-colors group-hover:bg-[#1B4965]/10">
+              <div className="w-12 h-12 rounded-xl bg-purple-50 text-primary flex items-center justify-center transition-colors group-hover:bg-primary/10">
                 <ShieldCheck size={22} />
               </div>
-              <h3 className="font-serif text-xl font-bold text-[#1B4965]">
+              <h3 className="font-serif text-xl font-bold text-primary">
                 {isEn ? "Our History" : "Vår historie"}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-semibold">
@@ -220,7 +220,7 @@ export default function HkmAboutPage() {
                   : "Det som startet som en lokal visjon om å samle troende for åndelig vekst, har utviklet seg til et levende fellesskap som driver bønnenettverk over hele landet, målrettede seminarer og misjon i utlandet."}
               </p>
             </div>
-            <div className="pt-2 text-xs font-bold text-[#1B4965] flex items-center gap-1">
+            <div className="pt-2 text-xs font-bold text-primary flex items-center gap-1">
               <span>{isEn ? "Established on solid values" : "Grunnlagt på stødige verdier"}</span>
             </div>
           </div>
@@ -232,7 +232,7 @@ export default function HkmAboutPage() {
             <span className="section-label uppercase tracking-widest text-xs font-extrabold text-[#d17d39]">
               {isEn ? "Our Global Footprint" : "Våre resultater i tall"}
             </span>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1B4965]">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
               {isEn ? "Ministry Impact" : "Arbeidet som utføres"}
             </h2>
             <p className="text-xs text-slate-500 font-semibold">
@@ -244,12 +244,12 @@ export default function HkmAboutPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {stats.map((stat, i) => (
-              <div key={i} className="p-6 bg-[#faf8fd] border border-slate-200/50 rounded-2xl space-y-3 hover:border-[#dec2ef] transition-all hover:-translate-y-0.5 shadow-sm text-center sm:text-left">
+              <div key={i} className="p-6 bg-[#faf7fc] border border-slate-200/50 rounded-2xl space-y-3 hover:border-[#dec2ef] transition-all hover:-translate-y-0.5 shadow-sm text-center sm:text-left">
                 <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center shadow-sm mx-auto sm:mx-0">
                   {stat.icon}
                 </div>
                 <div className="space-y-1">
-                  <span className="font-serif text-3xl font-extrabold text-[#1B4965] block">
+                  <span className="font-serif text-3xl font-extrabold text-primary block">
                     {stat.number}
                   </span>
                   <span className="text-xs font-bold text-[#240046] block">
@@ -267,10 +267,10 @@ export default function HkmAboutPage() {
         {/* SECTION 4: GET INVOLVED (ENGASJER DEG) */}
         <section className="space-y-10">
           <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="section-label uppercase tracking-widest text-xs font-extrabold text-[#1B4965]">
+            <span className="section-label uppercase tracking-widest text-xs font-extrabold text-primary">
               {isEn ? "Get Involved" : "Bli involvert"}
             </span>
-            <h2 className="font-serif text-2xl font-bold text-[#1B4965]">
+            <h2 className="font-serif text-2xl font-bold text-primary">
               {isEn ? "How to Engage & Support" : "Hvordan stå sammen med oss"}
             </h2>
             <p className="text-xs text-slate-500 font-semibold">
@@ -287,7 +287,7 @@ export default function HkmAboutPage() {
                 <div className="w-12 h-12 bg-gradient-to-br from-[#f39c12] to-[#e74c3c] rounded-xl flex items-center justify-center text-white shadow-sm">
                   <Heart size={20} />
                 </div>
-                <h4 className="font-serif text-lg font-bold text-[#1B4965]">
+                <h4 className="font-serif text-lg font-bold text-primary">
                   {isEn ? "Support the Work" : "Støtt arbeidet"}
                 </h4>
                 <p className="text-xs text-slate-600 leading-relaxed font-semibold">
@@ -310,7 +310,7 @@ export default function HkmAboutPage() {
                 <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
                   <Calendar size={20} />
                 </div>
-                <h4 className="font-serif text-lg font-bold text-[#1B4965]">
+                <h4 className="font-serif text-lg font-bold text-primary">
                   {isEn ? "For Churches" : "For menigheter"}
                 </h4>
                 <p className="text-xs text-slate-600 leading-relaxed font-semibold">
@@ -321,7 +321,7 @@ export default function HkmAboutPage() {
               </div>
               <a 
                 href="mailto:kontakt@hiskingdomministry.no?subject=Undervisning%20for%20menighet" 
-                className="w-full py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-[#1B4965] text-xs font-bold uppercase rounded-lg transition-all text-center flex items-center justify-center gap-1.5 shadow-sm"
+                className="w-full py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-primary text-xs font-bold uppercase rounded-lg transition-all text-center flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98]"
               >
                 <span>{isEn ? "Contact Us" : "Kontakt oss"}</span>
                 <Mail size={13} />
@@ -334,7 +334,7 @@ export default function HkmAboutPage() {
                 <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
                   <Briefcase size={20} />
                 </div>
-                <h4 className="font-serif text-lg font-bold text-[#1B4965]">
+                <h4 className="font-serif text-lg font-bold text-primary">
                   {isEn ? "Business Network" : "Business Network"}
                 </h4>
                 <p className="text-xs text-slate-600 leading-relaxed font-semibold">
@@ -345,7 +345,7 @@ export default function HkmAboutPage() {
               </div>
               <a 
                 href="mailto:kontakt@hiskingdomministry.no?subject=Business%20Network" 
-                className="w-full py-2.5 bg-[#1B4965] hover:bg-[#153a50] text-white text-xs font-bold uppercase rounded-lg transition-all text-center flex items-center justify-center gap-1.5 shadow"
+                className="w-full py-2.5 bg-primary hover:bg-[#240046] text-white text-xs font-bold uppercase rounded-lg transition-all text-center flex items-center justify-center gap-1.5 shadow active:scale-[0.98]"
               >
                 <span>{isEn ? "Join Network" : "Meld din interesse"}</span>
                 <Send size={13} />
@@ -355,7 +355,7 @@ export default function HkmAboutPage() {
         </section>
 
         {/* BOTTOM CTA: COMBINED SCHOOL & MINISTRY */}
-        <section className="bg-gradient-to-br from-[#1B4965] to-[#240046] border border-[#dec2ef]/30 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden">
+        <section className="bg-gradient-to-br from-primary to-[#240046] border border-[#dec2ef]/30 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden">
           <div className="absolute top-[-40%] right-[-10%] w-[350px] h-[350px] rounded-full bg-white/5 blur-3xl pointer-events-none" />
           
           <div className="max-w-2xl space-y-6 relative z-10">
@@ -391,30 +391,27 @@ export default function HkmAboutPage() {
       </main>
 
       {/* Footer Segment */}
-      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#1B4965] text-white select-none shrink-0 border-t border-white/5">
+      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white select-none shrink-0 border-t border-white/5">
         <div className="flex flex-col gap-2 text-center md:text-left">
-          <div className="font-serif text-lg font-bold text-slate-100 flex items-center justify-center md:justify-start gap-1.5">
-            <img src={logo} alt="Logo" className="w-6 h-6 object-contain" />
-            <span>His Kingdom Ministry</span>
-          </div>
+          <div className="font-serif text-lg font-bold text-[#e0aaff]">His Kingdom Prophets</div>
           <p className="text-[10px] text-slate-300 opacity-80 max-w-md">
-            {isEn
-              ? "© 2026 His Kingdom Ministry. All rights reserved. Registered NGO promoting spiritual fellowship and teaching."
-              : "© 2026 His Kingdom Ministry. Alle rettigheter reservert. Registrert organisasjon som fremmer åndelig fellesskap og undervisning."}
+            {language === 'en'
+              ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church."
+              : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."}
           </p>
         </div>
-        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold text-slate-200">
+        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold text-[#e0aaff]">
           <button onClick={() => navigate('/privacy')} className="hover:text-white transition-opacity">
             {isEn ? "Privacy Policy" : "Personvern"}
           </button>
           <button onClick={() => navigate('/terms')} className="hover:text-white transition-opacity">
-            {isEn ? "Terms" : "Betingelser"}
+            {isEn ? "Terms of Service" : "Betingelser"}
           </button>
           <button onClick={() => navigate('/accessibility')} className="hover:text-white transition-opacity">
             {isEn ? "Accessibility" : "Tilgjengelighet"}
           </button>
           <button onClick={handleSupportClick} className="hover:text-white transition-opacity">
-            {isEn ? "Contact Support" : "Support"}
+            {isEn ? "Contact Support" : "Kontakt Support"}
           </button>
         </nav>
       </footer>
