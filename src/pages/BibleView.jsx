@@ -1656,7 +1656,7 @@ export default function BibleView() {
             className="fixed inset-0 z-50 bg-white flex flex-col h-screen w-screen overflow-hidden"
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white shrink-0">
+            <div className="flex items-center justify-between px-6 py-4.5 border-b border-slate-100 bg-white shrink-0">
               <div className="flex items-center gap-3">
                 {selectorTab === 'chapter' && (
                   <button
@@ -1666,7 +1666,7 @@ export default function BibleView() {
                     <ArrowLeft size={20} />
                   </button>
                 )}
-                <h3 className="font-serif font-extrabold text-lg text-primary">
+                <h3 className="font-serif font-extrabold text-lg sm:text-xl text-primary">
                   {selectorTab === 'book' ? 'Velg bibelbok' : 'Velg kapittel'}
                 </h3>
               </div>
@@ -1674,7 +1674,7 @@ export default function BibleView() {
                 onClick={() => setShowMobileSelector(false)}
                 className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"
               >
-                <X size={22} />
+                <X size={24} />
               </button>
             </div>
 
@@ -1682,7 +1682,7 @@ export default function BibleView() {
             <div className="grid grid-cols-2 border-b border-slate-100 bg-slate-50/50 shrink-0">
               <button
                 onClick={() => setSelectorTab('book')}
-                className={`py-3.5 text-xs font-bold border-b-2 uppercase tracking-wide transition-all ${
+                className={`py-4 text-xs sm:text-sm font-bold border-b-2 uppercase tracking-wide transition-all ${
                   selectorTab === 'book'
                     ? 'border-primary text-primary font-extrabold'
                     : 'border-transparent text-slate-400 hover:text-slate-600'
@@ -1692,7 +1692,7 @@ export default function BibleView() {
               </button>
               <button
                 onClick={() => setSelectorTab('chapter')}
-                className={`py-3.5 text-xs font-bold border-b-2 uppercase tracking-wide transition-all ${
+                className={`py-4 text-xs sm:text-sm font-bold border-b-2 uppercase tracking-wide transition-all ${
                   selectorTab === 'chapter'
                     ? 'border-primary text-primary font-extrabold'
                     : 'border-transparent text-slate-400 hover:text-slate-600'
@@ -1704,24 +1704,24 @@ export default function BibleView() {
 
             {/* Search Input (Only on 'book' tab) */}
             {selectorTab === 'book' && (
-              <div className="p-4 border-b border-slate-100 shrink-0">
-                <div className="relative">
+              <div className="p-4 sm:p-5 border-b border-slate-100 shrink-0">
+                <div className="relative max-w-4xl mx-auto">
                   <input
                     type="text"
                     placeholder="Søk etter bibelbok (f.eks. 'Mosebok', 'Joh')..."
                     value={selectorSearch}
                     onChange={(e) => setSelectorSearch(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white transition-all shadow-inner"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm sm:text-base font-semibold focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white transition-all shadow-inner"
                   />
-                  <div className="absolute left-3 top-0 bottom-0 my-auto h-4 w-4 text-slate-400 pointer-events-none">
-                    <Search size={16} />
+                  <div className="absolute left-4 top-0 bottom-0 my-auto h-4 w-4 text-slate-400 pointer-events-none">
+                    <Search size={18} />
                   </div>
                   {selectorSearch && (
                     <button
                       onClick={() => setSelectorSearch('')}
                       className="absolute right-3 top-0 bottom-0 my-auto p-1 text-slate-400 hover:text-slate-600"
                     >
-                      <X size={14} />
+                      <X size={16} />
                     </button>
                   )}
                 </div>
@@ -1729,9 +1729,9 @@ export default function BibleView() {
             )}
 
             {/* List & Grids container (scrollable) */}
-            <div className="flex-grow overflow-y-auto p-6 bg-slate-50/30">
+            <div className="flex-grow overflow-y-auto p-6 sm:p-8 bg-slate-50/30">
               {selectorTab === 'book' ? (
-                <div className="space-y-6 max-w-2xl mx-auto">
+                <div className="space-y-8 max-w-6xl mx-auto">
                   {/* Filter books */}
                   {(() => {
                     const cleanQuery = selectorSearch.toLowerCase().trim();
@@ -1742,9 +1742,9 @@ export default function BibleView() {
 
                     if (matchingBooks.length === 0) {
                       return (
-                        <div className="text-center py-12 space-y-2">
-                          <BookMarked className="mx-auto text-slate-300" size={40} />
-                          <p className="text-slate-500 font-medium text-sm">Ingen bøker funnet for "{selectorSearch}"</p>
+                        <div className="text-center py-16 space-y-3">
+                          <BookMarked className="mx-auto text-slate-300" size={48} />
+                          <p className="text-slate-500 font-bold text-base">Ingen bøker funnet for "{selectorSearch}"</p>
                         </div>
                       );
                     }
@@ -1756,11 +1756,11 @@ export default function BibleView() {
                       const ntBooks = matchingBooks.filter(b => b.testament === 'NT');
 
                       return (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                           {/* Gamle testamentet */}
-                          <div className="space-y-3">
-                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider pl-2 border-l-2 border-primary/40">Det gamle testamentet (GT)</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 bg-white p-2 border border-slate-100 rounded-2xl shadow-sm">
+                          <div className="space-y-4">
+                            <h4 className="text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-wider pl-2.5 border-l-2 border-primary/40">Det gamle testamentet (GT)</h4>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 bg-white p-3 sm:p-4.5 border border-slate-100 rounded-2xl shadow-sm">
                               {gtBooks.map(book => (
                                 <button
                                   key={book.id}
@@ -1768,23 +1768,23 @@ export default function BibleView() {
                                     setSelectedBook(book);
                                     setSelectorTab('chapter');
                                   }}
-                                  className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-all flex justify-between items-center ${
+                                  className={`w-full text-left px-4 py-3.5 sm:py-4 rounded-xl text-sm sm:text-[15px] font-bold transition-all flex justify-between items-center ${
                                     selectedBook.id === book.id
-                                      ? 'bg-primary/5 text-primary'
+                                      ? 'bg-primary/5 text-primary border border-primary/10 shadow-sm'
                                       : 'text-slate-600 hover:bg-slate-50'
                                   }`}
                                 >
                                   <span>{book.nor}</span>
-                                  <span className="text-[10px] font-mono opacity-50 font-normal">{book.chapters} kap</span>
+                                  <span className="text-xs font-mono opacity-50 font-normal">{book.chapters} kap</span>
                                 </button>
                               ))}
                             </div>
                           </div>
 
                           {/* Nye testamentet */}
-                          <div className="space-y-3">
-                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider pl-2 border-l-2 border-primary/40">Det nye testamentet (NT)</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 bg-white p-2 border border-slate-100 rounded-2xl shadow-sm">
+                          <div className="space-y-4">
+                            <h4 className="text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-wider pl-2.5 border-l-2 border-primary/40">Det nye testamentet (NT)</h4>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 bg-white p-3 sm:p-4.5 border border-slate-100 rounded-2xl shadow-sm">
                               {ntBooks.map(book => (
                                 <button
                                   key={book.id}
@@ -1792,14 +1792,14 @@ export default function BibleView() {
                                     setSelectedBook(book);
                                     setSelectorTab('chapter');
                                   }}
-                                  className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-all flex justify-between items-center ${
+                                  className={`w-full text-left px-4 py-3.5 sm:py-4 rounded-xl text-sm sm:text-[15px] font-bold transition-all flex justify-between items-center ${
                                     selectedBook.id === book.id
-                                      ? 'bg-primary/5 text-primary'
+                                      ? 'bg-primary/5 text-primary border border-primary/10 shadow-sm'
                                       : 'text-slate-600 hover:bg-slate-50'
                                   }`}
                                 >
                                   <span>{book.nor}</span>
-                                  <span className="text-[10px] font-mono opacity-50 font-normal">{book.chapters} kap</span>
+                                  <span className="text-xs font-mono opacity-50 font-normal">{book.chapters} kap</span>
                                 </button>
                               ))}
                             </div>
@@ -1810,7 +1810,7 @@ export default function BibleView() {
 
                     // Flat list of search results
                     return (
-                      <div className="bg-white border border-slate-100 rounded-2xl p-2 shadow-sm grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
+                      <div className="bg-white border border-slate-100 rounded-2xl p-4 sm:p-6 shadow-sm grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                         {matchingBooks.map(book => (
                           <button
                             key={book.id}
@@ -1818,14 +1818,14 @@ export default function BibleView() {
                               setSelectedBook(book);
                               setSelectorTab('chapter');
                             }}
-                            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-all flex justify-between items-center ${
+                            className={`w-full text-left px-4 py-3.5 sm:py-4 rounded-xl text-sm sm:text-[15px] font-bold transition-all flex justify-between items-center ${
                               selectedBook.id === book.id
-                                ? 'bg-primary/5 text-primary'
+                                ? 'bg-primary/5 text-primary border border-primary/10 shadow-sm'
                                 : 'text-slate-600 hover:bg-slate-50'
                             }`}
                           >
                             <span>{book.nor}</span>
-                            <span className="text-[10px] font-mono opacity-50 font-normal">{book.chapters} kap</span>
+                            <span className="text-xs font-mono opacity-50 font-normal">{book.chapters} kap</span>
                           </button>
                         ))}
                       </div>
@@ -1833,12 +1833,12 @@ export default function BibleView() {
                   })()}
                 </div>
               ) : (
-                <div className="max-w-xl mx-auto space-y-4">
+                <div className="max-w-5xl mx-auto space-y-6">
                   <div className="text-center pb-2">
-                    <p className="text-slate-400 font-bold text-xs uppercase tracking-wider">Velg kapittel i {selectedBook.nor}</p>
+                    <p className="text-slate-400 font-bold text-xs sm:text-sm uppercase tracking-wider">Velg kapittel i {selectedBook.nor}</p>
                   </div>
-                  <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
-                    <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
+                  <div className="bg-white border border-slate-100 rounded-2xl p-6 sm:p-8 shadow-sm">
+                    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-3 sm:gap-4">
                       {Array.from({ length: selectedBook.chapters }, (_, i) => i + 1).map(chap => (
                         <button
                           key={chap}
@@ -1852,7 +1852,7 @@ export default function BibleView() {
                               }
                             }, 150);
                           }}
-                          className={`h-12 w-full rounded-xl text-sm font-extrabold transition-all flex items-center justify-center border ${
+                          className={`h-12 sm:h-14 w-full rounded-xl text-sm sm:text-base font-extrabold transition-all flex items-center justify-center border ${
                             selectedChapter === chap
                               ? 'bg-primary text-white border-primary shadow font-black active:scale-[0.95]'
                               : 'bg-slate-50 text-slate-700 border-slate-200/50 hover:bg-slate-100 hover:border-slate-300 active:scale-[0.97]'
