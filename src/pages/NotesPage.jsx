@@ -356,9 +356,7 @@ export default function NotesPage() {
 
   useEffect(() => {
     fetchNotes();
-  }, [user]);
-
-  useEffect(() => {
+  }, [u  useEffect(() => {
     const handlePasteFromAI = (e) => {
       const textToPaste = e.detail?.text;
       if (!textToPaste) return;
@@ -368,29 +366,7 @@ export default function NotesPage() {
         return;
       }
 
-      // Convert Markdown/plain text paragraphs from AI into clean formatted HTML paragraphs
-      const htmlParagraphs = textToPaste
-        .split('\n')
-        .map(line => {
-          const trimmed = line.trim();
-          if (!trimmed) return '<p><br/></p>';
-          if (trimmed.startsWith('### ')) {
-            return `<h2>${trimmed.slice(4)}</h2>`;
-          }
-          if (trimmed.startsWith('• ') || trimmed.startsWith('- ')) {
-            return `<li>${trimmed.slice(2)}</li>`;
-          }
-          if (/^\d+\.\s/.test(trimmed)) {
-            const content = trimmed.replace(/^\d+\.\s/, '');
-            return `<li>${content}</li>`;
-          }
-          // Wrap bolding ** into <strong> and * into <em>
-          let formattedLine = trimmed
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\*(.*?)\*/g, '<em>$1</em>');
-          return `<p>${formattedLine}</p>`;
-        })
-        .join('');
+      const htmlParagraphs = parseMarkdownToHtml(textToPaste);
 
       // Insert at current cursor position or append to the end
       if (editorRef.current) {
@@ -409,7 +385,94 @@ export default function NotesPage() {
 
     window.addEventListener('hkm-paste-note', handlePasteFromAI);
     return () => window.removeEventListener('hkm-paste-note', handlePasteFromAI);
-  }, [isEditorOpen, selectedNote, editorText, language, showToast]);
+  }, [isEditorOpen, selectedNote, editorText, language, showToast]); showToast]);
+
+  // Robust Markdown to HTML Converter
+  const parseMarkdownToHtml = (markdownText) => {
+    if (!markdownText) return '';
+    
+    const lines = markdownText.split('\n');
+    let html = '';
+    let inList = false;
+    let listType = null; // 'ul' or 'ol'
+    
+    const closeList = () => {
+      if (inList) {
+        html += listType === 'ul' ? '</ul>' : '</ol>';
+        inList = false;
+        listType = null;
+      }
+    };
+    
+    lines.forEach(line => {
+      let trimmed = line.trim();
+      
+      const applyInlineStyles = (txt) => {
+        return txt
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+          .replace(/_([^_]+)_/g, '<em>$1</em>')
+          .replace(/`(.*?)`/g, '<code class="bg-slate-100 text-rose-600 px-1 rounded font-mono text-xs">$1</code>')
+          .replace(/\*\*/g, '')
+          .replace(/\*/g, '');
+      };
+
+      if (trimmed.startsWith('# ')) {
+        closeList();
+        html += `<h1 class="text-xl font-bold font-serif text-primary mt-6 mb-3">${applyInlineStyles(trimmed.slice(2))}</h1>`;
+      } else if (trimmed.startsWith('## ')) {
+        closeList();
+        html += `<h2 class="text-lg font-bold font-serif text-primary mt-5 mb-2.5">${applyInlineStyles(trimmed.slice(3))}</h2>`;
+      } else if (trimmed.startsWith('### ')) {
+        closeList();
+        html += `<h3 class="text-base font-bold font-serif text-primary mt-4 mb-2">${applyInlineStyles(trimmed.slice(4))}</h3>`;
+      } else if (trimmed.startsWith('> ')) {
+        closeList();
+        html += `<blockquote class="border-l-4 border-primary/45 bg-slate-50 pl-4 py-2 pr-2 my-4 italic text-slate-700 rounded-r-xl">${applyInlineStyles(trimmed.slice(2))}</blockquote>`;
+      } else if (trimmed.startsWith('• ') || trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+        if (!inList || listType !== 'ul') {
+          closeList();
+          html += '<ul class="list-disc pl-5 space-y-1.5 my-3 text-slate-800">';
+          inList = true;
+          listType = 'ul';
+        }
+        const bulletText = (trimmed.startsWith('• ') || trimmed.startsWith('* ')) ? trimmed.slice(2) : trimmed.slice(2);
+        html += `<li class="leading-relaxed">${applyInlineStyles(bulletText)}</li>`;
+      } else if (/^\d+\.\s/.test(trimmed)) {
+        if (!inList || listType !== 'ol') {
+          closeList();
+          html += '<ol class="list-decimal pl-5 space-y-1.5 my-3 text-slate-800">';
+          inList = true;
+          listType = 'ol';
+        }
+        const contentText = trimmed.replace(/^\d+\.\s/, '');
+        html += `<li class="leading-relaxed">${applyInlineStyles(contentText)}</li>`;
+      } else if (trimmed === '') {
+        closeList();
+        html += '<p><br/></p>';
+      } else {
+        closeList();
+        html += `<p class="my-2 leading-relaxed text-slate-800">${applyInlineStyles(trimmed)}</p>`;
+      }
+    });
+    
+    closeList();
+    return html;
+  };
+
+  // Clipboard Paste Event Handler
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text');
+    
+    if (text && (text.includes('**') || text.includes('###') || text.includes('- ') || text.includes('• ') || text.includes('> '))) {
+      const html = parseMarkdownToHtml(text);
+      document.execCommand('insertHTML', false, html);
+    } else {
+      const cleanText = text.replace(/\r\n/g, '\n');
+      document.execCommand('insertText', false, cleanText);
+    }
+  };
 
   // Clean HTML helper for text snippets (strips HTML tags and gets clean text)
   const stripHtml = (html) => {
@@ -1376,6 +1439,7 @@ ${rawContent}
                       ref={editorRef}
                       contentEditable
                       onInput={(e) => handleTextChange(e.currentTarget.innerHTML)}
+                      onPaste={handlePaste}
                       className="w-full h-full bg-transparent border-0 overflow-y-auto outline-none focus:ring-0 font-sans text-sm sm:text-base leading-relaxed text-slate-800 placeholder:text-outline placeholder:font-semibold prose prose-sm max-w-none min-h-[350px] focus:outline-none"
                       dangerouslySetInnerHTML={{ __html: selectedNote.type === 'lesson' ? (selectedNote.text || "<p><br/></p>") : (selectedNote.content || "<p><br/></p>") }}
                     />

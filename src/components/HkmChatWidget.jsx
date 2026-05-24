@@ -26,7 +26,8 @@ const parseInlineStyles = (text, isAssistant) => {
         </em>
       );
     }
-    return token;
+    // Clean any stray stjerne-tegn from remaining raw tokens
+    return token.replace(/\*\*/g, '').replace(/\*/g, '');
   });
 };
 
