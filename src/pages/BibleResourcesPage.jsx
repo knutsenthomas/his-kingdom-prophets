@@ -1681,40 +1681,42 @@ export default function BibleResourcesPage() {
       {/* Mobile Bottom Thumb-Navigation Pill (Ergonomisk) */}
       <AnimatePresence>
         {selectedVerses.length === 0 && !showMobileSelector && (
-          <motion.div
-            initial={{ opacity: 0, y: 40, x: '-50%' }}
-            animate={{ opacity: 1, y: 0, x: '-50%' }}
-            exit={{ opacity: 0, y: 40, x: '-50%' }}
-            className="fixed bottom-6 left-1/2 z-[55] bg-white/95 backdrop-blur-md text-slate-800 border border-slate-200/80 px-3 py-1 rounded-full flex items-center justify-between gap-2 shadow-lg w-[75vw] max-w-[260px] pointer-events-auto"
-          >
-            <button 
-              onClick={() => navigateChapter('prev')}
-              className="p-1.5 text-slate-500 hover:text-slate-800 active:scale-[0.9] transition-all cursor-pointer bg-transparent border-none outline-none flex items-center justify-center shrink-0"
-              title={isEn ? "Previous chapter" : "Forrige kapittel"}
+          <div className="fixed bottom-6 left-0 right-0 z-[55] flex justify-center pointer-events-none select-none">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 40 }}
+              className="bg-white/95 backdrop-blur-md text-slate-800 border border-slate-200/80 px-3 py-1 rounded-full flex items-center justify-between gap-2 shadow-lg w-[75vw] max-w-[260px] pointer-events-auto"
             >
-              <ArrowLeft size={16} />
-            </button>
+              <button 
+                onClick={() => navigateChapter('prev')}
+                className="p-1.5 text-slate-500 hover:text-slate-800 active:scale-[0.9] transition-all cursor-pointer bg-transparent border-none outline-none flex items-center justify-center shrink-0"
+                title={isEn ? "Previous chapter" : "Forrige kapittel"}
+              >
+                <ArrowLeft size={16} />
+              </button>
 
-            <button 
-              onClick={() => {
-                setSelectorTab('book');
-                setSelectorSearch('');
-                setShowMobileSelector(true);
-              }}
-              className="flex-grow text-center font-serif font-extrabold text-[13px] hover:text-slate-900 active:scale-[0.97] transition-all flex items-center gap-1 justify-center py-1 px-2 bg-transparent border-none outline-none text-slate-800 cursor-pointer select-none"
-            >
-              <span>{selectedBook.nor} {selectedChapter}</span>
-              <ChevronDown size={10} className="text-slate-400" />
-            </button>
+              <button 
+                onClick={() => {
+                  setSelectorTab('book');
+                  setSelectorSearch('');
+                  setShowMobileSelector(true);
+                }}
+                className="flex-grow text-center font-serif font-extrabold text-[13px] hover:text-slate-900 active:scale-[0.97] transition-all flex items-center gap-1 justify-center py-1 px-2 bg-transparent border-none outline-none text-slate-800 cursor-pointer select-none"
+              >
+                <span>{selectedBook.nor} {selectedChapter}</span>
+                <ChevronDown size={10} className="text-slate-400" />
+              </button>
 
-            <button 
-              onClick={() => navigateChapter('next')}
-              className="p-1.5 text-slate-500 hover:text-slate-800 active:scale-[0.9] transition-all cursor-pointer bg-transparent border-none outline-none flex items-center justify-center shrink-0"
-              title={isEn ? "Next chapter" : "Neste kapittel"}
-            >
-              <ArrowRight size={16} />
-            </button>
-          </motion.div>
+              <button 
+                onClick={() => navigateChapter('next')}
+                className="p-1.5 text-slate-500 hover:text-slate-800 active:scale-[0.9] transition-all cursor-pointer bg-transparent border-none outline-none flex items-center justify-center shrink-0"
+                title={isEn ? "Next chapter" : "Neste kapittel"}
+              >
+                <ArrowRight size={16} />
+              </button>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
 
