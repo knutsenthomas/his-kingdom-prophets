@@ -1231,7 +1231,7 @@ export default function BibleView() {
                   setSelectorSearch('');
                   setShowMobileSelector(true);
                 }}
-                className="hidden"
+                className={isFullscreenReading ? "text-center flex flex-col items-center select-none cursor-pointer group" : "hidden"}
                 title="Velg bok og kapittel"
               >
                 <h2 className="font-serif font-extrabold text-lg md:text-2xl text-primary leading-tight flex items-center gap-1 sm:gap-2 justify-center">

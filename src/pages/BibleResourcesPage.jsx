@@ -763,7 +763,7 @@ export default function BibleResourcesPage() {
                         setSelectorSearch('');
                         setShowMobileSelector(true);
                       }}
-                      className="hidden"
+                      className={isFullscreenReading ? "text-center flex flex-col items-center select-none cursor-pointer group" : "hidden"}
                       title={isEn ? "Select Book and Chapter" : "Velg bok og kapittel"}
                     >
                       <h2 className="font-serif font-extrabold text-base md:text-xl text-primary leading-tight flex items-center gap-1 sm:gap-2 justify-center">
