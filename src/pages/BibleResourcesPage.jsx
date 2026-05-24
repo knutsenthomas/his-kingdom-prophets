@@ -1635,7 +1635,7 @@ export default function BibleResourcesPage() {
             initial={{ opacity: 0, y: 40, x: '-50%' }}
             animate={{ opacity: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, y: 40, x: '-50%' }}
-            className="fixed bottom-6 left-1/2 z-40 bg-white/95 backdrop-blur-md text-slate-800 border border-slate-200/80 px-3 py-1 rounded-full flex items-center justify-between gap-2 shadow-lg w-[75vw] max-w-[260px] sm:hidden pointer-events-auto"
+            className="fixed bottom-6 left-1/2 z-[55] bg-white/95 backdrop-blur-md text-slate-800 border border-slate-200/80 px-3 py-1 rounded-full flex items-center justify-between gap-2 shadow-lg w-[75vw] max-w-[260px] sm:hidden pointer-events-auto"
             style={{ transform: 'translate3d(-50%, 0, 0)' }}
           >
             <button 
