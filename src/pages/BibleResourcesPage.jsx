@@ -699,12 +699,12 @@ export default function BibleResourcesPage() {
                         setSelectorSearch('');
                         setShowMobileSelector(true);
                       }}
-                      className="text-center flex flex-col items-center cursor-pointer hover:bg-slate-50 px-4 py-1.5 rounded-2xl active:scale-[0.97] transition-all border border-transparent hover:border-slate-100 select-none group"
+                      className="text-center flex flex-col items-center pointer-events-none sm:pointer-events-auto cursor-default sm:cursor-pointer sm:hover:bg-slate-50 px-4 py-1.5 rounded-2xl sm:active:scale-[0.97] transition-all border border-transparent sm:hover:border-slate-100 select-none group"
                       title={isEn ? "Select Book and Chapter" : "Velg bok og kapittel"}
                     >
                       <h2 className="font-serif font-extrabold text-base md:text-xl text-primary leading-tight flex items-center gap-1 sm:gap-2 justify-center">
                         <span>{selectedBook.nor} {selectedChapter}</span>
-                        <ChevronDown size={14} className="text-slate-400 group-hover:text-primary transition-transform duration-200 shrink-0" />
+                        <ChevronDown size={14} className="hidden sm:inline-block text-slate-400 group-hover:text-primary transition-transform duration-200 shrink-0" />
                       </h2>
                       <span className="text-[9px] font-bold text-slate-400 tracking-wider uppercase font-mono mt-0.5 block">
                         {TRANSLATIONS.find(t => t.id === selectedTranslation)?.name}
