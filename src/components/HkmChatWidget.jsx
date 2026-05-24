@@ -231,7 +231,7 @@ export default function HkmChatWidget() {
   };
 
   return (
-    <div className={`hkm-chat-widget-container fixed ${isNotesPage ? 'bottom-24' : 'bottom-6'} right-6 z-[99] font-sans flex flex-col items-end`}>
+    <div className={`hkm-chat-widget-container fixed ${isNotesPage ? 'bottom-24' : 'bottom-6'} right-3 sm:right-4 z-[99] font-sans flex flex-col items-end`}>
       {/* Chrome Jitter Fix Layer Isolation stylesheet */}
       <style>{`
         .hkm-chat-panel {
@@ -267,7 +267,7 @@ export default function HkmChatWidget() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.2 }}
-            className={`hkm-chat-panel bg-white flex flex-col overflow-hidden fixed inset-0 w-full h-[100dvh] md:h-[500px] md:w-[360px] md:inset-auto ${isNotesPage ? 'md:bottom-40' : 'md:bottom-24'} md:right-6 md:rounded-2xl md:shadow-2xl md:border md:border-outline-variant z-[999] mb-0 pointer-events-auto`}
+            className={`hkm-chat-panel bg-white flex flex-col overflow-hidden fixed inset-0 w-full h-[100dvh] md:h-[500px] md:w-[360px] md:inset-auto ${isNotesPage ? 'md:bottom-40' : 'md:bottom-24'} md:right-4 md:rounded-2xl md:shadow-2xl md:border md:border-outline-variant z-[999] mb-0 pointer-events-auto`}
           >
             {/* Header - Majestic Royal Purple (#561291) */}
             <div className="bg-[#561291] text-white px-5 py-4 flex items-center justify-between shadow-sm">

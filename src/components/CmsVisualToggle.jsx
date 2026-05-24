@@ -52,7 +52,7 @@ export default function CmsVisualToggle() {
   };
 
   return (
-    <div className={`cms-visual-toggle-container fixed ${isNotesPage ? 'bottom-[160px]' : 'bottom-[88px]'} right-4 sm:right-6 z-[90] font-sans pointer-events-auto`}>
+    <div className={`cms-visual-toggle-container fixed ${isNotesPage ? 'bottom-[160px]' : 'bottom-[88px]'} right-3 sm:right-4 z-[90] font-sans pointer-events-auto`}>
       <AnimatePresence mode="wait">
         {isMinimized ? (
           <motion.button
