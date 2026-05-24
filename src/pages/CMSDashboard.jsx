@@ -11,6 +11,26 @@ import {
 
 // Definition of all CMS strings with labels, categories, and explanatory descriptions
 const assetDefinitions = [
+  // Opptaksside (Admission Page)
+  { slug: 'admission-hero-title', title: 'Opptak Hero Tittel', section: 'Opptaksside', type: 'text', description: 'Hovedoverskrift på opptakssiden.' },
+  { slug: 'admission-hero-subtitle', title: 'Opptak Hero Undertittel', section: 'Opptaksside', type: 'textarea', description: 'Beskrivelse under hero-tittelen på opptakssiden.' },
+  { slug: 'admission-hero-cta', title: 'Opptak Hero Knapp', section: 'Opptaksside', type: 'text', description: 'Knappetekst for å navigere til søknadsskjemaet.' },
+  { slug: 'admission-programs-title', title: 'Opptak Studielinjer Tittel', section: 'Opptaksside', type: 'text', description: 'Hovedoverskrift for oversikten over studielinjer.' },
+  { slug: 'admission-programs-subtitle', title: 'Opptak Studielinjer Undertittel', section: 'Opptaksside', type: 'textarea', description: 'Beskrivende tekst under studielinjetittelen.' },
+  { slug: 'admission-payments-tag', title: 'Opptak Priser Merkelapp', section: 'Opptaksside', type: 'text', description: 'Liten tag øverst i prismatrisen.' },
+  { slug: 'admission-payments-title', title: 'Opptak Priser Overskrift', section: 'Opptaksside', type: 'text', description: 'Hovedtittel for finansierings- og prisseksjonen.' },
+  { slug: 'admission-payments-desc', title: 'Opptak Priser Beskrivelse', section: 'Opptaksside', type: 'textarea', description: 'Beskrivende avsnitt under pris-overskriften.' },
+  { slug: 'admission-payments-bullet1-title', title: 'Pris Fordel 1 Tittel', section: 'Opptaksside', type: 'text', description: 'Tittel for første pris-fordel (f.eks. Rentefri delbetaling).' },
+  { slug: 'admission-payments-bullet1-desc', title: 'Pris Fordel 1 Beskrivelse', section: 'Opptaksside', type: 'textarea', description: 'Utdypende tekst om første pris-fordel.' },
+  { slug: 'admission-payments-bullet2-title', title: 'Pris Fordel 2 Tittel', section: 'Opptaksside', type: 'text', description: 'Tittel for andre pris-fordel (f.eks. Alt inkludert).' },
+  { slug: 'admission-payments-bullet2-desc', title: 'Pris Fordel 2 Beskrivelse', section: 'Opptaksside', type: 'textarea', description: 'Utdypende tekst om andre pris-fordel.' },
+  { slug: 'admission-payments-bullet3-title', title: 'Pris Fordel 3 Tittel', section: 'Opptaksside', type: 'text', description: 'Tittel for tredje pris-fordel (f.eks. Stipendordninger).' },
+  { slug: 'admission-payments-bullet3-desc', title: 'Pris Fordel 3 Beskrivelse', section: 'Opptaksside', type: 'textarea', description: 'Utdypende tekst om tredje pris-fordel.' },
+  { slug: 'admission-steps-title', title: 'Opptak Søknadsprosess Tittel', section: 'Opptaksside', type: 'text', description: 'Overskrift for beskrivelsen av stegene i opptaket.' },
+  { slug: 'admission-steps-subtitle', title: 'Opptak Søknadsprosess Undertittel', section: 'Opptaksside', type: 'textarea', description: 'Beskrivelse under søknadsprosess-overskriften.' },
+  { slug: 'admission-form-title', title: 'Opptak Skjema Tittel', section: 'Opptaksside', type: 'text', description: 'Tittel øverst på søknadsskjemaet.' },
+  { slug: 'admission-form-subtitle', title: 'Opptak Skjema Undertittel', section: 'Opptaksside', type: 'textarea', description: 'Hjelpetekst under tittel på søknadsskjemaet.' },
+
   // Hjemmeside (Landing Page)
   { slug: 'landing-hero-title', title: 'Hero Hovedoverskrift', section: 'Hjemmeside', type: 'text', description: 'Hovedoverskriften i hero-seksjonen på landingssiden.' },
   { slug: 'landing-hero-tagline', title: 'Hero Tagline', section: 'Hjemmeside', type: 'text', description: 'Undertekst / tagline under hovedoverskriften på landingssiden.' },
