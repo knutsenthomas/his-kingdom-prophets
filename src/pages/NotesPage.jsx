@@ -10,7 +10,10 @@ import {
 import { 
   Search, Book, GraduationCap, Clock, Trash2, 
   FileText, Send, Sparkles, Download, ArrowLeft, 
-  Plus, Check, Edit, Save, FileEdit, AlertCircle
+  Plus, Check, Edit, Save, FileEdit, AlertCircle,
+  Bold, Italic, Underline, List, ListOrdered, Quote,
+  Heading2, Heading3, Palette, Calendar, Eraser,
+  AlignLeft, AlignCenter, AlignRight
 } from 'lucide-react';
 import CmsText from '@/components/CmsText';
 
@@ -419,7 +422,7 @@ export default function NotesPage() {
   // Open Editor
   const handleOpenEditor = (note) => {
     setSelectedNote(note);
-    setEditorText(note.type === 'bible' ? note.content : note.text);
+    setEditorText(note.type === 'lesson' ? note.text : note.content);
     setSaveStatus('idle');
     setIsEditorOpen(true);
   };
@@ -496,6 +499,75 @@ export default function NotesPage() {
     }, 1500);
   };
 
+  // Insert HTML at Cursor Selection (WYSIWYG custom tool)
+  const insertHTMLAtCursor = (html) => {
+    const sel = window.getSelection();
+    if (sel.getRangeAt && sel.rangeCount) {
+      const range = sel.getRangeAt(0);
+      range.deleteContents();
+      
+      const el = document.createElement("div");
+      el.innerHTML = html;
+      const frag = document.createDocumentFragment();
+      let node;
+      let lastNode;
+      while ((node = el.firstChild)) {
+        lastNode = frag.appendChild(node);
+      }
+      range.insertNode(frag);
+      
+      if (lastNode) {
+        range.setStartAfter(lastNode);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    } else {
+      document.execCommand('insertHTML', false, html);
+    }
+    
+    if (editorRef.current) {
+      handleTextChange(editorRef.current.innerHTML);
+    }
+  };
+
+  // Date and Time Stamp Inserter
+  const insertDateStamp = () => {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString(language === 'en' ? 'en-US' : 'no-NO', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+    const timeStr = now.toLocaleTimeString(language === 'en' ? 'en-US' : 'no-NO', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    
+    const stampHTML = ` <span class="px-2 py-0.5 bg-slate-100 border border-slate-200 text-slate-600 rounded text-xs font-semibold inline-flex items-center gap-1 select-all" contenteditable="false">📅 ${dateStr}, ${timeStr}</span> `;
+    insertHTMLAtCursor(stampHTML);
+  };
+
+  // Selection Highlighter Tool
+  const highlightSelection = (color) => {
+    document.execCommand('hiliteColor', false, color);
+    if (editorRef.current) {
+      handleTextChange(editorRef.current.innerHTML);
+    }
+  };
+
+  // Word count helper
+  const getWordCount = (html) => {
+    const text = stripHtml(html).trim();
+    if (!text) return 0;
+    return text.split(/\s+/).length;
+  };
+
+  // Character count helper
+  const getCharCount = (html) => {
+    return stripHtml(html).length;
+  };
+
   // Rich Text Commands helper
   const execEditorCommand = (command, value = null) => {
     document.execCommand(command, false, value);
@@ -506,13 +578,18 @@ export default function NotesPage() {
 
   // Ask AI Widget synergy
   const handleSendToAI = (note) => {
-    const content = note.type === 'bible' ? note.content : stripHtml(note.text);
+    const content = note.type === 'lesson' ? stripHtml(note.text) : stripHtml(note.content);
     if (!content.trim()) {
       showToast(language === 'en' ? "Note is empty." : "Notatet er tomt.");
       return;
     }
 
-    const title = note.type === 'bible' ? `${note.bookName} ${note.chapter}` : note.moduleTitle;
+    const title = note.type === 'bible' 
+      ? `${note.bookName} ${note.chapter}` 
+      : note.type === 'lesson' 
+        ? note.moduleTitle 
+        : note.title;
+        
     const aiPrompt = language === 'en'
       ? `I am studying and have written these notes on "${title}":\n\n"${content}"\n\nCan you expand on this and give me a deeper theological perspective?`
       : `Jeg studerer og har skrevet følgende notater om "${title}":\n\n"${content}"\n\nKan du utdype dette notatet og gi meg et dypere teologisk og profetisk perspektiv?`;
@@ -526,7 +603,7 @@ export default function NotesPage() {
 
   // Share to Chat
   const handleShareToChat = (note) => {
-    const content = note.type === 'bible' ? note.content : stripHtml(note.text);
+    const content = note.type === 'lesson' ? stripHtml(note.text) : stripHtml(note.content);
     if (!content.trim()) {
       showToast(language === 'en' ? "Note is empty." : "Notatet er tomt.");
       return;
@@ -557,7 +634,7 @@ export default function NotesPage() {
         ? note.moduleTitle 
         : note.title;
 
-    const rawContent = note.type === 'bible' ? note.content : stripHtml(note.text);
+    const rawContent = note.type === 'lesson' ? stripHtml(note.text) : stripHtml(note.content);
     const categoryName = note.type === 'bible' 
       ? 'Bibelstudie' 
       : note.type === 'lesson' 
@@ -1077,66 +1154,168 @@ ${rawContent}
                     </div>
                   </div>
 
-                  {/* Visual Rich WYSIWYG Toolbar for Lesson HTML Notes */}
-                  {selectedNote.type === 'lesson' && (
-                    <div className="flex items-center gap-1 mb-4 p-1.5 bg-white border border-slate-200 rounded-xl shadow-sm flex-wrap shrink-0">
+                  {/* Premium WYSIWYG Text Formatting Toolbar (available for all notes) */}
+                  <div className="flex items-center justify-between gap-4 mb-4 p-2 bg-white border border-slate-200 rounded-xl shadow-sm flex-wrap shrink-0">
+                    <div className="flex items-center gap-1 flex-wrap">
                       <button 
                         type="button"
                         onClick={() => execEditorCommand('bold')}
-                        className="px-2.5 py-1.5 hover:bg-slate-100 text-xs font-bold text-slate-700 rounded-lg"
+                        className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
                         title="Fet skrift (Ctrl+B)"
                       >
-                        B
+                        <Bold size={14} />
                       </button>
                       <button 
                         type="button"
                         onClick={() => execEditorCommand('italic')}
-                        className="px-2.5 py-1.5 hover:bg-slate-100 text-xs italic font-serif text-slate-700 rounded-lg"
-                        title="Kursiv skrift (Ctrl+I)"
+                        className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
+                        title="Kursiv (Ctrl+I)"
                       >
-                        I
+                        <Italic size={14} />
                       </button>
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('underline')}
+                        className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
+                        title="Understreking (Ctrl+U)"
+                      >
+                        <Underline size={14} />
+                      </button>
+                      
+                      <div className="w-[1px] h-5 bg-slate-200 mx-1" />
+                      
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('formatBlock', 'h2')}
+                        className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
+                        title="Overskrift H2"
+                      >
+                        <Heading2 size={14} />
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('formatBlock', 'h3')}
+                        className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
+                        title="Undertittel H3"
+                      >
+                        <Heading3 size={14} />
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('formatBlock', 'p')}
+                        className="p-1.5 hover:bg-slate-100 text-xs font-bold text-slate-700 rounded-lg transition-colors"
+                        title="Normal tekst"
+                      >
+                        Normal
+                      </button>
+
+                      <div className="w-[1px] h-5 bg-slate-200 mx-1" />
+                      
                       <button 
                         type="button"
                         onClick={() => execEditorCommand('insertUnorderedList')}
-                        className="px-2.5 py-1.5 hover:bg-slate-100 text-xs text-slate-700 rounded-lg"
+                        className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
                         title="Kulepunktliste"
                       >
-                        • Liste
+                        <List size={14} />
                       </button>
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('insertOrderedList')}
+                        className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
+                        title="Nummerert liste"
+                      >
+                        <ListOrdered size={14} />
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('formatBlock', 'blockquote')}
+                        className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
+                        title="Sitatblokk"
+                      >
+                        <Quote size={14} />
+                      </button>
+
                       <div className="w-[1px] h-5 bg-slate-200 mx-1" />
+
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('justifyLeft')}
+                        className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
+                        title="Venstrejuster"
+                      >
+                        <AlignLeft size={14} />
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('justifyCenter')}
+                        className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
+                        title="Midtstill"
+                      >
+                        <AlignCenter size={14} />
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('justifyRight')}
+                        className="p-2 hover:bg-slate-100 text-slate-700 rounded-lg transition-colors"
+                        title="Høyrejuster"
+                      >
+                        <AlignRight size={14} />
+                      </button>
+
+                      <div className="w-[1px] h-5 bg-slate-200 mx-1" />
+
+                      {/* Date stamp button */}
+                      <button 
+                        type="button"
+                        onClick={insertDateStamp}
+                        className="p-2 hover:bg-slate-100 text-[#561291] hover:text-primary rounded-lg transition-colors flex items-center gap-1"
+                        title="Sett inn dato og tidspunkt"
+                      >
+                        <Calendar size={14} />
+                      </button>
+
                       <button 
                         type="button"
                         onClick={() => execEditorCommand('removeFormat')}
-                        className="px-2 py-1.5 hover:bg-slate-100 text-[10px] text-outline rounded-lg"
+                        className="p-2 hover:bg-slate-100 text-outline hover:text-slate-700 rounded-lg transition-colors"
                         title="Fjern formatering"
                       >
-                        Fjern stil
+                        <Eraser size={14} />
                       </button>
                     </div>
-                  )}
+
+                    {/* Highlights/Colors bar */}
+                    <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
+                      <Palette size={13} className="text-outline mr-0.5" />
+                      {[
+                        { color: '#ffffff', title: 'Fjern markering', class: 'bg-white border-slate-300' },
+                        { color: '#fef3c7', title: 'Gul markering', class: 'bg-amber-200' },
+                        { color: '#d1fae5', title: 'Grønn markering', class: 'bg-emerald-200' },
+                        { color: '#e0f2fe', title: 'Blå markering', class: 'bg-sky-200' },
+                        { color: '#ffe4e6', title: 'Rød markering', class: 'bg-rose-200' },
+                        { color: '#f3e8ff', title: 'Lilla markering', class: 'bg-purple-200' }
+                      ].map(h => (
+                        <button
+                          key={h.color}
+                          type="button"
+                          onClick={() => highlightSelection(h.color)}
+                          className={`w-4 h-4 rounded-full border shadow-sm transition-transform active:scale-90 ${h.class}`}
+                          title={h.title}
+                        />
+                      ))}
+                    </div>
+                  </div>
 
                   {/* Editor Content Area */}
-                  <div className="h-[calc(100vh-290px)] w-full">
-                    {selectedNote.type === 'lesson' ? (
-                      /* WYSIWYG ContentEditable for Lesson Notes */
-                      <div
-                        ref={editorRef}
-                        contentEditable
-                        onInput={(e) => handleTextChange(e.currentTarget.innerHTML)}
-                        className="w-full h-full bg-transparent border-0 overflow-y-auto outline-none focus:ring-0 font-sans text-sm sm:text-base leading-relaxed text-slate-800 placeholder:text-outline placeholder:font-semibold prose prose-sm max-w-none"
-                        style={{ minHeight: '100%' }}
-                        dangerouslySetInnerHTML={{ __html: selectedNote.text }}
-                      />
-                    ) : (
-                      /* Plaintext Textarea for Bible Study and General/Personal notes */
-                      <textarea
-                        value={editorText}
-                        onChange={(e) => handleTextChange(e.target.value)}
-                        placeholder={selectedNote.type === 'general' ? (language === 'en' ? "Write down your personal reflections, studies, and comments here..." : "Skriv ned dine personlige refleksjoner, studier, visjoner og tanker her...") : (language === 'en' ? "Write down your scriptures, Tyndale cross-references, and prophetic visions here..." : "Skriv ned dine bibelsitater, åpenbaringsvers, paktstolkninger og profetiske refleksjoner her...")}
-                        className="w-full h-full bg-transparent border-0 resize-none outline-none focus:ring-0 font-sans text-sm sm:text-base leading-relaxed text-slate-800 placeholder:text-outline placeholder:font-semibold"
-                      />
-                    )}
+                  <div className="h-[calc(100vh-320px)] w-full">
+                    <div
+                      ref={editorRef}
+                      contentEditable
+                      onInput={(e) => handleTextChange(e.currentTarget.innerHTML)}
+                      className="w-full h-full bg-transparent border-0 overflow-y-auto outline-none focus:ring-0 font-sans text-sm sm:text-base leading-relaxed text-slate-800 placeholder:text-outline placeholder:font-semibold prose prose-sm max-w-none min-h-[350px] focus:outline-none"
+                      dangerouslySetInnerHTML={{ __html: selectedNote.type === 'lesson' ? (selectedNote.text || "<p><br/></p>") : (selectedNote.content || "<p><br/></p>") }}
+                    />
                   </div>
 
                 </div>
@@ -1145,11 +1324,23 @@ ${rawContent}
               {/* Modal Footer with quick manual save trigger */}
               <div className="border-t border-slate-100 bg-slate-50/50 shrink-0">
                 <div className="max-w-4xl mx-auto w-full px-5 py-4 flex justify-between items-center text-xs text-outline font-semibold">
-                  <span className="select-none">
-                    {selectedNote.type === 'bible' 
-                      ? (language === 'en' ? "Bible Note Workspace" : "Bibelstudie-notatblokk")
-                      : `${selectedNote.courseTitle} - Leksjonsbok`
-                    }
+                  <span className="select-none flex items-center gap-2">
+                    <span>
+                      {selectedNote.type === 'bible' 
+                        ? (language === 'en' ? "Bible Note Workspace" : "Bibelstudie-notatblokk")
+                        : selectedNote.type === 'lesson'
+                          ? `${selectedNote.courseTitle} - Leksjonsbok`
+                          : (language === 'en' ? "Personal Study Journal" : "Personlig studieskuff")
+                      }
+                    </span>
+                    <span className="text-slate-300">|</span>
+                    <span className="text-[10px] text-slate-500 font-mono font-bold">
+                      {getWordCount(editorText)} {language === 'en' ? "words" : "ord"}
+                    </span>
+                    <span className="text-slate-300">•</span>
+                    <span className="text-[10px] text-slate-500 font-mono font-bold">
+                      {getCharCount(editorText)} {language === 'en' ? "chars" : "tegn"}
+                    </span>
                   </span>
 
                   <button
