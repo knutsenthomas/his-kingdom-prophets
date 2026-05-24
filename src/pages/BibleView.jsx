@@ -1609,6 +1609,28 @@ export default function BibleView() {
 
       </section>
 
+      {/* Flytende gå-tilbake-knapp sentrert nederst på skjermen */}
+      <AnimatePresence>
+        {previousReference && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: 50, x: '-50%' }}
+            className="fixed bottom-6 left-1/2 z-50 select-none pointer-events-auto"
+          >
+            <button
+              onClick={handleGoBackToReference}
+              className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-primary to-[#2c6e91] hover:from-[#153b52] hover:to-[#225672] text-white shadow-xl shadow-primary/25 rounded-full text-xs font-extrabold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.95] cursor-pointer border-2 border-white/20 backdrop-blur-sm"
+            >
+              <ArrowLeft size={14} className="stroke-[3] animate-pulse" />
+              <span>
+                Tilbake til {previousReference.book.nor} {previousReference.chapter}{previousReference.verse ? `:${previousReference.verse}` : ''}
+              </span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </main>
   );
 }
