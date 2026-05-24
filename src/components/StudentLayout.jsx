@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { 
   Compass, BookOpen, Book, Video, CheckSquare, Users, 
   Menu, Bell, Power, Search, Award, GraduationCap, ChevronLeft, User,
-  Gift, HelpCircle, X, Globe, ArrowRight, FileText
+  Gift, HelpCircle, X, Globe, ArrowRight, FileText, MessageSquare
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import HkmChatWidget from '@/components/HkmChatWidget';
