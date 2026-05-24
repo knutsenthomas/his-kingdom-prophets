@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { 
   Play, Pause, SkipForward, Volume2, MessageSquare, Download, 
-  Send, Calendar, Clock, FileText, ClipboardList, BookOpen, ExternalLink
+  Send, Calendar, Clock, FileText, ClipboardList, BookOpen, ExternalLink,
+  Maximize, Minimize
 } from 'lucide-react';
 
 export default function VideoView() {
@@ -11,6 +12,42 @@ export default function VideoView() {
   const { user, showToast, courses } = useApp();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState("15:20");
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const playerRef = useRef(null);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (!playerRef.current) return;
+    
+    if (!document.fullscreenElement) {
+      const req = playerRef.current.requestFullscreen || playerRef.current.webkitRequestFullscreen || playerRef.current.msRequestFullscreen;
+      if (req) {
+        req.call(playerRef.current).then(() => {
+          setIsFullscreen(true);
+        }).catch(err => {
+          console.warn("Fullscreen request failed:", err);
+        });
+      }
+    } else {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+      if (exit) {
+        exit.call(document).then(() => {
+          setIsFullscreen(false);
+        });
+      }
+    }
+  };
   const [activeClassroomTab, setActiveClassroomTab] = useState('transcript');
   const [discussionList, setDiscussionList] = useState([
     {
@@ -102,7 +139,7 @@ export default function VideoView() {
         <div className="lg:col-span-8 space-y-6">
           
           {/* Cinematic Video Player */}
-          <div className="relative bg-black rounded-2xl overflow-hidden aspect-video shadow-xl group border border-outline-variant/10">
+          <div ref={playerRef} className="relative bg-black rounded-2xl overflow-hidden aspect-video shadow-xl group border border-outline-variant/10">
             {/* Thumbnail / Video Stream Mock */}
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-tr from-slate-900 via-slate-800 to-primary">
               <div className="text-center text-white/40 font-mono space-y-3 relative z-10 px-4">
@@ -133,7 +170,22 @@ export default function VideoView() {
                   <span className="font-mono">{currentTime} / 45:00</span>
                   <Volume2 size={16} />
                 </div>
-                <button className="p-1 rounded hover:bg-white/10 transition-colors">Fullskjerm</button>
+                <button 
+                  onClick={toggleFullscreen} 
+                  className="p-1.5 px-3 rounded bg-white/10 hover:bg-white/20 transition-all flex items-center gap-1.5 active:scale-95 font-sans text-xs text-white"
+                >
+                  {isFullscreen ? (
+                    <>
+                      <Minimize size={13} />
+                      <span>Normal</span>
+                    </>
+                  ) : (
+                    <>
+                      <Maximize size={13} />
+                      <span>Fullskjerm</span>
+                    </>
+                  )}
+                </button>
               </div>
             </div>
 
