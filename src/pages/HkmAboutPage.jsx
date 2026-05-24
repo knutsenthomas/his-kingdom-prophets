@@ -74,10 +74,10 @@ export default function HkmAboutPage() {
           >
             <img src={logo} alt="Logo" className="w-8 h-8 object-contain shrink-0" />
             <span className="hidden sm:inline">
-              <CmsText slug="layout-hkm-logo-title" fallback="His Kingdom Ministry" />
+              <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
             </span>
             <span className="inline sm:hidden">
-              <CmsText slug="layout-hkm-logo-mobile-title" fallback="HKM" />
+              <CmsText slug="layout-logo-mobile-title" fallback="HKP" />
             </span>
           </button>
           
