@@ -1050,7 +1050,7 @@ export default function BibleView() {
 
         {/* Middle Column: Bible reading pane */}
         <div className={`${showStudyPanel ? 'lg:col-span-5' : 'lg:col-span-8'} space-y-6`}>
-          <div className="bg-white border border-outline-variant/20 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]">
+          <div className="bg-white border border-outline-variant/20 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]">
             
             {/* Reading header with next/prev buttons and study panel toggle */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
@@ -1128,7 +1128,7 @@ export default function BibleView() {
                               : 'hover:bg-slate-50/80 border-transparent'
                           }`}
                         >
-                          <p className="text-sm md:text-base text-on-surface leading-relaxed pr-24">
+                          <p className="text-sm md:text-base text-on-surface leading-relaxed pr-10 sm:pr-24">
                             <span className="font-sans font-bold text-primary select-none mr-2.5 text-xs inline-block text-center w-5 h-5 leading-5 rounded bg-slate-100/80 group-hover:bg-primary group-hover:text-white transition-colors">
                               {verse.verse}
                             </span>
