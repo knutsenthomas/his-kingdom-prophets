@@ -15,58 +15,7 @@ export default function CommunityChatView() {
   
   // Responsive sidebar toggles for mobile view
   const [showSidebar, setShowSidebar] = useState(true);
-  const [showDeltakere, setShowDeltakere] = useState(true);
-  const [rightTab, setRightTab] = useState('deltakere'); // 'deltakere' | 'gjoeremaal'
-  const [newTodoText, setNewTodoText] = useState('');
-  
-  const [todoList, setTodoList] = useState(() => {
-    const saved = localStorage.getItem('hkm-chat-todo-list');
-    return saved ? JSON.parse(saved) : [
-      { id: 1, text: 'Lese Modul 3 i Profetisk 101', done: false, category: 'PROP 101' },
-      { id: 2, text: 'Johannes åpenbaring kapittel 4 tolkning', done: true, category: 'BIBLE 301' },
-      { id: 3, text: 'Forberede bønneseminar for studiegruppen', done: false, category: 'Bønn' }
-    ];
-  });
-
-  useEffect(() => {
-    localStorage.setItem('hkm-chat-todo-list', JSON.stringify(todoList));
-  }, [todoList]);
-
-  const handleToggleTodo = (id) => {
-    setTodoList(prev => prev.map(todo => todo.id === id ? { ...todo, done: !todo.done } : todo));
-    showToast("Gjøremålsstatus oppdatert!");
-  };
-
-  const handleAddTodo = (e) => {
-    e.preventDefault();
-    if (!newTodoText.trim()) return;
-
-    let defaultCategory = 'STUDIE';
-    if (activeChat.type === 'channel') {
-      if (activeChat.id === 'prop101') defaultCategory = 'PROP 101';
-      else if (activeChat.id === 'bible301') defaultCategory = 'BIBLE 301';
-      else if (activeChat.id === 'min201') defaultCategory = 'MIN 201';
-      else defaultCategory = 'BØNN';
-    } else {
-      defaultCategory = 'DM';
-    }
-
-    const newTodo = {
-      id: Date.now(),
-      text: newTodoText.trim(),
-      done: false,
-      category: defaultCategory
-    };
-    
-    setTodoList(prev => [...prev, newTodo]);
-    setNewTodoText('');
-    showToast("Nytt gjøremål lagt til!");
-  };
-
-  const handleDeleteTodo = (id) => {
-    setTodoList(prev => prev.filter(todo => todo.id !== id));
-    showToast("Gjøremål slettet.");
-  };
+  const [showDeltakere, setShowDeltakere] = useState(false);
 
   // Filter courses so students only see what they have paid for
   const studentCourses = courses.filter(course => {
@@ -489,10 +438,10 @@ export default function CommunityChatView() {
                 ? 'bg-primary text-white border-primary shadow-sm' 
                 : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
             }`}
-            title="Vis/skjul deltakere og gjøremål"
+            title="Vis/skjul deltakere"
           >
             <Users size={16} />
-            <span className="hidden sm:inline">Gjøremål & Info</span>
+            <span className="hidden sm:inline">Deltakere</span>
           </button>
         </div>
       </div>
@@ -867,7 +816,7 @@ export default function CommunityChatView() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Deltakere / Detail Info directory & Gjøremål */}
+        {/* RIGHT COLUMN: Deltakere / Detail Info directory */}
         <AnimatePresence>
           {showDeltakere && (
             <motion.div 
@@ -877,191 +826,68 @@ export default function CommunityChatView() {
               className="col-span-1 lg:col-span-3 h-full flex flex-col shrink-0 overflow-hidden"
             >
               <div className="bg-white border border-outline-variant/30 rounded-2xl p-5 shadow-sm h-full flex flex-col justify-between overflow-y-auto">
-                <div className="space-y-6 flex-grow flex flex-col justify-between h-full">
+                <div className="space-y-6">
                   
-                  <div className="space-y-5">
-                    {/* Dual-tab selector for Deltakere vs Gjøremål */}
-                    <div className="flex border-b border-slate-100 pb-1.5 gap-1 select-none">
-                      <button
-                        type="button"
-                        onClick={() => setRightTab('deltakere')}
-                        className={`flex-1 py-2 text-center text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all ${
-                          rightTab === 'deltakere'
-                            ? 'bg-[#561291] text-white shadow-sm'
-                            : 'text-slate-600 hover:bg-slate-50 hover:text-[#561291]'
-                        }`}
-                      >
-                        <Users size={14} />
-                        <span>Deltakere</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setRightTab('gjoeremaal')}
-                        className={`flex-1 py-2 text-center text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all ${
-                          rightTab === 'gjoeremaal'
-                            ? 'bg-[#561291] text-white shadow-sm'
-                            : 'text-slate-600 hover:bg-slate-50 hover:text-[#561291]'
-                        }`}
-                      >
-                        <ClipboardList size={14} />
-                        <span>Gjøremål</span>
-                      </button>
+                  {/* Section Title */}
+                  <div>
+                    <h3 className="font-serif text-sm font-extrabold text-primary flex items-center gap-2">
+                      <Users size={16} />
+                      <span>Gruppe-deltakere</span>
+                    </h3>
+                    <p className="text-[10px] text-outline font-semibold uppercase mt-0.5 tracking-wider">
+                      Studiegruppens medlemmer ({participants.length})
+                    </p>
+                  </div>
+
+                  {/* Active channels summary */}
+                  <div className="bg-slate-50 border border-slate-100 rounded-xl p-3.5 space-y-2">
+                    <p className="text-[10px] font-extrabold text-[#561291] uppercase tracking-wider">Aktivt emne:</p>
+                    <h4 className="text-xs font-extrabold text-slate-800">
+                      {activeChat.type === 'channel' ? activeChat.name : `Direkte DM med ${activeChat.name}`}
+                    </h4>
+                    <p className="text-[10px] text-outline font-semibold leading-relaxed">
+                      Lærere og studenter har tilgang til denne studiekanalen for løpende samhandling.
+                    </p>
+                  </div>
+
+                  {/* Classmate list directory with clickable triggers */}
+                  <div className="space-y-3">
+                    <p className="text-[10px] text-outline font-bold uppercase tracking-wider">
+                      Klikk for å sende direktemelding:
+                    </p>
+                    <div className="space-y-2.5">
+                      {participants.map((p) => (
+                        <button
+                          key={p.id}
+                          onClick={() => handleSelectDm(p)}
+                          className="w-full text-left p-2 border border-slate-100 hover:border-[#561291]/35 hover:bg-[#f3e8ff]/10 rounded-xl transition-all flex gap-3.5 items-center group active:scale-[0.98]"
+                        >
+                          <div className="relative shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-extrabold text-[11px]">
+                              {p.initials}
+                            </div>
+                            <span className={`absolute -right-0.5 -bottom-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${p.statusColor}`} />
+                          </div>
+                          <div className="min-w-0 flex-grow">
+                            <div className="flex items-center justify-between gap-1.5">
+                              <h4 className="text-xs font-bold text-slate-800 truncate leading-tight group-hover:text-primary transition-colors">
+                                {p.name}
+                              </h4>
+                            </div>
+                            <div className="flex items-center gap-1.5 mt-0.5">
+                              <span className={`text-[8px] font-bold px-1 rounded uppercase tracking-wider ${
+                                p.role === 'Mentor' ? 'bg-primary/5 text-primary border border-primary/10' : 'bg-slate-100 text-slate-600'
+                              }`}>
+                                {p.role === 'Mentor' ? 'Lærer' : 'Student'}
+                              </span>
+                              <span className="text-[9px] text-[#72787e] font-semibold truncate">
+                                {p.status}
+                              </span>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
                     </div>
-
-                    {rightTab === 'deltakere' ? (
-                      /* DELTAKERE TAB CONTENT */
-                      <div className="space-y-5">
-                        {/* Section Description */}
-                        <div>
-                          <p className="text-[10px] text-outline font-bold uppercase tracking-wider">
-                            Studiegruppens medlemmer ({participants.length})
-                          </p>
-                        </div>
-
-                        {/* Active channels summary */}
-                        <div className="bg-slate-50 border border-slate-100 rounded-xl p-3.5 space-y-2">
-                          <p className="text-[10px] font-extrabold text-[#561291] uppercase tracking-wider">Aktivt emne:</p>
-                          <h4 className="text-xs font-extrabold text-slate-800">
-                            {activeChat.type === 'channel' ? activeChat.name : `Direkte DM med ${activeChat.name}`}
-                          </h4>
-                          <p className="text-[10px] text-outline font-semibold leading-relaxed">
-                            Lærere og studenter har tilgang til denne studiekanalen for løpende samhandling.
-                          </p>
-                        </div>
-
-                        {/* Classmate list directory with clickable triggers */}
-                        <div className="space-y-3">
-                          <p className="text-[10px] text-outline font-bold uppercase tracking-wider">
-                            Klikk for å sende direktemelding:
-                          </p>
-                          <div className="space-y-2.5">
-                            {participants.map((p) => (
-                              <button
-                                key={p.id}
-                                onClick={() => handleSelectDm(p)}
-                                className="w-full text-left p-2 border border-slate-100 hover:border-[#561291]/35 hover:bg-[#f3e8ff]/10 rounded-xl transition-all flex gap-3.5 items-center group active:scale-[0.98]"
-                              >
-                                <div className="relative shrink-0">
-                                  <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-extrabold text-[11px]">
-                                    {p.initials}
-                                  </div>
-                                  <span className={`absolute -right-0.5 -bottom-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${p.statusColor}`} />
-                                </div>
-                                <div className="min-w-0 flex-grow">
-                                  <div className="flex items-center justify-between gap-1.5">
-                                    <h4 className="text-xs font-bold text-slate-800 truncate leading-tight group-hover:text-primary transition-colors">
-                                      {p.name}
-                                    </h4>
-                                  </div>
-                                  <div className="flex items-center gap-1.5 mt-0.5">
-                                    <span className={`text-[8px] font-bold px-1 rounded uppercase tracking-wider ${
-                                      p.role === 'Mentor' ? 'bg-primary/5 text-primary border border-primary/10' : 'bg-slate-100 text-slate-600'
-                                    }`}>
-                                      {p.role === 'Mentor' ? 'Lærer' : 'Student'}
-                                    </span>
-                                    <span className="text-[9px] text-[#72787e] font-semibold truncate">
-                                      {p.status}
-                                    </span>
-                                  </div>
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      /* GJØREMÅL TAB CONTENT */
-                      <div className="space-y-4 flex flex-col justify-between flex-grow">
-                        <div className="space-y-4">
-                          <div>
-                            <p className="text-[10px] text-outline font-bold uppercase tracking-wider">
-                              Mine studieoppgaver & gjøremål
-                            </p>
-                            <p className="text-[9px] text-on-surface-variant font-semibold mt-0.5 leading-relaxed">
-                              Sjekk av oppgavene dine her mens du diskuterer med studiegruppen eller faglærerne dine.
-                            </p>
-                          </div>
-
-                          {/* Add task simple inline form */}
-                          <form onSubmit={handleAddTodo} className="flex gap-2">
-                            <input
-                              type="text"
-                              placeholder="Ny oppgave..."
-                              value={newTodoText}
-                              onChange={(e) => setNewTodoText(e.target.value)}
-                              className="flex-grow px-3 py-2 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none placeholder:text-outline font-semibold transition-all"
-                            />
-                            <button
-                              type="submit"
-                              disabled={!newTodoText.trim()}
-                              className="px-3 py-2 bg-[#561291] text-white hover:bg-[#3c096c] disabled:opacity-40 transition-colors rounded-xl flex items-center justify-center shadow shrink-0 animate-fade-in"
-                            >
-                              <Plus size={16} />
-                            </button>
-                          </form>
-
-                          {/* Todo items list */}
-                          <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
-                            {todoList.length === 0 ? (
-                              <div className="text-center py-10 text-outline text-[11px] font-semibold italic">
-                                Ingen gjøremål lagt til. Skriv en oppgave over for å komme i gang!
-                              </div>
-                            ) : (
-                              todoList.map((todo) => (
-                                <div
-                                  key={todo.id}
-                                  className={`p-3 rounded-xl border border-slate-100 bg-slate-50/50 flex items-start gap-2.5 justify-between group transition-all hover:bg-white hover:shadow-sm ${
-                                    todo.done ? 'opacity-65' : ''
-                                  }`}
-                                >
-                                  <div className="flex items-start gap-2 min-w-0">
-                                    <button
-                                      type="button"
-                                      onClick={() => handleToggleTodo(todo.id)}
-                                      className="p-0.5 text-primary hover:text-primary-container shrink-0 mt-0.5 active:scale-95 transition-all"
-                                      title={todo.done ? "Merk som ufullført" : "Merk som fullført"}
-                                    >
-                                      {todo.done ? (
-                                        <CheckCircle size={16} className="text-green-600 fill-green-50" />
-                                      ) : (
-                                        <Circle size={16} className="text-[#dec2ef]" />
-                                      )}
-                                    </button>
-                                    <div className="min-w-0">
-                                      <p className={`text-xs font-bold text-slate-800 break-words leading-snug ${
-                                        todo.done ? 'line-through text-slate-400 font-medium' : ''
-                                      }`}>
-                                        {todo.text}
-                                      </p>
-                                      <span className="text-[8px] bg-primary/5 text-primary border border-primary/10 rounded px-1.5 py-0.2 font-bold uppercase tracking-wider inline-block mt-1">
-                                        {todo.category}
-                                      </span>
-                                    </div>
-                                  </div>
-
-                                  <button
-                                    type="button"
-                                    onClick={() => handleDeleteTodo(todo.id)}
-                                    className="p-1 hover:bg-red-50 text-outline hover:text-red-600 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-                                    title="Slett gjøremål"
-                                  >
-                                    <Trash2 size={13} />
-                                  </button>
-                                </div>
-                              ))
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Completed count summary */}
-                        <div className="pt-3 border-t border-slate-100 text-[10px] text-outline font-bold uppercase tracking-wider flex justify-between select-none shrink-0">
-                          <span>Fullførte oppgaver:</span>
-                          <span className="text-green-600 font-mono">
-                            {todoList.filter(t => t.done).length} / {todoList.length}
-                          </span>
-                        </div>
-                      </div>
-                    )}
                   </div>
 
                 </div>
