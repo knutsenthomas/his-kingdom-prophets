@@ -95,6 +95,7 @@ export default function NotesPage() {
   // Loading & Data States
   const [bibleNotes, setBibleNotes] = useState([]);
   const [lessonNotes, setLessonNotes] = useState([]);
+  const [generalNotes, setGeneralNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Editor Modal States
@@ -108,7 +109,13 @@ export default function NotesPage() {
 
   // Note Creation Modal States
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [newNoteType, setNewNoteType] = useState('bible'); // bible, lesson
+  const [newNoteType, setNewNoteType] = useState('bible'); // bible, lesson, general
+  const [newNoteTitle, setNewNoteTitle] = useState('');
+  const [isLinkingBible, setIsLinkingBible] = useState(false);
+  const [isLinkingComment, setIsLinkingComment] = useState(false);
+  const [newNoteLinkedVerses, setNewNoteLinkedVerses] = useState('');
+  const [newNoteLinkedComment, setNewNoteLinkedComment] = useState('');
+  
   const [selectedBookId, setSelectedBookId] = useState('gen');
   const [selectedChapter, setSelectedChapter] = useState(1);
   const [selectedCourseId, setSelectedCourseId] = useState('');
@@ -138,6 +145,11 @@ export default function NotesPage() {
   useEffect(() => {
     if (isCreateModalOpen) {
       setNewNoteType(activeTab);
+      setNewNoteTitle('');
+      setIsLinkingBible(false);
+      setIsLinkingComment(false);
+      setNewNoteLinkedVerses('');
+      setNewNoteLinkedComment('');
       if (courses && courses.length > 0) {
         const defaultCourse = courses[0];
         setSelectedCourseId(defaultCourse.id);
@@ -199,7 +211,7 @@ export default function NotesPage() {
         handleOpenEditor(newNoteObj);
         setIsCreateModalOpen(false);
 
-      } else {
+      } else if (newNoteType === 'lesson') {
         // Lesson Note
         if (!selectedCourseId || !selectedModuleId) {
           showToast(language === 'en' ? "Select a course and module." : "Velg et kurs og en modul.");
@@ -252,6 +264,34 @@ export default function NotesPage() {
         showToast(language === 'en' ? "Note created successfully." : "Notatet ble opprettet.");
         handleOpenEditor(newNoteObj);
         setIsCreateModalOpen(false);
+      } else {
+        // General / Personal Note
+        const docRef = doc(collection(db, "personal_notes")); // Generate clean Firestore ID
+        const now = new Date().toISOString();
+        const bookObj = isLinkingBible ? BIBLE_BOOKS.find(b => b.id === selectedBookId) : null;
+        const bookName = bookObj ? (language === 'en' ? bookObj.eng : bookObj.nor) : '';
+
+        const newNoteData = {
+          userId: user.uid,
+          userName: user.name || user.displayName || '',
+          title: newNoteTitle.trim() || (language === 'en' ? 'Untitled Personal Note' : 'Uten tittel'),
+          content: '',
+          type: 'general',
+          updatedAt: now,
+          linkedBookId: isLinkingBible ? selectedBookId : '',
+          linkedBookName: isLinkingBible ? bookName : '',
+          linkedChapter: isLinkingBible ? Number(selectedChapter) : null,
+          linkedVerses: isLinkingBible ? newNoteLinkedVerses.trim() : '',
+          linkedComment: isLinkingComment ? newNoteLinkedComment.trim() : ''
+        };
+
+        await setDoc(docRef, newNoteData);
+
+        const newNoteObj = { id: docRef.id, ...newNoteData, type: 'general' };
+        setGeneralNotes(prev => [newNoteObj, ...prev]);
+        showToast(language === 'en' ? "Personal note created successfully." : "Personlig notat ble opprettet.");
+        handleOpenEditor(newNoteObj);
+        setIsCreateModalOpen(false);
       }
     } catch (err) {
       console.error("Klarte ikke opprette notat:", err);
@@ -292,6 +332,17 @@ export default function NotesPage() {
       lNotes.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
       setLessonNotes(lNotes);
 
+      // 3. Fetch Personal/General Notes
+      const generalQuery = query(collection(db, "personal_notes"), where("userId", "==", user.uid));
+      const generalSnap = await getDocs(generalQuery);
+      const gNotes = [];
+      generalSnap.forEach((doc) => {
+        gNotes.push({ id: doc.id, ...doc.data(), type: 'general' });
+      });
+      // Sort by updatedAt descending
+      gNotes.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
+      setGeneralNotes(gNotes);
+
     } catch (err) {
       console.error("Klarte ikke hente notater fra Firestore:", err);
       showToast(language === 'en' ? "Failed to load notes from cloud." : "Kunne ikke hente notater fra skyen.");
@@ -327,23 +378,35 @@ export default function NotesPage() {
   const handleDeleteNote = async (note, e) => {
     e.stopPropagation(); // Prevent opening editor
     
+    const title = note.type === 'bible' 
+      ? `${note.bookName} ${note.chapter}` 
+      : note.type === 'lesson' 
+        ? note.moduleTitle 
+        : note.title;
+
     const confirmMsg = language === 'en' 
-      ? `Are you sure you want to delete notes for ${note.type === 'bible' ? `${note.bookName} ${note.chapter}` : note.moduleTitle}?`
-      : `Er du sikker på at du vil slette notatet for ${note.type === 'bible' ? `${note.bookName} ${note.chapter}` : note.moduleTitle}?`;
+      ? `Are you sure you want to delete notes for "${title}"?`
+      : `Er du sikker på at du vil slette notatet for "${title}"?`;
 
     if (!window.confirm(confirmMsg)) return;
 
     try {
-      const collectionName = note.type === 'bible' ? 'bible_notes' : 'user_notes';
+      let collectionName;
+      if (note.type === 'bible') collectionName = 'bible_notes';
+      else if (note.type === 'lesson') collectionName = 'user_notes';
+      else collectionName = 'personal_notes';
+
       await deleteDoc(doc(db, collectionName, note.id));
       
       // Clean local storage cache if applicable
       if (note.type === 'bible') {
         localStorage.removeItem(`hkm-bible-note-${user.uid}-${note.bookId}_${note.chapter}`);
         setBibleNotes(prev => prev.filter(n => n.id !== note.id));
-      } else {
+      } else if (note.type === 'lesson') {
         localStorage.removeItem(`hkm-notes-${note.courseId}-${note.moduleId}`);
         setLessonNotes(prev => prev.filter(n => n.id !== note.id));
+      } else {
+        setGeneralNotes(prev => prev.filter(n => n.id !== note.id));
       }
 
       showToast(language === 'en' ? "Note deleted." : "Notatet er slettet.");
@@ -379,20 +442,36 @@ export default function NotesPage() {
     setSaveStatus('saving');
     
     try {
-      const collectionName = selectedNote.type === 'bible' ? 'bible_notes' : 'user_notes';
+      let collectionName;
+      if (selectedNote.type === 'bible') collectionName = 'bible_notes';
+      else if (selectedNote.type === 'lesson') collectionName = 'user_notes';
+      else collectionName = 'personal_notes';
+
       const docRef = doc(db, collectionName, selectedNote.id);
       
       const now = new Date().toISOString();
-      const updatedFields = selectedNote.type === 'bible' 
-        ? { content: textToSave, updatedAt: now } 
-        : { text: textToSave, updatedAt: now };
+      const updatedFields = selectedNote.type === 'lesson' 
+        ? { text: textToSave, updatedAt: now } 
+        : { content: textToSave, updatedAt: now };
+
+      // Include optional fields for connections if edited in the editor sidebar settings
+      updatedFields.linkedBookId = selectedNote.linkedBookId || '';
+      updatedFields.linkedBookName = selectedNote.linkedBookName || '';
+      updatedFields.linkedChapter = selectedNote.linkedChapter || null;
+      updatedFields.linkedVerses = selectedNote.linkedVerses || '';
+      updatedFields.linkedComment = selectedNote.linkedComment || '';
+      
+      // Allow modifying the title if it is a general note
+      if (selectedNote.type === 'general') {
+        updatedFields.title = selectedNote.title || '';
+      }
 
       await setDoc(docRef, updatedFields, { merge: true });
       
       // Update local storage too to keep portals in sync instantly
       if (selectedNote.type === 'bible') {
         localStorage.setItem(`hkm-bible-note-${user.uid}-${selectedNote.bookId}_${selectedNote.chapter}`, textToSave);
-      } else {
+      } else if (selectedNote.type === 'lesson') {
         localStorage.setItem(`hkm-notes-${selectedNote.courseId}-${selectedNote.moduleId}`, textToSave);
       }
 
@@ -453,7 +532,12 @@ export default function NotesPage() {
       return;
     }
 
-    const title = note.type === 'bible' ? `${note.bookName} ${note.chapter}` : note.moduleTitle;
+    const title = note.type === 'bible' 
+      ? `${note.bookName} ${note.chapter}` 
+      : note.type === 'lesson' 
+        ? note.moduleTitle 
+        : note.title;
+
     const shareMessage = language === 'en'
       ? `Hey everyone! 📖 Sharing my study notes on **${title}**:\n\n"${content}"`
       : `Hei alle sammen! 📖 Her er mine studie-notater fra **${title}**:\n\n"${content}"`;
@@ -467,13 +551,23 @@ export default function NotesPage() {
 
   // Export note as Text file download
   const handleExportText = (note) => {
-    const title = note.type === 'bible' ? `${note.bookName} ${note.chapter}` : note.moduleTitle;
+    const title = note.type === 'bible' 
+      ? `${note.bookName} ${note.chapter}` 
+      : note.type === 'lesson' 
+        ? note.moduleTitle 
+        : note.title;
+
     const rawContent = note.type === 'bible' ? note.content : stripHtml(note.text);
+    const categoryName = note.type === 'bible' 
+      ? 'Bibelstudie' 
+      : note.type === 'lesson' 
+        ? `Kursleksjon (${note.courseTitle})` 
+        : 'Personlig notat';
 
     const fileContent = `================================================
 HIS KINGDOM PROPHETS - PERSONAL STUDY NOTES
 ================================================
-Kategori: ${note.type === 'bible' ? 'Bibelstudie' : `Kursleksjon (${note.courseTitle})`}
+Kategori: ${categoryName}
 Tittel: ${title}
 Sist oppdatert: ${formatDate(note.updatedAt)}
 ------------------------------------------------
@@ -506,7 +600,18 @@ ${rawContent}
     n.text.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const activeNotes = activeTab === 'bible' ? filteredBibleNotes : filteredLessonNotes;
+  const filteredGeneralNotes = generalNotes.filter(n => 
+    n.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    n.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (n.linkedBookName && n.linkedBookName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (n.linkedComment && n.linkedComment.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const activeNotes = activeTab === 'bible' 
+    ? filteredBibleNotes 
+    : activeTab === 'lesson' 
+      ? filteredLessonNotes 
+      : filteredGeneralNotes;
 
   return (
     <main className="flex-grow w-full max-w-[1440px] mx-auto px-6 md:px-12 py-10 flex flex-col font-sans">
@@ -588,6 +693,23 @@ ${rawContent}
             </span>
           )}
         </button>
+
+        <button
+          onClick={() => { setActiveTab('general'); setSearchQuery(''); }}
+          className={`pb-3 font-serif font-bold text-sm flex items-center gap-2 border-b-2 transition-all relative ${
+            activeTab === 'general' 
+              ? 'text-primary border-primary' 
+              : 'text-outline border-transparent hover:text-primary'
+          }`}
+        >
+          <FileText size={16} />
+          <span>{language === 'en' ? "Personal Notes" : "Personlige notater"}</span>
+          {generalNotes.length > 0 && (
+            <span className="text-[10px] font-mono font-bold bg-[#f3e8ff] text-primary border border-primary/25 rounded-full w-5 h-5 flex items-center justify-center shrink-0">
+              {generalNotes.length}
+            </span>
+          )}
+        </button>
       </div>
 
       {/* Grid workspace / Loading / Empty state */}
@@ -601,7 +723,7 @@ ${rawContent}
       ) : activeNotes.length === 0 ? (
         <div className="flex-grow py-20 px-6 border-2 border-dashed border-slate-200 rounded-3xl bg-white text-center flex flex-col items-center justify-center max-w-xl mx-auto shadow-sm">
           <div className="p-4 bg-purple-50 text-primary rounded-2xl mb-4 shadow-inner">
-            {activeTab === 'bible' ? <Book size={32} /> : <GraduationCap size={32} />}
+            {activeTab === 'bible' ? <Book size={32} /> : activeTab === 'lesson' ? <GraduationCap size={32} /> : <FileText size={32} />}
           </div>
           <h3 className="font-serif text-lg font-bold text-primary mb-2">
             {language === 'en' ? "No notes found" : "Ingen notater funnet"}
@@ -611,17 +733,25 @@ ${rawContent}
               ? (language === 'en' ? "No matches found for your search query." : "Ingen notater samsvarte med søket ditt.")
               : (activeTab === 'bible' 
                   ? (language === 'en' ? "Read the scriptures in the Study Bible portal and write reflections to start building your personal library." : "Les Skriftene i studiebibelen og skriv refleksjoner for å starte ditt eget personlige studiebibliotek.")
-                  : (language === 'en' ? "Study lessons inside courses and write classroom notes to build your curriculum workbook." : "Studer leksjonene i kurset og skriv leksjonsnotater for å fylle arbeidsboken din."))
+                  : activeTab === 'lesson'
+                    ? (language === 'en' ? "Study lessons inside courses and write classroom notes to build your curriculum workbook." : "Studer leksjonene i kurset og skriv leksjonsnotater for å fylle arbeidsboken din.")
+                    : (language === 'en' ? "Create a freeform personal note to jot down any reflections, cross-references, or commentaries." : "Opprett et personlig eller frittstående notat for å skrive ned dine refleksjoner, henvisninger eller kommentarer."))
             }
           </p>
           {!searchQuery && (
             <button
-              onClick={() => navigate(activeTab === 'bible' ? '/student/bible' : '/student/library')}
+              onClick={() => {
+                if (activeTab === 'bible') navigate('/student/bible');
+                else if (activeTab === 'lesson') navigate('/student/library');
+                else setIsCreateModalOpen(true);
+              }}
               className="px-5 py-2.5 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-md hover:bg-[#3c096c] transition-colors active:scale-95 flex items-center gap-2"
             >
               {activeTab === 'bible' 
                 ? (language === 'en' ? "Open Study Bible" : "Åpne Studiebibelen")
-                : (language === 'en' ? "Go to Classroom" : "Gå til Kursrommet")}
+                : activeTab === 'lesson'
+                  ? (language === 'en' ? "Go to Classroom" : "Gå til Kursrommet")
+                  : (language === 'en' ? "Create Personal Note" : "Opprett personlig notat")}
             </button>
           )}
         </div>
@@ -630,9 +760,18 @@ ${rawContent}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
           <AnimatePresence mode="popLayout">
             {activeNotes.map((note) => {
-              const title = note.type === 'bible' ? `${note.bookName} ${note.chapter}` : note.moduleTitle;
-              const textSnippet = note.type === 'bible' ? note.content : stripHtml(note.text);
-              const metadata = note.type === 'bible' ? 'Bibelstudie' : `${note.courseCode} - ${note.courseTitle}`;
+              const title = note.type === 'bible' 
+                ? `${note.bookName} ${note.chapter}` 
+                : note.type === 'lesson' 
+                  ? note.moduleTitle 
+                  : note.title;
+
+              const textSnippet = note.type === 'lesson' ? stripHtml(note.text) : note.content;
+              const metadata = note.type === 'bible' 
+                ? 'Bibelstudie' 
+                : note.type === 'lesson' 
+                  ? `${note.courseCode} - ${note.courseTitle}` 
+                  : 'Personlig notat';
               
               return (
                 <motion.div
@@ -648,7 +787,9 @@ ${rawContent}
                       <span className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded-md border tracking-wider shrink-0 ${
                         note.type === 'bible' 
                           ? 'bg-purple-50 text-primary border-purple-100' 
-                          : 'bg-cyan-50 text-cyan-700 border-cyan-100'
+                          : note.type === 'lesson'
+                            ? 'bg-cyan-50 text-cyan-700 border-cyan-100'
+                            : 'bg-emerald-50 text-emerald-700 border-emerald-100'
                       }`}>
                         {metadata}
                       </span>
@@ -689,7 +830,25 @@ ${rawContent}
                       {title}
                     </h3>
 
-                    <p className="text-xs text-on-surface-variant leading-relaxed line-clamp-4 break-words">
+                    {/* Render Linked Badge if Note has links */}
+                    {(note.linkedBookId || note.linkedComment) && (
+                      <div className="flex flex-wrap gap-1.5 mt-1 select-none">
+                        {note.linkedBookId && (
+                          <span className="text-[8px] font-bold bg-amber-50 text-amber-700 border border-amber-100 rounded px-1.5 py-0.2 uppercase tracking-wide flex items-center gap-1">
+                            <Book size={9} />
+                            {note.linkedBookName} {note.linkedChapter}{note.linkedVerses ? `:${note.linkedVerses}` : ''}
+                          </span>
+                        )}
+                        {note.linkedComment && (
+                          <span className="text-[8px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 rounded px-1.5 py-0.2 uppercase tracking-wide flex items-center gap-1 max-w-[150px] truncate" title={note.linkedComment}>
+                            <Sparkles size={9} />
+                            Ref: {note.linkedComment}
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    <p className="text-xs text-on-surface-variant leading-relaxed line-clamp-3 break-words">
                       {textSnippet || (language === 'en' ? "Empty note reflection..." : "Tomt studie-notat...")}
                     </p>
                   </div>
@@ -739,9 +898,13 @@ ${rawContent}
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <span className={`text-[8px] font-bold uppercase px-1.5 py-0.2 rounded border tracking-wider shrink-0 ${
-                        selectedNote.type === 'bible' ? 'bg-purple-50 text-primary border-purple-100' : 'bg-cyan-50 text-cyan-700 border-cyan-100'
-                      }`}>
-                        {selectedNote.type === 'bible' ? 'Bibelstudie' : `${selectedNote.courseCode} Leksjon`}
+                          selectedNote.type === 'bible' 
+                            ? 'bg-purple-50 text-primary border-purple-100' 
+                            : selectedNote.type === 'lesson'
+                              ? 'bg-cyan-50 text-cyan-700 border-cyan-100'
+                              : 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                        }`}>
+                        {selectedNote.type === 'bible' ? 'Bibelstudie' : selectedNote.type === 'lesson' ? `${selectedNote.courseCode} Leksjon` : 'Personlig notat'}
                       </span>
                       
                       {/* Cloud Sync Save Status Label */}
@@ -767,11 +930,25 @@ ${rawContent}
                       </span>
                     </div>
 
-                    <h2 className="font-serif font-extrabold text-primary text-base sm:text-lg leading-tight truncate mt-1">
-                      {selectedNote.type === 'bible' 
-                        ? `${selectedNote.bookName} ${selectedNote.chapter}` 
-                        : selectedNote.moduleTitle}
-                    </h2>
+                    {selectedNote.type === 'general' ? (
+                      <input
+                        type="text"
+                        value={selectedNote.title}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setSelectedNote(prev => ({ ...prev, title: val }));
+                          handleTextChange(editorText); // Trigger autosave
+                        }}
+                        className="font-serif font-extrabold text-primary text-base sm:text-lg leading-tight bg-transparent border-b border-transparent hover:border-slate-200 focus:border-[#561291] focus:ring-0 outline-none w-full max-w-[280px] sm:max-w-[450px] mt-1 py-0.5"
+                        placeholder={language === 'en' ? "Enter title..." : "Skriv tittel..."}
+                      />
+                    ) : (
+                      <h2 className="font-serif font-extrabold text-primary text-base sm:text-lg leading-tight truncate mt-1">
+                        {selectedNote.type === 'bible' 
+                          ? `${selectedNote.bookName} ${selectedNote.chapter}` 
+                          : selectedNote.moduleTitle}
+                      </h2>
+                    )}
                   </div>
                 </div>
 
@@ -809,6 +986,94 @@ ${rawContent}
               {/* Rich Editor Core Workspace */}
               <div className="flex-grow p-6 overflow-y-auto bg-slate-50/15">
                 
+                {/* Optional Connections Settings Panel for any note */}
+                <div className="mb-6 p-4 bg-[#561291]/5 border border-[#561291]/15 rounded-2xl">
+                  <div className="flex items-center gap-2">
+                    <Sparkles size={14} className="text-[#561291]" />
+                    <span className="text-[10px] font-bold text-[#561291] uppercase tracking-wide">
+                      {language === 'en' ? "Connections & References" : "Koblinger & Referanser (Valgfritt)"}
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 pt-3 border-t border-[#561291]/10">
+                    {/* Bible Link Field */}
+                    <div className="space-y-1.5">
+                      <label className="text-[9px] font-bold uppercase tracking-wider text-outline block">
+                        {language === 'en' ? "Link to Scripture" : "Koble til bibelvers"}
+                      </label>
+                      <div className="flex gap-2">
+                        <select
+                          value={selectedNote.linkedBookId || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            const book = BIBLE_BOOKS.find(b => b.id === val);
+                            setSelectedNote(prev => ({
+                              ...prev,
+                              linkedBookId: val,
+                              linkedBookName: book ? book.nor : '',
+                              linkedChapter: prev.linkedChapter || 1
+                            }));
+                            handleTextChange(editorText); // Trigger autosave
+                          }}
+                          className="flex-grow px-2 py-1.5 bg-white border border-slate-200 text-xs rounded-xl focus:outline-none font-semibold transition-all font-sans"
+                        >
+                          <option value="">-- {language === 'en' ? "No Scripture Link" : "Ingen skrift-link"} --</option>
+                          {BIBLE_BOOKS.map(book => (
+                            <option key={book.id} value={book.id}>
+                              {language === 'en' ? book.eng : book.nor}
+                            </option>
+                          ))}
+                        </select>
+
+                        {selectedNote.linkedBookId && (
+                          <>
+                            <input
+                              type="number"
+                              placeholder="Kap."
+                              value={selectedNote.linkedChapter || ''}
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                setSelectedNote(prev => ({ ...prev, linkedChapter: val }));
+                                handleTextChange(editorText);
+                              }}
+                              className="w-14 px-2 py-1.5 bg-white border border-slate-200 text-xs text-center rounded-xl font-bold focus:outline-none"
+                            />
+                            <input
+                              type="text"
+                              placeholder="Vers"
+                              value={selectedNote.linkedVerses || ''}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                setSelectedNote(prev => ({ ...prev, linkedVerses: val }));
+                                handleTextChange(editorText);
+                              }}
+                              className="w-16 px-2 py-1.5 bg-white border border-slate-200 text-xs text-center rounded-xl font-bold focus:outline-none"
+                            />
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Comment Link Field */}
+                    <div className="space-y-1.5">
+                      <label className="text-[9px] font-bold uppercase tracking-wider text-outline block">
+                        {language === 'en' ? "Link to Comment / Reference" : "Koble til kommentar / referanse"}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={language === 'en' ? "Enter reference tag..." : "Skriv inn referanse eller emne-tag..."}
+                        value={selectedNote.linkedComment || ''}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setSelectedNote(prev => ({ ...prev, linkedComment: val }));
+                          handleTextChange(editorText);
+                        }}
+                        className="w-full px-3 py-1.5 bg-white border border-slate-200 text-xs rounded-xl focus:outline-none font-semibold transition-all"
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 {/* Visual Rich WYSIWYG Toolbar for Lesson HTML Notes */}
                 {selectedNote.type === 'lesson' && (
                   <div className="flex items-center gap-1 mb-4 p-1.5 bg-white border border-slate-200 rounded-xl shadow-sm flex-wrap shrink-0">
@@ -849,16 +1114,8 @@ ${rawContent}
                 )}
 
                 {/* Editor Content Area */}
-                <div className="h-[calc(100vh-220px)] w-full">
-                  {selectedNote.type === 'bible' ? (
-                    /* Plaintext Textarea for Bible Study notes */
-                    <textarea
-                      value={editorText}
-                      onChange={(e) => handleTextChange(e.target.value)}
-                      placeholder={language === 'en' ? "Write down your scriptures, Tyndale cross-references, and prophetic visions here..." : "Skriv ned dine bibelsitater, åpenbaringsvers, paktstolkninger og profetiske refleksjoner her..."}
-                      className="w-full h-full bg-transparent border-0 resize-none outline-none focus:ring-0 font-sans text-sm sm:text-base leading-relaxed text-slate-800 placeholder:text-outline placeholder:font-semibold"
-                    />
-                  ) : (
+                <div className="h-[calc(100vh-290px)] w-full">
+                  {selectedNote.type === 'lesson' ? (
                     /* WYSIWYG ContentEditable for Lesson Notes */
                     <div
                       ref={editorRef}
@@ -867,6 +1124,14 @@ ${rawContent}
                       className="w-full h-full bg-transparent border-0 overflow-y-auto outline-none focus:ring-0 font-sans text-sm sm:text-base leading-relaxed text-slate-800 placeholder:text-outline placeholder:font-semibold prose prose-sm max-w-none"
                       style={{ minHeight: '100%' }}
                       dangerouslySetInnerHTML={{ __html: selectedNote.text }}
+                    />
+                  ) : (
+                    /* Plaintext Textarea for Bible Study and General/Personal notes */
+                    <textarea
+                      value={editorText}
+                      onChange={(e) => handleTextChange(e.target.value)}
+                      placeholder={selectedNote.type === 'general' ? (language === 'en' ? "Write down your personal reflections, studies, and comments here..." : "Skriv ned dine personlige refleksjoner, studier, visjoner og tanker her...") : (language === 'en' ? "Write down your scriptures, Tyndale cross-references, and prophetic visions here..." : "Skriv ned dine bibelsitater, åpenbaringsvers, paktstolkninger og profetiske refleksjoner her...")}
+                      className="w-full h-full bg-transparent border-0 resize-none outline-none focus:ring-0 font-sans text-sm sm:text-base leading-relaxed text-slate-800 placeholder:text-outline placeholder:font-semibold"
                     />
                   )}
                 </div>
@@ -964,12 +1229,24 @@ ${rawContent}
                     <GraduationCap size={15} />
                     <span>{language === 'en' ? "Class Lesson" : "Kursleksjon"}</span>
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => setNewNoteType('general')}
+                    className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2 ${
+                      newNoteType === 'general'
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-outline hover:text-primary'
+                    }`}
+                  >
+                    <FileText size={14} />
+                    <span>{language === 'en' ? "Personal Note" : "Personlig notat"}</span>
+                  </button>
                 </div>
               </div>
 
               {/* Interactive Creation Form */}
               <div className="p-6 space-y-5 overflow-y-auto max-h-[350px]">
-                {newNoteType === 'bible' ? (
+                {newNoteType === 'bible' && (
                   <>
                     {/* Bible Book Select */}
                     <div className="space-y-1.5">
@@ -1042,7 +1319,9 @@ ${rawContent}
                       );
                     })()}
                   </>
-                ) : (
+                )}
+
+                {newNoteType === 'lesson' && (
                   <>
                     {/* Course Selection */}
                     <div className="space-y-1.5">
@@ -1096,6 +1375,117 @@ ${rawContent}
                           </div>
                         );
                       })()}
+                    </div>
+                  </>
+                )}
+
+                {newNoteType === 'general' && (
+                  <>
+                    {/* General / Personal Note Title */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-outline block">
+                        {language === 'en' ? "Title" : "Tittel"}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={language === 'en' ? "Enter personal note title..." : "Skriv tittel for personlig notat..."}
+                        value={newNoteTitle}
+                        onChange={(e) => setNewNoteTitle(e.target.value)}
+                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-sm rounded-xl focus:outline-none font-semibold transition-all"
+                      />
+                    </div>
+
+                    {/* Bible Connection Checkbox & Fields */}
+                    <div className="space-y-3 p-3.5 bg-slate-50 border border-slate-200/60 rounded-xl">
+                      <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={isLinkingBible}
+                          onChange={(e) => setIsLinkingBible(e.target.checked)}
+                          className="rounded border-slate-300 text-primary focus:ring-primary"
+                        />
+                        <span className="text-xs font-bold text-slate-700">
+                          {language === 'en' ? "Link to a Bible verse" : "Koble til et bibelvers (Valgfritt)"}
+                        </span>
+                      </label>
+
+                      {isLinkingBible && (
+                        <div className="space-y-3 pt-2 border-t border-slate-200/50">
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-outline block">
+                              {language === 'en' ? "Bible Book" : "Bibelbok"}
+                            </label>
+                            <select
+                              value={selectedBookId}
+                              onChange={(e) => {
+                                setSelectedBookId(e.target.value);
+                                setSelectedChapter(1);
+                              }}
+                              className="w-full px-3 py-2 bg-white border border-slate-200 text-xs rounded-xl focus:outline-none font-semibold transition-all font-sans"
+                            >
+                              {BIBLE_BOOKS.map(book => (
+                                <option key={book.id} value={book.id}>
+                                  {language === 'en' ? book.eng : book.nor}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-1.5">
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-outline block">
+                                {language === 'en' ? "Chapter" : "Kapittel"}
+                              </label>
+                              <input
+                                type="number"
+                                min={1}
+                                value={selectedChapter}
+                                onChange={(e) => setSelectedChapter(Math.max(1, Number(e.target.value)))}
+                                className="w-full px-3 py-2 bg-white border border-slate-200 text-xs rounded-xl font-semibold focus:outline-none"
+                              />
+                            </div>
+                            <div className="space-y-1.5">
+                              <label className="text-[10px] font-bold uppercase tracking-wider text-outline block">
+                                {language === 'en' ? "Verses" : "Vers (Valgfritt)"}
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="e.g. 1-4, or 12"
+                                value={newNoteLinkedVerses}
+                                onChange={(e) => setNewNoteLinkedVerses(e.target.value)}
+                                className="w-full px-3 py-2 bg-white border border-slate-200 text-xs rounded-xl font-semibold focus:outline-none"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Comment Connection Checkbox & Fields */}
+                    <div className="space-y-3 p-3.5 bg-slate-50 border border-slate-200/60 rounded-xl">
+                      <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={isLinkingComment}
+                          onChange={(e) => setIsLinkingComment(e.target.checked)}
+                          className="rounded border-slate-300 text-primary focus:ring-primary"
+                        />
+                        <span className="text-xs font-bold text-slate-700">
+                          {language === 'en' ? "Link to a custom comment or reference tag" : "Koble til kommentar / referanse-tag (Valgfritt)"}
+                        </span>
+                      </label>
+
+                      {isLinkingComment && (
+                        <div className="space-y-1.5 pt-2 border-t border-slate-200/50">
+                          <input
+                            type="text"
+                            placeholder={language === 'en' ? "e.g. Covenant, Prophetic, or commentary name..." : "f.eks. Paktstolkning, Profetisk, eller kommentar-id..."}
+                            value={newNoteLinkedComment}
+                            onChange={(e) => setNewNoteLinkedComment(e.target.value)}
+                            className="w-full px-3 py-2 bg-white border border-slate-200 text-xs rounded-xl font-semibold focus:outline-none"
+                          />
+                        </div>
+                      )}
                     </div>
                   </>
                 )}
