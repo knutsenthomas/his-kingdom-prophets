@@ -91,7 +91,27 @@ export default function StudentProfile() {
       if (response.ok) {
         const data = await response.json();
         if (data && data.length > 0) {
-          const suggestions = data.map(item => item.display_name);
+          const suggestions = data.map(item => {
+            const addr = item.address;
+            if (!addr) return item.display_name;
+
+            const street = addr.road || addr.pedestrian || addr.suburb || addr.path || addr.construction || '';
+            const houseNumber = addr.house_number || '';
+            const postcode = addr.postcode || '';
+            const city = addr.city || addr.town || addr.village || addr.municipality || '';
+            const country = addr.country || '';
+
+            const streetPart = houseNumber ? `${street} ${houseNumber}` : street;
+            const cityPart = postcode ? `${postcode} ${city}` : city;
+
+            const parts = [
+              streetPart.trim(),
+              cityPart.trim(),
+              country.trim()
+            ].filter(Boolean);
+
+            return parts.length >= 2 ? parts.join(', ') : item.display_name;
+          });
           setAddressSuggestions(suggestions);
           setLoadingSuggestions(false);
           return;
@@ -105,11 +125,14 @@ export default function StudentProfile() {
         if (data && data.features && data.features.length > 0) {
           const suggestions = data.features.map(f => {
             const props = f.properties;
+            const streetPart = props.street ? `${props.street} ${props.housenumber || ''}`.trim() : '';
+            const cityPart = props.postcode ? `${props.postcode} ${props.city || props.town || props.village || ''}`.trim() : (props.city || props.town || props.village || '');
+            const countryPart = props.country || '';
+
             const parts = [
-              props.street ? `${props.street} ${props.housenumber || ''}`.trim() : '',
-              props.postcode || '',
-              props.city || props.town || props.village || '',
-              props.country || ''
+              streetPart,
+              cityPart,
+              countryPart
             ].filter(Boolean);
             return parts.join(', ');
           }).filter(Boolean);
