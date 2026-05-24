@@ -422,6 +422,7 @@ export default function BibleView() {
   const [highlightedVerse, setHighlightedVerse] = useState(null);
   const [testamentFilter, setTestamentFilter] = useState('all'); // all, GT, NT
   const topRef = useRef(null);
+  const readerRef = useRef(null);
 
   // Study Bible & Commentary States
   const [showStudyPanel, setShowStudyPanel] = useState(false);
@@ -896,9 +897,9 @@ export default function BibleView() {
         }
       }
     }
-    // Only scroll back to the top if the user has actually scrolled down, to prevent page jumping
-    if (typeof window !== 'undefined' && window.scrollY > 150) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Scroll the reading pane into view, respecting the sticky header offset
+    if (readerRef.current) {
+      readerRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -1052,7 +1053,7 @@ export default function BibleView() {
         </div>
 
         {/* Middle Column: Bible reading pane */}
-        <div className={`${showStudyPanel ? 'lg:col-span-5' : 'lg:col-span-8'} space-y-6`}>
+        <div ref={readerRef} className={`${showStudyPanel ? 'lg:col-span-5' : 'lg:col-span-8'} space-y-6 scroll-mt-24`}>
           <div className="bg-white border border-outline-variant/20 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]">
             
             {/* Reading header with next/prev buttons and study panel toggle */}
