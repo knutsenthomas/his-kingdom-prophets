@@ -876,285 +876,291 @@ ${rawContent}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-[#240046]/45 backdrop-blur-sm z-50 flex justify-end"
+            className="fixed inset-0 bg-[#240046]/45 backdrop-blur-sm z-50"
           >
             <motion.div 
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 26, stiffness: 220 }}
-              className="w-full md:w-[700px] lg:w-[850px] bg-white h-full shadow-2xl flex flex-col justify-between"
+              className="w-full bg-white h-full shadow-2xl flex flex-col justify-between"
             >
               {/* Modal Header */}
-              <div className="p-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center gap-4">
-                <div className="flex items-center gap-3 min-w-0">
-                  <button
-                    onClick={handleCloseEditor}
-                    className="p-2 hover:bg-slate-200 rounded-xl text-primary transition-all active:scale-95"
-                    title={language === 'en' ? "Back to Notes" : "Tilbake til notater"}
-                  >
-                    <ArrowLeft size={18} />
-                  </button>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className={`text-[8px] font-bold uppercase px-1.5 py-0.2 rounded border tracking-wider shrink-0 ${
-                          selectedNote.type === 'bible' 
-                            ? 'bg-purple-50 text-primary border-purple-100' 
-                            : selectedNote.type === 'lesson'
-                              ? 'bg-cyan-50 text-cyan-700 border-cyan-100'
-                              : 'bg-emerald-50 text-emerald-700 border-emerald-100'
-                        }`}>
-                        {selectedNote.type === 'bible' ? 'Bibelstudie' : selectedNote.type === 'lesson' ? `${selectedNote.courseCode} Leksjon` : 'Personlig notat'}
-                      </span>
-                      
-                      {/* Cloud Sync Save Status Label */}
-                      <span className="text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 select-none">
-                        {saveStatus === 'saving' && (
-                          <span className="text-amber-600 flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" />
-                            {language === 'en' ? "Saving to cloud..." : "Lagrer i skyen..."}
-                          </span>
-                        )}
-                        {saveStatus === 'saved' && (
-                          <span className="text-green-600 flex items-center gap-1">
-                            <Check size={11} className="stroke-[3]" />
-                            {language === 'en' ? "Synced" : "Synkronisert"}
-                          </span>
-                        )}
-                        {saveStatus === 'error' && (
-                          <span className="text-red-600 flex items-center gap-1">
-                            <AlertCircle size={11} />
-                            {language === 'en' ? "Offline mode" : "Lagret lokalt"}
-                          </span>
-                        )}
-                      </span>
+              <div className="border-b border-slate-100 bg-slate-50/50 shrink-0">
+                <div className="max-w-4xl mx-auto w-full px-5 py-4 flex justify-between items-center gap-4">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <button
+                      onClick={handleCloseEditor}
+                      className="p-2 hover:bg-slate-200 rounded-xl text-primary transition-all active:scale-95"
+                      title={language === 'en' ? "Back to Notes" : "Tilbake til notater"}
+                    >
+                      <ArrowLeft size={18} />
+                    </button>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[8px] font-bold uppercase px-1.5 py-0.2 rounded border tracking-wider shrink-0 ${
+                            selectedNote.type === 'bible' 
+                              ? 'bg-purple-50 text-primary border-purple-100' 
+                              : selectedNote.type === 'lesson'
+                                ? 'bg-cyan-50 text-cyan-700 border-cyan-100'
+                                : 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                          }`}>
+                          {selectedNote.type === 'bible' ? 'Bibelstudie' : selectedNote.type === 'lesson' ? `${selectedNote.courseCode} Leksjon` : 'Personlig notat'}
+                        </span>
+                        
+                        {/* Cloud Sync Save Status Label */}
+                        <span className="text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 select-none">
+                          {saveStatus === 'saving' && (
+                            <span className="text-amber-600 flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" />
+                              {language === 'en' ? "Saving to cloud..." : "Lagrer i skyen..."}
+                            </span>
+                          )}
+                          {saveStatus === 'saved' && (
+                            <span className="text-green-600 flex items-center gap-1">
+                              <Check size={11} className="stroke-[3]" />
+                              {language === 'en' ? "Synced" : "Synkronisert"}
+                            </span>
+                          )}
+                          {saveStatus === 'error' && (
+                            <span className="text-red-600 flex items-center gap-1">
+                              <AlertCircle size={11} />
+                              {language === 'en' ? "Offline mode" : "Lagret lokalt"}
+                            </span>
+                          )}
+                        </span>
+                      </div>
+
+                      {selectedNote.type === 'general' ? (
+                        <input
+                          type="text"
+                          value={selectedNote.title}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setSelectedNote(prev => ({ ...prev, title: val }));
+                            handleTextChange(editorText); // Trigger autosave
+                          }}
+                          className="font-serif font-extrabold text-primary text-base sm:text-lg leading-tight bg-transparent border-b border-transparent hover:border-slate-200 focus:border-[#561291] focus:ring-0 outline-none w-full max-w-[280px] sm:max-w-[450px] mt-1 py-0.5"
+                          placeholder={language === 'en' ? "Enter title..." : "Skriv tittel..."}
+                        />
+                      ) : (
+                        <h2 className="font-serif font-extrabold text-primary text-base sm:text-lg leading-tight truncate mt-1">
+                          {selectedNote.type === 'bible' 
+                            ? `${selectedNote.bookName} ${selectedNote.chapter}` 
+                            : selectedNote.moduleTitle}
+                        </h2>
+                      )}
                     </div>
-
-                    {selectedNote.type === 'general' ? (
-                      <input
-                        type="text"
-                        value={selectedNote.title}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          setSelectedNote(prev => ({ ...prev, title: val }));
-                          handleTextChange(editorText); // Trigger autosave
-                        }}
-                        className="font-serif font-extrabold text-primary text-base sm:text-lg leading-tight bg-transparent border-b border-transparent hover:border-slate-200 focus:border-[#561291] focus:ring-0 outline-none w-full max-w-[280px] sm:max-w-[450px] mt-1 py-0.5"
-                        placeholder={language === 'en' ? "Enter title..." : "Skriv tittel..."}
-                      />
-                    ) : (
-                      <h2 className="font-serif font-extrabold text-primary text-base sm:text-lg leading-tight truncate mt-1">
-                        {selectedNote.type === 'bible' 
-                          ? `${selectedNote.bookName} ${selectedNote.chapter}` 
-                          : selectedNote.moduleTitle}
-                      </h2>
-                    )}
                   </div>
-                </div>
 
-                {/* Editor actions menu */}
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handleSendToAI(selectedNote)}
-                    className="p-2 bg-[#f3e8ff]/70 text-[#561291] border border-[#561291]/15 hover:bg-[#f3e8ff] rounded-xl flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider transition-all"
-                    title={language === 'en' ? "Consult AI assistant" : "Spør HKM Assistent"}
-                  >
-                    <Sparkles size={13} />
-                    <span className="hidden sm:inline">Spør AI</span>
-                  </button>
+                  {/* Editor actions menu */}
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleSendToAI(selectedNote)}
+                      className="p-2 bg-[#f3e8ff]/70 text-[#561291] border border-[#561291]/15 hover:bg-[#f3e8ff] rounded-xl flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider transition-all"
+                      title={language === 'en' ? "Consult AI assistant" : "Spør HKM Assistent"}
+                    >
+                      <Sparkles size={13} />
+                      <span className="hidden sm:inline">Spør AI</span>
+                    </button>
 
-                  <button
-                    onClick={() => handleShareToChat(selectedNote)}
-                    className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider transition-all"
-                    title={language === 'en' ? "Share in community chat" : "Del i bønnefellesskapet"}
-                  >
-                    <Send size={12} />
-                    <span className="hidden sm:inline">Del</span>
-                  </button>
+                    <button
+                      onClick={() => handleShareToChat(selectedNote)}
+                      className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider transition-all"
+                      title={language === 'en' ? "Share in community chat" : "Del i bønnefellesskapet"}
+                    >
+                      <Send size={12} />
+                      <span className="hidden sm:inline">Del</span>
+                    </button>
 
-                  <button
-                    onClick={() => handleExportText(selectedNote)}
-                    className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider transition-all"
-                    title={language === 'en' ? "Export as txt" : "Eksporter"}
-                  >
-                    <Download size={12} />
-                    <span className="hidden sm:inline">Eksporter</span>
-                  </button>
+                    <button
+                      onClick={() => handleExportText(selectedNote)}
+                      className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider transition-all"
+                      title={language === 'en' ? "Export as txt" : "Eksporter"}
+                    >
+                      <Download size={12} />
+                      <span className="hidden sm:inline">Eksporter</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
               {/* Rich Editor Core Workspace */}
-              <div className="flex-grow p-6 overflow-y-auto bg-slate-50/15">
-                
-                {/* Optional Connections Settings Panel for any note */}
-                <div className="mb-6 p-4 bg-[#561291]/5 border border-[#561291]/15 rounded-2xl">
-                  <div className="flex items-center gap-2">
-                    <Sparkles size={14} className="text-[#561291]" />
-                    <span className="text-[10px] font-bold text-[#561291] uppercase tracking-wide">
-                      {language === 'en' ? "Connections & References" : "Koblinger & Referanser (Valgfritt)"}
-                    </span>
-                  </div>
+              <div className="flex-grow overflow-y-auto bg-slate-50/15">
+                <div className="max-w-4xl mx-auto p-6 w-full flex flex-col">
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 pt-3 border-t border-[#561291]/10">
-                    {/* Bible Link Field */}
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold uppercase tracking-wider text-outline block">
-                        {language === 'en' ? "Link to Scripture" : "Koble til bibelvers"}
-                      </label>
-                      <div className="flex gap-2">
-                        <select
-                          value={selectedNote.linkedBookId || ''}
+                  {/* Optional Connections Settings Panel for any note */}
+                  <div className="mb-6 p-4 bg-[#561291]/5 border border-[#561291]/15 rounded-2xl">
+                    <div className="flex items-center gap-2">
+                      <Sparkles size={14} className="text-[#561291]" />
+                      <span className="text-[10px] font-bold text-[#561291] uppercase tracking-wide">
+                        {language === 'en' ? "Connections & References" : "Koblinger & Referanser (Valgfritt)"}
+                      </span>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 pt-3 border-t border-[#561291]/10">
+                      {/* Bible Link Field */}
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-bold uppercase tracking-wider text-outline block">
+                          {language === 'en' ? "Link to Scripture" : "Koble til bibelvers"}
+                        </label>
+                        <div className="flex gap-2">
+                          <select
+                            value={selectedNote.linkedBookId || ''}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              const book = BIBLE_BOOKS.find(b => b.id === val);
+                              setSelectedNote(prev => ({
+                                ...prev,
+                                linkedBookId: val,
+                                linkedBookName: book ? book.nor : '',
+                                linkedChapter: prev.linkedChapter || 1
+                              }));
+                              handleTextChange(editorText); // Trigger autosave
+                            }}
+                            className="flex-grow px-2 py-1.5 bg-white border border-slate-200 text-xs rounded-xl focus:outline-none font-semibold transition-all font-sans"
+                          >
+                            <option value="">-- {language === 'en' ? "No Scripture Link" : "Ingen skrift-link"} --</option>
+                            {BIBLE_BOOKS.map(book => (
+                              <option key={book.id} value={book.id}>
+                                {language === 'en' ? book.eng : book.nor}
+                              </option>
+                            ))}
+                          </select>
+
+                          {selectedNote.linkedBookId && (
+                            <>
+                              <input
+                                type="number"
+                                placeholder="Kap."
+                                value={selectedNote.linkedChapter || ''}
+                                onChange={(e) => {
+                                  const val = Number(e.target.value);
+                                  setSelectedNote(prev => ({ ...prev, linkedChapter: val }));
+                                  handleTextChange(editorText);
+                                }}
+                                className="w-14 px-2 py-1.5 bg-white border border-slate-200 text-xs text-center rounded-xl font-bold focus:outline-none"
+                              />
+                              <input
+                                type="text"
+                                placeholder="Vers"
+                                value={selectedNote.linkedVerses || ''}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  setSelectedNote(prev => ({ ...prev, linkedVerses: val }));
+                                  handleTextChange(editorText);
+                                }}
+                                className="w-16 px-2 py-1.5 bg-white border border-slate-200 text-xs text-center rounded-xl font-bold focus:outline-none"
+                              />
+                            </>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Comment Link Field */}
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-bold uppercase tracking-wider text-outline block">
+                          {language === 'en' ? "Link to Comment / Reference" : "Koble til kommentar / referanse"}
+                        </label>
+                        <input
+                          type="text"
+                          placeholder={language === 'en' ? "Enter reference tag..." : "Skriv inn referanse eller emne-tag..."}
+                          value={selectedNote.linkedComment || ''}
                           onChange={(e) => {
                             const val = e.target.value;
-                            const book = BIBLE_BOOKS.find(b => b.id === val);
-                            setSelectedNote(prev => ({
-                              ...prev,
-                              linkedBookId: val,
-                              linkedBookName: book ? book.nor : '',
-                              linkedChapter: prev.linkedChapter || 1
-                            }));
-                            handleTextChange(editorText); // Trigger autosave
+                            setSelectedNote(prev => ({ ...prev, linkedComment: val }));
+                            handleTextChange(editorText);
                           }}
-                          className="flex-grow px-2 py-1.5 bg-white border border-slate-200 text-xs rounded-xl focus:outline-none font-semibold transition-all font-sans"
-                        >
-                          <option value="">-- {language === 'en' ? "No Scripture Link" : "Ingen skrift-link"} --</option>
-                          {BIBLE_BOOKS.map(book => (
-                            <option key={book.id} value={book.id}>
-                              {language === 'en' ? book.eng : book.nor}
-                            </option>
-                          ))}
-                        </select>
-
-                        {selectedNote.linkedBookId && (
-                          <>
-                            <input
-                              type="number"
-                              placeholder="Kap."
-                              value={selectedNote.linkedChapter || ''}
-                              onChange={(e) => {
-                                const val = Number(e.target.value);
-                                setSelectedNote(prev => ({ ...prev, linkedChapter: val }));
-                                handleTextChange(editorText);
-                              }}
-                              className="w-14 px-2 py-1.5 bg-white border border-slate-200 text-xs text-center rounded-xl font-bold focus:outline-none"
-                            />
-                            <input
-                              type="text"
-                              placeholder="Vers"
-                              value={selectedNote.linkedVerses || ''}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                setSelectedNote(prev => ({ ...prev, linkedVerses: val }));
-                                handleTextChange(editorText);
-                              }}
-                              className="w-16 px-2 py-1.5 bg-white border border-slate-200 text-xs text-center rounded-xl font-bold focus:outline-none"
-                            />
-                          </>
-                        )}
+                          className="w-full px-3 py-1.5 bg-white border border-slate-200 text-xs rounded-xl focus:outline-none font-semibold transition-all"
+                        />
                       </div>
                     </div>
+                  </div>
 
-                    {/* Comment Link Field */}
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold uppercase tracking-wider text-outline block">
-                        {language === 'en' ? "Link to Comment / Reference" : "Koble til kommentar / referanse"}
-                      </label>
-                      <input
-                        type="text"
-                        placeholder={language === 'en' ? "Enter reference tag..." : "Skriv inn referanse eller emne-tag..."}
-                        value={selectedNote.linkedComment || ''}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          setSelectedNote(prev => ({ ...prev, linkedComment: val }));
-                          handleTextChange(editorText);
-                        }}
-                        className="w-full px-3 py-1.5 bg-white border border-slate-200 text-xs rounded-xl focus:outline-none font-semibold transition-all"
-                      />
+                  {/* Visual Rich WYSIWYG Toolbar for Lesson HTML Notes */}
+                  {selectedNote.type === 'lesson' && (
+                    <div className="flex items-center gap-1 mb-4 p-1.5 bg-white border border-slate-200 rounded-xl shadow-sm flex-wrap shrink-0">
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('bold')}
+                        className="px-2.5 py-1.5 hover:bg-slate-100 text-xs font-bold text-slate-700 rounded-lg"
+                        title="Fet skrift (Ctrl+B)"
+                      >
+                        B
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('italic')}
+                        className="px-2.5 py-1.5 hover:bg-slate-100 text-xs italic font-serif text-slate-700 rounded-lg"
+                        title="Kursiv skrift (Ctrl+I)"
+                      >
+                        I
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('insertUnorderedList')}
+                        className="px-2.5 py-1.5 hover:bg-slate-100 text-xs text-slate-700 rounded-lg"
+                        title="Kulepunktliste"
+                      >
+                        • Liste
+                      </button>
+                      <div className="w-[1px] h-5 bg-slate-200 mx-1" />
+                      <button 
+                        type="button"
+                        onClick={() => execEditorCommand('removeFormat')}
+                        className="px-2 py-1.5 hover:bg-slate-100 text-[10px] text-outline rounded-lg"
+                        title="Fjern formatering"
+                      >
+                        Fjern stil
+                      </button>
                     </div>
-                  </div>
-                </div>
-
-                {/* Visual Rich WYSIWYG Toolbar for Lesson HTML Notes */}
-                {selectedNote.type === 'lesson' && (
-                  <div className="flex items-center gap-1 mb-4 p-1.5 bg-white border border-slate-200 rounded-xl shadow-sm flex-wrap shrink-0">
-                    <button 
-                      type="button"
-                      onClick={() => execEditorCommand('bold')}
-                      className="px-2.5 py-1.5 hover:bg-slate-100 text-xs font-bold text-slate-700 rounded-lg"
-                      title="Fet skrift (Ctrl+B)"
-                    >
-                      B
-                    </button>
-                    <button 
-                      type="button"
-                      onClick={() => execEditorCommand('italic')}
-                      className="px-2.5 py-1.5 hover:bg-slate-100 text-xs italic font-serif text-slate-700 rounded-lg"
-                      title="Kursiv skrift (Ctrl+I)"
-                    >
-                      I
-                    </button>
-                    <button 
-                      type="button"
-                      onClick={() => execEditorCommand('insertUnorderedList')}
-                      className="px-2.5 py-1.5 hover:bg-slate-100 text-xs text-slate-700 rounded-lg"
-                      title="Kulepunktliste"
-                    >
-                      • Liste
-                    </button>
-                    <div className="w-[1px] h-5 bg-slate-200 mx-1" />
-                    <button 
-                      type="button"
-                      onClick={() => execEditorCommand('removeFormat')}
-                      className="px-2 py-1.5 hover:bg-slate-100 text-[10px] text-outline rounded-lg"
-                      title="Fjern formatering"
-                    >
-                      Fjern stil
-                    </button>
-                  </div>
-                )}
-
-                {/* Editor Content Area */}
-                <div className="h-[calc(100vh-290px)] w-full">
-                  {selectedNote.type === 'lesson' ? (
-                    /* WYSIWYG ContentEditable for Lesson Notes */
-                    <div
-                      ref={editorRef}
-                      contentEditable
-                      onInput={(e) => handleTextChange(e.currentTarget.innerHTML)}
-                      className="w-full h-full bg-transparent border-0 overflow-y-auto outline-none focus:ring-0 font-sans text-sm sm:text-base leading-relaxed text-slate-800 placeholder:text-outline placeholder:font-semibold prose prose-sm max-w-none"
-                      style={{ minHeight: '100%' }}
-                      dangerouslySetInnerHTML={{ __html: selectedNote.text }}
-                    />
-                  ) : (
-                    /* Plaintext Textarea for Bible Study and General/Personal notes */
-                    <textarea
-                      value={editorText}
-                      onChange={(e) => handleTextChange(e.target.value)}
-                      placeholder={selectedNote.type === 'general' ? (language === 'en' ? "Write down your personal reflections, studies, and comments here..." : "Skriv ned dine personlige refleksjoner, studier, visjoner og tanker her...") : (language === 'en' ? "Write down your scriptures, Tyndale cross-references, and prophetic visions here..." : "Skriv ned dine bibelsitater, åpenbaringsvers, paktstolkninger og profetiske refleksjoner her...")}
-                      className="w-full h-full bg-transparent border-0 resize-none outline-none focus:ring-0 font-sans text-sm sm:text-base leading-relaxed text-slate-800 placeholder:text-outline placeholder:font-semibold"
-                    />
                   )}
-                </div>
 
+                  {/* Editor Content Area */}
+                  <div className="h-[calc(100vh-290px)] w-full">
+                    {selectedNote.type === 'lesson' ? (
+                      /* WYSIWYG ContentEditable for Lesson Notes */
+                      <div
+                        ref={editorRef}
+                        contentEditable
+                        onInput={(e) => handleTextChange(e.currentTarget.innerHTML)}
+                        className="w-full h-full bg-transparent border-0 overflow-y-auto outline-none focus:ring-0 font-sans text-sm sm:text-base leading-relaxed text-slate-800 placeholder:text-outline placeholder:font-semibold prose prose-sm max-w-none"
+                        style={{ minHeight: '100%' }}
+                        dangerouslySetInnerHTML={{ __html: selectedNote.text }}
+                      />
+                    ) : (
+                      /* Plaintext Textarea for Bible Study and General/Personal notes */
+                      <textarea
+                        value={editorText}
+                        onChange={(e) => handleTextChange(e.target.value)}
+                        placeholder={selectedNote.type === 'general' ? (language === 'en' ? "Write down your personal reflections, studies, and comments here..." : "Skriv ned dine personlige refleksjoner, studier, visjoner og tanker her...") : (language === 'en' ? "Write down your scriptures, Tyndale cross-references, and prophetic visions here..." : "Skriv ned dine bibelsitater, åpenbaringsvers, paktstolkninger og profetiske refleksjoner her...")}
+                        className="w-full h-full bg-transparent border-0 resize-none outline-none focus:ring-0 font-sans text-sm sm:text-base leading-relaxed text-slate-800 placeholder:text-outline placeholder:font-semibold"
+                      />
+                    )}
+                  </div>
+
+                </div>
               </div>
 
               {/* Modal Footer with quick manual save trigger */}
-              <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center text-xs text-outline font-semibold shrink-0">
-                <span className="select-none">
-                  {selectedNote.type === 'bible' 
-                    ? (language === 'en' ? "Bible Note Workspace" : "Bibelstudie-notatblokk")
-                    : `${selectedNote.courseTitle} - Leksjonsbok`
-                  }
-                </span>
+              <div className="border-t border-slate-100 bg-slate-50/50 shrink-0">
+                <div className="max-w-4xl mx-auto w-full px-5 py-4 flex justify-between items-center text-xs text-outline font-semibold">
+                  <span className="select-none">
+                    {selectedNote.type === 'bible' 
+                      ? (language === 'en' ? "Bible Note Workspace" : "Bibelstudie-notatblokk")
+                      : `${selectedNote.courseTitle} - Leksjonsbok`
+                    }
+                  </span>
 
-                <button
-                  type="button"
-                  onClick={() => handleSaveNote()}
-                  className="px-4 py-2 bg-primary text-white hover:bg-[#3c096c] rounded-xl flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider shadow-sm transition-all active:scale-95"
-                >
-                  <Save size={13} />
-                  <span>{language === 'en' ? "Save now" : "Lagre nå"}</span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSaveNote()}
+                    className="px-4 py-2 bg-primary text-white hover:bg-[#3c096c] rounded-xl flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider shadow-sm transition-all active:scale-95"
+                  >
+                    <Save size={13} />
+                    <span>{language === 'en' ? "Save now" : "Lagre nå"}</span>
+                  </button>
+                </div>
               </div>
 
             </motion.div>
