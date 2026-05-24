@@ -13,7 +13,7 @@ import {
   Plus, Check, Edit, Save, FileEdit, AlertCircle,
   Bold, Italic, Underline, List, ListOrdered, Quote,
   Heading1, Heading2, Heading3, Palette, Calendar, Eraser,
-  AlignLeft, AlignCenter, AlignRight
+  AlignLeft, AlignCenter, AlignRight, Library
 } from 'lucide-react';
 import CmsText from '@/components/CmsText';
 
@@ -92,7 +92,7 @@ const BIBLE_BOOKS = [
 export default function NotesPage() {
   const navigate = useNavigate();
   const { user, showToast, language, sendAssistantMessage, courses } = useApp();
-  const [activeTab, setActiveTab] = useState('bible'); // bible, lesson
+  const [activeTab, setActiveTab] = useState('all'); // all, bible, lesson, general
   const [searchQuery, setSearchQuery] = useState('');
   
   // Loading & Data States
@@ -147,7 +147,7 @@ export default function NotesPage() {
   // Reset creation modal fields when opening
   useEffect(() => {
     if (isCreateModalOpen) {
-      setNewNoteType(activeTab);
+      setNewNoteType(activeTab === 'all' ? 'bible' : activeTab);
       setNewNoteTitle('');
       setIsLinkingBible(false);
       setIsLinkingComment(false);
@@ -841,11 +841,19 @@ ${rawContent}
     (n.linkedComment && n.linkedComment.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const activeNotes = activeTab === 'bible' 
-    ? filteredBibleNotes 
-    : activeTab === 'lesson' 
-      ? filteredLessonNotes 
-      : filteredGeneralNotes;
+  const filteredAllNotes = [
+    ...filteredBibleNotes,
+    ...filteredLessonNotes,
+    ...filteredGeneralNotes
+  ].sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
+
+  const activeNotes = activeTab === 'all'
+    ? filteredAllNotes
+    : activeTab === 'bible' 
+      ? filteredBibleNotes 
+      : activeTab === 'lesson' 
+        ? filteredLessonNotes 
+        : filteredGeneralNotes;
 
   return (
     <main className="flex-grow w-full max-w-[1440px] mx-auto px-6 md:px-12 py-10 flex flex-col font-sans">
@@ -893,10 +901,27 @@ ${rawContent}
       </div>
 
       {/* Tabs segment controller */}
-      <div className="flex border-b border-slate-200 mb-8 gap-6 select-none shrink-0">
+      <div className="flex border-b border-slate-200 mb-8 gap-6 select-none shrink-0 overflow-x-auto scrollbar-none">
+        <button
+          onClick={() => { setActiveTab('all'); setSearchQuery(''); }}
+          className={`pb-3 font-serif font-bold text-sm flex items-center gap-2 border-b-2 transition-all relative shrink-0 ${
+            activeTab === 'all' 
+              ? 'text-primary border-primary' 
+              : 'text-outline border-transparent hover:text-primary'
+          }`}
+        >
+          <Library size={16} />
+          <span>{language === 'en' ? "All Notes" : "Alle notater"}</span>
+          {(bibleNotes.length + lessonNotes.length + generalNotes.length) > 0 && (
+            <span className="text-[10px] font-mono font-bold bg-[#f3e8ff] text-primary border border-primary/25 rounded-full w-5 h-5 flex items-center justify-center shrink-0">
+              {bibleNotes.length + lessonNotes.length + generalNotes.length}
+            </span>
+          )}
+        </button>
+
         <button
           onClick={() => { setActiveTab('bible'); setSearchQuery(''); }}
-          className={`pb-3 font-serif font-bold text-sm flex items-center gap-2 border-b-2 transition-all relative ${
+          className={`pb-3 font-serif font-bold text-sm flex items-center gap-2 border-b-2 transition-all relative shrink-0 ${
             activeTab === 'bible' 
               ? 'text-primary border-primary' 
               : 'text-outline border-transparent hover:text-primary'
@@ -913,7 +938,7 @@ ${rawContent}
 
         <button
           onClick={() => { setActiveTab('lesson'); setSearchQuery(''); }}
-          className={`pb-3 font-serif font-bold text-sm flex items-center gap-2 border-b-2 transition-all relative ${
+          className={`pb-3 font-serif font-bold text-sm flex items-center gap-2 border-b-2 transition-all relative shrink-0 ${
             activeTab === 'lesson' 
               ? 'text-primary border-primary' 
               : 'text-outline border-transparent hover:text-primary'
@@ -930,7 +955,7 @@ ${rawContent}
 
         <button
           onClick={() => { setActiveTab('general'); setSearchQuery(''); }}
-          className={`pb-3 font-serif font-bold text-sm flex items-center gap-2 border-b-2 transition-all relative ${
+          className={`pb-3 font-serif font-bold text-sm flex items-center gap-2 border-b-2 transition-all relative shrink-0 ${
             activeTab === 'general' 
               ? 'text-primary border-primary' 
               : 'text-outline border-transparent hover:text-primary'
@@ -957,7 +982,7 @@ ${rawContent}
       ) : activeNotes.length === 0 ? (
         <div className="flex-grow py-20 px-6 border-2 border-dashed border-slate-200 rounded-3xl bg-white text-center flex flex-col items-center justify-center max-w-xl mx-auto shadow-sm">
           <div className="p-4 bg-purple-50 text-primary rounded-2xl mb-4 shadow-inner">
-            {activeTab === 'bible' ? <Book size={32} /> : activeTab === 'lesson' ? <GraduationCap size={32} /> : <FileText size={32} />}
+            {activeTab === 'all' ? <Library size={32} /> : activeTab === 'bible' ? <Book size={32} /> : activeTab === 'lesson' ? <GraduationCap size={32} /> : <FileText size={32} />}
           </div>
           <h3 className="font-serif text-lg font-bold text-primary mb-2">
             {language === 'en' ? "No notes found" : "Ingen notater funnet"}
@@ -965,11 +990,13 @@ ${rawContent}
           <p className="text-xs text-on-surface-variant font-semibold max-w-sm mb-6 leading-relaxed">
             {searchQuery 
               ? (language === 'en' ? "No matches found for your search query." : "Ingen notater samsvarte med søket ditt.")
-              : (activeTab === 'bible' 
-                  ? (language === 'en' ? "Read the scriptures in the Study Bible portal and write reflections to start building your personal library." : "Les Skriftene i studiebibelen og skriv refleksjoner for å starte ditt eget personlige studiebibliotek.")
-                  : activeTab === 'lesson'
-                    ? (language === 'en' ? "Study lessons inside courses and write classroom notes to build your curriculum workbook." : "Studer leksjonene i kurset og skriv leksjonsnotater for å fylle arbeidsboken din.")
-                    : (language === 'en' ? "Create a freeform personal note to jot down any reflections, cross-references, or commentaries." : "Opprett et personlig eller frittstående notat for å skrive ned dine refleksjoner, henvisninger eller kommentarer."))
+              : (activeTab === 'all'
+                  ? (language === 'en' ? "You don't have any study notes yet. Write reflections in scriptures, study classroom lessons, or create a freeform personal note to start your theological journal." : "Du har ingen studienotater ennå. Skriv refleksjoner til bibelvers, ta notater til leksjoner, eller opprett et personlig notat for å starte din studie- og profetjournal.")
+                  : activeTab === 'bible' 
+                    ? (language === 'en' ? "Read the scriptures in the Study Bible portal and write reflections to start building your personal library." : "Les Skriftene i studiebibelen og skriv refleksjoner for å starte ditt eget personlige studiebibliotek.")
+                    : activeTab === 'lesson'
+                      ? (language === 'en' ? "Study lessons inside courses and write classroom notes to build your curriculum workbook." : "Studer leksjonene i kurset og skriv leksjonsnotater for å fylle arbeidsboken din.")
+                      : (language === 'en' ? "Create a freeform personal note to jot down any reflections, cross-references, or commentaries." : "Opprett et personlig eller frittstående notat for å skrive ned dine refleksjoner, henvisninger eller kommentarer."))
             }
           </p>
           {!searchQuery && (
@@ -981,11 +1008,13 @@ ${rawContent}
               }}
               className="px-5 py-2.5 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-md hover:bg-[#3c096c] transition-colors active:scale-95 flex items-center gap-2"
             >
-              {activeTab === 'bible' 
-                ? (language === 'en' ? "Open Study Bible" : "Åpne Studiebibelen")
-                : activeTab === 'lesson'
-                  ? (language === 'en' ? "Go to Classroom" : "Gå til Kursrommet")
-                  : (language === 'en' ? "Create Personal Note" : "Opprett personlig notat")}
+              {activeTab === 'all'
+                ? (language === 'en' ? "Create Note" : "Opprett notat")
+                : activeTab === 'bible' 
+                  ? (language === 'en' ? "Open Study Bible" : "Åpne Studiebibelen")
+                  : activeTab === 'lesson'
+                    ? (language === 'en' ? "Go to Classroom" : "Gå til Kursrommet")
+                    : (language === 'en' ? "Create Personal Note" : "Opprett personlig notat")}
             </button>
           )}
         </div>
