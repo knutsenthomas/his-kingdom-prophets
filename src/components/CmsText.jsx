@@ -85,6 +85,9 @@ export default function CmsText({
       ref={elementRef}
       contentEditable
       suppressContentEditableWarning
+      autoCapitalize="none"
+      autoCorrect="off"
+      spellCheck="false"
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
       onPaste={handlePaste}
