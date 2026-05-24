@@ -23,7 +23,7 @@ export function generateFastingPdf(cmsContent, language) {
   const sec2Title = getCmsValue('pdf_fasting_sec2_title', isEn ? "2. Practical Guidelines for Fasting" : "2. Praktiske retningslinjer for faste");
   const sec2Text = getCmsValue('pdf_fasting_sec2_text', isEn 
     ? "Hydration: Drink plenty of water during the fast. The body eliminates waste products, and sufficient fluid content prevents headaches and lethargy. Preparation: Taper off coffee, sugar, and heavy food a couple of days before a longer fast to avoid severe withdrawals. Time with God: Fasting without prayer is just a diet. Set aside the time you would normally spend on meals and cooking for Bible reading, quiet listening, and prayer." 
-    : "Hydrering: Drikk rikelig med vann under fasten. Kroppen skiller ut avfallsstoffer, og tilstrekkelig væskeinnhold forhindrer hodepine og sløvhet. Forberedelse: Trapp ned på kaffe, sukker og tung mat et par dager før en lengre faste for å unngå kraftige abstinenser. Tid med Gud: Faste uten bønn is kun en diett. Sett av den tiden du vanligvis ville brukt på måltider og matlaging til bibellesning, stille lytting og bønn.");
+    : "Hydrering: Drikk rikelig med vann under fasten. Kroppen skiller ut avfallsstoffer, og tilstrekkelig væskeinnhold forhindrer hodepine og sløvhet. Forberedelse: Trapp ned på kaffe, sukker og tung mat et par dager før en lengre faste for å unngå kraftige abstinenser. Tid med Gud: Faste uten bønn er kun en diett. Sett av den tiden du vanligvis ville brukt på måltider og matlaging til bibellesning, stille lytting og bønn.");
   const prayerTitle = getCmsValue('pdf_fasting_prayer_title', isEn ? "Prayer Proclamation for the Fast:" : "Bønne-proklamasjon for fasten:");
   const prayerText = getCmsValue('pdf_fasting_prayer_text', isEn 
     ? "'Lord, I consecrate my body and mind to You during this fast. Let my flesh recede, and let Your Holy Spirit fill me anew. I pray for clarity, revelation, and strength to walk in the prepared ministry You have for my life. In Jesus' name, Amen.'" 
@@ -32,28 +32,33 @@ export function generateFastingPdf(cmsContent, language) {
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'pt',
-    format: 'letter'
+    format: 'a4'
   });
 
-  // Numbered Canvas Page Setup
+  // Numbered Canvas Page Setup (A4 size: 595.28 x 841.89 points)
+  // Left margin = 54, right margin = 541, printable width = 487 pt
+  const startX = 54;
+  const endX = 541;
+  const printWidth = 487;
+
   // Header
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
+  doc.setFontSize(8.5);
   doc.setTextColor('#3c096c');
-  doc.text(isEn ? "HIS KINGDOM PROPHETS — STUDY RESOURCES" : "HIS KINGDOM PROPHETS — STUDIERESSURSER", 54, 52);
+  doc.text(isEn ? "HIS KINGDOM PROPHETS — STUDY RESOURCES" : "HIS KINGDOM PROPHETS — STUDIERESSURSER", startX, 52);
   doc.setDrawColor('#dec2ef');
-  doc.setLineWidth(0.5);
-  doc.line(54, 58, 558, 58);
+  doc.setLineWidth(0.75);
+  doc.line(startX, 58, endX, 58);
 
   // Core drawing position y
-  let y = 88;
-  const leading = 13.5;
+  let y = 92;
+  const leading = 16.5;
 
   const drawParagraph = (text, options = {}) => {
-    const fontSize = options.fontSize || 9.5;
+    const fontSize = options.fontSize || 10.5;
     const fontStyle = options.fontStyle || 'normal';
     const color = options.color || '#333333';
-    const spaceAfter = options.spaceAfter !== undefined ? options.spaceAfter : 4;
+    const spaceAfter = options.spaceAfter !== undefined ? options.spaceAfter : 10;
     const spaceBefore = options.spaceBefore !== undefined ? options.spaceBefore : 0;
     
     y += spaceBefore;
@@ -61,9 +66,9 @@ export function generateFastingPdf(cmsContent, language) {
     doc.setFontSize(fontSize);
     doc.setTextColor(color);
     
-    const lines = doc.splitTextToSize(text, 504);
+    const lines = doc.splitTextToSize(text, printWidth);
     lines.forEach((line) => {
-      doc.text(line, 54, y);
+      doc.text(line, startX, y);
       y += leading;
     });
     
@@ -71,25 +76,25 @@ export function generateFastingPdf(cmsContent, language) {
   };
 
   // 1. Doc Title
-  drawParagraph(title, { fontSize: 20, fontStyle: 'bold', color: '#3c096c', spaceAfter: 3 });
+  drawParagraph(title, { fontSize: 22, fontStyle: 'bold', color: '#3c096c', spaceAfter: 8 });
   
   // 2. Subtitle
-  drawParagraph(subtitle, { fontSize: 10.5, fontStyle: 'bold', color: '#c5a059', spaceAfter: 4 });
+  drawParagraph(subtitle, { fontSize: 11.5, fontStyle: 'bold', color: '#c5a059', spaceAfter: 12 });
   
   // 3. Gold Line divider
   doc.setDrawColor('#c5a059');
-  doc.setLineWidth(1);
-  doc.line(54, y, 558, y);
-  y += 10;
+  doc.setLineWidth(1.25);
+  doc.line(startX, y, endX, y);
+  y += 16;
 
   // 4. Intro Text
-  drawParagraph(intro, { spaceAfter: 4 });
+  drawParagraph(intro, { spaceAfter: 18 });
 
   // 5. Section 1 Title
-  drawParagraph(sec1Title, { fontSize: 12, fontStyle: 'bold', color: '#3c096c', spaceBefore: 5, spaceAfter: 2 });
+  drawParagraph(sec1Title, { fontSize: 13, fontStyle: 'bold', color: '#3c096c', spaceBefore: 12, spaceAfter: 8 });
 
   // 6. Section 1 Text
-  drawParagraph(sec1Text, { spaceAfter: 4 });
+  drawParagraph(sec1Text, { spaceAfter: 18 });
 
   // 7. Table of Fasts
   const tableData = isEn ? [
@@ -106,13 +111,25 @@ export function generateFastingPdf(cmsContent, language) {
     ["Jesu faste (40 dager)", "Luk 4,1-2", "Utrustning før tjenestestart, seier over fristelse."]
   ];
   
-  const colWidths = [129.6, 86.4, 288]; // sum = 504 pt
+  const colWidths = [125, 83, 279]; // sum = 487 pt
   let tableY = y + 4;
-  const rowHeight = 16;
   
   tableData.forEach((row, rowIndex) => {
     const isHeader = rowIndex === 0;
-    let currentX = 54;
+    let currentX = startX;
+    
+    // Calculate max lines for this row to set height dynamically
+    let maxLines = 1;
+    colWidths.forEach((w, colIndex) => {
+      const text = row[colIndex];
+      const lines = doc.splitTextToSize(text, w - 12);
+      if (lines.length > maxLines) {
+        maxLines = lines.length;
+      }
+    });
+    
+    const rowHeight = isHeader ? 22 : (maxLines * 13 + 11);
+    
     colWidths.forEach((w, colIndex) => {
       // Draw background
       doc.setFillColor(isHeader ? '#3c096c' : '#fdfbf7');
@@ -125,38 +142,43 @@ export function generateFastingPdf(cmsContent, language) {
       
       // Write text
       doc.setFont('helvetica', isHeader ? 'bold' : 'normal');
-      doc.setFontSize(isHeader ? 8 : 7.5);
+      doc.setFontSize(isHeader ? 9 : 8.5);
       doc.setTextColor(isHeader ? '#ffffff' : '#333333');
       
-      const textY = tableY + 10.5;
-      doc.text(row[colIndex], currentX + 6, textY, { maxWidth: w - 12 });
+      const lines = doc.splitTextToSize(row[colIndex], w - 12);
+      lines.forEach((line, lineIndex) => {
+        // Vertical centering alignment
+        const textY = tableY + (isHeader ? 14 : 12.5) + (lineIndex * 13);
+        doc.text(line, currentX + 6, textY);
+      });
+      
       currentX += w;
     });
     tableY += rowHeight;
   });
-  y = tableY + 6;
+  y = tableY + 18;
 
   // 8. Section 2 Title
-  drawParagraph(sec2Title, { fontSize: 12, fontStyle: 'bold', color: '#3c096c', spaceBefore: 5, spaceAfter: 2 });
+  drawParagraph(sec2Title, { fontSize: 13, fontStyle: 'bold', color: '#3c096c', spaceBefore: 12, spaceAfter: 8 });
 
   // 9. Section 2 Text (interpreting <br/> tags properly)
   const sec2Paragraphs = sec2Text.split(/<br\s*\/?>/i);
   sec2Paragraphs.forEach((pText) => {
     const cleanText = pText.replace(/<\/?b>/gi, "");
-    drawParagraph(cleanText, { spaceAfter: 2 });
+    drawParagraph(cleanText, { spaceAfter: 10 });
   });
-  y += 2;
+  y += 8;
 
   // 10. Prayer / Proclamation
-  drawParagraph(prayerTitle, { fontStyle: 'bold', spaceBefore: 2, spaceAfter: 2 });
-  drawParagraph(prayerText, { fontStyle: 'italic', color: '#555555', spaceAfter: 0 });
+  drawParagraph(prayerTitle, { fontSize: 10.5, fontStyle: 'bold', spaceBefore: 12, spaceAfter: 6 });
+  drawParagraph(prayerText, { fontSize: 10.5, fontStyle: 'italic', color: '#555555', spaceAfter: 0 });
 
-  // Draw Footer Page Number
+  // Draw Footer Page Number at the bottom of A4 (y = 805)
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8);
+  doc.setFontSize(8.5);
   doc.setTextColor('#666666');
-  doc.text(isEn ? "© 2026 His Kingdom Prophets. All rights reserved." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert.", 54, 755);
-  doc.text(isEn ? "Page 1 of 1" : "Side 1 av 1", 558, 755, { align: 'right' });
+  doc.text(isEn ? "© 2026 His Kingdom Prophets. All rights reserved." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert.", startX, 805);
+  doc.text(isEn ? "Page 1 of 1" : "Side 1 av 1", endX, 805, { align: 'right' });
 
   // Save the PDF
   doc.save(`${title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`);
@@ -194,28 +216,33 @@ export function generateIntercessionPdf(cmsContent, language) {
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'pt',
-    format: 'letter'
+    format: 'a4'
   });
 
-  // Numbered Canvas Page Setup
+  // Numbered Canvas Page Setup (A4 size: 595.28 x 841.89 points)
+  // Left margin = 54, right margin = 541, printable width = 487 pt
+  const startX = 54;
+  const endX = 541;
+  const printWidth = 487;
+
   // Header
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
+  doc.setFontSize(8.5);
   doc.setTextColor('#3c096c');
-  doc.text(isEn ? "HIS KINGDOM PROPHETS — STUDY RESOURCES" : "HIS KINGDOM PROPHETS — STUDIERESSURSER", 54, 52);
+  doc.text(isEn ? "HIS KINGDOM PROPHETS — STUDY RESOURCES" : "HIS KINGDOM PROPHETS — STUDIERESSURSER", startX, 52);
   doc.setDrawColor('#dec2ef');
-  doc.setLineWidth(0.5);
-  doc.line(54, 58, 558, 58);
+  doc.setLineWidth(0.75);
+  doc.line(startX, 58, endX, 58);
 
   // Core drawing position y
-  let y = 88;
-  const leading = 13.5;
+  let y = 92;
+  const leading = 16.5;
 
   const drawParagraph = (text, options = {}) => {
-    const fontSize = options.fontSize || 9.5;
+    const fontSize = options.fontSize || 10.5;
     const fontStyle = options.fontStyle || 'normal';
     const color = options.color || '#333333';
-    const spaceAfter = options.spaceAfter !== undefined ? options.spaceAfter : 4;
+    const spaceAfter = options.spaceAfter !== undefined ? options.spaceAfter : 10;
     const spaceBefore = options.spaceBefore !== undefined ? options.spaceBefore : 0;
     
     y += spaceBefore;
@@ -223,9 +250,9 @@ export function generateIntercessionPdf(cmsContent, language) {
     doc.setFontSize(fontSize);
     doc.setTextColor(color);
     
-    const lines = doc.splitTextToSize(text, 504);
+    const lines = doc.splitTextToSize(text, printWidth);
     lines.forEach((line) => {
-      doc.text(line, 54, y);
+      doc.text(line, startX, y);
       y += leading;
     });
     
@@ -233,25 +260,25 @@ export function generateIntercessionPdf(cmsContent, language) {
   };
 
   // 1. Doc Title
-  drawParagraph(title, { fontSize: 20, fontStyle: 'bold', color: '#3c096c', spaceAfter: 3 });
+  drawParagraph(title, { fontSize: 22, fontStyle: 'bold', color: '#3c096c', spaceAfter: 8 });
   
   // 2. Subtitle
-  drawParagraph(subtitle, { fontSize: 10.5, fontStyle: 'bold', color: '#c5a059', spaceAfter: 4 });
+  drawParagraph(subtitle, { fontSize: 11.5, fontStyle: 'bold', color: '#c5a059', spaceAfter: 12 });
   
   // 3. Gold Line divider
   doc.setDrawColor('#c5a059');
-  doc.setLineWidth(1);
-  doc.line(54, y, 558, y);
-  y += 10;
+  doc.setLineWidth(1.25);
+  doc.line(startX, y, endX, y);
+  y += 16;
 
   // 4. Intro Text
-  drawParagraph(intro, { spaceAfter: 4 });
+  drawParagraph(intro, { spaceAfter: 18 });
 
   // 5. Section 1 Title
-  drawParagraph(sec1Title, { fontSize: 12, fontStyle: 'bold', color: '#3c096c', spaceBefore: 5, spaceAfter: 2 });
+  drawParagraph(sec1Title, { fontSize: 13, fontStyle: 'bold', color: '#3c096c', spaceBefore: 12, spaceAfter: 8 });
 
   // 6. Section 1 Text
-  drawParagraph(sec1Text, { spaceAfter: 4 });
+  drawParagraph(sec1Text, { spaceAfter: 18 });
 
   // 7. Table of Intercession elements
   const tableData = isEn ? [
@@ -268,13 +295,25 @@ export function generateIntercessionPdf(cmsContent, language) {
     ["4", "Takk & Lovpris", "Fil 4,6", "Fullfør bønnen med tilbedelse, i tro på at Gud har hørt."]
   ];
   
-  const colWidths = [36, 93.6, 86.4, 288]; // sum = 504 pt
+  const colWidths = [35, 90, 83, 279]; // sum = 487 pt
   let tableY = y + 4;
-  const rowHeight = 16;
   
   tableData.forEach((row, rowIndex) => {
     const isHeader = rowIndex === 0;
-    let currentX = 54;
+    let currentX = startX;
+    
+    // Calculate max lines for this row to set height dynamically
+    let maxLines = 1;
+    colWidths.forEach((w, colIndex) => {
+      const text = row[colIndex];
+      const lines = doc.splitTextToSize(text, w - 12);
+      if (lines.length > maxLines) {
+        maxLines = lines.length;
+      }
+    });
+    
+    const rowHeight = isHeader ? 22 : (maxLines * 13 + 11);
+    
     colWidths.forEach((w, colIndex) => {
       // Draw background
       doc.setFillColor(isHeader ? '#3c096c' : '#fdfbf7');
@@ -287,34 +326,39 @@ export function generateIntercessionPdf(cmsContent, language) {
       
       // Write text
       doc.setFont('helvetica', isHeader ? 'bold' : 'normal');
-      doc.setFontSize(isHeader ? 8 : 7.5);
+      doc.setFontSize(isHeader ? 9 : 8.5);
       doc.setTextColor(isHeader ? '#ffffff' : '#333333');
       
-      const textY = tableY + 10.5;
-      doc.text(row[colIndex], currentX + 6, textY, { maxWidth: w - 12 });
+      const lines = doc.splitTextToSize(row[colIndex], w - 12);
+      lines.forEach((line, lineIndex) => {
+        // Vertical centering alignment
+        const textY = tableY + (isHeader ? 14 : 12.5) + (lineIndex * 13);
+        doc.text(line, currentX + 6, textY);
+      });
+      
       currentX += w;
     });
     tableY += rowHeight;
   });
-  y = tableY + 6;
+  y = tableY + 18;
 
   // 8. Section 2 Title
-  drawParagraph(sec2Title, { fontSize: 12, fontStyle: 'bold', color: '#3c096c', spaceBefore: 5, spaceAfter: 2 });
+  drawParagraph(sec2Title, { fontSize: 13, fontStyle: 'bold', color: '#3c096c', spaceBefore: 12, spaceAfter: 8 });
 
   // 9. Section 2 Text
-  drawParagraph(sec2Text, { spaceAfter: 4 });
-  y += 2;
+  drawParagraph(sec2Text, { spaceAfter: 10 });
+  y += 8;
 
   // 10. Prayer / Proclamation
-  drawParagraph(prayerTitle, { fontStyle: 'bold', spaceBefore: 2, spaceAfter: 2 });
-  drawParagraph(prayerText, { fontStyle: 'italic', color: '#555555', spaceAfter: 0 });
+  drawParagraph(prayerTitle, { fontSize: 10.5, fontStyle: 'bold', spaceBefore: 12, spaceAfter: 6 });
+  drawParagraph(prayerText, { fontSize: 10.5, fontStyle: 'italic', color: '#555555', spaceAfter: 0 });
 
-  // Draw Footer Page Number
+  // Draw Footer Page Number at the bottom of A4 (y = 805)
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8);
+  doc.setFontSize(8.5);
   doc.setTextColor('#666666');
-  doc.text(isEn ? "© 2026 His Kingdom Prophets. All rights reserved." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert.", 54, 755);
-  doc.text(isEn ? "Page 1 of 1" : "Side 1 av 1", 558, 755, { align: 'right' });
+  doc.text(isEn ? "© 2026 His Kingdom Prophets. All rights reserved." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert.", startX, 805);
+  doc.text(isEn ? "Page 1 of 1" : "Side 1 av 1", endX, 805, { align: 'right' });
 
   // Save the PDF
   doc.save(`${title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`);
