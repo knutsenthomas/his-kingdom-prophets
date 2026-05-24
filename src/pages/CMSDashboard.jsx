@@ -6,8 +6,10 @@ import {
   Globe, History, Download, Upload, Search, Settings, AlertTriangle, 
   ChevronLeft, ChevronRight, MoreVertical, X, CheckCircle2, Trash2, 
   Copy, PlusCircle, Languages, Info, RotateCcw, Layout, UserCheck, 
-  BookOpen, Users, Rocket, Flag, UploadCloud
+  BookOpen, Users, Rocket, Flag, UploadCloud, FileText
 } from 'lucide-react';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/firebase';
 
 // Definition of all CMS strings with labels, categories, and explanatory descriptions
 const assetDefinitions = [
@@ -465,7 +467,8 @@ export default function CMSDashboard() {
       { id: 'student', title: 'Studentportal', section: 'Studentportal', icon: BookOpen, count: assetDefinitions.filter(d => d.section === 'Studentportal').length },
       { id: 'teacher', title: 'Mentorportal', section: 'Mentorportal', icon: Users, count: assetDefinitions.filter(d => d.section === 'Mentorportal').length },
       { id: 'onboarding', title: 'Onboardingflyt', section: 'Onboarding', icon: Rocket, count: assetDefinitions.filter(d => d.section === 'Onboarding').length },
-      { id: 'resources', title: 'Bibelressurser', section: 'Bibelressurser', icon: BookOpen, count: assetDefinitions.filter(d => d.section === 'Bibelressurser').length }
+      { id: 'resources', title: 'Bibelressurser', section: 'Bibelressurser', icon: BookOpen, count: assetDefinitions.filter(d => d.section === 'Bibelressurser').length },
+      { id: 'documents', title: 'Dokumenter (PDF)', section: 'Dokumenter', icon: FileText, count: 2 }
     ];
   }, []);
 
@@ -481,7 +484,8 @@ export default function CMSDashboard() {
           teacher: 'Mentorportal',
           onboarding: 'Onboarding',
           resources: 'Bibelressurser',
-          system: 'System'
+          system: 'System',
+          documents: 'Dokumenter'
         };
         if (asset.section !== mapping[selectedCategory]) {
           return false;
@@ -649,6 +653,222 @@ export default function CMSDashboard() {
     { id: 1, date: '20. Mai - 10:00', author: 'System (Initialisering)', action: 'Etablerte CMS-språkbase med 75 nøkler' }
   ];
 
+  // DocumentCMSPanel subcomponent for custom PDF uploads via Firebase Storage
+  const DocumentCMSPanel = () => {
+    const [uploadingFasting, setUploadingFasting] = useState(false);
+    const [progressFasting, setProgressFasting] = useState(0);
+    const [uploadingIntercession, setUploadingIntercession] = useState(false);
+    const [progressIntercession, setProgressIntercession] = useState(0);
+
+    const handleUpload = (e, type) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      if (file.type !== 'application/pdf') {
+        setToastMessage({
+          title: 'Feil filtype',
+          desc: 'Kun PDF-filer er tillatt.'
+        });
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        setToastMessage({
+          title: 'Filen er for stor',
+          desc: 'Maksimal filstørrelse er 10MB.'
+        });
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+        return;
+      }
+
+      const isFasting = type === 'fasting';
+      if (isFasting) {
+        setUploadingFasting(true);
+        setProgressFasting(0);
+      } else {
+        setUploadingIntercession(true);
+        setProgressIntercession(0);
+      }
+
+      const timestamp = Date.now();
+      const cleanName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+      const storageRef = ref(storage, `pdfs/${type}_${timestamp}_${cleanName}`);
+
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          if (isFasting) setProgressFasting(progress);
+          else setProgressIntercession(progress);
+        },
+        (error) => {
+          console.error("Upload error:", error);
+          if (isFasting) setUploadingFasting(false);
+          else setUploadingIntercession(false);
+          setToastMessage({
+            title: 'Opplasting feilet',
+            desc: 'Kunne ikke laste opp filen. Prøv igjen.'
+          });
+          setShowToast(true);
+          setTimeout(() => setShowToast(false), 3000);
+        },
+        async () => {
+          try {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            const slug = isFasting ? 'pdf_fasting_url' : 'pdf_intercession_url';
+            await updateCmsContent(slug, downloadURL);
+
+            if (isFasting) {
+              setUploadingFasting(false);
+              setProgressFasting(100);
+            } else {
+              setUploadingIntercession(false);
+              setProgressIntercession(100);
+            }
+
+            setToastMessage({
+              title: 'Dokument oppdatert',
+              desc: `${file.name} ble lastet opp og satt som aktiv manual.`
+            });
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 3000);
+          } catch (err) {
+            console.error("Url retrieval error:", err);
+            if (isFasting) setUploadingFasting(false);
+            else setUploadingIntercession(false);
+          }
+        }
+      );
+    };
+
+    const handleReset = async (type) => {
+      const isFasting = type === 'fasting';
+      const slug = isFasting ? 'pdf_fasting_url' : 'pdf_intercession_url';
+      try {
+        await updateCmsContent(slug, '');
+        setToastMessage({
+          title: 'Tilbakestilt til standard',
+          desc: 'Dokumentet bruker nå den systemgenererte standarden.'
+        });
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+      } catch (err) {
+        console.error("Reset error:", err);
+      }
+    };
+
+    const docs = [
+      {
+        id: 'fasting',
+        title: 'Bibelsk Faste og Åndelig Disiplin',
+        desc: 'Studiemanual for fasting, bønn og teologiske retningslinjer.',
+        slug: 'pdf_fasting_url',
+        defaultUrl: '/Bibelsk_Faste_og_Aandelig_Disiplin.pdf',
+        uploading: uploadingFasting,
+        progress: progressFasting
+      },
+      {
+        id: 'intercession',
+        title: 'Profetisk Forbønn og Bønneskjold',
+        desc: 'Studiemanual for forbønn og etablering av et aktivt bønneskjold.',
+        slug: 'pdf_intercession_url',
+        defaultUrl: '/Profetisk_Forboenn_og_Boenneskjold.pdf',
+        uploading: uploadingIntercession,
+        progress: progressIntercession
+      }
+    ];
+
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm">
+          <h2 className="font-serif text-lg font-bold text-primary mb-1">Dokumentbehandling</h2>
+          <p className="text-xs text-outline font-medium">
+            Her kan du laste opp dine egne PDF-dokumenter for studieheftene. Studentene vil laste ned dine tilpassede PDF-filer i stedet for de systemgenererte standardene. Du kan når som helst nullstille tilbake til systemets 1-sides standard.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {docs.map((doc) => {
+            const customUrl = cmsContent?.[doc.slug];
+            const isActiveCustom = !!customUrl;
+            const currentUrl = customUrl || doc.defaultUrl;
+
+            return (
+              <div key={doc.id} className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow transition-shadow">
+                <div>
+                  <div className="flex items-center justify-between mb-3 select-none">
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
+                      isActiveCustom 
+                        ? 'bg-amber-100 text-amber-800' 
+                        : 'bg-primary/10 text-primary'
+                    }`}>
+                      {isActiveCustom ? 'Egendefinert' : 'Systemstandard'}
+                    </span>
+                    <a 
+                      href={currentUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
+                    >
+                      <Info size={12} /> Se aktiv PDF
+                    </a>
+                  </div>
+
+                  <h3 className="font-serif text-base font-bold text-primary mb-1">{doc.title}</h3>
+                  <p className="text-xs text-on-surface-variant font-medium mb-6">{doc.desc}</p>
+                </div>
+
+                <div className="space-y-4">
+                  {doc.uploading ? (
+                    <div className="bg-slate-50 border border-outline-variant/20 rounded-xl p-4">
+                      <div className="flex items-center justify-between text-xs font-bold text-primary mb-2 select-none">
+                        <span>Laster opp til server...</span>
+                        <span>{doc.progress}%</span>
+                      </div>
+                      <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                        <div 
+                          className="bg-primary h-full transition-all duration-300 rounded-full" 
+                          style={{ width: `${doc.progress}%` }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-3">
+                      <label className="w-full border border-dashed border-outline-variant/50 hover:border-primary hover:bg-primary/5 transition-all rounded-xl p-6 text-center cursor-pointer flex flex-col items-center justify-center gap-2 select-none group">
+                        <UploadCloud size={28} className="text-outline group-hover:text-primary transition-colors" />
+                        <span className="text-xs font-bold text-on-surface">Klikk eller dra for å laste opp</span>
+                        <span className="text-[10px] text-outline font-semibold">PDF-format, maks 10MB</span>
+                        <input 
+                          type="file" 
+                          accept=".pdf" 
+                          onChange={(e) => handleUpload(e, doc.id)}
+                          className="hidden" 
+                        />
+                      </label>
+
+                      {isActiveCustom && (
+                        <button
+                          onClick={() => handleReset(doc.id)}
+                          className="w-full flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 border border-red-200 hover:border-red-300 transition-all rounded-xl active:scale-[0.98] bg-white shadow-sm font-sans"
+                        >
+                          <RotateCcw size={14} /> Nullstill til systemstandard
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="w-full px-4 sm:px-6 md:px-12 py-6 md:py-12 flex flex-col gap-6 md:gap-8 font-sans">
       
@@ -788,8 +1008,12 @@ export default function CMSDashboard() {
         {/* Editor Area (Right 9 cols) */}
         <div className="lg:col-span-9 flex flex-col gap-6">
           
-          {/* Filters Card */}
-          <div className="bg-white border border-outline-variant/30 rounded-xl p-4 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 select-none">
+          {selectedCategory === 'documents' ? (
+            <DocumentCMSPanel />
+          ) : (
+            <>
+              {/* Filters Card */}
+              <div className="bg-white border border-outline-variant/30 rounded-xl p-4 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 select-none">
             <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto">
               
               {/* Search input in toolbar */}
@@ -1122,6 +1346,8 @@ export default function CMSDashboard() {
                 </select>
               </div>
             </div>
+          )}
+            </>
           )}
 
         </div>

@@ -15,7 +15,7 @@ import {
 
 export default function BibleResourcesPage() {
   const navigate = useNavigate();
-  const { language, toggleLanguage, user } = useApp();
+  const { language, toggleLanguage, user, cmsContent } = useApp();
   const isEn = language === 'en';
 
   // Navigation tab for the resource hub
@@ -1151,8 +1151,12 @@ export default function BibleResourcesPage() {
                     </div>
 
                     <a
-                      href={index === 0 ? "/Bibelsk_Faste_og_Aandelig_Disiplin.pdf" : "/Profetisk_Forboenn_og_Boenneskjold.pdf"}
+                      href={index === 0 
+                        ? (cmsContent?.['pdf_fasting_url'] || "/Bibelsk_Faste_og_Aandelig_Disiplin.pdf") 
+                        : (cmsContent?.['pdf_intercession_url'] || "/Profetisk_Forboenn_og_Boenneskjold.pdf")}
                       download
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center"
                     >
                       <FileText size={13} />
