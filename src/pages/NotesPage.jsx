@@ -14,9 +14,81 @@ import {
 } from 'lucide-react';
 import CmsText from '@/components/CmsText';
 
+const BIBLE_BOOKS = [
+  // Det gamle testamentet (GT)
+  { id: 'gen', nor: '1. Mosebok', eng: 'Genesis', chapters: 50, testament: 'GT' },
+  { id: 'exo', nor: '2. Mosebok', eng: 'Exodus', chapters: 40, testament: 'GT' },
+  { id: 'lev', nor: '3. Mosebok', eng: 'Leviticus', chapters: 27, testament: 'GT' },
+  { id: 'num', nor: '4. Mosebok', eng: 'Numbers', chapters: 36, testament: 'GT' },
+  { id: 'deu', nor: '5. Mosebok', eng: 'Deuteronomy', chapters: 34, testament: 'GT' },
+  { id: 'jos', nor: 'Josva', eng: 'Joshua', chapters: 24, testament: 'GT' },
+  { id: 'jdg', nor: 'Dommerne', eng: 'Judges', chapters: 21, testament: 'GT' },
+  { id: 'rut', nor: 'Rut', eng: 'Ruth', chapters: 4, testament: 'GT' },
+  { id: '1sa', nor: '1. Samuelsbok', eng: '1 Samuel', chapters: 31, testament: 'GT' },
+  { id: '2sa', nor: '2. Samuelsbok', eng: '2 Samuel', chapters: 24, testament: 'GT' },
+  { id: '1ki', nor: '1. Kongebok', eng: '1 Kings', chapters: 22, testament: 'GT' },
+  { id: '2ki', nor: '2. Kongebok', eng: '2 Kings', chapters: 25, testament: 'GT' },
+  { id: '1ch', nor: '1. Krønikerbok', eng: '1 Chronicles', chapters: 29, testament: 'GT' },
+  { id: '2ch', nor: '2. Krønikerbok', eng: '2 Chronicles', chapters: 36, testament: 'GT' },
+  { id: 'ezr', nor: 'Esra', eng: 'Ezra', chapters: 10, testament: 'GT' },
+  { id: 'neh', nor: 'Nehemia', eng: 'Nehemiah', chapters: 13, testament: 'GT' },
+  { id: 'est', nor: 'Ester', eng: 'Esther', chapters: 10, testament: 'GT' },
+  { id: 'job', nor: 'Job', eng: 'Job', chapters: 42, testament: 'GT' },
+  { id: 'psa', nor: 'Salmene', eng: 'Psalms', chapters: 150, testament: 'GT' },
+  { id: 'pro', nor: 'Ordspråkene', eng: 'Proverbs', chapters: 31, testament: 'GT' },
+  { id: 'ecc', nor: 'Forkynneren', eng: 'Ecclesiastes', chapters: 12, testament: 'GT' },
+  { id: 'sng', nor: 'Høysangen', eng: 'Song of Solomon', chapters: 8, testament: 'GT' },
+  { id: 'isa', nor: 'Jesaja', eng: 'Isaiah', chapters: 66, testament: 'GT' },
+  { id: 'jer', nor: 'Jeremia', eng: 'Jeremiah', chapters: 52, testament: 'GT' },
+  { id: 'lam', nor: 'Klagesangene', eng: 'Lamentations', chapters: 5, testament: 'GT' },
+  { id: 'eze', nor: 'Esekiel', eng: 'Ezekiel', chapters: 48, testament: 'GT' },
+  { id: 'dan', nor: 'Daniel', eng: 'Daniel', chapters: 12, testament: 'GT' },
+  { id: 'hos', nor: 'Hosea', eng: 'Hosea', chapters: 14, testament: 'GT' },
+  { id: 'joe', nor: 'Joel', eng: 'Joel', chapters: 3, testament: 'GT' },
+  { id: 'amo', nor: 'Amos', eng: 'Amos', chapters: 9, testament: 'GT' },
+  { id: 'oba', nor: 'Obadja', eng: 'Obadiah', chapters: 1, testament: 'GT' },
+  { id: 'jon', nor: 'Jona', eng: 'Jonah', chapters: 4, testament: 'GT' },
+  { id: 'mic', nor: 'Mika', eng: 'Micah', chapters: 7, testament: 'GT' },
+  { id: 'nam', nor: 'Nahum', eng: 'Nahum', chapters: 3, testament: 'GT' },
+  { id: 'hab', nor: 'Habakkuk', eng: 'Habakkuk', chapters: 3, testament: 'GT' },
+  { id: 'zep', nor: 'Sefanja', eng: 'Zephaniah', chapters: 3, testament: 'GT' },
+  { id: 'hag', nor: 'Haggai', eng: 'Haggai', chapters: 2, testament: 'GT' },
+  { id: 'zec', nor: 'Sakarja', eng: 'Zechariah', chapters: 14, testament: 'GT' },
+  { id: 'mal', nor: 'Malaki', eng: 'Malachi', chapters: 4, testament: 'GT' },
+
+  // Det nye testamentet (NT)
+  { id: 'mat', nor: 'Matteus', eng: 'Matthew', chapters: 28, testament: 'NT' },
+  { id: 'mrk', nor: 'Markus', eng: 'Mark', chapters: 16, testament: 'NT' },
+  { id: 'luk', nor: 'Lukas', eng: 'Luke', chapters: 24, testament: 'NT' },
+  { id: 'joh', nor: 'Johannes', eng: 'John', chapters: 21, testament: 'NT' },
+  { id: 'act', nor: 'Apostlenes gjerninger', eng: 'Acts', chapters: 28, testament: 'NT' },
+  { id: 'rom', nor: 'Romerne', eng: 'Romans', chapters: 16, testament: 'NT' },
+  { id: '1co', nor: '1. Korinter', eng: '1 Corinthians', chapters: 16, testament: 'NT' },
+  { id: '2co', nor: '2. Korinter', eng: '2 Corinthians', chapters: 13, testament: 'NT' },
+  { id: 'gal', nor: 'Galaterne', eng: 'Galatians', chapters: 6, testament: 'NT' },
+  { id: 'eph', nor: 'Efeserne', eng: 'Ephesians', chapters: 6, testament: 'NT' },
+  { id: 'php', nor: 'Filipperne', eng: 'Philippians', chapters: 4, testament: 'NT' },
+  { id: 'col', nor: 'Kolosserne', eng: 'Colossians', chapters: 4, testament: 'NT' },
+  { id: '1th', nor: '1. Tessaloniker', eng: '1 Thessalonians', chapters: 5, testament: 'NT' },
+  { id: '2th', nor: '2. Tessaloniker', eng: '2 Thessalonians', chapters: 3, testament: 'NT' },
+  { id: '1ti', nor: '1. Timoteus', eng: '1 Timothy', chapters: 6, testament: 'NT' },
+  { id: '2ti', nor: '2. Timoteus', eng: '2 Timothy', chapters: 4, testament: 'NT' },
+  { id: 'tit', nor: 'Titus', eng: 'Titus', chapters: 3, testament: 'NT' },
+  { id: 'phm', nor: 'Filemon', eng: 'Philemon', chapters: 1, testament: 'NT' },
+  { id: 'heb', nor: 'Hebreerne', eng: 'Hebrews', chapters: 13, testament: 'NT' },
+  { id: 'jas', nor: 'Jakob', eng: 'James', chapters: 5, testament: 'NT' },
+  { id: '1pe', nor: '1. Peter', eng: '1 Peter', chapters: 5, testament: 'NT' },
+  { id: '2pe', nor: '2. Peter', eng: '2 Peter', chapters: 3, testament: 'NT' },
+  { id: '1jo', nor: '1. Johannes', eng: '1 John', chapters: 5, testament: 'NT' },
+  { id: '2jo', nor: '2. Johannes', eng: '2 John', chapters: 1, testament: 'NT' },
+  { id: '3jo', nor: '3. Johannes', eng: '3 John', chapters: 1, testament: 'NT' },
+  { id: 'jud', nor: 'Judas', eng: 'Jude', chapters: 1, testament: 'NT' },
+  { id: 'rev', nor: 'Åpenbaringen', eng: 'Revelation', chapters: 22, testament: 'NT' },
+];
+
 export default function NotesPage() {
   const navigate = useNavigate();
-  const { user, showToast, language, sendAssistantMessage } = useApp();
+  const { user, showToast, language, sendAssistantMessage, courses } = useApp();
   const [activeTab, setActiveTab] = useState('bible'); // bible, lesson
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -33,6 +105,161 @@ export default function NotesPage() {
   
   const saveTimeoutRef = useRef(null);
   const editorRef = useRef(null);
+
+  // Note Creation Modal States
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [newNoteType, setNewNoteType] = useState('bible'); // bible, lesson
+  const [selectedBookId, setSelectedBookId] = useState('gen');
+  const [selectedChapter, setSelectedChapter] = useState(1);
+  const [selectedCourseId, setSelectedCourseId] = useState('');
+  const [selectedModuleId, setSelectedModuleId] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
+
+  // Sync selected Course & Module for Lesson Note creation
+  useEffect(() => {
+    if (courses && courses.length > 0) {
+      if (!selectedCourseId) {
+        setSelectedCourseId(courses[0].id);
+      }
+      const currentCourseObj = courses.find(c => c.id === (selectedCourseId || courses[0].id));
+      if (currentCourseObj && currentCourseObj.modules && currentCourseObj.modules.length > 0) {
+        // If the selectedModuleId is not in the current course's modules, set it to the first module
+        const hasModule = currentCourseObj.modules.some(m => m.id === selectedModuleId);
+        if (!hasModule) {
+          setSelectedModuleId(currentCourseObj.modules[0].id);
+        }
+      } else {
+        setSelectedModuleId('');
+      }
+    }
+  }, [selectedCourseId, courses, selectedModuleId]);
+
+  // Reset creation modal fields when opening
+  useEffect(() => {
+    if (isCreateModalOpen) {
+      setNewNoteType(activeTab);
+      if (courses && courses.length > 0) {
+        const defaultCourse = courses[0];
+        setSelectedCourseId(defaultCourse.id);
+        if (defaultCourse.modules && defaultCourse.modules.length > 0) {
+          setSelectedModuleId(defaultCourse.modules[0].id);
+        }
+      }
+      setSelectedBookId('gen');
+      setSelectedChapter(1);
+    }
+  }, [isCreateModalOpen, activeTab, courses]);
+
+  // Create Note Handler
+  const handleCreateNote = async () => {
+    if (!user?.uid) {
+      showToast(language === 'en' ? "Please log in to create notes." : "Vennligst logg inn for å opprette notater.");
+      return;
+    }
+
+    setIsCreating(true);
+
+    try {
+      if (newNoteType === 'bible') {
+        const calculatedId = `${user.uid}_${selectedBookId}_${selectedChapter}`;
+        
+        // Check duplicate locally
+        const existing = bibleNotes.find(n => n.id === calculatedId);
+        if (existing) {
+          showToast(language === 'en' ? "Note already exists. Opening editor..." : "Notatet eksisterer allerede. Åpner...");
+          handleOpenEditor(existing);
+          setIsCreateModalOpen(false);
+          setIsCreating(false);
+          return;
+        }
+
+        const book = BIBLE_BOOKS.find(b => b.id === selectedBookId);
+        const bookName = book ? (language === 'en' ? book.eng : book.nor) : selectedBookId;
+
+        const docRef = doc(db, "bible_notes", calculatedId);
+        const now = new Date().toISOString();
+        const newNoteData = {
+          userId: user.uid,
+          userName: user.name || user.displayName || '',
+          bookId: selectedBookId,
+          bookName: bookName,
+          chapter: Number(selectedChapter),
+          content: '',
+          updatedAt: now
+        };
+
+        await setDoc(docRef, newNoteData);
+
+        // Update local storage to prevent any offline desync
+        localStorage.setItem(`hkm-bible-note-${user.uid}-${selectedBookId}_${selectedChapter}`, '');
+
+        const newNoteObj = { id: calculatedId, ...newNoteData, type: 'bible' };
+        setBibleNotes(prev => [newNoteObj, ...prev]);
+        showToast(language === 'en' ? "Note created successfully." : "Notatet ble opprettet.");
+        handleOpenEditor(newNoteObj);
+        setIsCreateModalOpen(false);
+
+      } else {
+        // Lesson Note
+        if (!selectedCourseId || !selectedModuleId) {
+          showToast(language === 'en' ? "Select a course and module." : "Velg et kurs og en modul.");
+          setIsCreating(false);
+          return;
+        }
+
+        const calculatedId = `${user.uid}_${selectedCourseId}_${selectedModuleId}`;
+
+        // Check duplicate
+        const existing = lessonNotes.find(n => n.id === calculatedId);
+        if (existing) {
+          showToast(language === 'en' ? "Note already exists. Opening editor..." : "Notatet eksisterer allerede. Åpner...");
+          handleOpenEditor(existing);
+          setIsCreateModalOpen(false);
+          setIsCreating(false);
+          return;
+        }
+
+        const courseObj = courses.find(c => c.id === selectedCourseId);
+        const moduleObj = courseObj?.modules?.find(m => m.id === selectedModuleId);
+
+        if (!courseObj || !moduleObj) {
+          showToast(language === 'en' ? "Invalid course or module selection." : "Ugyldig valg av kurs eller modul.");
+          setIsCreating(false);
+          return;
+        }
+
+        const docRef = doc(db, "user_notes", calculatedId);
+        const now = new Date().toISOString();
+        const newNoteData = {
+          text: "<p><br/></p>",
+          userId: user.uid,
+          userName: user.name || user.displayName || '',
+          courseId: selectedCourseId,
+          courseTitle: courseObj.title,
+          courseCode: courseObj.code || '',
+          moduleId: selectedModuleId,
+          moduleTitle: moduleObj.title,
+          updatedAt: now
+        };
+
+        await setDoc(docRef, newNoteData);
+
+        // Update local storage
+        localStorage.setItem(`hkm-notes-${selectedCourseId}-${selectedModuleId}`, "<p><br/></p>");
+
+        const newNoteObj = { id: calculatedId, ...newNoteData, type: 'lesson' };
+        setLessonNotes(prev => [newNoteObj, ...prev]);
+        showToast(language === 'en' ? "Note created successfully." : "Notatet ble opprettet.");
+        handleOpenEditor(newNoteObj);
+        setIsCreateModalOpen(false);
+      }
+    } catch (err) {
+      console.error("Klarte ikke opprette notat:", err);
+      showToast(language === 'en' ? "Failed to create note." : "Kunne ikke opprette notatet.");
+    } finally {
+      setIsCreating(false);
+    }
+  };
 
   // Fetch Notes from Firestore
   const fetchNotes = async () => {
@@ -302,16 +529,27 @@ ${rawContent}
           </div>
         </div>
 
-        {/* Global search input */}
-        <div className="relative w-full md:w-80">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-outline" size={16} />
-          <input
-            type="text"
-            placeholder={language === 'en' ? "Search notes..." : "Søk i notater..."}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none placeholder:text-outline font-semibold transition-all"
-          />
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+          {/* Create Note Trigger Button */}
+          <button
+            onClick={() => setIsCreateModalOpen(true)}
+            className="px-4 py-2.5 bg-[#1B4965] hover:bg-[#14374b] text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2 group shrink-0"
+          >
+            <Plus size={15} className="group-hover:rotate-90 transition-transform duration-200" />
+            <span>{language === 'en' ? "New Note" : "Nytt notat"}</span>
+          </button>
+
+          {/* Global search input */}
+          <div className="relative w-full sm:w-64 md:w-80">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-outline" size={16} />
+            <input
+              type="text"
+              placeholder={language === 'en' ? "Search notes..." : "Søk i notater..."}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none placeholder:text-outline font-semibold transition-all"
+            />
+          </div>
         </div>
       </div>
 
@@ -651,6 +889,245 @@ ${rawContent}
                 >
                   <Save size={13} />
                   <span>{language === 'en' ? "Save now" : "Lagre nå"}</span>
+                </button>
+              </div>
+
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* CREATE NEW NOTE MODAL (Immersive overlay with Royal Purple / Mørkeblå harmony) */}
+      <AnimatePresence>
+        {isCreateModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-[#240046]/45 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 15, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.95, y: 15, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+              className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col"
+            >
+              {/* Modal Header */}
+              <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 bg-[#1B4965]/10 text-[#1B4965] rounded-xl">
+                    <FileEdit size={20} className="animate-pulse" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif font-extrabold text-[#1B4965] text-lg">
+                      {language === 'en' ? "Create New Note" : "Opprett nytt notat"}
+                    </h3>
+                    <p className="text-[10px] text-outline font-semibold">
+                      {language === 'en' ? "Select note type and location" : "Velg type notat og plassering"}
+                    </p>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={() => setIsCreateModalOpen(false)}
+                  className="p-1.5 hover:bg-slate-200 text-outline hover:text-slate-800 rounded-xl transition-all"
+                >
+                  <AlertCircle size={18} className="rotate-45" />
+                </button>
+              </div>
+
+              {/* Note Type Toggle segment selector */}
+              <div className="p-6 pb-2 shrink-0">
+                <div className="flex bg-slate-100 p-1 rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => setNewNoteType('bible')}
+                    className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2 ${
+                      newNoteType === 'bible'
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-outline hover:text-primary'
+                    }`}
+                  >
+                    <Book size={14} />
+                    <span>{language === 'en' ? "Bible Study" : "Bibelstudie"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setNewNoteType('lesson')}
+                    className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2 ${
+                      newNoteType === 'lesson'
+                        ? 'bg-white text-[#1B4965] shadow-sm'
+                        : 'text-outline hover:text-[#1B4965]'
+                    }`}
+                  >
+                    <GraduationCap size={15} />
+                    <span>{language === 'en' ? "Class Lesson" : "Kursleksjon"}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Interactive Creation Form */}
+              <div className="p-6 space-y-5 overflow-y-auto max-h-[350px]">
+                {newNoteType === 'bible' ? (
+                  <>
+                    {/* Bible Book Select */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-outline">
+                        {language === 'en' ? "Bible Book" : "Bibelbok"}
+                      </label>
+                      <select
+                        value={selectedBookId}
+                        onChange={(e) => {
+                          setSelectedBookId(e.target.value);
+                          setSelectedChapter(1);
+                        }}
+                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-sm rounded-xl focus:outline-none font-semibold transition-all font-sans"
+                      >
+                        {BIBLE_BOOKS.map(book => (
+                          <option key={book.id} value={book.id}>
+                            {language === 'en' ? book.eng : book.nor} ({book.testament})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Chapter select with fine numeric adjustment */}
+                    {(() => {
+                      const selectedBook = BIBLE_BOOKS.find(b => b.id === selectedBookId);
+                      const maxChapters = selectedBook ? selectedBook.chapters : 50;
+
+                      return (
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-bold uppercase tracking-wider text-outline">
+                            {language === 'en' ? "Chapter" : "Kapittel"}
+                          </label>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedChapter(prev => Math.max(1, prev - 1))}
+                              className="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl text-primary font-extrabold transition-all select-none w-11 h-11 flex items-center justify-center active:scale-95"
+                            >
+                              -
+                            </button>
+                            <input
+                              type="number"
+                              min={1}
+                              max={maxChapters}
+                              value={selectedChapter}
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                if (val > 0) {
+                                  setSelectedChapter(Math.min(maxChapters, val));
+                                }
+                              }}
+                              className="flex-grow text-center h-11 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-sm rounded-xl focus:outline-none font-bold transition-all"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setSelectedChapter(prev => Math.min(maxChapters, prev + 1))}
+                              className="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl text-primary font-extrabold transition-all select-none w-11 h-11 flex items-center justify-center active:scale-95"
+                            >
+                              +
+                            </button>
+                          </div>
+                          <span className="text-[10px] text-outline font-semibold italic block text-center mt-1">
+                            {selectedBook 
+                              ? (language === 'en' 
+                                  ? `${selectedBook.eng} contains ${maxChapters} chapters.` 
+                                  : `${selectedBook.nor} har totalt ${maxChapters} kapitler.`)
+                              : ''}
+                          </span>
+                        </div>
+                      );
+                    })()}
+                  </>
+                ) : (
+                  <>
+                    {/* Course Selection */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-outline">
+                        {language === 'en' ? "Select Course" : "Velg kurs"}
+                      </label>
+                      {courses && courses.length > 0 ? (
+                        <select
+                          value={selectedCourseId}
+                          onChange={(e) => setSelectedCourseId(e.target.value)}
+                          className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-sm rounded-xl focus:outline-none font-semibold transition-all font-sans"
+                        >
+                          {courses.map(course => (
+                            <option key={course.id} value={course.id}>
+                              [{course.code}] {course.title}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <div className="p-3.5 bg-amber-50 text-amber-700 text-xs rounded-xl font-semibold border border-amber-200 flex items-center gap-2">
+                          <AlertCircle size={16} />
+                          <span>{language === 'en' ? "No enrolled courses found." : "Ingen påmeldte kurs funnet."}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Module Dependent Dropdown */}
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-outline">
+                        {language === 'en' ? "Select Module / Lesson" : "Velg modul / leksjon"}
+                      </label>
+                      {(() => {
+                        const currentCourseObj = courses?.find(c => c.id === selectedCourseId);
+                        const modules = currentCourseObj?.modules || [];
+                        
+                        return modules.length > 0 ? (
+                          <select
+                            value={selectedModuleId}
+                            onChange={(e) => setSelectedModuleId(e.target.value)}
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-sm rounded-xl focus:outline-none font-semibold transition-all font-sans"
+                          >
+                            {modules.map(mod => (
+                              <option key={mod.id} value={mod.id}>
+                                {mod.title}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <div className="p-3.5 bg-slate-100 text-outline text-xs rounded-xl font-semibold border border-slate-200 text-center">
+                            {language === 'en' ? "No modules available for this course." : "Ingen moduler tilgjengelig for dette kurset."}
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Modal Footer with premium triggers */}
+              <div className="p-6 border-t border-slate-100 bg-slate-50/50 flex justify-end items-center gap-3 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsCreateModalOpen(false)}
+                  className="px-5 py-2.5 hover:bg-slate-200 text-outline hover:text-slate-800 text-xs font-bold uppercase tracking-wider rounded-xl transition-all active:scale-[0.98]"
+                >
+                  {language === 'en' ? "Cancel" : "Avbryt"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleCreateNote}
+                  disabled={isCreating || (newNoteType === 'lesson' && (!selectedCourseId || !selectedModuleId))}
+                  className="px-5 py-2.5 bg-[#1B4965] hover:bg-[#14374b] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isCreating ? (
+                    <>
+                      <div className="w-3.5 h-3.5 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+                      <span>{language === 'en' ? "Creating..." : "Oppretter..."}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Plus size={14} />
+                      <span>{language === 'en' ? "Create and write" : "Opprett og skriv"}</span>
+                    </>
+                  )}
                 </button>
               </div>
 
