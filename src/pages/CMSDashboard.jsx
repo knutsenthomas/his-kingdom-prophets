@@ -327,7 +327,10 @@ export default function CMSDashboard() {
   // Core Editor States
   const [draftContent, setDraftContent] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('category') || 'all';
+  });
   const [filterStatus, setFilterStatus] = useState('All Statuses');
   const [sortBy, setSortBy] = useState('Newest First');
 
@@ -1044,6 +1047,8 @@ export default function CMSDashboard() {
                   <option value="student">Studentportal</option>
                   <option value="teacher">Mentorportal</option>
                   <option value="onboarding">Onboardingflyt</option>
+                  <option value="resources">Bibelressurser</option>
+                  <option value="documents">Dokumenter (PDF)</option>
                 </select>
               </div>
 

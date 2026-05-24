@@ -100,11 +100,13 @@ export default function TeacherLayout() {
   if (user?.role === 'admin' || user?.role === 'superadmin') {
     navItems.push({ isHeader: true, slug: 'sidebar-administration', fallback: 'Administrasjon' });
     navItems.push({ slug: 'sidebar-cms-editor', fallback: 'Global CMS Styring', path: '/admin/cms', icon: Languages });
+    navItems.push({ slug: 'sidebar-document-admin', fallback: 'Dokumentbehandling', path: '/admin/cms?category=documents', icon: FileText });
     navItems.push({ slug: 'sidebar-analytics', fallback: 'Analytics Dashboard', path: '/admin/analytics', icon: BarChart3 });
     navItems.push({ slug: 'sidebar-user-admin', fallback: 'Brukerhåndtering', path: '/admin/portal', icon: Users });
   } else if (user?.role === 'teacher') {
     navItems.push({ isHeader: true, slug: 'sidebar-administration', fallback: 'Administrasjon' });
     navItems.push({ slug: 'sidebar-cms-editor', fallback: 'Global CMS Styring', path: '/admin/cms', icon: Languages });
+    navItems.push({ slug: 'sidebar-document-admin', fallback: 'Dokumentbehandling', path: '/admin/cms?category=documents', icon: FileText });
   }
 
   return (
@@ -273,7 +275,9 @@ export default function TeacherLayout() {
                       </div>
                     );
                   }
-                  const isActive = location.pathname === item.path;
+                  const isActive = item.path.includes('?') 
+                    ? (location.pathname + location.search) === item.path
+                    : location.pathname === item.path;
                   const IconComponent = item.icon;
                   return (
                     <button 
@@ -391,7 +395,9 @@ export default function TeacherLayout() {
                     </div>
                   );
                 }
-                const isActive = location.pathname === item.path;
+                const isActive = item.path.includes('?') 
+                  ? (location.pathname + location.search) === item.path
+                  : location.pathname === item.path;
                 const IconComponent = item.icon;
                 return (
                   <button 
