@@ -2035,7 +2035,7 @@ export default function BibleView() {
             }}
           >
             <div className="flex items-center gap-2 border-r border-slate-200/80 pr-2.5 sm:pr-3 shrink-0">
-              <span className="h-6 w-6 rounded-full bg-[#1B4965] text-white flex items-center justify-center text-xs font-bold font-mono">
+              <span className="h-6 w-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold font-mono">
                 {selectedVerses.length}
               </span>
               <span className="text-[11px] sm:text-xs font-extrabold text-slate-800 hidden min-[360px]:inline">
@@ -2046,7 +2046,7 @@ export default function BibleView() {
             <div className="flex items-center gap-1.5 sm:gap-2 text-xs">
               <button 
                 onClick={handleBulkCopy}
-                className="px-2.5 sm:px-3 py-1.5 bg-[#1B4965] hover:bg-[#153b52] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm shadow-[#1B4965]/20 cursor-pointer text-white text-[11px] sm:text-xs border-none"
+                className="px-2.5 sm:px-3 py-1.5 bg-primary hover:bg-primary-container active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm shadow-primary/20 cursor-pointer text-white text-[11px] sm:text-xs border-none"
                 title="Kopier markerte vers"
               >
                 <Copy size={13} className="text-white" />
@@ -2055,7 +2055,7 @@ export default function BibleView() {
 
               <button 
                 onClick={handleBulkSendToAssistant}
-                className="px-2.5 sm:px-3 py-1.5 bg-[#1B4965] hover:bg-[#153b52] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm shadow-[#1B4965]/20 cursor-pointer text-white text-[11px] sm:text-xs border-none"
+                className="px-2.5 sm:px-3 py-1.5 bg-primary hover:bg-primary-container active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm shadow-primary/20 cursor-pointer text-white text-[11px] sm:text-xs border-none"
                 title="Spør HKM-assistenten"
               >
                 <Sparkles size={13} />
@@ -2064,7 +2064,7 @@ export default function BibleView() {
 
               <button 
                 onClick={handleBulkShareToChat}
-                className="px-2.5 sm:px-3 py-1.5 bg-[#1B4965] hover:bg-[#153b52] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm shadow-[#1B4965]/20 cursor-pointer text-white text-[11px] sm:text-xs border-none"
+                className="px-2.5 sm:px-3 py-1.5 bg-primary hover:bg-primary-container active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm shadow-primary/20 cursor-pointer text-white text-[11px] sm:text-xs border-none"
                 title="Del i chatten"
               >
                 <Send size={13} className="text-white" />
@@ -2072,8 +2072,11 @@ export default function BibleView() {
               </button>
 
               <button 
-                onClick={() => setSelectedVerses([])}
-                className="p-1.5 text-[#1B4965]/70 hover:text-[#1B4965] hover:bg-[#1B4965]/5 rounded-xl transition-all cursor-pointer font-bold shrink-0 bg-transparent border-none outline-none"
+                onClick={() => {
+                  setSelectedVerses([]);
+                  setHighlightedVerse(null);
+                }}
+                className="p-1.5 text-primary/70 hover:text-primary hover:bg-primary/5 rounded-xl transition-all cursor-pointer font-bold shrink-0 bg-transparent border-none outline-none"
                 title="Nullstill"
               >
                 <X size={15} />
