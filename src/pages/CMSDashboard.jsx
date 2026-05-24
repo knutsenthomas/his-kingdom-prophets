@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -223,6 +223,18 @@ const assetDefinitions = [
   { slug: 'resources-video-desc', title: 'Video Innholdsbeskrivelse', section: 'Bibelressurser', type: 'textarea', description: 'Beskrivelse inni video-fanen.' },
   { slug: 'resources-fasting-title', title: 'Faste Innholdstittel', section: 'Bibelressurser', type: 'text', description: 'Overskrift inni faste/bønn-fanen.' },
   { slug: 'resources-fasting-desc', title: 'Faste Innholdsbeskrivelse', section: 'Bibelressurser', type: 'textarea', description: 'Beskrivelse inni faste/bønn-fanen.' },
+  
+  // Heftekort-innhold under Bibelressurser
+  { slug: 'pdf-fasting-card-title', title: 'Faste Korttittel', section: 'Bibelressurser', type: 'text', description: 'Tittel på fasteheftets kort.' },
+  { slug: 'pdf-fasting-card-desc', title: 'Faste Kortbeskrivelse', section: 'Bibelressurser', type: 'textarea', description: 'Beskrivelse på fasteheftets kort.' },
+  { slug: 'pdf-fasting-card-bullet1', title: 'Faste Kort Punkt 1', section: 'Bibelressurser', type: 'text', description: 'Første kulepunkt på fasteheftets kort.' },
+  { slug: 'pdf-fasting-card-bullet2', title: 'Faste Kort Punkt 2', section: 'Bibelressurser', type: 'text', description: 'Andre kulepunkt på fasteheftets kort.' },
+  { slug: 'pdf-fasting-card-bullet3', title: 'Faste Kort Punkt 3', section: 'Bibelressurser', type: 'text', description: 'Tredje kulepunkt på fasteheftets kort.' },
+  { slug: 'pdf-intercession-card-title', title: 'Forbønn Korttittel', section: 'Bibelressurser', type: 'text', description: 'Tittel på forbønnsheftets kort.' },
+  { slug: 'pdf-intercession-card-desc', title: 'Forbønn Kortbeskrivelse', section: 'Bibelressurser', type: 'textarea', description: 'Beskrivelse på forbønnsheftets kort.' },
+  { slug: 'pdf-intercession-card-bullet1', title: 'Forbønn Kort Punkt 1', section: 'Bibelressurser', type: 'text', description: 'Første kulepunkt på forbønnsheftets kort.' },
+  { slug: 'pdf-intercession-card-bullet2', title: 'Forbønn Kort Punkt 2', section: 'Bibelressurser', type: 'text', description: 'Andre kulepunkt på forbønnsheftets kort.' },
+  { slug: 'pdf-intercession-card-bullet3', title: 'Forbønn Kort Punkt 3', section: 'Bibelressurser', type: 'text', description: 'Tredje kulepunkt på forbønnsheftets kort.' },
 
   // Profiler og kontoinnstillinger
   { slug: 'profile-tab-teacher', title: 'Fane: Lærerprofil', section: 'Profil', type: 'text', description: 'Tekst på mentorens profil-fane.' },
@@ -319,6 +331,7 @@ const assetDefinitions = [
 
 export default function CMSDashboard() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, cmsContent, updateCmsContent } = useApp();
   
   // Ref for global hotkey focusing of search input
@@ -332,6 +345,15 @@ export default function CMSDashboard() {
     const params = new URLSearchParams(window.location.search);
     return params.get('category') || 'all';
   });
+
+  // Synchronize category state when URL search parameters change
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const cat = params.get('category');
+    if (cat) {
+      setSelectedCategory(cat);
+    }
+  }, [location.search]);
   const [filterStatus, setFilterStatus] = useState('All Statuses');
   const [sortBy, setSortBy] = useState('Newest First');
 
@@ -663,6 +685,15 @@ export default function CMSDashboard() {
     const [progressFasting, setProgressFasting] = useState(0);
     const [uploadingIntercession, setUploadingIntercession] = useState(false);
     const [progressIntercession, setProgressIntercession] = useState(0);
+    const [expandedDoc, setExpandedDoc] = useState(null);
+
+    useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const exp = params.get('expand');
+      if (exp) {
+        setExpandedDoc(exp);
+      }
+    }, []);
 
     const handleUpload = (e, type) => {
       const file = e.target.files?.[0];
@@ -864,6 +895,13 @@ export default function CMSDashboard() {
                         />
                       </label>
 
+                      <button
+                        onClick={() => setExpandedDoc(expandedDoc === doc.id ? null : doc.id)}
+                        className="w-full flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold text-primary hover:bg-primary/5 border border-primary/20 hover:border-primary transition-all rounded-xl active:scale-[0.98] bg-white shadow-sm font-sans"
+                      >
+                        <Settings size={14} /> {expandedDoc === doc.id ? 'Skjul hefteinnhold' : 'Rediger hefteinnhold'}
+                      </button>
+
                       {isActiveCustom && (
                         <button
                           onClick={() => handleReset(doc.id)}
@@ -874,6 +912,216 @@ export default function CMSDashboard() {
                       )}
                     </div>
                   )}
+
+                  {expandedDoc === doc.id && (() => {
+                    const docFields = doc.id === 'fasting' ? [
+                      {
+                        key: 'pdf_fasting_title',
+                        label: 'Tittel',
+                        type: 'text',
+                        fallback: 'Bibelsk Faste og Åndelig Disiplin',
+                        fallbackEn: 'Biblical Fasting & Spiritual Discipline'
+                      },
+                      {
+                        key: 'pdf_fasting_subtitle',
+                        label: 'Undertittel',
+                        type: 'text',
+                        fallback: 'En praktisk og teologisk guide til fasting, bønn og åpenbaring',
+                        fallbackEn: 'A practical and theological guide to fasting, prayer, and revelation'
+                      },
+                      {
+                        key: 'pdf_fasting_intro',
+                        label: 'Introduksjonstekst',
+                        type: 'textarea',
+                        fallback: 'Velkommen til studieheftet for Bibelsk Faste. Faste er ikke en metode for å tvinge Guds hånd, men en åndelig disiplin som innstiller våre hjerter, rydder bort støy og gjør oss mer mottakelige for Den Hellige Ånds ledelse. Gjennom historien har faste vært nøkkelen til profetisk gjennombrudd, dypere åpenbaring og personlig helliggjørelse.',
+                        fallbackEn: "Welcome to the study booklet on Biblical Fasting. Fasting is not a method to force God's hand, but a spiritual discipline that aligns our hearts, clears away noise, and makes us more receptive to the Holy Spirit's guidance. Throughout history, fasting has been the key to prophetic breakthrough, deeper revelation, and personal sanctification."
+                      },
+                      {
+                        key: 'pdf_fasting_sec1_title',
+                        label: 'Seksjon 1: Tittel',
+                        type: 'text',
+                        fallback: '1. Det bibelske fundamentet for faste',
+                        fallbackEn: '1. The Biblical Foundation of Fasting'
+                      },
+                      {
+                        key: 'pdf_fasting_sec1_text',
+                        label: 'Seksjon 1: Tekst',
+                        type: 'textarea',
+                        fallback: "I Matteus 6,16 sier Jesus: 'Når dere faster...'. Han forutsetter at faste er en naturlig del av en disippels liv. Faste handler om å avstå fra fysisk næring for å søke åndelig metthet. I Jesaja 58 ser vi hva slags faste Gud har behag i — en faste som løser ugudelighets bånd og setter de undertrykte fri.",
+                        fallbackEn: "In Matthew 6:16, Jesus says: 'When you fast...'. He assumes that fasting is a natural part of a disciple's life. Fasting is about abstaining from physical nourishment to seek spiritual satisfaction. In Isaiah 58, we see the kind of fast that pleases God — a fast that looses the bonds of wickedness and sets the oppressed free."
+                      },
+                      {
+                        key: 'pdf_fasting_sec2_title',
+                        label: 'Seksjon 2: Tittel',
+                        type: 'text',
+                        fallback: '2. Praktiske retningslinjer for faste',
+                        fallbackEn: '2. Practical Guidelines for Fasting'
+                      },
+                      {
+                        key: 'pdf_fasting_sec2_text',
+                        label: 'Seksjon 2: Tekst',
+                        type: 'textarea',
+                        fallback: 'Hydrering: Drikk rikelig med vann under fasten. Kroppen skiller ut avfallsstoffer, og tilstrekkelig væskeinnhold forhindrer hodepine og sløvhet. Forberedelse: Trapp ned på kaffe, sukker og tung mat et par dager før en lengre faste for å unngå kraftige abstinenser. Tid med Gud: Faste uten bønn er kun en diett. Sett av den tiden du vanligvis ville brukt på måltider og matlaging til bibellesning, stille lytting og bønn.',
+                        fallbackEn: 'Hydration: Drink plenty of water during the fast. The body eliminates waste products, and sufficient fluid content prevents headaches and lethargy. Preparation: Taper off coffee, sugar, and heavy food a couple of days before a longer fast to avoid severe withdrawals. Time with God: Fasting without prayer is just a diet. Set aside the time you would normally spend on meals and cooking for Bible reading, quiet listening, and prayer.'
+                      },
+                      {
+                        key: 'pdf_fasting_prayer_title',
+                        label: 'Bønn / Proklamasjon Tittel',
+                        type: 'text',
+                        fallback: 'Bønne-proklamasjon for fasten:',
+                        fallbackEn: 'Prayer Proclamation for the Fast:'
+                      },
+                      {
+                        key: 'pdf_fasting_prayer_text',
+                        label: 'Bønn / Proklamasjon Innhold',
+                        type: 'textarea',
+                        fallback: "'Herre, jeg innvier mitt legeme og mitt sinn til Deg under denne fasten. La mitt kjød vike, og la Din Hellige Ånd fylle meg på ny. Jeg ber om klarsyn, åpenbaring og styrke til å gå i den ferdiglagte tjenesten Du har for mitt liv. I Jesu navn, Amen.'",
+                        fallbackEn: "'Lord, I consecrate my body and mind to You during this fast. Let my flesh recede, and let Your Holy Spirit fill me anew. I pray for clarity, revelation, and strength to walk in the prepared ministry You have for my life. In Jesus' name, Amen.'"
+                      }
+                    ] : [
+                      {
+                        key: 'pdf_intercession_title',
+                        label: 'Tittel',
+                        type: 'text',
+                        fallback: 'Profetisk Forbønn og Bønneskjold',
+                        fallbackEn: 'Prophetic Intercession & Prayer Shield'
+                      },
+                      {
+                        key: 'pdf_intercession_subtitle',
+                        label: 'Undertittel',
+                        type: 'text',
+                        fallback: 'Å be strategisk under Helligåndens inspirasjon og reise et bønnevern',
+                        fallbackEn: 'Praying strategically under Holy Spirit inspiration and raising a prayer shield'
+                      },
+                      {
+                        key: 'pdf_intercession_intro',
+                        label: 'Introduksjonstekst',
+                        type: 'textarea',
+                        fallback: 'Profetisk forbønn handler om å lytte til Guds hjerte før vi ber, slik at våre bønner samstemmer med Hans vilje i himmelen. Når vi ber det Gud viser oss, utløses en enorm åndelig autoritet. Dette studieheftet gir deg det bibelske grunnlaget for å bygge et personlig og menighetsbasert bønneskjold.',
+                        fallbackEn: "Prophetic intercession is about listening to God's heart before we pray, so that our prayers align with His will in heaven. When we pray what God reveals, a tremendous spiritual authority is released. This study booklet provides you with the biblical foundation to build a personal and ministry-based prayer shield."
+                      },
+                      {
+                        key: 'pdf_intercession_sec1_title',
+                        label: 'Seksjon 1: Tittel',
+                        type: 'text',
+                        fallback: '1. Hva er profetisk forbønn?',
+                        fallbackEn: '1. What is Prophetic Intercession?'
+                      },
+                      {
+                        key: 'pdf_intercession_sec1_text',
+                        label: 'Seksjon 1: Tekst',
+                        type: 'textarea',
+                        fallback: "Vanlig bønn starter med menneskets behov og løftes opp til Gud. Profetisk forbønn starter hos Gud, som åpenbarer sine hensikter til forbederen gjennom et ord, et syn, en indre byrde eller et skriftsted. Forbederen taler og ber deretter dette ut på jorden. Det er å be 'skje Din vilje, som i himmelen, så også på jorden' med dyp presisjon.",
+                        fallbackEn: "Usual prayer starts with human needs and is lifted up to God. Prophetic intercession starts with God, who reveals His purposes to the intercessor through a word, a vision, an inner burden, or a scripture. The intercessor then speaks and prays this out on earth. It is praying 'thy will be done, on earth as it is in heaven' with deep precision."
+                      },
+                      {
+                        key: 'pdf_intercession_sec2_title',
+                        label: 'Seksjon 2: Tittel',
+                        type: 'text',
+                        fallback: '2. Å etablere et bønneskjold',
+                        fallbackEn: '2. Establishing a Prayer Shield'
+                      },
+                      {
+                        key: 'pdf_intercession_sec2_text',
+                        label: 'Seksjon 2: Tekst',
+                        type: 'textarea',
+                        fallback: 'Enhver profetisk tjeneste og lokal menighet trenger et bønneskjold for å stå imot åndelige motangrep og bevare en åpen himmel over arbeidet. Et bønneskjold består av dedikerte forbedere som står i kontinuerlig vakt. Paulus ba gjentatte ganger menighetene om å kjempe sammen med ham i bønn (Rom 15,30). Uten et aktivt bønneskjold blir ledere og tjenester sårbare for tretthet og motstand.',
+                        fallbackEn: 'Every prophetic ministry and local church needs a prayer shield to stand against spiritual counterattacks and preserve an open heaven over the work. A prayer shield consists of dedicated intercessors who stand in continuous watch. Paul repeatedly asked churches to strive together with him in prayer (Rom 15:30). Without an active prayer shield, leaders and ministries become vulnerable to weariness and opposition.'
+                      },
+                      {
+                        key: 'pdf_intercession_prayer_title',
+                        label: 'Bønn / Proklamasjon Tittel',
+                        type: 'text',
+                        fallback: 'Bønn for å reise et bønneskjold:',
+                        fallbackEn: 'Prayer to Raise a Prayer Shield:'
+                      },
+                      {
+                        key: 'pdf_intercession_prayer_text',
+                        label: 'Bønn / Proklamasjon Innhold',
+                        type: 'textarea',
+                        fallback: "'Herre, jeg ber om at Du reiser opp våkne vektere på murene i vår tid. Gi oss et brennende hjerte for forbønn, og lær oss å be i overensstemmelse med Ditt hjerte. Vi setter opp et bønneskjold over våre hjem, våre menighetsledere og den profetiske tjenesten. Må Din herlighet hvile over oss. I Jesu navn, Amen.'",
+                        fallbackEn: "'Lord, I pray that You raise up alert watchmen on the walls in our day. Give us a burning heart for intercession, and teach us to pray in accordance with Your heart. We establish a prayer shield over our homes, our church leaders, and the prophetic ministry. May Your glory rest upon us. In Jesus' name, Amen.'"
+                      }
+                    ];
+
+                    return (
+                      <div className="mt-6 pt-6 border-t border-slate-100 space-y-6 text-left">
+                        <h4 className="text-xs font-bold text-primary flex items-center gap-1.5 uppercase tracking-wider mb-4 select-none">
+                          <Settings size={14} /> Rediger hefteinnhold (Tospråklig)
+                        </h4>
+                        {docFields.map((field) => {
+                          const valNo = draftContent[field.key] !== undefined ? draftContent[field.key] : (cmsContent?.[field.key] || field.fallback);
+                          const valEn = draftContent[field.key + '-en'] !== undefined ? draftContent[field.key + '-en'] : (cmsContent?.[field.key + '-en'] || field.fallbackEn);
+                          
+                          const isDraftNo = draftContent[field.key] !== undefined && draftContent[field.key] !== (cmsContent?.[field.key] || field.fallback);
+                          const isDraftEn = draftContent[field.key + '-en'] !== undefined && draftContent[field.key + '-en'] !== (cmsContent?.[field.key + '-en'] || field.fallbackEn);
+
+                          return (
+                            <div key={field.key} className="space-y-2 border-b border-slate-100/50 pb-5 last:border-0 last:pb-0">
+                              <span className="text-xs font-bold text-primary block select-none mb-1">{field.label}</span>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                
+                                {/* Norsk (NO) */}
+                                <div className="space-y-1 block">
+                                  <div className="flex justify-between items-center text-[10px] font-bold text-outline select-none">
+                                    <span>Norsk (NO)</span>
+                                    {isDraftNo && <span className="text-primary font-bold text-[9px] uppercase tracking-wider">Utkast</span>}
+                                  </div>
+                                  {field.type === 'textarea' ? (
+                                    <textarea
+                                      value={valNo}
+                                      onChange={(e) => setDraftContent(prev => ({ ...prev, [field.key]: e.target.value }))}
+                                      rows={3}
+                                      className={`w-full bg-slate-50 border border-outline-variant/30 rounded-lg text-xs focus:ring-1 focus:ring-primary focus:border-primary py-2 px-3 resize-none ${
+                                        isDraftNo ? 'border-2 border-primary/30 bg-white' : 'hover:border-outline-variant/60'
+                                      }`}
+                                    />
+                                  ) : (
+                                    <input
+                                      type="text"
+                                      value={valNo}
+                                      onChange={(e) => setDraftContent(prev => ({ ...prev, [field.key]: e.target.value }))}
+                                      className={`w-full bg-slate-50 border border-outline-variant/30 rounded-lg text-xs focus:ring-1 focus:ring-primary focus:border-primary py-2 px-3 ${
+                                        isDraftNo ? 'border-2 border-primary/30 bg-white' : 'hover:border-outline-variant/60'
+                                      }`}
+                                    />
+                                  )}
+                                </div>
+
+                                {/* Engelsk (EN) */}
+                                <div className="space-y-1 block">
+                                  <div className="flex justify-between items-center text-[10px] font-bold text-outline select-none">
+                                    <span>Engelsk (EN)</span>
+                                    {isDraftEn && <span className="text-primary font-bold text-[9px] uppercase tracking-wider">Utkast</span>}
+                                  </div>
+                                  {field.type === 'textarea' ? (
+                                    <textarea
+                                      value={valEn}
+                                      onChange={(e) => setDraftContent(prev => ({ ...prev, [field.key + '-en']: e.target.value }))}
+                                      rows={3}
+                                      className={`w-full bg-slate-50 border border-outline-variant/30 rounded-lg text-xs focus:ring-1 focus:ring-primary focus:border-primary py-2 px-3 resize-none ${
+                                        isDraftEn ? 'border-2 border-primary/30 bg-white' : 'hover:border-outline-variant/60'
+                                      }`}
+                                    />
+                                  ) : (
+                                    <input
+                                      type="text"
+                                      value={valEn}
+                                      onChange={(e) => setDraftContent(prev => ({ ...prev, [field.key + '-en']: e.target.value }))}
+                                      className={`w-full bg-slate-50 border border-outline-variant/30 rounded-lg text-xs focus:ring-1 focus:ring-primary focus:border-primary py-2 px-3 ${
+                                        isDraftEn ? 'border-2 border-primary/30 bg-white' : 'hover:border-outline-variant/60'
+                                      }`}
+                                    />
+                                  )}
+                                </div>
+
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             );

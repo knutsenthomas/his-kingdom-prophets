@@ -4,10 +4,11 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BookOpen, Search, ArrowLeft, ArrowRight, Copy, Check, RefreshCw, Sparkles, BookMarked, X,
-  Trash2, Save, Globe, Video, FileText, Calendar, Compass, UserCheck, Flame, BookText
+  Trash2, Save, Globe, Video, FileText, Calendar, Compass, UserCheck, Flame, BookText, Settings
 } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
+import { generateFastingPdf, generateIntercessionPdf } from '@/utils/pdfGenerator';
 import { 
   BIBLE_BOOKS, TRANSLATIONS, STUDY_BIBLE_DATA, 
   parseBibleReference, findBibleBook, generateDynamicCommentary 
@@ -1106,62 +1107,114 @@ export default function BibleResourcesPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {[
                 {
-                  title: isEn ? 'The Biblical Fasting Manual (PDF)' : 'Bibelsk faste og åndelig disiplin (PDF)',
-                  desc: isEn
+                  id: 'fasting',
+                  titleSlug: 'pdf-fasting-card-title',
+                  titleFallback: isEn ? 'The Biblical Fasting Manual (PDF)' : 'Bibelsk faste og åndelig disiplin (PDF)',
+                  descSlug: 'pdf-fasting-card-desc',
+                  descFallback: isEn
                     ? 'A detailed 14-page guide explaining the theology, health boundaries, and spiritual focus of Christian fasting. Includes daily scripture readings.'
                     : 'En grundig 14-siders guide som forklarer teologien, de helsemessige rammene, og det åndelige fokuset ved kristen faste. Inkluderer faste-skriftsteder.',
-                  bullets: isEn
-                    ? ['Theology of Fasting (Matthew 6, Isaiah 58)', 'Practical health and hydration guidelines', 'Fasting for revelation and breakthrough']
-                    : ['Faste-teologi (Matteus 6 og Jesaja 58)', 'Praktiske helse- og væskeråd', 'Faste for åpenbaring og gjennombrudd'],
+                  bullets: [
+                    { slug: 'pdf-fasting-card-bullet1', fallback: isEn ? 'Theology of Fasting (Matthew 6, Isaiah 58)' : 'Faste-teologi (Matteus 6 og Jesaja 58)' },
+                    { slug: 'pdf-fasting-card-bullet2', fallback: isEn ? 'Practical health and hydration guidelines' : 'Praktiske helse- og væskeråd' },
+                    { slug: 'pdf-fasting-card-bullet3', fallback: isEn ? 'Fasting for revelation and breakthrough' : 'Faste for åpenbaring og gjennombrudd' }
+                  ],
                   icon: Flame
                 },
                 {
-                  title: isEn ? 'Prophetic Intercession & Prayer Shield' : 'Profetisk forbønn og bønneskjold',
-                  desc: isEn
+                  id: 'intercession',
+                  titleSlug: 'pdf-intercession-card-title',
+                  titleFallback: isEn ? 'Prophetic Intercession & Prayer Shield' : 'Profetisk forbønn og bønneskjold',
+                  descSlug: 'pdf-intercession-card-desc',
+                  descFallback: isEn
                     ? 'Learn how to pray under the leading of the Holy Spirit, establish prayer watches in your local church, and pray effectively for missions.'
                     : 'Lær å be strategisk under Helligåndens ledelse, etablere bønnevakter i menigheten, og be målrettet for misjonsfeltet og profetiske tjenester.',
-                  bullets: isEn
-                    ? ['Hearing God in prayer watches', 'Developing spiritual authority', 'Establishing a prayer shield for your ministry']
-                    : ['Høre Guds stemme under bønnevakten', 'Åndelig autoritet og posisjonering', 'Sette opp et bønneskjold for din tjeneste'],
+                  bullets: [
+                    { slug: 'pdf-intercession-card-bullet1', fallback: isEn ? 'Hearing God in prayer watches' : 'Høre Guds stemme under bønnevakten' },
+                    { slug: 'pdf-intercession-card-bullet2', fallback: isEn ? 'Developing spiritual authority' : 'Åndelig autoritet og posisjonering' },
+                    { slug: 'pdf-intercession-card-bullet3', fallback: isEn ? 'Establishing a prayer shield for your ministry' : 'Sette opp et bønneskjold for din tjeneste' }
+                  ],
                   icon: Compass
                 }
               ].map((manual, index) => {
                 const Icon = manual.icon;
                 return (
-                  <div key={index} className="bg-white rounded-2xl border border-slate-200/60 shadow-sm p-6 sm:p-8 flex flex-col justify-between hover:shadow-md hover:border-primary/20 transition-all duration-300 group">
+                  <div key={index} className="bg-white rounded-2xl border border-slate-200/60 shadow-sm p-6 sm:p-8 flex flex-col justify-between hover:shadow-md hover:border-primary/20 transition-all duration-300 group relative animate-in fade-in-50">
+                    
+                    {/* Admin "Rediger PDF" Floating Shortcut Button */}
+                    {['admin', 'superadmin', 'teacher'].includes(user?.role) && (
+                      <button
+                        onClick={() => navigate(`/admin/cms?category=documents&expand=${manual.id}`)}
+                        className="absolute top-4 right-4 z-10 p-2 bg-gradient-to-r from-[#d17d39] to-[#bd4f2a] hover:from-[#bd4f2a] hover:to-[#a03e1e] text-white rounded-full transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5 text-[10px] font-bold px-3 py-1.5 uppercase font-sans tracking-wide"
+                        title="Rediger hefteinnhold og filer i CMS"
+                      >
+                        <Settings size={12} />
+                        <span>Rediger PDF</span>
+                      </button>
+                    )}
+
                     <div className="space-y-4">
                       <div className="w-12 h-12 rounded-xl bg-purple-50 text-primary flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
                         <Icon size={22} className="text-[#561291]" />
                       </div>
                       <h4 className="font-serif text-lg font-bold text-primary group-hover:text-[#561291] transition-colors">
-                        {manual.title}
+                        <CmsText slug={manual.titleSlug} fallback={manual.titleFallback} />
                       </h4>
-                      <p className="text-xs text-slate-500 leading-relaxed">
-                        {manual.desc}
-                      </p>
+                      <CmsText slug={manual.descSlug} fallback={manual.descFallback} as="p" className="text-xs text-slate-500 leading-relaxed" />
 
                       <ul className="space-y-2 border-t border-slate-100 pt-4 text-xs text-slate-600 font-medium">
                         {manual.bullets.map((b, i) => (
                           <li key={i} className="flex items-center gap-2">
                             <span className="p-0.5 bg-purple-50 text-primary rounded-full shrink-0"><Check size={10} /></span>
-                            <span>{b}</span>
+                            <CmsText slug={b.slug} fallback={b.fallback} />
                           </li>
                         ))}
                       </ul>
                     </div>
 
-                    <a
-                      href={index === 0 
-                        ? (cmsContent?.['pdf_fasting_url'] || "/Bibelsk_Faste_og_Aandelig_Disiplin.pdf") 
-                        : (cmsContent?.['pdf_intercession_url'] || "/Profetisk_Forboenn_og_Boenneskjold.pdf")}
-                      download
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center"
-                    >
-                      <FileText size={13} />
-                      <span>{isEn ? 'Download Resources' : 'Last ned studiehefte'}</span>
-                    </a>
+                    {index === 0 ? (
+                      cmsContent?.['pdf_fasting_url'] ? (
+                        <a
+                          href={cmsContent['pdf_fasting_url']}
+                          download
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
+                        >
+                          <FileText size={13} />
+                          <span>{isEn ? 'Download Resources' : 'Last ned studiehefte'}</span>
+                        </a>
+                      ) : (
+                        <button
+                          onClick={() => generateFastingPdf(cmsContent, language)}
+                          className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
+                        >
+                          <FileText size={13} />
+                          <span>{isEn ? 'Download Resources' : 'Last ned studiehefte'}</span>
+                        </button>
+                      )
+                    ) : (
+                      cmsContent?.['pdf_intercession_url'] ? (
+                        <a
+                          href={cmsContent['pdf_intercession_url']}
+                          download
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
+                        >
+                          <FileText size={13} />
+                          <span>{isEn ? 'Download Resources' : 'Last ned studiehefte'}</span>
+                        </a>
+                      ) : (
+                        <button
+                          onClick={() => generateIntercessionPdf(cmsContent, language)}
+                          className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
+                        >
+                          <FileText size={13} />
+                          <span>{isEn ? 'Download Resources' : 'Last ned studiehefte'}</span>
+                        </button>
+                      )
+                    )}
                   </div>
                 );
               })}
