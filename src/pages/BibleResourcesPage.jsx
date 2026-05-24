@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BookOpen, Search, ArrowLeft, ArrowRight, Copy, Check, RefreshCw, Sparkles, BookMarked, X,
   Trash2, Save, Globe, Video, FileText, Calendar, Compass, UserCheck, Flame, BookText, Settings,
-  ChevronDown
+  ChevronDown, Maximize2, Minimize2, Type
 } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
@@ -52,6 +52,45 @@ export default function BibleResourcesPage() {
 
   // Multi-verse Selection States
   const [selectedVerses, setSelectedVerses] = useState([]);
+
+  // Fullscreen Reading & Text Sizing States
+  const [isFullscreenReading, setIsFullscreenReading] = useState(false);
+  const [textSize, setTextSize] = useState(() => localStorage.getItem('hkm-bible-text-size') || 'md');
+
+  // Text size persistence in localStorage
+  useEffect(() => {
+    localStorage.setItem('hkm-bible-text-size', textSize);
+  }, [textSize]);
+
+  // Lock body scroll in fullscreen mode
+  useEffect(() => {
+    if (isFullscreenReading) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isFullscreenReading]);
+
+  // Typography Scaling Helper
+  const getTextSizeClass = () => {
+    switch (textSize) {
+      case 'sm':
+        return 'text-[13px] sm:text-[14px] md:text-[15px] leading-relaxed';
+      case 'md':
+        return 'text-[15px] sm:text-[17px] md:text-lg leading-relaxed sm:leading-loose md:leading-loose';
+      case 'lg':
+        return 'text-[18px] sm:text-[20px] md:text-xl leading-relaxed sm:leading-loose md:leading-loose';
+      case 'xl':
+        return 'text-[21px] sm:text-[23px] md:text-2xl leading-relaxed sm:leading-loose md:leading-loose';
+      case '2xl':
+        return 'text-[24px] sm:text-[26px] md:text-3xl leading-relaxed sm:leading-loose md:leading-loose';
+      default:
+        return 'text-[15px] sm:text-[17px] md:text-lg leading-relaxed sm:leading-loose md:leading-loose';
+    }
+  };
 
   // Personal Study Notes States
   const [noteText, setNoteText] = useState('');
@@ -636,10 +675,17 @@ export default function BibleResourcesPage() {
 
               {/* Middle Column: Reading Panel */}
               <div className={`${showStudyPanel ? 'lg:col-span-5' : 'lg:col-span-8'} space-y-6 scroll-mt-40`} ref={readerRef}>
-                <div className="bg-white border border-slate-200/60 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]">
-                  
-                  {/* Reading Header */}
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-6 sticky top-[144px] bg-white z-20 -mx-6 px-6 md:-mx-8 md:px-8 pt-2 rounded-t-2xl">
+                <div className={isFullscreenReading 
+                  ? "fixed inset-0 z-50 overflow-y-auto h-screen w-screen bg-white" 
+                  : "bg-white border border-slate-200/60 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]"}
+                >
+                  <div className={isFullscreenReading ? "max-w-4xl mx-auto w-full px-6 py-8 md:px-12 flex flex-col min-h-screen" : "flex flex-col justify-between h-full flex-grow"}>
+                    {/* Reading Header */}
+                    <div className={`flex items-center justify-between border-b border-slate-100 pb-3 mb-6 sticky bg-white z-20 pt-2 ${
+                      isFullscreenReading 
+                        ? 'top-0 -mx-6 px-6 md:-mx-12 md:px-12 pt-4 shadow-sm' 
+                        : 'top-[144px] -mx-6 px-6 md:-mx-8 md:px-8 rounded-t-2xl'
+                    }`}>
                     <button 
                       onClick={() => navigateChapter('prev')}
                       className="p-2 bg-slate-50 text-primary border border-slate-200/60 rounded-xl hover:bg-slate-100 active:scale-[0.97] transition-all cursor-pointer"
@@ -665,18 +711,52 @@ export default function BibleResourcesPage() {
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <button 
-                        onClick={() => setShowStudyPanel(!showStudyPanel)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[11px] font-bold transition-all active:scale-[0.97] cursor-pointer ${
-                          showStudyPanel 
-                            ? 'bg-primary text-white border-primary shadow' 
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      {/* Text size adjuster */}
+                      <button
+                        onClick={() => {
+                          setTextSize(prev => {
+                            if (prev === 'sm') return 'md';
+                            if (prev === 'md') return 'lg';
+                            if (prev === 'lg') return 'xl';
+                            if (prev === 'xl') return '2xl';
+                            return 'sm';
+                          });
+                        }}
+                        className="p-2 bg-slate-50 text-primary border border-slate-200/60 rounded-xl hover:bg-slate-100 active:scale-[0.97] transition-all cursor-pointer flex items-center gap-1"
+                        title={isEn ? "Juster tekststørrelse" : "Juster tekststørrelse"}
+                      >
+                        <Type size={14} />
+                        <span className="text-[9px] font-bold uppercase">{textSize.toUpperCase()}</span>
+                      </button>
+
+                      {/* Fullscreen toggle */}
+                      <button
+                        onClick={() => setIsFullscreenReading(!isFullscreenReading)}
+                        className={`p-2 rounded-xl border active:scale-[0.97] transition-all cursor-pointer ${
+                          isFullscreenReading 
+                            ? 'bg-amber-500 text-white border-amber-500 hover:bg-amber-600' 
                             : 'bg-slate-50 text-primary border-slate-200/60 hover:bg-slate-100'
                         }`}
+                        title={isFullscreenReading ? (isEn ? "Avslutt lesemodus" : "Avslutt lesemodus") : (isEn ? "Fullskjerm lesemodus" : "Fullskjerm lesemodus")}
                       >
-                        <Sparkles size={12} className={showStudyPanel ? 'animate-pulse' : ''} />
-                        <span className="hidden sm:inline">{showStudyPanel ? (isEn ? "Hide study" : "Lukk studie") : (isEn ? "Study Bible" : "Studiebibel")}</span>
+                        {isFullscreenReading ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
                       </button>
+
+                      {/* Hide Study Panel button in fullscreen mode */}
+                      {!isFullscreenReading && (
+                        <button 
+                          onClick={() => setShowStudyPanel(!showStudyPanel)}
+                          className={`flex items-center gap-1 px-2.5 py-2 rounded-xl border text-[11px] font-bold transition-all active:scale-[0.97] cursor-pointer ${
+                            showStudyPanel 
+                              ? 'bg-primary text-white border-primary shadow' 
+                              : 'bg-slate-50 text-primary border-slate-200/60 hover:bg-slate-100'
+                          }`}
+                        >
+                          <Sparkles size={12} className={showStudyPanel ? 'animate-pulse' : ''} />
+                          <span className="hidden sm:inline">{showStudyPanel ? (isEn ? "Lukk studie" : "Studiebibel") : (isEn ? "Studiebibel" : "Studiebibel")}</span>
+                        </button>
+                      )}
 
                       <button 
                         onClick={() => navigateChapter('next')}
@@ -716,7 +796,7 @@ export default function BibleResourcesPage() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: 0.2 }}
-                          className="select-text text-slate-800 font-serif text-[15px] sm:text-[17px] md:text-lg leading-relaxed sm:leading-loose md:leading-loose space-y-4 pr-1"
+                          className={`select-text text-slate-800 font-serif space-y-4 pr-1 ${getTextSizeClass()}`}
                         >
                           <p className="text-justify md:text-left">
                             {verses.map((verse) => {
@@ -749,40 +829,9 @@ export default function BibleResourcesPage() {
                       )}
                     </AnimatePresence>
                   </div>
-
-                  {/* Multi-verse Action Banner */}
-                  {selectedVerses.length > 0 && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between gap-4 text-xs font-semibold text-slate-700 shadow-inner shrink-0"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="h-5 w-5 bg-primary text-white rounded-full flex items-center justify-center font-bold font-mono text-[10px]">
-                          {selectedVerses.length}
-                        </span>
-                        <span>{isEn ? 'selected verses' : 'vers valgt'}</span>
-                      </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={handleBulkCopy}
-                          className="px-3 py-1.5 bg-primary text-white rounded-lg hover:bg-primary-container hover:text-on-primary-container active:scale-[0.98] transition-all flex items-center gap-1.5 font-bold shadow-sm"
-                        >
-                          <Copy size={12} />
-                          <span>{isEn ? 'Copy' : 'Kopier'}</span>
-                        </button>
-                        <button
-                          onClick={() => setSelectedVerses([])}
-                          className="px-3 py-1.5 border border-slate-200 hover:bg-slate-100 rounded-lg transition-all text-slate-500 font-bold"
-                        >
-                          {isEn ? 'Clear' : 'Avbryt'}
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
                 </div>
               </div>
+            </div>
 
               {/* Right Column: Study Panel (when open) */}
               {showStudyPanel && (
@@ -1362,7 +1411,7 @@ export default function BibleResourcesPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-            className="fixed inset-0 z-50 bg-white flex flex-col h-screen w-screen overflow-hidden"
+            className="fixed inset-0 z-[60] bg-white flex flex-col h-screen w-screen overflow-hidden"
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between px-6 py-4.5 border-b border-slate-100 bg-white shrink-0">
@@ -1574,6 +1623,96 @@ export default function BibleResourcesPage() {
                   </div>
                 </div>
               )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Mobile Bottom Thumb-Navigation Pill (Ergonomisk) */}
+      <AnimatePresence>
+        {selectedVerses.length === 0 && !showMobileSelector && (
+          <motion.div
+            initial={{ opacity: 0, y: 40, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: 40, x: '-50%' }}
+            className="fixed bottom-6 left-1/2 z-40 bg-[#1B4965]/95 backdrop-blur-md text-white border border-white/10 px-4 py-2.5 rounded-full flex items-center justify-between gap-3 shadow-2xl w-[90vw] max-w-sm sm:hidden pointer-events-auto"
+            style={{ transform: 'translate3d(-50%, 0, 0)' }}
+          >
+            <button 
+              onClick={() => navigateChapter('prev')}
+              className="p-2 text-white hover:text-blue-200 active:scale-[0.9] transition-all cursor-pointer bg-transparent border-none outline-none"
+              title={isEn ? "Previous chapter" : "Forrige kapittel"}
+            >
+              <ArrowLeft size={18} />
+            </button>
+
+            <button 
+              onClick={() => {
+                setSelectorTab('book');
+                setSelectorSearch('');
+                setShowMobileSelector(true);
+              }}
+              className="flex-grow text-center font-serif font-extrabold text-sm hover:text-blue-200 active:scale-[0.97] transition-all flex items-center gap-1.5 justify-center py-1 px-3 bg-transparent border-none outline-none text-white cursor-pointer"
+            >
+              <span>{selectedBook.nor} {selectedChapter}</span>
+              <ChevronDown size={12} className="text-white/60" />
+            </button>
+
+            <button 
+              onClick={() => navigateChapter('next')}
+              className="p-2 text-white hover:text-blue-200 active:scale-[0.9] transition-all cursor-pointer bg-transparent border-none outline-none"
+              title={isEn ? "Next chapter" : "Neste kapittel"}
+            >
+              <ArrowRight size={18} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Actions Dialog when verses are selected */}
+      <AnimatePresence>
+        {selectedVerses.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, x: '-50%', scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, x: '-50%', scale: 1 }}
+            exit={{ opacity: 0, y: 50, x: '-50%', scale: 0.95 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+            className="fixed bottom-8 left-1/2 z-[100] bg-[#1B4965]/95 backdrop-blur-md border border-white/10 px-4 sm:px-6 py-3 rounded-2xl flex items-center justify-between gap-3 sm:gap-4 text-white shadow-2xl font-sans max-w-[92vw] sm:max-w-md w-max pointer-events-auto"
+            style={{ transform: 'translate3d(-50%, 0, 0)' }}
+          >
+            <div className="flex items-center gap-2 border-r border-white/10 pr-2.5 sm:pr-3 shrink-0">
+              <span className="h-6 w-6 rounded-full bg-[#d17d39] text-white flex items-center justify-center text-xs font-bold font-mono">
+                {selectedVerses.length}
+              </span>
+              <span className="text-[11px] sm:text-xs font-bold hidden min-[360px]:inline">
+                {selectedVerses.length === 1 ? 'vers' : 'vers'} valgt
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 sm:gap-2.5">
+              <button 
+                onClick={handleBulkCopy}
+                className="px-2.5 sm:px-3 py-1.5 hover:bg-white/15 active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer text-white text-[11px] sm:text-xs border border-transparent bg-transparent"
+              >
+                <Copy size={13} />
+                <span>Kopier</span>
+              </button>
+
+              <button 
+                onClick={() => navigate('/login')}
+                className="px-2.5 sm:px-3 py-1.5 bg-[#d17d39] hover:bg-[#bd4f2a] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm shadow-[#d17d39]/20 cursor-pointer text-white text-[11px] sm:text-xs border-none"
+              >
+                <Sparkles size={13} />
+                <span>Logg inn</span>
+              </button>
+
+              <button 
+                onClick={() => setSelectedVerses([])}
+                className="p-1.5 text-slate-300 hover:text-white rounded-xl transition-all cursor-pointer font-bold shrink-0 bg-transparent border-none outline-none"
+                title="Nullstill"
+              >
+                <X size={15} />
+              </button>
             </div>
           </motion.div>
         )}
