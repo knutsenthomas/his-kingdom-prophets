@@ -36,7 +36,7 @@ export default function CmsVisualToggle() {
   };
 
   return (
-    <div className="cms-visual-toggle-container fixed bottom-[88px] right-6 z-[90] font-sans pointer-events-auto">
+    <div className="cms-visual-toggle-container hidden md:block fixed bottom-[88px] right-6 z-[90] font-sans pointer-events-auto">
       <AnimatePresence mode="wait">
         {isMinimized ? (
           <motion.button
