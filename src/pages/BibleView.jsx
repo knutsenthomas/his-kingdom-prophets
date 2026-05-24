@@ -487,6 +487,43 @@ export default function BibleView() {
     };
   }, [isFullscreenReading]);
 
+  const cardContainerRef = useRef(null);
+  const [cardPosition, setCardPosition] = useState({ left: 0, width: 0 });
+
+  useEffect(() => {
+    if (!cardContainerRef.current) return;
+
+    const updatePosition = () => {
+      if (cardContainerRef.current) {
+        const rect = cardContainerRef.current.getBoundingClientRect();
+        setCardPosition({ left: rect.left, width: rect.width });
+      }
+    };
+
+    // Initial measure
+    updatePosition();
+
+    // Use ResizeObserver for highly responsive layout tracking
+    const observer = new ResizeObserver(() => {
+      updatePosition();
+    });
+    observer.observe(cardContainerRef.current);
+
+    // Also listen to window resize, scroll and sidebar animations
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition);
+
+    // Dynamic checks during transition animations
+    const interval = setInterval(updatePosition, 100);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition);
+      clearInterval(interval);
+    };
+  }, [isFullscreenReading]);
+
   // Typography Scaling Helper
   const getTextSizeClass = () => {
     switch (textSize) {
@@ -1167,9 +1204,11 @@ export default function BibleView() {
 
         {/* Middle Column: Bible reading pane */}
         <div ref={readerRef} className={`${showStudyPanel ? 'lg:col-span-5' : 'lg:col-span-8'} space-y-6 scroll-mt-24`}>
-          <div className={isFullscreenReading 
-            ? "fixed inset-0 z-50 overflow-y-auto h-screen w-screen bg-white" 
-            : "bg-white border border-outline-variant/20 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]"}
+          <div 
+            ref={cardContainerRef}
+            className={isFullscreenReading 
+              ? "fixed inset-0 z-50 overflow-y-auto h-screen w-screen bg-white" 
+              : "bg-white border border-outline-variant/20 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]"}
           >
             <div className={isFullscreenReading ? "max-w-4xl mx-auto w-full px-6 py-8 md:px-12 flex flex-col min-h-screen" : "flex flex-col justify-between h-full flex-grow"}>
               {/* Reading header with next/prev buttons and study panel toggle */}
@@ -1930,7 +1969,16 @@ export default function BibleView() {
       {/* Mobile Bottom Thumb-Navigation Pill (Ergonomisk) */}
       <AnimatePresence>
         {selectedVerses.length === 0 && !showMobileSelector && (
-          <div className={`fixed bottom-6 left-0 right-0 z-[55] flex justify-center pointer-events-none select-none ${isFullscreenReading ? '' : 'sm:hidden'}`}>
+          <div 
+            className="fixed bottom-6 z-[55] flex justify-center pointer-events-none select-none"
+            style={cardPosition.width > 0 ? {
+              left: `${cardPosition.left + cardPosition.width / 2}px`,
+              transform: 'translate3d(-50%, 0, 0)'
+            } : {
+              left: '50%',
+              transform: 'translate3d(-50%, 0, 0)'
+            }}
+          >
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
