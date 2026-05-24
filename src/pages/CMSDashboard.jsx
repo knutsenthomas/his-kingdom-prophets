@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/firebase';
+import CmsText from '@/components/CmsText';
 
 // Definition of all CMS strings with labels, categories, and explanatory descriptions
 const assetDefinitions = [
@@ -788,9 +789,11 @@ export default function CMSDashboard() {
     return (
       <div className="flex flex-col gap-6">
         <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm">
-          <h2 className="font-serif text-lg font-bold text-primary mb-1">Dokumentbehandling</h2>
+          <h2 className="font-serif text-lg font-bold text-primary mb-1">
+            <CmsText slug="admin-doc-panel-title" fallback="Dokumentbehandling" />
+          </h2>
           <p className="text-xs text-outline font-medium">
-            Her kan du laste opp dine egne PDF-dokumenter for studieheftene. Studentene vil laste ned dine tilpassede PDF-filer i stedet for de systemgenererte standardene. Du kan når som helst nullstille tilbake til systemets 1-sides standard.
+            <CmsText slug="admin-doc-panel-desc" fallback="Her kan du laste opp dine egne PDF-dokumenter for studieheftene. Studentene vil laste ned dine tilpassede PDF-filer i stedet for de systemgenererte standardene. Du kan når som helst nullstille tilbake til systemets 1-sides standard." />
           </p>
         </div>
 
@@ -817,12 +820,16 @@ export default function CMSDashboard() {
                       rel="noopener noreferrer"
                       className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
                     >
-                      <Info size={12} /> Se aktiv PDF
+                      <Info size={12} /> <CmsText slug="admin-doc-preview-link" fallback="Se aktiv PDF" />
                     </a>
                   </div>
 
-                  <h3 className="font-serif text-base font-bold text-primary mb-1">{doc.title}</h3>
-                  <p className="text-xs text-on-surface-variant font-medium mb-6">{doc.desc}</p>
+                  <h3 className="font-serif text-base font-bold text-primary mb-1">
+                    <CmsText slug={`admin-doc-${doc.id}-title`} fallback={doc.title} />
+                  </h3>
+                  <p className="text-xs text-on-surface-variant font-medium mb-6">
+                    <CmsText slug={`admin-doc-${doc.id}-desc`} fallback={doc.desc} />
+                  </p>
                 </div>
 
                 <div className="space-y-4">
@@ -843,8 +850,12 @@ export default function CMSDashboard() {
                     <div className="flex flex-col gap-3">
                       <label className="w-full border border-dashed border-outline-variant/50 hover:border-primary hover:bg-primary/5 transition-all rounded-xl p-6 text-center cursor-pointer flex flex-col items-center justify-center gap-2 select-none group">
                         <UploadCloud size={28} className="text-outline group-hover:text-primary transition-colors" />
-                        <span className="text-xs font-bold text-on-surface">Klikk eller dra for å laste opp</span>
-                        <span className="text-[10px] text-outline font-semibold">PDF-format, maks 10MB</span>
+                        <span className="text-xs font-bold text-on-surface">
+                          <CmsText slug="admin-doc-upload-label" fallback="Klikk eller dra for å laste opp" />
+                        </span>
+                        <span className="text-[10px] text-outline font-semibold">
+                          <CmsText slug="admin-doc-upload-specs" fallback="PDF-format, maks 10MB" />
+                        </span>
                         <input 
                           type="file" 
                           accept=".pdf" 
@@ -858,7 +869,7 @@ export default function CMSDashboard() {
                           onClick={() => handleReset(doc.id)}
                           className="w-full flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 border border-red-200 hover:border-red-300 transition-all rounded-xl active:scale-[0.98] bg-white shadow-sm font-sans"
                         >
-                          <RotateCcw size={14} /> Nullstill til systemstandard
+                          <RotateCcw size={14} /> <CmsText slug="admin-doc-reset-label" fallback="Nullstill til systemstandard" />
                         </button>
                       )}
                     </div>
@@ -905,10 +916,10 @@ export default function CMSDashboard() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="font-serif text-2xl md:text-4xl font-bold text-primary flex items-center gap-2">
-            <Languages className="text-primary shrink-0" size={32} /> Global CMS Styring
+            <Languages className="text-primary shrink-0" size={32} /> <CmsText slug="admin-cms-title-header" fallback="Global CMS Styring" />
           </h1>
           <p className="text-xs sm:text-sm text-on-surface-variant mt-1 font-medium">
-            Administrer og rediger all tekst på alle sider i His Kingdom Prophets-plattformen.
+            <CmsText slug="admin-cms-desc-header" fallback="Administrer og rediger all tekst på alle sider i His Kingdom Prophets-plattformen." />
           </p>
         </div>
 
