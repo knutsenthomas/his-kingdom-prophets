@@ -1681,7 +1681,7 @@ export default function BibleResourcesPage() {
       {/* Mobile Bottom Thumb-Navigation Pill (Ergonomisk) */}
       <AnimatePresence>
         {selectedVerses.length === 0 && !showMobileSelector && (
-          <div className="fixed bottom-6 left-0 right-0 z-[55] flex justify-center pointer-events-none select-none">
+          <div className={`fixed bottom-6 left-0 right-0 z-[55] flex justify-center pointer-events-none select-none ${isFullscreenReading ? '' : 'sm:hidden'}`}>
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
