@@ -1797,9 +1797,9 @@ export default function BibleResourcesPage() {
             <div className="flex items-center gap-1.5 sm:gap-2.5">
               <button 
                 onClick={handleBulkCopy}
-                className="px-2.5 sm:px-3 py-1.5 text-[#1B4965] bg-[#1B4965]/5 hover:bg-[#1B4965]/10 border border-[#1B4965]/15 active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer text-[11px] sm:text-xs"
+                className="px-2.5 sm:px-3 py-1.5 bg-[#1B4965] hover:bg-[#153b52] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm shadow-[#1B4965]/20 cursor-pointer text-white text-[11px] sm:text-xs border-none"
               >
-                <Copy size={13} className="text-[#1B4965]" />
+                <Copy size={13} className="text-white" />
                 <span>Kopier</span>
               </button>
 
