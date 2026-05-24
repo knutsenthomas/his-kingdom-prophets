@@ -1215,7 +1215,7 @@ export default function BibleView() {
               <div className={`flex items-center justify-between border-b border-slate-100 pb-3 mb-6 sticky bg-white z-20 pt-2 ${
                 isFullscreenReading 
                   ? 'top-0 -mx-4 px-4 sm:-mx-6 sm:px-6 md:-mx-12 md:px-12 pt-4 shadow-sm' 
-                  : 'top-[64px] -mx-4 px-4 sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 rounded-t-2xl'
+                  : 'top-[80px] -mx-4 px-4 sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 rounded-t-2xl'
               }`}>
               <button 
                 onClick={() => navigateChapter('prev')}
