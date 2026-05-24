@@ -2040,10 +2040,10 @@ export default function BibleView() {
             <div className="flex items-center gap-1.5 sm:gap-2 text-xs">
               <button 
                 onClick={handleBulkCopy}
-                className="px-2.5 sm:px-3 py-1.5 hover:bg-slate-100 active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer text-slate-700 hover:text-slate-900 text-[11px] sm:text-xs border border-transparent bg-transparent"
+                className="px-2.5 sm:px-3 py-1.5 text-[#1B4965] hover:bg-[#1B4965]/5 active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer text-[11px] sm:text-xs border border-transparent bg-transparent"
                 title="Kopier markerte vers"
               >
-                <Copy size={13} />
+                <Copy size={13} className="text-[#1B4965]" />
                 <span>Kopier</span>
               </button>
 
@@ -2058,16 +2058,16 @@ export default function BibleView() {
 
               <button 
                 onClick={handleBulkShareToChat}
-                className="px-2.5 sm:px-3 py-1.5 hover:bg-slate-100 active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer text-slate-700 hover:text-slate-900 text-[11px] sm:text-xs border border-transparent bg-transparent"
+                className="px-2.5 sm:px-3 py-1.5 text-[#1B4965] hover:bg-[#1B4965]/5 active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer text-[11px] sm:text-xs border border-transparent bg-transparent"
                 title="Del i chatten"
               >
-                <Send size={13} />
+                <Send size={13} className="text-[#1B4965]" />
                 <span>Del</span>
               </button>
 
               <button 
                 onClick={() => setSelectedVerses([])}
-                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl transition-all cursor-pointer font-bold shrink-0 bg-transparent border-none outline-none"
+                className="p-1.5 text-[#1B4965]/70 hover:text-[#1B4965] hover:bg-[#1B4965]/5 rounded-xl transition-all cursor-pointer font-bold shrink-0 bg-transparent border-none outline-none"
                 title="Nullstill"
               >
                 <X size={15} />
