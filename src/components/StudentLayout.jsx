@@ -324,6 +324,8 @@ export default function StudentLayout() {
     { slug: 'sidebar-partner', fallback: 'Partnerportal', path: '/student/partner', icon: Gift },
     { slug: 'sidebar-support', fallback: 'Hjelp & support', path: '/student/support', icon: HelpCircle },
     { slug: 'nav.settings.account', fallback: 'Min profil', path: '/student/profile', icon: User },
+    { isHeader: true, slug: 'sidebar-exit', fallback: 'Avslutt' },
+    { slug: 'profile-btn-logout', fallback: 'Logg ut', path: '', icon: Power, isLogout: true },
   ];
 
   return (
@@ -350,7 +352,8 @@ export default function StudentLayout() {
                 alt="His Kingdom Prophets Logo" 
                 className="w-8 h-8 object-contain shrink-0" 
               />
-              <span className="truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
+              <span className="hidden sm:inline truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
+              <span className="inline sm:hidden truncate"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
             </div>
           </div>
 
@@ -455,13 +458,6 @@ export default function StudentLayout() {
                     <span className="text-[9px] font-medium text-on-surface-variant uppercase tracking-wider">Student</span>
                   </span>
                 </Link>
-                <button 
-                  onClick={handleLogOut} 
-                  className="hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors" 
-                  title="Logg ut"
-                >
-                  <Power size={18} />
-                </button>
               </div>
             </div>
           </div>
@@ -507,13 +503,26 @@ export default function StudentLayout() {
 
               {/* Side Navigation Menu */}
               <nav className="space-y-1.5">
-                {navItems.map(item => {
-                  const isActive = location.pathname === item.path;
+                {navItems.map((item, idx) => {
+                  if (item.isHeader) {
+                    return (
+                      <div 
+                        key={item.slug + '-' + idx} 
+                        className="text-[10px] font-bold text-primary uppercase tracking-wider pt-4 pb-1 px-4 select-none"
+                      >
+                        <CmsText slug={item.slug} fallback={item.fallback} />
+                      </div>
+                    );
+                  }
+                  const isActive = !item.isLogout && location.pathname === item.path;
                   const IconComponent = item.icon;
+                  const onClickAction = item.isLogout 
+                    ? handleLogOut 
+                    : () => navigate(item.path);
                   return (
                     <button 
-                      key={item.path}
-                      onClick={() => navigate(item.path)} 
+                      key={item.isLogout ? 'logout' : item.path}
+                      onClick={onClickAction} 
                       className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
                         isActive 
                           ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
@@ -608,16 +617,29 @@ export default function StudentLayout() {
 
             {/* Nav Items */}
             <nav className="space-y-1">
-              {navItems.map(item => {
-                const isActive = location.pathname === item.path;
+              {navItems.map((item, idx) => {
+                if (item.isHeader) {
+                  return (
+                    <div 
+                      key={item.slug + '-' + idx} 
+                      className="text-[10px] font-bold text-primary uppercase tracking-wider pt-4 pb-1 px-4 select-none"
+                    >
+                      <CmsText slug={item.slug} fallback={item.fallback} />
+                    </div>
+                  );
+                }
+                const isActive = !item.isLogout && location.pathname === item.path;
                 const IconComponent = item.icon;
-                return (
-                  <button 
-                    key={item.path}
-                    onClick={() => {
+                const onClickAction = item.isLogout 
+                  ? handleLogOut 
+                  : () => {
                       navigate(item.path);
                       setIsMobileMenuOpen(false);
-                    }} 
+                    };
+                return (
+                  <button 
+                    key={item.isLogout ? 'logout' : item.path}
+                    onClick={onClickAction} 
                     className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
                       isActive 
                         ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 

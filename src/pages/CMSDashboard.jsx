@@ -141,6 +141,7 @@ const assetDefinitions = [
   { slug: 'admin-cms-title', title: 'CMS Seksjonstittel (Admin)', section: 'System', type: 'text', description: 'Tittel på administrasjonspanelet for innhold.' },
   { slug: 'admin-cms-subtitle', title: 'CMS Hjelpetekst (Admin)', section: 'System', type: 'textarea', description: 'Forklarende hjelpetekst for bruk av CMS-systemet.' },
   { slug: 'layout-logo-title', title: 'Plattform Logotittel', section: 'System', type: 'text', description: 'Systemnavn og logo-tekst i sidepanelet på plattformen.' },
+  { slug: 'layout-logo-mobile-title', title: 'Plattform Mobil Logotittel', section: 'System', type: 'text', description: 'Kort systemnavn som vises på mobilskjermer (f.eks. HKP).' },
   { slug: 'layout-search-placeholder', title: 'Søkefelt Hjelpetekst', section: 'System', type: 'text', description: 'Standard hjelpetekst / placeholder i søkefeltet i topplinjen.' },
   { slug: 'layout-upgrade-banner-title', title: 'Sidebar Oppgrader Tittel', section: 'System', type: 'text', description: 'Tittel på oppgraderingsbanneret i sidepanelet.' },
   { slug: 'layout-upgrade-banner-desc', title: 'Sidebar Oppgrader Beskrivelse', section: 'System', type: 'textarea', description: 'Beskrivelse av fordeler ved profilutvidelse i banneret.' },

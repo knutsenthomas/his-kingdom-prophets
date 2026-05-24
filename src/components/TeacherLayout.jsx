@@ -108,6 +108,9 @@ export default function TeacherLayout() {
     navItems.push({ slug: 'sidebar-cms-editor', fallback: 'Global CMS Styring', path: '/admin/cms', icon: Languages });
     navItems.push({ slug: 'sidebar-document-admin', fallback: 'Dokumentbehandling', path: '/admin/cms?category=documents', icon: FileText });
   }
+  
+  navItems.push({ isHeader: true, slug: 'sidebar-exit', fallback: 'Avslutt' });
+  navItems.push({ slug: 'profile-btn-logout', fallback: 'Logg ut', path: '', icon: Power, isLogout: true });
 
   return (
     <div className="bg-background min-h-screen flex flex-col font-sans text-on-surface pt-20">
@@ -133,7 +136,8 @@ export default function TeacherLayout() {
                 alt="His Kingdom Prophets Logo" 
                 className="w-8 h-8 object-contain shrink-0" 
               />
-              <span className="truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
+              <span className="hidden sm:inline truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
+              <span className="inline sm:hidden truncate"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
               <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 sm:px-3 py-1 rounded-full shrink-0">
                 {user?.role === 'admin' ? 'Admin' : 'Mentor'}
               </span>
@@ -214,13 +218,6 @@ export default function TeacherLayout() {
                   </span>
                 </span>
               </Link>
-              <button 
-                onClick={handleLogOut} 
-                className="hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors" 
-                title="Logg ut"
-              >
-                <Power size={18} />
-              </button>
             </div>
           </div>
 
@@ -275,14 +272,17 @@ export default function TeacherLayout() {
                       </div>
                     );
                   }
-                  const isActive = item.path.includes('?') 
+                  const isActive = !item.isLogout && (item.path.includes('?') 
                     ? (location.pathname + location.search) === item.path
-                    : location.pathname === item.path;
+                    : location.pathname === item.path);
                   const IconComponent = item.icon;
+                  const onClickAction = item.isLogout 
+                    ? handleLogOut 
+                    : () => navigate(item.path);
                   return (
                     <button 
-                      key={item.path}
-                      onClick={() => navigate(item.path)} 
+                      key={item.isLogout ? 'logout' : item.path}
+                      onClick={onClickAction} 
                       className={`flex items-center justify-between w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
                         isActive 
                           ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
@@ -349,7 +349,8 @@ export default function TeacherLayout() {
             <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
               <div className="font-serif text-lg font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => { navigate('/teacher/dashboard'); setIsMobileMenuOpen(false); }}>
                 <GraduationCap className="text-primary shrink-0 animate-pulse" size={20} />
-                <span>His Kingdom Prophets</span>
+                <span className="hidden sm:inline"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
+                <span className="inline sm:hidden"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
               </div>
               <button 
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -395,17 +396,20 @@ export default function TeacherLayout() {
                     </div>
                   );
                 }
-                const isActive = item.path.includes('?') 
+                const isActive = !item.isLogout && (item.path.includes('?') 
                   ? (location.pathname + location.search) === item.path
-                  : location.pathname === item.path;
+                  : location.pathname === item.path);
                 const IconComponent = item.icon;
-                return (
-                  <button 
-                    key={item.path}
-                    onClick={() => {
+                const onClickAction = item.isLogout 
+                  ? handleLogOut 
+                  : () => {
                       navigate(item.path);
                       setIsMobileMenuOpen(false);
-                    }} 
+                    };
+                return (
+                  <button 
+                    key={item.isLogout ? 'logout' : item.path}
+                    onClick={onClickAction} 
                     className={`flex items-center justify-between w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
                       isActive 
                         ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
