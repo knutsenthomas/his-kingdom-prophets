@@ -333,7 +333,7 @@ export default function LandingPage() {
                   <CmsText slug="landing-hero-cta-primary" fallback="Begynn Din Reise" />
                 </button>
                 <button 
-                  onClick={() => navigate(user ? '/student/video' : '/login')} 
+                  onClick={() => navigate('/about')} 
                   className="px-8 py-4 border border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all group flex items-center justify-center gap-2 text-sm active:scale-[0.98]"
                 >
                   <CmsText slug="landing-hero-cta-secondary" fallback="Se Introduksjon" />

@@ -52,6 +52,7 @@ import AccessibilityPage from '@/pages/AccessibilityPage';
 import ContactSupportPage from '@/pages/ContactSupportPage';
 import BibleResourcesPage from '@/pages/BibleResourcesPage';
 import AdmissionPage from '@/pages/AdmissionPage';
+import AboutPage from '@/pages/AboutPage';
 
 // Email Previews
 import EmailPreviews from '@/pages/EmailPreviews';
@@ -232,6 +233,7 @@ function AppRoutes() {
         <Route path="/bible-resources" element={<BibleResourcesPage />} />
         <Route path="/admission" element={<AdmissionPage />} />
         <Route path="/opptak" element={<AdmissionPage />} />
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
     </>
   );
