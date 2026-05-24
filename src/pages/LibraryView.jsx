@@ -116,32 +116,7 @@ export default function LibraryView() {
           </motion.article>
         ))}
 
-        {/* Premium Blocked Card */}
-        <article className="bg-white rounded-2xl border border-outline-variant/20 overflow-hidden flex flex-col justify-between shadow-sm opacity-65">
-          <div>
-            <div className="h-44 bg-slate-200 relative flex items-center justify-center p-6 text-slate-500 text-center">
-              <Laptop size={48} className="text-slate-300 absolute -right-2 -bottom-2" />
-              <h3 className="font-serif font-bold text-lg leading-tight">Lovsang & Tilbedelse 401</h3>
-            </div>
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-3">
-                <span className="bg-slate-100 text-slate-500 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider font-mono">
-                  WOR 401
-                </span>
-                <span className="text-xs text-outline font-medium">Tjenestegave</span>
-              </div>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                Dette er et videregående kurs for lovsangere og tilbedere. Lær om tabernaklets tjeneste og åndelig lederskap i lovsang.
-              </p>
-            </div>
-          </div>
-          <div className="p-6 border-t border-slate-100 flex items-center justify-between">
-            <span className="text-[10px] text-burnt-orange font-bold uppercase tracking-wide">Kun for Pro-medlemmer</span>
-            <button onClick={() => showToast("Lås opp dette kurset ved å oppgradere!")} className="text-xs font-bold text-primary hover:underline">
-              Lås opp
-            </button>
-          </div>
-        </article>
+
       </section>
 
     </main>
