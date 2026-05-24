@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BookOpen, Search, ArrowLeft, ArrowRight, Share2, Copy, Send, Check, RefreshCw, Sparkles, BookMarked, X,
-  Trash2, Save, Loader2
+  Trash2, Save, Loader2, ChevronDown
 } from 'lucide-react';
 import { db } from '@/firebase';
 import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
@@ -424,6 +424,11 @@ export default function BibleView() {
   const topRef = useRef(null);
   const readerRef = useRef(null);
   const [previousReference, setPreviousReference] = useState(null);
+
+  // Fullscreen Mobile Selector States
+  const [showMobileSelector, setShowMobileSelector] = useState(false);
+  const [selectorTab, setSelectorTab] = useState('book'); // book, chapter
+  const [selectorSearch, setSelectorSearch] = useState('');
 
   // Study Bible & Commentary States
   const [showStudyPanel, setShowStudyPanel] = useState(false);
@@ -996,8 +1001,8 @@ export default function BibleView() {
       {/* Main interactive grid layout */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        {/* Left Column: Book and chapter selection pane */}
-        <div className={`${showStudyPanel ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-6 lg:sticky lg:top-24`}>
+        {/* Left Column: Book and chapter selection pane (Desktop only) */}
+        <div className={`hidden lg:block ${showStudyPanel ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-6 lg:sticky lg:top-24`}>
           <div className="bg-white border border-outline-variant/20 rounded-2xl p-5 shadow-sm space-y-5">
             <h2 className="font-serif font-bold text-base text-primary flex items-center gap-2 border-b border-slate-100 pb-3">
               <BookMarked size={18} />
@@ -1109,11 +1114,20 @@ export default function BibleView() {
                 <ArrowLeft size={18} />
               </button>
 
-              <div className="text-center flex flex-col items-center">
-                <h2 className="font-serif font-extrabold text-xl md:text-2xl text-primary leading-tight">
-                  {selectedBook.nor} {selectedChapter}
+              <div 
+                onClick={() => {
+                  setSelectorTab('book');
+                  setSelectorSearch('');
+                  setShowMobileSelector(true);
+                }}
+                className="text-center flex flex-col items-center cursor-pointer hover:bg-slate-50 px-4 py-1.5 rounded-2xl active:scale-[0.97] transition-all border border-transparent hover:border-slate-100 select-none group"
+                title="Velg bok og kapittel"
+              >
+                <h2 className="font-serif font-extrabold text-lg md:text-2xl text-primary leading-tight flex items-center gap-1 sm:gap-2 justify-center">
+                  <span>{selectedBook.nor} {selectedChapter}</span>
+                  <ChevronDown size={14} className="text-slate-400 group-hover:text-primary transition-transform duration-200 shrink-0" />
                 </h2>
-                <span className="text-[10px] font-bold text-outline tracking-wider uppercase font-mono mt-1 block">
+                <span className="text-[10px] font-bold text-outline tracking-wider uppercase font-mono mt-0.5 block">
                   {TRANSLATIONS.find(t => t.id === selectedTranslation)?.name}
                 </span>
               </div>
@@ -1627,6 +1641,231 @@ export default function BibleView() {
                 Tilbake til {previousReference.book.nor} {previousReference.chapter}{previousReference.verse ? `:${previousReference.verse}` : ''}
               </span>
             </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Fullscreen Book/Chapter Selector Modal for Mobile & Desktop */}
+      <AnimatePresence>
+        {showMobileSelector && (
+          <motion.div
+            initial={{ opacity: 0, y: '100%' }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+            className="fixed inset-0 z-50 bg-white flex flex-col h-screen w-screen overflow-hidden"
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white shrink-0">
+              <div className="flex items-center gap-3">
+                {selectorTab === 'chapter' && (
+                  <button
+                    onClick={() => setSelectorTab('book')}
+                    className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"
+                  >
+                    <ArrowLeft size={20} />
+                  </button>
+                )}
+                <h3 className="font-serif font-extrabold text-lg text-primary">
+                  {selectorTab === 'book' ? 'Velg bibelbok' : 'Velg kapittel'}
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowMobileSelector(false)}
+                className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+            {/* Selector Sub-Tabs */}
+            <div className="grid grid-cols-2 border-b border-slate-100 bg-slate-50/50 shrink-0">
+              <button
+                onClick={() => setSelectorTab('book')}
+                className={`py-3.5 text-xs font-bold border-b-2 uppercase tracking-wide transition-all ${
+                  selectorTab === 'book'
+                    ? 'border-primary text-primary font-extrabold'
+                    : 'border-transparent text-slate-400 hover:text-slate-600'
+                }`}
+              >
+                {selectedBook ? selectedBook.nor : 'Bibelbok'}
+              </button>
+              <button
+                onClick={() => setSelectorTab('chapter')}
+                className={`py-3.5 text-xs font-bold border-b-2 uppercase tracking-wide transition-all ${
+                  selectorTab === 'chapter'
+                    ? 'border-primary text-primary font-extrabold'
+                    : 'border-transparent text-slate-400 hover:text-slate-600'
+                }`}
+              >
+                {`Kapittel ${selectedChapter}`}
+              </button>
+            </div>
+
+            {/* Search Input (Only on 'book' tab) */}
+            {selectorTab === 'book' && (
+              <div className="p-4 border-b border-slate-100 shrink-0">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Søk etter bibelbok (f.eks. 'Mosebok', 'Joh')..."
+                    value={selectorSearch}
+                    onChange={(e) => setSelectorSearch(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white transition-all shadow-inner"
+                  />
+                  <div className="absolute left-3 top-0 bottom-0 my-auto h-4 w-4 text-slate-400 pointer-events-none">
+                    <Search size={16} />
+                  </div>
+                  {selectorSearch && (
+                    <button
+                      onClick={() => setSelectorSearch('')}
+                      className="absolute right-3 top-0 bottom-0 my-auto p-1 text-slate-400 hover:text-slate-600"
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* List & Grids container (scrollable) */}
+            <div className="flex-grow overflow-y-auto p-6 bg-slate-50/30">
+              {selectorTab === 'book' ? (
+                <div className="space-y-6 max-w-2xl mx-auto">
+                  {/* Filter books */}
+                  {(() => {
+                    const cleanQuery = selectorSearch.toLowerCase().trim();
+                    const matchingBooks = BIBLE_BOOKS.filter(b => 
+                      b.nor.toLowerCase().includes(cleanQuery) || 
+                      b.eng.toLowerCase().includes(cleanQuery)
+                    );
+
+                    if (matchingBooks.length === 0) {
+                      return (
+                        <div className="text-center py-12 space-y-2">
+                          <BookMarked className="mx-auto text-slate-300" size={40} />
+                          <p className="text-slate-500 font-medium text-sm">Ingen bøker funnet for "{selectorSearch}"</p>
+                        </div>
+                      );
+                    }
+
+                    // Group by testament if no active search
+                    const showGrouped = !selectorSearch;
+                    if (showGrouped) {
+                      const gtBooks = matchingBooks.filter(b => b.testament === 'GT');
+                      const ntBooks = matchingBooks.filter(b => b.testament === 'NT');
+
+                      return (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          {/* Gamle testamentet */}
+                          <div className="space-y-3">
+                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider pl-2 border-l-2 border-primary/40">Det gamle testamentet (GT)</h4>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 bg-white p-2 border border-slate-100 rounded-2xl shadow-sm">
+                              {gtBooks.map(book => (
+                                <button
+                                  key={book.id}
+                                  onClick={() => {
+                                    setSelectedBook(book);
+                                    setSelectorTab('chapter');
+                                  }}
+                                  className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-all flex justify-between items-center ${
+                                    selectedBook.id === book.id
+                                      ? 'bg-primary/5 text-primary'
+                                      : 'text-slate-600 hover:bg-slate-50'
+                                  }`}
+                                >
+                                  <span>{book.nor}</span>
+                                  <span className="text-[10px] font-mono opacity-50 font-normal">{book.chapters} kap</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Nye testamentet */}
+                          <div className="space-y-3">
+                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider pl-2 border-l-2 border-primary/40">Det nye testamentet (NT)</h4>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 bg-white p-2 border border-slate-100 rounded-2xl shadow-sm">
+                              {ntBooks.map(book => (
+                                <button
+                                  key={book.id}
+                                  onClick={() => {
+                                    setSelectedBook(book);
+                                    setSelectorTab('chapter');
+                                  }}
+                                  className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-all flex justify-between items-center ${
+                                    selectedBook.id === book.id
+                                      ? 'bg-primary/5 text-primary'
+                                      : 'text-slate-600 hover:bg-slate-50'
+                                  }`}
+                                >
+                                  <span>{book.nor}</span>
+                                  <span className="text-[10px] font-mono opacity-50 font-normal">{book.chapters} kap</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    // Flat list of search results
+                    return (
+                      <div className="bg-white border border-slate-100 rounded-2xl p-2 shadow-sm grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
+                        {matchingBooks.map(book => (
+                          <button
+                            key={book.id}
+                            onClick={() => {
+                              setSelectedBook(book);
+                              setSelectorTab('chapter');
+                            }}
+                            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-all flex justify-between items-center ${
+                              selectedBook.id === book.id
+                                ? 'bg-primary/5 text-primary'
+                                : 'text-slate-600 hover:bg-slate-50'
+                            }`}
+                          >
+                            <span>{book.nor}</span>
+                            <span className="text-[10px] font-mono opacity-50 font-normal">{book.chapters} kap</span>
+                          </button>
+                        ))}
+                      </div>
+                    );
+                  })()}
+                </div>
+              ) : (
+                <div className="max-w-xl mx-auto space-y-4">
+                  <div className="text-center pb-2">
+                    <p className="text-slate-400 font-bold text-xs uppercase tracking-wider">Velg kapittel i {selectedBook.nor}</p>
+                  </div>
+                  <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                    <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
+                      {Array.from({ length: selectedBook.chapters }, (_, i) => i + 1).map(chap => (
+                        <button
+                          key={chap}
+                          onClick={() => {
+                            setSelectedChapter(chap);
+                            setShowMobileSelector(false);
+                            // Scroll reading card to view
+                            setTimeout(() => {
+                              if (readerRef.current) {
+                                readerRef.current.scrollIntoView({ behavior: 'smooth' });
+                              }
+                            }, 150);
+                          }}
+                          className={`h-12 w-full rounded-xl text-sm font-extrabold transition-all flex items-center justify-center border ${
+                            selectedChapter === chap
+                              ? 'bg-primary text-white border-primary shadow font-black active:scale-[0.95]'
+                              : 'bg-slate-50 text-slate-700 border-slate-200/50 hover:bg-slate-100 hover:border-slate-300 active:scale-[0.97]'
+                          }`}
+                        >
+                          {chap}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
