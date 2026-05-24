@@ -477,7 +477,17 @@ export default function NotesPage() {
   // Clean HTML helper for text snippets (strips HTML tags and gets clean text)
   const stripHtml = (html) => {
     if (!html) return '';
-    return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ');
+    // Unescape &lt; and &gt; to let the tag-stripper regex catch them
+    let clean = html
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&amp;/g, '&');
+    
+    // Strip all HTML tag structures
+    clean = clean.replace(/<[^>]*>/g, '');
+    
+    return clean.replace(/&nbsp;/g, ' ').trim();
   };
 
   // Format Date beautifully
