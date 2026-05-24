@@ -1247,8 +1247,18 @@ export default function BibleView() {
 
         {/* Right Column: Study Bible & Commentary Panel */}
         {showStudyPanel && (
-          <div className="lg:col-span-4 space-y-6 animate-fade-in lg:sticky lg:top-24">
-            <div className="bg-white border border-outline-variant/20 rounded-2xl p-5 shadow-sm space-y-4 flex flex-col min-h-[500px]">
+          <div 
+            onClick={() => setShowStudyPanel(false)}
+            className="fixed inset-0 z-50 bg-[#240046]/45 backdrop-blur-sm flex items-end justify-center p-0 lg:static lg:bg-transparent lg:backdrop-blur-none lg:z-auto lg:block lg:col-span-4 lg:space-y-6 lg:sticky lg:top-24"
+          >
+            <motion.div 
+              initial={typeof window !== 'undefined' && window.innerWidth < 1024 ? { y: '100%' } : {}}
+              animate={typeof window !== 'undefined' && window.innerWidth < 1024 ? { y: 0 } : {}}
+              exit={typeof window !== 'undefined' && window.innerWidth < 1024 ? { y: '100%' } : {}}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white border-t border-slate-200 lg:border lg:border-outline-variant/20 rounded-t-3xl lg:rounded-2xl p-5 shadow-2xl lg:shadow-sm space-y-4 flex flex-col w-full max-w-xl lg:max-w-none h-[80vh] lg:h-auto lg:min-h-[500px]"
+            >
               
               {/* Header */}
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -1528,7 +1538,7 @@ export default function BibleView() {
                 })()
               )}
 
-            </div>
+            </motion.div>
           </div>
         )}
 
