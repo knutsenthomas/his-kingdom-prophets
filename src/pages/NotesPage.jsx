@@ -536,11 +536,30 @@ export default function NotesPage() {
   };
 
   // Open Editor
+  // Open Editor with auto-migration from raw markdown to rich premium HTML
   const handleOpenEditor = (note) => {
     setSelectedNote(note);
-    setEditorText(note.type === 'lesson' ? note.text : note.content);
     setSaveStatus('idle');
     setIsEditorOpen(true);
+
+    const rawText = note.type === 'lesson' ? (note.text || '') : (note.content || '');
+    
+    // Check if the raw text contains markdown structures that need migration to premium rich formatting
+    if (rawText.includes('**') || rawText.includes('###') || rawText.includes('- ') || rawText.includes('• ')) {
+      const parsedHTML = parseMarkdownToHtml(rawText);
+      setEditorText(parsedHTML);
+      
+      // Sync it immediately in the next microtask to let the editor state catch up
+      setTimeout(() => {
+        if (editorRef.current) {
+          editorRef.current.innerHTML = parsedHTML;
+        }
+        // Save the migrated HTML back to Firestore in the background
+        handleSaveNote(parsedHTML);
+      }, 50);
+    } else {
+      setEditorText(rawText);
+    }
   };
 
   // Close Editor
@@ -969,7 +988,9 @@ ${rawContent}
                   ? note.moduleTitle 
                   : note.title;
 
-              const textSnippet = note.type === 'lesson' ? stripHtml(note.text) : note.content;
+              const rawSnippet = note.type === 'lesson' ? (note.text || '') : (note.content || '');
+              const cleanSnippet = stripHtml(rawSnippet);
+              const textSnippet = cleanSnippet.replace(/\*\*/g, '').replace(/\*/g, '');
               const metadata = note.type === 'bible' 
                 ? 'Bibelstudie' 
                 : note.type === 'lesson' 
