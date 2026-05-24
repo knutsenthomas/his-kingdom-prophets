@@ -169,7 +169,7 @@ export default function TeacherProfile() {
   const set = (field, value) => setDraft(prev => ({ ...prev, [field]: value }));
   const mentorStudents = students?.length || 0;
   const activeCourses = courses?.filter(course => course.instructor === user?.name).length || courses?.length || 0;
-  const completionFields = [draft.name, draft.title, draft.department, draft.expertise, draft.officeHours, draft.zoomLink, draft.bio];
+  const completionFields = [draft.name, draft.title, draft.department, draft.expertise, draft.officeHours, draft.bio];
   const completionPct = Math.round((completionFields.filter(Boolean).length / completionFields.length) * 100);
 
   useEffect(() => {
