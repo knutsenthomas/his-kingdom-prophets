@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { 
   Compass, BookOpen, Book, Video, CheckSquare, Users, 
   Menu, Bell, Power, Search, Award, GraduationCap, ChevronLeft, User,
-  Gift, HelpCircle, X, Globe, ArrowRight
+  Gift, HelpCircle, X, Globe, ArrowRight, FileText
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import HkmChatWidget from '@/components/HkmChatWidget';
@@ -319,6 +319,7 @@ export default function StudentLayout() {
     { slug: 'sidebar-lesson', fallback: 'Leksjon', path: '/student/lesson', icon: GraduationCap },
     { slug: 'sidebar-video', fallback: 'Klasserom / Video', path: '/student/video', icon: Video },
     { slug: 'sidebar-assignments', fallback: 'Oppgaver', path: '/student/assignments', icon: CheckSquare },
+    { slug: 'sidebar-notes', fallback: 'Mine notater', path: '/student/notes', icon: FileText },
     { slug: 'sidebar-community', fallback: 'Bønnefellesskap', path: '/student/chat', icon: Users },
     { slug: 'sidebar-partner', fallback: 'Partnerportal', path: '/student/partner', icon: Gift },
     { slug: 'sidebar-support', fallback: 'Hjelp & support', path: '/student/support', icon: HelpCircle },

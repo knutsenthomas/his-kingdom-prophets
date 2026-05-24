@@ -139,6 +139,7 @@ const assetDefinitions = [
   { slug: 'sidebar-lesson', title: 'Sidemeny Leksjon Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til gjeldende leksjon.' },
   { slug: 'sidebar-video', title: 'Sidemeny Klasserom Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til videoklasserommet.' },
   { slug: 'sidebar-assignments', title: 'Sidemeny Oppgaver Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til oppgavesiden.' },
+  { slug: 'sidebar-notes', title: 'Sidemeny Notater Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til notatsiden.' },
   { slug: 'sidebar-community', title: 'Sidemeny Fellesskap Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til bønnefellesskapet.' },
   { slug: 'sidebar-grades', title: 'Sidemeny Karakterutregning Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til karakterkalkulatoren.' },
   { slug: 'sidebar-insights', title: 'Sidemeny Kursinnsikt Lenke', section: 'System', type: 'text', description: 'Navigasjonslenke til kursinnsikt.' },

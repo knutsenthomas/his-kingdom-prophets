@@ -5,7 +5,7 @@ import {
   Compass, Users, AlertTriangle, ClipboardList, BookOpen, 
   Award, Bell, Power, Menu, ChevronLeft, Sliders, Video, User,
   Languages, BarChart3, TrendingUp, Gift, HelpCircle, X, GraduationCap, Globe,
-  Book, CheckSquare
+  Book, CheckSquare, FileText
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
 import CmsText from '@/components/CmsText';
@@ -84,6 +84,7 @@ export default function TeacherLayout() {
     { slug: 'sidebar-lesson', fallback: 'Leksjon', path: '/student/lesson', icon: GraduationCap },
     { slug: 'sidebar-video', fallback: 'Klasserom / Video', path: '/student/video', icon: Video },
     { slug: 'sidebar-assignments', fallback: 'Oppgaver', path: '/student/assignments', icon: CheckSquare },
+    { slug: 'sidebar-notes', fallback: 'Mine notater', path: '/student/notes', icon: FileText },
     { slug: 'sidebar-community', fallback: 'Bønnefellesskap', path: '/student/chat', icon: Users },
     
     // Fakultetsverktøy
