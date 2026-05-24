@@ -12,7 +12,7 @@ export default function CmsText({
   
   const getCmsText = () => {
     if (language === 'en') {
-      return cmsContent?.[slug + '-en'] || cmsContent?.[slug] || fallback;
+      return cmsContent?.[slug + '-en'] || fallback;
     }
     return cmsContent?.[slug] || fallback;
   };
