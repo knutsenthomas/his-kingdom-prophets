@@ -265,7 +265,7 @@ export default function HkmChatWidget() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="hkm-chat-panel bg-white w-[360px] h-[500px] rounded-2xl shadow-2xl border border-outline-variant flex flex-col overflow-hidden mb-4"
+            className="hkm-chat-panel bg-white flex flex-col overflow-hidden fixed inset-0 w-full h-[100dvh] md:h-[500px] md:w-[360px] md:inset-auto md:bottom-24 md:right-6 md:rounded-2xl md:shadow-2xl md:border md:border-outline-variant z-[999] mb-0 pointer-events-auto"
           >
             {/* Header - Majestic Royal Purple (#561291) */}
             <div className="bg-[#561291] text-white px-5 py-4 flex items-center justify-between shadow-sm">
@@ -373,7 +373,7 @@ export default function HkmChatWidget() {
       {/* Floating Toggle Button - Circular SVG with Majestic Royal Purple */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="hkm-chat-toggle w-14 h-14 flex items-center justify-center text-white shadow-xl hover:shadow-2xl cursor-pointer animate-fade-in"
+        className={`hkm-chat-toggle w-14 h-14 flex items-center justify-center text-white shadow-xl hover:shadow-2xl cursor-pointer animate-fade-in pointer-events-auto ${isOpen ? 'hidden md:flex' : 'flex'}`}
         style={{
           borderRadius: '9999px'
         }}
