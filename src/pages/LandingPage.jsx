@@ -93,7 +93,8 @@ export default function LandingPage() {
               alt="His Kingdom Prophets Logo" 
               className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0" 
             />
-            <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
+            <span className="hidden sm:inline"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
+            <span className="inline sm:hidden"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
           </div>
           
           <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
