@@ -1776,8 +1776,14 @@ export default function BibleResourcesPage() {
             animate={{ opacity: 1, y: 0, x: '-50%', scale: 1 }}
             exit={{ opacity: 0, y: 50, x: '-50%', scale: 0.95 }}
             transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-            className="fixed bottom-8 left-1/2 z-[100] bg-white/95 backdrop-blur-md border border-slate-200/80 px-4 sm:px-6 py-3 rounded-2xl flex items-center justify-between gap-3 sm:gap-4 text-slate-800 shadow-2xl font-sans max-w-[92vw] sm:max-w-md w-max pointer-events-auto"
-            style={{ transform: 'translate3d(-50%, 0, 0)' }}
+            className="fixed bottom-8 z-[100] bg-white/95 backdrop-blur-md border border-slate-200/80 px-4 sm:px-6 py-3 rounded-2xl flex items-center justify-between gap-3 sm:gap-4 text-slate-800 shadow-2xl font-sans max-w-[92vw] sm:max-w-md w-max pointer-events-auto"
+            style={cardPosition.width > 0 ? {
+              left: `${cardPosition.left + cardPosition.width / 2}px`,
+              transform: 'translate3d(-50%, 0, 0)'
+            } : {
+              left: '50%',
+              transform: 'translate3d(-50%, 0, 0)'
+            }}
           >
             <div className="flex items-center gap-2 border-r border-slate-200/80 pr-2.5 sm:pr-3 shrink-0">
               <span className="h-6 w-6 rounded-full bg-[#1B4965] text-white flex items-center justify-center text-xs font-bold font-mono">
@@ -1791,7 +1797,7 @@ export default function BibleResourcesPage() {
             <div className="flex items-center gap-1.5 sm:gap-2.5">
               <button 
                 onClick={handleBulkCopy}
-                className="px-2.5 sm:px-3 py-1.5 text-[#1B4965] hover:bg-[#1B4965]/5 active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer text-[11px] sm:text-xs border border-transparent bg-transparent"
+                className="px-2.5 sm:px-3 py-1.5 text-[#1B4965] bg-[#1B4965]/5 hover:bg-[#1B4965]/10 border border-[#1B4965]/15 active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer text-[11px] sm:text-xs"
               >
                 <Copy size={13} className="text-[#1B4965]" />
                 <span>Kopier</span>
