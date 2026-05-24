@@ -356,7 +356,9 @@ export default function NotesPage() {
 
   useEffect(() => {
     fetchNotes();
-  }, [u  useEffect(() => {
+  }, [user?.uid]);
+
+  useEffect(() => {
     const handlePasteFromAI = (e) => {
       const textToPaste = e.detail?.text;
       if (!textToPaste) return;
@@ -385,7 +387,7 @@ export default function NotesPage() {
 
     window.addEventListener('hkm-paste-note', handlePasteFromAI);
     return () => window.removeEventListener('hkm-paste-note', handlePasteFromAI);
-  }, [isEditorOpen, selectedNote, editorText, language, showToast]); showToast]);
+  }, [isEditorOpen, selectedNote, editorText, language, showToast]);
 
   // Robust Markdown to HTML Converter
   const parseMarkdownToHtml = (markdownText) => {
