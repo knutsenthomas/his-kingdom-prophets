@@ -145,14 +145,6 @@ export default function TeacherDashboard() {
           <span className="text-xs text-on-surface-variant font-semibold bg-[#eaeef2] px-3 py-1.5 rounded-full border border-outline-variant/30 font-mono">
             <CmsText slug="teacher-academic-year-label" fallback="Studieår" />: 2026
           </span>
-          <button
-            onClick={() => navigate('/admin/cms')}
-            className="text-xs text-white font-bold bg-[#c5a059] hover:bg-[#b08b45] active:scale-95 transition-all px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1"
-            title="Gå til CMS-dashbord"
-          >
-            <Sparkles size={12} />
-            HKM Headless CMS
-          </button>
         </div>
       </div>
 
