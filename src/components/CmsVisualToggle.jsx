@@ -2,11 +2,13 @@ import React from 'react';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Edit3, Check, Settings, X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function CmsVisualToggle() {
   const { user, isAdminEditing, setIsAdminEditing, showToast } = useApp();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isNotesPage = location.pathname === '/student/notes';
   const [isMinimized, setIsMinimized] = React.useState(() => {
     return localStorage.getItem('hkm-cms-minimized') === 'true';
   });
@@ -36,7 +38,7 @@ export default function CmsVisualToggle() {
   };
 
   return (
-    <div className="cms-visual-toggle-container hidden md:block fixed bottom-[160px] right-6 z-[90] font-sans pointer-events-auto">
+    <div className={`cms-visual-toggle-container hidden md:block fixed ${isNotesPage ? 'bottom-[160px]' : 'bottom-[88px]'} right-6 z-[90] font-sans pointer-events-auto`}>
       <AnimatePresence mode="wait">
         {isMinimized ? (
           <motion.button
