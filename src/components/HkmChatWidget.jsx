@@ -317,7 +317,24 @@ export default function HkmChatWidget() {
                     }`}>
                       {renderRichText(msg.text, msg.sender === 'assistant')}
                     </div>
-                    <span className="text-[10px] text-outline mt-1 px-1 font-mono">{msg.time}</span>
+                    
+                    <div className="flex items-center gap-2 mt-1 px-1 text-[10px] text-outline select-none font-semibold">
+                      <span className="font-mono">{msg.time}</span>
+                      {msg.sender === 'assistant' && (
+                        <>
+                          <span>•</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              window.dispatchEvent(new CustomEvent('hkm-paste-note', { detail: { text: msg.text } }));
+                            }}
+                            className="text-[#561291] hover:text-[#3c096c] font-extrabold flex items-center gap-0.5 transition-colors"
+                          >
+                            ➕ Lim inn i notat
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

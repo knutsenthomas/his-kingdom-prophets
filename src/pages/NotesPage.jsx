@@ -358,6 +358,59 @@ export default function NotesPage() {
     fetchNotes();
   }, [user]);
 
+  useEffect(() => {
+    const handlePasteFromAI = (e) => {
+      const textToPaste = e.detail?.text;
+      if (!textToPaste) return;
+
+      if (!isEditorOpen || !selectedNote) {
+        showToast(language === 'en' ? "Open a note first to paste into it." : "Åpne et notat og start redigering først for å lime inn.");
+        return;
+      }
+
+      // Convert Markdown/plain text paragraphs from AI into clean formatted HTML paragraphs
+      const htmlParagraphs = textToPaste
+        .split('\n')
+        .map(line => {
+          const trimmed = line.trim();
+          if (!trimmed) return '<p><br/></p>';
+          if (trimmed.startsWith('### ')) {
+            return `<h2>${trimmed.slice(4)}</h2>`;
+          }
+          if (trimmed.startsWith('• ') || trimmed.startsWith('- ')) {
+            return `<li>${trimmed.slice(2)}</li>`;
+          }
+          if (/^\d+\.\s/.test(trimmed)) {
+            const content = trimmed.replace(/^\d+\.\s/, '');
+            return `<li>${content}</li>`;
+          }
+          // Wrap bolding ** into <strong> and * into <em>
+          let formattedLine = trimmed
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>');
+          return `<p>${formattedLine}</p>`;
+        })
+        .join('');
+
+      // Insert at current cursor position or append to the end
+      if (editorRef.current) {
+        const activeHTML = editorRef.current.innerHTML;
+        // Append with spacing
+        const newHTML = activeHTML + `<br/>` + htmlParagraphs;
+        editorRef.current.innerHTML = newHTML;
+        handleTextChange(newHTML);
+      } else {
+        const newText = editorText + '\n\n' + textToPaste;
+        handleTextChange(newText);
+      }
+      
+      showToast(language === 'en' ? "Inserted into active note!" : "Lagt til i det aktive notatet!");
+    };
+
+    window.addEventListener('hkm-paste-note', handlePasteFromAI);
+    return () => window.removeEventListener('hkm-paste-note', handlePasteFromAI);
+  }, [isEditorOpen, selectedNote, editorText, language, showToast]);
+
   // Clean HTML helper for text snippets (strips HTML tags and gets clean text)
   const stripHtml = (html) => {
     if (!html) return '';
