@@ -141,14 +141,14 @@ export default function VideoView() {
           {/* Cinematic Video Player */}
           <div ref={playerRef} className="relative bg-black rounded-2xl overflow-hidden aspect-video shadow-xl group border border-outline-variant/10">
             {/* Thumbnail / Video Stream Mock */}
-            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-tr from-slate-900 via-slate-800 to-primary">
-              <div className="text-center text-white/40 font-mono space-y-3 relative z-10 px-4">
-                <p className="text-xs uppercase tracking-widest font-bold">{classroomCourse?.title}</p>
-                <h3 className="font-serif text-lg md:text-xl font-bold text-white/80">{classroomModule?.title}</h3>
-                <p className="text-[10px] text-white/60">Foreleser: {classroomCourse?.instructor}</p>
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-tr from-slate-950 via-[#240046] to-[#561291]">
+              <div className="text-center bg-[#240046]/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 max-w-md space-y-3.5 relative z-20 mx-4 shadow-2xl animate-fade-in">
+                <p className="text-[10px] sm:text-xs uppercase tracking-widest font-bold text-[#dec2ef]">{classroomCourse?.title}</p>
+                <h3 className="font-serif text-lg sm:text-2.5xl font-extrabold text-white leading-snug tracking-tight">{classroomModule?.title}</h3>
+                <p className="text-xs text-white/80 font-semibold">Foreleser: {classroomCourse?.instructor}</p>
               </div>
-              {/* Glowing background scripture elements */}
-              <div className="absolute inset-0 opacity-10 bg-cover font-serif text-white flex items-center justify-center text-2xl whitespace-pre-wrap select-none p-12">
+              {/* Glowing background scripture elements - extremely subtle watermark */}
+              <div className="absolute inset-0 opacity-[0.03] font-serif text-white flex items-center justify-center text-3xl md:text-4xl whitespace-pre-wrap select-none p-12 pointer-events-none z-10">
                 {"Apostlenes gjerninger 2:17\nÅpenbaringen 1:1\n1. Kor 14"}
               </div>
             </div>
