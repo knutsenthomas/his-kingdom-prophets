@@ -423,6 +423,7 @@ export default function BibleView() {
   const [testamentFilter, setTestamentFilter] = useState('all'); // all, GT, NT
   const topRef = useRef(null);
   const readerRef = useRef(null);
+  const [previousReference, setPreviousReference] = useState(null);
 
   // Study Bible & Commentary States
   const [showStudyPanel, setShowStudyPanel] = useState(false);
@@ -615,6 +616,7 @@ export default function BibleView() {
   }, [selectedBook, selectedChapter]);
 
   const toggleVerseSelection = (verseNum) => {
+    setHighlightedVerse(verseNum); // Sett denne som aktivt fokusvers for studier og kryssreferanser
     setSelectedVerses(prev => {
       if (prev.includes(verseNum)) {
         return prev.filter(num => num !== verseNum);
@@ -749,6 +751,14 @@ export default function BibleView() {
     if (parsedRef) {
       const foundBook = findBibleBook(parsedRef.bookStr);
       if (foundBook) {
+        // Lagre nåværende posisjon (inkludert aktivt vers) før vi navigerer
+        const sourceVerse = highlightedVerse || (selectedVerses.length > 0 ? selectedVerses[selectedVerses.length - 1] : null);
+        setPreviousReference({
+          book: selectedBook,
+          chapter: selectedChapter,
+          verse: sourceVerse
+        });
+
         setSelectedBook(foundBook);
         const clampedChapter = Math.max(1, Math.min(parsedRef.chapter, foundBook.chapters));
         setSelectedChapter(clampedChapter);
@@ -771,6 +781,23 @@ export default function BibleView() {
       }
     }
     return false;
+  };
+
+  const handleGoBackToReference = () => {
+    if (!previousReference) return;
+    setSelectedBook(previousReference.book);
+    setSelectedChapter(previousReference.chapter);
+    setHighlightedVerse(previousReference.verse);
+    
+    showToast(`Returnerte til ${previousReference.book.nor} ${previousReference.chapter}${previousReference.verse ? `:${previousReference.verse}` : ''}!`);
+      
+    setTimeout(() => {
+      if (readerRef.current) {
+        readerRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 150);
+    
+    setPreviousReference(null);
   };
 
   const handleSearch = async (e) => {
@@ -1114,6 +1141,21 @@ export default function BibleView() {
                 </button>
               </div>
             </div>
+
+            {/* Back to previous reference button */}
+            {previousReference && (
+              <div className="mb-4 flex animate-fade-in justify-start select-none">
+                <button
+                  onClick={handleGoBackToReference}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-primary to-[#2c6e91] hover:from-[#153b52] hover:to-[#225672] text-white shadow-md shadow-primary/10 rounded-full text-xs font-extrabold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] cursor-pointer"
+                >
+                  <ArrowLeft size={12} className="stroke-[3]" />
+                  <span>
+                    Tilbake til {previousReference.book.nor} {previousReference.chapter}{previousReference.verse ? `:${previousReference.verse}` : ''}
+                  </span>
+                </button>
+              </div>
+            )}
 
             {/* Reading body */}
             <div className="flex-grow relative">
