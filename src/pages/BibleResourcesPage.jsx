@@ -440,10 +440,10 @@ export default function BibleResourcesPage() {
       <section className="border-b border-slate-200 bg-white sticky top-20 z-30 shadow-sm">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 flex space-x-8 overflow-x-auto whitespace-nowrap scrollbar-none h-16 items-center">
           {[
-            { id: 'bible', fallback: '📖 Interaktiv studiebibel', icon: BookOpen },
-            { id: 'curriculums', fallback: '📚 Fagplaner og studiehefter', icon: BookText },
-            { id: 'video', fallback: '🎙️ Lyd- og videoundervisning', icon: Video },
-            { id: 'fasting', fallback: '📜 Fastemanualer og bønneguider', icon: Flame }
+            { id: 'bible', fallback: 'Interaktiv studiebibel', icon: BookOpen },
+            { id: 'curriculums', fallback: 'Fagplaner og studiehefter', icon: BookText },
+            { id: 'video', fallback: 'Lyd- og videoundervisning', icon: Video },
+            { id: 'fasting', fallback: 'Fastemanualer og bønneguider', icon: Flame }
           ].map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
