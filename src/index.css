@@ -75,24 +75,7 @@ button {
   box-shadow: 0 20px 40px rgba(86, 18, 145, 0.08);
 }
 
-/* Custom premium scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
 
-::-webkit-scrollbar-track {
-  background: #f5eefb;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #dec2ef;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #561291;
-}
 
 /* Custom animations */
 @keyframes float {
