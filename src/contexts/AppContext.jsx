@@ -1609,10 +1609,12 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     try {
       if (user) {
+        // Always save user to localStorage when we have one
         localStorage.setItem('hkm-current-user', JSON.stringify(user));
-      } else {
-        localStorage.removeItem('hkm-current-user');
       }
+      // Do NOT remove localStorage when user=null — that is handled only on explicit logout.
+      // Removing here causes CmsVisualToggle to disappear on public pages where
+      // Firebase onAuthStateChanged resolves to null before auth finishes loading.
     } catch (e) {
       console.error("Feil ved lagring av bruker i localStorage:", e);
     }
@@ -1988,6 +1990,13 @@ export const AppProvider = ({ children }) => {
       await signOut(auth);
     } catch (err) {
       console.error("Feil under utlogging:", err);
+    }
+    // Explicitly clear localStorage on logout (the useEffect no longer does this automatically
+    // to prevent clearing admin identity when visiting public pages)
+    try {
+      localStorage.removeItem('hkm-current-user');
+    } catch (e) {
+      console.warn("Klarte ikke fjerne bruker fra localStorage:", e);
     }
     changePersona('none');
   };
