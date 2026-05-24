@@ -13,15 +13,29 @@ export default function CmsVisualToggle() {
     return localStorage.getItem('hkm-cms-minimized') === 'true';
   });
 
-  // Only display this floating control bar if logged in user is an Administrator or Superadmin
+  // Check admin status from both AppContext user AND localStorage (needed for public pages)
+  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no'];
   const cleanEmail = user?.email?.toLowerCase();
+
+  // Parse localStorage user safely for public-page detection
+  const localStorageUser = (() => {
+    try {
+      const raw = localStorage.getItem('hkm-current-user');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  })();
+  const localEmail = localStorageUser?.email?.toLowerCase();
+  const localRole = localStorageUser?.role;
+
   const isAdminUser = 
     user?.role === 'admin' || 
     user?.role === 'superadmin' || 
-    ['knutsenthomas@gmail.com', 'thomas@tk-design.no'].includes(cleanEmail) ||
-    localStorage.getItem('hkm-current-user')?.includes('admin') ||
-    localStorage.getItem('hkm-current-user')?.includes('knutsenthomas@gmail.com') ||
-    localStorage.getItem('hkm-current-user')?.includes('thomas@tk-design.no');
+    ADMIN_EMAILS.includes(cleanEmail) ||
+    localRole === 'admin' ||
+    localRole === 'superadmin' ||
+    ADMIN_EMAILS.includes(localEmail);
 
   if (!isAdminUser) {
     return null;
@@ -38,7 +52,7 @@ export default function CmsVisualToggle() {
   };
 
   return (
-    <div className={`cms-visual-toggle-container hidden md:block fixed ${isNotesPage ? 'bottom-[160px]' : 'bottom-[88px]'} right-6 z-[90] font-sans pointer-events-auto`}>
+    <div className={`cms-visual-toggle-container fixed ${isNotesPage ? 'bottom-[160px]' : 'bottom-[88px]'} right-4 sm:right-6 z-[90] font-sans pointer-events-auto`}>
       <AnimatePresence mode="wait">
         {isMinimized ? (
           <motion.button
