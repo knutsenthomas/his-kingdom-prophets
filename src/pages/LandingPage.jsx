@@ -19,7 +19,7 @@ export default function LandingPage() {
     { slug: 'landing-nav-programs', fallback: 'Studielinjer', href: '#programs', id: 'programs' },
     { slug: 'landing-nav-faculty', fallback: 'Mentorer', href: '#faculty', id: 'faculty' },
     { slug: 'landing-nav-resources', fallback: 'Bibelressurser', href: '/bible-resources', id: 'research' },
-    { slug: 'landing-nav-admissions', fallback: 'Søk Opptak', href: '#admissions', id: 'admissions' }
+    { slug: 'landing-nav-admissions', fallback: 'Søk Opptak', href: '/admission', id: 'admissions' }
   ];
 
   const handleNavClick = (e, item) => {
@@ -144,7 +144,7 @@ export default function LandingPage() {
                     <CmsText slug="landing-btn-login" fallback="Logg inn" />
                   </button>
                   <button 
-                    onClick={() => navigate('/login')} 
+                    onClick={() => navigate('/admission')} 
                     className="px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-sm shrink-0"
                   >
                     <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
@@ -173,7 +173,7 @@ export default function LandingPage() {
                 </button>
               ) : (
                 <button 
-                  onClick={() => navigate('/login')} 
+                  onClick={() => navigate('/admission')} 
                   className="px-2.5 sm:px-4 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-[10px] min-[360px]:text-xs shrink-0"
                 >
                   <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
@@ -283,7 +283,7 @@ export default function LandingPage() {
                       <CmsText slug="landing-btn-login" fallback="Logg inn" />
                     </button>
                     <button
-                      onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
+                      onClick={() => { navigate('/admission'); setIsMobileMenuOpen(false); }}
                       className="w-full py-3 bg-primary text-white font-bold rounded-xl text-xs transition-all active:scale-[0.98] shadow-md"
                     >
                       <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
@@ -543,7 +543,7 @@ export default function LandingPage() {
             <CmsText slug="landing-cta-desc" fallback="Bli en del av et levende og solid læringsmiljø dedikert til bibelundervisning og åndelig utrustning." as="p" className="text-base text-on-surface-variant mb-10 max-w-xl mx-auto" />
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <button 
-                onClick={() => navigate('/login')} 
+                onClick={() => navigate('/admission')} 
                 className="w-full sm:w-auto px-8 py-4 bg-primary text-on-primary font-semibold rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
               >
                 <CmsText slug="landing-cta-btn-primary" fallback="Søk Opptak 2026" />

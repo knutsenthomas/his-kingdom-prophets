@@ -1,0 +1,655 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useApp } from '@/contexts/AppContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Sparkles, BookOpen, CreditCard, ChevronRight, Check, 
+  HelpCircle, ArrowLeft, Send, Award, Calendar, FileText, CheckCircle2 
+} from 'lucide-react';
+import logo from '@/assets/logo.png';
+
+export default function AdmissionPage() {
+  const navigate = useNavigate();
+  const { language, showToast } = useApp();
+
+  // Multi-step Application Form States
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    program: 'prop101',
+    paymentPlan: 'semester',
+    motivation: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [activePlan, setActivePlan] = useState('semester'); // semester, monthly
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.phone) {
+      showToast(language === 'en' ? "Please fill out all required fields." : "Vennligst fyll ut alle påkrevde felt.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    // Simulate API registration / Firestore seed
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      showToast(language === 'en' ? "Application submitted successfully!" : "Søknaden din har blitt sendt inn!");
+    }, 1500);
+  };
+
+  const programs = [
+    {
+      id: "prop101",
+      code: "PROP 101",
+      title: language === 'en' ? "Introduction to Prophetic Ministry" : "Innføring i den Profetiske Tjeneste",
+      duration: language === 'en' ? "1 Semester (8 Modules)" : "1 Semester (8 Moduler)",
+      credits: "15 STP",
+      priceSemester: "3 990,-",
+      priceMonthly: "790,-",
+      features: language === 'en' ? [
+        "Biblical foundations of prophecy",
+        "Hearing and discerning God's voice",
+        "Prophetic character and ethics",
+        "Personal 1-to-1 mentoring sessions"
+      ] : [
+        "Bibelhistorie og profetiens røtter",
+        "Å høre Guds stemme og skjelne ånder",
+        "Profetisk karakter og etiske retningslinjer",
+        "Personlig 1-til-1 mentorsamtale"
+      ]
+    },
+    {
+      id: "bible301",
+      code: "BIBLE 301",
+      title: language === 'en' ? "Advanced Hermeneutics & Exegesis" : "Avansert Hermeneutikk og Tolkning",
+      duration: language === 'en' ? "1 Semester (8 Modules)" : "1 Semester (8 Moduler)",
+      credits: "15 STP",
+      priceSemester: "4 490,-",
+      priceMonthly: "890,-",
+      features: language === 'en' ? [
+        "Historical-grammatical exegesis",
+        "Covenant theology & typologies",
+        "Prophetic symbols in Revelation",
+        "Hermeneutical study guide workbook"
+      ] : [
+        "Historisk-grammatisk eksegese",
+        "Paktsteologi og skyggebilder",
+        "Johannes' åpenbaring og symbolspråk",
+        "Hermeneutisk arbeidsbok & ressurser"
+      ]
+    },
+    {
+      id: "lead201",
+      code: "LEAD 201",
+      title: language === 'en' ? "Multicultural Leadership & Planting" : "Flerkulturelt Lederskap & Misjon",
+      duration: language === 'en' ? "1 Semester (8 Modules)" : "1 Semester (8 Moduler)",
+      credits: "15 STP",
+      priceSemester: "3 990,-",
+      priceMonthly: "790,-",
+      features: language === 'en' ? [
+        "Apostolic ministry and structures",
+        "Strategic church planting",
+        "Cross-cultural communication",
+        "Practical leadership mentoring"
+      ] : [
+        "Apostolisk tjeneste og nettverk",
+        "Strategisk menighetsplanting",
+        "Kulturell kontekstualisering",
+        "Praktisk mentorskap for ledere"
+      ]
+    }
+  ];
+
+  return (
+    <div className="bg-[#faf7fc] text-[#240046] font-sans min-h-screen">
+      
+      {/* Mini Brand Header Navigation */}
+      <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-[#dec2ef] px-6 py-4 shadow-sm select-none">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <button 
+            onClick={() => navigate('/')} 
+            className="flex items-center gap-2.5 font-serif font-extrabold text-primary text-base transition-all active:scale-95"
+          >
+            <img src={logo} alt="Logo" className="w-8 h-8 object-contain shrink-0" />
+            <span>His Kingdom Prophets</span>
+          </button>
+          
+          <button 
+            onClick={() => navigate('/')} 
+            className="px-4 py-2 hover:bg-[#dec2ef]/20 rounded-xl text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1 transition-all"
+          >
+            <ArrowLeft size={14} />
+            <span>{language === 'en' ? "Back to Home" : "Gå tilbake"}</span>
+          </button>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-primary via-[#561291] to-[#240046] text-white py-16 px-6 overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-white/5 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-primary-container/10 blur-3xl pointer-events-none" />
+
+        <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-on-primary-container font-semibold text-[10px] sm:text-xs uppercase tracking-widest border border-white/20">
+            <Award size={13} className="text-secondary-fixed-dim" />
+            {language === 'en' ? "Admission Autumn 2026" : "Søknad og Opptak Høst 2026"}
+          </span>
+
+          <h1 className="font-serif text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight max-w-2xl mx-auto">
+            {language === 'en' ? "Shape Your Calling" : "Bli utrustet til din gudgitte tjeneste"}
+          </h1>
+
+          <p className="text-xs sm:text-sm text-[#e0aaff] font-semibold max-w-xl mx-auto leading-relaxed">
+            {language === 'en'
+              ? "Choose your prophetic studyline, learn about payment plans, and submit your admission form to gain access to our immersive digital platform."
+              : "Velg din studielinje, velg en finansieringsplan som passer deg, og send inn søknad i dag. Opplev et moderne og solid teologisk utdanningsforløp."}
+          </p>
+
+          <div className="pt-4">
+            <a 
+              href="#apply-form"
+              className="px-6 py-3 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-xs font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 inline-flex items-center gap-2"
+            >
+              <span>{language === 'en' ? "Apply for Admission Now" : "Send Søknad Nå"}</span>
+              <ChevronRight size={14} />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* MAIN CONTAINER */}
+      <main className="max-w-6xl mx-auto px-6 py-12 space-y-16">
+        
+        {/* SECTION 1: PROGRAMS GRID */}
+        <section className="space-y-8">
+          <div className="text-center max-w-xl mx-auto space-y-2">
+            <h2 className="font-serif text-2xl font-bold text-primary">
+              {language === 'en' ? "Our Studylines & Subjects" : "Våre Studielinjer og Fag"}
+            </h2>
+            <p className="text-xs text-on-surface-variant font-semibold">
+              {language === 'en' 
+                ? "Every studyline consists of 8 modular steps combining deep theological curriculum with 1-to-1 faculty coaching."
+                : "Hvert fag består av 8 trinnvise moduler som integrerer grundig teologi med personlig mentorskap."}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {programs.map(prog => (
+              <div 
+                key={prog.id}
+                className="bg-white border border-[#dec2ef]/55 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-primary/20 transition-all flex flex-col justify-between"
+              >
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-bold px-2 py-0.5 bg-primary/5 text-primary border border-primary/10 rounded-md">
+                      {prog.code}
+                    </span>
+                    <span className="text-[10px] font-bold text-[#c5a059] uppercase tracking-wider">
+                      {prog.credits}
+                    </span>
+                  </div>
+
+                  <h3 className="font-serif text-lg font-bold text-primary leading-snug">
+                    {prog.title}
+                  </h3>
+
+                  <div className="flex items-center gap-1.5 text-xs text-on-surface-variant font-semibold">
+                    <Calendar size={14} className="text-primary/70" />
+                    <span>{prog.duration}</span>
+                  </div>
+
+                  <div className="w-full h-[1px] bg-slate-100 my-4" />
+
+                  <ul className="space-y-2.5">
+                    {prog.features.map((feat, i) => (
+                      <li key={i} className="flex items-start gap-2 text-xs text-on-surface-variant leading-relaxed">
+                        <Check className="stroke-[3] text-green-600 shrink-0 w-3.5 h-3.5 mt-0.5" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="pt-6 mt-6 border-t border-slate-100 flex justify-between items-end">
+                  <div className="space-y-0.5">
+                    <span className="text-[9px] uppercase font-bold text-outline block">
+                      {language === 'en' ? "Tuition Fee" : "Semesteravgift"}
+                    </span>
+                    <span className="font-serif text-lg font-extrabold text-primary">
+                      {prog.priceSemester}
+                    </span>
+                  </div>
+                  
+                  <a 
+                    href="#apply-form"
+                    onClick={() => setFormData(prev => ({ ...prev, program: prog.id }))}
+                    className="text-xs font-bold text-primary hover:text-secondary flex items-center gap-0.5"
+                  >
+                    <span>{language === 'en' ? "Select" : "Velg linje"}</span>
+                    <ChevronRight size={13} />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* SECTION 2: TUITION PAYMENT DETAILS */}
+        <section className="bg-white border border-[#dec2ef]/55 rounded-3xl p-8 shadow-sm">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Payment Description */}
+            <div className="space-y-6">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-primary font-bold text-[10px] uppercase tracking-wider">
+                <CreditCard size={12} />
+                {language === 'en' ? "Flexible Tuition & Payment" : "Fleksibel Betaling og Priser"}
+              </span>
+
+              <h2 className="font-serif text-2xl font-bold text-primary leading-tight">
+                {language === 'en' ? "Invest in your ministry with zero financial stress" : "Invester i din fremtid uten økonomisk stress"}
+              </h2>
+
+              <p className="text-xs text-on-surface-variant font-semibold leading-relaxed">
+                {language === 'en' 
+                  ? "At His Kingdom Prophets, we want our theological ministry programs to be accessible. We offer transparent payment paths modeled after professional university schedules. Choose standard semester billing or split tuition over convenient interest-free monthly installments."
+                  : "Hos His Kingdom Prophets ønsker vi at den profetiske utdanningen skal være tilgjengelig for alle. Vi tilbyr ryddige og forutsigbare betalingsordninger tilpasset din situasjon. Du kan betale hele semesteravgiften under ett, eller fordele den over rentefrie månedlige rater."}
+              </p>
+
+              <div className="space-y-3.5 pt-2">
+                <div className="flex items-start gap-3">
+                  <div className="p-1 bg-green-50 text-green-600 rounded-full shrink-0 mt-0.5">
+                    <Check size={14} className="stroke-[3]" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-primary">{language === 'en' ? "Interest-Free Installments" : "100 % rentefri delbetaling"}</h4>
+                    <p className="text-[11px] text-outline mt-0.5">{language === 'en' ? "Split the semester rate into 5 monthly billing intervals." : "Semesteravgiften kan fordeles over 5 månedlige rater gjennom semesteret."}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="p-1 bg-green-50 text-green-600 rounded-full shrink-0 mt-0.5">
+                    <Check size={14} className="stroke-[3]" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-primary">{language === 'en' ? "All-Inclusive Tuition" : "Alt inkludert i avgiften"}</h4>
+                    <p className="text-[11px] text-outline mt-0.5">{language === 'en' ? "Covers workbook, study guides, 1-to-1 mentoring, portal workbook access, and video archive access." : "Semesteravgiften dekker studiehefter, 1-til-1 samtaler, Zoom-møter, full tilgang til studentportalen og videoarkivet."}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="p-1 bg-green-50 text-green-600 rounded-full shrink-0 mt-0.5">
+                    <Check size={14} className="stroke-[3]" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-primary">{language === 'en' ? "Scholarships & Partner Discounts" : "Stipend og partner-rabatter"}</h4>
+                    <p className="text-[11px] text-outline mt-0.5">{language === 'en' ? "Enquire about discounts for students, spouses, active church planters, or missionary families." : "Ektepar-rabatt, studentrabatt og særskilte stipendordninger for aktive menighetsplantere og misjonærfamilier."}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Symmetrical Pricing Card Comparison */}
+            <div className="bg-[#faf7fc] border border-slate-200/60 rounded-2xl p-6 sm:p-8 space-y-6">
+              <div className="flex bg-white p-1 rounded-xl shadow-sm select-none border border-slate-100">
+                <button
+                  onClick={() => setActivePlan('semester')}
+                  className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
+                    activePlan === 'semester'
+                      ? 'bg-primary text-white shadow-sm'
+                      : 'text-outline hover:text-primary'
+                  }`}
+                >
+                  {language === 'en' ? "Semester Fee" : "Semesteravgift"}
+                </button>
+                <button
+                  onClick={() => setActivePlan('monthly')}
+                  className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
+                    activePlan === 'monthly'
+                      ? 'bg-primary text-white shadow-sm'
+                      : 'text-outline hover:text-primary'
+                  }`}
+                >
+                  {language === 'en' ? "Monthly Split" : "Månedsbetaling"}
+                </button>
+              </div>
+
+              <div className="text-center space-y-3">
+                <span className="text-[10px] font-bold text-outline uppercase tracking-widest">
+                  {activePlan === 'semester' ? (language === 'en' ? "One-time payment per semester" : "Enkeltfaktura per semester") : (language === 'en' ? "Interest-free rate / month" : "Rentefri delbetaling / måned")}
+                </span>
+                
+                <div className="font-serif text-3xl sm:text-5xl font-extrabold text-primary">
+                  {activePlan === 'semester' ? "3 990,- NOK" : "790,- NOK"}
+                </div>
+                
+                <p className="text-[11px] text-on-surface-variant font-semibold">
+                  {activePlan === 'semester'
+                    ? (language === 'en' ? "*Price for PROP 101 / LEAD 201. BIBLE 301 is 4 490,- NOK" : "*Gjelder PROP 101 og LEAD 201. BIBLE 301 koster 4 490,-")
+                    : (language === 'en' ? "*5 monthly rates per semester. Zero hidden credit fees." : "*5 månedlige avdrag per semester. Ingen etableringsgebyr eller renter.")
+                  }
+                </p>
+              </div>
+
+              <div className="w-full h-[1px] bg-slate-200/50" />
+
+              <div className="space-y-2.5 text-xs text-on-surface-variant font-semibold font-sans">
+                <div className="flex justify-between items-center">
+                  <span>{language === 'en' ? "Enrollment & Digital Access" : "Innmeldingsavgift & portal"}</span>
+                  <span className="text-green-600 font-bold">0,- NOK</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span>{language === 'en' ? "Assigned Mentor Coach" : "Tildelt Personlig Mentor"}</span>
+                  <span className="text-primary font-bold">{language === 'en' ? "Included" : "Inkludert"}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span>{language === 'en' ? "100% Digital Portals" : "100 % Digitalt studiehefte"}</span>
+                  <span className="text-primary font-bold">{language === 'en' ? "Included" : "Inkludert"}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span>{language === 'en' ? "Spouse Partner Discount" : "Ektefelle/Familierabatt"}</span>
+                  <span className="text-secondary font-bold">-25%</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* SECTION 3: STEP BY STEP APPLICATION PROCESS */}
+        <section className="space-y-8">
+          <div className="text-center max-w-xl mx-auto space-y-2">
+            <h2 className="font-serif text-2xl font-bold text-primary">
+              {language === 'en' ? "How the Admission Process Works" : "Slik fungerer søknadsprosessen"}
+            </h2>
+            <p className="text-xs text-on-surface-variant font-semibold">
+              {language === 'en' 
+                ? "Four simple steps to get accepted and start your prophetic ministry training."
+                : "Fire enkle steg fra innsendt søknad til godkjent studieplass og tilgang."}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+            {[
+              {
+                step: "01",
+                title: language === 'en' ? "Submit Form" : "Send søknad",
+                desc: language === 'en' ? "Fill out the admission form below with your motivation and contact info." : "Fyll ut det enkle søknadsskjemaet nedenfor på under 3 minutter."
+              },
+              {
+                step: "02",
+                title: language === 'en' ? "Admission Interview" : "Søknadssamtale",
+                desc: language === 'en' ? "We will schedule a brief Zoom or phone call to align callings and course goals." : "Vi tar en kort og uforpliktende samtale på telefon eller Zoom for å bli kjent."
+              },
+              {
+                step: "03",
+                title: language === 'en' ? "Tuition Setup" : "Betaling & Faktura",
+                desc: language === 'en' ? "Select your standard billing plan. Spouses enjoy automatic 25% off." : "Velg din foretrukne betalingsordning (semester eller månedlig delbetaling)."
+              },
+              {
+                step: "04",
+                title: language === 'en' ? "Instant Portal Access" : "Portal-tilgang",
+                desc: language === 'en' ? "Get your login, workbook, study materials, and PWA mobile portal active instantly." : "Du får tilsendt brukerkonto og kan umiddelbart logge inn i portalen og starte studiet!"
+              }
+            ].map((stepObj, i) => (
+              <div 
+                key={i}
+                className="bg-white border border-[#dec2ef]/45 p-6 rounded-2xl relative shadow-sm hover:shadow transition-all space-y-3"
+              >
+                <span className="font-serif text-3xl font-extrabold text-[#c5a059]/15 block">
+                  {stepObj.step}
+                </span>
+                <h4 className="font-serif text-sm font-bold text-primary">
+                  {stepObj.title}
+                </h4>
+                <p className="text-[11px] text-outline leading-relaxed font-semibold">
+                  {stepObj.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* SECTION 4: INTERACTIVE APPLICATION FORM */}
+        <section id="apply-form" className="bg-white border border-[#dec2ef]/65 rounded-3xl p-8 shadow-md max-w-2xl mx-auto scroll-mt-24">
+          <AnimatePresence mode="wait">
+            {!isSubmitted ? (
+              <motion.form 
+                key="form"
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onSubmit={handleFormSubmit}
+                className="space-y-6"
+              >
+                <div className="text-center space-y-2">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-2">
+                    <FileText size={18} />
+                  </div>
+                  <h3 className="font-serif text-xl font-bold text-primary">
+                    {language === 'en' ? "Søk Studieplass Nå" : "Søknad om opptak"}
+                  </h3>
+                  <p className="text-[11px] text-on-surface-variant font-semibold">
+                    {language === 'en' 
+                      ? "Enter your details. We will process your admission path within 24 hours."
+                      : "Fyll inn opplysningene dine under. Vi behandler søknaden din innen 24 timer."}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Name Input */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
+                      {language === 'en' ? "Full Name *" : "Fullt navn *"}
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      placeholder="F.eks. Thomas Knutsen"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none placeholder:text-outline font-semibold transition-all"
+                    />
+                  </div>
+
+                  {/* Email Input */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
+                      {language === 'en' ? "Email Address *" : "E-postadresse *"}
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      required
+                      placeholder="thomas@eksempel.no"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none placeholder:text-outline font-semibold transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Phone Input */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
+                      {language === 'en' ? "Phone Number *" : "Mobiltelefon *"}
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      required
+                      placeholder="8-sifret mobilnummer"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none placeholder:text-outline font-semibold transition-all"
+                    />
+                  </div>
+
+                  {/* Program Select */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
+                      {language === 'en' ? "Choose Studyline" : "Velg studielinje"}
+                    </label>
+                    <select
+                      name="program"
+                      value={formData.program}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none font-semibold transition-all font-sans"
+                    >
+                      {programs.map(p => (
+                        <option key={p.id} value={p.id}>
+                          {p.code} - {p.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Billing Plan Segment */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-outline block">
+                    {language === 'en' ? "Select Billing Plan" : "Foretrukket betalingsplan"}
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <label className={`border rounded-xl p-3 flex flex-col justify-center items-center cursor-pointer transition-all active:scale-[0.98] ${
+                      formData.paymentPlan === 'semester'
+                        ? 'border-primary bg-primary/5 text-primary'
+                        : 'border-slate-200 hover:border-primary/30 text-on-surface-variant'
+                    }`}>
+                      <input
+                        type="radio"
+                        name="paymentPlan"
+                        value="semester"
+                        checked={formData.paymentPlan === 'semester'}
+                        onChange={handleInputChange}
+                        className="sr-only"
+                      />
+                      <span className="text-xs font-bold block">{language === 'en' ? "Semester Bill" : "Semesterfaktura"}</span>
+                      <span className="text-[10px] text-outline mt-0.5">3 990,- per semester</span>
+                    </label>
+
+                    <label className={`border rounded-xl p-3 flex flex-col justify-center items-center cursor-pointer transition-all active:scale-[0.98] ${
+                      formData.paymentPlan === 'monthly'
+                        ? 'border-primary bg-primary/5 text-primary'
+                        : 'border-slate-200 hover:border-primary/30 text-on-surface-variant'
+                    }`}>
+                      <input
+                        type="radio"
+                        name="paymentPlan"
+                        value="monthly"
+                        checked={formData.paymentPlan === 'monthly'}
+                        onChange={handleInputChange}
+                        className="sr-only"
+                      />
+                      <span className="text-xs font-bold block">{language === 'en' ? "Monthly Split" : "Månedsbetaling"}</span>
+                      <span className="text-[10px] text-outline mt-0.5">790,- pr. måned</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Motivation Textarea */}
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
+                    {language === 'en' ? "Motivation / Vision (Optional)" : "Kort om din motivasjon eller ditt kall (Valgfritt)"}
+                  </label>
+                  <textarea
+                    name="motivation"
+                    rows={4}
+                    placeholder={language === 'en' ? "Briefly share your heart or what you hope to receive..." : "Skriv kort om hva du håper å få ut av studiet, eller din bakgrunn..."}
+                    value={formData.motivation}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none placeholder:text-outline font-semibold transition-all resize-none"
+                  />
+                </div>
+
+                {/* Submit button */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-4 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-xs font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-3.5 h-3.5 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+                      <span>{language === 'en' ? "Submitting..." : "Sender søknad..."}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send size={13} />
+                      <span>{language === 'en' ? "Submit Application" : "Send Inn Min Søknad"}</span>
+                    </>
+                  )}
+                </button>
+              </motion.form>
+            ) : (
+              <motion.div 
+                key="success"
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="text-center py-8 space-y-6"
+              >
+                <div className="w-14 h-14 rounded-full bg-green-50 text-green-600 border border-green-200 flex items-center justify-center mx-auto shadow-sm animate-bounce">
+                  <CheckCircle2 size={32} />
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-serif text-xl font-bold text-primary">
+                    {language === 'en' ? "Application Received!" : "Søknaden er mottatt!"}
+                  </h3>
+                  <p className="text-xs text-on-surface-variant font-semibold max-w-sm mx-auto leading-relaxed">
+                    {language === 'en'
+                      ? `Takk, ${formData.name}! Vi har mottatt din søknad for programmet ${formData.program === 'prop101' ? 'PROP 101' : formData.program === 'bible301' ? 'BIBLE 301' : 'LEAD 201'}. En av våre mentorer vil kontakte deg på e-post eller telefon for å bekrefte studieplassen din innen kort tid.`
+                      : `Takk, ${formData.name}! Vi har mottatt din søknad på programmet ${formData.program === 'prop101' ? 'PROP 101' : formData.program === 'bible301' ? 'BIBLE 301' : 'LEAD 201'}. En av våre mentorer vil kontakte deg på e-post eller telefon for en kort og uformell søknadssamtale innen kort tid.`}
+                  </p>
+                </div>
+
+                <div className="pt-4 flex flex-col sm:flex-row justify-center gap-3">
+                  <button
+                    onClick={() => navigate('/')}
+                    className="px-6 py-3 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95"
+                  >
+                    {language === 'en' ? "Go to Home" : "Gå til forsiden"}
+                  </button>
+                  <button
+                    onClick={() => navigate('/login')}
+                    className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold uppercase tracking-wider rounded-xl transition-all active:scale-95 border border-slate-200"
+                  >
+                    {language === 'en' ? "Access Guest Portal" : "Åpne portal (Gjest)"}
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </section>
+
+      </main>
+
+      {/* Footer */}
+      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white">
+        <div className="flex flex-col gap-2 text-center md:text-left">
+          <div className="font-serif text-lg font-bold text-[#e0aaff]">His Kingdom Prophets</div>
+          <p className="text-[10px] text-slate-300 opacity-80 max-w-md">
+            © 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten.
+          </p>
+        </div>
+        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold">
+          <button onClick={() => navigate('/privacy')} className="text-[#e0aaff] hover:text-white transition-opacity">Personvern</button>
+          <button onClick={() => navigate('/terms')} className="text-[#e0aaff] hover:text-white transition-opacity">Betingelser</button>
+          <button onClick={() => navigate('/accessibility')} className="text-[#e0aaff] hover:text-white transition-opacity">Tilgjengelighet</button>
+          <button onClick={() => navigate('/support')} className="text-[#e0aaff] hover:text-white transition-opacity">Kontakt Support</button>
+        </nav>
+      </footer>
+
+    </div>
+  );
+}

@@ -51,6 +51,7 @@ import TermsOfServicePage from '@/pages/TermsOfServicePage';
 import AccessibilityPage from '@/pages/AccessibilityPage';
 import ContactSupportPage from '@/pages/ContactSupportPage';
 import BibleResourcesPage from '@/pages/BibleResourcesPage';
+import AdmissionPage from '@/pages/AdmissionPage';
 
 // Email Previews
 import EmailPreviews from '@/pages/EmailPreviews';
@@ -229,6 +230,8 @@ function AppRoutes() {
         <Route path="/accessibility" element={<AccessibilityPage />} />
         <Route path="/support" element={<ContactSupportPage />} />
         <Route path="/bible-resources" element={<BibleResourcesPage />} />
+        <Route path="/admission" element={<AdmissionPage />} />
+        <Route path="/opptak" element={<AdmissionPage />} />
       </Routes>
     </>
   );
