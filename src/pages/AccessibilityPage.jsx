@@ -174,7 +174,7 @@ export default function AccessibilityPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-8 bg-[#561291] text-white/80 text-center text-xs mt-12 border-t border-slate-700/30 font-medium">
+      <footer className="w-full py-8 bg-[#240046] text-white/80 text-center text-xs mt-12 border-t border-white/10 font-medium">
         <p>© 2026 His Kingdom Prophets. All rights reserved.</p>
       </footer>
     </div>
