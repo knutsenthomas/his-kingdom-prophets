@@ -60,12 +60,10 @@ export default function TermsOfServicePage() {
               <Scale size={24} />
             </div>
             <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary break-words">
-              {isEn ? 'Terms of Service' : 'Vilkår og Betingelser'}
+              <CmsText slug="terms-title" fallback={isEn ? 'Terms of Service' : 'Vilkår og Betingelser'} />
             </h1>
             <p className="text-sm text-slate-500 font-medium">
-              {isEn 
-                ? 'Last updated: May 23, 2026. Please read these terms carefully before accessing our platform.' 
-                : 'Sist oppdatert: 23. mai 2026. Vennligst les disse vilkårene nøye før du tar plattformen i bruk.'}
+              <CmsText slug="terms-updated" fallback={isEn ? 'Last updated: May 23, 2026. Please read these terms carefully before accessing our platform.' : 'Sist oppdatert: 23. mai 2026. Vennligst les disse vilkårene nøye før du tar plattformen i bruk.'} />
             </p>
           </div>
 
@@ -74,122 +72,106 @@ export default function TermsOfServicePage() {
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
               <div className="text-primary"><UserPlus size={18} /></div>
               <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
-                {isEn ? 'Account Responsibility' : 'Kontosikkerhet'}
+                <CmsText slug="terms-security-title" fallback={isEn ? 'Account Responsibility' : 'Kontosikkerhet'} />
               </h3>
               <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                {isEn 
-                  ? 'Keep login credentials secure. You are fully responsible for your profile actions.' 
-                  : 'Hold innloggingsdetaljer sikre. Du er selv fullt ut ansvarlig for alle handlinger på profilen din.'}
+                <CmsText slug="terms-security-desc" fallback={isEn ? 'Keep login credentials secure. You are fully responsible for your profile actions.' : 'Hold innloggingsdetaljer sikre. Du er selv fullt ut ansvarlig for alle handlinger på profilen din.'} />
               </p>
             </div>
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
               <div className="text-primary"><AlertOctagon size={18} /></div>
               <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
-                {isEn ? 'Ethical Conduct' : 'Etisk Oppførsel'}
+                <CmsText slug="terms-conduct-title" fallback={isEn ? 'Ethical Conduct' : 'Etisk Oppførsel'} />
               </h3>
               <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                {isEn 
-                  ? 'We demand high integrity, ethical prophetic practice, and mutual respect in chat rooms.' 
-                  : 'Vi krever høy åndelig integritet, etisk profetisk praksis og gjensidig respekt i våre fellesskap.'}
+                <CmsText slug="terms-conduct-desc" fallback={isEn ? 'We demand high integrity, ethical prophetic practice, and mutual respect in chat rooms.' : 'Vi krever høy åndelig integritet, etisk profetisk praksis og gjensidig respekt i våre fellesskap.'} />
               </p>
             </div>
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
               <div className="text-primary"><HelpCircle size={18} /></div>
               <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
-                {isEn ? 'Prophetic Integrity' : 'Opphavsrett'}
+                <CmsText slug="terms-copyright-title" fallback={isEn ? 'Prophetic Integrity' : 'Opphavsrett'} />
               </h3>
               <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                {isEn 
-                  ? 'All educational material and study guides are proprietary property.' 
-                  : 'Alt studiemateriell og faghefter er beskyttet opphavsrettslig åndsverk tilhørende skolen.'}
+                <CmsText slug="terms-copyright-desc" fallback={isEn ? 'All educational material and study guides are proprietary property.' : 'Alt studiemateriell og faghefter er beskyttet opphavsrettslig åndsverk tilhørende skolen.'} />
               </p>
             </div>
           </div>
 
           {/* Terms content */}
           <div className="space-y-6 pt-4 text-slate-700 leading-relaxed text-xs sm:text-sm font-medium">
-            {isEn ? (
-              <>
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">1. Acceptable Use</h2>
-                  <p>
-                    By registering as a student or faglærer on His Kingdom Prophets, you agree to access educational tools exclusively for spiritual growth and theological discipling. Disruption, harassment, or unauthorized copying of resources is strictly prohibited.
-                  </p>
-                </section>
+            <section className="space-y-3">
+              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+                <CmsText slug="terms-sec1-title" fallback={isEn ? '1. Acceptable Use' : '1. Akseptabel bruk'} />
+              </h2>
+              <p>
+                <CmsText slug="terms-sec1-desc" fallback={isEn ? 'By registering as a student or faglærer on His Kingdom Prophets, you agree to access educational tools exclusively for spiritual growth and theological discipling. Disruption, harassment, or unauthorized copying of resources is strictly prohibited.' : 'Ved å registrere deg som student eller mentor på His Kingdom Prophets, samtykker du i å bruke plattformens verktøy utelukkende til teologisk opplæring og åndelig vekst. Forstyrrelser, trakassering eller uautorisert kopiering av ressurser er strengt forbudt.'} />
+              </p>
+            </section>
 
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">2. User Account Security</h2>
-                  <p>
-                    Users must provide authentic names and emails when setting up credentials. Sharing profile access or study credentials with unregistered students is a breach of security and can lead to suspension.
-                  </p>
-                </section>
+            <section className="space-y-3">
+              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+                <CmsText slug="terms-sec2-title" fallback={isEn ? '2. User Account Security' : '2. Kontosikkerhet'} />
+              </h2>
+              <p>
+                <CmsText slug="terms-sec2-desc" fallback={isEn ? 'Users must provide authentic names and emails when setting up credentials. Sharing profile access or study credentials with unregistered students is a breach of security and can lead to suspension.' : 'Brukere må oppgi sanne opplysninger under profilering. Å dele kontotilgang eller studierettigheter med uregistrerte eksterne personer regnes som sikkerhetsbrudd og kan føre til suspensjon av konto.'} />
+              </p>
+            </section>
 
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">3. Intellectuel Property</h2>
-                  <p>
-                    All study guides, weighted grading structures, courses, and portal code interfaces are unique creations and remain proprietary intellectual properties of Mandal Regnskapskontor & His Kingdom Prophets.
-                  </p>
-                </section>
+            <section className="space-y-3">
+              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+                <CmsText slug="terms-sec3-title" fallback={isEn ? '3. Intellectuel Property' : '3. Opphavsrett og Åndsverk'} />
+              </h2>
+              <p>
+                <CmsText slug="terms-sec3-desc" fallback={isEn ? 'All study guides, weighted grading structures, courses, and portal code interfaces are unique creations and remain proprietary intellectual properties of Mandal Regnskapskontor & His Kingdom Prophets.' : 'Alt undervisningsmateriell, kursinnhold, det vektede karaktersystemet og plattformens kildekode er beskyttede åndsverk og tilhører Mandal Regnskapskontor & His Kingdom Prophets.'} />
+              </p>
+            </section>
 
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">4. Limitation of Liability</h2>
-                  <p>
-                    Academic calculations and prophetic evaluations are for training and discipling purposes. While we maintain a 99.9% uptime using cloud-based database systems, we are not liable for temporary service interruptions.
-                  </p>
-                </section>
+            <section className="space-y-3">
+              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+                <CmsText slug="terms-sec4-title" fallback={isEn ? '4. Limitation of Liability' : '4. Ansvarsbegrensning'} />
+              </h2>
+              <p>
+                <CmsText slug="terms-sec4-desc" fallback={isEn ? 'Academic calculations and prophetic evaluations are for training and discipling purposes. While we maintain a 99.9% uptime using cloud-based database systems, we are not liable for temporary service interruptions.' : 'Faglige vurderinger og profetisk veiledning gis for personlig opplæring og disippelskap. Selv om vi sikrer 99,9% oppetid med skybaserte databaser via Supabase, kan vi ikke holdes ansvarlig for kortere midlertidige driftsavbrudd.'} />
+              </p>
+            </section>
 
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">5. Modifications to Terms</h2>
-                  <p>
-                    We reserve the right to modify these Terms of Service as our CMS updates and features expand. Major updates will be broadcasted to students inside the portal notice center.
-                  </p>
-                </section>
-              </>
-            ) : (
-              <>
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">1. Akseptabel bruk</h2>
-                  <p>
-                    Ved å registrere deg som student eller mentor på His Kingdom Prophets, samtykker du i å bruke plattformens verktøy utelukkende til teologisk opplæring og åndelig vekst. Forstyrrelser, trakassering eller uautorisert kopiering av ressurser er strengt forbudt.
-                  </p>
-                </section>
-
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">2. Kontosikkerhet</h2>
-                  <p>
-                    Brukere må oppgi sanne opplysninger under profilering. Å dele kontotilgang eller studierettigheter med uregistrerte eksterne personer regnes som sikkerhetsbrudd og kan føre til suspensjon av konto.
-                  </p>
-                </section>
-
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">3. Opphavsrett og Åndsverk</h2>
-                  <p>
-                    Alt undervisningsmateriell, kursinnhold, det vektede karaktersystemet og plattformens kildekode er beskyttede åndsverk og tilhører Mandal Regnskapskontor & His Kingdom Prophets.
-                  </p>
-                </section>
-
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">4. Ansvarsbegrensning</h2>
-                  <p>
-                    Faglige vurderinger og profetisk veiledning gis for personlig opplæring og disippelskap. Selv om vi sikrer 99,9% oppetid med skybaserte databaser via Supabase, kan vi ikke holdes ansvarlig for kortere midlertidige driftsavbrudd.
-                  </p>
-                </section>
-
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">5. Endring av vilkår</h2>
-                  <p>
-                    Vi forbeholder oss retten til å endre disse vilkårene ettersom CMS-systemet oppdateres og plattformens funksjoner utvides. Større oppdateringer vil bli kunngjort under varslingssenteret i portalene.
-                  </p>
-                </section>
-              </>
-            )}
+            <section className="space-y-3">
+              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+                <CmsText slug="terms-sec5-title" fallback={isEn ? '5. Modifications to Terms' : '5. Endring av vilkår'} />
+              </h2>
+              <p>
+                <CmsText slug="terms-sec5-desc" fallback={isEn ? 'We reserve the right to modify these Terms of Service as our CMS updates and features expand. Major updates will be broadcasted to students inside the portal notice center.' : 'Vi forbeholder oss retten til å endre disse vilkårene ettersom CMS-systemet oppdateres og plattformens funksjoner utvides. Større oppdateringer vil bli kunngjort under varslingssenteret i portalene.'} />
+              </p>
+            </section>
           </div>
         </motion.div>
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-8 bg-[#240046] text-white/80 text-center text-xs mt-12 border-t border-white/10 font-medium">
-        <p>© 2026 His Kingdom Prophets. All rights reserved.</p>
+      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white select-none shrink-0 border-t border-white/5 font-medium">
+        <div className="flex flex-col gap-2 text-center md:text-left">
+          <div className="font-serif text-lg font-bold text-[#e0aaff]">
+            <CmsText slug="landing-footer-title" fallback="His Kingdom Prophets" />
+          </div>
+          <p className="text-[10px] text-slate-300 opacity-80 max-w-md">
+            <CmsText slug="landing-footer-copyright" fallback={isEn ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."} />
+          </p>
+        </div>
+        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold text-[#e0aaff]">
+          <button onClick={() => navigate('/privacy')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-privacy" fallback={isEn ? "Privacy Policy" : "Personvern"} />
+          </button>
+          <button onClick={() => navigate('/terms')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-terms" fallback={isEn ? "Terms of Service" : "Betingelser"} />
+          </button>
+          <button onClick={() => navigate('/accessibility')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-accessibility" fallback={isEn ? "Accessibility" : "Tilgjengelighet"} />
+          </button>
+          <button onClick={() => navigate('/support')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-support" fallback={isEn ? "Contact Support" : "Kontakt Support"} />
+          </button>
+        </nav>
       </footer>
     </div>
   );

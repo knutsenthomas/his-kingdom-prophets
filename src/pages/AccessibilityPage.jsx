@@ -60,12 +60,10 @@ export default function AccessibilityPage() {
               <Eye size={24} />
             </div>
             <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary break-words">
-              {isEn ? 'Accessibility Statement' : 'Tilgjengelighetserklæring'}
+              <CmsText slug="accessibility-title" fallback={isEn ? 'Accessibility Statement' : 'Tilgjengelighetserklæring'} />
             </h1>
             <p className="text-sm text-slate-500 font-medium">
-              {isEn 
-                ? 'Last updated: May 23, 2026. Committed to providing a platform accessible to everyone.' 
-                : 'Sist oppdatert: 23. mai 2026. Forpliktet til å levere en universelt utformet plattform for alle.'}
+              <CmsText slug="accessibility-updated" fallback={isEn ? 'Last updated: May 23, 2026. Committed to providing a platform accessible to everyone.' : 'Sist oppdatert: 23. mai 2026. Forpliktet til å levere en universelt utformet plattform for alle.'} />
             </p>
           </div>
 
@@ -74,108 +72,97 @@ export default function AccessibilityPage() {
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
               <div className="text-primary"><Zap size={18} /></div>
               <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
-                {isEn ? 'WCAG 2.1 Compliance' : 'Følge WCAG 2.1'}
+                <CmsText slug="accessibility-wcag-title" fallback={isEn ? 'WCAG 2.1 Compliance' : 'Følge WCAG 2.1'} />
               </h3>
               <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                {isEn 
-                  ? 'We actively build features in accordance with WCAG 2.1 level AA standards.' 
-                  : 'Vi utvikler aktivt i tråd med standardene for WCAG 2.1 nivå AA.'}
+                <CmsText slug="accessibility-wcag-desc" fallback={isEn ? 'We actively build features in accordance with WCAG 2.1 level AA standards.' : 'Vi utvikler aktivt i tråd med standardene for WCAG 2.1 nivå AA.'} />
               </p>
             </div>
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
               <div className="text-primary"><CheckCircle size={18} /></div>
               <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
-                {isEn ? 'Contrast & Fonts' : 'Kontrast og Skrift'}
+                <CmsText slug="accessibility-contrast-title" fallback={isEn ? 'Contrast & Fonts' : 'Kontrast og Skrift'} />
               </h3>
               <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                {isEn 
-                  ? 'Carefully chosen dark-blue color tones and flexible text sizing prevent strain.' 
-                  : 'Nøye utvalgte kontraster og dynamisk tekstskalering hindrer synsbelastning.'}
+                <CmsText slug="accessibility-contrast-desc" fallback={isEn ? 'Carefully chosen dark-blue color tones and flexible text sizing prevent strain.' : 'Nøye utvalgte kontraster og dynamisk tekstskalering hindrer synsbelastning.'} />
               </p>
             </div>
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
               <div className="text-primary"><HeartHandshake size={18} /></div>
               <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
-                {isEn ? 'Inclusive Tech' : 'Inkluderende Teknologi'}
+                <CmsText slug="accessibility-tech-title" fallback={isEn ? 'Inclusive Tech' : 'Inkluderende Teknologi'} />
               </h3>
               <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                {isEn 
-                  ? 'Optimized navigation flow for screen readers and keyboard navigation.' 
-                  : 'Optimalisert navigasjonsflyt for skjermlesere og tastaturstyring.'}
+                <CmsText slug="accessibility-tech-desc" fallback={isEn ? 'Optimized navigation flow for screen readers and keyboard navigation.' : 'Optimalisert navigasjonsflyt for skjermlesere og tastaturstyring.'} />
               </p>
             </div>
           </div>
 
           {/* Details */}
           <div className="space-y-6 pt-4 text-slate-700 leading-relaxed text-xs sm:text-sm font-medium">
-            {isEn ? (
-              <>
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">1. Our Commitment</h2>
-                  <p>
-                    His Kingdom Prophets is dedicated to ensuring digital accessibility for people with disabilities. We are continuously improving the user experience for everyone and applying the relevant accessibility standards to make sure that our prophetic resources are accessible.
-                  </p>
-                </section>
+            <section className="space-y-3">
+              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+                <CmsText slug="accessibility-sec1-title" fallback={isEn ? '1. Our Commitment' : '1. Vår forpliktelse'} />
+              </h2>
+              <p>
+                <CmsText slug="accessibility-sec1-desc" fallback={isEn ? 'His Kingdom Prophets is dedicated to ensuring digital accessibility for people with disabilities. We are continuously improving the user experience for everyone and applying the relevant accessibility standards to make sure that our prophetic resources are accessible.' : 'His Kingdom Prophets er opptatt av å sikre digital tilgjengelighet for alle brukere. Vi forbedrer kontinuerlig brukeropplevelsen for alle og anvender de relevante tilgjengelighetsstandardene for å sikre at våre teologiske ressurser når ut til alle.'} />
+              </p>
+            </section>
 
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">2. Accessibility Standards</h2>
-                  <p>
-                    We target the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA requirements. Our features include high contrast support (such as our `#561291` primary brand color against light backgrounds), aria-labels for assistive screen readers, and robust semantic structures.
-                  </p>
-                </section>
+            <section className="space-y-3">
+              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+                <CmsText slug="accessibility-sec2-title" fallback={isEn ? '2. Accessibility Standards' : '2. Standarder for tilgjengelighet'} />
+              </h2>
+              <p>
+                <CmsText slug="accessibility-sec2-desc" fallback={isEn ? 'We target the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA requirements. Our features include high contrast support (such as our `#561291` primary brand color against light backgrounds), aria-labels for assistive screen readers, and robust semantic structures.' : 'Vi sikter mot å oppfylle kravene i Web Content Accessibility Guidelines (WCAG) 2.1 Nivå AA. Våre løsninger inkluderer gode fargekontraster (som vår `#561291` mørkeblå profilfarge mot lyse bakgrunner), aria-labels for skjermlesere og solid semantisk HTML-struktur.'} />
+              </p>
+            </section>
 
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">3. Tested Technologies</h2>
-                  <p>
-                    The platform is designed to be compatible with modern web browsers, screen magnification software, and screen readers (such as VoiceOver and NVDA). Interactive elements like the CMS visual toggles and profile options are built to support focus styling.
-                  </p>
-                </section>
+            <section className="space-y-3">
+              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+                <CmsText slug="accessibility-sec3-title" fallback={isEn ? '3. Tested Technologies' : '3. Kompatibel teknologi'} />
+              </h2>
+              <p>
+                <CmsText slug="accessibility-sec3-desc" fallback={isEn ? 'The platform is designed to be compatible with modern web browsers, screen magnification software, and screen readers (such as VoiceOver and NVDA). Interactive elements like the CMS visual toggles and profile options are built to support focus styling.' : 'Plattformen er utviklet for å fungere best mulig med moderne nettlesere, forstørrelsesprogramvare og skjermlesere (som VoiceOver og NVDA). Interaktive elementer som visuelle CMS-redigerere har tydelig fokusalternativ og kan styres via tastaturet.'} />
+              </p>
+            </section>
 
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">4. Feedback & Contact</h2>
-                  <p>
-                    We welcome your feedback on the accessibility of our platform. If you encounter any barriers or have difficulty using any feature, please submit a support ticket or email us at hiskingdomprophets@hiskingdomministry.no.
-                  </p>
-                </section>
-              </>
-            ) : (
-              <>
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">1. Vår forpliktelse</h2>
-                  <p>
-                    His Kingdom Prophets er opptatt av å sikre digital tilgjengelighet for alle brukere. Vi forbedrer kontinuerlig brukeropplevelsen for alle og anvender de relevante tilgjengelighetsstandardene for å sikre at våre teologiske ressurser når ut til alle.
-                  </p>
-                </section>
-
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">2. Standarder for tilgjengelighet</h2>
-                  <p>
-                    Vi sikter mot å oppfylle kravene i Web Content Accessibility Guidelines (WCAG) 2.1 Nivå AA. Våre løsninger inkluderer gode fargekontraster (som vår `#561291` mørkeblå profilfarge mot lyse bakgrunner), aria-labels for skjermlesere og solid semantisk HTML-struktur.
-                  </p>
-                </section>
-
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">3. Kompatibel teknologi</h2>
-                  <p>
-                    Plattformen er utviklet for å fungere best mulig med moderne nettlesere, forstørrelsesprogramvare og skjermlesere (som VoiceOver og NVDA). Interaktive elementer som visuelle CMS-redigerere har tydelig fokusalternativ og kan styres via tastaturet.
-                  </p>
-                </section>
-
-                <section className="space-y-3">
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">4. Tilbakemelding og kontakt</h2>
-                  <p>
-                    Vi setter pris på dine tilbakemeldinger angående tilgjengeligheten på nettstedet vårt. Dersom du opplever hindringer eller har forbedringsforslag, vennligst kontakt oss via support eller send en e-post til hiskingdomprophets@hiskingdomministry.no.
-                  </p>
-                </section>
-              </>
-            )}
+            <section className="space-y-3">
+              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+                <CmsText slug="accessibility-sec4-title" fallback={isEn ? '4. Feedback & Contact' : '4. Tilbakemelding og kontakt'} />
+              </h2>
+              <p>
+                <CmsText slug="accessibility-sec4-desc" fallback={isEn ? 'We welcome your feedback on the accessibility of our platform. If you encounter any barriers or have difficulty using any feature, please submit a support ticket or email us at hiskingdomprophets@hiskingdomministry.no.' : 'Vi setter pris på dine tilbakemeldinger angående tilgjengeligheten på nettstedet vårt. Dersom du opplever hindringer eller har forbedringsforslag, vennligst kontakt oss via support eller send en e-post til hiskingdomprophets@hiskingdomministry.no.'} />
+              </p>
+            </section>
           </div>
         </motion.div>
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-8 bg-[#240046] text-white/80 text-center text-xs mt-12 border-t border-white/10 font-medium">
-        <p>© 2026 His Kingdom Prophets. All rights reserved.</p>
+      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white select-none shrink-0 border-t border-white/5 font-medium">
+        <div className="flex flex-col gap-2 text-center md:text-left">
+          <div className="font-serif text-lg font-bold text-[#e0aaff]">
+            <CmsText slug="landing-footer-title" fallback="His Kingdom Prophets" />
+          </div>
+          <p className="text-[10px] text-slate-300 opacity-80 max-w-md">
+            <CmsText slug="landing-footer-copyright" fallback={isEn ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."} />
+          </p>
+        </div>
+        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold text-[#e0aaff]">
+          <button onClick={() => navigate('/privacy')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-privacy" fallback={isEn ? "Privacy Policy" : "Personvern"} />
+          </button>
+          <button onClick={() => navigate('/terms')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-terms" fallback={isEn ? "Terms of Service" : "Betingelser"} />
+          </button>
+          <button onClick={() => navigate('/accessibility')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-accessibility" fallback={isEn ? "Accessibility" : "Tilgjengelighet"} />
+          </button>
+          <button onClick={() => navigate('/support')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-support" fallback={isEn ? "Contact Support" : "Kontakt Support"} />
+          </button>
+        </nav>
       </footer>
     </div>
   );

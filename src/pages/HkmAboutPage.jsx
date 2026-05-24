@@ -428,25 +428,25 @@ export default function HkmAboutPage() {
       {/* Footer Segment */}
       <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white select-none shrink-0 border-t border-white/5">
         <div className="flex flex-col gap-2 text-center md:text-left">
-          <div className="font-serif text-lg font-bold text-[#e0aaff]">His Kingdom Prophets</div>
+          <div className="font-serif text-lg font-bold text-[#e0aaff]">
+            <CmsText slug="landing-footer-title" fallback="His Kingdom Prophets" />
+          </div>
           <p className="text-[10px] text-slate-300 opacity-80 max-w-md">
-            {language === 'en'
-              ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church."
-              : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."}
+            <CmsText slug="landing-footer-copyright" fallback={isEn ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."} />
           </p>
         </div>
         <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold text-[#e0aaff]">
           <button onClick={() => navigate('/privacy')} className="hover:text-white transition-opacity">
-            {isEn ? "Privacy Policy" : "Personvern"}
+            <CmsText slug="landing-footer-link-privacy" fallback={isEn ? "Privacy Policy" : "Personvern"} />
           </button>
           <button onClick={() => navigate('/terms')} className="hover:text-white transition-opacity">
-            {isEn ? "Terms of Service" : "Betingelser"}
+            <CmsText slug="landing-footer-link-terms" fallback={isEn ? "Terms of Service" : "Betingelser"} />
           </button>
           <button onClick={() => navigate('/accessibility')} className="hover:text-white transition-opacity">
-            {isEn ? "Accessibility" : "Tilgjengelighet"}
+            <CmsText slug="landing-footer-link-accessibility" fallback={isEn ? "Accessibility" : "Tilgjengelighet"} />
           </button>
           <button onClick={handleSupportClick} className="hover:text-white transition-opacity">
-            {isEn ? "Contact Support" : "Kontakt Support"}
+            <CmsText slug="landing-footer-link-support" fallback={isEn ? "Contact Support" : "Kontakt Support"} />
           </button>
         </nav>
       </footer>

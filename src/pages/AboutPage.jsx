@@ -12,6 +12,7 @@ import CmsText from '@/components/CmsText';
 export default function AboutPage() {
   const navigate = useNavigate();
   const { language, toggleLanguage, user } = useApp();
+  const isEn = language === 'en';
 
   const handleApplyClick = () => {
     navigate('/admission');
@@ -93,44 +94,52 @@ export default function AboutPage() {
         <section className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h2 className="font-serif text-2xl md:text-3xl font-bold text-primary">
-              {language === 'en' ? "Solid Theology. Authentic Spirit." : "Solid teologi. Autentisk Ånd."}
+              <CmsText slug="about-sec1-title" fallback={language === 'en' ? "Solid Theology. Authentic Spirit." : "Solid teologi. Autentisk Ånd."} />
             </h2>
             <p className="text-sm text-on-surface-variant leading-relaxed font-medium">
-              {language === 'en' 
+              <CmsText slug="about-sec1-desc1" fallback={language === 'en' 
                 ? "His Kingdom Prophets (HKP) is a contemporary prophetic school and equipping center. We believe that spiritual gifts must never be divorced from academic integrity and deep biblical study. Our curriculum is designed to prevent shallow emotionalism by grounding students in robust covenant theology, historical context, and sound exegesis."
-                : "His Kingdom Prophets (HKP) er en tidsaktuell profetisk åpenbaringsskole og et utrustningssenter. Vi tror at åndelige gaver aldri må skilles fra teologisk integritet og dype bibelstudier. Vår fagplan er utformet for å forhindre overfladisk følelsesstyring, og forankrer i stedet studentene i solid paktsteologi, historisk kontekst og sunn skriftforståelse."}
+                : "His Kingdom Prophets (HKP) er en tidsaktuell profetisk åpenbaringsskole og et utrustningssenter. Vi tror at åndelige gaver aldri må skilles fra teologisk integritet og dype bibelstudier. Vår fagplan er utformet for å forhindre overfladisk følelsesstyring, og forankrer i stedet studentene i solid paktsteologi, historisk kontekst og sunn skriftforståelse."} />
             </p>
             <p className="text-sm text-on-surface-variant leading-relaxed font-medium">
-              {language === 'en'
+              <CmsText slug="about-sec1-desc2" fallback={language === 'en'
                 ? "Through our high-end digital study workbook, personal one-on-one mentor coaching, and vibrant prayer community, we prepare leaders who stand firm in character, ethical integrity, and prophetic clarity."
-                : "Gjennom vårt digitale studiehefte, personlig én-til-én mentorveiledning og et levende bønnefellesskap, former vi tjenere som står støtt i karakter, etisk integritet og profetisk klarhet."}
+                : "Gjennom vårt digitale studiehefte, personlig én-til-én mentorveiledning og et levende bønnefellesskap, former vi tjenere som står støtt i karakter, etisk integritet og profetisk klarhet."} />
             </p>
           </div>
 
           {/* Stats Cards Layout */}
           <div className="grid grid-cols-2 gap-4">
             <div className="p-6 bg-white border border-[#dec2ef]/40 rounded-2xl text-center space-y-1 shadow-sm">
-              <span className="font-serif text-3xl font-extrabold text-primary block">8+</span>
+              <span className="font-serif text-3xl font-extrabold text-primary block">
+                <CmsText slug="about-stat1-num" fallback="8+" />
+              </span>
               <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
-                {language === 'en' ? "Modules per course" : "Moduler per fag"}
+                <CmsText slug="about-stat1-lbl" fallback={language === 'en' ? "Modules per course" : "Moduler per fag"} />
               </span>
             </div>
             <div className="p-6 bg-white border border-[#dec2ef]/40 rounded-2xl text-center space-y-1 shadow-sm">
-              <span className="font-serif text-3xl font-extrabold text-primary block">1-on-1</span>
+              <span className="font-serif text-3xl font-extrabold text-primary block">
+                <CmsText slug="about-stat2-num" fallback="1-on-1" />
+              </span>
               <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
-                {language === 'en' ? "Personal mentoring" : "Personlig veiledning"}
+                <CmsText slug="about-stat2-lbl" fallback={language === 'en' ? "Personal mentoring" : "Personlig veiledning"} />
               </span>
             </div>
             <div className="p-6 bg-white border border-[#dec2ef]/40 rounded-2xl text-center space-y-1 shadow-sm">
-              <span className="font-serif text-3xl font-extrabold text-primary block">100%</span>
+              <span className="font-serif text-3xl font-extrabold text-primary block">
+                <CmsText slug="about-stat3-num" fallback="100%" />
+              </span>
               <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
-                {language === 'en' ? "Digital Study Bible" : "Digital Studiebibel"}
+                <CmsText slug="about-stat3-lbl" fallback={language === 'en' ? "Digital Study Bible" : "Digital Studiebibel"} />
               </span>
             </div>
             <div className="p-6 bg-white border border-[#dec2ef]/40 rounded-2xl text-center space-y-1 shadow-sm">
-              <span className="font-serif text-3xl font-extrabold text-primary block">24/7</span>
+              <span className="font-serif text-3xl font-extrabold text-primary block">
+                <CmsText slug="about-stat4-num" fallback="24/7" />
+              </span>
               <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
-                {language === 'en' ? "AI Theology Assistant" : "AI-Teologiassistent"}
+                <CmsText slug="about-stat4-lbl" fallback={language === 'en' ? "AI Theology Assistant" : "AI-Teologiassistent"} />
               </span>
             </div>
           </div>
@@ -140,12 +149,12 @@ export default function AboutPage() {
         <section className="space-y-10">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <h2 className="font-serif text-2xl font-bold text-primary">
-              {language === 'en' ? "Our Three Core Pillars" : "Våre tre grunnpilarer"}
+              <CmsText slug="about-pillars-title" fallback={language === 'en' ? "Our Three Core Pillars" : "Våre tre grunnpilarer"} />
             </h2>
             <p className="text-xs text-on-surface-variant font-semibold">
-              {language === 'en' 
+              <CmsText slug="about-pillars-desc" fallback={language === 'en' 
                 ? "Every course and tool on our platform is built on these foundational values."
-                : "Hvert kurs og verktøy på plattformen vår er bygget på disse grunnleggende verdiene."}
+                : "Hvert kurs og verktøy på plattformen vår er bygget på disse grunnleggende verdiene."} />
             </p>
           </div>
 
@@ -156,12 +165,12 @@ export default function AboutPage() {
                 <BookOpen size={22} />
               </div>
               <h3 className="font-serif text-lg font-bold text-primary">
-                {language === 'en' ? "1. Hermeneutical Depth" : "1. Hermeneutisk dybde"}
+                <CmsText slug="about-pillar1-title" fallback={language === 'en' ? "1. Hermeneutical Depth" : "1. Hermeneutisk dybde"} />
               </h3>
               <p className="text-xs text-on-surface-variant leading-relaxed font-semibold">
-                {language === 'en'
+                <CmsText slug="about-pillar1-desc" fallback={language === 'en'
                   ? "We prioritize the historical-grammatical method of interpretation. Students learn to read scripture in its original context before attempting modern applications."
-                  : "Vi prioriterer den historisk-grammatiske tolkningsmetoden. Studentene lærer å lese Skriften i sin opprinnelige kontekst før de gjør moderne anvendelser."}
+                  : "Vi prioriterer den historisk-grammatiske tolkningsmetoden. Studentene lærer å lese Skriften i sin opprinnelige kontekst før de gjør moderne anvendelser."} />
               </p>
             </div>
 
@@ -171,12 +180,12 @@ export default function AboutPage() {
                 <ShieldCheck size={22} />
               </div>
               <h3 className="font-serif text-lg font-bold text-primary">
-                {language === 'en' ? "2. Character & Accountability" : "2. Karakter & etikk"}
+                <CmsText slug="about-pillar2-title" fallback={language === 'en' ? "2. Character & Accountability" : "2. Karakter & etikk"} />
               </h3>
               <p className="text-xs text-on-surface-variant leading-relaxed font-semibold">
-                {language === 'en'
+                <CmsText slug="about-pillar2-desc" fallback={language === 'en'
                   ? "A prophetic gift without a mature, Christ-like character is dangerous. We emphasize local church accountability, integrity, and personal discipleship."
-                  : "En profetisk gave uten en moden, Kristus-lik karakter er sårbar. Vi legger stor vekt på menighetsrelasjon, personlig integritet og disippelskap."}
+                  : "En profetisk gave uten en moden, Kristus-lik karakter er sårbar. Vi legger stor vekt på menighetsrelasjon, personlig integritet og disippelskap."} />
               </p>
             </div>
 
@@ -186,12 +195,12 @@ export default function AboutPage() {
                 <Compass size={22} />
               </div>
               <h3 className="font-serif text-lg font-bold text-primary">
-                {language === 'en' ? "3. Practical Equipping" : "3. Tjenesteutrustning"}
+                <CmsText slug="about-pillar3-title" fallback={language === 'en' ? "3. Practical Equipping" : "3. Tjenesteutrustning"} />
               </h3>
               <p className="text-xs text-on-surface-variant leading-relaxed font-semibold">
-                {language === 'en'
+                <CmsText slug="about-pillar3-desc" fallback={language === 'en'
                   ? "Our curriculum provides concrete, actionable tools. Learn to interpret dreams, discern spiritual climates, and lead with apostolic wisdom."
-                  : "Studiet gir konkrete, anvendelige verktøy. Lær å tyde drømmer, skjelne åndelige trender, og lede med apostolisk og profetisk visdom."}
+                  : "Studiet gir konkrete, anvendelige verktøy. Lær å tyde drømmer, skjelne åndelige trender, og lede med apostolisk og profetisk visdom."} />
               </p>
             </div>
           </div>
@@ -201,12 +210,12 @@ export default function AboutPage() {
         <section className="space-y-10">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <h2 className="font-serif text-2xl font-bold text-primary">
-              {language === 'en' ? "Our Faculty & Leadership" : "Våre mentorer og ledere"}
+              <CmsText slug="about-faculty-title" fallback={language === 'en' ? "Our Faculty & Leadership" : "Våre mentorer og ledere"} />
             </h2>
             <p className="text-xs text-on-surface-variant font-semibold">
-              {language === 'en'
+              <CmsText slug="about-faculty-desc" fallback={language === 'en'
                 ? "Learn from seasoned ministry leaders who combine deep theological training with years of practical experience."
-                : "Motta veiledning fra erfarne ledere som forener solid teologisk ballast med mangeårig tjenesteerfaring."}
+                : "Motta veiledning fra erfarne ledere som forener solid teologisk ballast med mangeårig tjenesteerfaring."} />
             </p>
           </div>
 
@@ -220,15 +229,17 @@ export default function AboutPage() {
               />
               <div className="space-y-2">
                 <div>
-                  <h4 className="font-serif text-lg font-bold text-primary">David Hansen</h4>
+                  <h4 className="font-serif text-lg font-bold text-primary">
+                    <CmsText slug="about-faculty-m1-name" fallback="David Hansen" />
+                  </h4>
                   <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
-                    {language === 'en' ? "Founder & Main Mentor" : "Grunnlegger & Hovedmentor"}
+                    <CmsText slug="about-faculty-m1-role" fallback={language === 'en' ? "Founder & Main Mentor" : "Grunnlegger & Hovedmentor"} />
                   </span>
                 </div>
                 <p className="text-xs text-on-surface-variant leading-relaxed">
-                  {language === 'en'
+                  <CmsText slug="about-faculty-m1-bio" fallback={language === 'en'
                     ? "David combines extensive pastoral experience with apostolic vision. He leads the prophetic activation and dream interpretation seminars."
-                    : "David kombinerer bred pastorallære med en apostolisk visjon. Han leder seminarene innen profetisk aktivisering og drømmetydning."}
+                    : "David kombinerer bred pastorallære med en apostolisk visjon. Han leder seminarene innen profetisk aktivisering og drømmetydning."} />
                 </p>
               </div>
             </div>
@@ -242,15 +253,17 @@ export default function AboutPage() {
               />
               <div className="space-y-2">
                 <div>
-                  <h4 className="font-serif text-lg font-bold text-primary">Siri Knutsen</h4>
+                  <h4 className="font-serif text-lg font-bold text-primary">
+                    <CmsText slug="about-faculty-m2-name" fallback="Siri Knutsen" />
+                  </h4>
                   <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
-                    {language === 'en' ? "Director of Pastoral Care" : "Fagansvarlig for Sjelesorg & Menighet"}
+                    <CmsText slug="about-faculty-m2-role" fallback={language === 'en' ? "Director of Pastoral Care" : "Fagansvarlig for Sjelesorg & Menighet"} />
                   </span>
                 </div>
                 <p className="text-xs text-on-surface-variant leading-relaxed">
-                  {language === 'en'
+                  <CmsText slug="about-faculty-m2-bio" fallback={language === 'en'
                     ? "Siri is dedicated to spiritual counseling and inner healing. She ensures that students develop sound emotional health and relational stability."
-                    : "Siri er opptatt av sjelesorg, indre helbredelse og sunn emosjonell helse. Hun veileder studentene inn i personlig modenhet og relasjonell stabilitet."}
+                    : "Siri er opptatt av sjelesorg, indre helbredelse og sunn emosjonell helse. Hun veileder studentene inn i personlig modenhet og relasjonell stabilitet."} />
                 </p>
               </div>
             </div>
@@ -262,35 +275,35 @@ export default function AboutPage() {
           <div className="space-y-6">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f3e8ff] text-primary font-bold text-[10px] uppercase tracking-wider select-none">
               <Award size={12} />
-              {language === 'en' ? "State-of-the-Art Student Workspace" : "Førsteklasses digitalt studiemiljø"}
+              <CmsText slug="about-workspace-tag" fallback={language === 'en' ? "State-of-the-Art Student Workspace" : "Førsteklasses digitalt studiemiljø"} />
             </span>
 
             <h2 className="font-serif text-2xl font-bold text-primary leading-tight">
-              {language === 'en' ? "A Modern Digital Workbook Built for Discipleship" : "Et moderne, digitalt verktøy bygget for vekst"}
+              <CmsText slug="about-workspace-title" fallback={language === 'en' ? "A Modern Digital Workbook Built for Discipleship" : "Et moderne, digitalt verktøy bygget for vekst"} />
             </h2>
 
             <p className="text-xs text-on-surface-variant font-semibold leading-relaxed">
-              {language === 'en'
+              <CmsText slug="about-workspace-desc" fallback={language === 'en'
                 ? "Our students don't just read books; they interact in a fully immersive study ecosystem. Our high-end student platform includes:"
-                : "Våre studenter leser ikke bare tørre bøker; de deltar i et fullverdig, interaktivt økosystem. Vår moderne studentportal inneholder:"}
+                : "Våre studenter leser ikke bare tørre bøker; de deltar i et fullverdig, interaktivt økosystem. Vår moderne studentportal inneholder:"} />
             </p>
 
             <ul className="space-y-3 pt-2 text-xs text-on-surface-variant font-semibold font-sans">
               <li className="flex items-center gap-2.5">
                 <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={13} /></span>
-                <span>{language === 'en' ? "Bilingual Study Bible with interactive footnotes" : "Tospråklig Studiebibel med integrerte kommentarer"}</span>
+                <span><CmsText slug="about-workspace-b1" fallback={language === 'en' ? "Bilingual Study Bible with interactive footnotes" : "Tospråklig Studiebibel med integrerte kommentarer"} /></span>
               </li>
               <li className="flex items-center gap-2.5">
                 <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={13} /></span>
-                <span>{language === 'en' ? "Premium WYSIWYG note editor with highlight markers" : "Førsteklasses rikteksteditor (WYSIWYG) med markørpenner"}</span>
+                <span><CmsText slug="about-workspace-b2" fallback={language === 'en' ? "Premium WYSIWYG note editor with highlight markers" : "Førsteklasses rikteksteditor (WYSIWYG) med markørpenner"} /></span>
               </li>
               <li className="flex items-center gap-2.5">
                 <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={13} /></span>
-                <span>{language === 'en' ? "Immediate 'Paste from AI' integration for theological deep-dives" : "Direkte 'Lim inn fra AI'-integrasjon for teologisk fordypning"}</span>
+                <span><CmsText slug="about-workspace-b3" fallback={language === 'en' ? "Immediate 'Paste from AI' integration for theological deep-dives" : "Direkte 'Lim inn fra AI'-integrasjon for teologisk fordypning"} /></span>
               </li>
               <li className="flex items-center gap-2.5">
                 <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={13} /></span>
-                <span>{language === 'en' ? "Interactive Prayer & Study groups with community chat" : "Interaktive bønnegrupper med felles diskusjonsrom"}</span>
+                <span><CmsText slug="about-workspace-b4" fallback={language === 'en' ? "Interactive Prayer & Study groups with community chat" : "Interaktive bønnegrupper med felles diskusjonsrom"} /></span>
               </li>
             </ul>
           </div>
@@ -301,12 +314,12 @@ export default function AboutPage() {
             </div>
             <div className="space-y-2">
               <h4 className="font-serif text-lg font-bold text-primary">
-                {language === 'en' ? "Ready to Start?" : "Klar for å starte?"}
+                <CmsText slug="about-start-title" fallback={language === 'en' ? "Ready to Start?" : "Klar for å starte?"} />
               </h4>
               <p className="text-[11px] text-on-surface-variant font-semibold leading-relaxed max-w-xs">
-                {language === 'en'
+                <CmsText slug="about-start-desc" fallback={language === 'en'
                   ? "Explore our public study lines or apply for admission to unlock the full student portal."
-                  : "Utforsk våre studielinjer eller søk om opptak for å låse opp hele studentportalen og mentorskapet."}
+                  : "Utforsk våre studielinjer eller søk om opptak for å låse opp hele studentportalen og mentorskapet."} />
               </p>
             </div>
             
@@ -315,14 +328,14 @@ export default function AboutPage() {
                 onClick={handleApplyClick}
                 className="flex-1 py-3 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-xs font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5"
               >
-                <span>{language === 'en' ? "Apply Now" : "Søk Opptak"}</span>
+                <span><CmsText slug="about-start-btn-apply" fallback={language === 'en' ? "Apply Now" : "Søk Opptak"} /></span>
                 <ArrowRight size={13} />
               </button>
               <button 
                 onClick={handleLoginClick}
                 className="flex-1 py-3 bg-white border border-slate-200 text-primary hover:bg-slate-50 text-xs font-bold uppercase rounded-xl transition-all active:scale-95"
               >
-                {language === 'en' ? "Log In" : "Logg inn"}
+                <CmsText slug="about-start-btn-login" fallback={language === 'en' ? "Log In" : "Logg inn"} />
               </button>
             </div>
           </div>
@@ -331,27 +344,27 @@ export default function AboutPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white select-none shrink-0">
+      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white select-none shrink-0 border-t border-white/5 font-medium">
         <div className="flex flex-col gap-2 text-center md:text-left">
-          <div className="font-serif text-lg font-bold text-[#e0aaff]">His Kingdom Prophets</div>
+          <div className="font-serif text-lg font-bold text-[#e0aaff]">
+            <CmsText slug="landing-footer-title" fallback="His Kingdom Prophets" />
+          </div>
           <p className="text-[10px] text-slate-300 opacity-80 max-w-md">
-            {language === 'en'
-              ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church."
-              : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."}
+            <CmsText slug="landing-footer-copyright" fallback={language === 'en' ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."} />
           </p>
         </div>
-        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold">
-          <button onClick={() => navigate('/privacy')} className="text-[#e0aaff] hover:text-white transition-opacity">
-            {language === 'en' ? "Privacy Policy" : "Personvern"}
+        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold text-[#e0aaff]">
+          <button onClick={() => navigate('/privacy')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-privacy" fallback={language === 'en' ? "Privacy Policy" : "Personvern"} />
           </button>
-          <button onClick={() => navigate('/terms')} className="text-[#e0aaff] hover:text-white transition-opacity">
-            {language === 'en' ? "Terms of Service" : "Betingelser"}
+          <button onClick={() => navigate('/terms')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-terms" fallback={language === 'en' ? "Terms of Service" : "Betingelser"} />
           </button>
-          <button onClick={() => navigate('/accessibility')} className="text-[#e0aaff] hover:text-white transition-opacity">
-            {language === 'en' ? "Accessibility" : "Tilgjengelighet"}
+          <button onClick={() => navigate('/accessibility')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-accessibility" fallback={language === 'en' ? "Accessibility" : "Tilgjengelighet"} />
           </button>
-          <button onClick={() => navigate('/support')} className="text-[#e0aaff] hover:text-white transition-opacity">
-            {language === 'en' ? "Contact Support" : "Kontakt Support"}
+          <button onClick={() => navigate('/support')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-support" fallback={language === 'en' ? "Contact Support" : "Kontakt Support"} />
           </button>
         </nav>
       </footer>

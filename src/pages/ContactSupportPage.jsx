@@ -91,15 +91,13 @@ export default function ContactSupportPage() {
           <div className="lg:col-span-5 space-y-6 sm:space-y-8 flex flex-col justify-center">
             <div className="space-y-4">
               <span className="px-3.5 py-1 rounded-full bg-[#561291]/10 text-primary text-[10px] font-bold uppercase tracking-wider border border-[#561291]/20">
-                {isEn ? 'Direct Support' : 'Brukerstøtte'}
+                <CmsText slug="support-hero-tag" fallback={isEn ? 'Direct Support' : 'Brukerstøtte'} />
               </span>
               <h1 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#561291] leading-tight break-words">
-                {isEn ? 'Get in Touch with Us' : 'Kontakt Kundestøtte'}
+                <CmsText slug="support-hero-title" fallback={isEn ? 'Get in Touch with Us' : 'Kontakt Kundestøtte'} />
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-medium">
-                {isEn 
-                  ? 'Have theological questions, need help with assignments, or experiencing technical glitches? We are here to support your prophetic journey.' 
-                  : 'Har du teologiske spørsmål, trenger hjelp med oppgaver eller opplever tekniske problemer? Vi er klare til å hjelpe deg videre i din tjeneste.'}
+                <CmsText slug="support-hero-desc" fallback={isEn ? 'Have theological questions, need help with assignments, or experiencing technical glitches? We are here to support your prophetic journey.' : 'Har du teologiske spørsmål, trenger hjelp med oppgaver eller opplever tekniske problemer? Vi er klare til å hjelpe deg videre i din tjeneste.'} />
               </p>
             </div>
 
@@ -111,11 +109,13 @@ export default function ContactSupportPage() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-primary uppercase tracking-wide">
-                    {isEn ? 'Email Support' : 'E-post support'}
+                    <CmsText slug="support-email-title" fallback={isEn ? 'Email Support' : 'E-post support'} />
                   </h4>
-                  <p className="text-xs font-semibold text-slate-700 mt-1">hiskingdomprophets@hiskingdomministry.no</p>
+                  <p className="text-xs font-semibold text-slate-700 mt-1">
+                    <CmsText slug="support-email-address" fallback="hiskingdomprophets@hiskingdomministry.no" />
+                  </p>
                   <p className="text-[10px] font-medium text-slate-400 mt-0.5">
-                    {isEn ? 'Response time: Within 24 hours' : 'Svarstid: Innen 24 timer'}
+                    <CmsText slug="support-email-time" fallback={isEn ? 'Response time: Within 24 hours' : 'Svarstid: Innen 24 timer'} />
                   </p>
                 </div>
               </div>
@@ -126,11 +126,13 @@ export default function ContactSupportPage() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-primary uppercase tracking-wide">
-                    {isEn ? 'Mentor Hotline' : 'Mentor kriselinje'}
+                    <CmsText slug="support-phone-title" fallback={isEn ? 'Mentor Hotline' : 'Mentor kriselinje'} />
                   </h4>
-                  <p className="text-xs font-semibold text-slate-700 mt-1">+47 38 26 80 00</p>
+                  <p className="text-xs font-semibold text-slate-700 mt-1">
+                    <CmsText slug="support-phone-number" fallback="+47 38 26 80 00" />
+                  </p>
                   <p className="text-[10px] font-medium text-slate-400 mt-0.5">
-                    {isEn ? 'Mon - Fri, 09:00 - 15:00 CET' : 'Man - Fre, 09:00 - 15:00'}
+                    <CmsText slug="support-phone-time" fallback={isEn ? 'Mon - Fri, 09:00 - 15:00 CET' : 'Man - Fre, 09:00 - 15:00'} />
                   </p>
                 </div>
               </div>
@@ -141,11 +143,13 @@ export default function ContactSupportPage() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-primary uppercase tracking-wide">
-                    {isEn ? 'Administration Office' : 'Administrasjon'}
+                    <CmsText slug="support-office-title" fallback={isEn ? 'Administration Office' : 'Administrasjon'} />
                   </h4>
-                  <p className="text-xs font-semibold text-slate-700 mt-1">Mandal, Norge</p>
+                  <p className="text-xs font-semibold text-slate-700 mt-1">
+                    <CmsText slug="support-office-location" fallback="Mandal, Norge" />
+                  </p>
                   <p className="text-[10px] font-medium text-slate-400 mt-0.5">
-                    {isEn ? 'Mandal Regnskapskontor Building' : 'Mandal Regnskapskontor bygget'}
+                    <CmsText slug="support-office-desc" fallback={isEn ? 'Mandal Regnskapskontor Building' : 'Mandal Regnskapskontor bygget'} />
                   </p>
                 </div>
               </div>
@@ -165,14 +169,14 @@ export default function ContactSupportPage() {
                 >
                   <h3 className="font-serif text-xl sm:text-2xl font-bold text-primary border-b border-slate-100 pb-4 flex items-center gap-2">
                     <Mail size={20} className="text-[#c5a059]" /> 
-                    {isEn ? 'Send us a Message' : 'Send oss en henvendelse'}
+                    <CmsText slug="support-form-title" fallback={isEn ? 'Send us a Message' : 'Send oss en henvendelse'} />
                   </h3>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">
-                          {isEn ? 'Your Name' : 'Ditt navn'}
+                          <CmsText slug="support-form-label-name" fallback={isEn ? 'Your Name' : 'Ditt navn'} />
                         </label>
                         <div className="relative flex items-center">
                           <input
@@ -188,7 +192,7 @@ export default function ContactSupportPage() {
 
                       <div>
                         <label className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">
-                          {isEn ? 'Email Address' : 'E-postadresse'}
+                          <CmsText slug="support-form-label-email" fallback={isEn ? 'Email Address' : 'E-postadresse'} />
                         </label>
                         <div className="relative flex items-center">
                           <input
@@ -205,7 +209,7 @@ export default function ContactSupportPage() {
 
                     <div>
                       <label className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">
-                        {isEn ? 'Subject' : 'Hva gjelder henvendelsen?'}
+                        <CmsText slug="support-form-label-subject" fallback={isEn ? 'Subject' : 'Hva gjelder henvendelsen?'} />
                       </label>
                       <div className="relative flex items-center">
                         <input
@@ -221,7 +225,7 @@ export default function ContactSupportPage() {
 
                     <div>
                       <label className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">
-                        {isEn ? 'Detailed Message' : 'Utdypende beskrivelse'}
+                        <CmsText slug="support-form-label-message" fallback={isEn ? 'Detailed Message' : 'Utdypende beskrivelse'} />
                       </label>
                       <textarea
                         rows={5}
@@ -239,11 +243,11 @@ export default function ContactSupportPage() {
                       className="w-full py-3.5 bg-primary hover:bg-[#0f344c] text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       {isSubmitting ? (
-                        <span>{isEn ? 'Submitting...' : 'Sender henvendelse...'}</span>
+                        <span><CmsText slug="support-form-submitting" fallback={isEn ? 'Submitting...' : 'Sender henvendelse...'} /></span>
                       ) : (
                         <>
                           <Send size={14} />
-                          <span>{isEn ? 'Send Message' : 'Send Henvendelse'}</span>
+                          <span><CmsText slug="support-form-submit" fallback={isEn ? 'Send Message' : 'Send Henvendelse'} /></span>
                         </>
                       )}
                     </button>
@@ -263,12 +267,10 @@ export default function ContactSupportPage() {
                   
                   <div className="space-y-2">
                     <h3 className="font-serif text-2xl font-bold text-primary">
-                      {isEn ? 'Thank you!' : 'Tusen takk!'}
+                      <CmsText slug="support-success-title" fallback={isEn ? 'Thank you!' : 'Tusen takk!'} />
                     </h3>
                     <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-semibold">
-                      {isEn 
-                        ? 'Your ticket has been registered. One of our mentors or faglærere will reply to your email shortly.' 
-                        : 'Din henvendelse er registrert. En av våre faglærere eller mentorer vil svare deg på e-post innen kort tid.'}
+                      <CmsText slug="support-success-desc" fallback={isEn ? 'Your ticket has been registered. One of our mentors or faglærere will reply to your email shortly.' : 'Din henvendelse er registrert. En av våre faglærere eller mentorer vil svare deg på e-post innen kort tid.'} />
                     </p>
                   </div>
 
@@ -290,8 +292,29 @@ export default function ContactSupportPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-8 bg-[#240046] text-white/80 text-center text-xs mt-12 border-t border-white/10 font-medium">
-        <p>© 2026 His Kingdom Prophets. All rights reserved.</p>
+      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white select-none shrink-0 border-t border-white/5 font-medium">
+        <div className="flex flex-col gap-2 text-center md:text-left">
+          <div className="font-serif text-lg font-bold text-[#e0aaff]">
+            <CmsText slug="landing-footer-title" fallback="His Kingdom Prophets" />
+          </div>
+          <p className="text-[10px] text-slate-300 opacity-80 max-w-md">
+            <CmsText slug="landing-footer-copyright" fallback={isEn ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."} />
+          </p>
+        </div>
+        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold text-[#e0aaff]">
+          <button onClick={() => navigate('/privacy')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-privacy" fallback={isEn ? "Privacy Policy" : "Personvern"} />
+          </button>
+          <button onClick={() => navigate('/terms')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-terms" fallback={isEn ? "Terms of Service" : "Betingelser"} />
+          </button>
+          <button onClick={() => navigate('/accessibility')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-accessibility" fallback={isEn ? "Accessibility" : "Tilgjengelighet"} />
+          </button>
+          <button onClick={() => navigate('/support')} className="hover:text-white transition-opacity">
+            <CmsText slug="landing-footer-link-support" fallback={isEn ? "Contact Support" : "Kontakt Support"} />
+          </button>
+        </nav>
       </footer>
     </div>
   );
