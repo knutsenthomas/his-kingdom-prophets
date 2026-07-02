@@ -84,10 +84,13 @@ const BIBLE_BOOKS = [
 ];
 
 const TRANSLATIONS = [
+  { id: 'openbible_nb', name: 'Open Translation Bible (Norsk)' },
   { id: 'bibelselskap', name: 'Norsk Bokmål (1930)' },
   { id: 'norsmb', name: 'Norsk Nynorsk (1921)' },
   { id: 'web', name: 'English (World English Bible)' },
   { id: 'kjv', name: 'English (King James Version)' },
+  { id: 'rv1960', name: 'Español (Reina Valera 1960)' },
+  { id: 'nvi', name: 'Español (Nueva Versión Internacional)' },
 ];
 
 const STUDY_BIBLE_DATA = {
@@ -847,10 +850,120 @@ export default function BibleView() {
     try {
       const bookIndex = BIBLE_BOOKS.findIndex(b => b.id === selectedBook.id);
       const bookNumber = bookIndex + 1;
+
+      // 1. Open Translation Bible (Norsk) - fetches from GitHub
+      if (selectedTranslation === 'openbible_nb') {
+        const OPENBIBLE_NB_FOLDERS = [
+          "01.1 Mosebok", "02.2 Mosebok", "03.3 Mosebok", "04.4 Mosebok", "05.5 Mosebok",
+          "06.Josva", "07.Dommerne", "08.Rut", "09.1 Samuelsbok", "10.2 Samuelsbok",
+          "11.1 Kongebok", "12.2 Kongebok", "13.1 Krønikebok", "14.2 Krønikebok",
+          "15.Esra", "16.Nehemja", "17.Ester", "18.Job", "19.Salmene", "20.Ordspråkene",
+          "21.Forkynneren", "22.Høysangen", "23.Jesaja", "24.Jeremia", "25.Klagesangene",
+          "26.Esekiel", "27.Daniel", "28.Hosea", "29.Joel", "30.Amos", "31.Obadja",
+          "32.Jona", "33.Mika", "34.Nahum", "35.Habakkuk", "36.Sefanja", "37.Haggai",
+          "38.Sakarja", "39.Malaki", "40.Matteus", "41.Markus", "42.Lukas", "43.Johannes",
+          "44.Apostlenes gjerninger", "45.Romerne", "46.1 Korinterne", "47.2 Korinterne",
+          "48.Galaterne", "49.Efeserne", "50.Filipperne", "51.Kolosserne", "52.1 Tessalonikerne",
+          "53.2 Tessalonikerne", "54.1 Timoteus", "55.2 Timoteus", "56.Titus", "57.Filemon",
+          "58.Hebreerne", "59.Jakob", "60.1 Peter", "61.2 Peter", "62.1 Johannes",
+          "63.2 Johannes", "64.3 Johannes", "65.Judas", "66.Åpenbaringen"
+        ];
+
+        const folderName = OPENBIBLE_NB_FOLDERS[bookIndex];
+        if (folderName) {
+          const dotIndex = folderName.indexOf(".");
+          const displayName = dotIndex === -1 ? folderName : folderName.substring(dotIndex + 1);
+          const jsonPrefix = displayName.toLowerCase().replace(/\s+/g, "-").replace(/\./g, "");
+          const padLength = bookNumber === 19 ? 3 : 2;
+          const chapterNumPadded = String(selectedChapter).padStart(padLength, "0");
+          
+          const githubUrl = `https://raw.githubusercontent.com/OpentranslationBible/open-bible/main/lang/nb-NO/${encodeURIComponent(folderName)}/json/${jsonPrefix}-${chapterNumPadded}.json`;
+
+          try {
+            const response = await fetch(githubUrl);
+            if (response.ok) {
+              const data = await response.json();
+              const mapped = (data.verses || [])
+                .filter(v => v.verse !== undefined && v.verse !== null)
+                .map(v => {
+                  const rawLines = Array.isArray(v.text) ? v.text : [String(v.text || "")];
+                  const cleaned = rawLines
+                    .map(line => line.trim().replace(/^>\s*/, ""))
+                    .filter(line => line !== "---" && line.length > 0)
+                    .join(" ");
+                  return {
+                    verse: Number(v.verse),
+                    text: cleaned
+                  };
+                });
+              if (mapped.length > 0) {
+                setVerses(mapped);
+                return;
+              }
+            }
+          } catch (e) {
+            console.warn("OpenBible fetch failed, falling back to Bokmål 1930:", e);
+          }
+        }
+        
+        // Fallback to Bokmål 1930 from getbible if OpenBible chapter is not available
+        const fallbackUrl = `https://api.getbible.net/v2/bibelselskap/${bookNumber}/${selectedChapter}.json`;
+        const res = await fetch(fallbackUrl);
+        if (res.ok) {
+          const data = await res.json();
+          setVerses(data.verses || []);
+          return;
+        }
+      }
+
+      // 2. Spanish/Bolls.life Translations (rv1960, nvi)
+      if (selectedTranslation === 'rv1960' || selectedTranslation === 'nvi') {
+        const targetBible = selectedTranslation.toUpperCase();
+        const bollsUrl = `https://bolls.life/get-chapter/${targetBible}/${bookNumber}/${selectedChapter}/`;
+        try {
+          const response = await fetch(bollsUrl);
+          if (response.ok) {
+            const data = await response.json(); // returns array of { pk, text, verse }
+            const mapped = (data || []).map(v => ({
+              verse: Number(v.verse),
+              text: v.text.replace(/<S>\d+<\/S>/g, "").replace(/<[^>]+>/g, "").trim()
+            }));
+            if (mapped.length > 0) {
+              setVerses(mapped);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn("Bolls.life fetch failed:", e);
+        }
+      }
+
+      // 3. Standard Translations (Getbible.net primary)
       const url = `https://api.getbible.net/v2/${selectedTranslation}/${bookNumber}/${selectedChapter}.json`;
       const response = await fetch(url);
       
       if (!response.ok) {
+        // Fallback to Bolls.life if getbible fails
+        const bollsTranslationMap = {
+          'bibelselskap': 'DNB',
+          'norsmb': 'NOR1921',
+          'web': 'WEB',
+          'kjv': 'KJV'
+        };
+        const bollsCode = bollsTranslationMap[selectedTranslation];
+        if (bollsCode) {
+          const bollsFallbackUrl = `https://bolls.life/get-chapter/${bollsCode}/${bookNumber}/${selectedChapter}/`;
+          const bollsRes = await fetch(bollsFallbackUrl);
+          if (bollsRes.ok) {
+            const bollsData = await bollsRes.json();
+            const mapped = (bollsData || []).map(v => ({
+              verse: Number(v.verse),
+              text: v.text.replace(/<S>\d+<\/S>/g, "").replace(/<[^>]+>/g, "").trim()
+            }));
+            setVerses(mapped);
+            return;
+          }
+        }
         throw new Error('Kunne ikke hente bibeldata');
       }
 
