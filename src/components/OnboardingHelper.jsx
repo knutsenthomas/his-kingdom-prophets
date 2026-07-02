@@ -5,6 +5,7 @@ import {
   Sparkles, Compass, GraduationCap, Users, 
   MessageSquare, ChevronRight, ChevronLeft, X, CheckCircle 
 } from 'lucide-react';
+import logo from '@/assets/logo.png';
 
 export default function OnboardingHelper() {
   const { user } = useApp();
@@ -126,9 +127,17 @@ export default function OnboardingHelper() {
               key={currentStep}
               initial={{ scale: 0.8, rotate: -10 }}
               animate={{ scale: 1, rotate: 0 }}
-              className={`w-20 h-20 bg-gradient-to-tr ${steps[currentStep].color} text-white rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3`}
+              className={`w-20 h-20 bg-gradient-to-tr ${
+                currentStep === 0 
+                  ? 'from-blue-50 to-indigo-100/50 border border-indigo-200/50' 
+                  : steps[currentStep].color
+              } rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3`}
             >
-              <ActiveIcon size={38} className="animate-pulse" />
+              {currentStep === 0 ? (
+                <img src={logo} alt="His Kingdom Prophets Logo" className="w-14 h-14 object-contain" />
+              ) : (
+                <ActiveIcon size={38} className="animate-pulse" />
+              )}
             </motion.div>
 
             {/* Step Content */}
