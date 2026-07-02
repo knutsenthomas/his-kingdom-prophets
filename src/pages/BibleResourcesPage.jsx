@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BookOpen, Search, ArrowLeft, ArrowRight, Copy, Check, RefreshCw, Sparkles, BookMarked, X,
   Trash2, Save, Globe, Video, FileText, Calendar, Compass, UserCheck, Flame, BookText, Settings,
-  ChevronDown, Maximize2, Minimize2, Type, Edit3
+  ChevronDown, Maximize2, Minimize2, Type, Edit3, Users, History
 } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
@@ -14,6 +14,8 @@ import {
   BIBLE_BOOKS, TRANSLATIONS, STUDY_BIBLE_DATA, 
   parseBibleReference, findBibleBook, generateDynamicCommentary 
 } from '@/lib/bibleData';
+import { biblicalCharacters } from '@/lib/bibelske-personer-data';
+import { timelineData, empiresData } from '@/lib/timelineData';
 
 export default function BibleResourcesPage() {
   const navigate = useNavigate();
@@ -43,7 +45,14 @@ export default function BibleResourcesPage() {
     ADMIN_EMAILS.includes(localEmail);
 
   // Navigation tab for the resource hub
-  const [activeTab, setActiveTab] = useState('bible'); // bible, curriculums, video, fasting
+  const [activeTab, setActiveTab] = useState('bible'); // bible, curriculums, video, fasting, characters, timeline
+
+  // Biblical Characters and Timeline States
+  const [characterSearch, setCharacterSearch] = useState('');
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [timelineSubTab, setTimelineSubTab] = useState('history'); // history, empires
+  const [activeTimelineSection, setActiveTimelineSection] = useState('urhistorien');
+  const [returnOriginTab, setReturnOriginTab] = useState(null);
 
   // Interactive Bible States (Same as BibleView)
   const [selectedBook, setSelectedBook] = useState(BIBLE_BOOKS.find(b => b.id === 'joh'));
@@ -349,6 +358,15 @@ export default function BibleResourcesPage() {
     return false;
   };
 
+  const handleScriptureRefLink = (refString, originTab) => {
+    if (!refString) return;
+    const success = loadBibleReference(refString);
+    if (success) {
+      setReturnOriginTab(originTab);
+      setActiveTab('bible');
+    }
+  };
+
   const handleGoBackToReference = () => {
     if (!previousReference) return;
     setSelectedBook(previousReference.book);
@@ -573,7 +591,9 @@ export default function BibleResourcesPage() {
             { id: 'bible', fallback: 'Interaktiv studiebibel', icon: BookOpen },
             { id: 'curriculums', fallback: 'Fagplaner og studiehefter', icon: BookText },
             { id: 'video', fallback: 'Lyd- og videoundervisning', icon: Video },
-            { id: 'fasting', fallback: 'Fastemanualer og bønneguider', icon: Flame }
+            { id: 'fasting', fallback: 'Fastemanualer og bønneguider', icon: Flame },
+            { id: 'characters', fallback: 'Bibelske personer', icon: Users },
+            { id: 'timeline', fallback: 'Bibelsk tidslinje', icon: History }
           ].map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -1468,26 +1488,527 @@ export default function BibleResourcesPage() {
           </div>
         )}
 
+        {/* TAB 5: BIBLICAL CHARACTERS */}
+        {activeTab === 'characters' && (
+          <div className="space-y-10 animate-in fade-in duration-300">
+            <div className="text-center max-w-2xl mx-auto space-y-3">
+              <h3 className="font-serif text-2xl font-bold text-primary">
+                {isEn ? "Biblical Characters Catalog" : "Bibelske personer"}
+              </h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                {isEn 
+                  ? "Explore the biographies, key scripture passages, and theological significance of the central figures of the biblical narrative." 
+                  : "Utforsk biografiene, de sentrale bibelske skriftene, og den teologiske betydningen av Bibelens mest sentrale skikkelser."}
+              </p>
+            </div>
+
+            {/* Search and Filters */}
+            <div className="max-w-md mx-auto relative">
+              <Search className="absolute left-4 top-3.5 text-slate-400" size={18} />
+              <input
+                type="text"
+                placeholder={isEn ? "Search characters by name, role, era..." : "Søk etter navn, rolle, historisk tid..."}
+                value={characterSearch}
+                onChange={(e) => setCharacterSearch(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 focus:border-primary focus:bg-white rounded-xl text-sm focus:outline-none transition-all shadow-sm"
+              />
+            </div>
+
+            {/* Grid of Characters */}
+            {(() => {
+              const searchLower = characterSearch.toLowerCase();
+              const filtered = (biblicalCharacters || []).filter(char => {
+                const name = (char.name[language] || char.name.no || '').toLowerCase();
+                const role = (char.role[language] || char.role.no || '').toLowerCase();
+                const era = (char.era[language] || char.era.no || '').toLowerCase();
+                const summary = (char.summary[language] || char.summary.no || '').toLowerCase();
+                return name.includes(searchLower) || role.includes(searchLower) || era.includes(searchLower) || summary.includes(searchLower);
+              });
+
+              if (filtered.length === 0) {
+                return (
+                  <div className="text-center py-12 text-slate-500">
+                    {isEn ? "No characters match your search query." : "Ingen personer samsvarer med søket ditt."}
+                  </div>
+                );
+              }
+
+              return (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                  {filtered.map(char => {
+                    const charName = char.name[language] || char.name.no;
+                    const charRole = char.role[language] || char.role.no;
+                    const charEra = char.era[language] || char.era.no;
+                    const charSummary = char.summary[language] || char.summary.no;
+                    
+                    return (
+                      <div 
+                        key={char.id} 
+                        className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md hover:border-primary/20 transition-all duration-300 group"
+                      >
+                        <div>
+                          {/* Image Wrap */}
+                          <div className="h-56 bg-slate-100 overflow-hidden relative">
+                            <img 
+                              src={char.image} 
+                              alt={charName} 
+                              className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextSibling.style.display = 'flex';
+                              }}
+                            />
+                            <div 
+                              className="hidden absolute inset-0 bg-gradient-to-br from-[#1B4965]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-4xl text-primary"
+                            >
+                              {charName.substring(0, 1)}
+                            </div>
+                            <div className="absolute top-4 left-4 px-2.5 py-1 bg-white/90 backdrop-blur-sm rounded-lg text-[9px] font-bold text-slate-600 uppercase tracking-wide border border-slate-200/40">
+                              {charEra}
+                            </div>
+                          </div>
+
+                          <div className="p-6 space-y-3">
+                            <h4 className="font-serif text-lg font-bold text-primary group-hover:text-burnt-orange transition-colors">
+                              {charName}
+                            </h4>
+                            <span className="text-[10px] font-bold text-burnt-orange uppercase tracking-wider block font-sans">
+                              {charRole}
+                            </span>
+                            <p className="text-xs text-slate-500 leading-relaxed font-sans font-medium line-clamp-3">
+                              {charSummary}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="px-6 pb-6 pt-2">
+                          <button
+                            onClick={() => setSelectedCharacter(char)}
+                            className="w-full py-2 bg-slate-50 hover:bg-primary hover:text-white border border-slate-200 hover:border-primary text-primary font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                          >
+                            <span>{isEn ? 'Read Biography' : 'Les mer'}</span>
+                            <ArrowRight size={12} />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
+          </div>
+        )}
+
+        {/* TAB 6: BIBLICAL TIMELINE */}
+        {activeTab === 'timeline' && (
+          <div className="space-y-10 animate-in fade-in duration-300">
+            <div className="text-center max-w-2xl mx-auto space-y-3">
+              <h3 className="font-serif text-2xl font-bold text-primary">
+                {isEn ? "Biblical Timeline" : "Bibelsk tidslinje og historiske epoker"}
+              </h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                {isEn 
+                  ? "Explore the chronological progression of biblical history and the world empires that impacted the scriptures." 
+                  : "Følg den røde tråden gjennom Bibelens historiske epoker og få oversikt over imperiene som formet den bibelske historien."}
+              </p>
+            </div>
+
+            {/* Sub Tabs Toggle (History vs. Empires) */}
+            <div className="flex justify-center shrink-0">
+              <div className="bg-slate-100 p-1.5 rounded-2xl flex max-w-md w-full border border-slate-200/50">
+                <button
+                  onClick={() => {
+                    setTimelineSubTab('history');
+                    setActiveTimelineSection('urhistorien');
+                  }}
+                  className={`flex-1 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer text-center ${
+                    timelineSubTab === 'history' 
+                      ? 'bg-white text-primary shadow-md font-extrabold' 
+                      : 'text-slate-500 hover:text-primary'
+                  }`}
+                >
+                  {isEn ? "Bible History" : "Bibelens historie"}
+                </button>
+                <button
+                  onClick={() => {
+                    setTimelineSubTab('empires');
+                    setActiveTimelineSection('egypt');
+                  }}
+                  className={`flex-1 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer text-center ${
+                    timelineSubTab === 'empires' 
+                      ? 'bg-white text-primary shadow-md font-extrabold' 
+                      : 'text-slate-500 hover:text-primary'
+                  }`}
+                >
+                  {isEn ? "World Empires" : "Store imperier"}
+                </button>
+              </div>
+            </div>
+
+            {/* Timeline Content */}
+            <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6">
+              {/* Left Column: Sticky Sub-navigation list */}
+              <div className="lg:col-span-3 hidden lg:block sticky top-40 h-fit space-y-2.5 bg-slate-50/50 border border-slate-100 p-5 rounded-2xl">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2 font-mono">
+                  {isEn ? "Jump to era" : "Hurtignavigering"}
+                </span>
+                {(timelineSubTab === 'history' ? timelineData : empiresData).map(section => {
+                  const isActive = activeTimelineSection === section.id;
+                  const sectionTitle = section.title[language] || section.title.no;
+                  const dotColor = 
+                    section.color === 'emerald' ? 'bg-emerald-500' :
+                    section.color === 'amber' ? 'bg-amber-500' :
+                    section.color === 'yellow' ? 'bg-yellow-500' :
+                    section.color === 'red' ? 'bg-red-500' :
+                    section.color === 'purple' ? 'bg-purple-500' :
+                    section.color === 'orange' ? 'bg-orange-500' :
+                    section.color === 'cyan' ? 'bg-cyan-500' : 'bg-indigo-500';
+                  
+                  return (
+                    <button
+                      key={section.id}
+                      onClick={() => {
+                        setActiveTimelineSection(section.id);
+                        const el = document.getElementById(`timeline-section-${section.id}`);
+                        if (el) {
+                          const offset = 180;
+                          const bodyRect = document.body.getBoundingClientRect().top;
+                          const elementRect = el.getBoundingClientRect().top;
+                          window.scrollTo({
+                            top: elementRect - bodyRect - offset,
+                            behavior: 'smooth'
+                          });
+                        }
+                      }}
+                      className={`w-full text-left py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 border ${
+                        isActive 
+                          ? 'bg-white border-slate-200/80 text-primary shadow-sm font-extrabold' 
+                          : 'bg-transparent border-transparent text-slate-500 hover:text-primary hover:bg-slate-50'
+                      }`}
+                    >
+                      <span className={`w-2 h-2 rounded-full ${dotColor} ${isActive ? 'scale-125 animate-pulse' : ''}`} />
+                      <span className="truncate">{sectionTitle}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Right Column: The Vertical Timeline Graphic */}
+              <div className="lg:col-span-9 relative">
+                {/* Vertical Central/Left Line */}
+                <div 
+                  className="absolute top-4 bottom-4 left-6 lg:left-1/2 w-1 rounded bg-gradient-to-b from-[#d17d39] via-[#bd4f2a] to-primary -translate-x-1/2" 
+                />
+
+                <div className="space-y-16">
+                  {(timelineSubTab === 'history' ? timelineData : empiresData).map((section, idx) => {
+                    const sectionTitle = section.title[language] || section.title.no;
+                    const sectionEra = section.era[language] || section.era.no;
+                    const sectionItalic = section.italic[language] || section.italic.no;
+                    const sectionDesc = section.desc[language] || section.desc.no;
+                    const sectionScripTitle = section.scripTitle[language] || section.scripTitle.no;
+                    
+                    const isEven = idx % 2 === 0;
+
+                    const accentClass = 
+                      section.color === 'emerald' ? 'border-t-emerald-500 text-emerald-600 bg-emerald-50/50 text-emerald-800' :
+                      section.color === 'amber' ? 'border-t-amber-500 text-amber-600 bg-amber-50/50 text-amber-800' :
+                      section.color === 'yellow' ? 'border-t-yellow-500 text-yellow-600 bg-yellow-50/50 text-yellow-800' :
+                      section.color === 'red' ? 'border-t-red-500 text-red-600 bg-red-50/50 text-red-800' :
+                      section.color === 'purple' ? 'border-t-purple-500 text-purple-600 bg-purple-50/50 text-purple-800' :
+                      section.color === 'orange' ? 'border-t-orange-500 text-orange-600 bg-orange-50/50 text-orange-800' :
+                      section.color === 'cyan' ? 'border-t-cyan-500 text-cyan-600 bg-cyan-50/50 text-cyan-800' :
+                      'border-t-indigo-500 text-indigo-600 bg-indigo-50/50 text-indigo-800';
+
+                    const dotBorderColor = 
+                      section.color === 'emerald' ? 'border-emerald-500' :
+                      section.color === 'amber' ? 'border-amber-500' :
+                      section.color === 'yellow' ? 'border-yellow-500' :
+                      section.color === 'red' ? 'border-red-500' :
+                      section.color === 'purple' ? 'border-purple-500' :
+                      section.color === 'orange' ? 'border-orange-500' :
+                      section.color === 'cyan' ? 'border-cyan-500' : 'border-indigo-500';
+
+                    return (
+                      <div 
+                        id={`timeline-section-${section.id}`}
+                        key={section.id} 
+                        className="relative flex flex-col lg:flex-row w-full group"
+                      >
+                        {/* Timeline Node dot */}
+                        <div 
+                          className={`absolute left-6 lg:left-1/2 w-5 h-5 rounded-full bg-white border-4 ${dotBorderColor} -translate-x-1/2 top-8 z-10 shadow-sm transition-all duration-300 group-hover:scale-125 group-hover:bg-primary`} 
+                        />
+
+                        {/* Left Spacer / Card for even items on desktop */}
+                        <div className={`w-full lg:w-1/2 pl-16 lg:pl-0 lg:pr-12 flex justify-end order-2 ${isEven ? 'lg:order-1' : 'lg:order-2 hidden lg:flex'}`} />
+
+                        {/* Main Card */}
+                        <div className={`w-full lg:w-1/2 pl-16 lg:pl-12 lg:pr-0 flex justify-start order-2 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
+                          <div className={`bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 sm:p-8 w-full border-t-4 ${accentClass.split(' ')[0]} transition-all duration-300 hover:shadow-md`}>
+                            
+                            {/* Card Header */}
+                            <div className="space-y-1 mb-4">
+                              <span className={`text-[10px] font-bold uppercase tracking-wider font-sans ${accentClass.split(' ')[1]}`}>
+                                {sectionEra}
+                              </span>
+                              <h4 className="font-serif text-lg sm:text-xl font-bold text-primary">
+                                {sectionTitle}
+                              </h4>
+                              {sectionItalic && (
+                                <p className="text-xs font-semibold text-slate-400 italic">
+                                  {sectionItalic}
+                                </p>
+                              )}
+                            </div>
+
+                            {/* Summary Text */}
+                            <p className="text-xs text-slate-600 leading-relaxed font-sans font-medium mb-5">
+                              {sectionDesc}
+                            </p>
+
+                            {/* Events bullet list */}
+                            <div className="space-y-3.5 mb-6">
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block font-sans">
+                                {isEn ? "Key Events / Details" : "Viktige detaljer"}
+                              </span>
+                              <ul className="space-y-3">
+                                {section.events.map((evt, eidx) => {
+                                  const evtTitle = evt.title[language] || evt.title.no;
+                                  const evtDesc = evt.desc[language] || evt.desc.no;
+                                  return (
+                                    <li key={eidx} className="flex gap-2.5 text-xs text-slate-600 leading-relaxed font-medium align-top">
+                                      <span className={`shrink-0 w-1.5 h-1.5 rounded-full mt-2 ${accentClass.split(' ')[0].replace('border-t-', 'bg-')}`} />
+                                      <span>
+                                        <strong className="text-slate-800">{evtTitle} </strong>
+                                        {evtDesc}
+                                      </span>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
+
+                            {/* Citation Link */}
+                            <div className={`p-4 rounded-xl border border-slate-200/10 flex items-start gap-3 ${accentClass.split(' ').slice(2).join(' ')}`}>
+                              <BookOpen size={16} className="shrink-0 mt-0.5" />
+                              <div className="space-y-0.5">
+                                <span className="text-[9px] font-bold uppercase tracking-wider block font-sans">
+                                  {isEn ? "Key Scripture Passage" : "Sentrale skrifter"}
+                                </span>
+                                <button
+                                  onClick={() => handleScriptureRefLink(section.scripRef, 'timeline')}
+                                  className="text-xs font-bold hover:underline text-left block text-[#1B4965] transition-all cursor-pointer font-serif"
+                                >
+                                  {sectionScripTitle}
+                                </button>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+
+                        {/* Right Spacer for odd items on desktop */}
+                        <div className={`w-full lg:w-1/2 pl-16 lg:pl-0 lg:pr-12 flex justify-start order-2 ${!isEven ? 'lg:order-2' : 'lg:order-1 hidden lg:flex'}`} />
+
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        )}
+
       </main>
+
+      {/* Selected Character Detail Modal */}
+      <AnimatePresence>
+        {selectedCharacter && (() => {
+          const charName = selectedCharacter.name[language] || selectedCharacter.name.no;
+          const charRole = selectedCharacter.role[language] || selectedCharacter.role.no;
+          const charEra = selectedCharacter.era[language] || selectedCharacter.era.no;
+          const charMeaning = selectedCharacter.meaning[language] || selectedCharacter.meaning.no;
+          const charSummary = selectedCharacter.summary[language] || selectedCharacter.summary.no;
+          const charStory = selectedCharacter.story[language] || selectedCharacter.story.no;
+          const charTheology = selectedCharacter.theologicalSignificance[language] || selectedCharacter.theologicalSignificance.no;
+          
+          return (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedCharacter(null)}
+              className="fixed inset-0 z-[70] bg-[#1B4965]/40 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
+            >
+              <motion.div
+                initial={{ scale: 0.95, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 20 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white rounded-3xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl border border-slate-100"
+              >
+                {/* Modal Header */}
+                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 shrink-0 bg-slate-50">
+                  <div className="space-y-0.5">
+                    <span className="text-[9px] font-bold text-burnt-orange uppercase tracking-wider block font-sans">
+                      {isEn ? "Biblical Character Profile" : "Profil av bibelsk person"}
+                    </span>
+                    <h3 className="font-serif font-extrabold text-lg text-primary leading-tight">
+                      {charName}
+                    </h3>
+                  </div>
+                  <button 
+                    onClick={() => setSelectedCharacter(null)}
+                    className="p-1.5 hover:bg-slate-200 rounded-lg text-slate-400 hover:text-primary transition-all cursor-pointer"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                {/* Modal Body */}
+                <div className="flex-grow overflow-y-auto p-6 md:p-8 space-y-6 md:space-y-0 md:grid md:grid-cols-12 md:gap-8 font-sans scrollbar-thin">
+                  
+                  {/* Left Column: Image and quick facts */}
+                  <div className="md:col-span-4 space-y-5">
+                    <div className="aspect-[4/5] bg-slate-100 rounded-2xl overflow-hidden shadow-sm border border-slate-200/40 relative">
+                      <img 
+                        src={selectedCharacter.image} 
+                        alt={charName}
+                        className="w-full h-full object-cover object-top"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                      <div 
+                        className="hidden absolute inset-0 bg-gradient-to-br from-[#1B4965]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-6xl text-primary"
+                      >
+                        {charName.substring(0, 1)}
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4.5 space-y-4">
+                      <div>
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">
+                          {isEn ? "Name Meaning" : "Navnets betydning"}
+                        </span>
+                        <span className="text-xs font-bold text-primary mt-0.5 block leading-normal">
+                          {charMeaning}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">
+                          {isEn ? "Historical Era" : "Historisk tid"}
+                        </span>
+                        <span className="text-xs font-bold text-slate-700 mt-0.5 block">
+                          {charEra}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">
+                          {isEn ? "Biblical Role" : "Rolle / Tittel"}
+                        </span>
+                        <span className="text-xs font-bold text-slate-700 mt-0.5 block">
+                          {charRole}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Biography & Significance */}
+                  <div className="md:col-span-8 space-y-6">
+                    {/* Excerpt */}
+                    <p className="text-sm font-bold text-primary leading-relaxed font-serif bg-primary/5 p-4 rounded-xl border border-primary/10">
+                      {charSummary}
+                    </p>
+
+                    {/* Biography */}
+                    <div className="space-y-2">
+                      <h4 className="font-serif font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
+                        {isEn ? "Biblical Biography & History" : "Biografi og bibelsk historie"}
+                      </h4>
+                      <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium text-justify whitespace-pre-line">
+                        {charStory}
+                      </div>
+                    </div>
+
+                    {/* Theological Significance */}
+                    <div className="space-y-2">
+                      <h4 className="font-serif font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
+                        {isEn ? "Theological Significance" : "Teologisk betydning"}
+                      </h4>
+                      <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium text-justify whitespace-pre-line">
+                        {charTheology}
+                      </div>
+                    </div>
+
+                    {/* Key Verses Links */}
+                    <div className="space-y-2">
+                      <h4 className="font-serif font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
+                        {isEn ? "Key Bible Passages" : "Sentrale bibelske skrifter"}
+                      </h4>
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {selectedCharacter.verses.map((ref, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              setSelectedCharacter(null);
+                              handleScriptureRefLink(ref, 'characters');
+                            }}
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-50 hover:bg-[#1B4965] hover:text-white border border-slate-200 text-primary rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer active:scale-95"
+                          >
+                            <BookOpen size={11} />
+                            <span>{ref}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </motion.div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
 
       {/* Flytende gå-tilbake-knapp sentrert nederst på skjermen */}
       <AnimatePresence>
-        {previousReference && (
+        {(returnOriginTab || previousReference) && (
           <motion.div
             initial={{ opacity: 0, y: 50, x: '-50%' }}
             animate={{ opacity: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, y: 50, x: '-50%' }}
             className="fixed bottom-6 left-1/2 z-50 select-none pointer-events-auto"
           >
-            <button
-              onClick={handleGoBackToReference}
-              className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-primary to-[#2c6e91] hover:from-[#153b52] hover:to-[#225672] text-white shadow-xl shadow-primary/25 rounded-full text-xs font-extrabold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.95] cursor-pointer border-2 border-white/20 backdrop-blur-sm"
-            >
-              <ArrowLeft size={14} className="stroke-[3] animate-pulse" />
-              <span>
-                Tilbake til {previousReference.book.nor} {previousReference.chapter}{previousReference.verse ? `:${previousReference.verse}` : ''}
-              </span>
-            </button>
+            {returnOriginTab ? (
+              <button
+                onClick={() => {
+                  setActiveTab(returnOriginTab);
+                  setReturnOriginTab(null);
+                }}
+                className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-burnt-orange to-[#bd4f2a] hover:from-[#bd4f2a] hover:to-[#a03d1e] text-white shadow-xl shadow-burnt-orange/25 rounded-full text-xs font-extrabold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.95] cursor-pointer border-2 border-white/20 backdrop-blur-sm"
+              >
+                <ArrowLeft size={14} className="stroke-[3] animate-pulse" />
+                <span>
+                  {returnOriginTab === 'characters' 
+                    ? (isEn ? "Back to Characters" : "Tilbake til personer") 
+                    : (isEn ? "Back to Timeline" : "Tilbake til tidslinje")}
+                </span>
+              </button>
+            ) : (
+              <button
+                onClick={handleGoBackToReference}
+                className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-primary to-[#2c6e91] hover:from-[#153b52] hover:to-[#225672] text-white shadow-xl shadow-primary/25 rounded-full text-xs font-extrabold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.95] cursor-pointer border-2 border-white/20 backdrop-blur-sm"
+              >
+                <ArrowLeft size={14} className="stroke-[3] animate-pulse" />
+                <span>
+                  Tilbake til {previousReference.book.nor} {previousReference.chapter}{previousReference.verse ? `:${previousReference.verse}` : ''}
+                </span>
+              </button>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
