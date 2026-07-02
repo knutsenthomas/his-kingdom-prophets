@@ -523,12 +523,15 @@ export default function StudentLayout() {
                     <button 
                       key={item.isLogout ? 'logout' : item.path}
                       onClick={onClickAction} 
-                      className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
+                      className={`relative flex items-center gap-3 w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
                         isActive 
-                          ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
+                          ? 'text-primary bg-primary/5 font-bold shadow-sm' 
                           : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
                       }`}
                     >
+                      {isActive && (
+                        <div className="absolute left-0 top-2.5 bottom-2.5 w-1 bg-primary rounded-r-full" />
+                      )}
                       <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
                       <span><CmsText slug={item.slug} fallback={item.fallback} /></span>
                     </button>
@@ -675,12 +678,15 @@ export default function StudentLayout() {
                   <button 
                     key={item.isLogout ? 'logout' : item.path}
                     onClick={onClickAction} 
-                    className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
+                    className={`relative flex items-center gap-3 w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
                       isActive 
-                        ? 'text-primary bg-primary/5 border-l-4 border-primary font-bold shadow-sm' 
+                        ? 'text-primary bg-primary/5 font-bold shadow-sm' 
                         : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
                     }`}
                   >
+                    {isActive && (
+                      <div className="absolute left-0 top-2.5 bottom-2.5 w-1 bg-primary rounded-r-full" />
+                    )}
                     <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
                     <span><CmsText slug={item.slug} fallback={item.fallback} /></span>
                   </button>

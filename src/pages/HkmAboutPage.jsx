@@ -23,6 +23,10 @@ export default function HkmAboutPage() {
     navigate('/support');
   };
 
+  const handleDonateClick = () => {
+    window.open('https://hiskingdomministry.no/donasjoner', '_blank', 'noopener,noreferrer');
+  };
+
   const stats = [
     {
       icon: <Mic size={24} className="text-[#d17d39]" />,
@@ -332,7 +336,7 @@ export default function HkmAboutPage() {
                 </p>
               </div>
               <button 
-                onClick={handleSupportClick}
+                onClick={handleDonateClick}
                 className="w-full py-2.5 bg-gradient-to-br from-[#f39c12] to-[#e74c3c] hover:opacity-95 text-white text-xs font-bold uppercase rounded-lg shadow transition-all active:scale-[0.98]"
               >
                 <CmsText slug="hkm-engage-card1-btn" fallback={isEn ? "Support Now" : "Gi gave / Støtt nå"} />
