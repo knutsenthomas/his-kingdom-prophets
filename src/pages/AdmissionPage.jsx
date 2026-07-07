@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, BookOpen, CreditCard, ChevronRight, Check, 
-  HelpCircle, ArrowLeft, Send, Award, Calendar, FileText, CheckCircle2, Globe
+  HelpCircle, ArrowLeft, Send, Award, Calendar, FileText, CheckCircle2, Globe, Lock
 } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
