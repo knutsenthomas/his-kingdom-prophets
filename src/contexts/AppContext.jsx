@@ -432,14 +432,14 @@ export const AppProvider = ({ children }) => {
       'landing-testimonial2-quote-en': '"Bridging solid Bible teaching and practical ministry in the church is the core of my heart. The mentorship here gives students direction and stability."',
       
       // New landing page final CTA (cached defaults)
-      'landing-cta-tagline': 'Opptak Åpent for Høsten 2026',
-      'landing-cta-tagline-en': 'Admissions Open for Fall 2026',
+      'landing-cta-tagline': 'Opptak Åpent for Høsten 2027',
+      'landing-cta-tagline-en': 'Admissions Open for Fall 2027',
       'landing-cta-title': 'Er du klar til å tre inn i din gudgitte tjeneste?',
       'landing-cta-title-en': 'Are you ready to step into your God-given ministry?',
       'landing-cta-desc': 'Bli en del av et levende og solid læringsmiljø dedikert til bibelundervisning og åndelig utrustning.',
       'landing-cta-desc-en': 'Become part of a vibrant and solid learning environment dedicated to Bible teaching and spiritual equipment.',
-      'landing-cta-btn-primary': 'Søk Opptak 2026',
-      'landing-cta-btn-primary-en': 'Apply for Admission 2026',
+      'landing-cta-btn-primary': 'Søk Opptak 2027',
+      'landing-cta-btn-primary-en': 'Apply for Admission 2027',
       'landing-cta-btn-secondary': 'Se Fagplan',
       'landing-cta-btn-secondary-en': 'See Curriculum',
       
@@ -864,7 +864,7 @@ export const AppProvider = ({ children }) => {
       const saved = localStorage.getItem('hkm-cms-content');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed['layout-logo-title'] === 'His Kingdom Prophets') {
+        if (parsed['layout-logo-title'] === 'His Kingdom Prophets' || parsed['landing-cta-btn-primary'] === 'Søk Opptak 2026') {
           localStorage.removeItem('hkm-cms-content');
           return defaults;
         }
@@ -1022,14 +1022,14 @@ export const AppProvider = ({ children }) => {
             'landing-testimonial2-quote-en': '"Bridging solid Bible teaching and practical ministry in the church is the core of my heart. The mentorship here gives students direction and stability."',
             
             // New landing page final CTA (database seed)
-            'landing-cta-tagline': 'Opptak Åpent for Høsten 2026',
-            'landing-cta-tagline-en': 'Admissions Open for Fall 2026',
+            'landing-cta-tagline': 'Opptak Åpent for Høsten 2027',
+            'landing-cta-tagline-en': 'Admissions Open for Fall 2027',
             'landing-cta-title': 'Er du klar til å tre inn i din gudgitte tjeneste?',
             'landing-cta-title-en': 'Are you ready to step into your God-given ministry?',
             'landing-cta-desc': 'Bli en del av et levende og solid læringsmiljø dedikert til bibelundervisning og åndelig utrustning.',
             'landing-cta-desc-en': 'Become part of a vibrant and solid learning environment dedicated to Bible teaching and spiritual equipment.',
-            'landing-cta-btn-primary': 'Søk Opptak 2026',
-            'landing-cta-btn-primary-en': 'Apply for Admission 2026',
+            'landing-cta-btn-primary': 'Søk Opptak 2027',
+            'landing-cta-btn-primary-en': 'Apply for Admission 2027',
             'landing-cta-btn-secondary': 'Se Fagplan',
             'landing-cta-btn-secondary-en': 'See Curriculum',
             

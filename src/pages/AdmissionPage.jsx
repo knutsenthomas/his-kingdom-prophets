@@ -340,7 +340,7 @@ export default function AdmissionPage() {
         <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-on-primary-container font-semibold text-[10px] sm:text-xs uppercase tracking-widest border border-white/20">
             <Award size={13} className="text-secondary-fixed-dim" />
-            <CmsText slug="landing-cta-tagline" fallback={language === 'en' ? "Application and Admission Fall 2026" : "Søknad og Opptak Høst 2026"} />
+            <CmsText slug="landing-cta-tagline" fallback={language === 'en' ? "Application and Admission Fall 2027" : "Søknad og Opptak Høst 2027"} />
           </span>
 
           <CmsText 
