@@ -305,7 +305,7 @@ export default function AdmissionPage() {
             className="flex items-center gap-2.5 font-serif font-extrabold text-primary text-base transition-all active:scale-95"
           >
             <img src={logo} alt="Logo" className="w-8 h-8 object-contain shrink-0" />
-            <span className="hidden sm:inline"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
+            <span className="hidden sm:inline"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophetic Community" /></span>
             <span className="inline sm:hidden"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
           </button>
           

@@ -344,8 +344,8 @@ export const AppProvider = ({ children }) => {
   // Centralized Headless CMS Content State
   const [cmsContent, setCmsContent] = useState(() => {
     const defaults = {
-      'landing-hero-title': 'His Kingdom prophets',
-      'landing-hero-title-en': 'His Kingdom Prophets',
+      'landing-hero-title': 'His Kingdom Prophetic Community',
+      'landing-hero-title-en': 'His Kingdom Prophetic Community',
       'landing-hero-tagline': 'Profetisk tjeneste og åndelig dybde',
       'landing-hero-tagline-en': 'Prophetic Ministry and Spiritual Depth',
       'landing-hero-description': 'En åpenbaringsskole for profetisk utrustning, bibelundervisning og åndelig vekst, hvor solid bibelsk teologi møter den levende Ånd.',
@@ -444,10 +444,10 @@ export const AppProvider = ({ children }) => {
       'landing-cta-btn-secondary-en': 'See Curriculum',
       
       // New landing page footer (cached defaults)
-      'landing-footer-title': 'His Kingdom Prophets',
-      'landing-footer-title-en': 'His Kingdom Prophets',
-      'landing-footer-copyright': '© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten.',
-      'landing-footer-copyright-en': '© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church.',
+      'landing-footer-title': 'His Kingdom Prophetic Community',
+      'landing-footer-title-en': 'His Kingdom Prophetic Community',
+      'landing-footer-copyright': '© 2026 His Kingdom Prophetic Community. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten.',
+      'landing-footer-copyright-en': '© 2026 His Kingdom Prophetic Community. All rights reserved. Equipping prophetic ministries for the church.',
       'landing-footer-link-privacy': 'Personvern',
       'landing-footer-link-privacy-en': 'Privacy Policy',
       'landing-footer-link-terms': 'Betingelser',
@@ -489,8 +489,8 @@ export const AppProvider = ({ children }) => {
       'resources-fasting-desc': 'Praktiske, bibelske verktøy som ruster deg til åndelig disiplin, bibelske fasteperioder, og profetisk forbønn under Åndens ledelse.',
       'resources-fasting-desc-en': 'Practical biblical tools for spiritual discipline, fasting, and prophetic intercession.',
 
-      'login-title': 'His Kingdom Prophets',
-      'login-title-en': 'His Kingdom Prophets',
+      'login-title': 'His Kingdom Prophetic Community',
+      'login-title-en': 'His Kingdom Prophetic Community',
       'login-subtitle': 'Logg inn på din åpenbaringsportal',
       'login-subtitle-en': 'Sign in to your revelation portal',
       'login-instruction': 'Velg din rolle under for rask pålogging, eller skriv inn brukernavn og passord for å gå til dine studier.',
@@ -532,8 +532,8 @@ export const AppProvider = ({ children }) => {
       'teacher-actions-title': 'Administrative tjenester',
       'teacher-actions-title-en': 'Administrative Services',
       
-      'admin-cms-welcome': 'Velkommen til His Kingdom Prophets sitt administrative portal. Tjen Herren med integritet.',
-      'admin-cms-welcome-en': 'Welcome to the His Kingdom Prophets administrative portal. Serve the Lord with integrity.',
+      'admin-cms-welcome': 'Velkommen til His Kingdom Prophetic Community sitt administrative portal. Tjen Herren med integritet.',
+      'admin-cms-welcome-en': 'Welcome to the His Kingdom Prophetic Community administrative portal. Serve the Lord with integrity.',
       'admin-cms-title': 'Plattforminnhold (Assets)',
       'admin-cms-title-en': 'Platform Content (Assets)',
       'admin-cms-subtitle': 'Velg et statisk tekstfelt eller systemkonfigurasjon for å gjøre endringer direkte i databasen.',
@@ -554,8 +554,8 @@ export const AppProvider = ({ children }) => {
       'welcome-cta-btn': 'GÅ TIL MITT DASHBOARD',
       'welcome-cta-btn-en': 'GO TO MY DASHBOARD',
 
-      'layout-logo-title': 'His Kingdom Prophets',
-      'layout-logo-title-en': 'His Kingdom Prophets',
+      'layout-logo-title': 'His Kingdom Prophetic Community',
+      'layout-logo-title-en': 'His Kingdom Prophetic Community',
       'layout-search-placeholder': 'Søk i plattformen...',
       'layout-search-placeholder-en': 'Search the platform...',
       'layout-upgrade-banner-title': 'Utvid tjenesten',
@@ -929,8 +929,8 @@ export const AppProvider = ({ children }) => {
         } else {
           // Document doesn't exist, seed it with the default cmsContent values!
           const initialCms = {
-            'landing-hero-title': 'His Kingdom prophets',
-            'landing-hero-title-en': 'His Kingdom Prophets',
+            'landing-hero-title': 'His Kingdom Prophetic Community',
+            'landing-hero-title-en': 'His Kingdom Prophetic Community',
             'landing-hero-tagline': 'Profetisk tjeneste og åndelig dybde',
             'landing-hero-tagline-en': 'Prophetic Ministry and Spiritual Depth',
             'landing-hero-description': 'En åpenbaringsskole for profetisk utrustning, bibelundervisning og åndelig vekst, hvor solid bibelsk teologi møter den levende Ånd.',
@@ -1029,10 +1029,10 @@ export const AppProvider = ({ children }) => {
             'landing-cta-btn-secondary-en': 'See Curriculum',
             
             // New landing page footer (database seed)
-            'landing-footer-title': 'His Kingdom Prophets',
-            'landing-footer-title-en': 'His Kingdom Prophets',
-            'landing-footer-copyright': '© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten.',
-            'landing-footer-copyright-en': '© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church.',
+            'landing-footer-title': 'His Kingdom Prophetic Community',
+            'landing-footer-title-en': 'His Kingdom Prophetic Community',
+            'landing-footer-copyright': '© 2026 His Kingdom Prophetic Community. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten.',
+            'landing-footer-copyright-en': '© 2026 His Kingdom Prophetic Community. All rights reserved. Equipping prophetic ministries for the church.',
             'landing-footer-link-privacy': 'Personvern',
             'landing-footer-link-privacy-en': 'Privacy Policy',
             'landing-footer-link-terms': 'Betingelser',
@@ -1074,8 +1074,8 @@ export const AppProvider = ({ children }) => {
             'resources-fasting-desc': 'Praktiske, bibelske verktøy som ruster deg til åndelig disiplin, bibelske fasteperioder, og profetisk forbønn under Åndens ledelse.',
             'resources-fasting-desc-en': 'Practical biblical tools for spiritual discipline, fasting, and prophetic intercession.',
 
-            'login-title': 'His Kingdom Prophets',
-            'login-title-en': 'His Kingdom Prophets',
+            'login-title': 'His Kingdom Prophetic Community',
+            'login-title-en': 'His Kingdom Prophetic Community',
             'login-subtitle': 'Logg inn på din åpenbaringsportal',
             'login-subtitle-en': 'Sign in to your revelation portal',
             'login-instruction': 'Velg din rolle under for rask pålogging, eller skriv inn brukernavn og passord for å gå til dine studier.',
@@ -1117,8 +1117,8 @@ export const AppProvider = ({ children }) => {
             'teacher-actions-title': 'Administrative tjenester',
             'teacher-actions-title-en': 'Administrative Services',
             
-            'admin-cms-welcome': 'Velkommen til His Kingdom Prophets sitt administrative portal. Tjen Herren med integritet.',
-            'admin-cms-welcome-en': 'Welcome to the His Kingdom Prophets administrative portal. Serve the Lord with integrity.',
+            'admin-cms-welcome': 'Velkommen til His Kingdom Prophetic Community sitt administrative portal. Tjen Herren med integritet.',
+            'admin-cms-welcome-en': 'Welcome to the His Kingdom Prophetic Community administrative portal. Serve the Lord with integrity.',
             'admin-cms-title': 'Plattforminnhold (Assets)',
             'admin-cms-title-en': 'Platform Content (Assets)',
             'admin-cms-subtitle': 'Velg et statisk tekstfelt eller systemkonfigurasjon for å gjøre endringer direkte i databasen.',
@@ -1139,8 +1139,8 @@ export const AppProvider = ({ children }) => {
             'welcome-cta-btn': 'GÅ TIL MITT DASHBOARD',
             'welcome-cta-btn-en': 'GO TO MY DASHBOARD',
        
-            'layout-logo-title': 'His Kingdom Prophets',
-            'layout-logo-title-en': 'His Kingdom Prophets',
+            'layout-logo-title': 'His Kingdom Prophetic Community',
+            'layout-logo-title-en': 'His Kingdom Prophetic Community',
             'layout-search-placeholder': 'Søk i plattformen...',
             'layout-search-placeholder-en': 'Search the platform...',
             'layout-upgrade-banner-title': 'Utvid tjenesten',

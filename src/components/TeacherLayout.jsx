@@ -138,7 +138,7 @@ export default function TeacherLayout() {
                 alt="His Kingdom Prophets Logo" 
                 className="w-8 h-8 object-contain shrink-0" 
               />
-              <span className="hidden sm:inline truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
+              <span className="hidden sm:inline truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophetic Community" /></span>
               <span className="inline sm:hidden truncate"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
               <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 sm:px-3 py-1 rounded-full shrink-0">
                 {user?.role === 'admin' ? 'Admin' : 'Mentor'}
@@ -354,7 +354,7 @@ export default function TeacherLayout() {
             <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
               <div className="font-serif text-lg font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => { navigate('/teacher/dashboard'); setIsMobileMenuOpen(false); }}>
                 <GraduationCap className="text-primary shrink-0 animate-pulse" size={20} />
-                <span className="hidden sm:inline"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
+                <span className="hidden sm:inline"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophetic Community" /></span>
                 <span className="inline sm:hidden"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
               </div>
               <button 
