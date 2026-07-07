@@ -643,8 +643,8 @@ export default function LandingPage() {
                 
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
                   {language === 'no'
-                    ? "Førsteåret fokuserer på å bygge et solid bibelsk fundament, styrke din personlige relasjon til Jesus og utruste deg i Åndens profetiske gaver. Undervisningen forener sunn teologi med praktisk åpenbaring og et trygt trosfellesskap. Temaene vil bli løpende revidert etter bønnesøking for Guds ledelse og timing."
-                    : "The first year focuses on building a solid biblical foundation, strengthening your personal relationship with Jesus, and equipping you in the prophetic gifts of the Spirit. The teaching unites sound theology with practical revelation and a safe faith community. Topics will be continuously revised as we pray and seek the Lord's direction."}
+                    ? "Førsteåret fokuserer på å bygge et solid bibelsk fundament, styrke din personlige relasjon til Jesus og utruste deg i Åndens profetiske gaver. Undervisningen forener sunn teologi med praktisk åpenbaring og et trygt trosfellesskap."
+                    : "The first year focuses on building a solid biblical foundation, strengthening your personal relationship with Jesus, and equipping you in the prophetic gifts of the Spirit. The teaching unites sound theology with practical revelation and a safe faith community."}
                 </p>
               </div>
 
