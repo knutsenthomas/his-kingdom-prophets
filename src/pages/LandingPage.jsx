@@ -334,7 +334,7 @@ export default function LandingPage() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <button 
                   onClick={(e) => handleNavClick(e, { href: '#about', id: 'about' })} 
-                  className="px-8 py-4 bg-white text-[#1B4965] font-semibold rounded-xl hover:bg-slate-100 transition-all shadow-lg hover:-translate-y-0.5 text-sm active:scale-[0.98]"
+                  className="px-8 py-4 bg-white text-[#3c096c] font-semibold rounded-xl hover:bg-slate-100 transition-all shadow-lg hover:-translate-y-0.5 text-sm active:scale-[0.98]"
                 >
                   <CmsText slug="landing-hero-cta-primary" fallback="Les mer om oss" />
                 </button>
@@ -353,19 +353,19 @@ export default function LandingPage() {
         {/* Section 1: About the Organization & Founders */}
         <section id="about" className="py-20 px-4 sm:px-6 md:px-12 max-w-[1200px] mx-auto space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#1B4965]/10 text-[#1B4965] font-bold text-xs uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-xs uppercase tracking-wider">
               <Info size={14} />
               {language === 'no' ? "Vårt fundament & Grunnleggere" : "Our Foundation & Founders"}
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl text-[#1B4965] font-extrabold leading-tight">
+            <h2 className="font-serif text-3xl md:text-4xl text-[#3c096c] font-extrabold leading-tight">
               {language === 'no' ? "Om stiftelsen og folkene bak" : "About the Organization & Founders"}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* The Foundation text */}
-            <div className="space-y-6 bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#1B4965]/20 transition-all">
-              <div className="flex items-center gap-3 text-[#1B4965]">
+            <div className="space-y-6 bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all">
+              <div className="flex items-center gap-3 text-[#3c096c]">
                 <Award size={24} className="shrink-0" />
                 <h3 className="font-serif text-xl font-bold">{language === 'no' ? "Vårt fundament" : "Our Foundation"}</h3>
               </div>
@@ -378,7 +378,7 @@ export default function LandingPage() {
               <div className="w-full h-[1px] bg-slate-100 my-4" />
 
               <div className="space-y-2">
-                <h4 className="font-serif text-base font-bold text-[#1B4965]">
+                <h4 className="font-serif text-base font-bold text-[#3c096c]">
                   {language === 'no' ? "Fra \"Stiftelse\" til \"Ministry 2.0\"" : "From \"Foundation\" to \"Ministry 2.0\""}
                 </h4>
                 <p className="text-xs text-on-surface-variant leading-relaxed">
@@ -390,8 +390,8 @@ export default function LandingPage() {
             </div>
 
             {/* The Story Behind */}
-            <div className="space-y-6 bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#1B4965]/20 transition-all">
-              <div className="flex items-center gap-3 text-[#1B4965]">
+            <div className="space-y-6 bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all">
+              <div className="flex items-center gap-3 text-[#3c096c]">
                 <Heart size={24} className="shrink-0 text-red-500" />
                 <h3 className="font-serif text-xl font-bold">{language === 'no' ? "Historien bak" : "The Story Behind"}</h3>
               </div>
@@ -414,11 +414,11 @@ export default function LandingPage() {
           <div className="px-4 sm:px-6 md:px-12 max-w-[1200px] mx-auto space-y-12">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-7 space-y-6">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#1B4965]/10 text-[#1B4965] rounded-full text-xs font-bold uppercase tracking-wider">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#3c096c]/10 text-[#3c096c] rounded-full text-xs font-bold uppercase tracking-wider">
                   <ShoppingBag size={14} />
                   {language === 'no' ? "Kreativt Arbeid & Butikk" : "Creative Work & Store"}
                 </span>
-                <h2 className="font-serif text-3xl font-bold text-[#1B4965] leading-tight">
+                <h2 className="font-serif text-3xl font-bold text-[#3c096c] leading-tight">
                   {language === 'no' ? "His Kingdom Designs" : "His Kingdom Designs Shop"}
                 </h2>
                 <p className="text-sm text-on-surface-variant leading-relaxed font-medium">
@@ -427,14 +427,14 @@ export default function LandingPage() {
                     : "The organization also runs the His Kingdom Designs shop. The store offers many products in Norwegian, English, and Spanish that are great as gifts and for use in Evangelism. It also provides income for the ministry and the projects God puts on our hearts."}
                 </p>
                 <div className="bg-white p-6 rounded-2xl border border-outline-variant/30 space-y-4">
-                  <h4 className="font-serif text-base font-bold text-[#1B4965]">{language === 'no' ? "Rollefordeling i teamet:" : "Team Roles:"}</h4>
+                  <h4 className="font-serif text-base font-bold text-[#3c096c]">{language === 'no' ? "Rollefordeling i teamet:" : "Team Roles:"}</h4>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-semibold text-slate-700">
                     <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-[#1B4965] rounded-full" />
+                      <span className="w-1.5 h-1.5 bg-[#3c096c] rounded-full" />
                       <span><strong>Thomas:</strong> {language === 'no' ? "Webdesigner (opprettet nettstedene)" : "Webdesigner (created the websites)"}</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-[#1B4965] rounded-full" />
+                      <span className="w-1.5 h-1.5 bg-[#3c096c] rounded-full" />
                       <span><strong>Hilde Karin:</strong> {language === 'no' ? "Designer produktene" : "Designs the products"}</span>
                     </li>
                   </ul>
@@ -448,7 +448,7 @@ export default function LandingPage() {
 
               <div className="lg:col-span-5 space-y-6">
                 <div className="bg-white border border-[#dec2ef]/55 p-8 rounded-3xl shadow-sm space-y-6">
-                  <h3 className="font-serif text-lg font-bold text-[#1B4965]">{language === 'no' ? "Nettsteder & Ressurser" : "Websites & Resources"}</h3>
+                  <h3 className="font-serif text-lg font-bold text-[#3c096c]">{language === 'no' ? "Nettsteder & Ressurser" : "Websites & Resources"}</h3>
                   
                   <div className="space-y-4">
                     <a 
@@ -458,7 +458,7 @@ export default function LandingPage() {
                       className="flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-100 transition-all group"
                     >
                       <div className="space-y-1">
-                        <span className="text-xs font-bold text-[#1B4965] flex items-center gap-1">
+                        <span className="text-xs font-bold text-[#3c096c] flex items-center gap-1">
                           hiskingdomministry.no
                           <Link2 size={12} className="opacity-60" />
                         </span>
@@ -466,7 +466,7 @@ export default function LandingPage() {
                           {language === 'no' ? "Hovedsiden (Blogg, YouTube, podcast, bibelverktøy)" : "Ministry page (Blog, YouTube, podcast, Bible tools)"}
                         </p>
                       </div>
-                      <ArrowRight size={14} className="text-[#1B4965] group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight size={14} className="text-[#3c096c] group-hover:translate-x-1 transition-transform" />
                     </a>
 
                     <a 
@@ -476,7 +476,7 @@ export default function LandingPage() {
                       className="flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-100 transition-all group"
                     >
                       <div className="space-y-1">
-                        <span className="text-xs font-bold text-[#1B4965] flex items-center gap-1">
+                        <span className="text-xs font-bold text-[#3c096c] flex items-center gap-1">
                           hiskingdomdesigns.no
                           <Link2 size={12} className="opacity-60" />
                         </span>
@@ -484,7 +484,7 @@ export default function LandingPage() {
                           {language === 'no' ? "Nettbutikken (inntektskilde for misjonsprosjekter)" : "The store (income source for the ministry)"}
                         </p>
                       </div>
-                      <ArrowRight size={14} className="text-[#1B4965] group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight size={14} className="text-[#3c096c] group-hover:translate-x-1 transition-transform" />
                     </a>
                   </div>
                 </div>
@@ -496,11 +496,11 @@ export default function LandingPage() {
         {/* Section 3: The Prophetic School and Online Concept */}
         <section id="school" className="py-20 px-4 sm:px-6 md:px-12 max-w-[1200px] mx-auto space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#1B4965]/10 text-[#1B4965] font-bold text-xs uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-xs uppercase tracking-wider">
               <Laptop size={14} />
               {language === 'no' ? "Skole og Studieforløp" : "Prophetic School & Concept"}
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl text-[#1B4965] font-extrabold leading-tight">
+            <h2 className="font-serif text-3xl md:text-4xl text-[#3c096c] font-extrabold leading-tight">
               {language === 'no' ? "Vår visjon for den profetiske skolen" : "Vision for the Prophetic School"}
             </h2>
             <p className="text-sm text-on-surface-variant leading-relaxed max-w-2xl mx-auto">
@@ -512,10 +512,10 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             {/* Track 1 Box */}
-            <div className="bg-white border border-[#dec2ef]/55 p-8 rounded-3xl shadow-sm flex flex-col justify-between hover:border-[#1B4965]/20 transition-all min-h-[420px]">
+            <div className="bg-white border border-[#dec2ef]/55 p-8 rounded-3xl shadow-sm flex flex-col justify-between hover:border-[#3c096c]/20 transition-all min-h-[420px]">
               <div>
                 <div className="flex justify-between items-center mb-6">
-                  <span className="text-[10px] font-bold px-2.5 py-1 bg-[#1B4965]/5 text-[#1B4965] border border-[#1B4965]/10 rounded-md uppercase tracking-wider">
+                  <span className="text-[10px] font-bold px-2.5 py-1 bg-[#3c096c]/5 text-[#3c096c] border border-[#3c096c]/10 rounded-md uppercase tracking-wider">
                     {language === 'no' ? "Linje 1 (1. år)" : "Track 1 (Year 1)"}
                   </span>
                   <span className="text-xs font-bold text-[#c5a059] uppercase tracking-wider flex items-center gap-1">
@@ -523,7 +523,7 @@ export default function LandingPage() {
                     {language === 'no' ? "Aktiv for søknad" : "Open for applications"}
                   </span>
                 </div>
-                <h3 className="font-serif text-xl font-bold text-[#1B4965] mb-4">
+                <h3 className="font-serif text-xl font-bold text-[#3c096c] mb-4">
                   His Kingdom Prophetic Community
                 </h3>
                 <p className="text-xs text-on-surface-variant leading-relaxed mb-6 font-medium">
@@ -533,7 +533,7 @@ export default function LandingPage() {
                 </p>
                 
                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs font-semibold text-slate-700 mb-6">
-                  <span className="text-[#1B4965] block mb-1 font-bold">💡 Intercession Core Team:</span>
+                  <span className="text-[#3c096c] block mb-1 font-bold">💡 Intercession Core Team:</span>
                   {language === 'no' 
                     ? "Som en del av vårt kjerne-forbønnsteam er du velkommen til å bli med på alle klasser du ønsker helt GRATIS." 
                     : "As part of our Intercession Core Team, you are welcome to join any, all, or as many of the classes as you like for FREE."}
@@ -553,7 +553,7 @@ export default function LandingPage() {
             </div>
 
             {/* Track 2 Box */}
-            <div className="bg-white border border-[#dec2ef]/55 p-8 rounded-3xl shadow-sm flex flex-col justify-between hover:border-[#1B4965]/20 transition-all min-h-[420px] relative overflow-hidden">
+            <div className="bg-white border border-[#dec2ef]/55 p-8 rounded-3xl shadow-sm flex flex-col justify-between hover:border-[#3c096c]/20 transition-all min-h-[420px] relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-amber-500/10 to-transparent pointer-events-none" />
               <div>
                 <div className="flex justify-between items-center mb-6">
@@ -565,7 +565,7 @@ export default function LandingPage() {
                     {language === 'no' ? "Oppstart 2028" : "Launches 2028"}
                   </span>
                 </div>
-                <h3 className="font-serif text-xl font-bold text-[#1B4965] mb-4">
+                <h3 className="font-serif text-xl font-bold text-[#3c096c] mb-4">
                   His Kingdom Prophets
                 </h3>
                 <p className="text-xs text-on-surface-variant leading-relaxed mb-6 font-medium">
@@ -596,9 +596,9 @@ export default function LandingPage() {
           </div>
 
           {/* Dream & Launch Details */}
-          <div className="bg-gradient-to-r from-[#1B4965]/5 to-transparent border border-[#1B4965]/10 p-8 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="bg-gradient-to-r from-[#3c096c]/5 to-transparent border border-[#3c096c]/10 p-8 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div className="space-y-2">
-              <h4 className="font-serif text-lg font-bold text-[#1B4965]">{language === 'no' ? "Oppstartsdato" : "Launch Details"}</h4>
+              <h4 className="font-serif text-lg font-bold text-[#3c096c]">{language === 'no' ? "Oppstartsdato" : "Launch Details"}</h4>
               <p className="text-xs text-on-surface-variant leading-relaxed">
                 {language === 'no'
                   ? "Skolen vil lanseres i begynnelsen av enten januar eller august/september 2027."
@@ -606,7 +606,7 @@ export default function LandingPage() {
               </p>
             </div>
             <div className="space-y-2">
-              <h4 className="font-serif text-lg font-bold text-[#1B4965]">{language === 'no' ? "Vår Drøm" : "Our Dream"}</h4>
+              <h4 className="font-serif text-lg font-bold text-[#3c096c]">{language === 'no' ? "Vår Drøm" : "Our Dream"}</h4>
               <p className="text-xs text-on-surface-variant leading-relaxed">
                 {language === 'no'
                   ? "Vår drøm er å ha et hus og et sted hvor vi også kan være vertskap for fysiske arrangementer som vil bli strømmet på Zoom eller i lukkede Facebook-grupper."
@@ -620,11 +620,11 @@ export default function LandingPage() {
         <section id="curriculum" className="py-20 bg-surface-container-low border-t border-outline-variant/40">
           <div className="px-4 sm:px-6 md:px-12 max-w-[1200px] mx-auto space-y-12">
             <div className="text-center max-w-3xl mx-auto space-y-4">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#1B4965]/10 text-[#1B4965] font-bold text-xs uppercase tracking-wider">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-xs uppercase tracking-wider">
                 <BookOpenCheck size={14} />
                 {language === 'no' ? "Fagplan & Emner" : "Curriculum & Topics"}
               </span>
-              <h2 className="font-serif text-3xl font-extrabold text-[#1B4965]">
+              <h2 className="font-serif text-3xl font-extrabold text-[#3c096c]">
                 {language === 'no' ? "Hva lærer du hos oss?" : "Teaching Topics & Curriculum"}
               </h2>
             </div>
@@ -636,8 +636,8 @@ export default function LandingPage() {
                   onClick={() => setActiveCurriculumTab('community')}
                   className={`px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 active:scale-95 ${
                     activeCurriculumTab === 'community'
-                      ? 'bg-[#1B4965] text-white shadow-sm'
-                      : 'text-slate-600 hover:text-[#1B4965]'
+                      ? 'bg-[#240046] text-white shadow-sm'
+                      : 'text-slate-600 hover:text-[#3c096c]'
                   }`}
                 >
                   {language === 'no' ? "1. år: Prophetic Community" : "Year 1: Prophetic Community"}
@@ -646,8 +646,8 @@ export default function LandingPage() {
                   onClick={() => setActiveCurriculumTab('prophets')}
                   className={`px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 active:scale-95 flex items-center gap-1.5 ${
                     activeCurriculumTab === 'prophets'
-                      ? 'bg-[#1B4965] text-white shadow-sm'
-                      : 'text-slate-600 hover:text-[#1B4965]'
+                      ? 'bg-[#3c096c] text-white shadow-sm'
+                      : 'text-slate-600 hover:text-[#3c096c]'
                   }`}
                 >
                   <Lock size={12} className={activeCurriculumTab === 'prophets' ? 'text-amber-300' : 'text-slate-400'} />
@@ -657,7 +657,7 @@ export default function LandingPage() {
             </div>
 
             {/* Curriculum content display */}
-            <div className="bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#1B4965]/20 transition-all">
+            <div className="bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all">
               <AnimatePresence mode="wait">
                 {activeCurriculumTab === 'community' ? (
                   <motion.div
@@ -669,7 +669,7 @@ export default function LandingPage() {
                     className="space-y-6"
                   >
                     <div className="space-y-2 border-b border-slate-100 pb-4">
-                      <h3 className="font-serif text-lg font-bold text-[#1B4965] uppercase tracking-wider">
+                      <h3 className="font-serif text-lg font-bold text-[#3c096c] uppercase tracking-wider">
                         TEACHING PLAN: HIS KINGDOM PROPHETIC COMMUNITY
                       </h3>
                       <p className="text-xs text-slate-500 font-medium">
@@ -694,7 +694,7 @@ export default function LandingPage() {
                         "Different Ways to Hear God", "The Secret Place and Journaling", "Renouncing prayers"
                       ].map((topic, i) => (
                         <div key={i} className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-100/60 hover:bg-slate-100 transition-colors">
-                          <span className="w-1.5 h-1.5 bg-[#1B4965] rounded-full shrink-0" />
+                          <span className="w-1.5 h-1.5 bg-[#3c096c] rounded-full shrink-0" />
                           <span>{topic}</span>
                         </div>
                       ))}
@@ -711,7 +711,7 @@ export default function LandingPage() {
                   >
                     <div className="space-y-2 border-b border-slate-100 pb-4">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-serif text-lg font-bold text-[#1B4965] uppercase tracking-wider">
+                        <h3 className="font-serif text-lg font-bold text-[#3c096c] uppercase tracking-wider">
                           TEACHING PLAN: HIS KINGDOM PROPHETS
                         </h3>
                         <span className="text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full uppercase tracking-wider">
@@ -758,22 +758,22 @@ export default function LandingPage() {
         {/* Call to action section */}
         <section id="admissions" className="py-24 bg-background border-t border-outline-variant/30 text-center">
           <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12">
-            <div className="inline-flex items-center gap-2 mb-6 text-[#1B4965]">
+            <div className="inline-flex items-center gap-2 mb-6 text-[#3c096c]">
               <Sparkles size={16} />
               <CmsText slug="landing-cta-tagline" fallback="Opptak Åpent for 2027" as="span" className="text-xs font-semibold tracking-widest uppercase" />
             </div>
-            <CmsText slug="landing-cta-title" fallback="Er du klar til å vokse i dine åndelige gaver?" as="h2" className="font-serif text-3xl md:text-4xl text-[#1B4965] font-bold mb-6 max-w-2xl mx-auto" />
+            <CmsText slug="landing-cta-title" fallback="Er du klar til å vokse i dine åndelige gaver?" as="h2" className="font-serif text-3xl md:text-4xl text-[#3c096c] font-bold mb-6 max-w-2xl mx-auto" />
             <CmsText slug="landing-cta-desc" fallback="Søk om opptak til His Kingdom Prophetic Community i dag. Vi gleder oss til å gå sammen med deg." as="p" className="text-base text-on-surface-variant mb-10 max-w-xl mx-auto" />
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <button 
                 onClick={() => navigate('/admission')} 
-                className="w-full sm:w-auto px-8 py-4 bg-[#1B4965] hover:bg-[#1B4965]/90 text-white font-semibold rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
+                className="w-full sm:w-auto px-8 py-4 bg-[#3c096c] hover:bg-[#3c096c]/90 text-white font-semibold rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
               >
                 <CmsText slug="landing-cta-btn-primary" fallback="Søk Opptak 2027" />
               </button>
               <button 
                 onClick={(e) => handleNavClick(e, { href: '#curriculum', id: 'curriculum' })}
-                className="w-full sm:w-auto px-8 py-4 bg-surface-container border border-outline-variant text-[#1B4965] font-semibold rounded-xl hover:bg-surface-container-high transition-all active:scale-[0.98]"
+                className="w-full sm:w-auto px-8 py-4 bg-surface-container border border-outline-variant text-[#3c096c] font-semibold rounded-xl hover:bg-surface-container-high transition-all active:scale-[0.98]"
               >
                 <CmsText slug="landing-cta-btn-secondary" fallback="Se Undervisningsemner" />
               </button>
@@ -783,7 +783,7 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-12 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#1B4965] text-white">
+      <footer className="w-full py-12 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#3c096c] text-white">
         <div className="flex flex-col gap-2 text-center md:text-left">
           <CmsText slug="landing-footer-title" fallback="His Kingdom Ministry" as="div" className="font-serif text-lg font-bold text-white" />
           <CmsText slug="landing-footer-copyright" fallback="© 2026 His Kingdom Ministry. Alle rettigheter reservert. Utrustning av profetiske tjenester for Hans Rike." as="p" className="text-xs text-slate-300 opacity-90 max-w-md" />

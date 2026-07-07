@@ -420,12 +420,12 @@ export default function AdmissionPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-serif text-lg font-bold text-[#1B4965] leading-snug">
+                  <h3 className="font-serif text-lg font-bold text-primary leading-snug">
                     {prog.title}
                   </h3>
 
                   <div className="flex items-center gap-1.5 text-xs text-on-surface-variant font-semibold">
-                    <Calendar size={14} className="text-[#1B4965]/70" />
+                    <Calendar size={14} className="text-primary/70" />
                     <span>{prog.duration}</span>
                   </div>
 
@@ -446,7 +446,7 @@ export default function AdmissionPage() {
                     <span className="text-[9px] uppercase font-bold text-outline block">
                       {language === 'en' ? "Tuition Fee" : "Semesteravgift"}
                     </span>
-                    <span className="font-serif text-lg font-extrabold text-[#1B4965]">
+                    <span className="font-serif text-lg font-extrabold text-primary">
                       {prog.priceSemester}
                     </span>
                   </div>
@@ -454,7 +454,7 @@ export default function AdmissionPage() {
                   <a 
                     href="#apply-form"
                     onClick={() => setFormData(prev => ({ ...prev, program: prog.id }))}
-                    className="text-xs font-bold text-[#1B4965] hover:text-secondary flex items-center gap-0.5 font-sans"
+                    className="text-xs font-bold text-primary hover:text-secondary flex items-center gap-0.5 font-sans"
                   >
                     <span>{language === 'en' ? "Select" : "Velg linje"}</span>
                     <ChevronRight size={13} />
@@ -932,7 +932,7 @@ export default function AdmissionPage() {
                   <button
                     onClick={handleStripePaymentSubmit}
                     disabled={isSubmitting}
-                    className="flex-[2] py-4 bg-primary hover:bg-[#1B4965] text-white text-xs font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="flex-[2] py-4 bg-primary hover:bg-primary-container text-white text-xs font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <>

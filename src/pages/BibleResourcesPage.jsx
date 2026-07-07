@@ -1672,7 +1672,7 @@ export default function BibleResourcesPage() {
                               }}
                             />
                             <div 
-                              className="hidden absolute inset-0 bg-gradient-to-br from-[#1B4965]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-4xl text-primary"
+                              className="hidden absolute inset-0 bg-gradient-to-br from-[#3c096c]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-4xl text-primary"
                             >
                               {charName.substring(0, 1)}
                             </div>
@@ -1911,7 +1911,7 @@ export default function BibleResourcesPage() {
                                 </span>
                                 <button
                                   onClick={() => handleScriptureRefLink(section.scripRef, 'timeline')}
-                                  className="text-xs font-bold hover:underline text-left block text-[#1B4965] transition-all cursor-pointer font-serif"
+                                  className="text-xs font-bold hover:underline text-left block text-[#3c096c] transition-all cursor-pointer font-serif"
                                 >
                                   {sectionScripTitle}
                                 </button>
@@ -1953,7 +1953,7 @@ export default function BibleResourcesPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedCharacter(null)}
-              className="fixed inset-0 z-[70] bg-[#1B4965]/40 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
+              className="fixed inset-0 z-[70] bg-[#3c096c]/40 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
             >
               <motion.div
                 initial={{ scale: 0.95, y: 20 }}
@@ -1996,7 +1996,7 @@ export default function BibleResourcesPage() {
                         }}
                       />
                       <div 
-                        className="hidden absolute inset-0 bg-gradient-to-br from-[#1B4965]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-6xl text-primary"
+                        className="hidden absolute inset-0 bg-gradient-to-br from-[#3c096c]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-6xl text-primary"
                       >
                         {charName.substring(0, 1)}
                       </div>
@@ -2070,7 +2070,7 @@ export default function BibleResourcesPage() {
                               setSelectedCharacter(null);
                               handleScriptureRefLink(ref, 'characters');
                             }}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-50 hover:bg-[#1B4965] hover:text-white border border-slate-200 text-primary rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer active:scale-95"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-50 hover:bg-[#3c096c] hover:text-white border border-slate-200 text-primary rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer active:scale-95"
                           >
                             <BookOpen size={11} />
                             <span>{ref}</span>
@@ -2420,7 +2420,7 @@ export default function BibleResourcesPage() {
             }}
           >
             <div className="flex items-center gap-2 border-r border-slate-200/80 pr-2.5 sm:pr-3 shrink-0">
-              <span className="h-6 w-6 rounded-full bg-[#1B4965] text-white flex items-center justify-center text-xs font-bold font-mono">
+              <span className="h-6 w-6 rounded-full bg-[#3c096c] text-white flex items-center justify-center text-xs font-bold font-mono">
                 {selectedVerses.length}
               </span>
               <span className="text-[11px] sm:text-xs font-extrabold text-slate-800 hidden min-[360px]:inline">
@@ -2431,7 +2431,7 @@ export default function BibleResourcesPage() {
             <div className="flex items-center gap-1.5 sm:gap-2.5">
               <button 
                 onClick={handleBulkCopy}
-                className="px-2.5 sm:px-3 py-1.5 bg-[#1B4965] hover:bg-[#153a50] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm cursor-pointer text-white text-[11px] sm:text-xs border-none"
+                className="px-2.5 sm:px-3 py-1.5 bg-[#3c096c] hover:bg-[#561291] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm cursor-pointer text-white text-[11px] sm:text-xs border-none"
               >
                 <Copy size={13} className="text-white" />
                 <span>Kopier</span>
@@ -2439,7 +2439,7 @@ export default function BibleResourcesPage() {
 
               <button 
                 onClick={() => navigate('/login')}
-                className="px-2.5 sm:px-3 py-1.5 bg-[#1B4965] hover:bg-[#153a50] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm cursor-pointer text-white text-[11px] sm:text-xs border-none"
+                className="px-2.5 sm:px-3 py-1.5 bg-[#3c096c] hover:bg-[#561291] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm cursor-pointer text-white text-[11px] sm:text-xs border-none"
               >
                 <Sparkles size={13} />
                 <span>Logg inn</span>
@@ -2450,7 +2450,7 @@ export default function BibleResourcesPage() {
                   setSelectedVerses([]);
                   setHighlightedVerse(null);
                 }}
-                className="p-1.5 text-[#1B4965]/70 hover:text-[#1B4965] hover:bg-[#1B4965]/5 rounded-xl transition-all cursor-pointer font-bold shrink-0 bg-transparent border-none outline-none"
+                className="p-1.5 text-[#3c096c]/70 hover:text-[#3c096c] hover:bg-[#3c096c]/5 rounded-xl transition-all cursor-pointer font-bold shrink-0 bg-transparent border-none outline-none"
                 title="Nullstill"
               >
                 <X size={15} />
