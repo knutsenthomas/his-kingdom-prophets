@@ -20,13 +20,14 @@ export default function AdmissionPage() {
     name: '',
     email: '',
     phone: '',
-    program: 'prop101',
+    program: 'prophetic_community',
     paymentPlan: 'semester',
     motivation: ''
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activePlan, setActivePlan] = useState('semester'); // semester, monthly
+  const [confirmYear1, setConfirmYear1] = useState(false);
   
   const [stripeElements, setStripeElements] = useState(null);
   const [stripeInstance, setStripeInstance] = useState(null);
@@ -248,66 +249,50 @@ export default function AdmissionPage() {
 
   const programs = [
     {
-      id: "prop101",
-      code: "PROP 101",
-      title: language === 'en' ? "Introduction to Prophetic Ministry" : "Innføring i den Profetiske Tjeneste",
-      duration: language === 'en' ? "1 Semester (8 Modules)" : "1 Semester (8 Moduler)",
-      credits: "15 STP",
+      id: "prophetic_community",
+      code: "TRACK 1 (YEAR 1)",
+      title: "His Kingdom Prophetic Community",
+      duration: language === 'en' ? "1 Year (Self-paced / Classes)" : "1 År (Fleksibelt / Klasser)",
+      credits: "1. År / Year 1",
       priceSemester: "3 990,-",
       priceMonthly: "790,-",
+      isLocked: false,
       features: language === 'en' ? [
-        "Biblical foundations of prophecy",
-        "Hearing and discerning God's voice",
-        "Prophetic character and ethics",
-        "Personal 1-to-1 mentoring sessions"
+        "Grow in relationship with Jesus & gifts of the Spirit",
+        "Prophecy 101, How to Hear God, Gift vs Office",
+        "Intercession Core Team joins classes for FREE",
+        "Join year after year (different subjects yearly)"
       ] : [
-        "Bibelhistorie og profetiens røtter",
-        "Å høre Guds stemme og skjelne ånder",
-        "Profetisk karakter og etiske retningslinjer",
-        "Personlig 1-til-1 mentorsamtale"
+        "Vokse i relasjon med Jesus og Åndens gaver",
+        "Profeti 101, Å høre Guds stemme, Gave vs Tjeneste",
+        "Kjerne-forbønnsteam blir med helt GRATIS",
+        "Kan tas år etter år med nye temaer hvert år"
       ]
     },
     {
-      id: "bible301",
-      code: "BIBLE 301",
-      title: language === 'en' ? "Advanced Hermeneutics & Exegesis" : "Avansert Hermeneutikk og Tolkning",
-      duration: language === 'en' ? "1 Semester (8 Modules)" : "1 Semester (8 Moduler)",
-      credits: "15 STP",
+      id: "prophets_advanced",
+      code: "TRACK 2 (YEAR 2)",
+      title: "His Kingdom Prophets (Oppstart 2028)",
+      duration: language === 'en' ? "Starts in 2028 (Requires Track 1)" : "Starter i 2028 (Krever 1. År)",
+      credits: "2. År / Year 2",
       priceSemester: "4 490,-",
       priceMonthly: "890,-",
+      isLocked: true,
       features: language === 'en' ? [
-        "Historical-grammatical exegesis",
-        "Covenant theology & typologies",
-        "Prophetic symbols in Revelation",
-        "Hermeneutical study guide workbook"
+        "Specifically for those called to the office of a prophet",
+        "Requires separate reapplication & prayer evaluation",
+        "Reading list, paper writing & physical SUPER CHARGE",
+        "PREREQUISITE: Must complete Track 1 (1st Year) first"
       ] : [
-        "Historisk-grammatisk eksegese",
-        "Paktsteologi og skyggebilder",
-        "Johannes' åpenbaring og symbolspråk",
-        "Hermeneutisk arbeidsbok & ressurser"
-      ]
-    },
-    {
-      id: "lead201",
-      code: "LEAD 201",
-      title: language === 'en' ? "Multicultural Leadership & Planting" : "Flerkulturelt Lederskap & Misjon",
-      duration: language === 'en' ? "1 Semester (8 Modules)" : "1 Semester (8 Moduler)",
-      credits: "15 STP",
-      priceSemester: "3 990,-",
-      priceMonthly: "790,-",
-      features: language === 'en' ? [
-        "Apostolic ministry and structures",
-        "Strategic church planting",
-        "Cross-cultural communication",
-        "Practical leadership mentoring"
-      ] : [
-        "Apostolisk tjeneste og nettverk",
-        "Strategisk menighetsplanting",
-        "Kulturell kontekstualisering",
-        "Praktisk mentorskap for ledere"
+        "Spesifikt for de kalt til embetet som profet",
+        "Krever ny søknad, pensumliste og skriftlig oppgave",
+        "Krav om deltakelse på 1-2 ukers fysisk samling",
+        "FORKUNNSKAP: Må ha fullført 1. år (Track 1) først"
       ]
     }
   ];
+
+  const selectedProg = programs.find(p => p.id === formData.program) || programs[0];
 
   return (
     <div className="bg-[#faf7fc] text-[#240046] font-sans min-h-screen">
@@ -404,15 +389,30 @@ export default function AdmissionPage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {programs.map(prog => (
               <div 
                 key={prog.id}
-                className="bg-white border border-[#dec2ef]/55 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-primary/20 transition-all flex flex-col justify-between"
+                className={`bg-white border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden ${
+                  prog.isLocked 
+                    ? 'border-amber-200 hover:border-amber-300' 
+                    : 'border-[#dec2ef]/55 hover:border-primary/20'
+                }`}
               >
+                {prog.isLocked && (
+                  <div className="absolute top-0 right-0 bg-amber-500 text-white text-[9px] font-bold px-3 py-1 uppercase tracking-wider rounded-bl-lg flex items-center gap-1">
+                    <Lock size={10} />
+                    <span>2028</span>
+                  </div>
+                )}
+                
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-bold px-2 py-0.5 bg-primary/5 text-primary border border-primary/10 rounded-md">
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                      prog.isLocked 
+                        ? 'bg-amber-50 text-amber-700 border border-amber-200' 
+                        : 'bg-primary/5 text-primary border border-primary/10'
+                    }`}>
                       {prog.code}
                     </span>
                     <span className="text-[10px] font-bold text-[#c5a059] uppercase tracking-wider">
@@ -420,12 +420,12 @@ export default function AdmissionPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-serif text-lg font-bold text-primary leading-snug">
+                  <h3 className="font-serif text-lg font-bold text-[#1B4965] leading-snug">
                     {prog.title}
                   </h3>
 
                   <div className="flex items-center gap-1.5 text-xs text-on-surface-variant font-semibold">
-                    <Calendar size={14} className="text-primary/70" />
+                    <Calendar size={14} className="text-[#1B4965]/70" />
                     <span>{prog.duration}</span>
                   </div>
 
@@ -446,7 +446,7 @@ export default function AdmissionPage() {
                     <span className="text-[9px] uppercase font-bold text-outline block">
                       {language === 'en' ? "Tuition Fee" : "Semesteravgift"}
                     </span>
-                    <span className="font-serif text-lg font-extrabold text-primary">
+                    <span className="font-serif text-lg font-extrabold text-[#1B4965]">
                       {prog.priceSemester}
                     </span>
                   </div>
@@ -454,7 +454,7 @@ export default function AdmissionPage() {
                   <a 
                     href="#apply-form"
                     onClick={() => setFormData(prev => ({ ...prev, program: prog.id }))}
-                    className="text-xs font-bold text-primary hover:text-secondary flex items-center gap-0.5 font-sans"
+                    className="text-xs font-bold text-[#1B4965] hover:text-secondary flex items-center gap-0.5 font-sans"
                   >
                     <span>{language === 'en' ? "Select" : "Velg linje"}</span>
                     <ChevronRight size={13} />
@@ -796,7 +796,9 @@ export default function AdmissionPage() {
                         className="sr-only"
                       />
                       <span className="text-xs font-bold block">{language === 'en' ? "Semester Invoice" : "Semesterfaktura"}</span>
-                      <span className="text-[10px] text-outline mt-0.5">{language === 'en' ? "3,990 NOK per semester" : "3 990,- per semester"}</span>
+                      <span className="text-[10px] text-outline mt-0.5">
+                        {language === 'en' ? `${selectedProg.priceSemester} per semester` : `${selectedProg.priceSemester} per semester`}
+                      </span>
                     </label>
 
                     <label className={`border rounded-xl p-3 flex flex-col justify-center items-center cursor-pointer transition-all active:scale-[0.98] ${
@@ -813,10 +815,40 @@ export default function AdmissionPage() {
                         className="sr-only"
                       />
                       <span className="text-xs font-bold block">{language === 'en' ? "Monthly Split" : "Månedsbetaling"}</span>
-                      <span className="text-[10px] text-outline mt-0.5">{language === 'en' ? "790 NOK per month" : "790,- pr. måned"}</span>
+                      <span className="text-[10px] text-outline mt-0.5">
+                        {language === 'en' ? `${selectedProg.priceMonthly} per month` : `${selectedProg.priceMonthly} pr. måned`}
+                      </span>
                     </label>
                   </div>
                 </div>
+
+                {/* Confirm Year 1 Checkbox for Track 2 */}
+                {formData.program === 'prophets_advanced' && (
+                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-3">
+                    <div className="flex gap-2 text-amber-800 text-xs">
+                      <Lock size={16} className="shrink-0 mt-0.5" />
+                      <p className="font-semibold leading-relaxed">
+                        {language === 'en'
+                          ? "This program (Track 2) does not start until 2028. To apply, you must confirm that you plan to complete or have completed Track 1 (His Kingdom Prophetic Community) first."
+                          : "Dette studieløpet (Track 2) starter ikke før i 2028. For å søke opptak, må du bekrefte at du har fullført eller planlegger å fullføre 1. år (His Kingdom Prophetic Community) først."}
+                      </p>
+                    </div>
+                    <label className="flex items-start gap-2 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        required
+                        checked={confirmYear1}
+                        onChange={(e) => setConfirmYear1(e.target.checked)}
+                        className="mt-1 accent-amber-600 rounded border-amber-300 focus:ring-amber-500 text-amber-600 w-4 h-4"
+                      />
+                      <span className="text-[11px] text-amber-900 font-bold leading-normal">
+                        {language === 'en'
+                          ? "I confirm that I plan to complete or have completed Track 1 first *"
+                          : "Jeg bekrefter at jeg har fullført eller planlegger å fullføre 1. år først *"}
+                      </span>
+                    </label>
+                  </div>
+                )}
 
                 {/* Motivation Textarea */}
                 <div className="space-y-1.5">
