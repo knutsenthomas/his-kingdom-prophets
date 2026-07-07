@@ -376,10 +376,14 @@ export const AppProvider = ({ children }) => {
       'landing-network-desc-en': 'Connect with prayer networks, mission trips, and ministries worldwide to expand your spiritual perspective.',
       
       // New landing page links and buttons (cached defaults)
-      'landing-nav-programs': 'Studielinjer',
-      'landing-nav-programs-en': 'Programs',
-      'landing-nav-faculty': 'Mentorer',
-      'landing-nav-faculty-en': 'Mentors',
+      'landing-nav-about': 'Om oss',
+      'landing-nav-about-en': 'About Us',
+      'landing-nav-shop': 'Designbutikk',
+      'landing-nav-shop-en': 'Design Shop',
+      'landing-nav-school': 'Utdanning',
+      'landing-nav-school-en': 'Education',
+      'landing-nav-curriculum': 'Fagplaner',
+      'landing-nav-curriculum-en': 'Curriculum',
       'landing-nav-resources': 'Bibelressurser',
       'landing-nav-resources-en': 'Bible Resources',
       'landing-nav-admissions': 'Søk Opptak',
@@ -867,7 +871,8 @@ export const AppProvider = ({ children }) => {
         if (
           parsed['layout-logo-title'] === 'His Kingdom Prophets' || 
           parsed['landing-cta-btn-primary'] === 'Søk Opptak 2026' ||
-          parsed['landing-nav-resources'] === 'Bible Resources'
+          parsed['landing-nav-resources'] === 'Bible Resources' ||
+          !parsed['landing-nav-about']
         ) {
           localStorage.removeItem('hkm-cms-content');
           return defaults;
@@ -970,10 +975,14 @@ export const AppProvider = ({ children }) => {
             'landing-network-desc-en': 'Connect with prayer networks, mission trips, and ministries worldwide to expand your spiritual perspective.',
             
             // New landing page links and buttons (database seed)
-            'landing-nav-programs': 'Studielinjer',
-            'landing-nav-programs-en': 'Programs',
-            'landing-nav-faculty': 'Mentorer',
-            'landing-nav-faculty-en': 'Mentors',
+            'landing-nav-about': 'Om oss',
+            'landing-nav-about-en': 'About Us',
+            'landing-nav-shop': 'Designbutikk',
+            'landing-nav-shop-en': 'Design Shop',
+            'landing-nav-school': 'Utdanning',
+            'landing-nav-school-en': 'Education',
+            'landing-nav-curriculum': 'Fagplaner',
+            'landing-nav-curriculum-en': 'Curriculum',
             'landing-nav-resources': 'Bibelressurser',
             'landing-nav-resources-en': 'Bible Resources',
             'landing-nav-admissions': 'Søk Opptak',
