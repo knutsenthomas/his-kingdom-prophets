@@ -531,13 +531,6 @@ export default function LandingPage() {
                     ? "Dette sporet er for alle som ønsker å vokse i sitt forhold til Jesus og i Åndens gaver, uavhengig av om de er kalt til profetembetet eller ikke. Vi ønsker å bygge et trygt fellesskap for profetiske mennesker til å vokse."
                     : "This track is for everyone who wants to grow in their relationship with Jesus and in the gifts of the Spirit, regardless of whether they are called into the office as a prophet or not. We want to build a safe community for prophetic people to grow and be seen."}
                 </p>
-                
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs font-semibold text-slate-700 mb-6">
-                  <span className="text-[#3c096c] block mb-1 font-bold">💡 Intercession Core Team:</span>
-                  {language === 'no' 
-                    ? "Som en del av vårt kjerne-forbønnsteam er du velkommen til å bli med på alle klasser du ønsker helt GRATIS." 
-                    : "As part of our Intercession Core Team, you are welcome to join any, all, or as many of the classes as you like for FREE."}
-                </div>
               </div>
               
               <div className="border-t border-slate-100 pt-6 space-y-2.5 text-xs text-slate-600">
