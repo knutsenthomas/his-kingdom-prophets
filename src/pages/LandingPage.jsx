@@ -643,7 +643,20 @@ export default function LandingPage() {
                   </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 text-xs text-slate-700 font-semibold font-sans">
-                  {[
+                  {(language === 'no' ? [
+                    "Bønn og profetisk forbønn", "Faste", "Gudsfrykt / Frykt for Gud", 
+                    "Omvendelse og tilgivelse", "Disippelskap", "Personlig profeti / Profeti 101", 
+                    "Åndens gaver", "Helbredelse / Indre helbredelse", "Forbannelser (generelt)", 
+                    "Kristen religiøs heksekunst / Forbannelser / sjelelige bønner", "Hvordan overvinne blokkeringer?", 
+                    "Hvordan vokse i det profetiske?", "Overnaturlig økonomi", "Misjon / Misjonær", 
+                    "Bønnevakter / Nattbønn / Morgenbønn", "Forkastelse, foreldreløs ånd", 
+                    "Perversjonsånd, Lilith, Incubus & Succubus", "Spådomsånder og overvåkende ånder", 
+                    "Bryte okkulte og heksekunstbånd", "Kunnskapsord, tydning av tunger", 
+                    "Smågrupper", "Traumer og triggere", "Identitet og autoritet i Kristus", 
+                    "Mental og emosjonell helse", "Tungetale", "Proklamasjoner og erklæringer", 
+                    "Ydmykhet", "Retningslinjer for det profetiske fellesskapet", "Hva er en profet vs. profetisk gave", 
+                    "Ulike måter å høre Gud på", "Lønnkammeret og journalføring", "Frasigelsesbønner / Avsvergelser"
+                  ] : [
                     "Prayer and Prophetic Intercession", "Fasting", "The Fear of God", 
                     "Repentance and Forgiveness", "Discipleship", "Personal Prophecy / Prophecy 101", 
                     "Gifts of the Spirit", "Healing / Inner Healing", "Curses (general)", 
@@ -656,7 +669,7 @@ export default function LandingPage() {
                     "Mental and Emotional Health", "Speaking in Tongues", "Proclamations and Decreeing", 
                     "Humility", "Prophetic Community Guidelines", "What is a prophet vs prophetic gift", 
                     "Different Ways to Hear God", "The Secret Place and Journaling", "Renouncing prayers"
-                  ].map((topic, i) => (
+                  ]).map((topic, i) => (
                     <div key={i} className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-100/60 hover:bg-slate-100 transition-colors">
                       <span className="w-1.5 h-1.5 bg-[#3c096c] rounded-full shrink-0" />
                       <span>{topic}</span>
