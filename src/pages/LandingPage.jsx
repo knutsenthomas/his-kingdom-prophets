@@ -92,18 +92,18 @@ export default function LandingPage() {
     <div className="bg-background text-on-background font-sans min-h-screen">
       {/* TopNavBar */}
       <header className="sticky top-0 z-40 w-full glass-nav border-b border-outline-variant">
-        <div className="flex justify-between items-center w-full px-3 sm:px-6 md:px-12 h-20 max-w-[1440px] mx-auto">
-          <div className="font-serif text-xs min-[360px]:text-sm sm:text-lg md:text-xl lg:text-2xl text-primary font-bold cursor-pointer shrink-0 flex items-center gap-1.5 sm:gap-2.5" onClick={() => navigate('/')}>
+        <div className="flex justify-between items-center w-full px-3 sm:px-4 md:px-6 lg:px-8 h-20 max-w-[1440px] mx-auto">
+          <div className="font-serif text-[11px] min-[360px]:text-xs sm:text-sm md:text-base lg:text-base xl:text-lg text-primary font-bold cursor-pointer shrink-0 flex items-center gap-1.5 sm:gap-2" onClick={() => navigate('/')}>
             <img 
               src={logo} 
               alt="His Kingdom Prophets Logo" 
-              className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0" 
+              className="w-6 h-6 sm:w-7 sm:h-7 object-contain shrink-0" 
             />
             <span className="hidden sm:inline"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophetic Community" /></span>
             <span className="inline sm:hidden"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
           </div>
           
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-xs xl:text-sm">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
               return (
@@ -111,7 +111,7 @@ export default function LandingPage() {
                   key={item.href}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item)}
-                  className={`font-semibold cursor-pointer pb-1 border-b-2 transition-all duration-200 ${
+                  className={`font-bold cursor-pointer pb-1 border-b-2 transition-all duration-200 ${
                     isActive 
                       ? 'text-primary border-primary' 
                       : 'text-on-surface-variant border-transparent hover:text-primary hover:border-primary/40'
