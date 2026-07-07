@@ -601,8 +601,8 @@ export default function LandingPage() {
               <h4 className="font-serif text-lg font-bold text-[#3c096c]">{language === 'no' ? "Oppstartsdato" : "Launch Details"}</h4>
               <p className="text-xs text-on-surface-variant leading-relaxed">
                 {language === 'no'
-                  ? "Skolen vil lanseres i begynnelsen av enten januar eller august/september 2027."
-                  : "The school will launch in the beginning of either January or August/September 2027."}
+                  ? "Skolen starter 27. august 2027."
+                  : "The school starts August 27, 2027."}
               </p>
             </div>
             <div className="space-y-2">
