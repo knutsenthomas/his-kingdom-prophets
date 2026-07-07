@@ -300,10 +300,12 @@ export default function StudentLayout() {
   };
 
   useEffect(() => {
-    if (user?.role && user.role !== 'student' && user.role !== 'admin' && user.role !== 'superadmin' && user?.email !== 'thomas@tk-design.no') {
-      changePersona('student');
+    const allowedRoles = ['student', 'admin', 'superadmin'];
+    if (user && !allowedRoles.includes(user.role) && user.email !== 'thomas@tk-design.no') {
+      showToast(language === 'en' ? 'Access denied. Please apply for admission.' : 'Tilgang avslått. Vennligst søk om opptak.');
+      navigate('/admission');
     }
-  }, [user?.role, user?.email, changePersona]);
+  }, [user, navigate, language, showToast]);
 
 
 

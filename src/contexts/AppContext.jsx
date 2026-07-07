@@ -1479,7 +1479,7 @@ export const AppProvider = ({ children }) => {
             console.warn("Could not read local cache for merge:", e);
           }
 
-          const fallbackRole = (userEmail === 'knutsenthomas@gmail.com' || userEmail === 'thomas@tk-design.no') ? 'superadmin' : 'student';
+          const fallbackRole = (userEmail === 'knutsenthomas@gmail.com' || userEmail === 'thomas@tk-design.no') ? 'superadmin' : 'member';
           
           const optimisticUserData = {
             uid: firebaseUser.uid,

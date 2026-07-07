@@ -33,11 +33,18 @@ export default function LoginPage() {
       return;
     }
     
-    const checkRole = role || 'student';
+    const allowedRoles = ['student', 'teacher', 'admin', 'superadmin'];
+    const currentRole = role || 'member';
     
-    if (checkRole === 'teacher' || checkEmail.includes('teacher') || checkEmail.includes('david')) {
+    if (!allowedRoles.includes(currentRole) && !checkEmail.includes('teacher') && !checkEmail.includes('david') && !checkEmail.includes('admin') && !checkEmail.includes('siri')) {
+      showToast('Du har ikke tilgang til studieportalen. Vennligst søk om opptak.');
+      navigate('/admission');
+      return;
+    }
+    
+    if (currentRole === 'teacher' || checkEmail.includes('teacher') || checkEmail.includes('david')) {
       navigate('/teacher/profile');
-    } else if (checkRole === 'admin' || checkEmail.includes('admin') || checkEmail.includes('siri')) {
+    } else if (currentRole === 'admin' || checkEmail.includes('admin') || checkEmail.includes('siri')) {
       navigate('/teacher/profile');
     } else {
       if (onboardingCompleted) {

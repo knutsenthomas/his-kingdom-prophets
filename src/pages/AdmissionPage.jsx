@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,7 +11,9 @@ import CmsText from '@/components/CmsText';
 
 export default function AdmissionPage() {
   const navigate = useNavigate();
-  const { language, toggleLanguage, showToast } = useApp();
+  const { language, toggleLanguage, showToast, user } = useApp();
+
+  const stripePublicKey = "pk_live_51Pab8rAL393JGrO9bTUitYflDKlHGpLiqZCCBp0dCzBEV3ZFxARFfK6MgWraehq7i79tJHPIEzlpMwPiT2K3HsiZ00gJ1TQ71Y";
 
   // Multi-step Application Form States
   const [formData, setFormData] = useState({
@@ -22,29 +24,226 @@ export default function AdmissionPage() {
     paymentPlan: 'semester',
     motivation: ''
   });
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [activePlan, setActivePlan] = useState('semester'); // semester, monthly
+  
+  const [stripeElements, setStripeElements] = useState(null);
+  const [stripeInstance, setStripeInstance] = useState(null);
+  const [paymentStep, setPaymentStep] = useState('form'); // 'form', 'payment', 'success'
+  const [clientSecret, setClientSecret] = useState('');
+  const [paymentError, setPaymentError] = useState('');
+
+  // Dynamically load Stripe JS
+  useEffect(() => {
+    if (!window.Stripe) {
+      const script = document.createElement('script');
+      script.src = 'https://js.stripe.com/v3/';
+      script.async = true;
+      script.onload = () => {
+        console.log('Stripe SDK loaded');
+      };
+      document.body.appendChild(script);
+    }
+  }, []);
+
+  // Prepopulate form if logged in
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || ''
+      }));
+    }
+  }, [user]);
+
+  // Handle URL redirect query parameters (post-payment verification)
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const paymentIntentSecret = query.get('payment_intent_client_secret') || query.get('subscription_client_secret');
+    const redirectStatus = query.get('redirect_status');
+
+    if (paymentIntentSecret && redirectStatus === 'succeeded' && user) {
+      const updateUserRole = async () => {
+        setIsSubmitting(true);
+        try {
+          const { db } = await import('@/firebase');
+          const { doc, setDoc } = await import('firebase/firestore');
+          // Update user role to student
+          await setDoc(doc(db, "users", user.uid), { role: 'student' }, { merge: true });
+          
+          // Sync local storage cache
+          localStorage.setItem('hkm-current-user', JSON.stringify({
+            ...user,
+            role: 'student'
+          }));
+
+          setPaymentStep('success');
+          showToast(language === 'en' ? "Payment successful! You are now enrolled as a student." : "Betaling fullført! Du er nå registrert som student.");
+        } catch (err) {
+          console.error("Failed to update user role to student:", err);
+          showToast("Kunne ikke oppdatere studentrolle. Kontakt support.", "error");
+        } finally {
+          setIsSubmitting(false);
+        }
+      };
+      updateUserRole();
+    }
+  }, [user, language, showToast]);
+
+  // Mount Stripe elements when entering 'payment' step
+  useEffect(() => {
+    if (paymentStep === 'payment' && clientSecret && window.Stripe && !stripeElements) {
+      const stripe = window.Stripe(stripePublicKey);
+      setStripeInstance(stripe);
+
+      const appearance = {
+        theme: 'stripe',
+        variables: {
+          colorPrimary: '#3c096c',
+          colorBackground: '#ffffff',
+          colorText: '#30313d',
+          colorDanger: '#df1b41',
+          fontFamily: 'Inter, system-ui, sans-serif',
+          spacingUnit: '4px',
+          borderRadius: '12px',
+        },
+      };
+
+      const elementsOptions = {
+        appearance,
+        clientSecret,
+      };
+
+      const els = stripe.elements(elementsOptions);
+      setStripeElements(els);
+
+      const paymentElementOptions = {
+        layout: "tabs",
+      };
+
+      const paymentElement = els.create("payment", paymentElementOptions);
+      
+      // Wait for DOM layout to stabilize, then mount
+      setTimeout(() => {
+        const container = document.getElementById("hkm-stripe-element");
+        if (container) {
+          paymentElement.mount("#hkm-stripe-element");
+        }
+      }, 150);
+    }
+  }, [paymentStep, clientSecret, stripeElements]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.phone) {
       showToast(language === 'en' ? "Please fill out all required fields." : "Vennligst fyll ut alle påkrevde felt.");
       return;
     }
 
+    if (!user) {
+      showToast(language === 'en' ? "Please log in to continue." : "Vennligst logg inn for å fortsette.");
+      navigate('/login');
+      return;
+    }
+
     setIsSubmitting(true);
-    // Simulate API registration / Firestore seed
-    setTimeout(() => {
+    setPaymentError('');
+
+    try {
+      const selectedProgram = programs.find(p => p.id === formData.program);
+      const amount = formData.paymentPlan === 'semester' 
+        ? parseFloat(selectedProgram.priceSemester.replace(/\s/g, '').replace(',-', '')) 
+        : parseFloat(selectedProgram.priceMonthly.replace(/\s/g, '').replace(',-', ''));
+
+      const isRecurring = formData.paymentPlan === 'monthly';
+      const targetUrl = isRecurring 
+        ? "https://createstripesubscription-42bhgdjkcq-uc.a.run.app" 
+        : "https://createpaymentintent-42bhgdjkcq-uc.a.run.app";
+
+      const response = await fetch(targetUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: amount,
+          currency: "nok",
+          customerDetails: {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            message: `Program: ${selectedProgram.code} (${formData.paymentPlan})`,
+            fund: "prophets_tuition",
+            userId: user.uid
+          }
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to initialize payment");
+      }
+
+      const { clientSecret: secret } = await response.json();
+      setClientSecret(secret);
+      setPaymentStep('payment');
+    } catch (err) {
+      console.error("Failed to initialize payment:", err);
+      showToast("Kunne ikke starte betaling: " + err.message, "error");
+    } finally {
       setIsSubmitting(false);
-      setIsSubmitted(true);
-      showToast(language === 'en' ? "Application submitted successfully!" : "Søknaden din har blitt sendt inn!");
-    }, 1500);
+    }
+  };
+
+  const handleStripePaymentSubmit = async (e) => {
+    e.preventDefault();
+    if (!stripeInstance || !stripeElements) return;
+
+    setIsSubmitting(true);
+    setPaymentError('');
+
+    try {
+      // Save pending application details to firestore
+      const { db } = await import('@/firebase');
+      const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
+      await addDoc(collection(db, "applications"), {
+        userId: user.uid,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        program: formData.program,
+        paymentPlan: formData.paymentPlan,
+        motivation: formData.motivation,
+        status: "pending_payment",
+        createdAt: serverTimestamp()
+      });
+
+      const { error } = await stripeInstance.confirmPayment({
+        elements: stripeElements,
+        confirmParams: {
+          return_url: window.location.href.split('?')[0],
+        },
+      });
+
+      if (error) {
+        if (error.type === "card_error" || error.type === "validation_error") {
+          setPaymentError(error.message);
+        } else {
+          setPaymentError("En uventet feil oppstod: " + error.message);
+        }
+      }
+    } catch (err) {
+      console.error("Payment confirmation failed:", err);
+      setPaymentError("Betalingsbekreftelsen feilet. Prøv igjen.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const programs = [
@@ -452,7 +651,35 @@ export default function AdmissionPage() {
         {/* SECTION 4: INTERACTIVE APPLICATION FORM */}
         <section id="apply-form" className="bg-white border border-[#dec2ef]/65 rounded-3xl p-8 shadow-md max-w-2xl mx-auto scroll-mt-24">
           <AnimatePresence mode="wait">
-            {!isSubmitted ? (
+            {!user ? (
+              <motion.div 
+                key="login-prompt"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-center py-8 space-y-6"
+              >
+                <div className="w-14 h-14 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
+                  <BookOpen size={28} />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="font-serif text-xl font-bold text-primary">
+                    {language === 'en' ? "Log In to Enroll" : "Logg inn for å melde deg på"}
+                  </h3>
+                  <p className="text-xs text-on-surface-variant font-semibold max-w-sm mx-auto leading-relaxed">
+                    {language === 'en'
+                      ? "To apply and pay for courses at His Kingdom Prophets, you must first log in with your HKM account or register."
+                      : "For å søke om opptak og betale for kurs ved His Kingdom Prophets, må du logge inn med din HKM-brukerkonto."}
+                  </p>
+                </div>
+                <button
+                  onClick={() => navigate('/login')}
+                  className="px-8 py-4 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 mx-auto block"
+                >
+                  {language === 'en' ? "Log In Now" : "Logg inn nå"}
+                </button>
+              </motion.div>
+            ) : paymentStep === 'form' ? (
               <motion.form 
                 key="form"
                 initial={{ opacity: 1 }}
@@ -625,6 +852,67 @@ export default function AdmissionPage() {
                   )}
                 </button>
               </motion.form>
+            ) : paymentStep === 'payment' ? (
+              <motion.div 
+                key="payment"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="space-y-6"
+              >
+                <div className="text-center space-y-2">
+                  <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-2">
+                    <CreditCard size={18} className="animate-pulse" />
+                  </div>
+                  <h3 className="font-serif text-xl font-bold text-primary">
+                    {language === 'en' ? "Complete Your Enrollment Payment" : "Fullfør din studieavgift"}
+                  </h3>
+                  <p className="text-xs text-on-surface-variant font-semibold">
+                    {language === 'en' 
+                      ? `Program: ${programs.find(p => p.id === formData.program)?.title} (${formData.paymentPlan === 'semester' ? 'One-time semester' : 'Monthly split'})`
+                      : `Valgt studielinje: ${programs.find(p => p.id === formData.program)?.title} (${formData.paymentPlan === 'semester' ? 'Hele semesteret' : 'Månedlig delbetaling'})`}
+                  </p>
+                  <p className="text-sm font-bold text-primary">
+                    {language === 'en' ? "Amount: " : "Beløp å betale: "} 
+                    {formData.paymentPlan === 'semester' 
+                      ? programs.find(p => p.id === formData.program)?.priceSemester 
+                      : programs.find(p => p.id === formData.program)?.priceMonthly}
+                  </p>
+                </div>
+
+                <div id="hkm-stripe-element" className="bg-slate-50 p-4 border border-slate-200 rounded-2xl min-h-[150px]">
+                  {/* Stripe Payment Element mounts here */}
+                </div>
+
+                {paymentError && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 text-xs font-bold p-3 rounded-xl text-center">
+                    {paymentError}
+                  </div>
+                )}
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setPaymentStep('form')}
+                    className="flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] text-center font-sans border border-slate-200"
+                  >
+                    {language === 'en' ? "Back" : "Tilbake"}
+                  </button>
+                  <button
+                    onClick={handleStripePaymentSubmit}
+                    disabled={isSubmitting}
+                    className="flex-[2] py-4 bg-primary hover:bg-[#1B4965] text-white text-xs font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-3.5 h-3.5 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+                        <span>{language === 'en' ? "Processing..." : "Behandler betaling..."}</span>
+                      </>
+                    ) : (
+                      <span>{language === 'en' ? "Pay and Enroll" : "Betal og fullfør"}</span>
+                    )}
+                  </button>
+                </div>
+              </motion.div>
             ) : (
               <motion.div 
                 key="success"
@@ -638,27 +926,27 @@ export default function AdmissionPage() {
 
                 <div className="space-y-2">
                   <h3 className="font-serif text-xl font-bold text-primary">
-                    {language === 'en' ? "Application Received!" : "Søknaden er mottatt!"}
+                    {language === 'en' ? "Admission Successful!" : "Opptak fullført!"}
                   </h3>
                   <p className="text-xs text-on-surface-variant font-semibold max-w-sm mx-auto leading-relaxed">
                     {language === 'en'
-                      ? `Thank you, ${formData.name}! We have received your application for the ${formData.program === 'prop101' ? 'PROP 101' : formData.program === 'bible301' ? 'BIBLE 301' : 'LEAD 201'} course. One of our mentors will contact you via email or phone to confirm your study spot shortly.`
-                      : `Takk, ${formData.name}! Vi har mottatt din søknad på programmet ${formData.program === 'prop101' ? 'PROP 101' : formData.program === 'bible301' ? 'BIBLE 301' : 'LEAD 201'}. En av våre mentorer vil kontakte deg på e-post eller telefon for en kort og uformell søknadssamtale innen kort tid.`}
+                      ? `Thank you, ${formData.name}! Your payment has been processed and you are now fully enrolled in the ${programs.find(p => p.id === formData.program)?.code} course. You have been granted instant access to the study portal.`
+                      : `Takk, ${formData.name}! Din betaling er registrert og du er nå tatt opp som student på programmet ${programs.find(p => p.id === formData.program)?.code}. Du har nå umiddelbar tilgang til studieportalen.`}
                   </p>
                 </div>
 
                 <div className="pt-4 flex flex-col sm:flex-row justify-center gap-3">
                   <button
                     onClick={() => navigate('/')}
-                    className="px-6 py-3 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95"
+                    className="px-6 py-3 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95"
                   >
                     {language === 'en' ? "Go to Home" : "Gå til forsiden"}
                   </button>
                   <button
-                    onClick={() => navigate('/login')}
-                    className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold uppercase tracking-wider rounded-xl transition-all active:scale-95 border border-slate-200 font-sans"
+                    onClick={() => navigate('/student/dashboard')}
+                    className="px-6 py-3 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all active:scale-95 border border-slate-200 font-sans"
                   >
-                    {language === 'en' ? "Access Guest Portal" : "Åpne portal (Gjest)"}
+                    {language === 'en' ? "Open Study Portal" : "Åpne studieportal"}
                   </button>
                 </div>
               </motion.div>

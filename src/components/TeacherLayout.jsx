@@ -56,10 +56,12 @@ export default function TeacherLayout() {
   };
 
   useEffect(() => {
-    if (user?.role && user.role !== 'teacher' && user.role !== 'admin' && user.role !== 'superadmin') {
-      changePersona('teacher');
+    const allowedRoles = ['teacher', 'admin', 'superadmin'];
+    if (user && !allowedRoles.includes(user.role)) {
+      showToast(language === 'en' ? 'Access denied.' : 'Tilgang avslått.');
+      navigate('/admission');
     }
-  }, [user?.role, changePersona]);
+  }, [user, navigate, language, showToast]);
 
 
 
