@@ -864,7 +864,11 @@ export const AppProvider = ({ children }) => {
       const saved = localStorage.getItem('hkm-cms-content');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed['layout-logo-title'] === 'His Kingdom Prophets' || parsed['landing-cta-btn-primary'] === 'Søk Opptak 2026') {
+        if (
+          parsed['layout-logo-title'] === 'His Kingdom Prophets' || 
+          parsed['landing-cta-btn-primary'] === 'Søk Opptak 2026' ||
+          parsed['landing-nav-resources'] === 'Bible Resources'
+        ) {
           localStorage.removeItem('hkm-cms-content');
           return defaults;
         }
