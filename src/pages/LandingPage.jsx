@@ -642,76 +642,41 @@ export default function LandingPage() {
               </div>
 
               {/* Categorized Curriculum Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
                   {
                     title: language === 'no' ? "1. Fundament & Relasjon" : "1. Foundation & Relationship",
-                    topics: language === 'no' ? [
-                      "Bønn og profetisk forbønn", "Faste", "Gudsfrykt / Frykt for Gud", 
-                      "Disippelskap", "Identitet og autoritet i Kristus", "Ydmykhet", 
-                      "Ulike måter å høre Gud på", "Lønnkammeret og journalføring"
-                    ] : [
-                      "Prayer and Prophetic Intercession", "Fasting", "The Fear of God", 
-                      "Discipleship", "Identity and Authority in Christ", "Humility", 
-                      "Different Ways to Hear God", "The Secret Place and Journaling"
-                    ]
+                    description: language === 'no'
+                      ? "Fokus på å legge et solid bibelsk grunnlag for det kristne livet. Her lærer du om bønn, faste, ydmykhet, gudsfrykt, din identitet og autoritet i Kristus, samt praktiske nøkler til å høre Guds røst i lønnkammeret."
+                      : "Focus on laying a solid biblical foundation for the Christian life. Here you will learn about prayer, fasting, humility, the fear of God, your identity and authority in Christ, as well as practical keys to hearing God's voice in the secret place."
                   },
                   {
                     title: language === 'no' ? "2. Profetisk Utrustning & Gaver" : "2. Prophetic Equipping & Gifts",
-                    topics: language === 'no' ? [
-                      "Personlig profeti / Profeti 101", "Åndens gaver", 
-                      "Hvordan vokse i det profetiske?", "Kunnskapsord, tydning av tunger", 
-                      "Tungetale", "Proklamasjoner og erklæringer", 
-                      "Hva er en profet vs. profetisk gave", "Retningslinjer for det profetiske fellesskapet"
-                    ] : [
-                      "Personal Prophecy / Prophecy 101", "Gifts of the Spirit", 
-                      "How to Grow in the Prophetic?", "Word of Knowledge, Interpretation of Tongues", 
-                      "Speaking in Tongues", "Proclamations and Decreeing", 
-                      "What is a prophet vs prophetic gift", "Prophetic Community Guidelines"
-                    ]
+                    description: language === 'no'
+                      ? "Utrustning og modning i de profetiske nådegavene. Modulen dekker personlig profeti, Åndens gaver, kunnskapsord, tydning av tunger, profetiske erklæringer og retningslinjer for sunn praksis i fellesskapet."
+                      : "Equipping and maturing in the prophetic gifts of the Spirit. The module covers personal prophecy, spiritual gifts, words of knowledge, interpretation of tongues, prophetic decrees, and guidelines for healthy practice in the community."
                   },
                   {
                     title: language === 'no' ? "3. Indre Helbredelse & Utfrielse" : "3. Inner Healing & Deliverance",
-                    topics: language === 'no' ? [
-                      "Omvendelse og tilgivelse", "Helbredelse / Indre helbredelse", 
-                      "Forbannelser (generelt)", "Kristen religiøs heksekunst / Forbannelser / sjelelige bønner", 
-                      "Hvordan overvinne blokkeringer?", "Forkastelse, foreldreløs ånd", 
-                      "Perversjonsånd, Lilith, Incubus & Succubus", "Spådomsånder og overvåkende ånder", 
-                      "Bryte okkulte og heksekunstbånd", "Traumer og triggere", 
-                      "Frasigelsesbønner / Avsvergelser", "Mental og emosjonell helse"
-                    ] : [
-                      "Repentance and Forgiveness", "Healing / Inner Healing", 
-                      "Curses (general)", "Christian Religious Witchcraft / Curses / soulish prayers", 
-                      "How to Overcome Blockage?", "Rejection, Orphan Spirit", 
-                      "Spirit of Perversion, Lilith, Incubus & Succubus", "Familiar Spirits and Monitoring Spirits", 
-                      "Breaking Occult and Witchcraft Ties", "Trauma and Triggers", 
-                      "Renouncing prayers", "Mental and Emotional Health"
-                    ]
+                    description: language === 'no'
+                      ? "Undervisning og tjeneste rettet mot personlig frihet og helbredelse. Vi går i dybden på omvendelse, oppgjør med forbannelser, bryte okkulte bånd, helbrede emosjonelle sår og traumer, samt frihet fra undertrykkende åndskrefter."
+                      : "Teaching and ministry aimed at personal freedom and healing. We go in-depth on repentance, dealing with curses, breaking occult ties, healing emotional wounds and traumas, as well as freedom from oppressive spiritual forces."
                   },
                   {
                     title: language === 'no' ? "4. Praktisk Kristenliv & Tjeneste" : "4. Practical Christian Life & Ministry",
-                    topics: language === 'no' ? [
-                      "Overnaturlig økonomi", "Misjon / Misjonær", 
-                      "Bønnevakter / Nattbønn / Morgenbønn", "Smågrupper"
-                    ] : [
-                      "Supernatural Finances", "Missions / Missionary", 
-                      "Prayer Watches / Night Prayers / Morning Prayers", "Small Groups"
-                    ]
+                    description: language === 'no'
+                      ? "Praktisk anvendelse av troen i hverdagen og misjon. Emner inkluderer overnaturlig økonomi og forvaltning, misjon og misjonærens kall, etablering av bønnevakter og deltakelse i nære smågrupper."
+                      : "Practical application of faith in everyday life and missions. Topics include supernatural finances and stewardship, missions and the missionary calling, establishing prayer watches, and participating in close-knit small groups."
                   }
                 ].map((cat, i) => (
-                  <div key={i} className="bg-slate-50 border border-slate-100 p-5 rounded-2xl space-y-3.5 hover:bg-slate-100/50 transition-all duration-200">
-                    <h4 className="font-serif text-[13px] font-bold text-[#3c096c] uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-2">
+                  <div key={i} className="bg-slate-50 border border-slate-100/70 p-6 rounded-2xl space-y-3 hover:bg-slate-100/50 transition-all duration-200">
+                    <h4 className="font-serif text-sm font-bold text-[#3c096c] uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#3c096c]" />
                       {cat.title}
                     </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {cat.topics.map((topic, j) => (
-                        <div key={j} className="bg-white border border-slate-200/50 p-2.5 rounded-xl text-xs text-slate-700 font-semibold flex items-center gap-2">
-                          <span className="w-1 h-1 bg-[#3c096c] rounded-full shrink-0" />
-                          <span>{topic}</span>
-                        </div>
-                      ))}
-                    </div>
+                    <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                      {cat.description}
+                    </p>
                   </div>
                 ))}
               </div>
