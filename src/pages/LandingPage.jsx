@@ -630,52 +630,97 @@ export default function LandingPage() {
             </div>
 
             {/* Directly display Year 1 Curriculum */}
-            <div className="bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all">
-              <div className="space-y-6">
-                <div className="space-y-2 border-b border-slate-100 pb-4">
+            <div className="bg-white border border-[#dec2ef]/40 p-6 sm:p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all space-y-8">
+              <div className="space-y-4 border-b border-slate-100 pb-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                   <h3 className="font-serif text-lg font-bold text-[#3c096c] uppercase tracking-wider">
-                    TEACHING PLAN: HIS KINGDOM PROPHETIC COMMUNITY
+                    {language === 'no' ? "Fagplan: 1. år (Prophetic Community)" : "Teaching Plan: Year 1 (Prophetic Community)"}
                   </h3>
-                  <p className="text-xs text-slate-500 font-medium">
-                    {language === 'no'
-                      ? "Foreløpig emneplan for førsteåret. Temaene vil bli revidert etter bønnesøking for Guds ledelse og timing."
-                      : "Preliminary topics written down for revision as we pray and seek the Lord for direction and timing."}
-                  </p>
+                  <span className="self-start text-[10px] font-bold bg-green-500 text-white px-2.5 py-1 rounded-full uppercase tracking-wider">
+                    {language === 'no' ? "Aktiv for søknad" : "Open for Admission"}
+                  </span>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 text-xs text-slate-700 font-semibold font-sans">
-                  {(language === 'no' ? [
-                    "Bønn og profetisk forbønn", "Faste", "Gudsfrykt / Frykt for Gud", 
-                    "Omvendelse og tilgivelse", "Disippelskap", "Personlig profeti / Profeti 101", 
-                    "Åndens gaver", "Helbredelse / Indre helbredelse", "Forbannelser (generelt)", 
-                    "Kristen religiøs heksekunst / Forbannelser / sjelelige bønner", "Hvordan overvinne blokkeringer?", 
-                    "Hvordan vokse i det profetiske?", "Overnaturlig økonomi", "Misjon / Misjonær", 
-                    "Bønnevakter / Nattbønn / Morgenbønn", "Forkastelse, foreldreløs ånd", 
-                    "Perversjonsånd, Lilith, Incubus & Succubus", "Spådomsånder og overvåkende ånder", 
-                    "Bryte okkulte og heksekunstbånd", "Kunnskapsord, tydning av tunger", 
-                    "Smågrupper", "Traumer og triggere", "Identitet og autoritet i Kristus", 
-                    "Mental og emosjonell helse", "Tungetale", "Proklamasjoner og erklæringer", 
-                    "Ydmykhet", "Retningslinjer for det profetiske fellesskapet", "Hva er en profet vs. profetisk gave", 
-                    "Ulike måter å høre Gud på", "Lønnkammeret og journalføring", "Frasigelsesbønner / Avsvergelser"
-                  ] : [
-                    "Prayer and Prophetic Intercession", "Fasting", "The Fear of God", 
-                    "Repentance and Forgiveness", "Discipleship", "Personal Prophecy / Prophecy 101", 
-                    "Gifts of the Spirit", "Healing / Inner Healing", "Curses (general)", 
-                    "Christian Religious Witchcraft / Curses / soulish prayers", "How to Overcome Blockage?", 
-                    "How to Grow in the Prophetic?", "Supernatural Finances", "Missions / Missionary", 
-                    "Prayer Watches / Night Prayers / Morning Prayers", "Rejection, Orphan Spirit", 
-                    "Spirit of Perversion, Lilith, Incubus & Succubus", "Familiar Spirits and Monitoring Spirits", 
-                    "Breaking Occult and Witchcraft Ties", "Word of Knowledge, Interpretation of Tongues", 
-                    "Small Groups", "Trauma and Triggers", "Identity and Authority in Christ", 
-                    "Mental and Emotional Health", "Speaking in Tongues", "Proclamations and Decreeing", 
-                    "Humility", "Prophetic Community Guidelines", "What is a prophet vs prophetic gift", 
-                    "Different Ways to Hear God", "The Secret Place and Journaling", "Renouncing prayers"
-                  ]).map((topic, i) => (
-                    <div key={i} className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-100/60 hover:bg-slate-100 transition-colors">
-                      <span className="w-1.5 h-1.5 bg-[#3c096c] rounded-full shrink-0" />
-                      <span>{topic}</span>
+                
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+                  {language === 'no'
+                    ? "Førsteåret fokuserer på å bygge et solid bibelsk fundament, styrke din personlige relasjon til Jesus og utruste deg i Åndens profetiske gaver. Undervisningen forener sunn teologi med praktisk åpenbaring og et trygt trosfellesskap. Temaene vil bli løpende revidert etter bønnesøking for Guds ledelse og timing."
+                    : "The first year focuses on building a solid biblical foundation, strengthening your personal relationship with Jesus, and equipping you in the prophetic gifts of the Spirit. The teaching unites sound theology with practical revelation and a safe faith community. Topics will be continuously revised as we pray and seek the Lord's direction."}
+                </p>
+              </div>
+
+              {/* Categorized Curriculum Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {[
+                  {
+                    title: language === 'no' ? "1. Fundament & Relasjon" : "1. Foundation & Relationship",
+                    topics: language === 'no' ? [
+                      "Bønn og profetisk forbønn", "Faste", "Gudsfrykt / Frykt for Gud", 
+                      "Disippelskap", "Identitet og autoritet i Kristus", "Ydmykhet", 
+                      "Ulike måter å høre Gud på", "Lønnkammeret og journalføring"
+                    ] : [
+                      "Prayer and Prophetic Intercession", "Fasting", "The Fear of God", 
+                      "Discipleship", "Identity and Authority in Christ", "Humility", 
+                      "Different Ways to Hear God", "The Secret Place and Journaling"
+                    ]
+                  },
+                  {
+                    title: language === 'no' ? "2. Profetisk Utrustning & Gaver" : "2. Prophetic Equipping & Gifts",
+                    topics: language === 'no' ? [
+                      "Personlig profeti / Profeti 101", "Åndens gaver", 
+                      "Hvordan vokse i det profetiske?", "Kunnskapsord, tydning av tunger", 
+                      "Tungetale", "Proklamasjoner og erklæringer", 
+                      "Hva er en profet vs. profetisk gave", "Retningslinjer for det profetiske fellesskapet"
+                    ] : [
+                      "Personal Prophecy / Prophecy 101", "Gifts of the Spirit", 
+                      "How to Grow in the Prophetic?", "Word of Knowledge, Interpretation of Tongues", 
+                      "Speaking in Tongues", "Proclamations and Decreeing", 
+                      "What is a prophet vs prophetic gift", "Prophetic Community Guidelines"
+                    ]
+                  },
+                  {
+                    title: language === 'no' ? "3. Indre Helbredelse & Utfrielse" : "3. Inner Healing & Deliverance",
+                    topics: language === 'no' ? [
+                      "Omvendelse og tilgivelse", "Helbredelse / Indre helbredelse", 
+                      "Forbannelser (generelt)", "Kristen religiøs heksekunst / Forbannelser / sjelelige bønner", 
+                      "Hvordan overvinne blokkeringer?", "Forkastelse, foreldreløs ånd", 
+                      "Perversjonsånd, Lilith, Incubus & Succubus", "Spådomsånder og overvåkende ånder", 
+                      "Bryte okkulte og heksekunstbånd", "Traumer og triggere", 
+                      "Frasigelsesbønner / Avsvergelser", "Mental og emosjonell helse"
+                    ] : [
+                      "Repentance and Forgiveness", "Healing / Inner Healing", 
+                      "Curses (general)", "Christian Religious Witchcraft / Curses / soulish prayers", 
+                      "How to Overcome Blockage?", "Rejection, Orphan Spirit", 
+                      "Spirit of Perversion, Lilith, Incubus & Succubus", "Familiar Spirits and Monitoring Spirits", 
+                      "Breaking Occult and Witchcraft Ties", "Trauma and Triggers", 
+                      "Renouncing prayers", "Mental and Emotional Health"
+                    ]
+                  },
+                  {
+                    title: language === 'no' ? "4. Praktisk Kristenliv & Tjeneste" : "4. Practical Christian Life & Ministry",
+                    topics: language === 'no' ? [
+                      "Overnaturlig økonomi", "Misjon / Misjonær", 
+                      "Bønnevakter / Nattbønn / Morgenbønn", "Smågrupper"
+                    ] : [
+                      "Supernatural Finances", "Missions / Missionary", 
+                      "Prayer Watches / Night Prayers / Morning Prayers", "Small Groups"
+                    ]
+                  }
+                ].map((cat, i) => (
+                  <div key={i} className="bg-slate-50 border border-slate-100 p-5 rounded-2xl space-y-3.5 hover:bg-slate-100/50 transition-all duration-200">
+                    <h4 className="font-serif text-[13px] font-bold text-[#3c096c] uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#3c096c]" />
+                      {cat.title}
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {cat.topics.map((topic, j) => (
+                        <div key={j} className="bg-white border border-slate-200/50 p-2.5 rounded-xl text-xs text-slate-700 font-semibold flex items-center gap-2">
+                          <span className="w-1 h-1 bg-[#3c096c] rounded-full shrink-0" />
+                          <span>{topic}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
