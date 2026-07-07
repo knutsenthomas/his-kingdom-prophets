@@ -629,128 +629,41 @@ export default function LandingPage() {
               </h2>
             </div>
 
-            {/* Premium Tab Controller for Curriculum */}
-            <div className="flex justify-center">
-              <div className="inline-flex p-1 bg-white border border-[#dec2ef]/55 rounded-2xl shadow-sm">
-                <button
-                  onClick={() => setActiveCurriculumTab('community')}
-                  className={`px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 active:scale-95 ${
-                    activeCurriculumTab === 'community'
-                      ? 'bg-[#240046] text-white shadow-sm'
-                      : 'text-slate-600 hover:text-[#3c096c]'
-                  }`}
-                >
-                  {language === 'no' ? "1. år: Prophetic Community" : "Year 1: Prophetic Community"}
-                </button>
-                <button
-                  onClick={() => setActiveCurriculumTab('prophets')}
-                  className={`px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 active:scale-95 flex items-center gap-1.5 ${
-                    activeCurriculumTab === 'prophets'
-                      ? 'bg-[#3c096c] text-white shadow-sm'
-                      : 'text-slate-600 hover:text-[#3c096c]'
-                  }`}
-                >
-                  <Lock size={12} className={activeCurriculumTab === 'prophets' ? 'text-amber-300' : 'text-slate-400'} />
-                  {language === 'no' ? "2. år: His Kingdom Prophets" : "Year 2: His Kingdom Prophets"}
-                </button>
-              </div>
-            </div>
-
-            {/* Curriculum content display */}
+            {/* Directly display Year 1 Curriculum */}
             <div className="bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all">
-              <AnimatePresence mode="wait">
-                {activeCurriculumTab === 'community' ? (
-                  <motion.div
-                    key="community"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-2 border-b border-slate-100 pb-4">
-                      <h3 className="font-serif text-lg font-bold text-[#3c096c] uppercase tracking-wider">
-                        TEACHING PLAN: HIS KINGDOM PROPHETIC COMMUNITY
-                      </h3>
-                      <p className="text-xs text-slate-500 font-medium">
-                        {language === 'no'
-                          ? "Foreløpig emneplan for førsteåret. Temaene vil bli revidert etter bønnesøking for Guds ledelse og timing."
-                          : "Preliminary topics written down for revision as we pray and seek the Lord for direction and timing."}
-                      </p>
+              <div className="space-y-6">
+                <div className="space-y-2 border-b border-slate-100 pb-4">
+                  <h3 className="font-serif text-lg font-bold text-[#3c096c] uppercase tracking-wider">
+                    TEACHING PLAN: HIS KINGDOM PROPHETIC COMMUNITY
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium">
+                    {language === 'no'
+                      ? "Foreløpig emneplan for førsteåret. Temaene vil bli revidert etter bønnesøking for Guds ledelse og timing."
+                      : "Preliminary topics written down for revision as we pray and seek the Lord for direction and timing."}
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 text-xs text-slate-700 font-semibold font-sans">
+                  {[
+                    "Prayer and Prophetic Intercession", "Fasting", "The Fear of God", 
+                    "Repentance and Forgiveness", "Discipleship", "Personal Prophecy / Prophecy 101", 
+                    "Gifts of the Spirit", "Healing / Inner Healing", "Curses (general)", 
+                    "Christian Religious Witchcraft / Curses / soulish prayers", "How to Overcome Blockage?", 
+                    "How to Grow in the Prophetic?", "Supernatural Finances", "Missions / Missionary", 
+                    "Prayer Watches / Night Prayers / Morning Prayers", "Rejection, Orphan Spirit", 
+                    "Spirit of Perversion, Lilith, Incubus & Succubus", "Familiar Spirits and Monitoring Spirits", 
+                    "Breaking Occult and Witchcraft Ties", "Word of Knowledge, Interpretation of Tongues", 
+                    "Small Groups", "Trauma and Triggers", "Identity and Authority in Christ", 
+                    "Mental and Emotional Health", "Speaking in Tongues", "Proclamations and Decreeing", 
+                    "Humility", "Prophetic Community Guidelines", "What is a prophet vs prophetic gift", 
+                    "Different Ways to Hear God", "The Secret Place and Journaling", "Renouncing prayers"
+                  ].map((topic, i) => (
+                    <div key={i} className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-100/60 hover:bg-slate-100 transition-colors">
+                      <span className="w-1.5 h-1.5 bg-[#3c096c] rounded-full shrink-0" />
+                      <span>{topic}</span>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 text-xs text-slate-700 font-semibold font-sans">
-                      {[
-                        "Prayer and Prophetic Intercession", "Fasting", "The Fear of God", 
-                        "Repentance and Forgiveness", "Discipleship", "Personal Prophecy / Prophecy 101", 
-                        "Gifts of the Spirit", "Healing / Inner Healing", "Curses (general)", 
-                        "Christian Religious Witchcraft / Curses / soulish prayers", "How to Overcome Blockage?", 
-                        "How to Grow in the Prophetic?", "Supernatural Finances", "Missions / Missionary", 
-                        "Prayer Watches / Night Prayers / Morning Prayers", "Rejection, Orphan Spirit", 
-                        "Spirit of Perversion, Lilith, Incubus & Succubus", "Familiar Spirits and Monitoring Spirits", 
-                        "Breaking Occult and Witchcraft Ties", "Word of Knowledge, Interpretation of Tongues", 
-                        "Small Groups", "Trauma and Triggers", "Identity and Authority in Christ", 
-                        "Mental and Emotional Health", "Speaking in Tongues", "Proclamations and Decreeing", 
-                        "Humility", "Prophetic Community Guidelines", "What is a prophet vs prophetic gift", 
-                        "Different Ways to Hear God", "The Secret Place and Journaling", "Renouncing prayers"
-                      ].map((topic, i) => (
-                        <div key={i} className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-100/60 hover:bg-slate-100 transition-colors">
-                          <span className="w-1.5 h-1.5 bg-[#3c096c] rounded-full shrink-0" />
-                          <span>{topic}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="prophets"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="space-y-6"
-                  >
-                    <div className="space-y-2 border-b border-slate-100 pb-4">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-serif text-lg font-bold text-[#3c096c] uppercase tracking-wider">
-                          TEACHING PLAN: HIS KINGDOM PROPHETS
-                        </h3>
-                        <span className="text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full uppercase tracking-wider">
-                          {language === 'no' ? "Starter i 2028" : "Launches in 2028"}
-                        </span>
-                      </div>
-                      <p className="text-xs text-slate-500 font-medium">
-                        {language === 'no'
-                          ? "Fagplanen for andreåret (profetembetet). Krever gjennomført førsteår og godkjent re-applikasjon."
-                          : "Curriculum for the second year (office of a prophet). Requires completion of Year 1 and approval of reapplication."}
-                      </p>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 text-xs text-slate-700 font-semibold font-sans">
-                      {[
-                        "What is a Prophet? (Role of the Prophet)", "Rejection, Orphan Spirit, and Imposter Syndrome", 
-                        "The Fivefold Ministry Gifts", "Recognizing and Shifting Atmospheres", "Prophetic Authority", 
-                        "Healthy Prophets", "Holy Spirit – Anointing", "7 Spirits of God", "Fire of God", 
-                        "Ecclesia and the Prophet", "Avoid the Pitfalls", "Shekinah Glory", "Kabod Glory", 
-                        "New Testament Prophets", "Old Testament Prophets", "Female Leaders and Prophets", 
-                        "Obedience – Counting the Cost", "The Prophets in the Bible", "Prophetic Activations", 
-                        "Prophetic Acts", "Freedom from Freemasonry", "Identifying God’s Calling", 
-                        "Leadership Training", "Demonology", "National Prophetic Words", "Deliverance", 
-                        "Ecstatic Prophecy", "Night Terrors and Sleep Paralysis", "Generational Curses – bloodline cleansing", 
-                        "The 12 Strongmen", "Dreams, Symbols, Numbers, Colors, and Interpretation", "Divine Judgement and Mercy", 
-                        "Exile vs. Judgement / Mercy Nations", "Role of a Prophet", "Isms and Idolatry", 
-                        "God and Politics/Government", "Nabi", "Seer", "Watchman", "Discernment", 
-                        "Spiritual Warfare", "The Python Spirit", "The Jezebel, Ahab, Athalia, Leviathan Spirit", 
-                        "Angels and Heavenly Beings", "Heavenly Realms", "God’s Throneroom", "Divine Healing", 
-                        "Counterfeits and How to Discern Them", "Council of God", "Courts of Heaven", "Altars"
-                      ].map((topic, i) => (
-                        <div key={i} className="flex items-center gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-100/60 hover:bg-slate-100 transition-colors">
-                          <span className="w-1.5 h-1.5 bg-amber-500 rounded-full shrink-0" />
-                          <span>{topic}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
