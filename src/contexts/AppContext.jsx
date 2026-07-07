@@ -863,7 +863,12 @@ export const AppProvider = ({ children }) => {
     try {
       const saved = localStorage.getItem('hkm-cms-content');
       if (saved) {
-        return { ...defaults, ...JSON.parse(saved) };
+        const parsed = JSON.parse(saved);
+        if (parsed['layout-logo-title'] === 'His Kingdom Prophets') {
+          localStorage.removeItem('hkm-cms-content');
+          return defaults;
+        }
+        return { ...defaults, ...parsed };
       }
     } catch (e) {
       console.error('Klarte ikke hente cms content fra localStorage:', e);
