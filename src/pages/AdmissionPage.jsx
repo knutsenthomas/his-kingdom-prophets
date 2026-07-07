@@ -672,12 +672,20 @@ export default function AdmissionPage() {
                       : "For å søke om opptak og betale for kurs ved His Kingdom Prophets, må du logge inn med din HKM-brukerkonto."}
                   </p>
                 </div>
-                <button
-                  onClick={() => navigate('/login')}
-                  className="px-8 py-4 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 mx-auto block"
-                >
-                  {language === 'en' ? "Log In Now" : "Logg inn nå"}
-                </button>
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-md mx-auto">
+                  <button
+                    onClick={() => navigate('/login')}
+                    className="w-full sm:w-auto px-6 py-3.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-primary text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5"
+                  >
+                    {language === 'en' ? "Log In" : "Logg inn"}
+                  </button>
+                  <button
+                    onClick={() => navigate('/login?mode=register')}
+                    className="w-full sm:w-auto px-6 py-3.5 bg-primary hover:bg-primary/95 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5"
+                  >
+                    {language === 'en' ? "Create Account" : "Opprett brukerkonto"}
+                  </button>
+                </div>
               </motion.div>
             ) : paymentStep === 'form' ? (
               <motion.form 

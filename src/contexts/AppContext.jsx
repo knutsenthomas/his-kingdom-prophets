@@ -1582,6 +1582,8 @@ export const AppProvider = ({ children }) => {
                   }).catch(err => console.warn(err));
                 } else {
                   finalUserData = optimisticUserData;
+                  // Save new public user profile in Firestore so it persists
+                  setDoc(userDocRef, finalUserData).catch(err => console.warn("Failed to create public user profile:", err));
                 }
               }
 
@@ -1861,9 +1863,11 @@ export const AppProvider = ({ children }) => {
       let isInvited = false;
       let invitedProfile = null;
       let docId = null;
+      let assignedRole = role || 'member';
 
       if (checkEmail === 'knutsenthomas@gmail.com') {
         isInvited = true;
+        assignedRole = 'superadmin';
       } else {
         const q = query(collection(db, "users"), where("email", "==", checkEmail));
         const querySnapshot = await getDocs(q);
@@ -1872,12 +1876,8 @@ export const AppProvider = ({ children }) => {
           isInvited = true;
           invitedProfile = data;
           docId = docSnap.id;
+          assignedRole = data.role || 'student';
         });
-      }
-
-      if (!isInvited) {
-        showToast("Registrering sperret: Din e-post er ikke registrert av en administrator.");
-        return;
       }
 
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -1887,14 +1887,20 @@ export const AppProvider = ({ children }) => {
 
       const defaultProfile = {
         uid: firebaseUser.uid,
-        name: invitedProfile?.name || name || 'Bruker',
+        name: invitedProfile?.name || name || 'Ny Bruker',
         email,
-        role: invitedProfile?.role || role || 'student',
+        role: assignedRole,
         avatar: invitedProfile?.avatar || avatar,
         phone: invitedProfile?.phone || "+47 900 00 000",
         location: invitedProfile?.location || "Kristiansand, Norge",
         birthYear: invitedProfile?.birthYear || "1995",
         bio: invitedProfile?.bio || "",
+        heading: invitedProfile?.heading || "",
+        title: invitedProfile?.title || "",
+        department: invitedProfile?.department || "",
+        expertise: invitedProfile?.expertise || "",
+        officeHours: invitedProfile?.officeHours || "",
+        zoomLink: invitedProfile?.zoomLink || "",
         ministry: invitedProfile?.ministry || "",
         socialInstagram: invitedProfile?.socialInstagram || "",
         socialFacebook: invitedProfile?.socialFacebook || ""
