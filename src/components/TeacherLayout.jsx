@@ -118,7 +118,7 @@ export default function TeacherLayout() {
     <div className="bg-background min-h-screen flex flex-col font-sans text-on-surface pt-20">
       {/* Dynamic Mentor Header */}
       <header className="bg-white border-b border-outline-variant/30 fixed top-0 left-0 right-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-12 max-w-[1440px] mx-auto h-20">
+        <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-12 h-20">
           
           {/* Logo & Toggle Trigger */}
           <div className="flex items-center gap-3 mr-2 truncate">
@@ -227,7 +227,7 @@ export default function TeacherLayout() {
       </header>
 
       {/* Main Content Layout with Sidebar */}
-      <div className="flex flex-1 w-full max-w-[1440px] mx-auto relative min-h-[calc(100vh-80px)]">
+      <div className="flex flex-1 w-full relative min-h-[calc(100vh-80px)]">
         
         {/* Collapsible Left Sidebar for Mentor portal */}
         <aside 
