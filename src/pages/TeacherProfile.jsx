@@ -245,7 +245,7 @@ export default function TeacherProfile() {
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 md:px-10 py-6 md:py-10 flex flex-col gap-6 md:gap-8 font-sans max-w-5xl">
+    <div className="w-full px-4 sm:px-6 md:px-10 py-6 md:py-10 flex flex-col gap-6 md:gap-8 font-sans max-w-7xl mx-auto">
       <div className="flex items-center gap-1.5 text-xs font-semibold text-outline">
         <span className="hover:text-primary cursor-pointer transition-colors" onClick={() => navigate('/teacher/dashboard')}><CmsText slug="profile-breadcrumb-mentor" fallback="Mentorpanel" /></span>
         <ChevronRight size={12} />
