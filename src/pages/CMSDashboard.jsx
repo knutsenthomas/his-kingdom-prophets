@@ -6,7 +6,7 @@ import {
   Globe, History, Download, Upload, Search, Settings, AlertTriangle, 
   ChevronLeft, ChevronRight, MoreVertical, X, CheckCircle2, Trash2, 
   Copy, PlusCircle, Languages, Info, RotateCcw, Layout, UserCheck, 
-  BookOpen, Users, Rocket, Flag, UploadCloud, FileText
+  BookOpen, Users, Rocket, Flag, UploadCloud, FileText, Award, HelpCircle
 } from 'lucide-react';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/firebase';
@@ -16,11 +16,22 @@ import { generateFastingPdf, generateIntercessionPdf } from '@/utils/pdfGenerato
 // Definition of all CMS strings with labels, categories, and explanatory descriptions
 const assetDefinitions = [
   // Opptaksside (Admission Page)
+  { slug: 'admission-hero-badge', title: 'Opptak Hero Merkelapp', section: 'Opptaksside', type: 'text', description: 'Liten merkelapp over hero-tittelen.' },
   { slug: 'admission-hero-title', title: 'Opptak Hero Tittel', section: 'Opptaksside', type: 'text', description: 'Hovedoverskrift på opptakssiden.' },
   { slug: 'admission-hero-subtitle', title: 'Opptak Hero Undertittel', section: 'Opptaksside', type: 'textarea', description: 'Beskrivelse under hero-tittelen på opptakssiden.' },
   { slug: 'admission-hero-cta', title: 'Opptak Hero Knapp', section: 'Opptaksside', type: 'text', description: 'Knappetekst for å navigere til søknadsskjemaet.' },
+  { slug: 'admission-programs-badge', title: 'Opptak Studielinjer Merkelapp', section: 'Opptaksside', type: 'text', description: 'Merkelapp over oversikten over studielinjer.' },
   { slug: 'admission-programs-title', title: 'Opptak Studielinjer Tittel', section: 'Opptaksside', type: 'text', description: 'Hovedoverskrift for oversikten over studielinjer.' },
   { slug: 'admission-programs-subtitle', title: 'Opptak Studielinjer Undertittel', section: 'Opptaksside', type: 'textarea', description: 'Beskrivende tekst under studielinjetittelen.' },
+  { slug: 'admission-prog-p1-title', title: 'Program 1 Tittel (PROP 101)', section: 'Opptaksside', type: 'text', description: 'Tittel på første studielinje.' },
+  { slug: 'admission-prog-p1-desc', title: 'Program 1 Beskrivelse', section: 'Opptaksside', type: 'textarea', description: 'Beskrivelse av første studielinje.' },
+  { slug: 'admission-prog-p1-price', title: 'Program 1 Pris', section: 'Opptaksside', type: 'text', description: 'Pris for første studielinje.' },
+  { slug: 'admission-prog-p2-title', title: 'Program 2 Tittel (BIBLE 301)', section: 'Opptaksside', type: 'text', description: 'Tittel på andre studielinje.' },
+  { slug: 'admission-prog-p2-desc', title: 'Program 2 Beskrivelse', section: 'Opptaksside', type: 'textarea', description: 'Beskrivelse av andre studielinje.' },
+  { slug: 'admission-prog-p2-price', title: 'Program 2 Pris', section: 'Opptaksside', type: 'text', description: 'Pris for andre studielinje.' },
+  { slug: 'admission-prog-p3-title', title: 'Program 3 Tittel (MIN 201)', section: 'Opptaksside', type: 'text', description: 'Tittel på tredje studielinje.' },
+  { slug: 'admission-prog-p3-desc', title: 'Program 3 Beskrivelse', section: 'Opptaksside', type: 'textarea', description: 'Beskrivelse av tredje studielinje.' },
+  { slug: 'admission-prog-p3-price', title: 'Program 3 Pris', section: 'Opptaksside', type: 'text', description: 'Pris for tredje studielinje.' },
   { slug: 'admission-payments-tag', title: 'Opptak Priser Merkelapp', section: 'Opptaksside', type: 'text', description: 'Liten tag øverst i prismatrisen.' },
   { slug: 'admission-payments-title', title: 'Opptak Priser Overskrift', section: 'Opptaksside', type: 'text', description: 'Hovedtittel for finansierings- og prisseksjonen.' },
   { slug: 'admission-payments-desc', title: 'Opptak Priser Beskrivelse', section: 'Opptaksside', type: 'textarea', description: 'Beskrivende avsnitt under pris-overskriften.' },
@@ -34,6 +45,22 @@ const assetDefinitions = [
   { slug: 'admission-steps-subtitle', title: 'Opptak Søknadsprosess Undertittel', section: 'Opptaksside', type: 'textarea', description: 'Beskrivelse under søknadsprosess-overskriften.' },
   { slug: 'admission-form-title', title: 'Opptak Skjema Tittel', section: 'Opptaksside', type: 'text', description: 'Tittel øverst på søknadsskjemaet.' },
   { slug: 'admission-form-subtitle', title: 'Opptak Skjema Undertittel', section: 'Opptaksside', type: 'textarea', description: 'Hjelpetekst under tittel på søknadsskjemaet.' },
+  { slug: 'admission-form-submit-btn', title: 'Opptak Fullfør Knapp', section: 'Opptaksside', type: 'text', description: 'Knappetekst for fullføring av søknaden.' },
+  { slug: 'admission-payment-title', title: 'Opptak Betaling Tittel', section: 'Opptaksside', type: 'text', description: 'Tittel på betalingssteget.' },
+  { slug: 'admission-payment-desc', title: 'Opptak Betaling Beskrivelse', section: 'Opptaksside', type: 'textarea', description: 'Forklaring på betalingssteget.' },
+  { slug: 'admission-success-title', title: 'Opptak Fullført Tittel', section: 'Opptaksside', type: 'text', description: 'Gratulasjonsoverskrift ved innsendt søknad.' },
+  { slug: 'admission-success-desc', title: 'Opptak Fullført Beskrivelse', section: 'Opptaksside', type: 'textarea', description: 'Bekreftelsestekst etter fullført søknad.' },
+
+  // Kundestøtte (Support Center)
+  { slug: 'support-hero-badge', title: 'Support Hero Merkelapp', section: 'Kundestøtte', type: 'text', description: 'Merkelapp over tittelen på kundestøttesiden.' },
+  { slug: 'support-hero-title', title: 'Support Hero Tittel', section: 'Kundestøtte', type: 'text', description: 'Hovedoverskrift på kundestøttesiden.' },
+  { slug: 'support-hero-desc', title: 'Support Hero Beskrivelse', section: 'Kundestøtte', type: 'textarea', description: 'Beskrivende tekst under tittelen på kundestøttesiden.' },
+  { slug: 'support-search-placeholder', title: 'Support Søkefelt Hjelpetekst', section: 'Kundestøtte', type: 'text', description: 'Plassholder i søkefeltet på hjelpesenteret.' },
+  { slug: 'support-popular-title', title: 'Support Mest Leste Tittel', section: 'Kundestøtte', type: 'text', description: 'Overskrift for populære artikler.' },
+  { slug: 'support-faq-title', title: 'Support Ofte Stilte Spørsmål', section: 'Kundestøtte', type: 'text', description: 'Overskrift for FAQ-seksjonen.' },
+  { slug: 'support-direct-title', title: 'Support Henvendelse Tittel', section: 'Kundestøtte', type: 'text', description: 'Overskrift for kontaktskjemaet.' },
+  { slug: 'support-direct-desc', title: 'Support Henvendelse Beskrivelse', section: 'Kundestøtte', type: 'textarea', description: 'Hjelpetekst under tittel for kontaktskjema.' },
+  { slug: 'support-form-submit-btn', title: 'Support Send Knapp', section: 'Kundestøtte', type: 'text', description: 'Tekst på send-knappen for supporthenvendelser.' },
 
   // Hjemmeside (Landing Page)
   { slug: 'landing-hero-title', title: 'Hero Hovedoverskrift', section: 'Hjemmeside', type: 'text', description: 'Hovedoverskriften i hero-seksjonen på landingssiden.' },
@@ -456,10 +483,65 @@ export default function CMSDashboard() {
     }));
   };
 
-  // Compute live unsaved modifications count
+  // Helper to infer section from slug
+  const inferSection = (slug) => {
+    if (slug.startsWith('admission-')) return 'Opptaksside';
+    if (slug.startsWith('support-')) return 'Kundestøtte';
+    if (slug.startsWith('resources-') || slug.startsWith('pdf-')) return 'Bibelressurser';
+    if (slug.startsWith('landing-') || slug.startsWith('about-') || slug.startsWith('shop-') || slug.startsWith('school-') || slug.startsWith('curriculum-')) return 'Hjemmeside';
+    if (slug.startsWith('student-') || slug.startsWith('msg.welcome.student')) return 'Studentportal';
+    if (slug.startsWith('teacher-')) return 'Mentorportal';
+    if (slug.startsWith('welcome-')) return 'Onboarding';
+    if (slug.startsWith('profile-')) return 'Profil';
+    if (slug.startsWith('login-')) return 'Innlogging';
+    return 'System';
+  };
+
+  // Helper to infer human-friendly title from slug
+  const inferTitle = (slug) => {
+    return slug
+      .replace(/[-_.]+/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase());
+  };
+
+  // Dynamic discovery combining static definitions and any discovered keys in cmsContent / draftContent
+  const allAssets = useMemo(() => {
+    const assetMap = new Map();
+    // 1. Static asset definitions
+    assetDefinitions.forEach(asset => {
+      assetMap.set(asset.slug, asset);
+    });
+
+    // 2. Discover dynamically added keys
+    const allKeys = new Set([
+      ...Object.keys(cmsContent || {}),
+      ...Object.keys(draftContent || {})
+    ]);
+
+    allKeys.forEach(rawKey => {
+      const slug = rawKey.endsWith('-en') ? rawKey.slice(0, -3) : rawKey;
+      if (!assetMap.has(slug)) {
+        const section = inferSection(slug);
+        const title = inferTitle(slug);
+        const sampleVal = draftContent[slug] || cmsContent[slug] || '';
+        const isLongText = sampleVal.length > 80 || sampleVal.includes('\n');
+        assetMap.set(slug, {
+          slug,
+          title,
+          section,
+          type: isLongText ? 'textarea' : 'text',
+          description: `Dynamisk oppdaget CMS-felt for "${slug}"`
+        });
+      }
+    });
+
+    return Array.from(assetMap.values());
+  }, [draftContent, cmsContent]);
+
+  // Compute live unsaved modifications count across all assets
   const unsavedCount = useMemo(() => {
     let count = 0;
-    assetDefinitions.forEach(asset => {
+    allAssets.forEach(asset => {
       const slug = asset.slug;
       const savedNo = cmsContent[slug] || '';
       const savedEn = cmsContent[slug + '-en'] || '';
@@ -487,7 +569,7 @@ export default function CMSDashboard() {
       }
     });
     return count;
-  }, [draftContent, cmsContent]);
+  }, [allAssets, draftContent, cmsContent]);
 
   // Handle full batch publish action (simulated spinner -> save state)
   const handlePublish = async () => {
@@ -530,29 +612,36 @@ export default function CMSDashboard() {
   // Category Tabs metadata and live count computations
   const categories = useMemo(() => {
     return [
-      { id: 'all', title: 'Systemnøkler', section: 'System', icon: Globe, count: assetDefinitions.length },
-      { id: 'landing', title: 'Landingsside', section: 'Hjemmeside', icon: Layout, count: assetDefinitions.filter(d => d.section === 'Hjemmeside').length },
-      { id: 'auth', title: 'Innloggingsflyt', section: 'Innlogging', icon: UserCheck, count: assetDefinitions.filter(d => d.section === 'Innlogging').length },
-      { id: 'student', title: 'Studentportal', section: 'Studentportal', icon: BookOpen, count: assetDefinitions.filter(d => d.section === 'Studentportal').length },
-      { id: 'teacher', title: 'Mentorportal', section: 'Mentorportal', icon: Users, count: assetDefinitions.filter(d => d.section === 'Mentorportal').length },
-      { id: 'onboarding', title: 'Onboardingflyt', section: 'Onboarding', icon: Rocket, count: assetDefinitions.filter(d => d.section === 'Onboarding').length },
-      { id: 'resources', title: 'Bibelressurser', section: 'Bibelressurser', icon: BookOpen, count: assetDefinitions.filter(d => d.section === 'Bibelressurser').length },
-      { id: 'documents', title: 'Dokumenter (PDF)', section: 'Dokumenter', icon: FileText, count: 2 }
+      { id: 'all', title: 'Alle nøkler', icon: Globe, count: allAssets.length },
+      { id: 'landing', title: 'Landingsside', icon: Layout, count: allAssets.filter(d => d.section === 'Hjemmeside').length },
+      { id: 'admission', title: 'Opptaksside', icon: Award, count: allAssets.filter(d => d.section === 'Opptaksside').length },
+      { id: 'support', title: 'Kundestøtte', icon: HelpCircle, count: allAssets.filter(d => d.section === 'Kundestøtte').length },
+      { id: 'resources', title: 'Bibelressurser', icon: BookOpen, count: allAssets.filter(d => d.section === 'Bibelressurser').length },
+      { id: 'student', title: 'Studentportal', icon: BookOpen, count: allAssets.filter(d => d.section === 'Studentportal').length },
+      { id: 'teacher', title: 'Mentorportal', icon: Users, count: allAssets.filter(d => d.section === 'Mentorportal').length },
+      { id: 'auth', title: 'Innloggingsflyt', icon: UserCheck, count: allAssets.filter(d => d.section === 'Innlogging').length },
+      { id: 'onboarding', title: 'Onboardingflyt', icon: Rocket, count: allAssets.filter(d => d.section === 'Onboarding').length },
+      { id: 'profile', title: 'Brukerprofil', icon: UserCheck, count: allAssets.filter(d => d.section === 'Profil').length },
+      { id: 'system', title: 'Systemnøkler', icon: Settings, count: allAssets.filter(d => d.section === 'System').length },
+      { id: 'documents', title: 'Dokumenter (PDF)', icon: FileText, count: 2 }
     ];
-  }, []);
+  }, [allAssets]);
 
   // Filter keys depending on selected rail, toolbar filters, and searches
   const filteredAssets = useMemo(() => {
-    return assetDefinitions.filter(asset => {
+    return allAssets.filter(asset => {
       // 1. Filter by category
       if (selectedCategory !== 'all') {
         const mapping = {
           landing: 'Hjemmeside',
-          auth: 'Innlogging',
+          admission: 'Opptaksside',
+          support: 'Kundestøtte',
+          resources: 'Bibelressurser',
           student: 'Studentportal',
           teacher: 'Mentorportal',
+          auth: 'Innlogging',
           onboarding: 'Onboarding',
-          resources: 'Bibelressurser',
+          profile: 'Profil',
           system: 'System',
           documents: 'Dokumenter'
         };

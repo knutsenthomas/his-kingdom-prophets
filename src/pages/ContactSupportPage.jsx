@@ -77,7 +77,7 @@ export default function ContactSupportPage() {
               className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-primary hover:text-primary-container transition-colors"
             >
               <ArrowLeft size={16} />
-              <span>{isEn ? 'Back' : 'Tilbake'}</span>
+              <span><CmsText slug="support-back-btn" fallback={isEn ? 'Back' : 'Tilbake'} /></span>
             </button>
           </div>
         </div>
@@ -281,7 +281,7 @@ export default function ContactSupportPage() {
                     }}
                     className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200/80 text-primary text-xs font-bold rounded-lg transition-all active:scale-95"
                   >
-                    {isEn ? 'Send another message' : 'Send en ny henvendelse'}
+                    <CmsText slug="support-success-new-btn" fallback={isEn ? 'Send another message' : 'Send en ny henvendelse'} />
                   </button>
                 </motion.div>
               )}

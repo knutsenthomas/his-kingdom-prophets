@@ -64,8 +64,11 @@ export default function CmsText({
   };
 
   const handleKeyDown = (e) => {
-    // Save on Enter (unless holding shift for multiline textareas/paragraphs)
-    if (e.key === 'Enter' && Component !== 'p' && Component !== 'textarea') {
+    // Save on Enter (unless holding shift or component is multiline paragraph/div)
+    if (e.key === 'Enter') {
+      if (e.shiftKey || Component === 'p' || Component === 'textarea' || Component === 'div') {
+        return; // Allow newline
+      }
       e.preventDefault();
       elementRef.current?.blur();
     }
@@ -86,7 +89,11 @@ export default function CmsText({
   };
 
   if (!isAdminEditing) {
-    return <Component className={className}>{displayText}</Component>;
+    return (
+      <Component className={className} data-cms-slug={slug}>
+        {displayText}
+      </Component>
+    );
   }
 
   return (
@@ -101,6 +108,7 @@ export default function CmsText({
       onKeyDown={handleKeyDown}
       onPaste={handlePaste}
       onClick={handleClick}
+      data-cms-slug={slug}
       className={`${className} inline-block outline-none border border-dashed border-burnt-orange/50 hover:border-burnt-orange focus:border-burnt-orange focus:bg-burnt-orange/5 focus:ring-1 focus:ring-burnt-orange rounded px-1.5 -mx-1.5 transition-all cursor-text relative group min-h-[1em]`}
       title={`Klikk for å redigere "${slug}" direkte på siden`}
     >

@@ -413,20 +413,20 @@ export default function AdmissionPage() {
                         ? 'bg-amber-50 text-amber-700 border border-amber-200' 
                         : 'bg-primary/5 text-primary border border-primary/10'
                     }`}>
-                      {prog.code}
+                      <CmsText slug={`admission-${prog.id}-code`} fallback={prog.code} />
                     </span>
                     <span className="text-[10px] font-bold text-[#c5a059] uppercase tracking-wider">
-                      {prog.credits}
+                      <CmsText slug={`admission-${prog.id}-credits`} fallback={prog.credits} />
                     </span>
                   </div>
 
                   <h3 className="font-serif text-lg font-bold text-primary leading-snug">
-                    {prog.title}
+                    <CmsText slug={`admission-${prog.id}-title`} fallback={prog.title} />
                   </h3>
 
                   <div className="flex items-center gap-1.5 text-xs text-on-surface-variant font-semibold">
                     <Calendar size={14} className="text-primary/70" />
-                    <span>{prog.duration}</span>
+                    <span><CmsText slug={`admission-${prog.id}-duration`} fallback={prog.duration} /></span>
                   </div>
 
                   <div className="w-full h-[1px] bg-slate-100 my-4" />
@@ -435,7 +435,7 @@ export default function AdmissionPage() {
                     {prog.features.map((feat, i) => (
                       <li key={i} className="flex items-start gap-2 text-xs text-on-surface-variant leading-relaxed">
                         <Check className="stroke-[3] text-green-600 shrink-0 w-3.5 h-3.5 mt-0.5" />
-                        <span>{feat}</span>
+                        <span><CmsText slug={`admission-${prog.id}-feat-${i + 1}`} fallback={feat} /></span>
                       </li>
                     ))}
                   </ul>
@@ -444,10 +444,10 @@ export default function AdmissionPage() {
                 <div className="pt-6 mt-6 border-t border-slate-100 flex justify-between items-end">
                   <div className="space-y-0.5">
                     <span className="text-[9px] uppercase font-bold text-outline block">
-                      {language === 'en' ? "Tuition Fee" : "Semesteravgift"}
+                      <CmsText slug="admission-tuition-fee-label" fallback={language === 'en' ? "Tuition Fee" : "Semesteravgift"} />
                     </span>
                     <span className="font-serif text-lg font-extrabold text-primary">
-                      {prog.priceSemester}
+                      <CmsText slug={`admission-${prog.id}-price`} fallback={prog.priceSemester} />
                     </span>
                   </div>
                   
@@ -456,7 +456,7 @@ export default function AdmissionPage() {
                     onClick={() => setFormData(prev => ({ ...prev, program: prog.id }))}
                     className="text-xs font-bold text-primary hover:text-secondary flex items-center gap-0.5 font-sans"
                   >
-                    <span>{language === 'en' ? "Select" : "Velg linje"}</span>
+                    <span><CmsText slug="admission-select-btn" fallback={language === 'en' ? "Select" : "Velg linje"} /></span>
                     <ChevronRight size={13} />
                   </a>
                 </div>
@@ -534,7 +534,7 @@ export default function AdmissionPage() {
                       : 'text-outline hover:text-primary'
                   }`}
                 >
-                  {language === 'en' ? "Semester Fee" : "Semesteravgift"}
+                  <CmsText slug="admission-price-plan-semester" fallback={language === 'en' ? "Semester Fee" : "Semesteravgift"} />
                 </button>
                 <button
                   onClick={() => setActivePlan('monthly')}
@@ -544,24 +544,33 @@ export default function AdmissionPage() {
                       : 'text-outline hover:text-primary'
                   }`}
                 >
-                  {language === 'en' ? "Monthly Split" : "Månedsbetaling"}
+                  <CmsText slug="admission-price-plan-monthly" fallback={language === 'en' ? "Monthly Split" : "Månedsbetaling"} />
                 </button>
               </div>
 
               <div className="text-center space-y-3">
                 <span className="text-[10px] font-bold text-outline uppercase tracking-widest block">
-                  {activePlan === 'semester' ? (language === 'en' ? "One-time payment per semester" : "Enkeltfaktura per semester") : (language === 'en' ? "Interest-free rate / month" : "Rentefri delbetaling / måned")}
+                  {activePlan === 'semester' ? (
+                    <CmsText slug="admission-price-subhead-semester" fallback={language === 'en' ? "One-time payment per semester" : "Enkeltfaktura per semester"} />
+                  ) : (
+                    <CmsText slug="admission-price-subhead-monthly" fallback={language === 'en' ? "Interest-free rate / month" : "Rentefri delbetaling / måned"} />
+                  )}
                 </span>
                 
                 <div className="font-serif text-3xl sm:text-5xl font-extrabold text-primary">
-                  {activePlan === 'semester' ? "3 990,- NOK" : "790,- NOK"}
+                  {activePlan === 'semester' ? (
+                    <CmsText slug="admission-price-amount-semester" fallback="3 990,- NOK" />
+                  ) : (
+                    <CmsText slug="admission-price-amount-monthly" fallback="790,- NOK" />
+                  )}
                 </div>
                 
                 <p className="text-[11px] text-on-surface-variant font-semibold">
-                  {activePlan === 'semester'
-                    ? (language === 'en' ? "*Price for PROP 101 / LEAD 201. BIBLE 301 is 4 490,- NOK" : "*Gjelder PROP 101 og LEAD 201. BIBLE 301 koster 4 490,-")
-                    : (language === 'en' ? "*5 monthly rates per semester. Zero hidden credit fees." : "*5 månedlige avdrag per semester. Ingen etableringsgebyr eller renter.")
-                  }
+                  {activePlan === 'semester' ? (
+                    <CmsText slug="admission-price-note-semester" fallback={language === 'en' ? "*Price for PROP 101 / LEAD 201. BIBLE 301 is 4 490,- NOK" : "*Gjelder PROP 101 og LEAD 201. BIBLE 301 koster 4 490,-"} />
+                  ) : (
+                    <CmsText slug="admission-price-note-monthly" fallback={language === 'en' ? "*5 monthly rates per semester. Zero hidden credit fees." : "*5 månedlige avdrag per semester. Ingen etableringsgebyr eller renter."} />
+                  )}
                 </p>
               </div>
 
@@ -569,20 +578,20 @@ export default function AdmissionPage() {
 
               <div className="space-y-2.5 text-xs text-on-surface-variant font-semibold font-sans">
                 <div className="flex justify-between items-center">
-                  <span>{language === 'en' ? "Enrollment & Digital Access" : "Innmeldingsavgift & portal"}</span>
-                  <span className="text-green-600 font-bold">0,- NOK</span>
+                  <span><CmsText slug="admission-price-row1-label" fallback={language === 'en' ? "Enrollment & Digital Access" : "Innmeldingsavgift & portal"} /></span>
+                  <span className="text-green-600 font-bold"><CmsText slug="admission-price-row1-val" fallback="0,- NOK" /></span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span>{language === 'en' ? "Assigned Mentor Coach" : "Tildelt Personlig Mentor"}</span>
-                  <span className="text-primary font-bold">{language === 'en' ? "Included" : "Inkludert"}</span>
+                  <span><CmsText slug="admission-price-row2-label" fallback={language === 'en' ? "Assigned Mentor Coach" : "Tildelt Personlig Mentor"} /></span>
+                  <span className="text-primary font-bold"><CmsText slug="admission-price-row2-val" fallback={language === 'en' ? "Included" : "Inkludert"} /></span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span>{language === 'en' ? "100% Digital Portals" : "100 % Digitalt studiehefte"}</span>
-                  <span className="text-primary font-bold">{language === 'en' ? "Included" : "Inkludert"}</span>
+                  <span><CmsText slug="admission-price-row3-label" fallback={language === 'en' ? "100% Digital Portals" : "100 % Digitalt studiehefte"} /></span>
+                  <span className="text-primary font-bold"><CmsText slug="admission-price-row3-val" fallback={language === 'en' ? "Included" : "Inkludert"} /></span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span>{language === 'en' ? "Spouse Partner Discount" : "Ektefelle/Familierabatt"}</span>
-                  <span className="text-secondary font-bold">-25%</span>
+                  <span><CmsText slug="admission-price-row4-label" fallback={language === 'en' ? "Spouse Partner Discount" : "Ektefelle/Familierabatt"} /></span>
+                  <span className="text-secondary font-bold"><CmsText slug="admission-price-row4-val" fallback="-25%" /></span>
                 </div>
               </div>
             </div>
@@ -610,24 +619,36 @@ export default function AdmissionPage() {
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
             {[
               {
-                step: "01",
-                title: language === 'en' ? "Submit Form" : "Send søknad",
-                desc: language === 'en' ? "Fill out the admission form below with your motivation and contact info." : "Fyll ut det enkle søknadsskjemaet nedenfor på under 3 minutter."
+                slugNum: 'admission-step1-num',
+                fallbackNum: '01',
+                slugTitle: 'admission-step1-title',
+                fallbackTitle: language === 'en' ? "Submit Form" : "Send søknad",
+                slugDesc: 'admission-step1-desc',
+                fallbackDesc: language === 'en' ? "Fill out the admission form below with your motivation and contact info." : "Fyll ut det enkle søknadsskjemaet nedenfor på under 3 minutter."
               },
               {
-                step: "02",
-                title: language === 'en' ? "Admission Interview" : "Søknadssamtale",
-                desc: language === 'en' ? "We will schedule a brief Zoom or phone call to align callings and course goals." : "Vi tar en kort og uforpliktende samtale på telefon eller Zoom for å bli kjent."
+                slugNum: 'admission-step2-num',
+                fallbackNum: '02',
+                slugTitle: 'admission-step2-title',
+                fallbackTitle: language === 'en' ? "Admission Interview" : "Søknadssamtale",
+                slugDesc: 'admission-step2-desc',
+                fallbackDesc: language === 'en' ? "We will schedule a brief Zoom or phone call to align callings and course goals." : "Vi tar en kort og uforpliktende samtale på telefon eller Zoom for å bli kjent."
               },
               {
-                step: "03",
-                title: language === 'en' ? "Tuition Setup" : "Betaling & Faktura",
-                desc: language === 'en' ? "Select your standard billing plan. Spouses enjoy automatic 25% off." : "Velg din foretrukne betalingsordning (semester eller månedlig delbetaling)."
+                slugNum: 'admission-step3-num',
+                fallbackNum: '03',
+                slugTitle: 'admission-step3-title',
+                fallbackTitle: language === 'en' ? "Tuition Setup" : "Betaling & Faktura",
+                slugDesc: 'admission-step3-desc',
+                fallbackDesc: language === 'en' ? "Select your standard billing plan. Spouses enjoy automatic 25% off." : "Velg din foretrukne betalingsordning (semester eller månedlig delbetaling)."
               },
               {
-                step: "04",
-                title: language === 'en' ? "Instant Portal Access" : "Portal-tilgang",
-                desc: language === 'en' ? "Get your login, workbook, study materials, and PWA mobile portal active instantly." : "Du får tilsendt brukerkonto og kan umiddelbart logge inn i portalen og starte studiet!"
+                slugNum: 'admission-step4-num',
+                fallbackNum: '04',
+                slugTitle: 'admission-step4-title',
+                fallbackTitle: language === 'en' ? "Instant Portal Access" : "Portal-tilgang",
+                slugDesc: 'admission-step4-desc',
+                fallbackDesc: language === 'en' ? "Get your login, workbook, study materials, and PWA mobile portal active instantly." : "Du får tilsendt brukerkonto og kan umiddelbart logge inn i portalen og starte studiet!"
               }
             ].map((stepObj, i) => (
               <div 
@@ -635,13 +656,13 @@ export default function AdmissionPage() {
                 className="bg-white border border-[#dec2ef]/45 p-6 rounded-2xl relative shadow-sm hover:shadow transition-all space-y-3"
               >
                 <span className="font-serif text-3xl font-extrabold text-[#c5a059]/15 block">
-                  {stepObj.step}
+                  <CmsText slug={stepObj.slugNum} fallback={stepObj.fallbackNum} />
                 </span>
                 <h4 className="font-serif text-sm font-bold text-primary font-sans">
-                  {stepObj.title}
+                  <CmsText slug={stepObj.slugTitle} fallback={stepObj.fallbackTitle} />
                 </h4>
                 <p className="text-[11px] text-outline leading-relaxed font-semibold">
-                  {stepObj.desc}
+                  <CmsText slug={stepObj.slugDesc} fallback={stepObj.fallbackDesc} />
                 </p>
               </div>
             ))}
@@ -663,27 +684,33 @@ export default function AdmissionPage() {
                   <BookOpen size={28} />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="font-serif text-xl font-bold text-primary">
-                    {language === 'en' ? "Log In to Enroll" : "Logg inn for å melde deg på"}
-                  </h3>
-                  <p className="text-xs text-on-surface-variant font-semibold max-w-sm mx-auto leading-relaxed">
-                    {language === 'en'
+                  <CmsText 
+                    slug="admission-login-title" 
+                    fallback={language === 'en' ? "Log In to Enroll" : "Logg inn for å melde deg på"} 
+                    as="h3"
+                    className="font-serif text-xl font-bold text-primary"
+                  />
+                  <CmsText 
+                    slug="admission-login-desc" 
+                    fallback={language === 'en'
                       ? "To apply and pay for courses at His Kingdom Prophets, you must first log in with your HKM account or register."
-                      : "For å søke om opptak og betale for kurs ved His Kingdom Prophets, må du logge inn med din HKM-brukerkonto."}
-                  </p>
+                      : "For å søke om opptak og betale for kurs ved His Kingdom Prophets, må du logge inn med din HKM-brukerkonto."} 
+                    as="p"
+                    className="text-xs text-on-surface-variant font-semibold max-w-sm mx-auto leading-relaxed"
+                  />
                 </div>
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-md mx-auto">
                   <button
                     onClick={() => navigate('/login')}
                     className="w-full sm:w-auto px-6 py-3.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-primary text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5"
                   >
-                    {language === 'en' ? "Log In" : "Logg inn"}
+                    <CmsText slug="admission-login-btn" fallback={language === 'en' ? "Log In" : "Logg inn"} />
                   </button>
                   <button
                     onClick={() => navigate('/login?mode=register')}
                     className="w-full sm:w-auto px-6 py-3.5 bg-primary hover:bg-primary/95 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5"
                   >
-                    {language === 'en' ? "Create Account" : "Opprett brukerkonto"}
+                    <CmsText slug="admission-register-btn" fallback={language === 'en' ? "Create Account" : "Opprett brukerkonto"} />
                   </button>
                 </div>
               </motion.div>
@@ -717,7 +744,7 @@ export default function AdmissionPage() {
                   {/* Name Input */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
-                      {language === 'en' ? "Full Name *" : "Fullt navn *"}
+                      <CmsText slug="admission-form-name-label" fallback={language === 'en' ? "Full Name *" : "Fullt navn *"} />
                     </label>
                     <input
                       type="text"
@@ -733,7 +760,7 @@ export default function AdmissionPage() {
                   {/* Email Input */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
-                      {language === 'en' ? "Email Address *" : "E-postadresse *"}
+                      <CmsText slug="admission-form-email-label" fallback={language === 'en' ? "Email Address *" : "E-postadresse *"} />
                     </label>
                     <input
                       type="email"
@@ -751,7 +778,7 @@ export default function AdmissionPage() {
                   {/* Phone Input */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
-                      {language === 'en' ? "Phone Number *" : "Mobiltelefon *"}
+                      <CmsText slug="admission-form-phone-label" fallback={language === 'en' ? "Phone Number *" : "Mobiltelefon *"} />
                     </label>
                     <input
                       type="tel"
@@ -767,7 +794,7 @@ export default function AdmissionPage() {
                   {/* Program Select */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
-                      {language === 'en' ? "Choose Study Line" : "Velg studielinje"}
+                      <CmsText slug="admission-form-program-label" fallback={language === 'en' ? "Choose Study Line" : "Velg studielinje"} />
                     </label>
                     <select
                       name="program"
@@ -787,7 +814,7 @@ export default function AdmissionPage() {
                 {/* Billing Plan Segment */}
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-wider text-outline block">
-                    {language === 'en' ? "Select Billing Plan" : "Foretrukket betalingsplan"}
+                    <CmsText slug="admission-form-billing-label" fallback={language === 'en' ? "Select Billing Plan" : "Foretrukket betalingsplan"} />
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     <label className={`border rounded-xl p-3 flex flex-col justify-center items-center cursor-pointer transition-all active:scale-[0.98] ${
@@ -803,7 +830,9 @@ export default function AdmissionPage() {
                         onChange={handleInputChange}
                         className="sr-only"
                       />
-                      <span className="text-xs font-bold block">{language === 'en' ? "Semester Invoice" : "Semesterfaktura"}</span>
+                      <span className="text-xs font-bold block">
+                        <CmsText slug="admission-form-billing-semester-title" fallback={language === 'en' ? "Semester Invoice" : "Semesterfaktura"} />
+                      </span>
                       <span className="text-[10px] text-outline mt-0.5">
                         {language === 'en' ? `${selectedProg.priceSemester} per semester` : `${selectedProg.priceSemester} per semester`}
                       </span>
@@ -822,7 +851,9 @@ export default function AdmissionPage() {
                         onChange={handleInputChange}
                         className="sr-only"
                       />
-                      <span className="text-xs font-bold block">{language === 'en' ? "Monthly Split" : "Månedsbetaling"}</span>
+                      <span className="text-xs font-bold block">
+                        <CmsText slug="admission-form-billing-monthly-title" fallback={language === 'en' ? "Monthly Split" : "Månedsbetaling"} />
+                      </span>
                       <span className="text-[10px] text-outline mt-0.5">
                         {language === 'en' ? `${selectedProg.priceMonthly} per month` : `${selectedProg.priceMonthly} pr. måned`}
                       </span>
@@ -836,9 +867,12 @@ export default function AdmissionPage() {
                     <div className="flex gap-2 text-amber-800 text-xs">
                       <Lock size={16} className="shrink-0 mt-0.5" />
                       <p className="font-semibold leading-relaxed">
-                        {language === 'en'
-                          ? "This program (Track 2) does not start until 2028. To apply, you must confirm that you plan to complete or have completed Track 1 (His Kingdom Prophetic Community) first."
-                          : "Dette studieløpet (Track 2) starter ikke før i 2028. For å søke opptak, må du bekrefte at du har fullført eller planlegger å fullføre 1. år (His Kingdom Prophetic Community) først."}
+                        <CmsText 
+                          slug="admission-form-track2-alert" 
+                          fallback={language === 'en'
+                            ? "This program (Track 2) does not start until 2028. To apply, you must confirm that you plan to complete or have completed Track 1 (His Kingdom Prophetic Community) first."
+                            : "Dette studieløpet (Track 2) starter ikke før i 2028. For å søke opptak, må du bekrefte at du har fullført eller planlegger å fullføre 1. år (His Kingdom Prophetic Community) først."} 
+                        />
                       </p>
                     </div>
                     <label className="flex items-start gap-2 cursor-pointer select-none">
@@ -850,9 +884,12 @@ export default function AdmissionPage() {
                         className="mt-1 accent-amber-600 rounded border-amber-300 focus:ring-amber-500 text-amber-600 w-4 h-4"
                       />
                       <span className="text-[11px] text-amber-900 font-bold leading-normal">
-                        {language === 'en'
-                          ? "I confirm that I plan to complete or have completed Track 1 first *"
-                          : "Jeg bekrefter at jeg har fullført eller planlegger å fullføre 1. år først *"}
+                        <CmsText 
+                          slug="admission-form-track2-confirm" 
+                          fallback={language === 'en'
+                            ? "I confirm that I plan to complete or have completed Track 1 first *"
+                            : "Jeg bekrefter at jeg har fullført eller planlegger å fullføre 1. år først *"} 
+                        />
                       </span>
                     </label>
                   </div>
@@ -861,7 +898,7 @@ export default function AdmissionPage() {
                 {/* Motivation Textarea */}
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
-                    {language === 'en' ? "Motivation / Vision (Optional)" : "Kort om din motivasjon eller ditt kall (Valgfritt)"}
+                    <CmsText slug="admission-form-motivation-label" fallback={language === 'en' ? "Motivation / Vision (Optional)" : "Kort om din motivasjon eller ditt kall (Valgfritt)"} />
                   </label>
                   <textarea
                     name="motivation"
@@ -887,7 +924,7 @@ export default function AdmissionPage() {
                   ) : (
                     <>
                       <Send size={13} />
-                      <span>{language === 'en' ? "Submit Application" : "Send Inn Min Søknad"}</span>
+                      <span><CmsText slug="admission-form-submit-btn" fallback={language === 'en' ? "Submit Application" : "Send Inn Min Søknad"} /></span>
                     </>
                   )}
                 </button>
@@ -904,9 +941,12 @@ export default function AdmissionPage() {
                   <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-2">
                     <CreditCard size={18} className="animate-pulse" />
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-primary">
-                    {language === 'en' ? "Complete Your Enrollment Payment" : "Fullfør din studieavgift"}
-                  </h3>
+                  <CmsText 
+                    slug="admission-payment-title" 
+                    fallback={language === 'en' ? "Complete Your Enrollment Payment" : "Fullfør din studieavgift"} 
+                    as="h3"
+                    className="font-serif text-xl font-bold text-primary"
+                  />
                   <p className="text-xs text-on-surface-variant font-semibold">
                     {language === 'en' 
                       ? `Program: ${programs.find(p => p.id === formData.program)?.title} (${formData.paymentPlan === 'semester' ? 'One-time semester' : 'Monthly split'})`
@@ -935,7 +975,7 @@ export default function AdmissionPage() {
                     onClick={() => setPaymentStep('form')}
                     className="flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] text-center font-sans border border-slate-200"
                   >
-                    {language === 'en' ? "Back" : "Tilbake"}
+                    <CmsText slug="admission-payment-back" fallback={language === 'en' ? "Back" : "Tilbake"} />
                   </button>
                   <button
                     onClick={handleStripePaymentSubmit}
@@ -948,7 +988,7 @@ export default function AdmissionPage() {
                         <span>{language === 'en' ? "Processing..." : "Behandler betaling..."}</span>
                       </>
                     ) : (
-                      <span>{language === 'en' ? "Pay and Enroll" : "Betal og fullfør"}</span>
+                      <span><CmsText slug="admission-payment-confirm-btn" fallback={language === 'en' ? "Pay and Enroll" : "Betal og fullfør"} /></span>
                     )}
                   </button>
                 </div>
@@ -965,9 +1005,12 @@ export default function AdmissionPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="font-serif text-xl font-bold text-primary">
-                    {language === 'en' ? "Admission Successful!" : "Opptak fullført!"}
-                  </h3>
+                  <CmsText 
+                    slug="admission-success-title" 
+                    fallback={language === 'en' ? "Admission Successful!" : "Opptak fullført!"} 
+                    as="h3"
+                    className="font-serif text-xl font-bold text-primary"
+                  />
                   <p className="text-xs text-on-surface-variant font-semibold max-w-sm mx-auto leading-relaxed">
                     {language === 'en'
                       ? `Thank you, ${formData.name}! Your payment has been processed and you are now fully enrolled in the ${programs.find(p => p.id === formData.program)?.code} course. You have been granted instant access to the study portal.`
@@ -980,13 +1023,13 @@ export default function AdmissionPage() {
                     onClick={() => navigate('/')}
                     className="px-6 py-3 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95"
                   >
-                    {language === 'en' ? "Go to Home" : "Gå til forsiden"}
+                    <CmsText slug="admission-success-home-btn" fallback={language === 'en' ? "Go to Home" : "Gå til forsiden"} />
                   </button>
                   <button
                     onClick={() => navigate('/student/dashboard')}
                     className="px-6 py-3 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all active:scale-95 border border-slate-200 font-sans"
                   >
-                    {language === 'en' ? "Open Study Portal" : "Åpne studieportal"}
+                    <CmsText slug="admission-success-portal-btn" fallback={language === 'en' ? "Open Study Portal" : "Åpne studieportal"} />
                   </button>
                 </div>
               </motion.div>

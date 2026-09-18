@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,6 +17,17 @@ export default function LandingPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('about');
   const [activeCurriculumTab, setActiveCurriculumTab] = useState('community');
+  
+  const logoClicksRef = useRef(0);
+  const handleLogoClick = () => {
+    logoClicksRef.current += 1;
+    if (logoClicksRef.current >= 3) {
+      logoClicksRef.current = 0;
+      window.dispatchEvent(new CustomEvent('hkm-toggle-cms'));
+    }
+    setTimeout(() => { logoClicksRef.current = 0; }, 1500);
+    navigate('/');
+  };
   
   const portalPath = user?.role === 'teacher' || user?.role === 'admin' || user?.role === 'superadmin' ? '/teacher/dashboard' : '/student/dashboard';
 
@@ -93,7 +104,7 @@ export default function LandingPage() {
       {/* TopNavBar */}
       <header className="sticky top-0 z-40 w-full glass-nav border-b border-outline-variant">
         <div className="flex justify-between items-center w-full px-3 sm:px-4 md:px-6 lg:px-8 h-20 max-w-[1440px] mx-auto">
-          <div className="font-serif text-[11px] min-[360px]:text-xs sm:text-sm md:text-base lg:text-base xl:text-lg text-primary font-bold cursor-pointer shrink-0 flex items-center gap-1.5 sm:gap-2" onClick={() => navigate('/')}>
+          <div className="font-serif text-[11px] min-[360px]:text-xs sm:text-sm md:text-base lg:text-base xl:text-lg text-primary font-bold cursor-pointer shrink-0 flex items-center gap-1.5 sm:gap-2" onClick={handleLogoClick} title="His Kingdom Prophets">
             <img 
               src={logo} 
               alt="His Kingdom Prophets Logo" 
@@ -355,11 +366,14 @@ export default function LandingPage() {
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-xs uppercase tracking-wider">
               <Info size={14} />
-              {language === 'no' ? "Vårt fundament & Grunnleggere" : "Our Foundation & Founders"}
+              <CmsText slug="landing-about-tag" fallback={language === 'no' ? "Vårt fundament & Grunnleggere" : "Our Foundation & Founders"} />
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl text-[#3c096c] font-extrabold leading-tight">
-              {language === 'no' ? "Om stiftelsen og folkene bak" : "About the Organization & Founders"}
-            </h2>
+            <CmsText 
+              slug="landing-about-title" 
+              fallback={language === 'no' ? "Om stiftelsen og folkene bak" : "About the Organization & Founders"} 
+              as="h2"
+              className="font-serif text-3xl md:text-4xl text-[#3c096c] font-extrabold leading-tight block"
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
@@ -367,25 +381,34 @@ export default function LandingPage() {
             <div className="space-y-6 bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all">
               <div className="flex items-center gap-3 text-[#3c096c]">
                 <Award size={24} className="shrink-0" />
-                <h3 className="font-serif text-xl font-bold">{language === 'no' ? "Vårt fundament" : "Our Foundation"}</h3>
+                <CmsText slug="landing-about-sec1-title" fallback={language === 'no' ? "Vårt fundament" : "Our Foundation"} as="h3" className="font-serif text-xl font-bold" />
               </div>
-              <p className="text-sm text-on-surface-variant leading-relaxed">
-                {language === 'no' 
+              <CmsText 
+                slug="landing-about-sec1-desc" 
+                fallback={language === 'no' 
                   ? "His Kingdom Ministry har fokus på misjon, utrustning av de hellige, bibelundervisning, bønn, forbønn, helbredelse og utfrielse, samt å vokse i Åndens profetiske gaver. Alt vi gjør skal gjøres etter bibelske standarder og med Guds ledelse."
                   : "Our Foundation: His Kingdom Ministry focuses on missions, equipping the saints, Bible teaching, prayer, intercession, healing and deliverance, and growing in the prophetic gifts of the Spirit. Everything we do will be done by Biblical standards and God’s guidance."}
-              </p>
+                as="p"
+                className="text-sm text-on-surface-variant leading-relaxed"
+              />
 
               <div className="w-full h-[1px] bg-slate-100 my-4" />
 
               <div className="space-y-2">
-                <h4 className="font-serif text-base font-bold text-[#3c096c]">
-                  {language === 'no' ? "Fra \"Stiftelse\" til \"Ministry 2.0\"" : "From \"Foundation\" to \"Ministry 2.0\""}
-                </h4>
-                <p className="text-xs text-on-surface-variant leading-relaxed">
-                  {language === 'no'
+                <CmsText 
+                  slug="landing-about-sec2-title" 
+                  fallback={language === 'no' ? "Fra \"Stiftelse\" til \"Ministry 2.0\"" : "From \"Foundation\" to \"Ministry 2.0\""} 
+                  as="h4" 
+                  className="font-serif text-base font-bold text-[#3c096c] block"
+                />
+                <CmsText 
+                  slug="landing-about-sec2-desc"
+                  fallback={language === 'no'
                     ? "Før Hilde Karin møtte Thomas, drev hun organisasjonen \"His Kingdom Foundation\". Hun fikk navnet fra Herren i bønn i 2008, hvor Jesus forklarte hvordan Han ønsket at arbeidet hennes skulle være grunnlagt på Hans rikes prinsipper fra Bibelen. His Kingdom Ministry ble registrert mens paret var på bryllupsreise. Det fungerer som en \"2.0 oppgradering\", men vi holder fortsatt fast på den samme høye verdien."
                     : "Before Hilde Karin met Thomas, she had an organization called His Kingdom Foundation. She had received the name from the Lord in prayer in 2008, where Jesus explained how He wanted her work to be founded on His Kingdom Principles from the Bible. His Kingdom Ministry was registered while the couple was on their honeymoon. It serves as a \"2.0 upgrade,\" but we still hold the same high value."}
-                </p>
+                  as="p"
+                  className="text-xs text-on-surface-variant leading-relaxed"
+                />
               </div>
             </div>
 
@@ -393,18 +416,24 @@ export default function LandingPage() {
             <div className="space-y-6 bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all">
               <div className="flex items-center gap-3 text-[#3c096c]">
                 <Heart size={24} className="shrink-0 text-red-500" />
-                <h3 className="font-serif text-xl font-bold">{language === 'no' ? "Historien bak" : "The Story Behind"}</h3>
+                <CmsText slug="landing-about-sec3-title" fallback={language === 'no' ? "Historien bak" : "The Story Behind"} as="h3" className="font-serif text-xl font-bold" />
               </div>
-              <p className="text-sm text-on-surface-variant leading-relaxed">
-                {language === 'no'
+              <CmsText 
+                slug="landing-about-sec3-p1"
+                fallback={language === 'no'
                   ? "Hilde Karin begynte å dra på misjons- og bibelsmuglingsturer da hun var 14 år, og har siden levd som misjonær i Midtøsten, Afrika og Spania. I mai 2022 kalte Gud henne hjem til Norge, hvor hun møtte Thomas Knutsen. De giftet seg 2. desember 2023."
                   : "Hilde Karin started going on mission and Bible smuggling trips when she was 14 and has since lived as a missionary in the Middle East, Africa, and Spain. In May 2022, God called her back home to Norway, where she met Thomas Knutsen. They were married on December 2, 2023."}
-              </p>
-              <p className="text-sm text-on-surface-variant leading-relaxed">
-                {language === 'no'
+                as="p"
+                className="text-sm text-on-surface-variant leading-relaxed"
+              />
+              <CmsText 
+                slug="landing-about-sec3-p2"
+                fallback={language === 'no'
                   ? "Thomas har arbeidet 16 år i kirkeadministrasjon og regnskap, og har vært på flere korttidsmisjonsturer. Sammen har de besøkt 9 land, og det å nå de fortapte ligger tungt på hjertet deres."
                   : "Thomas has worked for 16 years in Church Administration and Accounting and has gone on several short-term mission trips. Together, they have visited 9 countries, and reaching the lost is heavy on their hearts."}
-              </p>
+                as="p"
+                className="text-sm text-on-surface-variant leading-relaxed"
+              />
             </div>
           </div>
         </section>
@@ -416,39 +445,48 @@ export default function LandingPage() {
               <div className="lg:col-span-7 space-y-6">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#3c096c]/10 text-[#3c096c] rounded-full text-xs font-bold uppercase tracking-wider">
                   <ShoppingBag size={14} />
-                  {language === 'no' ? "Kreativt Arbeid & Butikk" : "Creative Work & Store"}
+                  <CmsText slug="landing-shop-tag" fallback={language === 'no' ? "Kreativt Arbeid & Butikk" : "Creative Work & Store"} />
                 </span>
-                <h2 className="font-serif text-3xl font-bold text-[#3c096c] leading-tight">
-                  {language === 'no' ? "His Kingdom Designs" : "His Kingdom Designs Shop"}
-                </h2>
-                <p className="text-sm text-on-surface-variant leading-relaxed font-medium">
-                  {language === 'no'
+                <CmsText 
+                  slug="landing-shop-title" 
+                  fallback={language === 'no' ? "His Kingdom Designs" : "His Kingdom Designs Shop"} 
+                  as="h2" 
+                  className="font-serif text-3xl font-bold text-[#3c096c] leading-tight block"
+                />
+                <CmsText 
+                  slug="landing-shop-desc"
+                  fallback={language === 'no'
                     ? "Organisasjonen driver også nettbutikken His Kingdom Designs. Butikken tilbyr mange produkter på norsk, engelsk og spansk som er flotte som gaver og til bruk i evangelisering. Den gir også inntekter til stiftelsen og prosjektene Gud legger på våre hjerter."
                     : "The organization also runs the His Kingdom Designs shop. The store offers many products in Norwegian, English, and Spanish that are great as gifts and for use in Evangelism. It also provides income for the ministry and the projects God puts on our hearts."}
-                </p>
+                  as="p"
+                  className="text-sm text-on-surface-variant leading-relaxed font-medium"
+                />
                 <div className="bg-white p-6 rounded-2xl border border-outline-variant/30 space-y-4">
-                  <h4 className="font-serif text-base font-bold text-[#3c096c]">{language === 'no' ? "Rollefordeling i teamet:" : "Team Roles:"}</h4>
+                  <CmsText slug="landing-shop-team-title" fallback={language === 'no' ? "Rollefordeling i teamet:" : "Team Roles:"} as="h4" className="font-serif text-base font-bold text-[#3c096c] block" />
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-semibold text-slate-700">
                     <li className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 bg-[#3c096c] rounded-full" />
-                      <span><strong>Thomas:</strong> {language === 'no' ? "Webdesigner (opprettet nettstedene)" : "Webdesigner (created the websites)"}</span>
+                      <span><strong>Thomas:</strong> <CmsText slug="landing-shop-team-thomas" fallback={language === 'no' ? "Webdesigner (opprettet nettstedene)" : "Webdesigner (created the websites)"} /></span>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 bg-[#3c096c] rounded-full" />
-                      <span><strong>Hilde Karin:</strong> {language === 'no' ? "Designer produktene" : "Designs the products"}</span>
+                      <span><strong>Hilde Karin:</strong> <CmsText slug="landing-shop-team-hilde" fallback={language === 'no' ? "Designer produktene" : "Designs the products"} /></span>
                     </li>
                   </ul>
-                  <p className="text-xs text-slate-500 italic mt-2">
-                    {language === 'no'
+                  <CmsText 
+                    slug="landing-shop-team-vision"
+                    fallback={language === 'no'
                       ? "Vår visjon for butikken: Vi har en visjon om å hjelpe andre designere til å bli sett og kunne selge sine ting gjennom vår butikk, slik at det kan velsigne mange!"
                       : "Our vision for the shop: We have a vision of helping other designers to be seen and able to sell their things through our store, so that it can help bless many people!"}
-                  </p>
+                    as="p"
+                    className="text-xs text-slate-500 italic mt-2"
+                  />
                 </div>
               </div>
 
               <div className="lg:col-span-5 space-y-6">
                 <div className="bg-white border border-[#dec2ef]/55 p-8 rounded-3xl shadow-sm space-y-6">
-                  <h3 className="font-serif text-lg font-bold text-[#3c096c]">{language === 'no' ? "Nettsteder & Ressurser" : "Websites & Resources"}</h3>
+                  <CmsText slug="landing-shop-links-title" fallback={language === 'no' ? "Nettsteder & Ressurser" : "Websites & Resources"} as="h3" className="font-serif text-lg font-bold text-[#3c096c] block" />
                   
                   <div className="space-y-4">
                     <a 
@@ -462,9 +500,7 @@ export default function LandingPage() {
                           hiskingdomministry.no
                           <Link2 size={12} className="opacity-60" />
                         </span>
-                        <p className="text-[10px] text-slate-500">
-                          {language === 'no' ? "Hovedsiden (Blogg, YouTube, podcast, bibelverktøy)" : "Ministry page (Blog, YouTube, podcast, Bible tools)"}
-                        </p>
+                        <CmsText slug="landing-shop-link1-desc" fallback={language === 'no' ? "Hovedsiden (Blogg, YouTube, podcast, bibelverktøy)" : "Ministry page (Blog, YouTube, podcast, Bible tools)"} as="p" className="text-[10px] text-slate-500" />
                       </div>
                       <ArrowRight size={14} className="text-[#3c096c] group-hover:translate-x-1 transition-transform" />
                     </a>
@@ -480,9 +516,7 @@ export default function LandingPage() {
                           hiskingdomdesigns.no
                           <Link2 size={12} className="opacity-60" />
                         </span>
-                        <p className="text-[10px] text-slate-500">
-                          {language === 'no' ? "Nettbutikken (inntektskilde for misjonsprosjekter)" : "The store (income source for the ministry)"}
-                        </p>
+                        <CmsText slug="landing-shop-link2-desc" fallback={language === 'no' ? "Nettbutikken (inntektskilde for misjonsprosjekter)" : "The store (income source for the ministry)"} as="p" className="text-[10px] text-slate-500" />
                       </div>
                       <ArrowRight size={14} className="text-[#3c096c] group-hover:translate-x-1 transition-transform" />
                     </a>
@@ -498,16 +532,22 @@ export default function LandingPage() {
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-xs uppercase tracking-wider">
               <Laptop size={14} />
-              {language === 'no' ? "Skole og Studieforløp" : "Prophetic School & Concept"}
+              <CmsText slug="landing-school-tag" fallback={language === 'no' ? "Skole og Studieforløp" : "Prophetic School & Concept"} />
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl text-[#3c096c] font-extrabold leading-tight">
-              {language === 'no' ? "Vår visjon for den profetiske skolen" : "Vision for the Prophetic School"}
-            </h2>
-            <p className="text-sm text-on-surface-variant leading-relaxed max-w-2xl mx-auto">
-              {language === 'no'
+            <CmsText 
+              slug="landing-school-title" 
+              fallback={language === 'no' ? "Vår visjon for den profetiske skolen" : "Vision for the Prophetic School"} 
+              as="h2" 
+              className="font-serif text-3xl md:text-4xl text-[#3c096c] font-extrabold leading-tight block" 
+            />
+            <CmsText 
+              slug="landing-school-desc" 
+              fallback={language === 'no'
                 ? "Vår visjon for den ONLINE profetiske skolen er at det vil være to studielinjer. Studenter må søke på begge linjene, og vi vil be over hvem vi skal ta opp."
-                : "Our vision for the ONLINE prophetic ministry and the prophet school is that there will be two ministry tracks/lines. Students need to apply to both of the school lines, and we will pray about whom to accept."}
-            </p>
+                : "Our vision for the ONLINE prophetic ministry and the prophet school is that there will be two ministry tracks/lines. Students need to apply to both of the school lines, and we will pray about whom to accept."} 
+              as="p" 
+              className="text-sm text-on-surface-variant leading-relaxed max-w-2xl mx-auto" 
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
@@ -516,31 +556,37 @@ export default function LandingPage() {
               <div>
                 <div className="flex justify-between items-center mb-6">
                   <span className="text-[10px] font-bold px-2.5 py-1 bg-[#3c096c]/5 text-[#3c096c] border border-[#3c096c]/10 rounded-md uppercase tracking-wider">
-                    {language === 'no' ? "Linje 1 (1. år)" : "Track 1 (Year 1)"}
+                    <CmsText slug="landing-track1-badge" fallback={language === 'no' ? "Linje 1 (1. år)" : "Track 1 (Year 1)"} />
                   </span>
                   <span className="text-xs font-bold text-[#c5a059] uppercase tracking-wider flex items-center gap-1">
                     <Sparkles size={14} />
-                    {language === 'no' ? "Aktiv for søknad" : "Open for applications"}
+                    <CmsText slug="landing-track1-status" fallback={language === 'no' ? "Aktiv for søknad" : "Open for applications"} />
                   </span>
                 </div>
-                <h3 className="font-serif text-xl font-bold text-[#3c096c] mb-4">
-                  His Kingdom Prophetic Community
-                </h3>
-                <p className="text-xs text-on-surface-variant leading-relaxed mb-6 font-medium">
-                  {language === 'no'
+                <CmsText 
+                  slug="landing-track1-title" 
+                  fallback="His Kingdom Prophetic Community" 
+                  as="h3" 
+                  className="font-serif text-xl font-bold text-[#3c096c] mb-4 block" 
+                />
+                <CmsText 
+                  slug="landing-track1-desc" 
+                  fallback={language === 'no'
                     ? "Dette sporet er for alle som ønsker å vokse i sitt forhold til Jesus og i Åndens gaver, uavhengig av om de er kalt til profetembetet eller ikke. Vi ønsker å bygge et trygt fellesskap for profetiske mennesker til å vokse."
-                    : "This track is for everyone who wants to grow in their relationship with Jesus and in the gifts of the Spirit, regardless of whether they are called into the office as a prophet or not. We want to build a safe community for prophetic people to grow and be seen."}
-                </p>
+                    : "This track is for everyone who wants to grow in their relationship with Jesus and in the gifts of the Spirit, regardless of whether they are called into the office as a prophet or not. We want to build a safe community for prophetic people to grow and be seen."} 
+                  as="p" 
+                  className="text-xs text-on-surface-variant leading-relaxed mb-6 font-medium" 
+                />
               </div>
               
               <div className="border-t border-slate-100 pt-6 space-y-2.5 text-xs text-slate-600">
                 <div className="flex items-center gap-2">
                   <Check size={14} className="text-green-600 shrink-0" />
-                  <span>{language === 'no' ? "Kan tas år etter år (nye temaer hvert år)" : "Can join year after year (different subjects yearly)"}</span>
+                  <span><CmsText slug="landing-track1-check1" fallback={language === 'no' ? "Kan tas år etter år (nye temaer hvert år)" : "Can join year after year (different subjects yearly)"} /></span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check size={14} className="text-green-600 shrink-0" />
-                  <span>{language === 'no' ? "Basisfag: Profeti 101, Å høre Guds stemme, Gave vs Tjeneste" : "Fundamentals: Prophecy 101, Hearing God, Gift vs Office"}</span>
+                  <span><CmsText slug="landing-track1-check2" fallback={language === 'no' ? "Basisfag: Profeti 101, Å høre Guds stemme, Gave vs Tjeneste" : "Fundamentals: Prophecy 101, Hearing God, Gift vs Office"} /></span>
                 </div>
               </div>
             </div>
@@ -552,37 +598,46 @@ export default function LandingPage() {
                 <div className="flex justify-between items-center mb-6">
                   <span className="text-[10px] font-bold px-2.5 py-1 bg-amber-500/10 text-amber-700 border border-amber-500/20 rounded-md uppercase tracking-wider flex items-center gap-1">
                     <Lock size={12} />
-                    {language === 'no' ? "Linje 2 (2. år)" : "Track 2 (Year 2)"}
+                    <CmsText slug="landing-track2-badge" fallback={language === 'no' ? "Linje 2 (2. år)" : "Track 2 (Year 2)"} />
                   </span>
                   <span className="text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full uppercase tracking-wider">
-                    {language === 'no' ? "Oppstart 2028" : "Launches 2028"}
+                    <CmsText slug="landing-track2-status" fallback={language === 'no' ? "Oppstart 2028" : "Launches 2028"} />
                   </span>
                 </div>
-                <h3 className="font-serif text-xl font-bold text-[#3c096c] mb-4">
-                  His Kingdom Prophets
-                </h3>
-                <p className="text-xs text-on-surface-variant leading-relaxed mb-6 font-medium">
-                  {language === 'no'
+                <CmsText 
+                  slug="landing-track2-title" 
+                  fallback="His Kingdom Prophets" 
+                  as="h3" 
+                  className="font-serif text-xl font-bold text-[#3c096c] mb-4 block" 
+                />
+                <CmsText 
+                  slug="landing-track2-desc" 
+                  fallback={language === 'no'
                     ? "Dette er sporet for de som vet at de er kalt til tjenesten som profet (profetembetet). Vi er Hans profeter som sprer Hans Rike, og fokuserer ikke på oss selv eller våre egne plattformer."
-                    : "This is the track for those who know they are called to the office of a prophet. We are His prophets, spreading His Kingdom, not focusing on ourselves or \"our\" platforms."}
-                </p>
+                    : "This is the track for those who know they are called to the office of a prophet. We are His prophets, spreading His Kingdom, not focusing on ourselves or \"our\" platforms."} 
+                  as="p" 
+                  className="text-xs text-on-surface-variant leading-relaxed mb-6 font-medium" 
+                />
 
                 <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 text-xs font-semibold text-amber-900 mb-6">
-                  <span className="text-amber-800 block mb-1 font-bold">⚠️ Opptakskrav:</span>
-                  {language === 'no' 
-                    ? "Alle som skal gå His Kingdom Prophets må først fullføre det 1. året (Prophetic Community)." 
-                    : "Everyone who wants to attend His Kingdom Prophets must go through the 1st year (Track 1)."}
+                  <CmsText slug="landing-track2-prereq-label" fallback={language === 'no' ? "⚠️ Opptakskrav:" : "⚠️ Admission Requirements:"} className="text-amber-800 block mb-1 font-bold" />
+                  <CmsText 
+                    slug="landing-track2-prereq-desc" 
+                    fallback={language === 'no' 
+                      ? "Alle som skal gå His Kingdom Prophets må først fullføre det 1. året (Prophetic Community)." 
+                      : "Everyone who wants to attend His Kingdom Prophets must go through the 1st year (Track 1)."} 
+                  />
                 </div>
               </div>
 
               <div className="border-t border-slate-100 pt-6 space-y-2.5 text-xs text-slate-600">
                 <div className="flex items-center gap-2">
                   <Check size={14} className="text-green-600 shrink-0" />
-                  <span>{language === 'no' ? "Krever ny søknad, pensumliste og skriftlig oppgave" : "Requires reapplication, reading list, and writing a paper"}</span>
+                  <span><CmsText slug="landing-track2-check1" fallback={language === 'no' ? "Krever ny søknad, pensumliste og skriftlig oppgave" : "Requires reapplication, reading list, and writing a paper"} /></span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check size={14} className="text-green-600 shrink-0" />
-                  <span>{language === 'no' ? "Krav om deltakelse på 1-2 ukers fysisk \"SUPER CHARGE\" samling" : "Requires attending a 1-2 week physical \"SUPER CHARGE\" event"}</span>
+                  <span><CmsText slug="landing-track2-check2" fallback={language === 'no' ? "Krav om deltakelse på 1-2 ukers fysisk \"SUPER CHARGE\" samling" : "Requires attending a 1-2 week physical \"SUPER CHARGE\" event"} /></span>
                 </div>
               </div>
             </div>
@@ -591,20 +646,26 @@ export default function LandingPage() {
           {/* Dream & Launch Details */}
           <div className="bg-gradient-to-r from-[#3c096c]/5 to-transparent border border-[#3c096c]/10 p-8 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div className="space-y-2">
-              <h4 className="font-serif text-lg font-bold text-[#3c096c]">{language === 'no' ? "Oppstartsdato" : "Launch Details"}</h4>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                {language === 'no'
+              <CmsText slug="landing-school-launch-title" fallback={language === 'no' ? "Oppstartsdato" : "Launch Details"} as="h4" className="font-serif text-lg font-bold text-[#3c096c] block" />
+              <CmsText 
+                slug="landing-school-launch-desc" 
+                fallback={language === 'no'
                   ? "Skolen starter 27. august 2027."
-                  : "The school starts August 27, 2027."}
-              </p>
+                  : "The school starts August 27, 2027."} 
+                as="p" 
+                className="text-xs text-on-surface-variant leading-relaxed" 
+              />
             </div>
             <div className="space-y-2">
-              <h4 className="font-serif text-lg font-bold text-[#3c096c]">{language === 'no' ? "Vår Drøm" : "Our Dream"}</h4>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                {language === 'no'
+              <CmsText slug="landing-school-dream-title" fallback={language === 'no' ? "Vår Drøm" : "Our Dream"} as="h4" className="font-serif text-lg font-bold text-[#3c096c] block" />
+              <CmsText 
+                slug="landing-school-dream-desc" 
+                fallback={language === 'no'
                   ? "Vår drøm er å ha et hus og et sted hvor vi også kan være vertskap for fysiske arrangementer som vil bli strømmet på Zoom eller i lukkede Facebook-grupper."
-                  : "Our Dream: To have a house and place where we can also host in-person events that will be streamed on Zoom/closed Facebook groups."}
-              </p>
+                  : "Our Dream: To have a house and place where we can also host in-person events that will be streamed on Zoom/closed Facebook groups."} 
+                as="p" 
+                className="text-xs text-on-surface-variant leading-relaxed" 
+              />
             </div>
           </div>
         </section>
@@ -615,56 +676,73 @@ export default function LandingPage() {
             <div className="text-center max-w-3xl mx-auto space-y-4">
               <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-xs uppercase tracking-wider">
                 <BookOpenCheck size={14} />
-                {language === 'no' ? "Fagplan & Emner" : "Curriculum & Topics"}
+                <CmsText slug="landing-curriculum-tag" fallback={language === 'no' ? "Fagplan & Emner" : "Curriculum & Topics"} />
               </span>
-              <h2 className="font-serif text-3xl font-extrabold text-[#3c096c]">
-                {language === 'no' ? "Hva lærer du hos oss?" : "Teaching Topics & Curriculum"}
-              </h2>
+              <CmsText 
+                slug="landing-curriculum-title" 
+                fallback={language === 'no' ? "Hva lærer du hos oss?" : "Teaching Topics & Curriculum"} 
+                as="h2" 
+                className="font-serif text-3xl font-extrabold text-[#3c096c] block" 
+              />
             </div>
 
             {/* Directly display Year 1 Curriculum */}
             <div className="bg-white border border-[#dec2ef]/40 p-6 sm:p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all space-y-8">
               <div className="space-y-4 border-b border-slate-100 pb-6">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                  <h3 className="font-serif text-lg font-bold text-[#3c096c] uppercase tracking-wider">
-                    {language === 'no' ? "Fagplan: 1. år (Prophetic Community)" : "Teaching Plan: Year 1 (Prophetic Community)"}
-                  </h3>
+                  <CmsText 
+                    slug="landing-curriculum-y1-title" 
+                    fallback={language === 'no' ? "Fagplan: 1. år (Prophetic Community)" : "Teaching Plan: Year 1 (Prophetic Community)"} 
+                    as="h3" 
+                    className="font-serif text-lg font-bold text-[#3c096c] uppercase tracking-wider" 
+                  />
                   <span className="self-start text-[10px] font-bold bg-green-500 text-white px-2.5 py-1 rounded-full uppercase tracking-wider">
-                    {language === 'no' ? "Aktiv for søknad" : "Open for Admission"}
+                    <CmsText slug="landing-curriculum-y1-badge" fallback={language === 'no' ? "Aktiv for søknad" : "Open for Admission"} />
                   </span>
                 </div>
                 
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-                  {language === 'no'
+                <CmsText 
+                  slug="landing-curriculum-y1-desc" 
+                  fallback={language === 'no'
                     ? "Førsteåret fokuserer på å bygge et solid bibelsk fundament, styrke din personlige relasjon til Jesus og utruste deg i Åndens profetiske gaver. Undervisningen forener sunn teologi med praktisk åpenbaring og et trygt trosfellesskap."
-                    : "The first year focuses on building a solid biblical foundation, strengthening your personal relationship with Jesus, and equipping you in the prophetic gifts of the Spirit. The teaching unites sound theology with practical revelation and a safe faith community."}
-                </p>
+                    : "The first year focuses on building a solid biblical foundation, strengthening your personal relationship with Jesus, and equipping you in the prophetic gifts of the Spirit. The teaching unites sound theology with practical revelation and a safe faith community."} 
+                  as="p" 
+                  className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium" 
+                />
               </div>
 
               {/* Categorized Curriculum Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
                   {
-                    title: language === 'no' ? "1. Fundament & Relasjon" : "1. Foundation & Relationship",
-                    description: language === 'no'
+                    slugTitle: "landing-curriculum-mod1-title",
+                    fallbackTitle: language === 'no' ? "1. Fundament & Relasjon" : "1. Foundation & Relationship",
+                    slugDesc: "landing-curriculum-mod1-desc",
+                    fallbackDesc: language === 'no'
                       ? "Fokus på å legge et solid bibelsk grunnlag for det kristne livet. Her lærer du om bønn, faste, ydmykhet, gudsfrykt, din identitet og autoritet i Kristus, samt praktiske nøkler til å høre Guds røst i lønnkammeret."
                       : "Focus on laying a solid biblical foundation for the Christian life. Here you will learn about prayer, fasting, humility, the fear of God, your identity and authority in Christ, as well as practical keys to hearing God's voice in the secret place."
                   },
                   {
-                    title: language === 'no' ? "2. Profetisk Utrustning & Gaver" : "2. Prophetic Equipping & Gifts",
-                    description: language === 'no'
+                    slugTitle: "landing-curriculum-mod2-title",
+                    fallbackTitle: language === 'no' ? "2. Profetisk Utrustning & Gaver" : "2. Prophetic Equipping & Gifts",
+                    slugDesc: "landing-curriculum-mod2-desc",
+                    fallbackDesc: language === 'no'
                       ? "Utrustning og modning i de profetiske nådegavene. Modulen dekker personlig profeti, Åndens gaver, kunnskapsord, tydning av tunger, profetiske erklæringer og retningslinjer for sunn praksis i fellesskapet."
                       : "Equipping and maturing in the prophetic gifts of the Spirit. The module covers personal prophecy, spiritual gifts, words of knowledge, interpretation of tongues, prophetic decrees, and guidelines for healthy practice in the community."
                   },
                   {
-                    title: language === 'no' ? "3. Indre Helbredelse & Utfrielse" : "3. Inner Healing & Deliverance",
-                    description: language === 'no'
+                    slugTitle: "landing-curriculum-mod3-title",
+                    fallbackTitle: language === 'no' ? "3. Indre Helbredelse & Utfrielse" : "3. Inner Healing & Deliverance",
+                    slugDesc: "landing-curriculum-mod3-desc",
+                    fallbackDesc: language === 'no'
                       ? "Undervisning og tjeneste rettet mot personlig frihet og helbredelse. Vi går i dybden på omvendelse, oppgjør med forbannelser, bryte okkulte bånd, helbrede emosjonelle sår og traumer, samt frihet fra undertrykkende åndskrefter."
                       : "Teaching and ministry aimed at personal freedom and healing. We go in-depth on repentance, dealing with curses, breaking occult ties, healing emotional wounds and traumas, as well as freedom from oppressive spiritual forces."
                   },
                   {
-                    title: language === 'no' ? "4. Praktisk Kristenliv & Tjeneste" : "4. Practical Christian Life & Ministry",
-                    description: language === 'no'
+                    slugTitle: "landing-curriculum-mod4-title",
+                    fallbackTitle: language === 'no' ? "4. Praktisk Kristenliv & Tjeneste" : "4. Practical Christian Life & Ministry",
+                    slugDesc: "landing-curriculum-mod4-desc",
+                    fallbackDesc: language === 'no'
                       ? "Praktisk anvendelse av troen i hverdagen og misjon. Emner inkluderer overnaturlig økonomi og forvaltning, misjon og misjonærens kall, etablering av bønnevakter og deltakelse i nære smågrupper."
                       : "Practical application of faith in everyday life and missions. Topics include supernatural finances and stewardship, missions and the missionary calling, establishing prayer watches, and participating in close-knit small groups."
                   }
@@ -672,11 +750,9 @@ export default function LandingPage() {
                   <div key={i} className="bg-slate-50 border border-slate-100/70 p-6 rounded-2xl space-y-3 hover:bg-slate-100/50 transition-all duration-200">
                     <h4 className="font-serif text-sm font-bold text-[#3c096c] uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#3c096c]" />
-                      {cat.title}
+                      <CmsText slug={cat.slugTitle} fallback={cat.fallbackTitle} />
                     </h4>
-                    <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                      {cat.description}
-                    </p>
+                    <CmsText slug={cat.slugDesc} fallback={cat.fallbackDesc} as="p" className="text-xs text-slate-600 leading-relaxed font-medium" />
                   </div>
                 ))}
               </div>

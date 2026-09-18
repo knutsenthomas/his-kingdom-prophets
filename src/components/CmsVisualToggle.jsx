@@ -12,8 +12,9 @@ export default function CmsVisualToggle() {
   const [isMinimized, setIsMinimized] = React.useState(() => {
     return localStorage.getItem('hkm-cms-minimized') === 'true';
   });
+  const [editableCount, setEditableCount] = React.useState(0);
 
-  // Check admin status from both AppContext user AND localStorage (needed for public pages)
+  // Check admin status from AppContext user, localStorage, and query parameters
   const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no'];
   const cleanEmail = user?.email?.toLowerCase();
 
@@ -28,8 +29,32 @@ export default function CmsVisualToggle() {
   })();
   const localEmail = localStorageUser?.email?.toLowerCase();
   const localRole = localStorageUser?.role;
+  const isAuthorizedStorage = localStorage.getItem('hkm-cms-authorized') === 'true';
+
+  // Check URL params (?edit=1, ?cms=1, ?admin=1)
+  const isUrlAdmin = React.useMemo(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      return params.get('edit') === '1' || params.get('edit') === 'true' ||
+             params.get('cms') === '1' || params.get('cms') === 'true' ||
+             params.get('admin') === '1';
+    } catch {
+      return false;
+    }
+  }, [location.search]);
+
+  // If opened with ?edit=1 or ?cms=1, save authorized flag permanently
+  React.useEffect(() => {
+    if (isUrlAdmin) {
+      localStorage.setItem('hkm-cms-authorized', 'true');
+      setIsAdminEditing(true);
+      showToast("Visuell redigeringsmodus aktivert via URL!");
+    }
+  }, [isUrlAdmin, setIsAdminEditing, showToast]);
 
   const isAdminUser = 
+    isUrlAdmin ||
+    isAuthorizedStorage ||
     user?.role === 'admin' || 
     user?.role === 'superadmin' || 
     ADMIN_EMAILS.includes(cleanEmail) ||
@@ -37,9 +62,43 @@ export default function CmsVisualToggle() {
     localRole === 'superadmin' ||
     ADMIN_EMAILS.includes(localEmail);
 
-  const isBiblePage = location.pathname === '/student/bible' || location.pathname === '/bible-resources';
+  // Keyboard shortcut (Cmd/Ctrl + Shift + E) & custom event listener
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'E' || e.key === 'e')) {
+        e.preventDefault();
+        localStorage.setItem('hkm-cms-authorized', 'true');
+        setIsAdminEditing(prev => {
+          const next = !prev;
+          showToast(next ? "Visuell CMS-redigering aktivert (Snarvei)!" : "Visuell redigering avsluttet.");
+          return next;
+        });
+      }
+    };
 
-  if (!isAdminUser || isBiblePage) {
+    const handleCustomToggle = () => {
+      localStorage.setItem('hkm-cms-authorized', 'true');
+      setIsAdminEditing(prev => !prev);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('hkm-toggle-cms', handleCustomToggle);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('hkm-toggle-cms', handleCustomToggle);
+    };
+  }, [setIsAdminEditing, showToast]);
+
+  // Dynamically count editable fields on current page
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      const count = document.querySelectorAll('[data-cms-slug]').length;
+      setEditableCount(count);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [location.pathname, isAdminEditing]);
+
+  if (!isAdminUser) {
     return null;
   }
 
@@ -47,7 +106,7 @@ export default function CmsVisualToggle() {
     const nextState = !isAdminEditing;
     setIsAdminEditing(nextState);
     if (nextState) {
-      showToast("Visuell CMS-redigering aktivert! Klikk på en tekst for å redigere.");
+      showToast("Visuell CMS-redigering aktivert! Klikk på en hvilken som helst tekst for å redigere.");
     } else {
       showToast("Visuell redigering avsluttet. Alle endringer er lagret.");
     }
@@ -100,7 +159,14 @@ export default function CmsVisualToggle() {
             </div>
 
             <div className="flex flex-col text-left pr-1 min-w-[120px]">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">CMS Editor</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">CMS Editor</span>
+                {editableCount > 0 && (
+                  <span className="text-[9px] font-mono font-bold text-burnt-orange bg-burnt-orange/10 px-1 rounded">
+                    {editableCount} felt
+                  </span>
+                )}
+              </div>
               <span className="text-xs font-bold text-primary dark:text-white leading-tight mt-0.5">
                 {isAdminEditing ? 'Visuell Modus: PÅ' : 'Visuell Modus: AV'}
               </span>

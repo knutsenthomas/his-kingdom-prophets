@@ -1305,35 +1305,50 @@ export default function BibleResourcesPage() {
               {[
                 {
                   code: 'PROP 101',
-                  title: isEn ? 'Prophetic Equipment & Character' : 'Innføring i den profetiske tjeneste',
-                  desc: isEn 
+                  titleSlug: 'resources-curr-prop101-title',
+                  titleFallback: isEn ? 'Prophetic Equipment & Character' : 'Innføring i den profetiske tjeneste',
+                  descSlug: 'resources-curr-prop101-desc',
+                  descFallback: isEn 
                     ? 'Understand the ethics, spiritual maturity, and character required to carry revelation. Covers dreams, visions, and biblical prophets.' 
                     : 'Forstå etikken, den åndelige karakteren og modenheten som kreves for å bære åpenbaringskunnskap. Moduler om drømmetydning og bibelsk profeti.',
-                  modules: isEn 
-                    ? ['Ethics of the Prophet', 'Visions and Dreams', 'Spiritual Discernment', 'Prophecy in the Local Church'] 
-                    : ['Den profetiske etikk og karakter', 'Tyde syner og drømmer', 'Åndelig skjelneevne og prøving', 'Betjening i menigheten'],
+                  modules: [
+                    { slug: 'resources-curr-prop101-mod1', fallback: isEn ? 'Ethics of the Prophet' : 'Den profetiske etikk og karakter' },
+                    { slug: 'resources-curr-prop101-mod2', fallback: isEn ? 'Visions and Dreams' : 'Tyde syner og drømmer' },
+                    { slug: 'resources-curr-prop101-mod3', fallback: isEn ? 'Spiritual Discernment' : 'Åndelig skjelneevne og prøving' },
+                    { slug: 'resources-curr-prop101-mod4', fallback: isEn ? 'Prophecy in the Local Church' : 'Betjening i menigheten' }
+                  ],
                   color: 'from-purple-500 to-indigo-600'
                 },
                 {
                   code: 'BIBLE 301',
-                  title: isEn ? 'Advanced Hermeneutics & Exegesis' : 'Avansert hermeneutikk og tolkning',
-                  desc: isEn 
+                  titleSlug: 'resources-curr-bible301-title',
+                  titleFallback: isEn ? 'Advanced Hermeneutics & Exegesis' : 'Avansert hermeneutikk og tolkning',
+                  descSlug: 'resources-curr-bible301-desc',
+                  descFallback: isEn 
                     ? 'Deep-dive into historic covenant theology, typologies, and eschatological frameworks. Learn sound exegesis using original text principles.' 
                     : 'Gå dypt inn i historisk paktsteologi, typologier og eskatologiske modeller. Lær sunn bibeltolkning og skriftgransking ut fra grunntekstens prinsipper.',
-                  modules: isEn 
-                    ? ['Historical-Grammatical Method', 'Covenant Theology Foundations', 'Eschatology & Typologies', 'Old Testament Exegesis'] 
-                    : ['Historisk-grammatisk metode', 'Paktsteologiens røtter', 'Eskatologiske typologier', 'Gammeltestamentlig eksegese'],
+                  modules: [
+                    { slug: 'resources-curr-bible301-mod1', fallback: isEn ? 'Historical-Grammatical Method' : 'Historisk-grammatisk metode' },
+                    { slug: 'resources-curr-bible301-mod2', fallback: isEn ? 'Covenant Theology Foundations' : 'Paktsteologiens røtter' },
+                    { slug: 'resources-curr-bible301-mod3', fallback: isEn ? 'Eschatology & Typologies' : 'Eskatologiske typologier' },
+                    { slug: 'resources-curr-bible301-mod4', fallback: isEn ? 'Old Testament Exegesis' : 'Gammeltestamentlig eksegese' }
+                  ],
                   color: 'from-indigo-600 to-blue-600'
                 },
                 {
                   code: 'MIN 201',
-                  title: isEn ? 'Pastoral Care & Inner Healing' : 'Sjelesorg, bønn og indre helbredelse',
-                  desc: isEn 
+                  titleSlug: 'resources-curr-min201-title',
+                  titleFallback: isEn ? 'Pastoral Care & Inner Healing' : 'Sjelesorg, bønn og indre helbredelse',
+                  descSlug: 'resources-curr-min201-desc',
+                  descFallback: isEn 
                     ? 'Equipping disciples for inner restoration, spiritual warfare, and prophetic counseling. Walk in the power of the Spirit to heal broken hearts.' 
                     : 'Utruster disipler til indre gjenopprettelse, sjelesorg under Åndens ledelse, og bønnetjeneste. Lær å vandre i Åndens kraft til å helbrede knuste hjerter.',
-                  modules: isEn 
-                    ? ['Biblical Soul Care', 'Theology of Inner Healing', 'Deliverance and Authority', 'Prophetic Counseling Ethics'] 
-                    : ['Bibelsk sjelesorg og samtale', 'Prinsipper for indre helbredelse', 'Åndelig autoritet og frihet', 'Etikk i bønnetjenesten'],
+                  modules: [
+                    { slug: 'resources-curr-min201-mod1', fallback: isEn ? 'Biblical Soul Care' : 'Bibelsk sjelesorg og samtale' },
+                    { slug: 'resources-curr-min201-mod2', fallback: isEn ? 'Theology of Inner Healing' : 'Prinsipper for indre helbredelse' },
+                    { slug: 'resources-curr-min201-mod3', fallback: isEn ? 'Deliverance and Authority' : 'Åndelig autoritet og frihet' },
+                    { slug: 'resources-curr-min201-mod4', fallback: isEn ? 'Prophetic Counseling Ethics' : 'Etikk i bønnetjenesten' }
+                  ],
                   color: 'from-purple-600 to-pink-600'
                 }
               ].map(item => (
@@ -1343,19 +1358,21 @@ export default function BibleResourcesPage() {
                       {item.code}
                     </span>
                     <h4 className="font-serif text-lg font-bold text-primary group-hover:text-primary-container transition-colors">
-                      {item.title}
+                      <CmsText slug={item.titleSlug} fallback={item.titleFallback} />
                     </h4>
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      {item.desc}
+                      <CmsText slug={item.descSlug} fallback={item.descFallback} />
                     </p>
                     
                     <div className="space-y-2 border-t border-slate-100 pt-4">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Kjernemoduler</span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                        <CmsText slug="resources-curr-modules-label" fallback={isEn ? "Core Modules" : "Kjernemoduler"} />
+                      </span>
                       <ul className="space-y-1.5">
                         {item.modules.map((mod, i) => (
                           <li key={i} className="flex items-center gap-2 text-xs text-slate-600 font-medium">
                             <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={10} /></span>
-                            <span>{mod}</span>
+                            <span><CmsText slug={mod.slug} fallback={mod.fallback} /></span>
                           </li>
                         ))}
                       </ul>
@@ -1367,7 +1384,7 @@ export default function BibleResourcesPage() {
                     className="w-full mt-6 py-2.5 bg-slate-50 hover:bg-primary hover:text-white border border-slate-200 hover:border-primary text-primary font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5"
                   >
                     <Calendar size={13} />
-                    <span>{isEn ? 'Apply / Request Info' : 'Søk studieplass'}</span>
+                    <span><CmsText slug="resources-curr-apply-btn" fallback={isEn ? 'Apply / Request Info' : 'Søk studieplass'} /></span>
                   </button>
                 </div>
               ))}
@@ -1404,9 +1421,11 @@ export default function BibleResourcesPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                     <div className="space-y-1">
-                      <span className="px-2 py-0.5 bg-amber-500 text-white font-bold rounded text-[9px] uppercase tracking-wider">Åpent seminar</span>
+                      <span className="px-2 py-0.5 bg-amber-500 text-white font-bold rounded text-[9px] uppercase tracking-wider">
+                        <CmsText slug="resources-video1-badge" fallback={isEn ? "Open Seminar" : "Åpent seminar"} />
+                      </span>
                       <h4 className="font-serif font-bold text-white text-base leading-tight">
-                        {isEn ? 'Understanding Prophetic Revelation & Ethics' : 'Å forstå profetisk åpenbaring og etikk'}
+                        <CmsText slug="resources-video1-title" fallback={isEn ? 'Understanding Prophetic Revelation & Ethics' : 'Å forstå profetisk åpenbaring og etikk'} />
                       </h4>
                     </div>
                   </div>
@@ -1414,16 +1433,19 @@ export default function BibleResourcesPage() {
                 
                 <div className="p-6 space-y-4">
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    {isEn
-                      ? "A comprehensive 45-minute introductory lecture by Apostle David Hansen explaining the biblical foundation of the prophetic gift in the early church, and how it must operate under sound theological testing."
-                      : "En 45-minutters introduksjonsforelesning med Apostel David Hansen som tar for seg det bibelske fundamentet for den profetiske gave, og hvordan gaverollen må underlegges sunn teologisk testing og karakter."}
+                    <CmsText 
+                      slug="resources-video1-desc" 
+                      fallback={isEn
+                        ? "A comprehensive 45-minute introductory lecture by Apostle David Hansen explaining the biblical foundation of the prophetic gift in the early church, and how it must operate under sound theological testing."
+                        : "En 45-minutters introduksjonsforelesning med Apostel David Hansen som tar for seg det bibelske fundamentet for den profetiske gave, og hvordan gaverollen må underlegges sunn teologisk testing og karakter."} 
+                    />
                   </p>
                   <button
                     onClick={() => navigate(user ? '/student/video' : '/login')}
                     className="w-full py-2.5 bg-primary text-white font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
                   >
                     <Video size={13} />
-                    <span>{isEn ? 'Watch Lecture (45 min)' : 'Se forelesning (45 min)'}</span>
+                    <span><CmsText slug="resources-video1-btn" fallback={isEn ? 'Watch Lecture (45 min)' : 'Se forelesning (45 min)'} /></span>
                   </button>
                 </div>
               </div>
@@ -1438,9 +1460,11 @@ export default function BibleResourcesPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                     <div className="space-y-1">
-                      <span className="px-2 py-0.5 bg-indigo-600 text-white font-bold rounded text-[9px] uppercase tracking-wider">Teologisk dypdykk</span>
+                      <span className="px-2 py-0.5 bg-indigo-600 text-white font-bold rounded text-[9px] uppercase tracking-wider">
+                        <CmsText slug="resources-video2-badge" fallback={isEn ? "Theological Deep-Dive" : "Teologisk dypdykk"} />
+                      </span>
                       <h4 className="font-serif font-bold text-white text-base leading-tight">
-                        {isEn ? 'Introduction to Covenant Theology & Typology' : 'Introduksjon til paktsteologi og typologi'}
+                        <CmsText slug="resources-video2-title" fallback={isEn ? 'Introduction to Covenant Theology & Typology' : 'Introduksjon til paktsteologi og typologi'} />
                       </h4>
                     </div>
                   </div>
@@ -1448,16 +1472,19 @@ export default function BibleResourcesPage() {
                 
                 <div className="p-6 space-y-4">
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    {isEn
-                      ? "Learn how the Old Testament promises and shadows point seamlessly to Christ in the New Testament. An introductory exegesis class covering Abrahamic and New Covenant typologies."
-                      : "Lær hvordan det gamle testamentets skygger og løfter peker fram mot Kristus i det nye testamentet. En innføringsklasse i paktsteologi som dekker abrahamspakten og den nye pakt."}
+                    <CmsText 
+                      slug="resources-video2-desc" 
+                      fallback={isEn
+                        ? "Learn how the Old Testament promises and shadows point seamlessly to Christ in the New Testament. An introductory exegesis class covering Abrahamic and New Covenant typologies."
+                        : "Lær hvordan det gamle testamentets skygger og løfter peker fram mot Kristus i det nye testamentet. En innføringsklasse i paktsteologi som dekker abrahamspakten og den nye pakt."} 
+                    />
                   </p>
                   <button
                     onClick={() => navigate(user ? '/student/video' : '/login')}
                     className="w-full py-2.5 bg-primary text-white font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
                   >
                     <Video size={13} />
-                    <span>{isEn ? 'Watch Lecture (35 min)' : 'Se forelesning (35 min)'}</span>
+                    <span><CmsText slug="resources-video2-btn" fallback={isEn ? 'Watch Lecture (35 min)' : 'Se forelesning (35 min)'} /></span>
                   </button>
                 </div>
               </div>
@@ -1561,7 +1588,7 @@ export default function BibleResourcesPage() {
                           className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
                         >
                           <FileText size={13} />
-                          <span>{isEn ? 'Download Resources' : 'Last ned studiehefte'}</span>
+                          <span><CmsText slug="resources-fasting-download-btn" fallback={isEn ? 'Download Resources' : 'Last ned studiehefte'} /></span>
                         </a>
                       ) : (
                         <button
@@ -1569,7 +1596,7 @@ export default function BibleResourcesPage() {
                           className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
                         >
                           <FileText size={13} />
-                          <span>{isEn ? 'Download Resources' : 'Last ned studiehefte'}</span>
+                          <span><CmsText slug="resources-fasting-download-btn" fallback={isEn ? 'Download Resources' : 'Last ned studiehefte'} /></span>
                         </button>
                       )
                     ) : (
@@ -1582,7 +1609,7 @@ export default function BibleResourcesPage() {
                           className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
                         >
                           <FileText size={13} />
-                          <span>{isEn ? 'Download Resources' : 'Last ned studiehefte'}</span>
+                          <span><CmsText slug="resources-fasting-download-btn" fallback={isEn ? 'Download Resources' : 'Last ned studiehefte'} /></span>
                         </a>
                       ) : (
                         <button
@@ -1590,7 +1617,7 @@ export default function BibleResourcesPage() {
                           className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
                         >
                           <FileText size={13} />
-                          <span>{isEn ? 'Download Resources' : 'Last ned studiehefte'}</span>
+                          <span><CmsText slug="resources-fasting-download-btn" fallback={isEn ? 'Download Resources' : 'Last ned studiehefte'} /></span>
                         </button>
                       )
                     )}
@@ -1605,14 +1632,20 @@ export default function BibleResourcesPage() {
         {activeTab === 'characters' && (
           <div className="space-y-10 animate-in fade-in duration-300">
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <h3 className="font-serif text-2xl font-bold text-primary">
-                {isEn ? "Biblical Characters Catalog" : "Bibelske personer"}
-              </h3>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                {isEn 
+              <CmsText 
+                slug="resources-characters-title" 
+                fallback={isEn ? "Biblical Characters Catalog" : "Bibelske personer"} 
+                as="h3"
+                className="font-serif text-2xl font-bold text-primary"
+              />
+              <CmsText 
+                slug="resources-characters-desc" 
+                fallback={isEn 
                   ? "Explore the biographies, key scripture passages, and theological significance of the central figures of the biblical narrative." 
-                  : "Utforsk biografiene, de sentrale bibelske skriftene, og den teologiske betydningen av Bibelens mest sentrale skikkelser."}
-              </p>
+                  : "Utforsk biografiene, de sentrale bibelske skriftene, og den teologiske betydningen av Bibelens mest sentrale skikkelser."} 
+                as="p"
+                className="text-sm text-slate-500 leading-relaxed"
+              />
             </div>
 
             {/* Search and Filters */}
@@ -1641,7 +1674,7 @@ export default function BibleResourcesPage() {
               if (filtered.length === 0) {
                 return (
                   <div className="text-center py-12 text-slate-500">
-                    {isEn ? "No characters match your search query." : "Ingen personer samsvarer med søket ditt."}
+                    <CmsText slug="resources-characters-no-results" fallback={isEn ? "No characters match your search query." : "Ingen personer samsvarer med søket ditt."} />
                   </div>
                 );
               }
@@ -1699,7 +1732,7 @@ export default function BibleResourcesPage() {
                             onClick={() => setSelectedCharacter(char)}
                             className="w-full py-2 bg-slate-50 hover:bg-primary hover:text-white border border-slate-200 hover:border-primary text-primary font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
                           >
-                            <span>{isEn ? 'Read Biography' : 'Les mer'}</span>
+                            <span><CmsText slug="resources-characters-read-btn" fallback={isEn ? 'Read Biography' : 'Les mer'} /></span>
                             <ArrowRight size={12} />
                           </button>
                         </div>
@@ -1716,14 +1749,20 @@ export default function BibleResourcesPage() {
         {activeTab === 'timeline' && (
           <div className="space-y-10 animate-in fade-in duration-300">
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <h3 className="font-serif text-2xl font-bold text-primary">
-                {isEn ? "Biblical Timeline" : "Bibelsk tidslinje og historiske epoker"}
-              </h3>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                {isEn 
+              <CmsText 
+                slug="resources-timeline-title" 
+                fallback={isEn ? "Biblical Timeline" : "Bibelsk tidslinje og historiske epoker"} 
+                as="h3"
+                className="font-serif text-2xl font-bold text-primary"
+              />
+              <CmsText 
+                slug="resources-timeline-desc" 
+                fallback={isEn 
                   ? "Explore the chronological progression of biblical history and the world empires that impacted the scriptures." 
-                  : "Følg den røde tråden gjennom Bibelens historiske epoker og få oversikt over imperiene som formet den bibelske historien."}
-              </p>
+                  : "Følg den røde tråden gjennom Bibelens historiske epoker og få oversikt over imperiene som formet den bibelske historien."} 
+                as="p"
+                className="text-sm text-slate-500 leading-relaxed"
+              />
             </div>
 
             {/* Sub Tabs Toggle (History vs. Empires) */}
@@ -1740,7 +1779,7 @@ export default function BibleResourcesPage() {
                       : 'text-slate-500 hover:text-primary'
                   }`}
                 >
-                  {isEn ? "Bible History" : "Bibelens historie"}
+                  <CmsText slug="resources-timeline-subtab-history" fallback={isEn ? "Bible History" : "Bibelens historie"} />
                 </button>
                 <button
                   onClick={() => {
@@ -1753,7 +1792,7 @@ export default function BibleResourcesPage() {
                       : 'text-slate-500 hover:text-primary'
                   }`}
                 >
-                  {isEn ? "World Empires" : "Store imperier"}
+                  <CmsText slug="resources-timeline-subtab-empires" fallback={isEn ? "World Empires" : "Store imperier"} />
                 </button>
               </div>
             </div>
@@ -1763,7 +1802,7 @@ export default function BibleResourcesPage() {
               {/* Left Column: Sticky Sub-navigation list */}
               <div className="lg:col-span-3 hidden lg:block sticky top-40 h-fit space-y-2.5 bg-slate-50/50 border border-slate-100 p-5 rounded-2xl">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2 font-mono">
-                  {isEn ? "Jump to era" : "Hurtignavigering"}
+                  <CmsText slug="resources-timeline-jump-era" fallback={isEn ? "Jump to era" : "Hurtignavigering"} />
                 </span>
                 {(timelineSubTab === 'history' ? timelineData : empiresData).map(section => {
                   const isActive = activeTimelineSection === section.id;
