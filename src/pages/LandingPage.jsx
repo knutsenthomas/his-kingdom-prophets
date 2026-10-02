@@ -416,10 +416,10 @@ export default function LandingPage() {
                 <Globe size={18} />
               </div>
               <h4 className="font-serif text-sm font-bold text-[#3c096c]">
-                {language === 'no' ? 'Norsk Undervisning' : 'Primary Language'}
+                {language === 'no' ? 'Engelsk Undervisning' : 'English Instruction'}
               </h4>
               <p className="text-xs text-on-surface-variant leading-relaxed">
-                {language === 'no' ? 'All kjerneundervisning og veiledning foregår på norsk.' : 'All core teaching and mentoring conducted in Norwegian.'}
+                {language === 'no' ? 'All undervisning foregår på engelsk.' : 'All teaching and instruction is conducted in English.'}
               </p>
             </div>
 
@@ -428,10 +428,10 @@ export default function LandingPage() {
                 <Calendar size={18} />
               </div>
               <h4 className="font-serif text-sm font-bold text-[#3c096c]">
-                {language === 'no' ? 'Søkeperiode 2027' : 'Applications 2027'}
+                {language === 'no' ? 'Søknad & Kickoff' : 'Applications & Kickoff'}
               </h4>
               <p className="text-xs text-on-surface-variant leading-relaxed">
-                {language === 'no' ? 'Søknad: 1. jan – 30. juni 2027. Skolestart: 27. august 2027.' : 'Apply: Jan 1 – June 30, 2027. School starts: August 27, 2027.'}
+                {language === 'no' ? 'Søknad: 1. jan – 30. juni 2027. Kickoff er on-site i Norge 27. august.' : 'Apply: Jan 1 – June 30, 2027. On-site kickoff in Norway August 27.'}
               </p>
             </div>
           </div>
@@ -794,7 +794,7 @@ export default function LandingPage() {
               <CmsText slug="landing-cta-tagline" fallback={language === 'no' ? "Søkeperiode: 1. januar – 30. juni 2027" : "Applications: January 1 – June 30, 2027"} as="span" className="text-xs font-semibold tracking-widest uppercase" />
             </div>
             <CmsText slug="landing-cta-title" fallback="Er du klar til å vokse i dine åndelige gaver?" as="h2" className="font-serif text-3xl md:text-4xl text-[#3c096c] font-bold mb-6 max-w-2xl mx-auto" />
-            <CmsText slug="landing-cta-desc" fallback={language === 'no' ? "Søkeperioden er fra 1. januar til 30. juni 2027, og skolen starter 27. august 2027. Vi gleder oss til å gå sammen med deg!" : "The application window runs from January 1 to June 30, 2027, with school starting August 27, 2027."} as="p" className="text-base text-on-surface-variant mb-10 max-w-xl mx-auto" />
+            <CmsText slug="landing-cta-desc" fallback={language === 'no' ? "Søkeperioden er fra 1. januar til 30. juni 2027, og oppstarten er med on-site kickoff i Norge 27. august 2027. All undervisning foregår på engelsk." : "The application window runs from January 1 to June 30, 2027, with on-site kickoff in Norway on August 27, 2027. All teaching is conducted in English."} as="p" className="text-base text-on-surface-variant mb-10 max-w-xl mx-auto" />
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <button 
                 onClick={() => navigate('/admission')} 

@@ -258,11 +258,15 @@ export default function AdmissionPage() {
       priceMonthly: "790,-",
       isLocked: false,
       features: language === 'en' ? [
+        "All instruction & teaching conducted in English",
+        "On-site kickoff gathering in Norway August 27, 2027",
         "Grow in relationship with Jesus & gifts of the Spirit",
         "Prophecy 101, How to Hear God, Gift vs Office",
         "Intercession Core Team joins classes for FREE",
         "Join year after year (different subjects yearly)"
       ] : [
+        "All undervisning og veiledning foregår på engelsk",
+        "On-site kickoff-samling i Norge 27. august 2027",
         "Vokse i relasjon med Jesus og Åndens gaver",
         "Profeti 101, Å høre Guds stemme, Gave vs Tjeneste",
         "Kjerne-forbønnsteam blir med helt GRATIS",
@@ -352,7 +356,7 @@ export default function AdmissionPage() {
 
           <CmsText 
             slug="admission-hero-subtitle" 
-            fallback={language === 'en' ? "Søkeperioden er fra 1. januar til 30. juni 2027, og skolen starter 27. august 2027. Velg din studielinje og gjør klar søknaden din." : "Søkeperioden er fra 1. januar til 30. juni 2027, og skolen starter 27. august 2027. Velg din studielinje og gjør klar søknaden din."} 
+            fallback={language === 'en' ? "Application period: January 1 – June 30, 2027. On-site kickoff in Norway August 27, 2027. All teaching is conducted in English." : "Søkeperioden er fra 1. januar til 30. juni 2027, med on-site kickoff i Norge 27. august 2027. All undervisning foregår på engelsk."} 
             as="p"
             className="text-xs sm:text-sm text-[#e0aaff] font-semibold max-w-xl mx-auto leading-relaxed"
           />
