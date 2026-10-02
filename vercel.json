@@ -1,5 +1,20 @@
 {
+  "redirects": [
+    {
+      "source": "/login",
+      "destination": "https://app.hkpc.no",
+      "permanent": true
+    },
+    {
+      "source": "/register",
+      "destination": "https://app.hkpc.no",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }

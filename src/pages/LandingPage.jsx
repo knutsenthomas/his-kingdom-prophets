@@ -155,12 +155,12 @@ export default function LandingPage() {
                 </button>
               ) : (
                 <>
-                  <button 
-                    onClick={() => navigate('/login')} 
-                    className="px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors text-sm shrink-0"
+                  <a 
+                    href="https://app.hkpc.no" 
+                    className="px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors text-sm shrink-0 flex items-center justify-center"
                   >
                     <CmsText slug="landing-btn-login" fallback="Logg inn" />
-                  </button>
+                  </a>
                   <button 
                     onClick={() => navigate('/admission')} 
                     className="px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-sm shrink-0"
@@ -294,12 +294,13 @@ export default function LandingPage() {
                   </button>
                 ) : (
                   <>
-                    <button
-                      onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
-                      className="w-full py-3 border border-outline-variant text-primary hover:bg-primary/5 font-bold rounded-xl text-xs transition-all active:scale-[0.98]"
+                    <a
+                      href="https://app.hkpc.no"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full py-3 border border-outline-variant text-primary hover:bg-primary/5 font-bold rounded-xl text-xs transition-all active:scale-[0.98] flex items-center justify-center"
                     >
                       <CmsText slug="landing-btn-login" fallback="Logg inn" />
-                    </button>
+                    </a>
                     <button
                       onClick={() => { navigate('/admission'); setIsMobileMenuOpen(false); }}
                       className="w-full py-3 bg-primary text-white font-bold rounded-xl text-xs transition-all active:scale-[0.98] shadow-md"
