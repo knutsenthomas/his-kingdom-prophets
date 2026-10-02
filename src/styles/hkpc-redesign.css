@@ -3,8 +3,8 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap");
 
 .hkpc-landing {
-  --purple: #26113d;
-  --violet: #4c2867;
+  --purple: #561291;
+  --violet: #561291;
   --gold: #d7b978;
   --ink: #271f30;
   --muted: #6d6575;
@@ -273,7 +273,7 @@
   left: 2px;
   right: 2px;
   padding: 55px 23px 19px;
-  background: linear-gradient(transparent,#1b1525d9);
+  background: linear-gradient(transparent,rgba(56, 10, 97, 0.88));
   border-radius: 0 0 14px 14px;
   z-index: 2;
 }
@@ -317,7 +317,7 @@
   border-radius: 16px;
   margin-top: 38px;
   align-items: center;
-  box-shadow: 0 8px 25px #26113d06;
+  box-shadow: 0 8px 25px rgba(86, 18, 145, 0.06);
 }
 
 .hkpc-landing .intake .eyebrow {
@@ -429,14 +429,14 @@
   border-top-width: 1px;
   border: 1px solid #e2dce7;
   border-top: 0;
-  box-shadow: 0 6px 20px #26113d04;
+  box-shadow: 0 6px 20px rgba(86, 18, 145, 0.04);
 }
 
 .hkpc-landing .primary {
   background: white;
   color: var(--ink);
   border-top: 4px solid var(--gold);
-  border-color: #4c2867;
+  border-color: #561291;
   border: 1px solid #e2dce7;
 }
 
@@ -639,7 +639,7 @@
   grid-template-columns: 48px 1fr;
   column-gap: 22px;
   align-content: start;
-  box-shadow: 0 5px 18px #26113d03;
+  box-shadow: 0 5px 18px rgba(86, 18, 145, 0.04);
 }
 
 .hkpc-landing .topics span {
@@ -952,7 +952,7 @@
 }
 
 .hkpc-landing dialog::backdrop {
-  background: #1c0b30b0;
+  background: rgba(86, 18, 145, 0.7);
 }
 
 .hkpc-landing a:focus-visible {
@@ -1034,7 +1034,7 @@
   grid-template-columns: 48px 1fr;
   column-gap: 22px;
   align-content: start;
-  box-shadow: 0 5px 18px #26113d03;
+  box-shadow: 0 5px 18px rgba(86, 18, 145, 0.04);
 }
 
 .hkpc-landing .topics article:last-child {
@@ -1045,7 +1045,7 @@
   grid-template-columns: 48px 1fr;
   column-gap: 22px;
   align-content: start;
-  box-shadow: 0 5px 18px #26113d03;
+  box-shadow: 0 5px 18px rgba(86, 18, 145, 0.04);
 }
 
 .hkpc-landing .hero-copy {
@@ -1262,15 +1262,15 @@
 }
 
 .hkpc-landing .program-bottom a:hover {
-  box-shadow: 0 2px 8px #26113d12;
+  box-shadow: 0 2px 8px rgba(86, 18, 145, 0.12);
 }
 
 .hkpc-landing .resource-grid a:hover {
-  box-shadow: 0 2px 8px #26113d12;
+  box-shadow: 0 2px 8px rgba(86, 18, 145, 0.12);
 }
 
 .hkpc-landing .headerlink:hover {
-  box-shadow: 0 2px 8px #26113d12;
+  box-shadow: 0 2px 8px rgba(86, 18, 145, 0.12);
 }
 
 .hkpc-landing summary::marker {
