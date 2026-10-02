@@ -8,7 +8,7 @@ import CmsText from '@/components/CmsText';
 import { 
   Sparkles, BookOpen, UserCheck, Globe, ArrowRight, Check, Menu, X,
   Heart, Info, Calendar, Award, ShoppingBag, Link2, Users, Laptop, 
-  BookOpenCheck, ShieldCheck, HelpCircle, Lock
+  BookOpenCheck, ShieldCheck, HelpCircle, Lock, Instagram, Facebook, Youtube, ChevronDown, ChevronUp
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -17,6 +17,8 @@ export default function LandingPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('school');
   const [activeCurriculumTab, setActiveCurriculumTab] = useState('community');
+  const [showFullHilde, setShowFullHilde] = useState(true);
+  const [showFullThomas, setShowFullThomas] = useState(true);
   
   const logoClicksRef = useRef(0);
   const handleLogoClick = () => {
@@ -683,8 +685,8 @@ export default function LandingPage() {
               <CmsText 
                 slug="landing-about-sec3-p1"
                 fallback={language === 'no'
-                  ? "Hilde Karin begynte å dra på misjons- og bibelsmuglingsturer da hun var 14 år, og har siden levd som misjonær i Midtøsten, Afrika og Spania. I mai 2022 kalte Gud henne hjem til Norge, hvor hun møtte Thomas Knutsen. De giftet seg 2. desember 2023."
-                  : "Hilde Karin started going on mission and Bible smuggling trips when she was 14 and has since lived as a missionary in the Middle East, Africa, and Spain. In May 2022, God called her back home to Norway, where she met Thomas Knutsen. They were married on December 2, 2023."}
+                  ? "Hilde Karin begynte å dra på misjonsturer da hun var 14 år, og har siden levd som misjonær i Midtøsten, Afrika og Spania. I mai 2022 kalte Gud henne hjem til Norge, hvor hun møtte Thomas Knutsen. De giftet seg 2. desember 2023."
+                  : "Hilde Karin started going on mission trips when she was 14 and has since lived as a missionary in the Middle East, Africa, and Spain. In May 2022, God called her back home to Norway, where she met Thomas Knutsen. They were married on December 2, 2023."}
                 as="p"
                 className="text-sm text-on-surface-variant leading-relaxed"
               />
@@ -696,6 +698,154 @@ export default function LandingPage() {
                 as="p"
                 className="text-sm text-on-surface-variant leading-relaxed"
               />
+            </div>
+          </div>
+
+          {/* Subsection: Møt hjertene bak His Kingdom Ministry */}
+          <div className="pt-6 space-y-10">
+            <div className="text-center max-w-2xl mx-auto space-y-2">
+              <CmsText 
+                slug="landing-leaders-title" 
+                fallback={language === 'no' ? "Møt hjertene bak His Kingdom Ministry" : "Meet the Hearts Behind His Kingdom Ministry"} 
+                as="h3"
+                className="font-serif text-2xl sm:text-3xl font-bold text-[#3c096c]"
+              />
+              <CmsText 
+                slug="landing-leaders-subtitle" 
+                fallback={language === 'no' 
+                  ? "Et liv overgitt til disippelskap, forbønn og utrustning av Guds folk" 
+                  : "A life dedicated to discipleship, intercession, and equipping God's people"} 
+                as="p"
+                className="text-xs sm:text-sm text-on-surface-variant font-medium"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {/* Card 1: Hilde Karin Knutsen */}
+              <div className="bg-white border border-[#dec2ef]/50 rounded-3xl p-8 shadow-sm hover:shadow-md transition-all text-center flex flex-col justify-between space-y-6">
+                <div className="space-y-4">
+                  <div className="w-28 h-28 mx-auto relative">
+                    <img 
+                      src="/img/hilde-karin-knutsen.jpg" 
+                      alt="Hilde Karin Knutsen" 
+                      className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-md mx-auto"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-serif text-xl font-bold text-[#240046]">
+                      Hilde Karin Knutsen
+                    </h4>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#bd4f2a] block mt-1 font-sans">
+                      <CmsText 
+                        slug="landing-leader-hilde-role" 
+                        fallback={language === 'no' ? "PROFETISK FORBEDER OG UNDERVISER" : "PROPHETIC INTERCESSOR & TEACHER"} 
+                      />
+                    </span>
+                  </div>
+                  <div className="text-xs text-on-surface-variant leading-relaxed text-left font-medium">
+                    {showFullHilde ? (
+                      <p>
+                        <CmsText 
+                          slug="landing-leader-hilde-bio"
+                          fallback={language === 'no'
+                            ? "Velkommen til vår side. Jeg heter Hilde Karin. Jeg er gift med Thomas. Vi bor i Norge. Jeg har reist som misjonær og profetisk forbeder store deler av livet mitt. Ved Guds nåde, gjennom Bibelens prinsipper og ved Den Hellige Ånds ledelse er jeg en profetisk stemme klar til å hjelpe deg å vokse i ditt personlige forhold til Jesus Kristus og utruste deg til å bli alt det han har skapt deg til å være."
+                            : "Welcome to our page. My name is Hilde Karin. I am married to Thomas. We live in Norway. I have traveled as a missionary and prophetic intercessor for much of my life. By God's grace, through Biblical principles, and by the Holy Spirit's guidance, I am a prophetic voice ready to help you grow in your personal relationship with Jesus Christ and equip you to become everything He has created you to be."}
+                        />
+                      </p>
+                    ) : (
+                      <p>
+                        {language === 'no'
+                          ? "Velkommen til vår side. Jeg heter Hilde Karin. Jeg er gift med Thomas. Vi bor i Norge..."
+                          : "Welcome to our page. My name is Hilde Karin. I am married to Thomas. We live in Norway..."}
+                      </p>
+                    )}
+                  </div>
+                  <button 
+                    type="button"
+                    onClick={() => setShowFullHilde(!showFullHilde)}
+                    className="px-4 py-1.5 rounded-full border border-[#bd4f2a]/60 text-[#bd4f2a] hover:bg-[#bd4f2a]/5 text-xs font-bold transition-all active:scale-95 inline-flex items-center gap-1 mx-auto"
+                  >
+                    <span>{showFullHilde ? (language === 'no' ? "Vis mindre" : "Show less") : (language === 'no' ? "Vis mer" : "Show more")}</span>
+                    {showFullHilde ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                  </button>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100 flex justify-center items-center gap-3 text-slate-500">
+                  <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Instagram">
+                    <Instagram size={14} />
+                  </a>
+                  <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Facebook">
+                    <Facebook size={14} />
+                  </a>
+                  <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="YouTube">
+                    <Youtube size={14} />
+                  </a>
+                  <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="TikTok">
+                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.46V11.8a8.28 8.28 0 0 0 5.77 2.29V10.64a4.84 4.84 0 0 1-3.77-3.95h3.77Z"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+
+              {/* Card 2: Thomas Knutsen */}
+              <div className="bg-white border border-[#dec2ef]/50 rounded-3xl p-8 shadow-sm hover:shadow-md transition-all text-center flex flex-col justify-between space-y-6">
+                <div className="space-y-4">
+                  <div className="w-28 h-28 mx-auto relative">
+                    <img 
+                      src="/img/thomas-knutsen.jpeg" 
+                      alt="Thomas Knutsen" 
+                      className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-md mx-auto"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-serif text-xl font-bold text-[#240046]">
+                      Thomas Knutsen
+                    </h4>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#bd4f2a] block mt-1 font-sans">
+                      <CmsText 
+                        slug="landing-leader-thomas-role" 
+                        fallback={language === 'no' ? "DAGLIG LEDER OG LOVSANG" : "GENERAL MANAGER & WORSHIP"} 
+                      />
+                    </span>
+                  </div>
+                  <div className="text-xs text-on-surface-variant leading-relaxed text-left font-medium">
+                    {showFullThomas ? (
+                      <p>
+                        <CmsText 
+                          slug="landing-leader-thomas-bio"
+                          fallback={language === 'no'
+                            ? "Hei og velkommen til siden vår. Vi er så glade for at du kom inn på vår tjeneteside. Jeg har ikke reist rundt i verden. Jeg har jobbet og bodd stort sett i samme by hele livet. Jeg jobbet i samme kirke i 15 år før jeg møtte Hilde. Vi koblet sammen med en gang og er så velsignet at Gud forente livene våre sammen."
+                            : "Hello and welcome to our page. We are so glad you found our ministry page. I have not traveled all around the world. I have worked and lived mostly in the same city all my life. I worked in the same church for 15 years before meeting Hilde. We connected immediately and are so blessed that God joined our lives together."}
+                        />
+                      </p>
+                    ) : (
+                      <p>
+                        {language === 'no'
+                          ? "Hei og velkommen til siden vår. Vi er så glade for at du kom inn på vår tjeneteside..."
+                          : "Hello and welcome to our page. We are so glad you found our ministry page..."}
+                      </p>
+                    )}
+                  </div>
+                  <button 
+                    type="button"
+                    onClick={() => setShowFullThomas(!showFullThomas)}
+                    className="px-4 py-1.5 rounded-full border border-[#bd4f2a]/60 text-[#bd4f2a] hover:bg-[#bd4f2a]/5 text-xs font-bold transition-all active:scale-95 inline-flex items-center gap-1 mx-auto"
+                  >
+                    <span>{showFullThomas ? (language === 'no' ? "Vis mindre" : "Show less") : (language === 'no' ? "Vis mer" : "Show more")}</span>
+                    {showFullThomas ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                  </button>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100 flex justify-center items-center gap-3 text-slate-500">
+                  <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Instagram">
+                    <Instagram size={14} />
+                  </a>
+                  <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Facebook">
+                    <Facebook size={14} />
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
