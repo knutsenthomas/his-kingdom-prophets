@@ -75,7 +75,7 @@ export default function HkmAboutPage() {
       <SiteHeader />
 
       {/* Hero Header Section with vibrant blending colors */}
-      <section className="relative bg-gradient-to-br from-[#561291] to-[#561291] text-white py-20 px-6 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#561291] to-[#561291] text-white py-12 sm:py-20 px-4 sm:px-6 overflow-hidden">
         {/* Glow rings and absolute blobs */}
         <div className="absolute top-[-30%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#d17d39]/10 blur-3xl pointer-events-none" />
         <div className="absolute bottom-[-20%] left-[-15%] w-[450px] h-[450px] rounded-full bg-primary/20 blur-3xl pointer-events-none" />
@@ -117,7 +117,7 @@ export default function HkmAboutPage() {
       </section>
 
       {/* MAIN CONTAINER */}
-      <main className="flex-grow max-w-6xl mx-auto px-6 py-16 space-y-24 w-full">
+      <main className="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-16 sm:space-y-24 w-full">
         
         {/* SECTION 1: ABOUT US & STORY */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -188,7 +188,7 @@ export default function HkmAboutPage() {
         {/* SECTION 2: MISSION & HISTORY PILLARS */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Mission Card */}
-          <div className="bg-white border border-[#e2dce7]/30 p-8 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-5 flex flex-col justify-between group">
+          <div className="bg-white border border-[#e2dce7]/30 p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-md transition-all space-y-5 flex flex-col justify-between group">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-xl bg-orange-50 text-[#d17d39] flex items-center justify-center transition-colors group-hover:bg-[#d17d39]/10">
                 <Compass size={22} />
@@ -213,7 +213,7 @@ export default function HkmAboutPage() {
           </div>
 
           {/* History Card */}
-          <div className="bg-white border border-[#e2dce7]/30 p-8 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-5 flex flex-col justify-between group">
+          <div className="bg-white border border-[#e2dce7]/30 p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-md transition-all space-y-5 flex flex-col justify-between group">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-xl bg-purple-50 text-primary flex items-center justify-center transition-colors group-hover:bg-primary/10">
                 <ShieldCheck size={22} />
@@ -239,7 +239,7 @@ export default function HkmAboutPage() {
         </section>
 
         {/* SECTION 3: IMPACT STATS */}
-        <section className="bg-white border border-[#e2dce7]/40 rounded-3xl p-8 sm:p-10 shadow-sm space-y-8">
+        <section className="bg-white border border-[#e2dce7]/40 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 shadow-sm space-y-8">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="section-label uppercase tracking-widest text-xs font-extrabold text-[#d17d39]">
               <CmsText slug="hkm-stats-tagline" fallback={isEn ? "Our Global Footprint" : "Våre resultater i tall"} />
@@ -290,7 +290,7 @@ export default function HkmAboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Donor Support */}
-            <div className="bg-white border border-[#e2dce7]/40 p-8 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
+            <div className="bg-white border border-[#e2dce7]/40 p-5 sm:p-8 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#f39c12] to-[#e74c3c] rounded-xl flex items-center justify-center text-white shadow-sm">
                   <Heart size={20} />
@@ -304,14 +304,14 @@ export default function HkmAboutPage() {
               </div>
               <button 
                 onClick={handleDonateClick}
-                className="w-full py-2.5 bg-gradient-to-br from-[#f39c12] to-[#e74c3c] hover:opacity-95 text-white text-xs font-bold uppercase rounded-lg shadow transition-all active:scale-[0.98]"
+                className="w-full min-h-[44px] py-2.5 bg-gradient-to-br from-[#f39c12] to-[#e74c3c] hover:opacity-95 text-white text-xs font-bold uppercase rounded-lg shadow transition-all active:scale-[0.98] flex items-center justify-center"
               >
                 <CmsText slug="hkm-engage-card1-btn" fallback={isEn ? "Support Now" : "Gi gave / Støtt nå"} />
               </button>
             </div>
 
             {/* Church Seminars */}
-            <div className="bg-white border border-[#e2dce7]/40 p-8 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
+            <div className="bg-white border border-[#e2dce7]/40 p-5 sm:p-8 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
                   <Calendar size={20} />
@@ -325,7 +325,7 @@ export default function HkmAboutPage() {
               </div>
               <a 
                 href="mailto:kontakt@hiskingdomministry.no?subject=Undervisning%20for%20menighet" 
-                className="w-full py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-primary text-xs font-bold uppercase rounded-lg transition-all text-center flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98]"
+                className="w-full min-h-[44px] py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-primary text-xs font-bold uppercase rounded-lg transition-all text-center flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98]"
               >
                 <span>
                   <CmsText slug="hkm-engage-card2-btn" fallback={isEn ? "Contact Us" : "Kontakt oss"} />
@@ -335,7 +335,7 @@ export default function HkmAboutPage() {
             </div>
 
             {/* Business Network */}
-            <div className="bg-white border border-[#e2dce7]/40 p-8 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
+            <div className="bg-white border border-[#e2dce7]/40 p-5 sm:p-8 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
                   <Briefcase size={20} />
@@ -349,7 +349,7 @@ export default function HkmAboutPage() {
               </div>
               <a 
                 href="mailto:kontakt@hiskingdomministry.no?subject=Business%20Network" 
-                className="w-full py-2.5 bg-primary hover:bg-[#430d70] text-white text-xs font-bold uppercase rounded-lg transition-all text-center flex items-center justify-center gap-1.5 shadow active:scale-[0.98]"
+                className="w-full min-h-[44px] py-2.5 bg-primary hover:bg-[#430d70] text-white text-xs font-bold uppercase rounded-lg transition-all text-center flex items-center justify-center gap-1.5 shadow active:scale-[0.98]"
               >
                 <span>
                   <CmsText slug="hkm-engage-card3-btn" fallback={isEn ? "Join Network" : "Meld din interesse"} />
@@ -361,7 +361,7 @@ export default function HkmAboutPage() {
         </section>
 
         {/* BOTTOM CTA: COMBINED SCHOOL & MINISTRY */}
-        <section className="bg-gradient-to-br from-primary to-[#430d70] border border-[#e2dce7]/30 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden">
+        <section className="bg-gradient-to-br from-primary to-[#430d70] border border-[#e2dce7]/30 rounded-2xl sm:rounded-3xl p-6 sm:p-10 md:p-12 text-white relative overflow-hidden">
           <div className="absolute top-[-40%] right-[-10%] w-[350px] h-[350px] rounded-full bg-white/5 blur-3xl pointer-events-none" />
           
           <div className="max-w-2xl space-y-6 relative z-10">
@@ -377,7 +377,7 @@ export default function HkmAboutPage() {
             <div className="flex flex-wrap gap-4 pt-2">
               <button 
                 onClick={handleApplyClick}
-                className="px-6 py-3 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-xs font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-1.5"
+                className="min-h-[44px] px-6 py-3 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-xs font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-1.5"
               >
                 <span>
                   <CmsText slug="hkm-bottom-btn1" fallback={isEn ? "Apply to Prophets School" : "Søk Opptak til skolen"} />
@@ -386,7 +386,7 @@ export default function HkmAboutPage() {
               </button>
               <button 
                 onClick={() => navigate('/')}
-                className="px-6 py-3 bg-white/10 hover:bg-white/15 text-white text-xs font-bold uppercase rounded-xl transition-all border border-white/20 active:scale-95"
+                className="min-h-[44px] px-6 py-3 bg-white/10 hover:bg-white/15 text-white text-xs font-bold uppercase rounded-xl transition-all border border-white/20 active:scale-95 flex items-center justify-center"
               >
                 <CmsText slug="hkm-bottom-btn2" fallback={isEn ? "Explore Course Lines" : "Utforsk studielinjer"} />
               </button>

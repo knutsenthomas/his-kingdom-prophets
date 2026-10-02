@@ -56,7 +56,7 @@ export default function ContactSupportPage() {
       <SiteHeader />
 
       {/* Main Container */}
-      <main className="flex-1 w-full max-w-[1100px] mx-auto px-4 sm:px-6 py-12 md:py-16">
+      <main className="flex-1 w-full max-w-[1100px] mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
           
           {/* Left Column - Contact Details */}
@@ -120,7 +120,7 @@ export default function ContactSupportPage() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="bg-white border border-slate-200/60 rounded-2xl p-6 sm:p-10 shadow-md space-y-6"
+                  className="bg-white border border-slate-200/60 rounded-2xl p-5 sm:p-8 md:p-10 shadow-md space-y-6"
                 >
                   <h3 className="font-sans text-xl sm:text-2xl font-bold text-primary border-b border-slate-100 pb-4 flex items-center gap-2">
                     <Mail size={20} className="text-[#D7B978]" /> 
@@ -139,7 +139,7 @@ export default function ContactSupportPage() {
                             value={form.name}
                             onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
                             placeholder={isEn ? 'Your name...' : 'Ditt navn...'}
-                            className="w-full px-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-xs sm:text-sm font-semibold outline-none transition-all"
+                            className="w-full min-h-[44px] px-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-base sm:text-sm font-semibold outline-none transition-all"
                             required
                           />
                         </div>
@@ -155,7 +155,7 @@ export default function ContactSupportPage() {
                             value={form.email}
                             onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))}
                             placeholder={isEn ? 'Email address...' : 'E-postadresse...'}
-                            className="w-full px-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-xs sm:text-sm font-semibold outline-none transition-all"
+                            className="w-full min-h-[44px] px-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-base sm:text-sm font-semibold outline-none transition-all"
                             required
                           />
                         </div>
@@ -172,7 +172,7 @@ export default function ContactSupportPage() {
                           value={form.subject}
                           onChange={(e) => setForm(prev => ({ ...prev, subject: e.target.value }))}
                           placeholder={isEn ? 'Subject...' : 'Hva gjelder henvendelsen?...'}
-                          className="w-full px-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-xs sm:text-sm font-semibold outline-none transition-all"
+                          className="w-full min-h-[44px] px-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-base sm:text-sm font-semibold outline-none transition-all"
                           required
                         />
                       </div>
@@ -187,7 +187,7 @@ export default function ContactSupportPage() {
                         value={form.message}
                         onChange={(e) => setForm(prev => ({ ...prev, message: e.target.value }))}
                         placeholder={isEn ? 'Describe your request here...' : 'Skriv din henvendelse her...'}
-                        className="w-full p-4 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-xs sm:text-sm font-medium outline-none transition-all resize-none leading-relaxed"
+                        className="w-full p-4 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-base sm:text-sm font-medium outline-none transition-all resize-none leading-relaxed"
                         required
                       />
                     </div>
@@ -195,7 +195,7 @@ export default function ContactSupportPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-3.5 bg-primary hover:bg-[#0f344c] text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="w-full min-h-[44px] py-3.5 bg-primary hover:bg-[#0f344c] text-white text-sm font-bold uppercase tracking-wider rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       {isSubmitting ? (
                         <span><CmsText slug="support-form-submitting" fallback={isEn ? 'Submitting...' : 'Sender henvendelse...'} /></span>

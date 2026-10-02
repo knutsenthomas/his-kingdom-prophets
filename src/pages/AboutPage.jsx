@@ -31,7 +31,7 @@ export default function AboutPage() {
       <SiteHeader />
 
       {/* Hero Header Section */}
-      <section className="relative bg-gradient-to-br from-[#561291] to-[#561291] text-white py-20 px-6 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#561291] to-[#561291] text-white py-12 sm:py-20 px-4 sm:px-6 overflow-hidden">
         {/* Visual glassmorphic blobs for agency standards */}
         <div className="absolute top-[-20%] right-[-10%] w-96 h-96 rounded-full bg-white/5 blur-3xl pointer-events-none" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[450px] h-[450px] rounded-full bg-primary-container/10 blur-3xl pointer-events-none" />
@@ -59,10 +59,10 @@ export default function AboutPage() {
       </section>
 
       {/* MAIN CONTAINER */}
-      <main className="flex-grow max-w-5xl mx-auto px-6 py-16 space-y-20 w-full">
+      <main className="flex-grow max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-12 sm:space-y-20 w-full">
         
         {/* SECTION 1: WHO WE ARE (TEXT & STATS) */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
           <div className="space-y-6">
             <h2 className="font-sans text-2xl md:text-3xl font-bold text-primary">
               <CmsText slug="about-sec1-title" fallback={language === 'en' ? "Solid Theology. Authentic Spirit." : "Solid teologi. Autentisk Ånd."} />
@@ -242,7 +242,7 @@ export default function AboutPage() {
         </section>
 
         {/* SECTION 4: DIGITAL PLATFORM WORKSPACE */}
-        <section className="bg-white border border-[#e2dce7]/55 rounded-3xl p-8 shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <section className="bg-white border border-[#e2dce7]/55 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
           <div className="space-y-6">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f3e8ff] text-primary font-bold text-[10px] uppercase tracking-wider select-none">
               <Award size={12} />
@@ -279,7 +279,7 @@ export default function AboutPage() {
             </ul>
           </div>
 
-          <div className="bg-[#F6F4F8] border border-slate-200/60 rounded-2xl p-6 sm:p-8 space-y-6 flex flex-col justify-center items-center text-center">
+          <div className="bg-[#F6F4F8] border border-slate-200/60 rounded-2xl p-5 sm:p-8 space-y-6 flex flex-col justify-center items-center text-center">
             <div className="w-16 h-16 bg-white border border-[#e2dce7] rounded-full flex items-center justify-center text-primary shadow-sm">
               <MessageSquare size={28} />
             </div>
@@ -297,14 +297,14 @@ export default function AboutPage() {
             <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
               <button 
                 onClick={handleApplyClick}
-                className="flex-1 py-3 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-xs font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5"
+                className="flex-1 min-h-[44px] py-3 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-xs font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5"
               >
                 <span><CmsText slug="about-start-btn-apply" fallback={language === 'en' ? "Apply Now" : "Søk Opptak"} /></span>
                 <ArrowRight size={13} />
               </button>
               <button 
                 onClick={handleLoginClick}
-                className="flex-1 py-3 bg-white border border-slate-200 text-primary hover:bg-slate-50 text-xs font-bold uppercase rounded-xl transition-all active:scale-95"
+                className="flex-1 min-h-[44px] py-3 bg-white border border-slate-200 text-primary hover:bg-slate-50 text-xs font-bold uppercase rounded-xl transition-all active:scale-95 flex items-center justify-center"
               >
                 <CmsText slug="about-start-btn-login" fallback={language === 'en' ? "Log In" : "Logg inn"} />
               </button>

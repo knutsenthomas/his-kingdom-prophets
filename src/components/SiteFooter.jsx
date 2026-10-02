@@ -33,17 +33,17 @@ export default function SiteFooter() {
           </a>
           <p>{language === 'no' ? 'Forankret i Skriften. Utrustet til tjeneste.' : 'Grounded in Scripture. Equipped for ministry.'}</p>
           
-          <div style={{ display: 'flex', gap: '20px', fontSize: '13px', color: 'var(--muted)', flexWrap: 'wrap' }}>
-            <Link to="/privacy" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-[13px] text-slate-500 pt-2">
+            <Link to="/privacy" className="min-h-[44px] inline-flex items-center hover:text-[#561291] transition-colors">
               {language === 'no' ? 'Personvern' : 'Privacy Policy'}
             </Link>
-            <Link to="/terms" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to="/terms" className="min-h-[44px] inline-flex items-center hover:text-[#561291] transition-colors">
               {language === 'no' ? 'Brukervilkår' : 'Terms of Service'}
             </Link>
-            <Link to="/accessibility" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to="/accessibility" className="min-h-[44px] inline-flex items-center hover:text-[#561291] transition-colors">
               {language === 'no' ? 'Tilgjengelighet' : 'Accessibility'}
             </Link>
-            <Link to="/support" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to="/support" className="min-h-[44px] inline-flex items-center hover:text-[#561291] transition-colors">
               {language === 'no' ? 'Kontakt support' : 'Support'}
             </Link>
           </div>

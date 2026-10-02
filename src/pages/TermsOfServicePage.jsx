@@ -20,11 +20,11 @@ export default function TermsOfServicePage() {
       <SiteHeader />
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-[1000px] mx-auto px-4 sm:px-6 py-12 md:py-16">
+      <main className="flex-1 w-full max-w-[1000px] mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16">
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white border border-slate-200/60 rounded-2xl p-6 sm:p-10 md:p-12 shadow-sm space-y-8"
+          className="bg-white border border-slate-200/60 rounded-2xl p-5 sm:p-8 md:p-12 shadow-sm space-y-8"
         >
           {/* Hero */}
           <div className="space-y-4 border-b border-slate-100 pb-8 text-center sm:text-left">

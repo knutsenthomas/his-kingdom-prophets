@@ -641,7 +641,7 @@ export default function AdmissionPage() {
       </section>
 
       {/* MAIN CONTAINER */}
-      <main className="max-w-6xl mx-auto px-6 py-12 space-y-16">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-12 sm:space-y-16">
         
         {/* SECTION 1: PROGRAMS GRID */}
         <section className="space-y-8">
@@ -741,7 +741,7 @@ export default function AdmissionPage() {
         </section>
 
         {/* SECTION 2: TUITION PAYMENT DETAILS */}
-        <section className="bg-white border border-[#e2dce7]/70 rounded-3xl p-8 shadow-sm">
+        <section className="bg-white border border-[#e2dce7]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             
             {/* Payment Description */}
@@ -954,7 +954,7 @@ export default function AdmissionPage() {
         <section id="apply-form" className="max-w-4xl mx-auto scroll-mt-24">
           {!isAdmissionOpen ? (
             /* LOCKED / COMING SOON VIEW (Before January 1, 2027) */
-            <div className="bg-white border border-[#e2dce7]/70 rounded-3xl p-8 sm:p-12 shadow-lg text-center space-y-8 relative overflow-hidden">
+            <div className="bg-white border border-[#e2dce7]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-12 shadow-lg text-center space-y-6 sm:space-y-8 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-[#561291]/5 blur-3xl pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-[#D7B978]/10 blur-3xl pointer-events-none" />
 
@@ -1010,7 +1010,7 @@ export default function AdmissionPage() {
               </div>
 
               {/* Get Notified / Lead Capture Form */}
-              <div className="max-w-lg mx-auto bg-gradient-to-br from-[#561291]/5 to-[#D7B978]/10 border border-[#561291]/15 rounded-2xl p-6 sm:p-8 space-y-4 relative z-10 text-center">
+              <div className="max-w-lg mx-auto bg-gradient-to-br from-[#561291]/5 to-[#D7B978]/10 border border-[#561291]/15 rounded-2xl p-5 sm:p-8 space-y-4 relative z-10 text-center">
                 <div className="space-y-1">
                   <div className="w-11 h-11 rounded-2xl bg-[#561291]/10 text-[#561291] flex items-center justify-center mx-auto mb-2 shadow-xs">
                     <Bell size={20} />
@@ -1032,13 +1032,13 @@ export default function AdmissionPage() {
                   </div>
                 ) : (
                   <form onSubmit={handleInterestSubmit} className="space-y-3 pt-1">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-left">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left">
                       <input
                         type="text"
                         placeholder={language === 'en' ? "Your Name" : "Ditt navn"}
                         value={interestName}
                         onChange={(e) => setInterestName(e.target.value)}
-                        className="w-full px-4 py-2.5 bg-white border border-slate-200 focus:border-[#561291] rounded-xl text-sm focus:outline-none"
+                        className="w-full min-h-[44px] px-4 py-2.5 bg-white border border-slate-200 focus:border-[#561291] rounded-xl text-base sm:text-sm focus:outline-none transition-colors"
                       />
                       <input
                         type="email"
@@ -1046,13 +1046,13 @@ export default function AdmissionPage() {
                         placeholder={language === 'en' ? "Your Email *" : "Din e-post *"}
                         value={interestEmail}
                         onChange={(e) => setInterestEmail(e.target.value)}
-                        className="w-full px-4 py-2.5 bg-white border border-slate-200 focus:border-[#561291] rounded-xl text-sm focus:outline-none"
+                        className="w-full min-h-[44px] px-4 py-2.5 bg-white border border-slate-200 focus:border-[#561291] rounded-xl text-base sm:text-sm focus:outline-none transition-colors"
                       />
                     </div>
                     <button
                       type="submit"
                       disabled={isSubmittingInterest}
-                      className="w-full py-3 bg-[#561291] hover:bg-[#430d72] text-white font-bold text-sm uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-50"
+                      className="w-full min-h-[44px] py-3 bg-[#561291] hover:bg-[#430d72] text-white font-bold text-sm uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                       <Bell size={16} />
                       <span>{isSubmittingInterest ? (language === 'en' ? "Saving..." : "Lagrer...") : (language === 'en' ? "Notify Me" : "Send meg påminnelse")}</span>
@@ -1078,7 +1078,7 @@ export default function AdmissionPage() {
             </div>
           ) : (
             /* ACTIVE APPLICATION WIZARD (Opens Jan 1, 2027 or in ?preview=true mode) */
-            <div className="bg-white border border-[#e2dce7]/70 rounded-3xl p-6 sm:p-10 shadow-lg">
+            <div className="bg-white border border-[#e2dce7]/70 rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-10 shadow-lg">
               {isPreviewMode && (
                 <div className="mb-6 p-3 px-4 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
@@ -1152,12 +1152,12 @@ export default function AdmissionPage() {
                   </div>
 
                   {/* Step Pills Navigation */}
-                  <div className="grid grid-cols-4 gap-2 pt-2">
+                  <div className="grid grid-cols-4 gap-1.5 sm:gap-2 pt-2">
                     {[
-                      { step: 1, title: language === 'en' ? "1. Details" : "1. Personalia" },
-                      { step: 2, title: language === 'en' ? "2. Program" : "2. Studielinje" },
-                      { step: 3, title: language === 'en' ? "3. Background" : "3. Bakgrunn" },
-                      { step: 4, title: language === 'en' ? "4. Reference" : "4. Referanse" }
+                      { step: 1, title: language === 'en' ? "1. Details" : "1. Personalia", short: "1. Info" },
+                      { step: 2, title: language === 'en' ? "2. Program" : "2. Studielinje", short: "2. Linje" },
+                      { step: 3, title: language === 'en' ? "3. Background" : "3. Bakgrunn", short: "3. Tro" },
+                      { step: 4, title: language === 'en' ? "4. Reference" : "4. Referanse", short: "4. Svar" }
                     ].map(item => (
                       <button
                         key={item.step}
@@ -1173,7 +1173,7 @@ export default function AdmissionPage() {
                             setCurrentStep(4);
                           }
                         }}
-                        className={`py-2 px-2 text-center text-xs font-bold rounded-xl transition-all duration-200 ${
+                        className={`min-h-[44px] py-2 px-1 text-center text-xs font-bold rounded-xl transition-all duration-200 flex items-center justify-center ${
                           currentStep === item.step
                             ? 'bg-[#561291] text-white shadow-sm'
                             : currentStep > item.step
@@ -1181,7 +1181,8 @@ export default function AdmissionPage() {
                             : 'bg-slate-50 text-slate-400 hover:text-slate-600'
                         }`}
                       >
-                        {item.title}
+                        <span className="hidden sm:inline">{item.title}</span>
+                        <span className="sm:hidden">{item.short}</span>
                       </button>
                     ))}
                   </div>
@@ -1261,7 +1262,7 @@ export default function AdmissionPage() {
                                 key={g}
                                 type="button"
                                 onClick={() => updateFieldValue('gender', g)}
-                                className={`py-3 px-4 rounded-xl border text-sm sm:text-base font-bold transition-all duration-200 ${
+                                className={`min-h-[44px] py-2.5 px-4 rounded-xl border text-sm sm:text-base font-bold transition-all duration-200 flex items-center justify-center ${
                                   formData.gender === g
                                     ? 'bg-[#561291]/10 border-[#561291] text-[#561291]'
                                     : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
@@ -1367,12 +1368,14 @@ export default function AdmissionPage() {
                           {language === 'en' ? "Marital Status *" : "Sivilstatus *"}
                         </label>
                         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                          {['Gift', 'Ugift', 'Forlovet', 'Separert / skilt', 'Enke / enkemann'].map((ms) => (
+                          {['Gift', 'Ugift', 'Forlovet', 'Separert / skilt', 'Enke / enkemann'].map((ms, idx) => (
                             <button
                               key={ms}
                               type="button"
                               onClick={() => updateFieldValue('maritalStatus', ms)}
-                              className={`py-2.5 px-2 rounded-xl border text-xs sm:text-sm font-bold transition-all duration-200 text-center ${
+                              className={`min-h-[44px] py-2.5 px-2 rounded-xl border text-xs sm:text-sm font-bold transition-all duration-200 text-center flex items-center justify-center ${
+                                idx === 4 ? 'col-span-2 sm:col-span-1' : ''
+                              } ${
                                 formData.maritalStatus === ms
                                   ? 'bg-[#561291]/10 border-[#561291] text-[#561291]'
                                   : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
@@ -1392,7 +1395,7 @@ export default function AdmissionPage() {
                             saveDraft(formData, currentStep);
                             showToast(language === 'en' ? "Draft saved! You can resume anytime." : "Kladd lagret! Du kan lukke siden og fortsette senere.");
                           }}
-                          className="w-full sm:w-auto px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
+                          className="w-full sm:w-auto min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
                         >
                           <Save size={16} />
                           <span>{language === 'en' ? "Save Draft & Continue Later" : "Lagre kladd & fortsett senere"}</span>
@@ -1401,7 +1404,7 @@ export default function AdmissionPage() {
                         <button
                           type="button"
                           onClick={handleNextStep}
-                          className="w-full sm:w-auto px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
+                          className="w-full sm:w-auto min-h-[44px] px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
                         >
                           <span>{language === 'en' ? "Next: Study Line & Payment" : "Neste: Studielinje & betaling"}</span>
                           <ArrowRight size={18} />
@@ -1578,7 +1581,7 @@ export default function AdmissionPage() {
                           <button
                             type="button"
                             onClick={handlePrevStep}
-                            className="flex-1 sm:flex-initial px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
+                            className="flex-1 sm:flex-initial min-h-[44px] px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
                           >
                             <ArrowLeft size={18} />
                             <span>{language === 'en' ? "Back" : "Tilbake"}</span>
@@ -1589,7 +1592,7 @@ export default function AdmissionPage() {
                               saveDraft(formData, currentStep);
                               showToast(language === 'en' ? "Draft saved! You can resume anytime." : "Kladd lagret! Du kan lukke siden og fortsette senere.");
                             }}
-                            className="flex-1 sm:flex-initial px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
+                            className="flex-1 sm:flex-initial min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
                           >
                             <Save size={16} />
                             <span>{language === 'en' ? "Save Draft" : "Lagre kladd"}</span>
@@ -1598,7 +1601,7 @@ export default function AdmissionPage() {
                         <button
                           type="button"
                           onClick={handleNextStep}
-                          className="w-full sm:w-auto px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
+                          className="w-full sm:w-auto min-h-[44px] px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
                         >
                           <span>{language === 'en' ? "Next: Spiritual Background" : "Neste: Åndelig bakgrunn"}</span>
                           <ArrowRight size={18} />
@@ -1785,7 +1788,7 @@ export default function AdmissionPage() {
                           <button
                             type="button"
                             onClick={handlePrevStep}
-                            className="flex-1 sm:flex-initial px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
+                            className="flex-1 sm:flex-initial min-h-[44px] px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
                           >
                             <ArrowLeft size={18} />
                             <span>{language === 'en' ? "Back" : "Tilbake"}</span>
@@ -1796,7 +1799,7 @@ export default function AdmissionPage() {
                               saveDraft(formData, currentStep);
                               showToast(language === 'en' ? "Draft saved! You can resume anytime." : "Kladd lagret! Du kan lukke siden og fortsette senere.");
                             }}
-                            className="flex-1 sm:flex-initial px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
+                            className="flex-1 sm:flex-initial min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
                           >
                             <Save size={16} />
                             <span>{language === 'en' ? "Save Draft" : "Lagre kladd"}</span>
@@ -1805,7 +1808,7 @@ export default function AdmissionPage() {
                         <button
                           type="button"
                           onClick={handleNextStep}
-                          className="w-full sm:w-auto px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
+                          className="w-full sm:w-auto min-h-[44px] px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
                         >
                           <span>{language === 'en' ? "Next: Reference & Final Review" : "Neste: Referanse & fullfør"}</span>
                           <ArrowRight size={18} />
@@ -1907,7 +1910,7 @@ export default function AdmissionPage() {
                           <button
                             type="button"
                             onClick={handlePrevStep}
-                            className="flex-1 sm:flex-initial px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
+                            className="flex-1 sm:flex-initial min-h-[44px] px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
                           >
                             <ArrowLeft size={18} />
                             <span>{language === 'en' ? "Back" : "Tilbake"}</span>
@@ -1918,7 +1921,7 @@ export default function AdmissionPage() {
                               saveDraft(formData, currentStep);
                               showToast(language === 'en' ? "Draft saved! You can resume anytime." : "Kladd lagret! Du kan lukke siden og fortsette senere.");
                             }}
-                            className="flex-1 sm:flex-initial px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
+                            className="flex-1 sm:flex-initial min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
                           >
                             <Save size={16} />
                             <span>{language === 'en' ? "Save Draft" : "Lagre kladd"}</span>
@@ -1928,7 +1931,7 @@ export default function AdmissionPage() {
                         <button
                           type="submit"
                           disabled={isSubmitting}
-                          className="w-full sm:w-auto px-10 py-4 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base font-sans uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2.5 disabled:opacity-50"
+                          className="w-full sm:w-auto min-h-[48px] px-10 py-4 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base font-sans uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2.5 disabled:opacity-50"
                         >
                           {isSubmitting ? (
                             <>
