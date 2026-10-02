@@ -691,7 +691,7 @@ export default function AdmissionPage() {
           <div className="text-center max-w-xl mx-auto space-y-2">
             <CmsText 
               slug="admission-programs-title" 
-              fallback={language === 'en' ? "Our Study Lines and Courses" : "Våre Studielinjer og Fag"} 
+              fallback={language === 'en' ? "Our Study Lines and Courses" : "Våre studielinjer og fag"} 
               as="h2"
               className="font-sans text-2xl sm:text-3xl font-bold text-[#561291]"
             />
@@ -791,7 +791,7 @@ export default function AdmissionPage() {
             <div className="space-y-6">
               <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#561291]/10 text-[#561291] font-bold text-xs uppercase tracking-wider select-none">
                 <CreditCard size={14} />
-                <CmsText slug="admission-payments-tag" fallback={language === 'en' ? "Flexible Payments and Tuition" : "Fleksibel Betaling og Priser"} />
+                <CmsText slug="admission-payments-tag" fallback={language === 'en' ? "Flexible Payments and Tuition" : "Fleksibel betaling og priser"} />
               </span>
 
               <CmsText 
@@ -842,31 +842,33 @@ export default function AdmissionPage() {
             </div>
 
             {/* Pricing Card Comparison */}
-            <div className="bg-[#F6F4F8] border border-slate-200/70 rounded-2xl p-6 sm:p-8 space-y-6">
-              <div className="flex bg-white p-1 rounded-xl shadow-sm select-none border border-slate-200/50">
+            <div className="bg-[#F8F7FA] border border-slate-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-7 md:p-8 space-y-5 sm:space-y-6 shadow-sm">
+              <div className="flex bg-white/90 p-1 sm:p-1.5 rounded-xl border border-slate-200/70 shadow-xs gap-1 sm:gap-1.5 select-none">
                 <button
+                  type="button"
                   onClick={() => setActivePlan('semester')}
-                  className={`flex-1 py-2.5 text-sm sm:text-base font-bold uppercase tracking-wider rounded-lg transition-all duration-200 ${
+                  className={`flex-1 min-h-[44px] py-2 sm:py-2.5 px-2 text-xs sm:text-sm font-bold normal-case sm:uppercase tracking-normal sm:tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center text-center ${
                     activePlan === 'semester'
-                      ? 'bg-[#561291] text-white shadow-sm'
-                      : 'text-slate-600 hover:text-[#561291]'
+                      ? 'bg-[#561291] text-white shadow-sm shadow-[#561291]/25 font-extrabold'
+                      : 'text-slate-600 hover:text-[#561291] hover:bg-slate-50'
                   }`}
                 >
                   <CmsText slug="admission-price-plan-semester" fallback={language === 'en' ? "Semester Fee" : "Semesteravgift"} />
                 </button>
                 <button
+                  type="button"
                   onClick={() => setActivePlan('year')}
-                  className={`flex-1 py-2.5 text-sm sm:text-base font-bold uppercase tracking-wider rounded-lg transition-all duration-200 ${
+                  className={`flex-1 min-h-[44px] py-2 sm:py-2.5 px-2 text-xs sm:text-sm font-bold normal-case sm:uppercase tracking-normal sm:tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center text-center ${
                     activePlan === 'year'
-                      ? 'bg-[#561291] text-white shadow-sm'
-                      : 'text-slate-600 hover:text-[#561291]'
+                      ? 'bg-[#561291] text-white shadow-sm shadow-[#561291]/25 font-extrabold'
+                      : 'text-slate-600 hover:text-[#561291] hover:bg-slate-50'
                   }`}
                 >
                   <CmsText slug="admission-price-plan-year" fallback={language === 'en' ? "Full Academic Year" : "Fullt studieår"} />
                 </button>
               </div>
 
-              <div className="text-center space-y-3">
+              <div className="text-center space-y-2 sm:space-y-3 pt-1">
                 <span className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-widest block">
                   {activePlan === 'semester' ? (
                     <CmsText slug="admission-price-subhead-semester" fallback={language === 'en' ? "Tuition per semester" : "Studieavgift per semester"} />
@@ -875,7 +877,7 @@ export default function AdmissionPage() {
                   )}
                 </span>
                 
-                <div className="font-sans text-3xl sm:text-5xl font-extrabold text-[#561291]">
+                <div className="font-sans text-3xl sm:text-5xl font-extrabold text-[#561291] tracking-tight">
                   {language === 'en' ? (
                     activePlan === 'semester' ? "$500 USD" : "$1,000 USD"
                   ) : (
@@ -887,7 +889,7 @@ export default function AdmissionPage() {
                   )}
                 </div>
                 
-                <p className="text-sm sm:text-base text-slate-700 font-medium leading-relaxed max-w-sm mx-auto">
+                <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed max-w-sm mx-auto">
                   {language === 'en'
                     ? "*In addition: $50 USD admin/startup fee and $50 USD room & board for the kickoff weekend. (Self-chosen hotel during kickoff weekend is not covered by the school)."
                     : "*I tillegg: 500 kr i admin oppstart og 500 kr for kost og losji for kickoff-helgen. (Hvis man skal bo på egenvalgt hotell i kickoff-helgen dekker skolen ikke dette)."}
@@ -896,26 +898,52 @@ export default function AdmissionPage() {
 
               <div className="w-full h-[1px] bg-slate-200/70" />
 
-              <div className="space-y-3 text-base text-slate-700 font-medium font-sans">
-                <div className="flex justify-between items-center">
-                  <span><CmsText slug="admission-price-row1-label" fallback={language === 'en' ? "Admin / Startup fee" : "Admin / oppstartsgebyr"} /></span>
-                  <span className="text-[#561291] font-bold"><CmsText slug="admission-price-row1-val" fallback={language === 'en' ? "$50 USD" : "500,- NOK"} /></span>
+              <div className="bg-white rounded-xl border border-slate-200/70 divide-y divide-slate-100 shadow-xs overflow-hidden">
+                <div className="flex items-center justify-between gap-3 px-3.5 py-3 text-xs sm:text-sm">
+                  <span className="text-slate-700 font-medium leading-snug">
+                    <CmsText slug="admission-price-row1-label" fallback={language === 'en' ? "Admin / Startup fee" : "Admin / oppstartsgebyr"} />
+                  </span>
+                  <span className="text-[#561291] font-bold whitespace-nowrap shrink-0 text-right">
+                    <CmsText slug="admission-price-row1-val" fallback={language === 'en' ? "$50 USD" : "500,- NOK"} />
+                  </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span><CmsText slug="admission-price-row2-label" fallback={language === 'en' ? "Kickoff weekend room & board" : "Kickoff-helg kost og losji"} /></span>
-                  <span className="text-[#561291] font-bold"><CmsText slug="admission-price-row2-val" fallback={language === 'en' ? "$50 USD" : "500,- NOK"} /></span>
+
+                <div className="flex items-center justify-between gap-3 px-3.5 py-3 text-xs sm:text-sm">
+                  <span className="text-slate-700 font-medium leading-snug">
+                    <CmsText slug="admission-price-row2-label" fallback={language === 'en' ? "Kickoff weekend room & board" : "Kickoff-helg kost og losji"} />
+                  </span>
+                  <span className="text-[#561291] font-bold whitespace-nowrap shrink-0 text-right">
+                    <CmsText slug="admission-price-row2-val" fallback={language === 'en' ? "$50 USD" : "500,- NOK"} />
+                  </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span><CmsText slug="admission-price-row3-label" fallback={language === 'en' ? "Assigned Personal Mentor" : "Tildelt Personlig Mentor"} /></span>
-                  <span className="text-green-600 font-bold"><CmsText slug="admission-price-row3-val" fallback={language === 'en' ? "Included" : "Inkludert"} /></span>
+
+                <div className="flex items-center justify-between gap-3 px-3.5 py-3 text-xs sm:text-sm">
+                  <span className="text-slate-700 font-medium leading-snug">
+                    <CmsText slug="admission-price-row3-label" fallback={language === 'en' ? "Assigned personal mentor" : "Tildelt personlig mentor"} />
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-1 rounded-full font-bold text-xs whitespace-nowrap shrink-0">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <CmsText slug="admission-price-row3-val" fallback={language === 'en' ? "Included" : "Inkludert"} />
+                  </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span><CmsText slug="admission-price-row4-label" fallback={language === 'en' ? "Digital Study Platform & Lectures" : "Digital studieportal & forelesninger"} /></span>
-                  <span className="text-green-600 font-bold"><CmsText slug="admission-price-row4-val" fallback={language === 'en' ? "Included" : "Inkludert"} /></span>
+
+                <div className="flex items-center justify-between gap-3 px-3.5 py-3 text-xs sm:text-sm">
+                  <span className="text-slate-700 font-medium leading-snug">
+                    <CmsText slug="admission-price-row4-label" fallback={language === 'en' ? "Digital Study Platform & Lectures" : "Digital studieportal & forelesninger"} />
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-1 rounded-full font-bold text-xs whitespace-nowrap shrink-0">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <CmsText slug="admission-price-row4-val" fallback={language === 'en' ? "Included" : "Inkludert"} />
+                  </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span><CmsText slug="admission-price-row5-label" fallback={language === 'en' ? "Spouse Partner Discount" : "Ektefelle/Familierabatt"} /></span>
-                  <span className="text-[#b58c38] font-bold"><CmsText slug="admission-price-row5-val" fallback="-25%" /></span>
+
+                <div className="flex items-center justify-between gap-3 px-3.5 py-3 text-xs sm:text-sm">
+                  <span className="text-slate-700 font-medium leading-snug">
+                    <CmsText slug="admission-price-row5-label" fallback={language === 'en' ? "Spouse / Family Discount" : "Ektefelle/familierabatt"} />
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-amber-700 bg-amber-50 border border-amber-200/60 px-2.5 py-1 rounded-full font-bold text-xs whitespace-nowrap shrink-0">
+                    <CmsText slug="admission-price-row5-val" fallback="-25%" />
+                  </span>
                 </div>
               </div>
             </div>
