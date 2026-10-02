@@ -344,24 +344,26 @@ export default function AdmissionPage() {
         <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-white/5 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-primary-container/10 blur-3xl pointer-events-none" />
 
-        <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-on-primary-container font-semibold text-[10px] sm:text-xs uppercase tracking-widest border border-white/20">
-            <Award size={13} className="text-secondary-fixed-dim" />
-            <CmsText slug="admission-hero-tagline" fallback={language === 'en' ? "Application Period: January 1 – June 30, 2027" : "Søkeperiode: 1. januar – 30. juni 2027"} />
-          </span>
+        <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6 sm:space-y-8">
+          <div className="inline-block">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 text-on-primary-container font-semibold text-[10px] sm:text-xs uppercase tracking-widest border border-white/20 shadow-sm">
+              <Award size={13} className="text-secondary-fixed-dim" />
+              <CmsText slug="admission-hero-tagline" fallback={language === 'en' ? "Application Period: January 1 – June 30, 2027" : "Søkeperiode: 1. januar – 30. juni 2027"} />
+            </span>
+          </div>
 
           <CmsText 
             slug="admission-hero-title" 
             fallback={language === 'en' ? "Be Equipped for Your God-Given Ministry" : "Bli utrustet til din gudgitte tjeneste"} 
             as="h1"
-            className="font-serif text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight max-w-2xl mx-auto text-white"
+            className="font-serif text-3xl sm:text-5xl font-extrabold leading-snug sm:leading-[1.25] tracking-normal max-w-3xl mx-auto text-white"
           />
 
           <CmsText 
             slug="admission-hero-subtitle" 
             fallback={language === 'en' ? "Application period: January 1 – June 30, 2027. On-site kickoff in Norway August 27, 2027. All teaching is conducted in English." : "Søkeperioden er fra 1. januar til 30. juni 2027, med on-site kickoff i Norge 27. august 2027. All undervisning foregår på engelsk."} 
             as="p"
-            className="text-xs sm:text-sm text-[#e0aaff] font-semibold max-w-xl mx-auto leading-relaxed"
+            className="text-xs sm:text-sm text-[#e0aaff] font-semibold max-w-xl mx-auto leading-relaxed pt-1"
           />
 
           <div className="pt-4">
