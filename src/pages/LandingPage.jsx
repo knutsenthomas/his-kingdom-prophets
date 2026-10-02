@@ -182,7 +182,7 @@ export default function LandingPage() {
           </motion.div>
           <motion.div variants={fadeInUp}>
             <small>{language === 'no' ? 'Kickoff i Norge' : 'Kickoff in Norway'}</small>
-            <strong>{language === 'no' ? '27. august 2027' : 'August 27, 2027'}</strong>
+            <strong>{language === 'no' ? '20.–22. august 2027' : 'August 20–22, 2027'}</strong>
           </motion.div>
           <motion.div variants={fadeInUp}>
             <small>{language === 'no' ? 'Undervisning' : 'Instruction'}</small>
@@ -608,8 +608,8 @@ export default function LandingPage() {
                 <b>{language === 'no' ? 'Opptak til skoleåret 2027' : 'Admissions for Academic Year 2027'}</b>
                 <span>
                   {language === 'no'
-                    ? 'Søknadsperiode 1. januar – 30. juni · Kickoff 27. august'
-                    : 'Application period Jan 1 – June 30 · Kickoff August 27'}
+                    ? 'Søknadsperiode 1. januar – 30. juni · Kickoff 20.–22. august · Min. 18 år'
+                    : 'Application period Jan 1 – June 30 · Kickoff August 20–22 · Min. 18 yrs'}
                 </span>
               </div>
               <motion.button 
@@ -628,8 +628,8 @@ export default function LandingPage() {
               </summary>
               <p>
                 {language === 'no'
-                  ? 'Førsteår: 10 000 kr for fullt år, pluss 500 kr i oppstart/administrasjon og 500 kr for kickoff kost/losji. Andreår starter i 2028 og krever fullført førsteår og ny søknad. Undervisningen foregår på engelsk.'
-                  : 'First year: 10,000 NOK for full academic year, plus 500 NOK in administration/registration and 500 NOK for kickoff meals and lodging. Second year begins in 2028 and requires completed first year and separate application. All instruction is in English.'}
+                  ? 'Opptakskrav: Du må være fylt 18 år. Førsteår: 10 000 kr for fullt år, pluss 500 kr i oppstart/administrasjon og 500 kr for kickoff kost/losji. Andreår starter i 2028 og krever fullført førsteår og ny søknad. Undervisningen foregår på engelsk.'
+                  : 'Admission requirement: You must be at least 18 years old. First year: 10,000 NOK for full academic year, plus 500 NOK in administration/registration and 500 NOK for kickoff meals and lodging. Second year begins in 2028 and requires completed first year and separate application. All instruction is in English.'}
               </p>
             </details>
           </div>

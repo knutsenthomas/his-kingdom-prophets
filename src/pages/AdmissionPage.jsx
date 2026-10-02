@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, BookOpen, CreditCard, ChevronRight, Check, 
   HelpCircle, ArrowLeft, ArrowRight, Send, Award, Calendar, FileText, CheckCircle2, Globe, Lock, GraduationCap,
-  User, Mail, Phone, MapPin, Heart, Church, Save, RotateCcw, Clock, Bell
+  User, Mail, Phone, MapPin, Heart, Church, Save, RotateCcw, Clock, Bell, AlertTriangle
 } from 'lucide-react';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
@@ -16,6 +16,35 @@ const DRAFT_STEP_KEY = 'hkpc_application_draft_step';
 
 // Admission period officially opens January 1, 2027 00:00:00
 const ADMISSION_OPEN_DATE = new Date('2027-01-01T00:00:00');
+
+// Helper to calculate applicant age in whole years without timezone shift
+const calculateAge = (birthDateString) => {
+  if (!birthDateString) return 0;
+  const parts = birthDateString.split('-');
+  if (parts.length !== 3) return 0;
+  const birthYear = parseInt(parts[0], 10);
+  const birthMonth = parseInt(parts[1], 10) - 1;
+  const birthDay = parseInt(parts[2], 10);
+  if (isNaN(birthYear) || isNaN(birthMonth) || isNaN(birthDay)) return 0;
+
+  const today = new Date();
+  let age = today.getFullYear() - birthYear;
+  const monthDiff = today.getMonth() - birthMonth;
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDay)) {
+    age--;
+  }
+  return age;
+};
+
+// Returns YYYY-MM-DD for exactly 18 years ago from today
+const getEighteenYearsAgoDateString = () => {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - 18);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
 export default function AdmissionPage() {
   const navigate = useNavigate();
@@ -271,6 +300,15 @@ export default function AdmissionPage() {
       showToast(language === 'en' ? "Please enter birth date." : "Vennligst fyll inn fødselsdato.", "error");
       return false;
     }
+    if (calculateAge(formData.birthDate) < 18) {
+      showToast(
+        language === 'en' 
+          ? "You must be at least 18 years old to apply as a student." 
+          : "Du må være minst 18 år for å søke elevplass ved skolen.", 
+        "error"
+      );
+      return false;
+    }
     if (!formData.email.trim() || !formData.email.includes('@')) {
       showToast(language === 'en' ? "Please enter a valid email address." : "Vennligst fyll inn en gyldig e-postadresse.", "error");
       return false;
@@ -465,7 +503,7 @@ export default function AdmissionPage() {
                   <h3 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 6px; margin-top: 24px;">2. Studielinje & rammer</h3>
                   <p style="margin: 6px 0; font-size: 14px;"><strong>Valgt linje:</strong> ${prog.title} (${prog.code})</p>
                   <p style="margin: 6px 0; font-size: 14px;"><strong>Betalingsordning:</strong> ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}</p>
-                  <p style="margin: 6px 0; font-size: 14px;"><strong>Språk & kickoff:</strong> Godtatt (Engelsk undervisning + Kickoff 27. aug 2027 i Norge)</p>
+                  <p style="margin: 6px 0; font-size: 14px;"><strong>Språk & kickoff:</strong> Godtatt (Engelsk undervisning + Kickoff 20.–22. aug 2027 i Norge)</p>
 
                   <h3 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 6px; margin-top: 24px;">3. Åndelig bakgrunn & kall</h3>
                   <div style="font-size: 14px; line-height: 1.6;">
@@ -539,14 +577,15 @@ export default function AdmissionPage() {
       id: "prophetic_community",
       code: "TRACK 1 (YEAR 1)",
       title: "His Kingdom Prophetic Community",
-      duration: language === 'en' ? "1 Year • English • On-site Kickoff Aug 27" : "1 År • Engelsk • Kickoff i Norge 27. aug",
+      duration: language === 'en' ? "1 Year • English • On-site Kickoff Aug 20–22" : "1 År • Engelsk • Kickoff i Norge 20.–22. aug",
       credits: "1. År / Year 1",
       priceSemester: language === 'en' ? "$500 USD" : "5 000,-",
       priceYear: language === 'en' ? "$1,000 USD" : "10 000,-",
       isLocked: false,
       features: language === 'en' ? [
+        "Age requirement: Minimum 18 years old",
         "All instruction & teaching conducted in English",
-        "On-site kickoff gathering in Norway August 27, 2027",
+        "On-site kickoff gathering in Norway August 20–22, 2027",
         "Tuition: $500 USD / semester ($1,000 USD full year)",
         "Admin startup fee: $50 USD",
         "Kickoff room & board: $50 USD (own hotel not covered)",
@@ -554,8 +593,9 @@ export default function AdmissionPage() {
         "Prophecy 101, How to Hear God, Gift vs Office",
         "Join year after year (different subjects yearly)"
       ] : [
+        "Opptakskrav: Du må være fylt 18 år",
         "All undervisning og veiledning foregår på engelsk",
-        "On-site kickoff-samling i Norge 27. august 2027",
+        "On-site kickoff-samling i Norge 20.–22. august 2027",
         "Studieavgift: 5 000,- per semester (10 000,- fullt år)",
         "Admin oppstartsgebyr: 500,-",
         "Kost og losji for kickoff-helgen: 500,- (egenvalgt hotell dekkes ikke)",
@@ -620,7 +660,7 @@ export default function AdmissionPage() {
 
           <CmsText 
             slug="admission-hero-subtitle" 
-            fallback={language === 'en' ? "Application period: January 1 – June 30, 2027. On-site kickoff in Norway August 27, 2027. All teaching is conducted in English." : "Søkeperioden er fra 1. januar til 30. juni 2027, med on-site kickoff i Norge 27. august 2027. All undervisning foregår på engelsk."} 
+            fallback={language === 'en' ? "Application period: January 1 – June 30, 2027. On-site kickoff in Norway August 20–22, 2027. All teaching is conducted in English." : "Søkeperioden er fra 1. januar til 30. juni 2027, med on-site kickoff i Norge 20.–22. august 2027. All undervisning foregår på engelsk."} 
             as="p"
             className="text-base sm:text-lg text-[#E5DDED] font-medium max-w-2xl mx-auto leading-relaxed pt-1"
           />
@@ -1057,8 +1097,8 @@ export default function AdmissionPage() {
                     <Sparkles size={14} className="text-[#D7B978]" />
                     <span>{language === 'en' ? "Kickoff" : "Kickoff i Norge"}</span>
                   </div>
-                  <div className="font-bold text-[#561291] text-base">27. august 2027</div>
-                  <p className="text-xs text-slate-600 font-normal">{language === 'en' ? "On-site gathering" : "Fysisk samling"}</p>
+                  <div className="font-bold text-[#561291] text-base">{language === 'en' ? "August 20–22, 2027" : "20.–22. august 2027"}</div>
+                  <p className="text-xs text-slate-600 font-normal">{language === 'en' ? "On-site weekend gathering" : "Fysisk helgesamling"}</p>
                 </div>
               </div>
 
@@ -1331,21 +1371,40 @@ export default function AdmissionPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {/* Birth Date */}
                         <div className="space-y-1.5">
-                          <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
-                            {language === 'en' ? "Date of Birth *" : "Fødselsdato *"}
+                          <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 flex items-center justify-between">
+                            <span>{language === 'en' ? "Date of Birth *" : "Fødselsdato *"}</span>
+                            <span className="text-[11px] font-semibold text-[#561291] bg-[#561291]/10 px-2 py-0.5 rounded-md normal-case">
+                              {language === 'en' ? "Min. 18 years old" : "Min. 18 år"}
+                            </span>
                           </label>
                           <input
                             type="date"
                             name="birthDate"
                             required
+                            max={getEighteenYearsAgoDateString()}
                             lang={language === 'en' ? "en-US" : "no"}
                             value={formData.birthDate}
                             onChange={handleInputChange}
-                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
+                            className={`w-full px-4 py-3 bg-slate-50 border ${
+                              formData.birthDate && calculateAge(formData.birthDate) < 18
+                                ? "border-red-400 focus:border-red-500 focus:ring-red-200"
+                                : "border-slate-200 focus:border-[#561291]/60 focus:ring-[#561291]/15"
+                            } focus:ring-2 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all`}
                           />
-                          <p className="text-[11px] text-slate-500 font-normal">
-                            {language === 'en' ? "Format: MM/DD/YYYY (or pick from calendar)" : "Format: DD.MM.ÅÅÅÅ (eller velg i kalenderen)"}
-                          </p>
+                          {formData.birthDate && calculateAge(formData.birthDate) < 18 ? (
+                            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
+                              <AlertTriangle size={15} className="shrink-0 text-red-600" />
+                              <span>
+                                {language === 'en'
+                                  ? `You must be at least 18 years old to apply (current age: ${calculateAge(formData.birthDate)}).`
+                                  : `Du må være minst 18 år for å søke elevplass ved skolen (oppgitt alder: ${calculateAge(formData.birthDate)} år).`}
+                              </span>
+                            </div>
+                          ) : (
+                            <p className="text-[11px] text-slate-500 font-normal">
+                              {language === 'en' ? "Format: MM/DD/YYYY (or pick from calendar)" : "Format: DD.MM.ÅÅÅÅ (eller velg i kalenderen)"}
+                            </p>
+                          )}
                         </div>
 
                         {/* Email */}
@@ -1593,8 +1652,8 @@ export default function AdmissionPage() {
                               {language === 'en' ? "Instruction Language & Kickoff Gathering Agreement *" : "Bekreftelse på undervisningsspråk & kickoff-samling *"}
                             </span>
                             {language === 'en'
-                              ? "I confirm that I understand all instruction and materials are conducted in English, with an on-site kickoff gathering in Norway on August 27, 2027."
-                              : "Jeg bekrefter at jeg er innforstått med at all undervisning foregår på engelsk via nett, med en obligatorisk/anbefalt kickoff-samling i Norge 27. august 2027."}
+                              ? "I confirm that I understand all instruction and materials are conducted in English, with an on-site kickoff gathering in Norway on August 20–22, 2027."
+                              : "Jeg bekrefter at jeg er innforstått med at all undervisning foregår på engelsk via nett, med en obligatorisk/anbefalt kickoff-samling i Norge 20.–22. august 2027."}
                           </div>
                         </label>
                       </div>
@@ -2059,7 +2118,7 @@ export default function AdmissionPage() {
                     </div>
                     <div>
                       <span className="text-slate-500 text-xs uppercase font-bold block">{language === 'en' ? "Kickoff" : "Kickoff"}</span>
-                      <span className="font-bold text-[#561291]">27. aug 2027 (Norge)</span>
+                      <span className="font-bold text-[#561291]">{language === 'en' ? "Aug 20–22, 2027 (Norway)" : "20.–22. aug 2027 (Norge)"}</span>
                     </div>
                   </div>
                 </div>
