@@ -1545,6 +1545,10 @@ export const AppProvider = ({ children }) => {
     });
   };
 
+  useEffect(() => {
+    document.documentElement.lang = language === 'en' ? 'en' : 'no';
+  }, [language]);
+
   // Firestore Realtime / Seed subscriptions
   useEffect(() => {
     const fetchCmsContent = async () => {

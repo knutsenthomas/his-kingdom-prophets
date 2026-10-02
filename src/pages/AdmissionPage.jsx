@@ -947,10 +947,14 @@ export default function AdmissionPage() {
                             type="date"
                             name="birthDate"
                             required
+                            lang={language === 'en' ? "en-US" : "no"}
                             value={formData.birthDate}
                             onChange={handleInputChange}
                             className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
                           />
+                          <p className="text-[11px] text-slate-500 font-normal">
+                            {language === 'en' ? "Format: MM/DD/YYYY (or pick from calendar)" : "Format: DD.MM.ÅÅÅÅ (eller velg i kalenderen)"}
+                          </p>
                         </div>
 
                         {/* Email */}
