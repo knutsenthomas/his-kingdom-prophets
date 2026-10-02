@@ -124,14 +124,12 @@ export default function LandingPage() {
                 {language === 'no' ? (
                   <>
                     Nærmere Jesus.<br />
-                    Tryggere i<br />
-                    <em>ditt kall.</em>
+                    Tryggere i ditt kall.
                   </>
                 ) : (
                   <>
                     Closer to Jesus.<br />
-                    Confident in<br />
-                    <em>your calling.</em>
+                    Confident in your calling.
                   </>
                 )}
               </h1>
