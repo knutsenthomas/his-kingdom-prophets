@@ -123,7 +123,7 @@ export default function TermsOfServicePage() {
                 <CmsText slug="terms-sec3-title" fallback={isEn ? '3. Intellectuel Property' : '3. Opphavsrett og Åndsverk'} />
               </h2>
               <p>
-                <CmsText slug="terms-sec3-desc" fallback={isEn ? 'All study guides, weighted grading structures, courses, and portal code interfaces are unique creations and remain proprietary intellectual properties of Mandal Regnskapskontor & His Kingdom Prophets.' : 'Alt undervisningsmateriell, kursinnhold, det vektede karaktersystemet og plattformens kildekode er beskyttede åndsverk og tilhører Mandal Regnskapskontor & His Kingdom Prophets.'} />
+                <CmsText slug="terms-sec3-desc" fallback={isEn ? 'All study guides, weighted grading structures, courses, and portal code interfaces are unique creations and remain proprietary intellectual properties of His Kingdom Ministry & His Kingdom Prophets.' : 'Alt undervisningsmateriell, kursinnhold, det vektede karaktersystemet og plattformens kildekode er beskyttede åndsverk og tilhører His Kingdom Ministry & His Kingdom Prophets.'} />
               </p>
             </section>
 

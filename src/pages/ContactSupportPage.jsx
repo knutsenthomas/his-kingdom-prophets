@@ -122,34 +122,17 @@ export default function ContactSupportPage() {
 
               <div className="flex items-start gap-4 p-4 bg-white rounded-xl border border-slate-200/50 shadow-sm">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                  <Phone size={18} />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-primary uppercase tracking-wide">
-                    <CmsText slug="support-phone-title" fallback={isEn ? 'Mentor Hotline' : 'Mentor kriselinje'} />
-                  </h4>
-                  <p className="text-xs font-semibold text-slate-700 mt-1">
-                    <CmsText slug="support-phone-number" fallback="+47 38 26 80 00" />
-                  </p>
-                  <p className="text-[10px] font-medium text-slate-400 mt-0.5">
-                    <CmsText slug="support-phone-time" fallback={isEn ? 'Mon - Fri, 09:00 - 15:00 CET' : 'Man - Fre, 09:00 - 15:00'} />
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4 p-4 bg-white rounded-xl border border-slate-200/50 shadow-sm">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
                   <MapPin size={18} />
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-primary uppercase tracking-wide">
-                    <CmsText slug="support-office-title" fallback={isEn ? 'Administration Office' : 'Administrasjon'} />
+                    <CmsText slug="support-office-title" fallback={isEn ? 'Organization' : 'Organisasjon'} />
                   </h4>
                   <p className="text-xs font-semibold text-slate-700 mt-1">
-                    <CmsText slug="support-office-location" fallback="Mandal, Norge" />
+                    <CmsText slug="support-office-name" fallback="His Kingdom Ministry" />
                   </p>
                   <p className="text-[10px] font-medium text-slate-400 mt-0.5">
-                    <CmsText slug="support-office-desc" fallback={isEn ? 'Mandal Regnskapskontor Building' : 'Mandal Regnskapskontor bygget'} />
+                    <CmsText slug="support-office-location" fallback="Norge" />
                   </p>
                 </div>
               </div>

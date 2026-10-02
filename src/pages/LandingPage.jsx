@@ -473,6 +473,10 @@ export default function LandingPage() {
                   <Check size={14} className="text-green-600 shrink-0" />
                   <span><CmsText slug="landing-track1-check2" fallback={language === 'no' ? "Basisfag: Profeti 101, Å høre Guds stemme, Gave vs Tjeneste" : "Fundamentals: Prophecy 101, Hearing God, Gift vs Office"} /></span>
                 </div>
+                <div className="flex items-center gap-2">
+                  <Check size={14} className="text-green-600 shrink-0" />
+                  <span><CmsText slug="landing-track1-check3" fallback={language === 'no' ? "Studieavgift: 5 000,- / sem. (10 000,- fullt år) + 500,- oppstart/admin & 500,- kickoff kost/losji" : "Tuition: NOK 5,000 / sem. (NOK 10,000 full year) + NOK 500 admin & NOK 500 kickoff room/board"} /></span>
+                </div>
               </div>
             </div>
 
