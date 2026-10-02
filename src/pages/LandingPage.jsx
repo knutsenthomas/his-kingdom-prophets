@@ -317,21 +317,15 @@ export default function LandingPage() {
       </AnimatePresence>
 
       <main>
-        {/* Modern Hero Section - Inspired by student community & organic wave aesthetic */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-[#3c096c] via-[#4a0e78] to-[#240046] text-white">
-          {/* Ambient background glows */}
-          <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-secondary/20 blur-3xl pointer-events-none" />
-          <div className="absolute top-1/2 right-0 w-96 h-96 rounded-full bg-[#c5a059]/15 blur-3xl pointer-events-none" />
-
-          {/* Mobile Top Image with Organic Wave Divider (shows on screens < lg) */}
-          <div className="lg:hidden relative w-full h-72 sm:h-96 overflow-hidden">
+        {/* Modern Authentic Hero Section */}
+        <section className="relative overflow-hidden bg-[#3c096c] text-white">
+          {/* Mobile Top Image with Organic Wave Divider (screens < lg) */}
+          <div className="lg:hidden relative w-full h-72 sm:h-96 overflow-hidden bg-slate-900">
             <img 
               src="/img/hero-students.jpg" 
               alt="Prophetic Community Students Studying" 
-              className="w-full h-full object-cover object-top"
+              className="w-full h-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#3c096c] via-transparent to-black/20" />
-            
             {/* Organic Wave Transition into purple content */}
             <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
               <svg 
@@ -344,14 +338,14 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="relative z-10 max-w-[1440px] mx-auto px-5 sm:px-8 md:px-12 py-10 sm:py-16 lg:py-24">
+          <div className="relative z-10 max-w-[1440px] mx-auto px-5 sm:px-8 md:px-12 py-10 sm:py-16 lg:py-20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               
-              {/* Left Column: Modern Punchy Copy, Badges & CTA */}
-              <div className="lg:col-span-7 space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-left-6 duration-700">
+              {/* Left Column: Direct, Grounded & Authentic Copy */}
+              <div className="lg:col-span-7 space-y-6 sm:space-y-8 animate-in fade-in duration-500">
                 
                 {/* Tagline / Registration period badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#e0aaff] font-bold text-xs sm:text-sm uppercase tracking-wider shadow-sm">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-[#e0aaff] font-bold text-xs sm:text-sm uppercase tracking-wider">
                   <Award size={16} className="text-[#c5a059]" />
                   <CmsText 
                     slug="landing-hero-tagline" 
@@ -370,7 +364,7 @@ export default function LandingPage() {
                   className="font-sans text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.12] tracking-tight" 
                 />
 
-                {/* Subtitle / Value Proposition */}
+                {/* Subtitle */}
                 <CmsText 
                   slug="landing-hero-bold-description" 
                   fallback={language === 'no'
@@ -381,25 +375,25 @@ export default function LandingPage() {
                   className="font-sans text-base sm:text-lg text-purple-100/90 max-w-2xl leading-relaxed font-normal" 
                 />
 
-                {/* Highlight Info Section - Inspired directly by user reference */}
+                {/* Information Row */}
                 <div className="pt-2 pb-2 grid grid-cols-1 sm:grid-cols-2 gap-4 border-y border-white/15">
                   <div className="space-y-1">
-                    <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight block">
+                    <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight block font-sans">
                       {language === 'no' ? "Alle er velkomne" : "All Are Welcome"}
                     </span>
-                    <span className="text-sm text-purple-200 block">
+                    <span className="text-sm text-purple-200 block font-sans">
                       {language === 'no' ? "For alle som lengter etter dypere fellesskap og utrustning" : "For everyone longing for deeper fellowship and equipping"}
                     </span>
                   </div>
 
                   <div className="space-y-1 sm:border-l sm:border-white/15 sm:pl-4">
-                    <span className="text-xs uppercase font-bold tracking-wider text-[#e0aaff] block">
+                    <span className="text-xs uppercase font-bold tracking-wider text-[#e0aaff] block font-sans">
                       {language === 'no' ? "Søknadsperiode & Oppstart:" : "Registration & Kickoff:"}
                     </span>
-                    <span className="text-base sm:text-lg font-bold text-white block">
+                    <span className="text-base sm:text-lg font-bold text-white block font-sans">
                       {language === 'no' ? "1. jan – 30. juni 2027" : "01 january – 30 june, 2027"}
                     </span>
-                    <span className="text-xs text-purple-200 block">
+                    <span className="text-xs text-purple-200 block font-sans">
                       {language === 'no' ? "On-site kickoff i Norge: 27. august 2027" : "On-site kickoff in Norway: August 27, 2027"}
                     </span>
                   </div>
@@ -409,7 +403,7 @@ export default function LandingPage() {
                 <div className="flex flex-col sm:flex-row gap-4 pt-2">
                   <button 
                     onClick={() => navigate('/admission')} 
-                    className="px-8 py-4 bg-[#c5a059] hover:bg-[#b08e4f] text-white font-extrabold rounded-xl transition-all shadow-xl hover:scale-[1.02] active:scale-[0.98] text-base font-sans inline-flex items-center justify-center gap-2"
+                    className="px-8 py-4 bg-[#c5a059] hover:bg-[#b08e4f] text-white font-extrabold rounded-xl transition-all shadow-lg active:scale-[0.98] text-base font-sans inline-flex items-center justify-center gap-2"
                   >
                     <CmsText slug="landing-hero-cta-primary" fallback={language === 'no' ? "Søk Studieplass Nå" : "Apply Now"} />
                     <ArrowRight size={18} />
@@ -424,57 +418,28 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Right Column: Desktop Organic Visual with White Arc Curve (from reference) */}
+              {/* Right Column: Natural Real Photo (Desktop) */}
               <div className="hidden lg:block lg:col-span-5 relative">
                 <div className="relative mx-auto max-w-md xl:max-w-lg">
-                  {/* Organic Wave Photo Card */}
-                  <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 aspect-[4/5] bg-primary-container">
+                  {/* Clean Real Photo Frame */}
+                  <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 aspect-[4/3] sm:aspect-[16/11]">
                     <img 
                       src="/img/hero-students.jpg" 
                       alt="His Kingdom Prophetic Community Students" 
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-center"
                     />
-                    
-                    {/* Organic purple wave overlay at bottom of the card */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#3c096c]/90 via-transparent to-black/10 pointer-events-none" />
-                    
-                    {/* Wave shape overlay at the bottom */}
-                    <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
-                      <svg 
-                        viewBox="0 0 500 150" 
-                        preserveAspectRatio="none" 
-                        className="w-full h-24 text-[#3c096c] fill-current opacity-95"
-                      >
-                        <path d="M0,40 C150,90 350,0 500,50 L500,150 L0,150 Z"></path>
-                      </svg>
-                    </div>
-
-                    {/* Floating badge inside photo */}
-                    <div className="absolute top-5 right-5 z-20 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md shadow-lg text-[#3c096c] text-xs font-extrabold uppercase tracking-wider border border-white flex items-center gap-1.5">
-                      <Sparkles size={14} className="text-[#c5a059]" />
-                      <span>{language === 'no' ? "100% Nettbasert" : "100% Online"}</span>
-                    </div>
-
-                    <div className="absolute bottom-5 left-6 right-6 z-20 text-white">
-                      <p className="font-extrabold text-lg text-white">
-                        {language === 'no' ? "Gudsfrykt • Åpenbaring • Utrustning" : "Godly Wisdom • Revelation • Equipping"}
-                      </p>
-                      <p className="text-xs text-purple-200 mt-0.5">
-                        {language === 'no' ? "Ukentlige Zoom-kvelder og personlig veiledning" : "Weekly Zoom sessions & personal mentorship"}
-                      </p>
-                    </div>
                   </div>
 
-                  {/* Geometric White Arc accent in bottom-right corner (Directly from reference design) */}
-                  <div className="absolute -bottom-10 -right-10 w-44 h-44 rounded-full bg-white shadow-2xl pointer-events-none -z-10 border-8 border-[#3c096c]/20" />
-                  <div className="absolute -top-6 -left-6 w-24 h-24 rounded-full bg-[#c5a059]/20 blur-xl pointer-events-none -z-10" />
+                  {/* Clean geometric white arc accent from user's design */}
+                  <div className="absolute -bottom-8 -right-8 w-40 h-40 rounded-full bg-white shadow-xl pointer-events-none -z-10 border-4 border-[#3c096c]/20" />
                 </div>
               </div>
+
             </div>
           </div>
 
-          {/* Mobile geometric white arc accent from reference */}
-          <div className="lg:hidden absolute bottom-12 -right-12 w-36 h-36 rounded-full bg-white pointer-events-none z-0 opacity-95 shadow-xl border-4 border-[#3c096c]/20" />
+          {/* Mobile geometric white arc accent from user's design */}
+          <div className="lg:hidden absolute bottom-12 -right-12 w-32 h-32 rounded-full bg-white pointer-events-none z-0 opacity-95 shadow-lg border-4 border-[#3c096c]/20" />
 
           {/* Bottom Wave Divider into the next section */}
           <div className="relative w-full overflow-hidden leading-none z-10 -mb-1">
