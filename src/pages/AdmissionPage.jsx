@@ -5,11 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, BookOpen, CreditCard, ChevronRight, Check, 
   HelpCircle, ArrowLeft, ArrowRight, Send, Award, Calendar, FileText, CheckCircle2, Globe, Lock, GraduationCap,
-  User, Mail, Phone, MapPin, Heart, Church
+  User, Mail, Phone, MapPin, Heart, Church, Save, RotateCcw
 } from 'lucide-react';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+
+const DRAFT_KEY = 'hkpc_application_draft_v1';
+const DRAFT_STEP_KEY = 'hkpc_application_draft_step';
 
 export default function AdmissionPage() {
   const navigate = useNavigate();
@@ -19,6 +22,8 @@ export default function AdmissionPage() {
 
   // Multi-step Application Form States (4 steps)
   const [currentStep, setCurrentStep] = useState(1); // 1: Personalia, 2: Studielinje, 3: Åndelig bakgrunn, 4: Referanse
+  const [hasDraft, setHasDraft] = useState(false);
+  const [draftSavedAt, setDraftSavedAt] = useState(null);
   const [formData, setFormData] = useState({
     // Del 1: Personalia & kontaktinformasjon
     name: '',
@@ -60,6 +65,83 @@ export default function AdmissionPage() {
   const [paymentStep, setPaymentStep] = useState('form'); // 'form', 'payment', 'success'
   const [clientSecret, setClientSecret] = useState('');
   const [paymentError, setPaymentError] = useState('');
+
+  // 1. Auto-restore draft from localStorage on initial load
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(DRAFT_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setFormData(prev => ({ ...prev, ...parsed }));
+        setHasDraft(true);
+        setDraftSavedAt(new Date());
+
+        const savedStep = localStorage.getItem(DRAFT_STEP_KEY);
+        if (savedStep && !isNaN(parseInt(savedStep))) {
+          const stepNum = parseInt(savedStep);
+          if (stepNum >= 1 && stepNum <= 4) {
+            setCurrentStep(stepNum);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Klarte ikke gjenopprette kladd:", err);
+    }
+  }, []);
+
+  // Helper to persist draft
+  const saveDraft = (dataToSave, step = currentStep) => {
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(dataToSave));
+      localStorage.setItem(DRAFT_STEP_KEY, String(step));
+      setHasDraft(true);
+      setDraftSavedAt(new Date());
+    } catch (err) {
+      console.warn("Klarte ikke lagre kladd:", err);
+    }
+  };
+
+  // Helper to clear draft
+  const clearDraft = () => {
+    const confirmMsg = language === 'en' 
+      ? "Are you sure you want to clear your saved draft and start over?" 
+      : "Er du sikker på at du vil slette den lagrede kladden og starte på nytt?";
+    if (window.confirm(confirmMsg)) {
+      try {
+        localStorage.removeItem(DRAFT_KEY);
+        localStorage.removeItem(DRAFT_STEP_KEY);
+      } catch (e) {}
+      setFormData({
+        name: user?.name || '',
+        gender: '',
+        birthDate: '',
+        email: user?.email || '',
+        phone: user?.phone || '',
+        address: '',
+        maritalStatus: '',
+        occupation: '',
+        program: 'prophetic_community',
+        paymentPlan: 'semester',
+        languageAgreement: false,
+        confirmYear1: false,
+        whySeeking: '',
+        expectations: '',
+        howHeard: '',
+        testimony: '',
+        churchCommunity: '',
+        currentMinistry: '',
+        ministryCalling: '',
+        dreamsVision: '',
+        hobbies: '',
+        reference: '',
+        additionalNotes: ''
+      });
+      setCurrentStep(1);
+      setHasDraft(false);
+      setDraftSavedAt(null);
+      showToast(language === 'en' ? "Draft cleared." : "Kladden er slettet.");
+    }
+  };
 
   // Prepopulate form if logged in
   useEffect(() => {
@@ -105,12 +187,17 @@ export default function AdmissionPage() {
     }
   }, [user, language, showToast]);
 
+  const updateFieldValue = (field, val) => {
+    setFormData(prev => {
+      const updated = { ...prev, [field]: val };
+      saveDraft(updated, currentStep);
+      return updated;
+    });
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({ 
-      ...prev, 
-      [name]: type === 'checkbox' ? checked : value 
-    }));
+    updateFieldValue(name, type === 'checkbox' ? checked : value);
   };
 
   // Step Validation Helpers
@@ -219,7 +306,9 @@ export default function AdmissionPage() {
     if (currentStep === 2 && !validateStep2()) return;
     if (currentStep === 3 && !validateStep3()) return;
     
-    setCurrentStep(prev => Math.min(prev + 1, 4));
+    const nextStep = Math.min(currentStep + 1, 4);
+    setCurrentStep(nextStep);
+    saveDraft(formData, nextStep);
     const element = document.getElementById('apply-form');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -227,7 +316,9 @@ export default function AdmissionPage() {
   };
 
   const handlePrevStep = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
+    const prevStep = Math.max(currentStep - 1, 1);
+    setCurrentStep(prevStep);
+    saveDraft(formData, prevStep);
     const element = document.getElementById('apply-form');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -363,6 +454,14 @@ export default function AdmissionPage() {
           console.warn("Google Sheets webhook varsel:", sheetErr);
         }
       }
+
+      // Clear saved draft on successful submission
+      try {
+        localStorage.removeItem(DRAFT_KEY);
+        localStorage.removeItem(DRAFT_STEP_KEY);
+        setHasDraft(false);
+        setDraftSavedAt(null);
+      } catch (e) {}
 
       setPaymentStep('success');
       showToast(language === 'en' ? "Application submitted successfully!" : "Søknaden er sendt inn! Vi tar kontakt for en samtale.");
@@ -562,8 +661,9 @@ export default function AdmissionPage() {
                   <a 
                     href="#apply-form"
                     onClick={() => {
-                      setFormData(prev => ({ ...prev, program: prog.id }));
+                      updateFieldValue('program', prog.id);
                       setCurrentStep(2);
+                      saveDraft({ ...formData, program: prog.id }, 2);
                     }}
                     className="text-base font-bold text-[#561291] hover:text-[#3b0b66] flex items-center gap-1 font-sans transition-colors"
                   >
@@ -875,6 +975,33 @@ export default function AdmissionPage() {
                       </button>
                     ))}
                   </div>
+
+                  {/* Draft Auto-Saved Indicator & Reset Option */}
+                  {hasDraft && (
+                    <div className="flex flex-wrap items-center justify-between gap-2 p-3 px-4 bg-emerald-50/90 border border-emerald-200/80 rounded-2xl text-xs text-emerald-900 shadow-xs">
+                      <div className="flex items-center gap-2 font-medium">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span>
+                          {language === 'en' 
+                            ? "Draft auto-saved on this device" 
+                            : "Søknaden lagres automatisk på denne enheten"}
+                        </span>
+                        {draftSavedAt && (
+                          <span className="text-emerald-700/70 hidden sm:inline">
+                            • {language === 'en' ? "Last saved" : "Sist lagret"} {draftSavedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={clearDraft}
+                        className="inline-flex items-center gap-1.5 text-slate-500 hover:text-red-600 font-semibold transition-colors underline decoration-slate-300 underline-offset-2 hover:decoration-red-400"
+                      >
+                        <RotateCcw size={13} />
+                        <span>{language === 'en' ? "Clear & start over" : "Nullstill skjema"}</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* FORM CONTENT PER STEP */}
@@ -923,7 +1050,7 @@ export default function AdmissionPage() {
                               <button
                                 key={g}
                                 type="button"
-                                onClick={() => setFormData(prev => ({ ...prev, gender: g }))}
+                                onClick={() => updateFieldValue('gender', g)}
                                 className={`py-3 px-4 rounded-xl border text-sm sm:text-base font-bold transition-all duration-200 ${
                                   formData.gender === g
                                     ? 'bg-[#561291]/10 border-[#561291] text-[#561291]'
@@ -1034,7 +1161,7 @@ export default function AdmissionPage() {
                             <button
                               key={ms}
                               type="button"
-                              onClick={() => setFormData(prev => ({ ...prev, maritalStatus: ms }))}
+                              onClick={() => updateFieldValue('maritalStatus', ms)}
                               className={`py-2.5 px-2 rounded-xl border text-xs sm:text-sm font-bold transition-all duration-200 text-center ${
                                 formData.maritalStatus === ms
                                   ? 'bg-[#561291]/10 border-[#561291] text-[#561291]'
@@ -1047,12 +1174,24 @@ export default function AdmissionPage() {
                         </div>
                       </div>
 
-                      {/* Next Button */}
-                      <div className="pt-4 flex justify-end">
+                      {/* Navigation & Draft Buttons */}
+                      <div className="pt-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            saveDraft(formData, currentStep);
+                            showToast(language === 'en' ? "Draft saved! You can resume anytime." : "Kladd lagret! Du kan lukke siden og fortsette senere.");
+                          }}
+                          className="w-full sm:w-auto px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
+                        >
+                          <Save size={16} />
+                          <span>{language === 'en' ? "Save Draft & Continue Later" : "Lagre kladd & fortsett senere"}</span>
+                        </button>
+
                         <button
                           type="button"
                           onClick={handleNextStep}
-                          className="px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
+                          className="w-full sm:w-auto px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
                         >
                           <span>{language === 'en' ? "Next: Study Line & Payment" : "Neste: Studielinje & betaling"}</span>
                           <ArrowRight size={18} />
@@ -1223,20 +1362,33 @@ export default function AdmissionPage() {
                         </div>
                       )}
 
-                      {/* Navigation Buttons */}
-                      <div className="pt-4 flex justify-between gap-3">
-                        <button
-                          type="button"
-                          onClick={handlePrevStep}
-                          className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center gap-2"
-                        >
-                          <ArrowLeft size={18} />
-                          <span>{language === 'en' ? "Back" : "Tilbake"}</span>
-                        </button>
+                      {/* Navigation & Draft Buttons */}
+                      <div className="pt-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <div className="flex items-center gap-2 w-full sm:w-auto">
+                          <button
+                            type="button"
+                            onClick={handlePrevStep}
+                            className="flex-1 sm:flex-initial px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
+                          >
+                            <ArrowLeft size={18} />
+                            <span>{language === 'en' ? "Back" : "Tilbake"}</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              saveDraft(formData, currentStep);
+                              showToast(language === 'en' ? "Draft saved! You can resume anytime." : "Kladd lagret! Du kan lukke siden og fortsette senere.");
+                            }}
+                            className="flex-1 sm:flex-initial px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
+                          >
+                            <Save size={16} />
+                            <span>{language === 'en' ? "Save Draft" : "Lagre kladd"}</span>
+                          </button>
+                        </div>
                         <button
                           type="button"
                           onClick={handleNextStep}
-                          className="px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
+                          className="w-full sm:w-auto px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
                         >
                           <span>{language === 'en' ? "Next: Spiritual Background" : "Neste: Åndelig bakgrunn"}</span>
                           <ArrowRight size={18} />
@@ -1417,20 +1569,33 @@ export default function AdmissionPage() {
                         />
                       </div>
 
-                      {/* Navigation Buttons */}
-                      <div className="pt-4 flex justify-between gap-3">
-                        <button
-                          type="button"
-                          onClick={handlePrevStep}
-                          className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center gap-2"
-                        >
-                          <ArrowLeft size={18} />
-                          <span>{language === 'en' ? "Back" : "Tilbake"}</span>
-                        </button>
+                      {/* Navigation & Draft Buttons */}
+                      <div className="pt-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <div className="flex items-center gap-2 w-full sm:w-auto">
+                          <button
+                            type="button"
+                            onClick={handlePrevStep}
+                            className="flex-1 sm:flex-initial px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
+                          >
+                            <ArrowLeft size={18} />
+                            <span>{language === 'en' ? "Back" : "Tilbake"}</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              saveDraft(formData, currentStep);
+                              showToast(language === 'en' ? "Draft saved! You can resume anytime." : "Kladd lagret! Du kan lukke siden og fortsette senere.");
+                            }}
+                            className="flex-1 sm:flex-initial px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
+                          >
+                            <Save size={16} />
+                            <span>{language === 'en' ? "Save Draft" : "Lagre kladd"}</span>
+                          </button>
+                        </div>
                         <button
                           type="button"
                           onClick={handleNextStep}
-                          className="px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
+                          className="w-full sm:w-auto px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
                         >
                           <span>{language === 'en' ? "Next: Reference & Final Review" : "Neste: Referanse & fullfør"}</span>
                           <ArrowRight size={18} />
@@ -1527,20 +1692,33 @@ export default function AdmissionPage() {
                       </div>
 
                       {/* Navigation & Submit Buttons */}
-                      <div className="pt-4 flex flex-col sm:flex-row justify-between gap-3">
-                        <button
-                          type="button"
-                          onClick={handlePrevStep}
-                          className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
-                        >
-                          <ArrowLeft size={18} />
-                          <span>{language === 'en' ? "Back" : "Tilbake"}</span>
-                        </button>
+                      <div className="pt-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <div className="flex items-center gap-2 w-full sm:w-auto">
+                          <button
+                            type="button"
+                            onClick={handlePrevStep}
+                            className="flex-1 sm:flex-initial px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
+                          >
+                            <ArrowLeft size={18} />
+                            <span>{language === 'en' ? "Back" : "Tilbake"}</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              saveDraft(formData, currentStep);
+                              showToast(language === 'en' ? "Draft saved! You can resume anytime." : "Kladd lagret! Du kan lukke siden og fortsette senere.");
+                            }}
+                            className="flex-1 sm:flex-initial px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
+                          >
+                            <Save size={16} />
+                            <span>{language === 'en' ? "Save Draft" : "Lagre kladd"}</span>
+                          </button>
+                        </div>
                         
                         <button
                           type="submit"
                           disabled={isSubmitting}
-                          className="px-10 py-4 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base font-sans uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2.5 disabled:opacity-50"
+                          className="w-full sm:w-auto px-10 py-4 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base font-sans uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2.5 disabled:opacity-50"
                         >
                           {isSubmitting ? (
                             <>
