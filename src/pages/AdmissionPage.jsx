@@ -367,8 +367,8 @@ export default function AdmissionPage() {
 
         <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6 sm:space-y-8">
           <div className="inline-block">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 text-on-primary-container font-semibold text-[10px] sm:text-xs uppercase tracking-widest border border-white/20 shadow-sm">
-              <Award size={13} className="text-secondary-fixed-dim" />
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 text-on-primary-container font-semibold text-xs sm:text-sm uppercase tracking-widest border border-white/20 shadow-sm">
+              <Award size={15} className="text-secondary-fixed-dim" />
               <CmsText slug="admission-hero-tagline" fallback={language === 'en' ? "Application Period: January 1 – June 30, 2027" : "Søkeperiode: 1. januar – 30. juni 2027"} />
             </span>
           </div>
@@ -384,16 +384,16 @@ export default function AdmissionPage() {
             slug="admission-hero-subtitle" 
             fallback={language === 'en' ? "Application period: January 1 – June 30, 2027. On-site kickoff in Norway August 27, 2027. All teaching is conducted in English." : "Søkeperioden er fra 1. januar til 30. juni 2027, med on-site kickoff i Norge 27. august 2027. All undervisning foregår på engelsk."} 
             as="p"
-            className="text-xs sm:text-sm text-[#e0aaff] font-semibold max-w-xl mx-auto leading-relaxed pt-1"
+            className="text-base sm:text-lg text-[#e0aaff] font-medium max-w-2xl mx-auto leading-relaxed pt-1"
           />
 
           <div className="pt-4">
             <a 
               href="#apply-form"
-              className="px-6 py-3 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-xs font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 inline-flex items-center gap-2"
+              className="px-8 py-3.5 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-sm sm:text-base font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 inline-flex items-center gap-2"
             >
               <span><CmsText slug="admission-hero-cta" fallback={language === 'en' ? "Apply Now" : "Send Søknad Nå"} /></span>
-              <ChevronRight size={14} />
+              <ChevronRight size={16} />
             </a>
           </div>
         </div>
@@ -409,13 +409,13 @@ export default function AdmissionPage() {
               slug="admission-programs-title" 
               fallback={language === 'en' ? "Our Study Lines and Courses" : "Våre Studielinjer og Fag"} 
               as="h2"
-              className="font-serif text-2xl font-bold text-primary"
+              className="font-serif text-2xl sm:text-3xl font-bold text-primary"
             />
             <CmsText 
               slug="admission-programs-subtitle" 
               fallback={language === 'en' ? "Each course consists of 8 step-by-step modules integrating thorough theology with personal mentoring." : "Hvert fag består av 8 trinnvise moduler som integrerer grundig teologi med personlig mentorskap."} 
               as="p"
-              className="text-xs text-on-surface-variant font-semibold"
+              className="text-base text-on-surface-variant font-medium leading-relaxed"
             />
           </div>
 
@@ -423,48 +423,48 @@ export default function AdmissionPage() {
             {programs.map(prog => (
               <div 
                 key={prog.id}
-                className={`bg-white border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden ${
+                className={`bg-white border rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden ${
                   prog.isLocked 
                     ? 'border-amber-200 hover:border-amber-300' 
                     : 'border-[#dec2ef]/55 hover:border-primary/20'
                 }`}
               >
                 {prog.isLocked && (
-                  <div className="absolute top-0 right-0 bg-amber-500 text-white text-[9px] font-bold px-3 py-1 uppercase tracking-wider rounded-bl-lg flex items-center gap-1">
-                    <Lock size={10} />
+                  <div className="absolute top-0 right-0 bg-amber-500 text-white text-xs font-bold px-3 py-1 uppercase tracking-wider rounded-bl-lg flex items-center gap-1">
+                    <Lock size={12} />
                     <span>2028</span>
                   </div>
                 )}
                 
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                    <span className={`text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider ${
                       prog.isLocked 
                         ? 'bg-amber-50 text-amber-700 border border-amber-200' 
                         : 'bg-primary/5 text-primary border border-primary/10'
                     }`}>
                       <CmsText slug={`admission-${prog.id}-code`} fallback={prog.code} />
                     </span>
-                    <span className="text-[10px] font-bold text-[#c5a059] uppercase tracking-wider">
+                    <span className="text-xs font-bold text-[#c5a059] uppercase tracking-wider">
                       <CmsText slug={`admission-${prog.id}-credits`} fallback={prog.credits} />
                     </span>
                   </div>
 
-                  <h3 className="font-serif text-lg font-bold text-primary leading-snug">
+                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-primary leading-snug">
                     <CmsText slug={`admission-${prog.id}-title`} fallback={prog.title} />
                   </h3>
 
-                  <div className="flex items-center gap-1.5 text-xs text-on-surface-variant font-semibold">
-                    <Calendar size={14} className="text-primary/70" />
+                  <div className="flex items-center gap-2 text-sm sm:text-base text-slate-600 font-medium">
+                    <Calendar size={16} className="text-primary/70 shrink-0" />
                     <span><CmsText slug={`admission-${prog.id}-duration`} fallback={prog.duration} /></span>
                   </div>
 
                   <div className="w-full h-[1px] bg-slate-100 my-4" />
 
-                  <ul className="space-y-2.5">
+                  <ul className="space-y-3">
                     {prog.features.map((feat, i) => (
-                      <li key={i} className="flex items-start gap-2 text-xs text-on-surface-variant leading-relaxed">
-                        <Check className="stroke-[3] text-green-600 shrink-0 w-3.5 h-3.5 mt-0.5" />
+                      <li key={i} className="flex items-start gap-2.5 text-base text-slate-700 leading-relaxed font-normal">
+                        <Check className="stroke-[3] text-green-600 shrink-0 w-4 h-4 mt-1" />
                         <span><CmsText slug={`admission-${prog.id}-feat-${i + 1}`} fallback={feat} /></span>
                       </li>
                     ))}
@@ -473,10 +473,10 @@ export default function AdmissionPage() {
 
                 <div className="pt-6 mt-6 border-t border-slate-100 flex justify-between items-end">
                   <div className="space-y-0.5">
-                    <span className="text-[9px] uppercase font-bold text-outline block">
+                    <span className="text-xs uppercase font-bold text-outline block">
                       <CmsText slug="admission-tuition-fee-label" fallback={language === 'en' ? "Tuition Fee" : "Semesteravgift"} />
                     </span>
-                    <span className="font-serif text-lg font-extrabold text-primary">
+                    <span className="font-serif text-xl font-extrabold text-primary">
                       <CmsText slug={`admission-${prog.id}-price`} fallback={prog.priceSemester} />
                     </span>
                   </div>
@@ -484,10 +484,10 @@ export default function AdmissionPage() {
                   <a 
                     href="#apply-form"
                     onClick={() => setFormData(prev => ({ ...prev, program: prog.id }))}
-                    className="text-xs font-bold text-primary hover:text-secondary flex items-center gap-0.5 font-sans"
+                    className="text-base font-bold text-primary hover:text-secondary flex items-center gap-1 font-sans"
                   >
                     <span><CmsText slug="admission-select-btn" fallback={language === 'en' ? "Select" : "Velg linje"} /></span>
-                    <ChevronRight size={13} />
+                    <ChevronRight size={16} />
                   </a>
                 </div>
               </div>
@@ -501,8 +501,8 @@ export default function AdmissionPage() {
             
             {/* Payment Description */}
             <div className="space-y-6">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-primary font-bold text-[10px] uppercase tracking-wider select-none">
-                <CreditCard size={12} />
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-secondary-container text-primary font-bold text-xs uppercase tracking-wider select-none">
+                <CreditCard size={14} />
                 <CmsText slug="admission-payments-tag" fallback={language === 'en' ? "Flexible Payments and Tuition" : "Fleksibel Betaling og Priser"} />
               </span>
 
@@ -510,44 +510,44 @@ export default function AdmissionPage() {
                 slug="admission-payments-title" 
                 fallback={language === 'en' ? "Invest in Your Future Without Financial Stress" : "Invester i din fremtid uten økonomisk stress"} 
                 as="h2"
-                className="font-serif text-2xl font-bold text-primary leading-tight"
+                className="font-serif text-2xl sm:text-3xl font-bold text-primary leading-tight"
               />
 
               <CmsText 
                 slug="admission-payments-desc" 
                 fallback={language === 'en' ? "At His Kingdom Prophets, we want prophetic education to be accessible to all. We offer transparent and predictable payment arrangements tailored to your situation. You can pay the full semester fee at once or distribute it over interest-free monthly installments." : "Hos His Kingdom Prophets ønsker vi at den profetiske utdanningen skal være tilgjengelig for alle. Vi tilbyr ryddige og forutsigbare betalingsordninger tilpasset din situasjon. Du kan betale hele semesteravgiften under ett, eller fordele den over rentefrie månedlige rater."} 
                 as="p"
-                className="text-xs text-on-surface-variant font-semibold leading-relaxed"
+                className="text-base text-slate-700 font-normal leading-relaxed"
               />
 
-              <div className="space-y-3.5 pt-2">
+              <div className="space-y-4 pt-2">
                 <div className="flex items-start gap-3">
-                  <div className="p-1 bg-green-50 text-green-600 rounded-full shrink-0 mt-0.5">
-                    <Check size={14} className="stroke-[3]" />
+                  <div className="p-1.5 bg-green-50 text-green-600 rounded-full shrink-0 mt-0.5">
+                    <Check size={16} className="stroke-[3]" />
                   </div>
                   <div>
-                    <CmsText slug="admission-payments-bullet1-title" fallback={language === 'en' ? "100% Interest-Free Installments" : "100 % rentefri delbetaling"} as="h4" className="text-xs font-bold text-primary" />
-                    <CmsText slug="admission-payments-bullet1-desc" fallback={language === 'en' ? "The semester fee can be distributed over 5 monthly installments throughout the semester." : "Semesteravgiften kan fordeles over 5 månedlige rater gjennom semesteret."} as="p" className="text-[11px] text-outline mt-0.5" />
+                    <CmsText slug="admission-payments-bullet1-title" fallback={language === 'en' ? "100% Interest-Free Installments" : "100 % rentefri delbetaling"} as="h4" className="text-base font-bold text-primary" />
+                    <CmsText slug="admission-payments-bullet1-desc" fallback={language === 'en' ? "The semester fee can be distributed over 5 monthly installments throughout the semester." : "Semesteravgiften kan fordeles over 5 månedlige rater gjennom semesteret."} as="p" className="text-base text-slate-600 mt-1 leading-relaxed font-normal" />
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="p-1 bg-green-50 text-green-600 rounded-full shrink-0 mt-0.5">
-                    <Check size={14} className="stroke-[3]" />
+                  <div className="p-1.5 bg-green-50 text-green-600 rounded-full shrink-0 mt-0.5">
+                    <Check size={16} className="stroke-[3]" />
                   </div>
                   <div>
-                    <CmsText slug="admission-payments-bullet2-title" fallback={language === 'en' ? "All-Inclusive Tuition Fee" : "Alt inkludert i avgiften"} as="h4" className="text-xs font-bold text-primary" />
-                    <CmsText slug="admission-payments-bullet2-desc" fallback={language === 'en' ? "The fee covers study workbooks, 1-on-1 mentoring, Zoom gatherings, full access to the student portal and the video archives." : "Semesteravgiften dekker studiehefter, 1-til-1 samtaler, Zoom-møter, full tilgang til studentportalen og videoarkivet."} as="p" className="text-[11px] text-outline mt-0.5" />
+                    <CmsText slug="admission-payments-bullet2-title" fallback={language === 'en' ? "All-Inclusive Tuition Fee" : "Alt inkludert i avgiften"} as="h4" className="text-base font-bold text-primary" />
+                    <CmsText slug="admission-payments-bullet2-desc" fallback={language === 'en' ? "The fee covers study workbooks, 1-on-1 mentoring, Zoom gatherings, full access to the student portal and the video archives." : "Semesteravgiften dekker studiehefter, 1-til-1 samtaler, Zoom-møter, full tilgang til studentportalen og videoarkivet."} as="p" className="text-base text-slate-600 mt-1 leading-relaxed font-normal" />
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="p-1 bg-green-50 text-green-600 rounded-full shrink-0 mt-0.5">
-                    <Check size={14} className="stroke-[3]" />
+                  <div className="p-1.5 bg-green-50 text-green-600 rounded-full shrink-0 mt-0.5">
+                    <Check size={16} className="stroke-[3]" />
                   </div>
                   <div>
-                    <CmsText slug="admission-payments-bullet3-title" fallback={language === 'en' ? "Scholarships & Partner Discounts" : "Stipend og partner-rabatter"} as="h4" className="text-xs font-bold text-primary" />
-                    <CmsText slug="admission-payments-bullet3-desc" fallback={language === 'en' ? "Spouse discount, student discount, and special scholarship options for active church planters and missionary families." : "Ektepar-rabatt, studentrabatt og særskilte stipendordninger for aktive menighetsplantere og misjonærfamilier."} as="p" className="text-[11px] text-outline mt-0.5" />
+                    <CmsText slug="admission-payments-bullet3-title" fallback={language === 'en' ? "Scholarships & Partner Discounts" : "Stipend og partner-rabatter"} as="h4" className="text-base font-bold text-primary" />
+                    <CmsText slug="admission-payments-bullet3-desc" fallback={language === 'en' ? "Spouse discount, student discount, and special scholarship options for active church planters and missionary families." : "Ektepar-rabatt, studentrabatt og særskilte stipendordninger for aktive menighetsplantere og misjonærfamilier."} as="p" className="text-base text-slate-600 mt-1 leading-relaxed font-normal" />
                   </div>
                 </div>
               </div>
@@ -558,7 +558,7 @@ export default function AdmissionPage() {
               <div className="flex bg-white p-1 rounded-xl shadow-sm select-none border border-slate-100">
                 <button
                   onClick={() => setActivePlan('semester')}
-                  className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
+                  className={`flex-1 py-2.5 text-sm sm:text-base font-bold uppercase tracking-wider rounded-lg transition-all ${
                     activePlan === 'semester'
                       ? 'bg-primary text-white shadow-sm'
                       : 'text-outline hover:text-primary'
@@ -568,7 +568,7 @@ export default function AdmissionPage() {
                 </button>
                 <button
                   onClick={() => setActivePlan('year')}
-                  className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
+                  className={`flex-1 py-2.5 text-sm sm:text-base font-bold uppercase tracking-wider rounded-lg transition-all ${
                     activePlan === 'year'
                       ? 'bg-primary text-white shadow-sm'
                       : 'text-outline hover:text-primary'
@@ -579,7 +579,7 @@ export default function AdmissionPage() {
               </div>
 
               <div className="text-center space-y-3">
-                <span className="text-[10px] font-bold text-outline uppercase tracking-widest block">
+                <span className="text-xs sm:text-sm font-bold text-outline uppercase tracking-widest block">
                   {activePlan === 'semester' ? (
                     <CmsText slug="admission-price-subhead-semester" fallback={language === 'en' ? "Tuition per semester" : "Studieavgift per semester"} />
                   ) : (
@@ -599,7 +599,7 @@ export default function AdmissionPage() {
                   )}
                 </div>
                 
-                <p className="text-[11px] text-on-surface-variant font-semibold leading-relaxed max-w-sm mx-auto">
+                <p className="text-sm sm:text-base text-slate-700 font-medium leading-relaxed max-w-sm mx-auto">
                   {language === 'en'
                     ? "*In addition: $50 USD admin/startup fee and $50 USD room & board for the kickoff weekend. (Self-chosen hotel during kickoff weekend is not covered by the school)."
                     : "*I tillegg: 500 kr i admin oppstart og 500 kr for kost og losji for kickoff-helgen. (Hvis man skal bo på egenvalgt hotell i kickoff-helgen dekker skolen ikke dette)."}
@@ -608,7 +608,7 @@ export default function AdmissionPage() {
 
               <div className="w-full h-[1px] bg-slate-200/50" />
 
-              <div className="space-y-2.5 text-xs text-on-surface-variant font-semibold font-sans">
+              <div className="space-y-3 text-base text-slate-700 font-medium font-sans">
                 <div className="flex justify-between items-center">
                   <span><CmsText slug="admission-price-row1-label" fallback={language === 'en' ? "Admin / Startup fee" : "Admin / oppstartsgebyr"} /></span>
                   <span className="text-primary font-bold"><CmsText slug="admission-price-row1-val" fallback={language === 'en' ? "$50 USD" : "500,- NOK"} /></span>
@@ -642,17 +642,17 @@ export default function AdmissionPage() {
               slug="admission-steps-title" 
               fallback={language === 'en' ? "How the Application Process Works" : "Slik fungerer søknadsprosessen"} 
               as="h2"
-              className="font-serif text-2xl font-bold text-primary"
+              className="font-serif text-2xl sm:text-3xl font-bold text-primary"
             />
             <CmsText 
               slug="admission-steps-subtitle" 
               fallback={language === 'en' ? "Four simple steps from submitting your application to your approved study space and access." : "Fire enkle steg fra innsendt søknad til godkjent studieplass og tilgang."} 
               as="p"
-              className="text-xs text-on-surface-variant font-semibold"
+              className="text-base text-on-surface-variant font-medium leading-relaxed"
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
                 slugNum: 'admission-step1-num',
@@ -691,13 +691,13 @@ export default function AdmissionPage() {
                 key={i}
                 className="bg-white border border-[#dec2ef]/45 p-6 rounded-2xl relative shadow-sm hover:shadow transition-all space-y-3"
               >
-                <span className="font-serif text-3xl font-extrabold text-[#c5a059]/15 block">
+                <span className="font-serif text-3xl font-extrabold text-[#c5a059]/25 block">
                   <CmsText slug={stepObj.slugNum} fallback={stepObj.fallbackNum} />
                 </span>
-                <h4 className="font-serif text-sm font-bold text-primary font-sans">
+                <h4 className="font-serif text-base sm:text-lg font-bold text-primary font-sans">
                   <CmsText slug={stepObj.slugTitle} fallback={stepObj.fallbackTitle} />
                 </h4>
-                <p className="text-[11px] text-outline leading-relaxed font-semibold">
+                <p className="text-base text-slate-600 leading-relaxed font-normal">
                   <CmsText slug={stepObj.slugDesc} fallback={stepObj.fallbackDesc} />
                 </p>
               </div>
@@ -717,24 +717,24 @@ export default function AdmissionPage() {
                 className="space-y-6"
               >
                 <div className="text-center space-y-2">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-2">
-                    <FileText size={18} />
+                  <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-2">
+                    <FileText size={22} />
                   </div>
                   <CmsText 
                     slug="admission-form-title" 
                     fallback={language === 'en' ? "Application for Admission" : "Søknad om opptak"} 
                     as="h3"
-                    className="font-serif text-xl font-bold text-primary"
+                    className="font-serif text-2xl font-bold text-primary"
                   />
                   <CmsText 
                     slug="admission-form-subtitle" 
                     fallback={language === 'en' ? "Fill in your details below. We process your application within 24 hours." : "Fyll inn opplysningene dine under. Vi behandler søknaden din innen 24 timer."} 
                     as="p"
-                    className="text-[11px] text-on-surface-variant font-semibold"
+                    className="text-base text-slate-600 font-normal leading-relaxed"
                   />
-                  <div className="pt-1">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container/70 text-primary font-semibold text-[10px] uppercase tracking-wider border border-secondary/20">
-                      <GraduationCap size={13} className="text-primary" />
+                  <div className="pt-1.5">
+                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-secondary-container/70 text-primary font-semibold text-xs sm:text-sm uppercase tracking-wider border border-secondary/20">
+                      <GraduationCap size={15} className="text-primary" />
                       {language === 'en' 
                         ? "No account needed to apply – Credentials assigned by administration upon admission" 
                         : "Ingen konto kreves for å søke – Brukerkonto tildeles av administrasjonen etter godkjent opptak"}
@@ -745,7 +745,7 @@ export default function AdmissionPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Name Input */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
+                    <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-outline block">
                       <CmsText slug="admission-form-name-label" fallback={language === 'en' ? "Full Name *" : "Fullt navn *"} />
                     </label>
                     <input
@@ -755,13 +755,13 @@ export default function AdmissionPage() {
                       placeholder={language === 'en' ? "E.g. Thomas Knutsen" : "F.eks. Thomas Knutsen"}
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none placeholder:text-outline font-semibold transition-all font-sans"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-base rounded-xl focus:outline-none placeholder:text-outline font-normal transition-all font-sans"
                     />
                   </div>
 
                   {/* Email Input */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
+                    <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-outline block">
                       <CmsText slug="admission-form-email-label" fallback={language === 'en' ? "Email Address *" : "E-postadresse *"} />
                     </label>
                     <input
@@ -771,7 +771,7 @@ export default function AdmissionPage() {
                       placeholder={language === 'en' ? "thomas@example.com" : "thomas@eksempel.no"}
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none placeholder:text-outline font-semibold transition-all font-sans"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-base rounded-xl focus:outline-none placeholder:text-outline font-normal transition-all font-sans"
                     />
                   </div>
                 </div>
@@ -779,7 +779,7 @@ export default function AdmissionPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Phone Input */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
+                    <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-outline block">
                       <CmsText slug="admission-form-phone-label" fallback={language === 'en' ? "Phone Number *" : "Mobiltelefon *"} />
                     </label>
                     <input
@@ -789,20 +789,20 @@ export default function AdmissionPage() {
                       placeholder={language === 'en' ? "8-digit phone number" : "8-sifret mobilnummer"}
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none placeholder:text-outline font-semibold transition-all font-sans"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-base rounded-xl focus:outline-none placeholder:text-outline font-normal transition-all font-sans"
                     />
                   </div>
 
                   {/* Program Select */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
+                    <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-outline block">
                       <CmsText slug="admission-form-program-label" fallback={language === 'en' ? "Choose Study Line" : "Velg studielinje"} />
                     </label>
                     <select
                       name="program"
                       value={formData.program}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none font-semibold transition-all font-sans"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-base rounded-xl focus:outline-none font-normal transition-all font-sans"
                     >
                       {programs.map(p => (
                         <option key={p.id} value={p.id}>
@@ -815,11 +815,11 @@ export default function AdmissionPage() {
 
                 {/* Billing Plan Segment */}
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-outline block">
+                  <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-outline block">
                     <CmsText slug="admission-form-billing-label" fallback={language === 'en' ? "Select Billing Plan" : "Foretrukket betalingsplan"} />
                   </label>
                   <div className="grid grid-cols-2 gap-3">
-                    <label className={`border rounded-xl p-3 flex flex-col justify-center items-center cursor-pointer transition-all active:scale-[0.98] ${
+                    <label className={`border rounded-xl p-4 flex flex-col justify-center items-center cursor-pointer transition-all active:scale-[0.98] ${
                       formData.paymentPlan === 'semester'
                         ? 'border-primary bg-primary/5 text-primary'
                         : 'border-slate-200 hover:border-primary/30 text-on-surface-variant'
@@ -832,15 +832,15 @@ export default function AdmissionPage() {
                         onChange={handleInputChange}
                         className="sr-only"
                       />
-                      <span className="text-xs font-bold block">
+                      <span className="text-base font-bold block">
                         <CmsText slug="admission-form-billing-semester-title" fallback={language === 'en' ? "Semester Invoice" : "Semesterfaktura"} />
                       </span>
-                      <span className="text-[10px] text-outline mt-0.5">
+                      <span className="text-xs sm:text-sm text-outline mt-1 font-medium">
                         {language === 'en' ? `${selectedProg.priceSemester} per semester` : `${selectedProg.priceSemester} per semester`}
                       </span>
                     </label>
 
-                    <label className={`border rounded-xl p-3 flex flex-col justify-center items-center cursor-pointer transition-all active:scale-[0.98] ${
+                    <label className={`border rounded-xl p-4 flex flex-col justify-center items-center cursor-pointer transition-all active:scale-[0.98] ${
                       formData.paymentPlan === 'year'
                         ? 'border-primary bg-primary/5 text-primary'
                         : 'border-slate-200 hover:border-primary/30 text-on-surface-variant'
@@ -853,10 +853,10 @@ export default function AdmissionPage() {
                         onChange={handleInputChange}
                         className="sr-only"
                       />
-                      <span className="text-xs font-bold block">
+                      <span className="text-base font-bold block">
                         <CmsText slug="admission-form-billing-year-title" fallback={language === 'en' ? "Full Academic Year" : "Fullt studieår"} />
                       </span>
-                      <span className="text-[10px] text-outline mt-0.5">
+                      <span className="text-xs sm:text-sm text-outline mt-1 font-medium">
                         {language === 'en' ? `${selectedProg.priceYear || '10 000,-'} full year` : `${selectedProg.priceYear || '10 000,-'} for hele året`}
                       </span>
                     </label>
@@ -865,10 +865,10 @@ export default function AdmissionPage() {
 
                 {/* Confirm Year 1 Checkbox for Track 2 */}
                 {formData.program === 'prophets_advanced' && (
-                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-3">
-                    <div className="flex gap-2 text-amber-800 text-xs">
-                      <Lock size={16} className="shrink-0 mt-0.5" />
-                      <p className="font-semibold leading-relaxed">
+                  <div className="p-5 bg-amber-50 border border-amber-200 rounded-xl space-y-3">
+                    <div className="flex gap-2.5 text-amber-900 text-base">
+                      <Lock size={18} className="shrink-0 mt-0.5" />
+                      <p className="font-medium leading-relaxed">
                         <CmsText 
                           slug="admission-form-track2-alert" 
                           fallback={language === 'en'
@@ -877,7 +877,7 @@ export default function AdmissionPage() {
                         />
                       </p>
                     </div>
-                    <label className="flex items-start gap-2 cursor-pointer select-none">
+                    <label className="flex items-start gap-2.5 cursor-pointer select-none">
                       <input
                         type="checkbox"
                         required
@@ -885,7 +885,7 @@ export default function AdmissionPage() {
                         onChange={(e) => setConfirmYear1(e.target.checked)}
                         className="mt-1 accent-amber-600 rounded border-amber-300 focus:ring-amber-500 text-amber-600 w-4 h-4"
                       />
-                      <span className="text-[11px] text-amber-900 font-bold leading-normal">
+                      <span className="text-sm sm:text-base text-amber-950 font-bold leading-normal">
                         <CmsText 
                           slug="admission-form-track2-confirm" 
                           fallback={language === 'en'
@@ -899,7 +899,7 @@ export default function AdmissionPage() {
 
                 {/* Motivation Textarea */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-outline">
+                  <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-outline block">
                     <CmsText slug="admission-form-motivation-label" fallback={language === 'en' ? "Motivation / Vision (Optional)" : "Kort om din motivasjon eller ditt kall (Valgfritt)"} />
                   </label>
                   <textarea
@@ -908,7 +908,7 @@ export default function AdmissionPage() {
                     placeholder={language === 'en' ? "Briefly share your heart or what you hope to receive..." : "Skriv kort om hva du håper å få ut av studiet, eller din bakgrunn..."}
                     value={formData.motivation}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-xs rounded-xl focus:outline-none placeholder:text-outline font-semibold transition-all resize-none font-sans"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-base rounded-xl focus:outline-none placeholder:text-outline font-normal transition-all resize-none font-sans"
                   />
                 </div>
 
@@ -916,16 +916,16 @@ export default function AdmissionPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-xs font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full py-4 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-base font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2.5 disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>
-                      <div className="w-3.5 h-3.5 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+                      <div className="w-4 h-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
                       <span>{language === 'en' ? "Submitting..." : "Sender søknad..."}</span>
                     </>
                   ) : (
                     <>
-                      <Send size={13} />
+                      <Send size={16} />
                       <span><CmsText slug="admission-form-submit-btn" fallback={language === 'en' ? "Submit Application" : "Send Inn Min Søknad"} /></span>
                     </>
                   )}
@@ -940,21 +940,21 @@ export default function AdmissionPage() {
                 className="space-y-6"
               >
                 <div className="text-center space-y-2">
-                  <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-2">
-                    <CreditCard size={18} className="animate-pulse" />
+                  <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-2">
+                    <CreditCard size={22} className="animate-pulse" />
                   </div>
                   <CmsText 
                     slug="admission-payment-title" 
                     fallback={language === 'en' ? "Complete Your Enrollment Payment" : "Fullfør din studieavgift"} 
                     as="h3"
-                    className="font-serif text-xl font-bold text-primary"
+                    className="font-serif text-2xl font-bold text-primary"
                   />
-                  <p className="text-xs text-on-surface-variant font-semibold">
+                  <p className="text-base text-on-surface-variant font-medium">
                     {language === 'en' 
                       ? `Program: ${programs.find(p => p.id === formData.program)?.title} (${formData.paymentPlan === 'year' ? 'Full academic year' : 'Semester'})`
                       : `Valgt studielinje: ${programs.find(p => p.id === formData.program)?.title} (${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'})`}
                   </p>
-                  <p className="text-sm font-bold text-primary">
+                  <p className="text-lg font-bold text-primary">
                     {language === 'en' ? "Amount: " : "Beløp å betale: "} 
                     {formData.paymentPlan === 'year' 
                       ? (programs.find(p => p.id === formData.program)?.priceYear || '10 000,- NOK')
@@ -967,7 +967,7 @@ export default function AdmissionPage() {
                 </div>
 
                 {paymentError && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 text-xs font-bold p-3 rounded-xl text-center">
+                  <div className="bg-red-50 border border-red-200 text-red-700 text-base font-medium p-4 rounded-xl text-center">
                     {paymentError}
                   </div>
                 )}
@@ -975,18 +975,18 @@ export default function AdmissionPage() {
                 <div className="flex gap-3">
                   <button
                     onClick={() => setPaymentStep('form')}
-                    className="flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] text-center font-sans border border-slate-200"
+                    className="flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-base font-bold uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] text-center font-sans border border-slate-200"
                   >
                     <CmsText slug="admission-payment-back" fallback={language === 'en' ? "Back" : "Tilbake"} />
                   </button>
                   <button
                     onClick={handleStripePaymentSubmit}
                     disabled={isSubmitting}
-                    className="flex-[2] py-4 bg-primary hover:bg-primary-container text-white text-xs font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="flex-[2] py-4 bg-primary hover:bg-primary-container text-white text-base font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="w-3.5 h-3.5 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+                        <div className="w-4 h-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
                         <span>{language === 'en' ? "Processing..." : "Behandler betaling..."}</span>
                       </>
                     ) : (
@@ -1007,16 +1007,16 @@ export default function AdmissionPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <span className="inline-block px-3 py-1 rounded-full bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-wider border border-green-200">
+                  <span className="inline-block px-3.5 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider border border-green-200">
                     {language === 'en' ? "Application Received" : "Søknad registrert"}
                   </span>
                   <CmsText 
                     slug="admission-success-title" 
                     fallback={language === 'en' ? "Application Successfully Submitted!" : "Søknad om opptak er mottatt!"} 
                     as="h3"
-                    className="font-serif text-2xl font-bold text-primary"
+                    className="font-serif text-2xl sm:text-3xl font-bold text-primary"
                   />
-                  <p className="text-xs text-on-surface-variant font-semibold max-w-md mx-auto leading-relaxed">
+                  <p className="text-base text-slate-700 font-normal max-w-md mx-auto leading-relaxed">
                     {language === 'en'
                       ? `Thank you, ${formData.name}! Your application has been submitted to the administration at His Kingdom Prophetic Community.`
                       : `Takk for din søknad, ${formData.name}! Søknaden din er nå oversendt til administrasjonen ved His Kingdom Prophetic Community.`}
@@ -1024,16 +1024,16 @@ export default function AdmissionPage() {
                 </div>
 
                 {/* Information Card about Next Steps and Account Assignment */}
-                <div className="bg-[#fbf8fe] border border-[#dec2ef]/60 rounded-2xl p-5 text-left max-w-lg mx-auto space-y-3">
+                <div className="bg-[#fbf8fe] border border-[#dec2ef]/60 rounded-2xl p-6 text-left max-w-lg mx-auto space-y-3.5">
                   <div className="flex items-start gap-3">
                     <div className="p-2 rounded-xl bg-primary/10 text-primary shrink-0 mt-0.5">
-                      <GraduationCap size={18} />
+                      <GraduationCap size={22} />
                     </div>
                     <div className="space-y-1">
-                      <h4 className="text-xs font-bold text-primary">
+                      <h4 className="text-base font-bold text-primary">
                         {language === 'en' ? "Next Steps: Review & Account Assignment" : "Veien videre: Opptaksbehandling & tildeling av konto"}
                       </h4>
-                      <p className="text-[11px] text-outline leading-relaxed font-semibold">
+                      <p className="text-base text-slate-600 leading-relaxed font-normal">
                         {language === 'en'
                           ? "We review all applications continuously and will contact you for a brief conversation. Upon approved admission, your personal user account and portal login credentials will be issued directly by the school administration."
                           : "Vi behandler søknader fortløpende og kontakter deg for en kort samtale. Når opptaket er godkjent, vil din personlige brukerkonto og innloggingsdetaljer til portalen bli opprettet og tildelt direkte av skolens administrasjon."}
@@ -1041,13 +1041,13 @@ export default function AdmissionPage() {
                     </div>
                   </div>
 
-                  <div className="border-t border-[#dec2ef]/40 pt-3 grid grid-cols-2 gap-3 text-[11px]">
+                  <div className="border-t border-[#dec2ef]/40 pt-3.5 grid grid-cols-2 gap-3 text-base">
                     <div>
-                      <span className="text-outline text-[10px] uppercase font-bold block">{language === 'en' ? "Program" : "Studielinje"}</span>
+                      <span className="text-outline text-xs uppercase font-bold block">{language === 'en' ? "Program" : "Studielinje"}</span>
                       <span className="font-bold text-primary">{programs.find(p => p.id === formData.program)?.code}</span>
                     </div>
                     <div>
-                      <span className="text-outline text-[10px] uppercase font-bold block">{language === 'en' ? "Kickoff" : "Kickoff"}</span>
+                      <span className="text-outline text-xs uppercase font-bold block">{language === 'en' ? "Kickoff" : "Kickoff"}</span>
                       <span className="font-bold text-primary">27. aug 2027 (Norge)</span>
                     </div>
                   </div>
@@ -1056,13 +1056,13 @@ export default function AdmissionPage() {
                 <div className="pt-2 flex flex-col sm:flex-row justify-center gap-3">
                   <button
                     onClick={() => navigate('/')}
-                    className="px-6 py-3 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95"
+                    className="px-6 py-3.5 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-base font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95"
                   >
                     <CmsText slug="admission-success-home-btn" fallback={language === 'en' ? "Back to Home" : "Gå til forsiden"} />
                   </button>
                   <button
                     onClick={() => navigate('/support')}
-                    className="px-6 py-3 bg-slate-50 hover:bg-slate-100 text-primary text-xs font-bold uppercase tracking-wider rounded-xl transition-all active:scale-95 border border-slate-200 font-sans"
+                    className="px-6 py-3.5 bg-slate-50 hover:bg-slate-100 text-primary text-base font-bold uppercase tracking-wider rounded-xl transition-all active:scale-95 border border-slate-200 font-sans"
                   >
                     <CmsText slug="admission-success-contact-btn" fallback={language === 'en' ? "Contact Administration" : "Kontakt administrasjonen"} />
                   </button>
@@ -1077,14 +1077,14 @@ export default function AdmissionPage() {
       {/* Footer */}
       <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white">
         <div className="flex flex-col gap-2 text-center md:text-left">
-          <div className="font-serif text-lg font-bold text-[#e0aaff]">His Kingdom Prophets</div>
-          <p className="text-[10px] text-slate-300 opacity-80 max-w-md">
+          <div className="font-serif text-xl font-bold text-[#e0aaff]">His Kingdom Prophets</div>
+          <p className="text-sm text-slate-300 opacity-80 max-w-md">
             {language === 'en'
               ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church."
               : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."}
           </p>
         </div>
-        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold">
+        <nav className="flex flex-wrap justify-center gap-6 text-sm font-semibold">
           <button onClick={() => navigate('/privacy')} className="text-[#e0aaff] hover:text-white transition-opacity">
             {language === 'en' ? "Privacy Policy" : "Personvern"}
           </button>

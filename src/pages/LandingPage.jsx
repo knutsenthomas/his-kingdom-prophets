@@ -115,7 +115,7 @@ export default function LandingPage() {
             <span className="inline sm:hidden"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
           </div>
           
-          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-xs xl:text-sm">
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-base">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
               return (
@@ -140,31 +140,31 @@ export default function LandingPage() {
             <div className="hidden lg:flex items-center gap-4">
               <button 
                 onClick={toggleLanguage}
-                className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
+                className="px-3.5 py-2 border border-[#561291]/20 hover:border-primary text-sm font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
                 title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
               >
-                <Globe size={13} />
+                <Globe size={15} />
                 <span>{language === 'no' ? 'NO' : 'EN'}</span>
               </button>
               {user ? (
                 <button 
                   onClick={() => navigate(portalPath)} 
-                  className="px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-sm shrink-0 flex items-center gap-1"
+                  className="px-6 py-2.5 bg-primary text-on-primary font-bold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-base shrink-0 flex items-center gap-1.5"
                 >
                   <CmsText slug="landing-btn-portal" fallback="Gå til portal" />
-                  <ArrowRight size={14} />
+                  <ArrowRight size={16} />
                 </button>
               ) : (
                 <>
                   <a 
                     href="https://app.hkpc.no" 
-                    className="px-6 py-2 font-semibold text-on-surface-variant hover:text-primary transition-colors text-sm shrink-0 flex items-center justify-center"
+                    className="px-5 py-2.5 font-bold text-on-surface-variant hover:text-primary transition-colors text-base shrink-0 flex items-center justify-center"
                   >
                     <CmsText slug="landing-btn-login" fallback="Logg inn" />
                   </a>
                   <button 
                     onClick={() => navigate('/admission')} 
-                    className="px-6 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-sm shrink-0"
+                    className="px-6 py-2.5 bg-primary text-on-primary font-bold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-base shrink-0"
                   >
                     <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
                   </button>
@@ -176,24 +176,24 @@ export default function LandingPage() {
             <div className="lg:hidden flex items-center gap-1.5 sm:gap-3">
               <button 
                 onClick={toggleLanguage}
-                className="px-2.5 sm:px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-[10px] sm:text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1 shadow-sm shrink-0"
+                className="px-2.5 sm:px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs sm:text-sm font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1 shadow-sm shrink-0"
                 title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
               >
-                <Globe size={12} />
+                <Globe size={13} />
                 <span>{language === 'no' ? 'NO' : 'EN'}</span>
               </button>
               {user ? (
                 <button 
                   onClick={() => navigate(portalPath)} 
-                  className="px-2.5 sm:px-4 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-[10px] min-[360px]:text-xs shrink-0 flex items-center gap-0.5"
+                  className="px-3 sm:px-4 py-2 bg-primary text-on-primary font-bold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-xs sm:text-sm shrink-0 flex items-center gap-0.5"
                 >
                   <CmsText slug="landing-btn-portal" fallback="Gå til portal" />
-                  <ArrowRight size={12} />
+                  <ArrowRight size={14} />
                 </button>
               ) : (
                 <button 
                   onClick={() => navigate('/admission')} 
-                  className="px-2.5 sm:px-4 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-[10px] min-[360px]:text-xs shrink-0"
+                  className="px-3 sm:px-4 py-2 bg-primary text-on-primary font-bold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-xs sm:text-sm shrink-0"
                 >
                   <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
                 </button>
@@ -263,7 +263,7 @@ export default function LandingPage() {
                           handleNavClick(e, item);
                           setIsMobileMenuOpen(false);
                         }}
-                        className={`px-4 py-3.5 text-sm font-semibold rounded-xl transition-all ${
+                        className={`px-4 py-3.5 text-base font-semibold rounded-xl transition-all ${
                           isActive 
                             ? 'text-primary bg-primary/5 font-bold' 
                             : 'text-on-surface-variant hover:text-primary hover:bg-surface-container-low'
@@ -280,31 +280,31 @@ export default function LandingPage() {
               <div className="pt-6 border-t border-surface-container space-y-3.5">
                 <button
                   onClick={toggleLanguage}
-                  className="w-full py-3 border border-[#561291]/20 text-primary hover:bg-[#561291]/5 font-bold rounded-xl text-xs transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 bg-white shadow-sm"
+                  className="w-full py-3.5 border border-[#561291]/20 text-primary hover:bg-[#561291]/5 font-bold rounded-xl text-sm transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 bg-white shadow-sm"
                 >
-                  <Globe size={14} />
+                  <Globe size={16} />
                   <span>{language === 'no' ? 'Bytt til Engelsk (EN)' : 'Switch to Norwegian (NO)'}</span>
                 </button>
                 {user ? (
                   <button
                     onClick={() => { navigate(portalPath); setIsMobileMenuOpen(false); }}
-                    className="w-full py-3 bg-primary text-white font-bold rounded-xl text-xs transition-all active:scale-[0.98] shadow-md flex items-center justify-center gap-1.5"
+                    className="w-full py-3.5 bg-primary text-white font-bold rounded-xl text-base transition-all active:scale-[0.98] shadow-md flex items-center justify-center gap-2"
                   >
                     <CmsText slug="landing-btn-portal" fallback="Gå til portal" />
-                    <ArrowRight size={14} />
+                    <ArrowRight size={16} />
                   </button>
                 ) : (
                   <>
                     <a
                       href="https://app.hkpc.no"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="w-full py-3 border border-outline-variant text-primary hover:bg-primary/5 font-bold rounded-xl text-xs transition-all active:scale-[0.98] flex items-center justify-center"
+                      className="w-full py-3.5 border border-outline-variant text-primary hover:bg-primary/5 font-bold rounded-xl text-base transition-all active:scale-[0.98] flex items-center justify-center"
                     >
                       <CmsText slug="landing-btn-login" fallback="Logg inn" />
                     </a>
                     <button
                       onClick={() => { navigate('/admission'); setIsMobileMenuOpen(false); }}
-                      className="w-full py-3 bg-primary text-white font-bold rounded-xl text-xs transition-all active:scale-[0.98] shadow-md"
+                      className="w-full py-3.5 bg-primary text-white font-bold rounded-xl text-base transition-all active:scale-[0.98] shadow-md"
                     >
                       <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
                     </button>
@@ -329,7 +329,7 @@ export default function LandingPage() {
           </div>
           <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 py-16 md:py-32">
             <div className="max-w-2xl animate-in fade-in slide-in-from-left-8 duration-700">
-              <span className="inline-block px-4 py-1.5 mb-6 rounded-full bg-primary-fixed/20 text-primary-fixed font-semibold text-xs uppercase tracking-wider backdrop-blur-md border border-primary-fixed/30">
+              <span className="inline-block px-4 py-1.5 mb-6 rounded-full bg-primary-fixed/20 text-primary-fixed font-semibold text-sm uppercase tracking-wider backdrop-blur-md border border-primary-fixed/30">
                 <CmsText slug="landing-hero-tagline" fallback="Profetisk Tjeneste og Åndelig Dybde" />
               </span>
               <CmsText 
@@ -342,21 +342,21 @@ export default function LandingPage() {
                 slug="landing-hero-description" 
                 fallback="His Kingdom Ministry fokuserer på misjon, utrustning av de hellige, bibelundervisning, bønn, helbredelse og utfrielse, samt å vokse i Åndens profetiske gaver. Alt gjøres etter bibelsk standard." 
                 as="p" 
-                className="text-base md:text-lg text-on-primary-container mb-10 max-w-xl" 
+                className="text-base md:text-lg text-on-primary-container mb-10 max-w-xl leading-relaxed" 
               />
               <div className="flex flex-col sm:flex-row gap-4">
                 <button 
                   onClick={() => navigate('/admission')} 
-                  className="px-8 py-4 bg-white text-[#3c096c] font-semibold rounded-xl hover:bg-slate-100 transition-all shadow-lg hover:-translate-y-0.5 text-sm active:scale-[0.98]"
+                  className="px-8 py-4 bg-white text-[#3c096c] font-bold rounded-xl hover:bg-slate-100 transition-all shadow-lg hover:-translate-y-0.5 text-base active:scale-[0.98]"
                 >
                   <CmsText slug="landing-hero-cta-primary" fallback="Søk Opptak 2027" />
                 </button>
                 <button 
                   onClick={(e) => handleNavClick(e, { href: '#school', id: 'school' })} 
-                  className="px-8 py-4 border border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all group flex items-center justify-center gap-2 text-sm active:scale-[0.98]"
+                  className="px-8 py-4 border border-white/30 text-white font-bold rounded-xl hover:bg-white/10 transition-all group flex items-center justify-center gap-2 text-base active:scale-[0.98]"
                 >
                   <CmsText slug="landing-hero-cta-secondary" fallback="Våre Studielinjer" />
-                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </div>
@@ -366,8 +366,8 @@ export default function LandingPage() {
         {/* Section 1: The Prophetic School and Online Concept */}
         <section id="school" className="py-20 px-4 sm:px-6 md:px-12 max-w-[1200px] mx-auto space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-xs uppercase tracking-wider">
-              <Laptop size={14} />
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-sm uppercase tracking-wider">
+              <Laptop size={15} />
               <CmsText slug="landing-school-tag" fallback={language === 'no' ? "Skole og Studieforløp" : "Prophetic School & Concept"} />
             </span>
             <CmsText 
@@ -382,56 +382,56 @@ export default function LandingPage() {
                 ? "Vår nettbaserte bibelskole gir deg fleksibiliteten til å studere i ditt eget tempo, kombinert med ukentlige live-samlinger og personlig veiledning."
                 : "Our online Bible school gives you the flexibility to study at your own pace, combined with weekly live gatherings and personal mentoring."} 
               as="p" 
-              className="text-sm text-on-surface-variant leading-relaxed max-w-2xl mx-auto" 
+              className="text-base md:text-lg text-on-surface-variant leading-relaxed max-w-2xl mx-auto" 
             />
           </div>
 
           {/* Quick Facts Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white border border-[#dec2ef]/40 p-5 rounded-2xl shadow-sm space-y-2 hover:border-[#3c096c]/30 hover:shadow-md transition-all duration-200">
-              <div className="w-9 h-9 rounded-xl bg-[#3c096c]/10 text-[#3c096c] flex items-center justify-center">
-                <Laptop size={18} />
+            <div className="bg-white border border-[#dec2ef]/40 p-6 rounded-2xl shadow-sm space-y-2.5 hover:border-[#3c096c]/30 hover:shadow-md transition-all duration-200">
+              <div className="w-10 h-10 rounded-xl bg-[#3c096c]/10 text-[#3c096c] flex items-center justify-center">
+                <Laptop size={20} />
               </div>
-              <h4 className="font-serif text-sm font-bold text-[#3c096c]">
+              <h4 className="font-serif text-base font-bold text-[#3c096c]">
                 {language === 'no' ? '100% Nettbasert' : '100% Online'}
               </h4>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
+              <p className="text-base text-slate-700 leading-relaxed">
                 {language === 'no' ? 'Studer i eget tempo med fleksible videoforelesninger og oppgaver.' : 'Study at your own pace with on-demand video lectures and digital assignments.'}
               </p>
             </div>
 
-            <div className="bg-white border border-[#dec2ef]/40 p-5 rounded-2xl shadow-sm space-y-2 hover:border-[#3c096c]/30 hover:shadow-md transition-all duration-200">
-              <div className="w-9 h-9 rounded-xl bg-[#3c096c]/10 text-[#3c096c] flex items-center justify-center">
-                <Users size={18} />
+            <div className="bg-white border border-[#dec2ef]/40 p-6 rounded-2xl shadow-sm space-y-2.5 hover:border-[#3c096c]/30 hover:shadow-md transition-all duration-200">
+              <div className="w-10 h-10 rounded-xl bg-[#3c096c]/10 text-[#3c096c] flex items-center justify-center">
+                <Users size={20} />
               </div>
-              <h4 className="font-serif text-sm font-bold text-[#3c096c]">
+              <h4 className="font-serif text-base font-bold text-[#3c096c]">
                 {language === 'no' ? 'Ukentlige Zoom-kvelder' : 'Weekly Zoom Gatherings'}
               </h4>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
+              <p className="text-base text-slate-700 leading-relaxed">
                 {language === 'no' ? 'Live fellesskap for bønn, fagdrøfting og praktisk profetisk trening.' : 'Live prayer, curriculum discussion, and hands-on prophetic activation.'}
               </p>
             </div>
 
-            <div className="bg-white border border-[#dec2ef]/40 p-5 rounded-2xl shadow-sm space-y-2 hover:border-[#3c096c]/30 hover:shadow-md transition-all duration-200">
-              <div className="w-9 h-9 rounded-xl bg-[#3c096c]/10 text-[#3c096c] flex items-center justify-center">
-                <Globe size={18} />
+            <div className="bg-white border border-[#dec2ef]/40 p-6 rounded-2xl shadow-sm space-y-2.5 hover:border-[#3c096c]/30 hover:shadow-md transition-all duration-200">
+              <div className="w-10 h-10 rounded-xl bg-[#3c096c]/10 text-[#3c096c] flex items-center justify-center">
+                <Globe size={20} />
               </div>
-              <h4 className="font-serif text-sm font-bold text-[#3c096c]">
+              <h4 className="font-serif text-base font-bold text-[#3c096c]">
                 {language === 'no' ? 'Engelsk Undervisning' : 'English Instruction'}
               </h4>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
+              <p className="text-base text-slate-700 leading-relaxed">
                 {language === 'no' ? 'All undervisning foregår på engelsk.' : 'All teaching and instruction is conducted in English.'}
               </p>
             </div>
 
-            <div className="bg-white border border-[#dec2ef]/40 p-5 rounded-2xl shadow-sm space-y-2 hover:border-[#3c096c]/30 hover:shadow-md transition-all duration-200">
-              <div className="w-9 h-9 rounded-xl bg-[#3c096c]/10 text-[#3c096c] flex items-center justify-center">
-                <Calendar size={18} />
+            <div className="bg-white border border-[#dec2ef]/40 p-6 rounded-2xl shadow-sm space-y-2.5 hover:border-[#3c096c]/30 hover:shadow-md transition-all duration-200">
+              <div className="w-10 h-10 rounded-xl bg-[#3c096c]/10 text-[#3c096c] flex items-center justify-center">
+                <Calendar size={20} />
               </div>
-              <h4 className="font-serif text-sm font-bold text-[#3c096c]">
+              <h4 className="font-serif text-base font-bold text-[#3c096c]">
                 {language === 'no' ? 'Søknad & Kickoff' : 'Applications & Kickoff'}
               </h4>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
+              <p className="text-base text-slate-700 leading-relaxed">
                 {language === 'no' ? 'Søknad: 1. jan – 30. juni 2027. Kickoff er on-site i Norge 27. august.' : 'Apply: Jan 1 – June 30, 2027. On-site kickoff in Norway August 27.'}
               </p>
             </div>
@@ -442,11 +442,11 @@ export default function LandingPage() {
             <div className="bg-white border border-[#dec2ef]/55 p-8 rounded-3xl shadow-sm flex flex-col justify-between hover:border-[#3c096c]/20 transition-all min-h-[420px]">
               <div>
                 <div className="flex justify-between items-center mb-6">
-                  <span className="text-[10px] font-bold px-2.5 py-1 bg-[#3c096c]/5 text-[#3c096c] border border-[#3c096c]/10 rounded-md uppercase tracking-wider">
+                  <span className="text-xs font-bold px-3 py-1 bg-[#3c096c]/5 text-[#3c096c] border border-[#3c096c]/10 rounded-md uppercase tracking-wider">
                     <CmsText slug="landing-track1-badge" fallback={language === 'no' ? "Linje 1 (1. år)" : "Track 1 (Year 1)"} />
                   </span>
-                  <span className="text-xs font-bold text-[#c5a059] uppercase tracking-wider flex items-center gap-1">
-                    <Sparkles size={14} />
+                  <span className="text-sm font-bold text-[#c5a059] uppercase tracking-wider flex items-center gap-1.5">
+                    <Sparkles size={16} />
                     <CmsText slug="landing-track1-status" fallback={language === 'no' ? "Søknad: 1. jan – 30. juni 2027" : "Applications: Jan 1 – June 30, 2027"} />
                   </span>
                 </div>
@@ -454,7 +454,7 @@ export default function LandingPage() {
                   slug="landing-track1-title" 
                   fallback="His Kingdom Prophetic Community" 
                   as="h3" 
-                  className="font-serif text-xl font-bold text-[#3c096c] mb-4 block" 
+                  className="font-serif text-2xl font-bold text-[#3c096c] mb-4 block" 
                 />
                 <CmsText 
                   slug="landing-track1-desc" 
@@ -462,21 +462,21 @@ export default function LandingPage() {
                     ? "Dette sporet er for alle som ønsker å vokse i sitt forhold til Jesus og i Åndens gaver, uavhengig av om de er kalt til profetembetet eller ikke. Vi ønsker å bygge et trygt fellesskap for profetiske mennesker til å vokse."
                     : "This track is for everyone who wants to grow in their relationship with Jesus and in the gifts of the Spirit, regardless of whether they are called into the office as a prophet or not. We want to build a safe community for prophetic people to grow and be seen."} 
                   as="p" 
-                  className="text-xs text-on-surface-variant leading-relaxed mb-6 font-medium" 
+                  className="text-base text-slate-700 leading-relaxed mb-6 font-normal" 
                 />
               </div>
               
-              <div className="border-t border-slate-100 pt-6 space-y-2.5 text-xs text-slate-600">
-                <div className="flex items-center gap-2">
-                  <Check size={14} className="text-green-600 shrink-0" />
+              <div className="border-t border-slate-100 pt-6 space-y-3.5 text-base text-slate-700">
+                <div className="flex items-start gap-2.5">
+                  <Check size={18} className="text-green-600 shrink-0 mt-0.5" />
                   <span><CmsText slug="landing-track1-check1" fallback={language === 'no' ? "Kan tas år etter år (nye temaer hvert år)" : "Can join year after year (different subjects yearly)"} /></span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Check size={14} className="text-green-600 shrink-0" />
+                <div className="flex items-start gap-2.5">
+                  <Check size={18} className="text-green-600 shrink-0 mt-0.5" />
                   <span><CmsText slug="landing-track1-check2" fallback={language === 'no' ? "Basisfag: Profeti 101, Å høre Guds stemme, Gave vs Tjeneste" : "Fundamentals: Prophecy 101, Hearing God, Gift vs Office"} /></span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Check size={14} className="text-green-600 shrink-0" />
+                <div className="flex items-start gap-2.5">
+                  <Check size={18} className="text-green-600 shrink-0 mt-0.5" />
                   <span><CmsText slug="landing-track1-check3" fallback={language === 'no' ? "Studieavgift: 5 000,- / sem. (10 000,- fullt år) + 500,- oppstart/admin & 500,- kickoff kost/losji" : "Tuition: $500 USD / sem. ($1,000 USD full year) + $50 USD admin & $50 USD kickoff room/board"} /></span>
                 </div>
               </div>
@@ -487,11 +487,11 @@ export default function LandingPage() {
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-amber-500/10 to-transparent pointer-events-none" />
               <div>
                 <div className="flex justify-between items-center mb-6">
-                  <span className="text-[10px] font-bold px-2.5 py-1 bg-amber-500/10 text-amber-700 border border-amber-500/20 rounded-md uppercase tracking-wider flex items-center gap-1">
-                    <Lock size={12} />
+                  <span className="text-xs font-bold px-3 py-1 bg-amber-500/10 text-amber-700 border border-amber-500/20 rounded-md uppercase tracking-wider flex items-center gap-1.5">
+                    <Lock size={14} />
                     <CmsText slug="landing-track2-badge" fallback={language === 'no' ? "Linje 2 (2. år)" : "Track 2 (Year 2)"} />
                   </span>
-                  <span className="text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full uppercase tracking-wider">
+                  <span className="text-xs font-bold bg-amber-500 text-white px-2.5 py-1 rounded-full uppercase tracking-wider">
                     <CmsText slug="landing-track2-status" fallback={language === 'no' ? "Oppstart 2028" : "Launches 2028"} />
                   </span>
                 </div>
@@ -499,7 +499,7 @@ export default function LandingPage() {
                   slug="landing-track2-title" 
                   fallback="His Kingdom Prophets" 
                   as="h3" 
-                  className="font-serif text-xl font-bold text-[#3c096c] mb-4 block" 
+                  className="font-serif text-2xl font-bold text-[#3c096c] mb-4 block" 
                 />
                 <CmsText 
                   slug="landing-track2-desc" 
@@ -507,27 +507,28 @@ export default function LandingPage() {
                     ? "Dette er sporet for de som vet at de er kalt til tjenesten som profet (profetembetet). Vi er Hans profeter som sprer Hans Rike, og fokuserer ikke på oss selv eller våre egne plattformer."
                     : "This is the track for those who know they are called to the office of a prophet. We are His prophets, spreading His Kingdom, not focusing on ourselves or \"our\" platforms."} 
                   as="p" 
-                  className="text-xs text-on-surface-variant leading-relaxed mb-6 font-medium" 
+                  className="text-base text-slate-700 leading-relaxed mb-6 font-normal" 
                 />
 
-                <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 text-xs font-semibold text-amber-900 mb-6">
-                  <CmsText slug="landing-track2-prereq-label" fallback={language === 'no' ? "⚠️ Opptakskrav:" : "⚠️ Admission Requirements:"} className="text-amber-800 block mb-1 font-bold" />
+                <div className="bg-amber-50 p-5 rounded-2xl border border-amber-100 text-base font-medium text-amber-950 mb-6 space-y-1">
+                  <CmsText slug="landing-track2-prereq-label" fallback={language === 'no' ? "⚠️ Opptakskrav:" : "⚠️ Admission Requirements:"} className="text-amber-900 block font-bold text-base" />
                   <CmsText 
                     slug="landing-track2-prereq-desc" 
                     fallback={language === 'no' 
                       ? "Alle som skal gå His Kingdom Prophets må først fullføre det 1. året (Prophetic Community)." 
                       : "Everyone who wants to attend His Kingdom Prophets must go through the 1st year (Track 1)."} 
+                    className="leading-relaxed block"
                   />
                 </div>
               </div>
 
-              <div className="border-t border-slate-100 pt-6 space-y-2.5 text-xs text-slate-600">
-                <div className="flex items-center gap-2">
-                  <Check size={14} className="text-green-600 shrink-0" />
+              <div className="border-t border-slate-100 pt-6 space-y-3.5 text-base text-slate-700">
+                <div className="flex items-start gap-2.5">
+                  <Check size={18} className="text-green-600 shrink-0 mt-0.5" />
                   <span><CmsText slug="landing-track2-check1" fallback={language === 'no' ? "Krever ny søknad, pensumliste og skriftlig oppgave" : "Requires reapplication, reading list, and writing a paper"} /></span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Check size={14} className="text-green-600 shrink-0" />
+                <div className="flex items-start gap-2.5">
+                  <Check size={18} className="text-green-600 shrink-0 mt-0.5" />
                   <span><CmsText slug="landing-track2-check2" fallback={language === 'no' ? "Krav om deltakelse på 1-2 ukers fysisk samling («Supercharge» samling)" : "Requires attending a 1-2 week physical immersion («Supercharge» event)"} /></span>
                 </div>
               </div>
@@ -539,15 +540,15 @@ export default function LandingPage() {
         <section id="curriculum" className="py-20 bg-surface-container-low border-t border-outline-variant/40">
           <div className="px-4 sm:px-6 md:px-12 max-w-[1200px] mx-auto space-y-12">
             <div className="text-center max-w-3xl mx-auto space-y-4">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-xs uppercase tracking-wider">
-                <BookOpenCheck size={14} />
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-sm uppercase tracking-wider">
+                <BookOpenCheck size={16} />
                 <CmsText slug="landing-curriculum-tag" fallback={language === 'no' ? "Fagplan & Emner" : "Curriculum & Topics"} />
               </span>
               <CmsText 
                 slug="landing-curriculum-title" 
                 fallback={language === 'no' ? "Hva lærer du hos oss?" : "Teaching Topics & Curriculum"} 
                 as="h2" 
-                className="font-serif text-3xl font-extrabold text-[#3c096c] block" 
+                className="font-serif text-3xl md:text-4xl font-extrabold text-[#3c096c] block" 
               />
             </div>
 
@@ -559,9 +560,9 @@ export default function LandingPage() {
                     slug="landing-curriculum-y1-title" 
                     fallback={language === 'no' ? "Fagplan: 1. år (Prophetic Community)" : "Teaching Plan: Year 1 (Prophetic Community)"} 
                     as="h3" 
-                    className="font-serif text-lg font-bold text-[#3c096c] uppercase tracking-wider" 
+                    className="font-serif text-xl font-bold text-[#3c096c] uppercase tracking-wider" 
                   />
-                  <span className="self-start text-[10px] font-bold bg-[#c5a059] text-white px-2.5 py-1 rounded-full uppercase tracking-wider">
+                  <span className="self-start text-xs font-bold bg-[#c5a059] text-white px-3 py-1 rounded-full uppercase tracking-wider">
                     <CmsText slug="landing-curriculum-y1-badge" fallback={language === 'no' ? "Søkeperiode: 1. jan – 30. juni 2027" : "Applications: Jan 1 – June 30, 2027"} />
                   </span>
                 </div>
@@ -572,7 +573,7 @@ export default function LandingPage() {
                     ? "Førsteåret fokuserer på å bygge et solid bibelsk fundament, styrke din personlige relasjon til Jesus og utruste deg i Åndens profetiske gaver. Undervisningen forener sunn teologi med praktisk åpenbaring og et trygt trosfellesskap."
                     : "The first year focuses on building a solid biblical foundation, strengthening your personal relationship with Jesus, and equipping you in the prophetic gifts of the Spirit. The teaching unites sound theology with practical revelation and a safe faith community."} 
                   as="p" 
-                  className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium" 
+                  className="text-base text-slate-700 leading-relaxed" 
                 />
               </div>
 
@@ -613,11 +614,11 @@ export default function LandingPage() {
                   }
                 ].map((cat, i) => (
                   <div key={i} className="bg-slate-50 border border-slate-100/70 p-6 rounded-2xl space-y-3 hover:bg-slate-100/50 transition-all duration-200">
-                    <h4 className="font-serif text-sm font-bold text-[#3c096c] uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#3c096c]" />
+                    <h4 className="font-serif text-base sm:text-lg font-bold text-[#3c096c] uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#3c096c]" />
                       <CmsText slug={cat.slugTitle} fallback={cat.fallbackTitle} />
                     </h4>
-                    <CmsText slug={cat.slugDesc} fallback={cat.fallbackDesc} as="p" className="text-xs text-slate-600 leading-relaxed font-medium" />
+                    <CmsText slug={cat.slugDesc} fallback={cat.fallbackDesc} as="p" className="text-base text-slate-700 leading-relaxed font-normal" />
                   </div>
                 ))}
               </div>
@@ -628,8 +629,8 @@ export default function LandingPage() {
         {/* Section 3: About the Organization & Founders */}
         <section id="about" className="py-20 px-4 sm:px-6 md:px-12 max-w-[1200px] mx-auto space-y-16 border-t border-outline-variant/40">
           <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-xs uppercase tracking-wider">
-              <Info size={14} />
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-sm uppercase tracking-wider">
+              <Info size={16} />
               <CmsText slug="landing-about-tag" fallback={language === 'no' ? "Vårt fundament & Grunnleggere" : "Our Foundation & Founders"} />
             </span>
             <CmsText 
@@ -644,8 +645,8 @@ export default function LandingPage() {
             {/* The Foundation text */}
             <div className="space-y-6 bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all">
               <div className="flex items-center gap-3 text-[#3c096c]">
-                <Award size={24} className="shrink-0" />
-                <CmsText slug="landing-about-sec1-title" fallback={language === 'no' ? "Vårt fundament" : "Our Foundation"} as="h3" className="font-serif text-xl font-bold" />
+                <Award size={26} className="shrink-0" />
+                <CmsText slug="landing-about-sec1-title" fallback={language === 'no' ? "Vårt fundament" : "Our Foundation"} as="h3" className="font-serif text-2xl font-bold" />
               </div>
               <CmsText 
                 slug="landing-about-sec1-desc" 
@@ -653,7 +654,7 @@ export default function LandingPage() {
                   ? "His Kingdom Ministry har fokus på misjon, utrustning av de hellige, bibelundervisning, bønn, forbønn, helbredelse og utfrielse, samt å vokse i Åndens profetiske gaver. Alt vi gjør skal gjøres etter bibelske standarder og med Guds ledelse."
                   : "Our Foundation: His Kingdom Ministry focuses on missions, equipping the saints, Bible teaching, prayer, intercession, healing and deliverance, and growing in the prophetic gifts of the Spirit. Everything we do will be done by Biblical standards and God’s guidance."}
                 as="p"
-                className="text-sm text-on-surface-variant leading-relaxed"
+                className="text-base text-slate-700 leading-relaxed font-normal"
               />
 
               <div className="w-full h-[1px] bg-slate-100 my-4" />
@@ -663,7 +664,7 @@ export default function LandingPage() {
                   slug="landing-about-sec2-title" 
                   fallback={language === 'no' ? "Videreføring og utvidelse av tjenesten" : "Continuation & Growth of the Ministry"} 
                   as="h4" 
-                  className="font-serif text-base font-bold text-[#3c096c] block"
+                  className="font-serif text-lg font-bold text-[#3c096c] block"
                 />
                 <CmsText 
                   slug="landing-about-sec2-desc"
@@ -671,7 +672,7 @@ export default function LandingPage() {
                     ? "Før Hilde Karin møtte Thomas, ledet hun stiftelsen His Kingdom Foundation, et arbeid grunnlagt i bønn i 2008 etter Herrens ledelse. Etter at de giftet seg i 2023, ble tjenesten videreført og utvidet som His Kingdom Ministry, med uforandret forpliktelse til bibelske standarder og åndelig utrustning."
                     : "Before Hilde Karin met Thomas, she led His Kingdom Foundation, a ministry founded in prayer in 2008 following the Lord's guidance. After they married in 2023, the ministry was continued and expanded as His Kingdom Ministry, with an unchanged commitment to biblical standards and spiritual equipping."}
                   as="p"
-                  className="text-xs text-on-surface-variant leading-relaxed"
+                  className="text-base text-slate-700 leading-relaxed font-normal"
                 />
               </div>
             </div>
@@ -679,8 +680,8 @@ export default function LandingPage() {
             {/* The Story Behind */}
             <div className="space-y-6 bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all">
               <div className="flex items-center gap-3 text-[#3c096c]">
-                <Heart size={24} className="shrink-0 text-red-500" />
-                <CmsText slug="landing-about-sec3-title" fallback={language === 'no' ? "Historien bak" : "The Story Behind"} as="h3" className="font-serif text-xl font-bold" />
+                <Heart size={26} className="shrink-0 text-red-500" />
+                <CmsText slug="landing-about-sec3-title" fallback={language === 'no' ? "Historien bak" : "The Story Behind"} as="h3" className="font-serif text-2xl font-bold" />
               </div>
               <CmsText 
                 slug="landing-about-sec3-p1"
@@ -688,7 +689,7 @@ export default function LandingPage() {
                   ? "Hilde Karin begynte å dra på misjonsturer da hun var 14 år, og har siden levd som misjonær i Midtøsten, Afrika og Spania. I mai 2022 kalte Gud henne hjem til Norge, hvor hun møtte Thomas Knutsen. De giftet seg 2. desember 2023."
                   : "Hilde Karin started going on mission trips when she was 14 and has since lived as a missionary in the Middle East, Africa, and Spain. In May 2022, God called her back home to Norway, where she met Thomas Knutsen. They were married on December 2, 2023."}
                 as="p"
-                className="text-sm text-on-surface-variant leading-relaxed"
+                className="text-base text-slate-700 leading-relaxed font-normal"
               />
               <CmsText 
                 slug="landing-about-sec3-p2"
@@ -696,7 +697,7 @@ export default function LandingPage() {
                   ? "Thomas har arbeidet 16 år i kirkeadministrasjon og regnskap, og har vært på flere korttidsmisjonsturer. Sammen har de besøkt 9 land, og det å nå de fortapte ligger tungt på hjertet deres."
                   : "Thomas has worked for 16 years in Church Administration and Accounting and has gone on several short-term mission trips. Together, they have visited 9 countries, and reaching the lost is heavy on their hearts."}
                 as="p"
-                className="text-sm text-on-surface-variant leading-relaxed"
+                className="text-base text-slate-700 leading-relaxed font-normal"
               />
             </div>
           </div>
@@ -716,7 +717,7 @@ export default function LandingPage() {
                   ? "Et liv overgitt til disippelskap, forbønn og utrustning av Guds folk" 
                   : "A life dedicated to discipleship, intercession, and equipping God's people"} 
                 as="p"
-                className="text-xs sm:text-sm text-on-surface-variant font-medium"
+                className="text-base text-slate-600 font-medium"
               />
             </div>
 
@@ -732,17 +733,17 @@ export default function LandingPage() {
                     />
                   </div>
                   <div>
-                    <h4 className="font-serif text-xl font-bold text-[#240046]">
+                    <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#240046]">
                       Hilde Karin Knutsen
                     </h4>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#bd4f2a] block mt-1 font-sans">
+                    <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#bd4f2a] block mt-1 font-sans">
                       <CmsText 
                         slug="landing-leader-hilde-role" 
                         fallback={language === 'no' ? "PROFETISK FORBEDER OG UNDERVISER" : "PROPHETIC INTERCESSOR & TEACHER"} 
                       />
                     </span>
                   </div>
-                  <div className="text-xs text-on-surface-variant leading-relaxed text-left font-medium">
+                  <div className="text-base text-slate-700 leading-relaxed text-left font-normal">
                     {showFullHilde ? (
                       <p>
                         <CmsText 
@@ -763,25 +764,25 @@ export default function LandingPage() {
                   <button 
                     type="button"
                     onClick={() => setShowFullHilde(!showFullHilde)}
-                    className="px-4 py-1.5 rounded-full border border-[#bd4f2a]/60 text-[#bd4f2a] hover:bg-[#bd4f2a]/5 text-xs font-bold transition-all active:scale-95 inline-flex items-center gap-1 mx-auto"
+                    className="px-5 py-2 rounded-full border border-[#bd4f2a]/60 text-[#bd4f2a] hover:bg-[#bd4f2a]/5 text-sm font-bold transition-all active:scale-95 inline-flex items-center gap-1.5 mx-auto"
                   >
                     <span>{showFullHilde ? (language === 'no' ? "Vis mindre" : "Show less") : (language === 'no' ? "Vis mer" : "Show more")}</span>
-                    {showFullHilde ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                    {showFullHilde ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                   </button>
                 </div>
 
                 <div className="pt-4 border-t border-slate-100 flex justify-center items-center gap-3 text-slate-500">
-                  <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Instagram">
-                    <Instagram size={14} />
+                  <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Instagram">
+                    <Instagram size={16} />
                   </a>
-                  <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Facebook">
-                    <Facebook size={14} />
+                  <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Facebook">
+                    <Facebook size={16} />
                   </a>
-                  <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="YouTube">
-                    <Youtube size={14} />
+                  <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="YouTube">
+                    <Youtube size={16} />
                   </a>
-                  <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="TikTok">
-                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                  <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="TikTok">
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                       <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.46V11.8a8.28 8.28 0 0 0 5.77 2.29V10.64a4.84 4.84 0 0 1-3.77-3.95h3.77Z"/>
                     </svg>
                   </a>
@@ -799,17 +800,17 @@ export default function LandingPage() {
                     />
                   </div>
                   <div>
-                    <h4 className="font-serif text-xl font-bold text-[#240046]">
+                    <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#240046]">
                       Thomas Knutsen
                     </h4>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#bd4f2a] block mt-1 font-sans">
+                    <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#bd4f2a] block mt-1 font-sans">
                       <CmsText 
                         slug="landing-leader-thomas-role" 
                         fallback={language === 'no' ? "DAGLIG LEDER OG LOVSANG" : "GENERAL MANAGER & WORSHIP"} 
                       />
                     </span>
                   </div>
-                  <div className="text-xs text-on-surface-variant leading-relaxed text-left font-medium">
+                  <div className="text-base text-slate-700 leading-relaxed text-left font-normal">
                     {showFullThomas ? (
                       <p>
                         <CmsText 
@@ -830,19 +831,19 @@ export default function LandingPage() {
                   <button 
                     type="button"
                     onClick={() => setShowFullThomas(!showFullThomas)}
-                    className="px-4 py-1.5 rounded-full border border-[#bd4f2a]/60 text-[#bd4f2a] hover:bg-[#bd4f2a]/5 text-xs font-bold transition-all active:scale-95 inline-flex items-center gap-1 mx-auto"
+                    className="px-5 py-2 rounded-full border border-[#bd4f2a]/60 text-[#bd4f2a] hover:bg-[#bd4f2a]/5 text-sm font-bold transition-all active:scale-95 inline-flex items-center gap-1.5 mx-auto"
                   >
                     <span>{showFullThomas ? (language === 'no' ? "Vis mindre" : "Show less") : (language === 'no' ? "Vis mer" : "Show more")}</span>
-                    {showFullThomas ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                    {showFullThomas ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                   </button>
                 </div>
 
                 <div className="pt-4 border-t border-slate-100 flex justify-center items-center gap-3 text-slate-500">
-                  <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Instagram">
-                    <Instagram size={14} />
+                  <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Instagram">
+                    <Instagram size={16} />
                   </a>
-                  <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Facebook">
-                    <Facebook size={14} />
+                  <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Facebook">
+                    <Facebook size={16} />
                   </a>
                 </div>
               </div>
@@ -855,15 +856,15 @@ export default function LandingPage() {
           <div className="px-4 sm:px-6 md:px-12 max-w-[1200px] mx-auto space-y-12">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-7 space-y-6">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#3c096c]/10 text-[#3c096c] rounded-full text-xs font-bold uppercase tracking-wider">
-                  <ShoppingBag size={14} />
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#3c096c]/10 text-[#3c096c] rounded-full text-sm font-bold uppercase tracking-wider">
+                  <ShoppingBag size={16} />
                   <CmsText slug="landing-shop-tag" fallback={language === 'no' ? "Kreativt Arbeid & Butikk" : "Creative Work & Store"} />
                 </span>
                 <CmsText 
                   slug="landing-shop-title" 
                   fallback={language === 'no' ? "Bøker, Studiehefter & Trykte Manualer" : "Books, Study Guides & Printed Manuals"} 
                   as="h2" 
-                  className="font-serif text-3xl font-bold text-[#3c096c] leading-tight block" 
+                  className="font-serif text-3xl md:text-4xl font-bold text-[#3c096c] leading-tight block" 
                 />
                 <CmsText 
                   slug="landing-shop-desc"
@@ -871,17 +872,17 @@ export default function LandingPage() {
                     ? "Fysiske og digitale læremidler utviklet av fakultetet ved His Kingdom Prophetic Community. Butikken tilbyr materiell til bruk i personlig bibelstudium og evangelisering, og inntektene går til stiftelsens misjonsprosjekter."
                     : "Physical and digital study resources developed by faculty at His Kingdom Prophetic Community. The shop offers materials for personal Bible study and evangelism, supporting our mission projects."}
                   as="p"
-                  className="text-sm text-on-surface-variant leading-relaxed font-medium"
+                  className="text-base text-slate-700 leading-relaxed font-normal"
                 />
-                <div className="bg-white p-6 rounded-2xl border border-outline-variant/30 space-y-4">
-                  <CmsText slug="landing-shop-team-title" fallback={language === 'no' ? "Rollefordeling i teamet:" : "Team Roles:"} as="h4" className="font-serif text-base font-bold text-[#3c096c] block" />
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-semibold text-slate-700">
+                <div className="bg-white p-6 sm:p-7 rounded-2xl border border-outline-variant/30 space-y-4">
+                  <CmsText slug="landing-shop-team-title" fallback={language === 'no' ? "Rollefordeling i teamet:" : "Team Roles:"} as="h4" className="font-serif text-lg font-bold text-[#3c096c] block" />
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-base text-slate-700">
                     <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-[#3c096c] rounded-full" />
+                      <span className="w-2 h-2 bg-[#3c096c] rounded-full shrink-0" />
                       <span><strong>Thomas:</strong> <CmsText slug="landing-shop-team-thomas" fallback={language === 'no' ? "Administrasjon & Digitale plattformer" : "Administration & Digital Platforms"} /></span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-[#3c096c] rounded-full" />
+                      <span className="w-2 h-2 bg-[#3c096c] rounded-full shrink-0" />
                       <span><strong>Hilde Karin:</strong> <CmsText slug="landing-shop-team-hilde" fallback={language === 'no' ? "Produktutvikling & Design" : "Product Development & Design"} /></span>
                     </li>
                   </ul>
@@ -891,14 +892,14 @@ export default function LandingPage() {
                       ? "Vår visjon for butikken: Vi har en visjon om å hjelpe andre designere til å bli sett og kunne selge sine ting gjennom vår butikk, slik at det kan velsigne mange!"
                       : "Our vision for the shop: We have a vision of helping other designers to be seen and able to sell their things through our store, so that it can help bless many people!"}
                     as="p"
-                    className="text-xs text-slate-500 italic mt-2"
+                    className="text-base text-slate-600 italic mt-2"
                   />
                 </div>
               </div>
 
               <div className="lg:col-span-5 space-y-6">
                 <div className="bg-white border border-[#dec2ef]/55 p-8 rounded-3xl shadow-sm space-y-6">
-                  <CmsText slug="landing-shop-links-title" fallback={language === 'no' ? "Nettsteder & Ressurser" : "Websites & Resources"} as="h3" className="font-serif text-lg font-bold text-[#3c096c] block" />
+                  <CmsText slug="landing-shop-links-title" fallback={language === 'no' ? "Nettsteder & Ressurser" : "Websites & Resources"} as="h3" className="font-serif text-xl font-bold text-[#3c096c] block" />
                   
                   <div className="space-y-4">
                     <a 
@@ -908,13 +909,13 @@ export default function LandingPage() {
                       className="flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-100 transition-all group"
                     >
                       <div className="space-y-1">
-                        <span className="text-xs font-bold text-[#3c096c] flex items-center gap-1">
+                        <span className="text-base font-bold text-[#3c096c] flex items-center gap-1.5">
                           hiskingdomministry.no
-                          <Link2 size={12} className="opacity-60" />
+                          <Link2 size={14} className="opacity-60" />
                         </span>
-                        <CmsText slug="landing-shop-link1-desc" fallback={language === 'no' ? "Hovedsiden (Blogg, YouTube, podcast, bibelverktøy)" : "Ministry page (Blog, YouTube, podcast, Bible tools)"} as="p" className="text-[10px] text-slate-500" />
+                        <CmsText slug="landing-shop-link1-desc" fallback={language === 'no' ? "Hovedsiden (Blogg, YouTube, podcast, bibelverktøy)" : "Ministry page (Blog, YouTube, podcast, Bible tools)"} as="p" className="text-sm text-slate-600" />
                       </div>
-                      <ArrowRight size={14} className="text-[#3c096c] group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight size={16} className="text-[#3c096c] group-hover:translate-x-1 transition-transform" />
                     </a>
 
                     <a 
@@ -924,13 +925,13 @@ export default function LandingPage() {
                       className="flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-100 transition-all group"
                     >
                       <div className="space-y-1">
-                        <span className="text-xs font-bold text-[#3c096c] flex items-center gap-1">
+                        <span className="text-base font-bold text-[#3c096c] flex items-center gap-1.5">
                           hiskingdomdesigns.no
-                          <Link2 size={12} className="opacity-60" />
+                          <Link2 size={14} className="opacity-60" />
                         </span>
-                        <CmsText slug="landing-shop-link2-desc" fallback={language === 'no' ? "Nettbutikken (inntektskilde for misjonsprosjekter)" : "The store (income source for the ministry)"} as="p" className="text-[10px] text-slate-500" />
+                        <CmsText slug="landing-shop-link2-desc" fallback={language === 'no' ? "Nettbutikken (inntektskilde for misjonsprosjekter)" : "The store (income source for the ministry)"} as="p" className="text-sm text-slate-600" />
                       </div>
-                      <ArrowRight size={14} className="text-[#3c096c] group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight size={16} className="text-[#3c096c] group-hover:translate-x-1 transition-transform" />
                     </a>
                   </div>
                 </div>
@@ -943,21 +944,21 @@ export default function LandingPage() {
         <section id="admissions" className="py-24 bg-background border-t border-outline-variant/30 text-center">
           <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12">
             <div className="inline-flex items-center gap-2 mb-6 text-[#3c096c]">
-              <Sparkles size={16} />
-              <CmsText slug="landing-cta-tagline" fallback={language === 'no' ? "Søkeperiode: 1. januar – 30. juni 2027" : "Applications: January 1 – June 30, 2027"} as="span" className="text-xs font-semibold tracking-widest uppercase" />
+              <Sparkles size={18} />
+              <CmsText slug="landing-cta-tagline" fallback={language === 'no' ? "Søkeperiode: 1. januar – 30. juni 2027" : "Applications: January 1 – June 30, 2027"} as="span" className="text-sm font-bold tracking-widest uppercase" />
             </div>
             <CmsText slug="landing-cta-title" fallback="Er du klar til å vokse i dine åndelige gaver?" as="h2" className="font-serif text-3xl md:text-4xl text-[#3c096c] font-bold mb-6 max-w-2xl mx-auto" />
-            <CmsText slug="landing-cta-desc" fallback={language === 'no' ? "Søkeperioden er fra 1. januar til 30. juni 2027, og oppstarten er med on-site kickoff i Norge 27. august 2027. All undervisning foregår på engelsk." : "The application window runs from January 1 to June 30, 2027, with on-site kickoff in Norway on August 27, 2027. All teaching is conducted in English."} as="p" className="text-base text-on-surface-variant mb-10 max-w-xl mx-auto" />
+            <CmsText slug="landing-cta-desc" fallback={language === 'no' ? "Søkeperioden er fra 1. januar til 30. juni 2027, og oppstarten er med on-site kickoff i Norge 27. august 2027. All undervisning foregår på engelsk." : "The application window runs from January 1 to June 30, 2027, with on-site kickoff in Norway on August 27, 2027. All teaching is conducted in English."} as="p" className="text-lg text-slate-700 mb-10 max-w-2xl mx-auto leading-relaxed" />
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <button 
                 onClick={() => navigate('/admission')} 
-                className="w-full sm:w-auto px-8 py-4 bg-[#3c096c] hover:bg-[#3c096c]/90 text-white font-semibold rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
+                className="w-full sm:w-auto px-8 py-4 bg-[#3c096c] hover:bg-[#3c096c]/90 text-white font-bold text-base rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
               >
                 <CmsText slug="landing-cta-btn-primary" fallback="Søk Opptak 2027" />
               </button>
               <button 
                 onClick={(e) => handleNavClick(e, { href: '#curriculum', id: 'curriculum' })}
-                className="w-full sm:w-auto px-8 py-4 bg-surface-container border border-outline-variant text-[#3c096c] font-semibold rounded-xl hover:bg-surface-container-high transition-all active:scale-[0.98]"
+                className="w-full sm:w-auto px-8 py-4 bg-surface-container border border-outline-variant text-[#3c096c] font-bold text-base rounded-xl hover:bg-surface-container-high transition-all active:scale-[0.98]"
               >
                 <CmsText slug="landing-cta-btn-secondary" fallback="Se Undervisningsemner" />
               </button>
@@ -969,20 +970,20 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="w-full py-12 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#3c096c] text-white">
         <div className="flex flex-col gap-2 text-center md:text-left">
-          <CmsText slug="landing-footer-title" fallback="His Kingdom Ministry" as="div" className="font-serif text-lg font-bold text-white" />
-          <CmsText slug="landing-footer-copyright" fallback="© 2026 His Kingdom Ministry. Alle rettigheter reservert. Utrustning av profetiske tjenester for Hans Rike." as="p" className="text-xs text-slate-300 opacity-90 max-w-md" />
+          <CmsText slug="landing-footer-title" fallback="His Kingdom Ministry" as="div" className="font-serif text-xl font-bold text-white" />
+          <CmsText slug="landing-footer-copyright" fallback="© 2026 His Kingdom Ministry. Alle rettigheter reservert. Utrustning av profetiske tjenester for Hans Rike." as="p" className="text-sm text-slate-200 opacity-90 max-w-md" />
         </div>
-        <nav className="flex flex-wrap justify-center gap-6 text-xs text-center">
-          <Link className="text-slate-300 hover:text-white transition-colors" to="/privacy">
+        <nav className="flex flex-wrap justify-center gap-6 text-sm text-center">
+          <Link className="text-slate-200 hover:text-white transition-colors" to="/privacy">
             <CmsText slug="landing-footer-link-privacy" fallback="Personvern" />
           </Link>
-          <Link className="text-slate-300 hover:text-white transition-colors" to="/terms">
+          <Link className="text-slate-200 hover:text-white transition-colors" to="/terms">
             <CmsText slug="landing-footer-link-terms" fallback="Betingelser" />
           </Link>
-          <Link className="text-slate-300 hover:text-white transition-colors" to="/accessibility">
+          <Link className="text-slate-200 hover:text-white transition-colors" to="/accessibility">
             <CmsText slug="landing-footer-link-accessibility" fallback="Tilgjengelighet" />
           </Link>
-          <Link className="text-slate-300 hover:text-white transition-colors" to="/support">
+          <Link className="text-slate-200 hover:text-white transition-colors" to="/support">
             <CmsText slug="landing-footer-link-support" fallback="Kontakt Support" />
           </Link>
         </nav>
