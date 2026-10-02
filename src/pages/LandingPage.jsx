@@ -361,7 +361,7 @@ export default function LandingPage() {
 
                 {/* Main Headline */}
                 <CmsText 
-                  slug="landing-hero-title" 
+                  slug="landing-hero-bold-title" 
                   fallback={language === 'no' 
                     ? "Søk NÅ og bli med i denne profetiske treningsarenaen!" 
                     : "Apply NOW to join this prophetic training ground!"
@@ -372,13 +372,13 @@ export default function LandingPage() {
 
                 {/* Subtitle / Value Proposition */}
                 <CmsText 
-                  slug="landing-hero-description" 
+                  slug="landing-hero-bold-description" 
                   fallback={language === 'no'
                     ? "Bli med og voks i din relasjon til Jesus gjennom Den Hellige Ånd og Guds ord når vi legger ut på denne reisen sammen."
                     : "Come grow in your relationship with Jesus through the Holy Spirit and God’s word as we embark on this journey together."
                   } 
                   as="p" 
-                  className="text-base sm:text-lg text-purple-100/90 max-w-2xl leading-relaxed font-normal" 
+                  className="font-sans text-base sm:text-lg text-purple-100/90 max-w-2xl leading-relaxed font-normal" 
                 />
 
                 {/* Highlight Info Section - Inspired directly by user reference */}
@@ -470,9 +470,11 @@ export default function LandingPage() {
                   <div className="absolute -top-6 -left-6 w-24 h-24 rounded-full bg-[#c5a059]/20 blur-xl pointer-events-none -z-10" />
                 </div>
               </div>
-
             </div>
           </div>
+
+          {/* Mobile geometric white arc accent from reference */}
+          <div className="lg:hidden absolute bottom-12 -right-12 w-36 h-36 rounded-full bg-white pointer-events-none z-0 opacity-95 shadow-xl border-4 border-[#3c096c]/20" />
 
           {/* Bottom Wave Divider into the next section */}
           <div className="relative w-full overflow-hidden leading-none z-10 -mb-1">
