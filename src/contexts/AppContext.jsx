@@ -408,7 +408,7 @@ export const DEFAULT_CMS_CONTENT = {
   'landing-cta-title': 'Er du klar til å tre inn i din gudgitte tjeneste?',
   'landing-cta-title-en': 'Are you ready to step into your God-given ministry?',
   'landing-cta-desc': 'Bli en del av et levende og solid læringsmiljø dedikert til bibelundervisning og åndelig utrustning.',
-  'landing-cta-desc-en': 'Become part of a vibrant and solid learning environment dedicated to Bible teaching and spiritual equipment.',
+  'landing-cta-desc-en': 'Become part of a vibrant and solid learning environment dedicated to Bible teaching and spiritual equipping.',
   'landing-cta-btn-primary': 'Søk Opptak 2027',
   'landing-cta-btn-primary-en': 'Apply for Admission 2027',
   'landing-cta-btn-secondary': 'Se Fagplan',
