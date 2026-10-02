@@ -436,8 +436,8 @@ export default function AdmissionPage() {
         console.warn("Kunne ikke sende e-postvarsel, men søknaden er lagret i Firestore:", emailErr);
       }
 
-      // 3. Webhook til Google Sheets (hvis miljøvariabel er satt)
-      const sheetsWebhook = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL;
+      // 3. Webhook til Google Sheets (miljøvariabel med fallback til aktiv implementering)
+      const sheetsWebhook = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL || 'https://script.google.com/macros/s/AKfycbwxK3zY_Rwt532uyH1G37saGVH5mS3Iq_7palJufHOUOKaEK_mKle9k9ojvM_GKwSHBwA/exec';
       if (sheetsWebhook) {
         try {
           await fetch(sheetsWebhook, {
