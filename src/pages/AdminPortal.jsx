@@ -7,7 +7,9 @@ import {
   Users, Shield, ShieldAlert, Check, Search, Download, Plus, 
   Trash2, Edit3, Filter, Lock, BookOpen, Video, BarChart3, 
   Database, Save, Undo, Mail, Calendar, Info, HelpCircle, 
-  AlertTriangle, Key, ChevronLeft, ChevronRight, X
+  AlertTriangle, Key, ChevronLeft, ChevronRight, X,
+  Unlock, ToggleLeft, ToggleRight, ExternalLink, RefreshCw,
+  CheckCircle2, Clock, Sparkles, GraduationCap, Eye, FileText, Phone
 } from 'lucide-react';
 
 const DEFAULT_USERS = [
@@ -99,8 +101,13 @@ const DEFAULT_PERMISSIONS = {
 };
 
 export default function AdminPortal() {
-  const { user: currentUser, showToast } = useApp();
-  const [activeTab, setActiveTab] = useState('users'); // 'users' | 'permissions'
+  const { user: currentUser, showToast, admissionFormOpen, setAdmissionFormOpenState, language } = useApp();
+  const [activeTab, setActiveTab] = useState(() => {
+    const tabParam = new URLSearchParams(window.location.search).get('tab');
+    if (tabParam === 'admissions' || tabParam === 'opptak') return 'admissions';
+    if (tabParam === 'permissions') return 'permissions';
+    return 'users';
+  });
   
   // Guard Check
   const isAuthorized = currentUser?.role === 'admin' || currentUser?.role === 'superadmin';
@@ -133,10 +140,129 @@ export default function AdminPortal() {
   const [newUserRole, setNewUserRole] = useState('student');
   const [newUserStatus, setNewUserStatus] = useState('AKTIV');
 
-  // --- TAB 2: PERMISSIONS STATE ---
+  // --- TAB 2: OPPTAK & SØKNADSSKJEMA STATE ---
+  const [applicationsList, setApplicationsList] = useState([]);
+  const [leadsList, setLeadsList] = useState([]);
+  const [isLoadingAdmissions, setIsLoadingAdmissions] = useState(false);
+  const [isTogglingAdmission, setIsTogglingAdmission] = useState(false);
+  const [selectedApplication, setSelectedApplication] = useState(null);
+  const [admissionsSearch, setAdmissionsSearch] = useState('');
+  const [admissionsSubTab, setAdmissionsSubTab] = useState('applications'); // 'applications' | 'leads'
+
+  // --- TAB 3: PERMISSIONS STATE ---
   const [selectedRole, setSelectedRole] = useState('admin');
   const [activePermissionGroup, setActivePermissionGroup] = useState('course'); // 'course' | 'user' | 'media' | 'analytics' | 'security'
   const [permissionsMatrix, setPermissionsMatrix] = useState(DEFAULT_PERMISSIONS);
+
+  // Fetch admissions & leads
+  const fetchAdmissionsData = async () => {
+    if (!isAuthorized) return;
+    setIsLoadingAdmissions(true);
+    try {
+      const appSnap = await getDocs(collection(db, "applications"));
+      const apps = appSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      apps.sort((a, b) => {
+        const timeA = a.submittedAt?.seconds ? a.submittedAt.seconds * 1000 : new Date(a.date || a.createdAt || 0).getTime();
+        const timeB = b.submittedAt?.seconds ? b.submittedAt.seconds * 1000 : new Date(b.date || b.createdAt || 0).getTime();
+        return timeB - timeA;
+      });
+      setApplicationsList(apps);
+    } catch (err) {
+      console.warn("Kunne ikke hente søknader:", err);
+    }
+
+    try {
+      const leadSnap = await getDocs(collection(db, "admission_leads"));
+      const leads = leadSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      leads.sort((a, b) => {
+        const timeA = a.createdAt?.seconds ? a.createdAt.seconds * 1000 : new Date(a.createdAt || 0).getTime();
+        const timeB = b.createdAt?.seconds ? b.createdAt.seconds * 1000 : new Date(b.createdAt || 0).getTime();
+        return timeB - timeA;
+      });
+      setLeadsList(leads);
+    } catch (err) {
+      console.warn("Kunne ikke hente leads:", err);
+    } finally {
+      setIsLoadingAdmissions(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthorized) {
+      fetchAdmissionsData();
+    }
+  }, [isAuthorized]);
+
+  const handleToggleAdmissionForm = async () => {
+    setIsTogglingAdmission(true);
+    try {
+      const nextState = !admissionFormOpen;
+      await setAdmissionFormOpenState(nextState);
+      showToast(
+        nextState 
+          ? "Søknadsskjemaet er nå ÅPENT for alle søkere på nettsiden!" 
+          : "Søknadsskjemaet er nå LÅST for vanlige besøkende (åpner 1. jan 2027)."
+      );
+    } catch (err) {
+      showToast("Kunne ikke oppdatere skjema-status: " + err.message, "error");
+    } finally {
+      setIsTogglingAdmission(false);
+    }
+  };
+
+  const exportApplicationsCsv = () => {
+    if (!applicationsList.length) {
+      showToast("Ingen søknader å eksportere.");
+      return;
+    }
+    const headers = ["Navn", "E-post", "Telefon", "Adresse", "Kjønn", "Sivilstatus", "Studielinje", "Betalingsplan", "Status", "Innsendt dato"];
+    const rows = applicationsList.map(a => [
+      `"${(a.name || '').replace(/"/g, '""')}"`,
+      `"${(a.email || '').replace(/"/g, '""')}"`,
+      `"${(a.phone || '').replace(/"/g, '""')}"`,
+      `"${(a.address || '').replace(/"/g, '""')}"`,
+      `"${(a.gender || '').replace(/"/g, '""')}"`,
+      `"${(a.maritalStatus || '').replace(/"/g, '""')}"`,
+      `"${(a.program || '').replace(/"/g, '""')}"`,
+      `"${(a.paymentPlan || '').replace(/"/g, '""')}"`,
+      `"${(a.status || 'Mottatt').replace(/"/g, '""')}"`,
+      `"${(a.submittedAt?.toDate?.() ? a.submittedAt.toDate().toLocaleDateString('no-NO') : a.date || '').replace(/"/g, '""')}"`
+    ]);
+    const csvContent = "\uFEFF" + [headers.join(";"), ...rows.map(r => r.join(";"))].join("\r\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `HKPC_Soknader_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast("Søknader eksportert til CSV (UTF-8 BOM).");
+  };
+
+  const exportLeadsCsv = () => {
+    if (!leadsList.length) {
+      showToast("Ingen registrerte på interesselisten å eksportere.");
+      return;
+    }
+    const headers = ["Navn", "E-post", "Kilde", "Registrert dato"];
+    const rows = leadsList.map(l => [
+      `"${(l.name || '').replace(/"/g, '""')}"`,
+      `"${(l.email || '').replace(/"/g, '""')}"`,
+      `"${(l.source || 'admission_portal_reminder_2027').replace(/"/g, '""')}"`,
+      `"${(l.createdAt?.toDate?.() ? l.createdAt.toDate().toLocaleDateString('no-NO') : '').replace(/"/g, '""')}"`
+    ]);
+    const csvContent = "\uFEFF" + [headers.join(";"), ...rows.map(r => r.join(";"))].join("\r\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `HKPC_Interesseliste_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast("Interesseliste eksportert til CSV (UTF-8 BOM).");
+  };
 
   // Sync users database
   useEffect(() => {
@@ -484,18 +610,27 @@ export default function AdminPortal() {
         </div>
         
         {/* Tab Selection */}
-        <div className="flex bg-[#eaeef2] p-1 rounded-full relative">
+        <div className="flex bg-[#eaeef2] p-1 rounded-full relative overflow-x-auto max-w-full">
           <button
             onClick={() => setActiveTab('users')}
-            className={`px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all relative z-10 ${
+            className={`px-4 sm:px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all relative z-10 whitespace-nowrap ${
               activeTab === 'users' ? 'text-[#561291] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
             }`}
           >
             Brukerhåndtering
           </button>
           <button
+            onClick={() => setActiveTab('admissions')}
+            className={`px-4 sm:px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all relative z-10 flex items-center gap-1.5 whitespace-nowrap ${
+              activeTab === 'admissions' ? 'text-[#561291] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
+            }`}
+          >
+            <span>Opptak & Skjema</span>
+            <span className={`w-2 h-2 rounded-full shrink-0 ${admissionFormOpen ? 'bg-green-500 animate-pulse' : 'bg-amber-500'}`} />
+          </button>
+          <button
             onClick={() => setActiveTab('permissions')}
-            className={`px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all relative z-10 ${
+            className={`px-4 sm:px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all relative z-10 whitespace-nowrap ${
               activeTab === 'permissions' ? 'text-[#561291] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
             }`}
           >
@@ -505,9 +640,11 @@ export default function AdminPortal() {
           <motion.div
             className="absolute top-1 bottom-1 left-1 bg-white rounded-full shadow-sm"
             layoutId="portalTabIndicator"
-            style={{ width: activeTab === 'users' ? 'calc(50% - 4px)' : 'calc(50% - 4px)' }}
-            animate={{ x: activeTab === 'users' ? '0%' : '100%' }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            style={{ width: 'calc(33.333% - 2px)' }}
+            animate={{ 
+              x: activeTab === 'users' ? '0%' : activeTab === 'admissions' ? '100%' : '200%' 
+            }}
+            transition={{ type: 'spring', stiffness: 350, damping: 32 }}
           />
         </div>
       </div>
@@ -811,6 +948,356 @@ export default function AdminPortal() {
               </div>
             </div>
 
+          </motion.div>
+        ) : activeTab === 'admissions' ? (
+          <motion.div
+            key="admissions-tab"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-6"
+          >
+            {/* 1. MASTER TOGGLE & CONTROL CARD */}
+            <div className="bg-white border border-outline-variant/40 rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-[#561291]/5 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#D7B978]/10 rounded-full blur-3xl pointer-events-none" />
+
+              <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div className="space-y-3 max-w-2xl">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs uppercase font-extrabold tracking-wider text-[#561291] bg-[#561291]/10 px-3 py-1 rounded-full">
+                      Hovedbryter for Opptak
+                    </span>
+                    <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full border ${
+                      admissionFormOpen 
+                        ? 'bg-green-50 text-green-700 border-green-200' 
+                        : 'bg-amber-50 text-amber-800 border-amber-200'
+                    }`}>
+                      <span className={`w-2 h-2 rounded-full ${admissionFormOpen ? 'bg-green-500 animate-pulse' : 'bg-amber-500'}`} />
+                      {admissionFormOpen ? 'Søknadsskjema er ÅPENT' : 'Søknadsskjema er LÅST (1. jan 2027)'}
+                    </span>
+                  </div>
+
+                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#561291] tracking-tight">
+                    {admissionFormOpen 
+                      ? 'Skjemaet er åpent for alle søkere' 
+                      : 'Skjemaet er låst for vanlige besøkende'}
+                  </h3>
+
+                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                    {admissionFormOpen ? (
+                      <>
+                        Søknadsportalen på <span className="font-bold text-[#561291]">/admission</span> er nå fullstendig åpen for publikum. Alle besøkende kan fylle ut de 4 stegene og sende inn sin søknad. Slå av bryteren for å sette skjemaet tilbake til planlagt modus (1. januar 2027).
+                      </>
+                    ) : (
+                      <>
+                        Vanlige besøkende ser informasjonssiden og inviteres til å registrere e-post for påminnelse. Søknadsskjemaet åpner automatisk <span className="font-bold text-[#561291]">1. januar 2027</span>. Du kan når som helst åpne skjemaet for alle ved å slå på toggle-bryteren her.
+                      </>
+                    )}
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-3 pt-1">
+                    <a
+                      href="/admission"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-[#561291] text-xs font-bold rounded-xl transition-all active:scale-[0.98]"
+                    >
+                      <ExternalLink size={14} />
+                      <span>Åpne søknadssiden</span>
+                    </a>
+                    <a
+                      href="/admission?preview=true"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all active:scale-[0.98]"
+                    >
+                      <Eye size={14} />
+                      <span>Forhåndsvis som søker</span>
+                    </a>
+                    <button
+                      type="button"
+                      onClick={fetchAdmissionsData}
+                      disabled={isLoadingAdmissions}
+                      className="inline-flex items-center gap-1.5 px-3 py-2 text-slate-500 hover:text-[#561291] text-xs font-medium rounded-xl hover:bg-slate-50 transition-all"
+                    >
+                      <RefreshCw size={13} className={isLoadingAdmissions ? "animate-spin" : ""} />
+                      <span>Oppdater data</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* THE TOGGLE SWITCH */}
+                <div className="bg-slate-50 border border-slate-200/80 p-5 sm:p-6 rounded-2xl flex flex-col items-center justify-center gap-3 shrink-0 min-w-[260px] text-center">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Manuell Åpningsbryter
+                  </span>
+
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={admissionFormOpen}
+                    disabled={isTogglingAdmission}
+                    onClick={handleToggleAdmissionForm}
+                    className={`w-20 h-11 flex items-center rounded-full p-1.5 cursor-pointer transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-[#561291]/20 shadow-inner ${
+                      admissionFormOpen ? 'bg-green-500 justify-end' : 'bg-slate-300 justify-start'
+                    }`}
+                    title={admissionFormOpen ? "Klikk for å låse/stenge skjemaet" : "Klikk for å åpne skjemaet for alle"}
+                  >
+                    <motion.div
+                      layout
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                      className="bg-white w-8 h-8 rounded-full shadow-lg flex items-center justify-center text-[#561291]"
+                    >
+                      {admissionFormOpen ? (
+                        <Check size={18} className="text-green-600 stroke-[3]" />
+                      ) : (
+                        <Lock size={15} className="text-slate-500" />
+                      )}
+                    </motion.div>
+                  </button>
+
+                  <div className="space-y-0.5">
+                    <span className={`text-sm font-extrabold block ${admissionFormOpen ? 'text-green-700' : 'text-slate-700'}`}>
+                      {admissionFormOpen ? 'PÅ (Skjema er ÅPENT)' : 'AV (Skjema er LÅST)'}
+                    </span>
+                    <span className="text-[11px] text-slate-500 font-normal block">
+                      {admissionFormOpen ? 'Klikk for å låse' : 'Klikk for å åpne for alle nå'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. KPI / STATS ROW */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-white border border-outline-variant/40 p-5 rounded-2xl shadow-sm space-y-1">
+                <div className="flex items-center justify-between text-[#561291]">
+                  <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Mottatte søknader</p>
+                  <FileText size={18} />
+                </div>
+                <p className="text-3xl font-serif font-bold text-[#561291]">{applicationsList.length}</p>
+                <p className="text-xs text-slate-500">Innsendte skjemaer via nettsiden</p>
+              </div>
+
+              <div className="bg-white border border-outline-variant/40 p-5 rounded-2xl shadow-sm space-y-1">
+                <div className="flex items-center justify-between text-[#561291]">
+                  <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Interesseliste</p>
+                  <Mail size={18} />
+                </div>
+                <p className="text-3xl font-serif font-bold text-[#561291]">{leadsList.length}</p>
+                <p className="text-xs text-slate-500">Registrert for forhåndsvarsel</p>
+              </div>
+
+              <div className="bg-white border border-outline-variant/40 p-5 rounded-2xl shadow-sm space-y-1">
+                <div className="flex items-center justify-between text-[#561291]">
+                  <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Ordinær åpning</p>
+                  <Calendar size={18} />
+                </div>
+                <p className="text-2xl font-serif font-bold text-slate-800">1. jan 2027</p>
+                <p className="text-xs text-slate-500">Automatisk låsing før denne dato</p>
+              </div>
+
+              <div className="bg-white border border-outline-variant/40 p-5 rounded-2xl shadow-sm space-y-1">
+                <div className="flex items-center justify-between text-[#561291]">
+                  <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Søknadsfrist</p>
+                  <Clock size={18} />
+                </div>
+                <p className="text-2xl font-serif font-bold text-slate-800">30. juni 2027</p>
+                <p className="text-xs text-slate-500">Fortløpende opptaksevaluering</p>
+              </div>
+            </div>
+
+            {/* 3. DATA TABLES WITH SUB-TABS */}
+            <div className="bg-white border border-outline-variant/40 rounded-3xl p-5 sm:p-7 shadow-sm space-y-6">
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-slate-100 pb-5">
+                <div className="flex bg-[#eaeef2] p-1 rounded-xl">
+                  <button
+                    onClick={() => setAdmissionsSubTab('applications')}
+                    className={`px-4 py-2 rounded-lg text-xs uppercase font-bold tracking-wider transition-all ${
+                      admissionsSubTab === 'applications' ? 'bg-white text-[#561291] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Innsendte Søknader ({applicationsList.length})
+                  </button>
+                  <button
+                    onClick={() => setAdmissionsSubTab('leads')}
+                    className={`px-4 py-2 rounded-lg text-xs uppercase font-bold tracking-wider transition-all ${
+                      admissionsSubTab === 'leads' ? 'bg-white text-[#561291] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Varslingsliste ({leadsList.length})
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      placeholder="Søk i listen..."
+                      value={admissionsSearch}
+                      onChange={(e) => setAdmissionsSearch(e.target.value)}
+                      className="pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-[#561291] outline-none"
+                    />
+                  </div>
+
+                  {admissionsSubTab === 'applications' ? (
+                    <button
+                      onClick={exportApplicationsCsv}
+                      className="flex items-center gap-1.5 px-4 py-2 bg-[#561291] hover:bg-[#430d72] text-white text-xs font-bold rounded-xl transition-all shadow-xs"
+                      title="Last ned CSV (UTF-8 BOM, semi-kolon)"
+                    >
+                      <Download size={14} />
+                      <span className="hidden sm:inline">Eksporter CSV</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={exportLeadsCsv}
+                      className="flex items-center gap-1.5 px-4 py-2 bg-[#561291] hover:bg-[#430d72] text-white text-xs font-bold rounded-xl transition-all shadow-xs"
+                      title="Last ned CSV (UTF-8 BOM, semi-kolon)"
+                    >
+                      <Download size={14} />
+                      <span className="hidden sm:inline">Eksporter CSV</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Sub-tab 1: Applications */}
+              {admissionsSubTab === 'applications' && (
+                <div className="overflow-x-auto">
+                  {applicationsList.length === 0 ? (
+                    <div className="text-center py-12 text-slate-400 space-y-2">
+                      <GraduationCap size={40} className="mx-auto text-slate-300" />
+                      <p className="text-sm font-semibold text-slate-600">Ingen søknader mottatt enda</p>
+                      <p className="text-xs max-w-sm mx-auto">
+                        Når søkere fyller ut skjemaet på nettsiden, lagres de automatisk her i sanntid.
+                      </p>
+                    </div>
+                  ) : (
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                          <th className="py-3 px-3">Søker</th>
+                          <th className="py-3 px-3">Kontakt</th>
+                          <th className="py-3 px-3">Studielinje</th>
+                          <th className="py-3 px-3">Betaling</th>
+                          <th className="py-3 px-3">Dato</th>
+                          <th className="py-3 px-3 text-right">Handling</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-xs">
+                        {applicationsList
+                          .filter(app => {
+                            if (!admissionsSearch.trim()) return true;
+                            const q = admissionsSearch.toLowerCase();
+                            return (
+                              (app.name || '').toLowerCase().includes(q) ||
+                              (app.email || '').toLowerCase().includes(q) ||
+                              (app.phone || '').toLowerCase().includes(q) ||
+                              (app.program || '').toLowerCase().includes(q)
+                            );
+                          })
+                          .map(app => (
+                            <tr key={app.id} className="hover:bg-slate-50/70 transition-colors">
+                              <td className="py-3 px-3 font-semibold text-slate-800">
+                                <div>{app.name || 'Ukjent navn'}</div>
+                                <div className="text-[11px] text-slate-500 font-normal">{app.email}</div>
+                              </td>
+                              <td className="py-3 px-3 text-slate-600">
+                                <div>{app.phone || '–'}</div>
+                                <div className="text-[11px] text-slate-400">{app.address || ''}</div>
+                              </td>
+                              <td className="py-3 px-3">
+                                <span className="inline-block px-2.5 py-1 bg-[#561291]/10 text-[#561291] font-bold rounded-lg text-[11px]">
+                                  {app.program === 'prophetic_community' ? 'PROP 101' :
+                                   app.program === 'bible_deep_dive' ? 'BIBLE 301' :
+                                   app.program === 'fivefold_ministry' ? 'MIN 201' : (app.program || 'Ikke spesifisert')}
+                                </span>
+                              </td>
+                              <td className="py-3 px-3 text-slate-600 capitalize">
+                                {app.paymentPlan === 'semester' ? 'Semestervis' : app.paymentPlan === 'yearly' ? 'Fullt år' : (app.paymentPlan || '–')}
+                              </td>
+                              <td className="py-3 px-3 text-slate-500 whitespace-nowrap">
+                                {app.submittedAt?.toDate?.() ? app.submittedAt.toDate().toLocaleDateString('no-NO') : (app.date || '–')}
+                              </td>
+                              <td className="py-3 px-3 text-right">
+                                <button
+                                  type="button"
+                                  onClick={() => setSelectedApplication(app)}
+                                  className="px-3 py-1.5 bg-slate-100 hover:bg-[#561291] hover:text-white text-[#561291] font-bold rounded-lg transition-colors text-xs inline-flex items-center gap-1"
+                                >
+                                  <Eye size={13} />
+                                  <span>Vis</span>
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              )}
+
+              {/* Sub-tab 2: Leads / Reminder Signups */}
+              {admissionsSubTab === 'leads' && (
+                <div className="overflow-x-auto">
+                  {leadsList.length === 0 ? (
+                    <div className="text-center py-12 text-slate-400 space-y-2">
+                      <Mail size={40} className="mx-auto text-slate-300" />
+                      <p className="text-sm font-semibold text-slate-600">Ingen registrert for forhåndsvarsel enda</p>
+                      <p className="text-xs max-w-sm mx-auto">
+                        Besøkende som legger igjen navn og e-post mens søknadsskjemaet er låst havner automatisk her.
+                      </p>
+                    </div>
+                  ) : (
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                          <th className="py-3 px-3">Navn</th>
+                          <th className="py-3 px-3">E-post</th>
+                          <th className="py-3 px-3">Kilde</th>
+                          <th className="py-3 px-3">Registrert</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-xs">
+                        {leadsList
+                          .filter(lead => {
+                            if (!admissionsSearch.trim()) return true;
+                            const q = admissionsSearch.toLowerCase();
+                            return (
+                              (lead.name || '').toLowerCase().includes(q) ||
+                              (lead.email || '').toLowerCase().includes(q)
+                            );
+                          })
+                          .map(lead => (
+                            <tr key={lead.id} className="hover:bg-slate-50/70 transition-colors">
+                              <td className="py-3 px-3 font-semibold text-slate-800">
+                                {lead.name || '–'}
+                              </td>
+                              <td className="py-3 px-3 text-[#561291] font-medium">
+                                <a href={`mailto:${lead.email}`} className="hover:underline">
+                                  {lead.email}
+                                </a>
+                              </td>
+                              <td className="py-3 px-3 text-slate-500">
+                                <span className="text-[10px] bg-slate-100 px-2 py-0.5 rounded-md font-mono">
+                                  {lead.source || 'admission_portal_reminder_2027'}
+                                </span>
+                              </td>
+                              <td className="py-3 px-3 text-slate-500 whitespace-nowrap">
+                                {lead.createdAt?.toDate?.() ? lead.createdAt.toDate().toLocaleDateString('no-NO') : (lead.date || '–')}
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              )}
+            </div>
           </motion.div>
         ) : (
           <motion.div
@@ -1210,6 +1697,137 @@ export default function AdminPortal() {
                   </button>
                 </div>
               </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* --- APPLICATION DETAIL MODAL --- */}
+      <AnimatePresence>
+        {selectedApplication && (
+          <div className="fixed inset-0 bg-[#561291]/45 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="bg-white rounded-3xl border border-outline-variant/50 max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative my-8 max-h-[90vh] overflow-y-auto"
+            >
+              <button
+                onClick={() => setSelectedApplication(null)}
+                className="absolute top-4 right-4 p-1.5 hover:bg-slate-100 rounded-lg text-[#72787e] hover:text-[#561291] transition-all"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="border-b border-slate-100 pb-4 mb-6">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] uppercase font-extrabold tracking-wider bg-[#561291]/10 text-[#561291] px-2.5 py-0.5 rounded-md">
+                    Søknadsdetaljer
+                  </span>
+                  <span className="text-xs text-slate-400">ID: {selectedApplication.id}</span>
+                </div>
+                <h3 className="font-serif text-2xl font-bold text-[#561291]">
+                  {selectedApplication.name || 'Ukjent søker'}
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Innsendt: {selectedApplication.submittedAt?.toDate?.() ? selectedApplication.submittedAt.toDate().toLocaleString('no-NO') : (selectedApplication.date || '–')}
+                </p>
+              </div>
+
+              <div className="space-y-6 text-sm">
+                {/* Personalia */}
+                <div className="space-y-2">
+                  <h4 className="font-bold text-xs uppercase tracking-wider text-[#561291] border-b border-slate-100 pb-1">
+                    1. Personalia & Kontakt
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div><span className="text-slate-400 block">E-post:</span> <span className="font-semibold text-slate-800">{selectedApplication.email || '–'}</span></div>
+                    <div><span className="text-slate-400 block">Telefon:</span> <span className="font-semibold text-slate-800">{selectedApplication.phone || '–'}</span></div>
+                    <div><span className="text-slate-400 block">Fødselsdato:</span> <span className="font-semibold text-slate-800">{selectedApplication.birthDate || '–'}</span></div>
+                    <div><span className="text-slate-400 block">Kjønn:</span> <span className="font-semibold text-slate-800">{selectedApplication.gender || '–'}</span></div>
+                    <div><span className="text-slate-400 block">Sivilstatus:</span> <span className="font-semibold text-slate-800">{selectedApplication.maritalStatus || '–'}</span></div>
+                    <div><span className="text-slate-400 block">Yrke/Stilling:</span> <span className="font-semibold text-slate-800">{selectedApplication.occupation || '–'}</span></div>
+                    <div className="sm:col-span-2"><span className="text-slate-400 block">Adresse:</span> <span className="font-semibold text-slate-800">{selectedApplication.address || '–'}</span></div>
+                  </div>
+                </div>
+
+                {/* Studielinje */}
+                <div className="space-y-2">
+                  <h4 className="font-bold text-xs uppercase tracking-wider text-[#561291] border-b border-slate-100 pb-1">
+                    2. Valgt Studielinje
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <span className="text-slate-400 block">Studieprogram:</span>
+                      <span className="font-bold text-[#561291]">
+                        {selectedApplication.program === 'prophetic_community' ? 'PROP 101 – Innføring i den Profetiske Tjeneste' :
+                         selectedApplication.program === 'bible_deep_dive' ? 'BIBLE 301 – Avansert Hermeneutikk & Tolkning' :
+                         selectedApplication.program === 'fivefold_ministry' ? 'MIN 201 – Praktisk Tjenestegave-lederskap' : (selectedApplication.program || '–')}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block">Betalingsplan:</span>
+                      <span className="font-semibold text-slate-800 capitalize">{selectedApplication.paymentPlan || '–'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Åndelig bakgrunn */}
+                <div className="space-y-2">
+                  <h4 className="font-bold text-xs uppercase tracking-wider text-[#561291] border-b border-slate-100 pb-1">
+                    3. Åndelig Bakgrunn & Motivasjon
+                  </h4>
+                  <div className="space-y-3 text-xs">
+                    <div>
+                      <span className="text-slate-400 block mb-1">Hvorfor søker du HKPC?</span>
+                      <p className="p-3 bg-slate-50 rounded-xl text-slate-700 leading-relaxed font-normal whitespace-pre-wrap">
+                        {selectedApplication.whySeeking || 'Ikke oppgitt'}
+                      </p>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block mb-1">Forventninger til studieåret:</span>
+                      <p className="p-3 bg-slate-50 rounded-xl text-slate-700 leading-relaxed font-normal whitespace-pre-wrap">
+                        {selectedApplication.expectations || 'Ikke oppgitt'}
+                      </p>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block mb-1">Frelseserfaring & dåp:</span>
+                      <p className="p-3 bg-slate-50 rounded-xl text-slate-700 leading-relaxed font-normal whitespace-pre-wrap">
+                        {selectedApplication.salvationExperience || 'Ikke oppgitt'}
+                      </p>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block mb-1">Menighetstilknytning:</span>
+                      <p className="p-3 bg-slate-50 rounded-xl text-slate-700 leading-relaxed font-normal whitespace-pre-wrap">
+                        {selectedApplication.churchAffiliation || 'Ikke oppgitt'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Referanse */}
+                <div className="space-y-2">
+                  <h4 className="font-bold text-xs uppercase tracking-wider text-[#561291] border-b border-slate-100 pb-1">
+                    4. Referanseperson
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div><span className="text-slate-400 block">Navn:</span> <span className="font-semibold text-slate-800">{selectedApplication.referenceName || '–'}</span></div>
+                    <div><span className="text-slate-400 block">Rolle / Relasjon:</span> <span className="font-semibold text-slate-800">{selectedApplication.referenceRole || '–'}</span></div>
+                    <div><span className="text-slate-400 block">E-post:</span> <span className="font-semibold text-slate-800">{selectedApplication.referenceEmail || '–'}</span></div>
+                    <div><span className="text-slate-400 block">Telefon:</span> <span className="font-semibold text-slate-800">{selectedApplication.referencePhone || '–'}</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-6 mt-6 border-t border-slate-100 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setSelectedApplication(null)}
+                  className="px-5 py-2.5 bg-[#561291] text-white rounded-xl text-xs font-bold hover:opacity-95 transition-all shadow-sm"
+                >
+                  Lukk
+                </button>
+              </div>
             </motion.div>
           </div>
         )}

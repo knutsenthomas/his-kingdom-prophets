@@ -6,7 +6,7 @@ import {
   Globe, History, Download, Upload, Search, Settings, AlertTriangle, 
   ChevronLeft, ChevronRight, MoreVertical, X, CheckCircle2, Trash2, 
   Copy, PlusCircle, Languages, Info, RotateCcw, Layout, UserCheck, 
-  BookOpen, Users, Rocket, Flag, UploadCloud, FileText, Award, HelpCircle
+  BookOpen, Users, Rocket, Flag, UploadCloud, FileText, Award, HelpCircle, Lock
 } from 'lucide-react';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/firebase';
@@ -402,7 +402,7 @@ const assetDefinitions = [
 export default function CMSDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, cmsContent, updateCmsContent } = useApp();
+  const { user, cmsContent, updateCmsContent, admissionFormOpen, setAdmissionFormOpenState } = useApp();
   
   // Ref for global hotkey focusing of search input
   const searchInputRef = useRef(null);
@@ -1421,6 +1421,56 @@ export default function CMSDashboard() {
             <DocumentCMSPanel />
           ) : (
             <>
+              {selectedCategory === 'admission' && (
+                <div className="bg-[#561291] text-white p-5 rounded-2xl shadow-sm border border-[#7924c7]/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] uppercase font-extrabold tracking-wider text-[#D7B978]">Hovedbryter for Opptak</span>
+                      <span className="text-xs px-2.5 py-0.5 rounded-md bg-white/10 font-semibold">
+                        {admissionFormOpen ? 'Status: ÅPENT FOR ALLE' : 'Status: LÅST (Planlagt 1. jan 2027)'}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-200">
+                      {admissionFormOpen 
+                        ? 'Søknadsskjemaet er nå direkte tilgjengelig for alle besøkende på nettsiden.'
+                        : 'Søknadsskjemaet er låst for vanlige besøkende og åpner 1. januar 2027. Du kan åpne det for alle nå med denne toggle-knappen.'}
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
+                    <span className="text-xs font-bold text-white/90">
+                      {admissionFormOpen ? 'Skjema er ÅPENT' : 'Skjema er LÅST'}
+                    </span>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={admissionFormOpen}
+                      onClick={async () => {
+                        const nextState = !admissionFormOpen;
+                        await setAdmissionFormOpenState(nextState);
+                        setToastMessage({
+                          title: nextState ? "Søknadsskjema er ÅPENT" : "Søknadsskjema er LÅST",
+                          desc: nextState ? "Søknadsskjemaet er nå direkte tilgjengelig for alle besøkende." : "Skjemaet er nå satt til planlagt modus (1. januar 2027)."
+                        });
+                        setShowToast(true);
+                      }}
+                      className={`w-14 h-8 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#D7B978] ${
+                        admissionFormOpen ? 'bg-green-500 justify-end' : 'bg-white/20 justify-start'
+                      }`}
+                      title={admissionFormOpen ? "Klikk for å stenge/låse skjemaet" : "Klikk for å åpne skjemaet for alle"}
+                    >
+                      <motion.div
+                        layout
+                        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                        className="bg-white w-6 h-6 rounded-full shadow-md flex items-center justify-center text-[#561291]"
+                      >
+                        {admissionFormOpen ? <CheckCircle2 size={14} className="text-green-600 stroke-[3]" /> : <Lock size={12} className="text-slate-500" />}
+                      </motion.div>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Filters Card */}
               <div className="bg-white border border-outline-variant/30 rounded-xl p-4 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 select-none">
             <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto">

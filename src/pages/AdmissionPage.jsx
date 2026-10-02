@@ -19,13 +19,16 @@ const ADMISSION_OPEN_DATE = new Date('2027-01-01T00:00:00');
 
 export default function AdmissionPage() {
   const navigate = useNavigate();
-  const { language, toggleLanguage, showToast, user } = useApp();
+  const { language, toggleLanguage, showToast, user, admissionFormOpen, setAdmissionFormOpenState } = useApp();
 
   const stripePublicKey = "pk_live_51Pab8rAL393JGrO9bTUitYflDKlHGpLiqZCCBp0dCzBEV3ZFxARFfK6MgWraehq7i79tJHPIEzlpMwPiT2K3HsiZ00gJ1TQ71Y";
 
-  // Check if admission is open (automatically unlocks on Jan 1, 2027, or with ?preview=true / admin)
-  const isPreviewMode = new URLSearchParams(window.location.search).get('preview') === 'true' || user?.role === 'admin';
-  const isAdmissionOpen = isPreviewMode || (new Date() >= ADMISSION_OPEN_DATE);
+  const isAdmin = user?.role === 'admin' || user?.role === 'superadmin';
+  const isPreviewMode = new URLSearchParams(window.location.search).get('preview') === 'true';
+  const isFormManuallyOpen = Boolean(admissionFormOpen);
+
+  // Check if admission is open (automatically unlocks on Jan 1, 2027, or when toggled open by admin, or with ?preview=true / admin)
+  const isAdmissionOpen = isFormManuallyOpen || (new Date() >= ADMISSION_OPEN_DATE) || isPreviewMode || isAdmin;
 
   // Interest List / Reminder State (for visitors before Jan 1, 2027)
   const [interestEmail, setInterestEmail] = useState('');
@@ -951,7 +954,57 @@ export default function AdmissionPage() {
         </section>
 
         {/* SECTION 4: INTERACTIVE 4-STEP APPLICATION FORM OR OPENING ANNOUNCEMENT */}
-        <section id="apply-form" className="max-w-4xl mx-auto scroll-mt-24">
+        <section id="apply-form" className="max-w-4xl mx-auto scroll-mt-24 space-y-4">
+          {isAdmin && (
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#561291] text-white shadow-md border border-[#7924c7]/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-3.5 h-3.5 rounded-full ${isFormManuallyOpen ? 'bg-green-400 shadow-sm shadow-green-400/80 animate-pulse' : 'bg-amber-400'}`} />
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs uppercase font-extrabold tracking-wider text-[#D7B978]">Admin Styring</span>
+                    <span className="text-[11px] px-2 py-0.5 rounded-md bg-white/10 font-medium">
+                      {isFormManuallyOpen ? 'Offentlig status: ÅPENT' : 'Offentlig status: LÅST (Planlagt 1. jan 2027)'}
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-200 mt-0.5">
+                    {isFormManuallyOpen 
+                      ? 'Søknadsskjemaet er nå direkte tilgjengelig for alle besøkende på nettsiden.'
+                      : 'Skjemaet er låst for publikum fram til 1. januar 2027. Du ser det fordi du er logget inn som administrator.'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Toggle Switch */}
+              <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
+                <span className="text-xs font-bold text-white/90">
+                  {isFormManuallyOpen ? 'Skjema er ÅPENT' : 'Skjema er LÅST'}
+                </span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={isFormManuallyOpen}
+                  onClick={async () => {
+                    const nextState = !isFormManuallyOpen;
+                    await setAdmissionFormOpenState(nextState);
+                    showToast(nextState ? "Søknadsskjemaet er nå ÅPENT for alle besøkende!" : "Søknadsskjemaet er nå LÅST for vanlige besøkende.");
+                  }}
+                  className={`w-14 h-8 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#D7B978] ${
+                    isFormManuallyOpen ? 'bg-green-500 justify-end' : 'bg-white/20 justify-start'
+                  }`}
+                  title={isFormManuallyOpen ? "Klikk for å stenge/låse skjemaet" : "Klikk for å åpne skjemaet for alle"}
+                >
+                  <motion.div
+                    layout
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    className="bg-white w-6 h-6 rounded-full shadow-md flex items-center justify-center text-[#561291]"
+                  >
+                    {isFormManuallyOpen ? <Check size={14} className="text-green-600 stroke-[3]" /> : <Lock size={12} className="text-slate-500" />}
+                  </motion.div>
+                </button>
+              </div>
+            </div>
+          )}
+
           {!isAdmissionOpen ? (
             /* LOCKED / COMING SOON VIEW (Before January 1, 2027) */
             <div className="bg-white border border-[#e2dce7]/70 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-12 shadow-lg text-center space-y-6 sm:space-y-8 relative overflow-hidden">
@@ -1079,7 +1132,7 @@ export default function AdmissionPage() {
           ) : (
             /* ACTIVE APPLICATION WIZARD (Opens Jan 1, 2027 or in ?preview=true mode) */
             <div className="bg-white border border-[#e2dce7]/70 rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-10 shadow-lg">
-              {isPreviewMode && (
+              {isPreviewMode && !isAdmin && (
                 <div className="mb-6 p-3 px-4 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <span className="font-bold">⚠️ Forhåndsvisningsmodus aktiv (?preview=true):</span>

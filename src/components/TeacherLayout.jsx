@@ -101,6 +101,7 @@ export default function TeacherLayout() {
 
   if (user?.role === 'admin' || user?.role === 'superadmin') {
     navItems.push({ isHeader: true, slug: 'sidebar-administration', fallback: 'Administrasjon' });
+    navItems.push({ slug: 'sidebar-admissions-admin', fallback: 'Opptak & Søknader', path: '/admin/portal?tab=admissions', icon: GraduationCap });
     navItems.push({ slug: 'sidebar-cms-editor', fallback: 'Global CMS Styring', path: '/admin/cms', icon: Languages });
     navItems.push({ slug: 'sidebar-document-admin', fallback: 'Dokumentbehandling', path: '/admin/cms?category=documents', icon: FileText });
     navItems.push({ slug: 'sidebar-analytics', fallback: 'Analytics Dashboard', path: '/admin/analytics', icon: BarChart3 });

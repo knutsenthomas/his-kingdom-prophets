@@ -808,6 +808,7 @@ export const DEFAULT_CMS_CONTENT = {
   'profile-placeholder-bio-student-en': 'Write a little about yourself, your spiritual journey, and what you wish to learn at HKM...',
   'profile-placeholder-social-username': 'brukernavn',
   'profile-placeholder-social-username-en': 'username',
+  'admission-form-open': false,
   'admission-hero-badge': 'Opptak for høstsemesteret 2026 er nå åpent',
   'admission-hero-badge-en': 'Admissions for Fall Semester 2026 Now Open',
   'admission-hero-title': 'Søk Opptak ved His Kingdom Prophetic Community',
@@ -1579,6 +1580,31 @@ export const AppProvider = ({ children }) => {
       }
     };
     fetchCmsContent();
+
+    let unsubCms;
+    try {
+      const cmsDocRef = doc(db, "cms_configs", "default");
+      unsubCms = onSnapshot(cmsDocRef, (snap) => {
+        if (snap.exists()) {
+          const dbData = snap.data();
+          setCmsContent(prev => {
+            const merged = { ...prev, ...dbData };
+            try {
+              localStorage.setItem('hkm-cms-content', JSON.stringify(merged));
+            } catch (e) {}
+            return merged;
+          });
+        }
+      }, (err) => {
+        console.warn("Realtime CMS subscription notice:", err?.message);
+      });
+    } catch (e) {
+      console.warn("Could not attach CMS realtime listener:", e);
+    }
+
+    return () => {
+      if (unsubCms) unsubCms();
+    };
   }, []);
 
   useEffect(() => {
@@ -1713,7 +1739,19 @@ export const AppProvider = ({ children }) => {
           syncProfileInBackground();
 
         } else {
-          // Clear user session when logged out
+          // Clear user session when logged out, but preserve admin in localhost development if set
+          const saved = localStorage.getItem('hkm-current-user');
+          if (saved && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+            try {
+              const parsed = JSON.parse(saved);
+              if (parsed?.role === 'superadmin' || parsed?.role === 'admin') {
+                setUser(parsed);
+                setIsLoggedIn(true);
+                setIsAuthReady(true);
+                return;
+              }
+            } catch (e) {}
+          }
           setUser(null);
           setIsLoggedIn(false);
           setIsAuthReady(true);
@@ -1834,6 +1872,23 @@ export const AppProvider = ({ children }) => {
       await setDoc(cmsDocRef, { [slug]: value }, { merge: true });
     } catch (err) {
       console.error("Feil ved oppdatering av CMS-innhold i Firestore:", err);
+    }
+  };
+
+  const admissionFormOpen = Boolean(cmsContent['admission-form-open']);
+
+  const setAdmissionFormOpenState = async (isOpen) => {
+    const boolVal = Boolean(isOpen);
+    await updateCmsContent('admission-form-open', boolVal);
+    try {
+      const configDocRef = doc(db, "system_configs", "admissions");
+      await setDoc(configDocRef, { 
+        isOpen: boolVal, 
+        updatedAt: new Date().toISOString(),
+        updatedBy: user?.email || 'admin'
+      }, { merge: true });
+    } catch (err) {
+      console.warn("Kunne ikke skrive til system_configs/admissions:", err);
     }
   };
 
@@ -2974,7 +3029,9 @@ export const AppProvider = ({ children }) => {
       language,
       toggleLanguage,
       assistantContext,
-      setAssistantContext
+      setAssistantContext,
+      admissionFormOpen,
+      setAdmissionFormOpenState
     }}>
       {children}
     </AppContext.Provider>
