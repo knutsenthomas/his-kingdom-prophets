@@ -87,7 +87,7 @@ export default {
       },
       fontFamily: {
         serif: ["Merriweather", "Georgia", "serif"],
-        sans: ["Merriweather", "Source Sans 3", "Inter", "sans-serif"],
+        sans: ["Inter", "Source Sans 3", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
         "mono-sm": ["JetBrains Mono"],
         "headline-md": ["Merriweather"],

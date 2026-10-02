@@ -317,49 +317,172 @@ export default function LandingPage() {
       </AnimatePresence>
 
       <main>
-        {/* Hero Section */}
-        <section className="relative min-h-[75vh] flex items-center overflow-hidden bg-primary text-white">
-          <div className="absolute inset-0 z-0">
+        {/* Modern Hero Section - Inspired by student community & organic wave aesthetic */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#3c096c] via-[#4a0e78] to-[#240046] text-white">
+          {/* Ambient background glows */}
+          <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-secondary/20 blur-3xl pointer-events-none" />
+          <div className="absolute top-1/2 right-0 w-96 h-96 rounded-full bg-[#c5a059]/15 blur-3xl pointer-events-none" />
+
+          {/* Mobile Top Image with Organic Wave Divider (shows on screens < lg) */}
+          <div className="lg:hidden relative w-full h-72 sm:h-96 overflow-hidden">
             <img 
-              alt="Prophetic Bible School" 
-              className="w-full h-full object-cover opacity-50" 
-              src={worshipHero}
+              src="/img/hero-students.jpg" 
+              alt="Prophetic Community Students Studying" 
+              className="w-full h-full object-cover object-top"
             />
-            <div className="absolute inset-0 hero-gradient"></div>
-          </div>
-          <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 py-16 md:py-32">
-            <div className="max-w-2xl animate-in fade-in slide-in-from-left-8 duration-700">
-              <span className="inline-block px-4 py-1.5 mb-6 rounded-full bg-primary-fixed/20 text-primary-fixed font-semibold text-sm uppercase tracking-wider backdrop-blur-md border border-primary-fixed/30">
-                <CmsText slug="landing-hero-tagline" fallback="Profetisk Tjeneste og Åndelig Dybde" />
-              </span>
-              <CmsText 
-                slug="landing-hero-title" 
-                fallback="His Kingdom Prophetic Community" 
-                as="h1" 
-                className="font-serif text-3xl md:text-5xl lg:text-6xl text-white mb-8 leading-tight font-bold" 
-              />
-              <CmsText 
-                slug="landing-hero-description" 
-                fallback="His Kingdom Ministry fokuserer på misjon, utrustning av de hellige, bibelundervisning, bønn, helbredelse og utfrielse, samt å vokse i Åndens profetiske gaver. Alt gjøres etter bibelsk standard." 
-                as="p" 
-                className="text-base md:text-lg text-on-primary-container mb-10 max-w-xl leading-relaxed" 
-              />
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button 
-                  onClick={() => navigate('/admission')} 
-                  className="px-8 py-4 bg-white text-[#3c096c] font-bold rounded-xl hover:bg-slate-100 transition-all shadow-lg hover:-translate-y-0.5 text-base active:scale-[0.98]"
-                >
-                  <CmsText slug="landing-hero-cta-primary" fallback="Søk Opptak 2027" />
-                </button>
-                <button 
-                  onClick={(e) => handleNavClick(e, { href: '#school', id: 'school' })} 
-                  className="px-8 py-4 border border-white/30 text-white font-bold rounded-xl hover:bg-white/10 transition-all group flex items-center justify-center gap-2 text-base active:scale-[0.98]"
-                >
-                  <CmsText slug="landing-hero-cta-secondary" fallback="Våre Studielinjer" />
-                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#3c096c] via-transparent to-black/20" />
+            
+            {/* Organic Wave Transition into purple content */}
+            <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
+              <svg 
+                viewBox="0 0 1200 120" 
+                preserveAspectRatio="none" 
+                className="relative block w-full h-12 sm:h-16 text-[#3c096c] fill-current"
+              >
+                <path d="M0,0 C150,90 350,-40 500,45 C650,130 900,10 1200,60 L1200,120 L0,120 Z"></path>
+              </svg>
             </div>
+          </div>
+
+          <div className="relative z-10 max-w-[1440px] mx-auto px-5 sm:px-8 md:px-12 py-10 sm:py-16 lg:py-24">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              
+              {/* Left Column: Modern Punchy Copy, Badges & CTA */}
+              <div className="lg:col-span-7 space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-left-6 duration-700">
+                
+                {/* Tagline / Registration period badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#e0aaff] font-bold text-xs sm:text-sm uppercase tracking-wider shadow-sm">
+                  <Award size={16} className="text-[#c5a059]" />
+                  <CmsText 
+                    slug="landing-hero-tagline" 
+                    fallback={language === 'no' ? "Søkeperiode: 1. januar – 30. juni 2027" : "Application Period: January 1 – June 30, 2027"} 
+                  />
+                </div>
+
+                {/* Main Headline */}
+                <CmsText 
+                  slug="landing-hero-title" 
+                  fallback={language === 'no' 
+                    ? "Søk NÅ og bli med i denne profetiske treningsarenaen!" 
+                    : "Apply NOW to join this prophetic training ground!"
+                  } 
+                  as="h1" 
+                  className="font-sans text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.12] tracking-tight" 
+                />
+
+                {/* Subtitle / Value Proposition */}
+                <CmsText 
+                  slug="landing-hero-description" 
+                  fallback={language === 'no'
+                    ? "Bli med og voks i din relasjon til Jesus gjennom Den Hellige Ånd og Guds ord når vi legger ut på denne reisen sammen."
+                    : "Come grow in your relationship with Jesus through the Holy Spirit and God’s word as we embark on this journey together."
+                  } 
+                  as="p" 
+                  className="text-base sm:text-lg text-purple-100/90 max-w-2xl leading-relaxed font-normal" 
+                />
+
+                {/* Highlight Info Section - Inspired directly by user reference */}
+                <div className="pt-2 pb-2 grid grid-cols-1 sm:grid-cols-2 gap-4 border-y border-white/15">
+                  <div className="space-y-1">
+                    <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight block">
+                      {language === 'no' ? "Alle er velkomne" : "All Are Welcome"}
+                    </span>
+                    <span className="text-sm text-purple-200 block">
+                      {language === 'no' ? "For alle som lengter etter dypere fellesskap og utrustning" : "For everyone longing for deeper fellowship and equipping"}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1 sm:border-l sm:border-white/15 sm:pl-4">
+                    <span className="text-xs uppercase font-bold tracking-wider text-[#e0aaff] block">
+                      {language === 'no' ? "Søknadsperiode & Oppstart:" : "Registration & Kickoff:"}
+                    </span>
+                    <span className="text-base sm:text-lg font-bold text-white block">
+                      {language === 'no' ? "1. jan – 30. juni 2027" : "01 january – 30 june, 2027"}
+                    </span>
+                    <span className="text-xs text-purple-200 block">
+                      {language === 'no' ? "On-site kickoff i Norge: 27. august 2027" : "On-site kickoff in Norway: August 27, 2027"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                  <button 
+                    onClick={() => navigate('/admission')} 
+                    className="px-8 py-4 bg-[#c5a059] hover:bg-[#b08e4f] text-white font-extrabold rounded-xl transition-all shadow-xl hover:scale-[1.02] active:scale-[0.98] text-base font-sans inline-flex items-center justify-center gap-2"
+                  >
+                    <CmsText slug="landing-hero-cta-primary" fallback={language === 'no' ? "Søk Studieplass Nå" : "Apply Now"} />
+                    <ArrowRight size={18} />
+                  </button>
+                  <button 
+                    onClick={(e) => handleNavClick(e, { href: '#school', id: 'school' })} 
+                    className="px-8 py-4 border border-white/30 text-white font-bold rounded-xl hover:bg-white/10 transition-all group flex items-center justify-center gap-2 text-base active:scale-[0.98] font-sans"
+                  >
+                    <CmsText slug="landing-hero-cta-secondary" fallback={language === 'no' ? "Våre Studielinjer" : "Explore Programs"} />
+                    <ChevronDown size={18} className="group-hover:translate-y-0.5 transition-transform" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Column: Desktop Organic Visual with White Arc Curve (from reference) */}
+              <div className="hidden lg:block lg:col-span-5 relative">
+                <div className="relative mx-auto max-w-md xl:max-w-lg">
+                  {/* Organic Wave Photo Card */}
+                  <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 aspect-[4/5] bg-primary-container">
+                    <img 
+                      src="/img/hero-students.jpg" 
+                      alt="His Kingdom Prophetic Community Students" 
+                      className="w-full h-full object-cover"
+                    />
+                    
+                    {/* Organic purple wave overlay at bottom of the card */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#3c096c]/90 via-transparent to-black/10 pointer-events-none" />
+                    
+                    {/* Wave shape overlay at the bottom */}
+                    <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
+                      <svg 
+                        viewBox="0 0 500 150" 
+                        preserveAspectRatio="none" 
+                        className="w-full h-24 text-[#3c096c] fill-current opacity-95"
+                      >
+                        <path d="M0,40 C150,90 350,0 500,50 L500,150 L0,150 Z"></path>
+                      </svg>
+                    </div>
+
+                    {/* Floating badge inside photo */}
+                    <div className="absolute top-5 right-5 z-20 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md shadow-lg text-[#3c096c] text-xs font-extrabold uppercase tracking-wider border border-white flex items-center gap-1.5">
+                      <Sparkles size={14} className="text-[#c5a059]" />
+                      <span>{language === 'no' ? "100% Nettbasert" : "100% Online"}</span>
+                    </div>
+
+                    <div className="absolute bottom-5 left-6 right-6 z-20 text-white">
+                      <p className="font-extrabold text-lg text-white">
+                        {language === 'no' ? "Gudsfrykt • Åpenbaring • Utrustning" : "Godly Wisdom • Revelation • Equipping"}
+                      </p>
+                      <p className="text-xs text-purple-200 mt-0.5">
+                        {language === 'no' ? "Ukentlige Zoom-kvelder og personlig veiledning" : "Weekly Zoom sessions & personal mentorship"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Geometric White Arc accent in bottom-right corner (Directly from reference design) */}
+                  <div className="absolute -bottom-10 -right-10 w-44 h-44 rounded-full bg-white shadow-2xl pointer-events-none -z-10 border-8 border-[#3c096c]/20" />
+                  <div className="absolute -top-6 -left-6 w-24 h-24 rounded-full bg-[#c5a059]/20 blur-xl pointer-events-none -z-10" />
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Bottom Wave Divider into the next section */}
+          <div className="relative w-full overflow-hidden leading-none z-10 -mb-1">
+            <svg 
+              viewBox="0 0 1440 80" 
+              preserveAspectRatio="none" 
+              className="w-full h-10 sm:h-14 text-background fill-current"
+            >
+              <path d="M0,0 C360,70 1080,70 1440,0 L1440,80 L0,80 Z"></path>
+            </svg>
           </div>
         </section>
 

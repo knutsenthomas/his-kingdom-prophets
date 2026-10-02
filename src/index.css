@@ -8,7 +8,7 @@
     overflow-x: clip;
   }
   body {
-    @apply bg-background text-on-background font-serif antialiased;
+    @apply bg-background text-on-background font-sans antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
