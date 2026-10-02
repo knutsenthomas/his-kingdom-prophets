@@ -104,7 +104,7 @@ export default function AccessibilityPage() {
                 <CmsText slug="accessibility-sec4-title" fallback={isEn ? '4. Feedback & Contact' : '4. Tilbakemelding og kontakt'} />
               </h2>
               <p>
-                <CmsText slug="accessibility-sec4-desc" fallback={isEn ? 'We welcome your feedback on the accessibility of our platform. If you encounter any barriers or have difficulty using any feature, please submit a support ticket or email us at hiskingdomprophets@hiskingdomministry.no.' : 'Vi setter pris på dine tilbakemeldinger angående tilgjengeligheten på nettstedet vårt. Dersom du opplever hindringer eller har forbedringsforslag, vennligst kontakt oss via support eller send en e-post til hiskingdomprophets@hiskingdomministry.no.'} />
+                <CmsText slug="accessibility-sec4-desc" fallback={isEn ? 'We welcome your feedback on the accessibility of our platform. If you encounter any barriers or have difficulty using any feature, please submit a support ticket or email us at school@hiskingdomministry.no.' : 'Vi setter pris på dine tilbakemeldinger angående tilgjengeligheten på nettstedet vårt. Dersom du opplever hindringer eller har forbedringsforslag, vennligst kontakt oss via support eller send en e-post til school@hiskingdomministry.no.'} />
               </p>
             </section>
           </div>

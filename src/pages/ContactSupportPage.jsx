@@ -84,7 +84,7 @@ export default function ContactSupportPage() {
                     <CmsText slug="support-email-title" fallback={isEn ? 'Email Support' : 'E-post support'} />
                   </h4>
                   <p className="text-xs font-semibold text-slate-700 mt-1">
-                    <CmsText slug="support-email-address" fallback="hiskingdomprophets@hiskingdomministry.no" />
+                    <CmsText slug="support-email-address" fallback="school@hiskingdomministry.no" />
                   </p>
                   <p className="text-[10px] font-medium text-slate-400 mt-0.5">
                     <CmsText slug="support-email-time" fallback={isEn ? 'Response time: Within 24 hours' : 'Svarstid: Innen 24 timer'} />

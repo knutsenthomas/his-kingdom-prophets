@@ -2414,7 +2414,7 @@ export const AppProvider = ({ children }) => {
       // 2. Lagre i "support_emails" for automatisk e-postutsending via Firebase Extension
       const emailRef = doc(collection(db, "support_emails"));
       const newEmail = {
-        to: 'hiskingdomprophets@hiskingdomministry.no',
+        to: 'school@hiskingdomministry.no',
         replyTo: ticketData.email,
         message: {
           subject: `[HKM Support] ${ticketData.subject || 'Ny henvendelse'}`,
