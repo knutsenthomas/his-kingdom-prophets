@@ -428,10 +428,10 @@ export default function LandingPage() {
                 <Calendar size={18} />
               </div>
               <h4 className="font-serif text-sm font-bold text-[#3c096c]">
-                {language === 'no' ? 'Oppstart 27. aug 2027' : 'Starts Aug 27, 2027'}
+                {language === 'no' ? 'Søkeperiode 2027' : 'Applications 2027'}
               </h4>
               <p className="text-xs text-on-surface-variant leading-relaxed">
-                {language === 'no' ? 'Opptaket er åpent for Linje 1. Løpende behandling av søknader.' : 'Admissions are open for Year 1. Continuous review of applications.'}
+                {language === 'no' ? 'Søknad: 1. jan – 30. juni 2027. Skolestart: 27. august 2027.' : 'Apply: Jan 1 – June 30, 2027. School starts: August 27, 2027.'}
               </p>
             </div>
           </div>
@@ -446,7 +446,7 @@ export default function LandingPage() {
                   </span>
                   <span className="text-xs font-bold text-[#c5a059] uppercase tracking-wider flex items-center gap-1">
                     <Sparkles size={14} />
-                    <CmsText slug="landing-track1-status" fallback={language === 'no' ? "Aktiv for søknad" : "Open for applications"} />
+                    <CmsText slug="landing-track1-status" fallback={language === 'no' ? "Søknad: 1. jan – 30. juni 2027" : "Applications: Jan 1 – June 30, 2027"} />
                   </span>
                 </div>
                 <CmsText 
@@ -532,12 +532,12 @@ export default function LandingPage() {
           {/* Dream & Launch Details */}
           <div className="bg-gradient-to-r from-[#3c096c]/5 to-transparent border border-[#3c096c]/10 p-8 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div className="space-y-2">
-              <CmsText slug="landing-school-launch-title" fallback={language === 'no' ? "Oppstartsdato" : "Launch Details"} as="h4" className="font-serif text-lg font-bold text-[#3c096c] block" />
+              <CmsText slug="landing-school-launch-title" fallback={language === 'no' ? "Søkeperiode & Oppstart" : "Applications & Launch"} as="h4" className="font-serif text-lg font-bold text-[#3c096c] block" />
               <CmsText 
                 slug="landing-school-launch-desc" 
                 fallback={language === 'no'
-                  ? "Skolen starter 27. august 2027."
-                  : "The school starts August 27, 2027."} 
+                  ? "Søkeperioden er fra 1. januar 2027 til 30. juni 2027. Skolen starter 27. august 2027."
+                  : "The application period runs from January 1, 2027 to June 30, 2027. School starts August 27, 2027."} 
                 as="p" 
                 className="text-xs text-on-surface-variant leading-relaxed" 
               />
@@ -582,8 +582,8 @@ export default function LandingPage() {
                     as="h3" 
                     className="font-serif text-lg font-bold text-[#3c096c] uppercase tracking-wider" 
                   />
-                  <span className="self-start text-[10px] font-bold bg-green-500 text-white px-2.5 py-1 rounded-full uppercase tracking-wider">
-                    <CmsText slug="landing-curriculum-y1-badge" fallback={language === 'no' ? "Aktiv for søknad" : "Open for Admission"} />
+                  <span className="self-start text-[10px] font-bold bg-[#c5a059] text-white px-2.5 py-1 rounded-full uppercase tracking-wider">
+                    <CmsText slug="landing-curriculum-y1-badge" fallback={language === 'no' ? "Søkeperiode: 1. jan – 30. juni 2027" : "Applications: Jan 1 – June 30, 2027"} />
                   </span>
                 </div>
                 
@@ -817,10 +817,10 @@ export default function LandingPage() {
           <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12">
             <div className="inline-flex items-center gap-2 mb-6 text-[#3c096c]">
               <Sparkles size={16} />
-              <CmsText slug="landing-cta-tagline" fallback="Opptak Åpent for 2027" as="span" className="text-xs font-semibold tracking-widest uppercase" />
+              <CmsText slug="landing-cta-tagline" fallback={language === 'no' ? "Søkeperiode: 1. januar – 30. juni 2027" : "Applications: January 1 – June 30, 2027"} as="span" className="text-xs font-semibold tracking-widest uppercase" />
             </div>
             <CmsText slug="landing-cta-title" fallback="Er du klar til å vokse i dine åndelige gaver?" as="h2" className="font-serif text-3xl md:text-4xl text-[#3c096c] font-bold mb-6 max-w-2xl mx-auto" />
-            <CmsText slug="landing-cta-desc" fallback="Søk om opptak til His Kingdom Prophetic Community i dag. Vi gleder oss til å gå sammen med deg." as="p" className="text-base text-on-surface-variant mb-10 max-w-xl mx-auto" />
+            <CmsText slug="landing-cta-desc" fallback={language === 'no' ? "Søkeperioden er fra 1. januar til 30. juni 2027, og skolen starter 27. august 2027. Vi gleder oss til å gå sammen med deg!" : "The application window runs from January 1 to June 30, 2027, with school starting August 27, 2027."} as="p" className="text-base text-on-surface-variant mb-10 max-w-xl mx-auto" />
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <button 
                 onClick={() => navigate('/admission')} 

@@ -340,7 +340,7 @@ export default function AdmissionPage() {
         <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-on-primary-container font-semibold text-[10px] sm:text-xs uppercase tracking-widest border border-white/20">
             <Award size={13} className="text-secondary-fixed-dim" />
-            <CmsText slug="landing-cta-tagline" fallback={language === 'en' ? "Application and Admission Fall 2027" : "Søknad og Opptak Høst 2027"} />
+            <CmsText slug="admission-hero-tagline" fallback={language === 'en' ? "Application Period: January 1 – June 30, 2027" : "Søkeperiode: 1. januar – 30. juni 2027"} />
           </span>
 
           <CmsText 
@@ -352,7 +352,7 @@ export default function AdmissionPage() {
 
           <CmsText 
             slug="admission-hero-subtitle" 
-            fallback={language === 'en' ? "Choose your study line, select a financial plan that fits your needs, and apply today. Experience a modern, solid theological education." : "Velg din studielinje, velg en finansieringsplan som passer deg, og send inn søknad i dag. Opplev et moderne og solid teologisk utdanningsforløp."} 
+            fallback={language === 'en' ? "Søkeperioden er fra 1. januar til 30. juni 2027, og skolen starter 27. august 2027. Velg din studielinje og gjør klar søknaden din." : "Søkeperioden er fra 1. januar til 30. juni 2027, og skolen starter 27. august 2027. Velg din studielinje og gjør klar søknaden din."} 
             as="p"
             className="text-xs sm:text-sm text-[#e0aaff] font-semibold max-w-xl mx-auto leading-relaxed"
           />
