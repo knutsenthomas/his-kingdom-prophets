@@ -437,7 +437,7 @@ export default function AdmissionPage() {
       }
 
       // 3. Webhook til Google Sheets (miljøvariabel med fallback til aktiv implementering)
-      const sheetsWebhook = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL || 'https://script.google.com/macros/s/AKfycbwxK3zY_Rwt532uyH1G37saGVH5mS3Iq_7palJufHOUOKaEK_mKle9k9ojvM_GKwSHBwA/exec';
+      const sheetsWebhook = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL || 'https://script.google.com/macros/s/AKfycbxs_INRqjhn5X8KffHyUsoY33L3QAV8uVOwvAwoKp9NqrmaQT_BU53CrYR0HUzaQJyFjA/exec';
       if (sheetsWebhook) {
         try {
           await fetch(sheetsWebhook, {
