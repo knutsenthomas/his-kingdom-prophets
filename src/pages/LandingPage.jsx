@@ -344,21 +344,12 @@ export default function LandingPage() {
               {/* Left Column: Direct, Grounded & Authentic Copy */}
               <div className="lg:col-span-7 space-y-6 sm:space-y-8 animate-in fade-in duration-500">
                 
-                {/* Tagline / Registration period badge */}
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-[#e0aaff] font-bold text-xs sm:text-sm uppercase tracking-wider">
-                  <Award size={16} className="text-[#c5a059]" />
-                  <CmsText 
-                    slug="landing-hero-tagline" 
-                    fallback={language === 'no' ? "Søkeperiode: 1. januar – 30. juni 2027" : "Application Period: January 1 – June 30, 2027"} 
-                  />
-                </div>
-
                 {/* Main Headline */}
                 <CmsText 
-                  slug="landing-hero-bold-title" 
+                  slug="landing-hero-calm-title" 
                   fallback={language === 'no' 
-                    ? "Søk NÅ og bli med i denne profetiske treningsarenaen!" 
-                    : "Apply NOW to join this prophetic training ground!"
+                    ? "Bli med i vår profetiske treningsarena" 
+                    : "Join our prophetic training ground"
                   } 
                   as="h1" 
                   className="font-sans text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.12] tracking-tight" 
@@ -366,53 +357,42 @@ export default function LandingPage() {
 
                 {/* Subtitle */}
                 <CmsText 
-                  slug="landing-hero-bold-description" 
+                  slug="landing-hero-calm-subtitle" 
                   fallback={language === 'no'
-                    ? "Bli med og voks i din relasjon til Jesus gjennom Den Hellige Ånd og Guds ord når vi legger ut på denne reisen sammen."
-                    : "Come grow in your relationship with Jesus through the Holy Spirit and God’s word as we embark on this journey together."
+                    ? "Voks i din relasjon til Jesus gjennom Den Hellige Ånd og Guds ord."
+                    : "Grow in your relationship with Jesus through the Holy Spirit and God's word."
                   } 
                   as="p" 
-                  className="font-sans text-base sm:text-lg text-purple-100/90 max-w-2xl leading-relaxed font-normal" 
+                  className="font-sans text-lg sm:text-xl text-purple-100/90 max-w-2xl leading-relaxed font-normal" 
                 />
 
-                {/* Information Row */}
-                <div className="pt-2 pb-2 grid grid-cols-1 sm:grid-cols-2 gap-4 border-y border-white/15">
-                  <div className="space-y-1">
-                    <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight block font-sans">
-                      {language === 'no' ? "Alle er velkomne" : "All Are Welcome"}
+                {/* Application Period info line */}
+                <div className="inline-flex items-center gap-2.5 text-sm sm:text-base text-purple-200 font-sans">
+                  <Calendar size={18} className="text-[#c5a059] flex-shrink-0" />
+                  <span>
+                    <span className="text-purple-300 font-normal">
+                      {language === 'no' ? "Søknadsperiode: " : "Application period: "}
                     </span>
-                    <span className="text-sm text-purple-200 block font-sans">
-                      {language === 'no' ? "For alle som lengter etter dypere fellesskap og utrustning" : "For everyone longing for deeper fellowship and equipping"}
-                    </span>
-                  </div>
-
-                  <div className="space-y-1 sm:border-l sm:border-white/15 sm:pl-4">
-                    <span className="text-xs uppercase font-bold tracking-wider text-[#e0aaff] block font-sans">
-                      {language === 'no' ? "Søknadsperiode & Oppstart:" : "Registration & Kickoff:"}
-                    </span>
-                    <span className="text-base sm:text-lg font-bold text-white block font-sans">
-                      {language === 'no' ? "1. jan – 30. juni 2027" : "01 january – 30 june, 2027"}
-                    </span>
-                    <span className="text-xs text-purple-200 block font-sans">
-                      {language === 'no' ? "On-site kickoff i Norge: 27. august 2027" : "On-site kickoff in Norway: August 27, 2027"}
-                    </span>
-                  </div>
+                    <strong className="text-white font-semibold">
+                      {language === 'no' ? "1. jan – 30. juni 2027" : "Jan 1 – June 30, 2027"}
+                    </strong>
+                  </span>
                 </div>
 
                 {/* CTA Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-2">
                   <button 
                     onClick={() => navigate('/admission')} 
-                    className="px-8 py-4 bg-[#c5a059] hover:bg-[#b08e4f] text-white font-extrabold rounded-xl transition-all shadow-lg active:scale-[0.98] text-base font-sans inline-flex items-center justify-center gap-2"
+                    className="min-h-[44px] px-8 py-4 bg-[#c5a059] hover:bg-[#b08e4f] text-white font-extrabold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.98] text-base font-sans inline-flex items-center justify-center gap-2"
                   >
-                    <CmsText slug="landing-hero-cta-primary" fallback={language === 'no' ? "Søk Studieplass Nå" : "Apply Now"} />
+                    <CmsText slug="landing-hero-calm-cta-primary" fallback={language === 'no' ? "Begynn din reise" : "Begin your journey"} />
                     <ArrowRight size={18} />
                   </button>
                   <button 
                     onClick={(e) => handleNavClick(e, { href: '#school', id: 'school' })} 
-                    className="px-8 py-4 border border-white/30 text-white font-bold rounded-xl hover:bg-white/10 transition-all group flex items-center justify-center gap-2 text-base active:scale-[0.98] font-sans"
+                    className="min-h-[44px] px-8 py-4 border border-white/30 text-white font-bold rounded-xl hover:bg-white/10 transition-all duration-200 group flex items-center justify-center gap-2 text-base active:scale-[0.98] font-sans"
                   >
-                    <CmsText slug="landing-hero-cta-secondary" fallback={language === 'no' ? "Våre Studielinjer" : "Explore Programs"} />
+                    <CmsText slug="landing-hero-calm-cta-secondary" fallback={language === 'no' ? "Se introduksjon" : "See introduction"} />
                     <ChevronDown size={18} className="group-hover:translate-y-0.5 transition-transform" />
                   </button>
                 </div>
@@ -474,6 +454,45 @@ export default function LandingPage() {
               as="p" 
               className="text-base md:text-lg text-on-surface-variant leading-relaxed max-w-2xl mx-auto" 
             />
+          </div>
+
+          {/* Welcome & Kickoff Banner (Flyttet fra hero) */}
+          <div className="bg-gradient-to-br from-purple-50/90 via-white to-amber-50/30 border border-[#dec2ef]/60 rounded-3xl p-6 sm:p-8 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+              <div className="md:col-span-7 space-y-2">
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#3c096c] bg-[#3c096c]/10 px-3 py-1 rounded-full">
+                  <Users size={14} />
+                  {language === 'no' ? "Fellesskap & Utrustning" : "Community & Equipping"}
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-[#3c096c] font-sans">
+                  {language === 'no' ? "Alle er velkomne" : "All Are Welcome"}
+                </h3>
+                <p className="text-base text-slate-700 leading-relaxed font-sans">
+                  {language === 'no' 
+                    ? "For alle som lengter etter dypere fellesskap og utrustning. Vår visjon er å trene og utruste troende til et liv i fortrolighet med Gud og virksom tro i hverdagen." 
+                    : "For everyone longing for deeper fellowship and equipping. Our vision is to train and equip believers for a life of intimacy with God and active faith in daily life."}
+                </p>
+              </div>
+              <div className="md:col-span-5 flex flex-col justify-center sm:items-start md:items-end border-t md:border-t-0 md:border-l border-purple-200/50 pt-5 md:pt-0 md:pl-8 space-y-3">
+                <div className="space-y-1">
+                  <span className="text-xs uppercase font-bold tracking-wider text-purple-700 block font-sans">
+                    {language === 'no' ? "Kickoff i Norge (On-site):" : "Kickoff in Norway (On-site):"}
+                  </span>
+                  <div className="flex items-center gap-2 text-lg font-extrabold text-[#3c096c] font-sans">
+                    <Calendar size={20} className="text-[#c5a059] flex-shrink-0" />
+                    <span>{language === 'no' ? "27. august 2027" : "August 27, 2027"}</span>
+                  </div>
+                </div>
+                <div className="space-y-0.5 pt-1">
+                  <span className="text-xs uppercase font-bold tracking-wider text-slate-500 block font-sans">
+                    {language === 'no' ? "Søknadsperiode:" : "Application Period:"}
+                  </span>
+                  <span className="text-sm font-semibold text-slate-800 font-sans">
+                    {language === 'no' ? "1. jan – 30. juni 2027" : "Jan 1 – June 30, 2027"}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Quick Facts Grid */}
