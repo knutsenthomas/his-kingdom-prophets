@@ -275,7 +275,7 @@ export default function TeacherDashboard() {
                     onClick={() => handleStartClass(item.title, item.zoomLink)}
                     className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all shrink-0 active:scale-95 shadow-sm ${
                       item.status === 'live'
-                        ? 'bg-[#D7B978] hover:bg-[#b08b45] text-white'
+                        ? 'bg-[#D7B978] hover:bg-[#b08b45] text-[#561291]'
                         : 'bg-[#561291] hover:opacity-95 text-white'
                     }`}
                   >

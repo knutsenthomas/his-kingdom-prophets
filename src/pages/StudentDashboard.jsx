@@ -156,7 +156,7 @@ export default function StudentDashboard() {
                   href={studentCourses[0]?.zoomLink || "https://zoom.us"} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 mt-3 text-xs font-bold text-burnt-orange hover:underline cursor-pointer"
+                  className="inline-flex items-center gap-1.5 mt-3 px-3.5 py-1.5 bg-gold hover:bg-gold-dark text-primary font-bold text-xs rounded-xl shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                 >
                   <CmsText slug="student-join-zoom" fallback="Bli med via Zoom" />
                   <ExternalLink size={12} />
