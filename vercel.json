@@ -9,6 +9,11 @@
       "source": "/register",
       "destination": "https://app.hkpc.no",
       "permanent": true
+    },
+    {
+      "source": "/bible-resources",
+      "destination": "/",
+      "permanent": false
     }
   ],
   "rewrites": [

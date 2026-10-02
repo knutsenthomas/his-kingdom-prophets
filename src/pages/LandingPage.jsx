@@ -35,8 +35,7 @@ export default function LandingPage() {
     { slug: 'landing-nav-school', fallback: 'Utdanning', href: '#school', id: 'school' },
     { slug: 'landing-nav-curriculum', fallback: 'Fagplaner', href: '#curriculum', id: 'curriculum' },
     { slug: 'landing-nav-about', fallback: 'Om oss', href: '#about', id: 'about' },
-    { slug: 'landing-nav-shop', fallback: 'Designbutikk', href: '#shop', id: 'shop' },
-    { slug: 'landing-nav-resources', fallback: 'Bibelressurser', href: '/bible-resources', id: 'research' }
+    { slug: 'landing-nav-shop', fallback: 'Designbutikk', href: '#shop', id: 'shop' }
   ];
 
   const handleNavClick = (e, item) => {

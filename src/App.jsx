@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
@@ -232,7 +232,7 @@ function AppRoutes() {
         <Route path="/terms" element={<TermsOfServicePage />} />
         <Route path="/accessibility" element={<AccessibilityPage />} />
         <Route path="/support" element={<ContactSupportPage />} />
-        <Route path="/bible-resources" element={<BibleResourcesPage />} />
+        <Route path="/bible-resources" element={<Navigate to="/" replace />} />
         <Route path="/admission" element={<AdmissionPage />} />
         <Route path="/opptak" element={<AdmissionPage />} />
         <Route path="/about" element={<AboutPage />} />

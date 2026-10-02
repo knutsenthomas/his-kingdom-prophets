@@ -12,12 +12,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-  <url>
-    <loc>https://hkpc.no/bible-resources</loc>
-    <lastmod>2026-10-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+
   <url>
     <loc>https://hkpc.no/personvern</loc>
     <lastmod>2026-10-02</lastmod>
