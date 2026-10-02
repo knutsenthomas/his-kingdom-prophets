@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, BookOpen, CreditCard, ChevronRight, Check, 
-  HelpCircle, ArrowLeft, Send, Award, Calendar, FileText, CheckCircle2, Globe, Lock
+  HelpCircle, ArrowLeft, Send, Award, Calendar, FileText, CheckCircle2, Globe, Lock, GraduationCap
 } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
@@ -144,14 +144,13 @@ export default function AdmissionPage() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.phone) {
+    if (!formData.name?.trim() || !formData.email?.trim() || !formData.phone?.trim()) {
       showToast(language === 'en' ? "Please fill out all required fields." : "Vennligst fyll ut alle påkrevde felt.");
       return;
     }
 
-    if (!user) {
-      showToast(language === 'en' ? "Please log in to continue." : "Vennligst logg inn for å fortsette.");
-      navigate('/login');
+    if (formData.program === 'prophets_advanced' && !confirmYear1) {
+      showToast(language === 'en' ? "Please confirm that you plan to complete Track 1 first." : "Vennligst bekreft at du har fullført eller planlegger å fullføre 1. år først.");
       return;
     }
 
@@ -159,41 +158,63 @@ export default function AdmissionPage() {
     setPaymentError('');
 
     try {
-      const amount = formData.paymentPlan === 'year'
-        ? (language === 'en' ? 1000 : 10000)
-        : (language === 'en' ? 500 : 5000);
+      const { db } = await import('@/firebase');
+      const { collection, addDoc, serverTimestamp, doc, setDoc } = await import('firebase/firestore');
 
-      const isRecurring = false;
-      const targetUrl = "https://createpaymentintent-42bhgdjkcq-uc.a.run.app";
+      const prog = programs.find(p => p.id === formData.program) || programs[0];
 
-      const response = await fetch(targetUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: amount,
-          currency: language === 'en' ? "usd" : "nok",
-          customerDetails: {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            message: `Program: ${selectedProgram.code} (${formData.paymentPlan})`,
-            fund: "prophets_tuition",
-            userId: user.uid
-          }
-        }),
+      // 1. Lagre søknad i Firestore 'applications' for administrasjonens opptaksbehandling
+      await addDoc(collection(db, "applications"), {
+        userId: user?.uid || null,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        programId: formData.program,
+        programTitle: prog.title,
+        programCode: prog.code,
+        paymentPlan: formData.paymentPlan,
+        motivation: formData.motivation ? formData.motivation.trim() : '',
+        status: "pending_review",
+        createdAt: serverTimestamp()
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to initialize payment");
+      // 2. Send e-postvarsel til administrasjonen via 'support_emails'
+      try {
+        const emailRef = doc(collection(db, "support_emails"));
+        await setDoc(emailRef, {
+          to: 'hiskingdomprophets@hiskingdomministry.no',
+          replyTo: formData.email.trim(),
+          message: {
+            subject: `[HKM Opptak] Ny søknad: ${formData.name.trim()} (${prog.code})`,
+            text: `Ny søknad om opptak ved His Kingdom Prophetic Community:\n\nNavn: ${formData.name.trim()}\nE-post: ${formData.email.trim()}\nTelefon: ${formData.phone.trim()}\nStudielinje: ${prog.title} (${prog.code})\nBetalingsplan: ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}\n\nMotivasjon / Bakgrunn:\n${formData.motivation?.trim() || 'Ikke oppgitt'}`,
+            html: `
+              <div style="font-family: sans-serif; padding: 24px; color: #240046; max-width: 600px; border: 1px solid #dec2ef; border-radius: 12px;">
+                <h2 style="color: #3c096c; border-bottom: 2px solid #561291; padding-bottom: 8px; margin-top: 0;">Ny søknad om opptak</h2>
+                <p><strong>Navn:</strong> ${formData.name.trim()}</p>
+                <p><strong>E-post:</strong> <a href="mailto:${formData.email.trim()}">${formData.email.trim()}</a></p>
+                <p><strong>Telefon:</strong> ${formData.phone.trim()}</p>
+                <p><strong>Studielinje:</strong> ${prog.title} (${prog.code})</p>
+                <p><strong>Betalingsordning:</strong> ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}</p>
+                <div style="background-color: #fbf8fe; padding: 16px; border-left: 4px solid #c5a059; margin-top: 16px; border-radius: 6px;">
+                  <p style="margin: 0 0 8px 0; font-weight: bold; font-size: 13px; color: #3c096c;">Motivasjon / Åndelig bakgrunn:</p>
+                  <p style="margin: 0; white-space: pre-wrap; font-size: 14px; line-height: 1.6; color: #333;">${formData.motivation?.trim() || 'Ingen utfyllende tekst oppgitt.'}</p>
+                </div>
+                <p style="font-size: 11px; color: #888; margin-top: 24px; border-top: 1px solid #eee; padding-top: 8px;">
+                  Registrert via www.hkpc.no/admission. Behandles av skolens administrasjon.
+                </p>
+              </div>
+            `
+          }
+        });
+      } catch (emailErr) {
+        console.warn("Kunne ikke sende e-postvarsel, men søknaden er lagret i Firestore:", emailErr);
       }
 
-      const { clientSecret: secret } = await response.json();
-      setClientSecret(secret);
-      setPaymentStep('payment');
+      setPaymentStep('success');
+      showToast(language === 'en' ? "Application submitted successfully!" : "Søknaden er sendt inn!");
     } catch (err) {
-      console.error("Failed to initialize payment:", err);
-      showToast("Kunne ikke starte betaling: " + err.message, "error");
+      console.error("Submission failed:", err);
+      showToast(language === 'en' ? "Failed to submit application: " + err.message : "Kunne ikke sende søknad: " + err.message, "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -687,49 +708,7 @@ export default function AdmissionPage() {
         {/* SECTION 4: INTERACTIVE APPLICATION FORM */}
         <section id="apply-form" className="bg-white border border-[#dec2ef]/65 rounded-3xl p-8 shadow-md max-w-2xl mx-auto scroll-mt-24">
           <AnimatePresence mode="wait">
-            {!user ? (
-              <motion.div 
-                key="login-prompt"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-center py-8 space-y-6"
-              >
-                <div className="w-14 h-14 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
-                  <BookOpen size={28} />
-                </div>
-                <div className="space-y-2">
-                  <CmsText 
-                    slug="admission-login-title" 
-                    fallback={language === 'en' ? "Log In to Enroll" : "Logg inn for å melde deg på"} 
-                    as="h3"
-                    className="font-serif text-xl font-bold text-primary"
-                  />
-                  <CmsText 
-                    slug="admission-login-desc" 
-                    fallback={language === 'en'
-                      ? "To apply and pay for courses at His Kingdom Prophets, you must first log in with your HKM account or register."
-                      : "For å søke om opptak og betale for kurs ved His Kingdom Prophets, må du logge inn med din HKM-brukerkonto."} 
-                    as="p"
-                    className="text-xs text-on-surface-variant font-semibold max-w-sm mx-auto leading-relaxed"
-                  />
-                </div>
-                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-md mx-auto">
-                  <button
-                    onClick={() => navigate('/login')}
-                    className="w-full sm:w-auto px-6 py-3.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-primary text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5"
-                  >
-                    <CmsText slug="admission-login-btn" fallback={language === 'en' ? "Log In" : "Logg inn"} />
-                  </button>
-                  <button
-                    onClick={() => navigate('/login?mode=register')}
-                    className="w-full sm:w-auto px-6 py-3.5 bg-primary hover:bg-primary/95 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5"
-                  >
-                    <CmsText slug="admission-register-btn" fallback={language === 'en' ? "Create Account" : "Opprett brukerkonto"} />
-                  </button>
-                </div>
-              </motion.div>
-            ) : paymentStep === 'form' ? (
+            {paymentStep === 'form' ? (
               <motion.form 
                 key="form"
                 initial={{ opacity: 1 }}
@@ -753,6 +732,14 @@ export default function AdmissionPage() {
                     as="p"
                     className="text-[11px] text-on-surface-variant font-semibold"
                   />
+                  <div className="pt-1">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container/70 text-primary font-semibold text-[10px] uppercase tracking-wider border border-secondary/20">
+                      <GraduationCap size={13} className="text-primary" />
+                      {language === 'en' 
+                        ? "No account needed to apply – Credentials assigned by administration upon admission" 
+                        : "Ingen konto kreves for å søke – Brukerkonto tildeles av administrasjonen etter godkjent opptak"}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1015,36 +1002,69 @@ export default function AdmissionPage() {
                 animate={{ scale: 1, opacity: 1 }}
                 className="text-center py-8 space-y-6"
               >
-                <div className="w-14 h-14 rounded-full bg-green-50 text-green-600 border border-green-200 flex items-center justify-center mx-auto shadow-sm animate-bounce">
-                  <CheckCircle2 size={32} />
+                <div className="w-16 h-16 rounded-full bg-green-50 text-green-600 border border-green-200 flex items-center justify-center mx-auto shadow-sm">
+                  <CheckCircle2 size={36} className="text-green-600" />
                 </div>
 
                 <div className="space-y-2">
+                  <span className="inline-block px-3 py-1 rounded-full bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-wider border border-green-200">
+                    {language === 'en' ? "Application Received" : "Søknad registrert"}
+                  </span>
                   <CmsText 
                     slug="admission-success-title" 
-                    fallback={language === 'en' ? "Admission Successful!" : "Opptak fullført!"} 
+                    fallback={language === 'en' ? "Application Successfully Submitted!" : "Søknad om opptak er mottatt!"} 
                     as="h3"
-                    className="font-serif text-xl font-bold text-primary"
+                    className="font-serif text-2xl font-bold text-primary"
                   />
-                  <p className="text-xs text-on-surface-variant font-semibold max-w-sm mx-auto leading-relaxed">
+                  <p className="text-xs text-on-surface-variant font-semibold max-w-md mx-auto leading-relaxed">
                     {language === 'en'
-                      ? `Thank you, ${formData.name}! Your payment has been processed and you are now fully enrolled in the ${programs.find(p => p.id === formData.program)?.code} course. You have been granted instant access to the study portal.`
-                      : `Takk, ${formData.name}! Din betaling er registrert og du er nå tatt opp som student på programmet ${programs.find(p => p.id === formData.program)?.code}. Du har nå umiddelbar tilgang til studieportalen.`}
+                      ? `Thank you, ${formData.name}! Your application has been submitted to the administration at His Kingdom Prophetic Community.`
+                      : `Takk for din søknad, ${formData.name}! Søknaden din er nå oversendt til administrasjonen ved His Kingdom Prophetic Community.`}
                   </p>
                 </div>
 
-                <div className="pt-4 flex flex-col sm:flex-row justify-center gap-3">
+                {/* Information Card about Next Steps and Account Assignment */}
+                <div className="bg-[#fbf8fe] border border-[#dec2ef]/60 rounded-2xl p-5 text-left max-w-lg mx-auto space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 rounded-xl bg-primary/10 text-primary shrink-0 mt-0.5">
+                      <GraduationCap size={18} />
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="text-xs font-bold text-primary">
+                        {language === 'en' ? "Next Steps: Review & Account Assignment" : "Veien videre: Opptaksbehandling & tildeling av konto"}
+                      </h4>
+                      <p className="text-[11px] text-outline leading-relaxed font-semibold">
+                        {language === 'en'
+                          ? "We review all applications continuously and will contact you for a brief conversation. Upon approved admission, your personal user account and portal login credentials will be issued directly by the school administration."
+                          : "Vi behandler søknader fortløpende og kontakter deg for en kort samtale. Når opptaket er godkjent, vil din personlige brukerkonto og innloggingsdetaljer til portalen bli opprettet og tildelt direkte av skolens administrasjon."}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-[#dec2ef]/40 pt-3 grid grid-cols-2 gap-3 text-[11px]">
+                    <div>
+                      <span className="text-outline text-[10px] uppercase font-bold block">{language === 'en' ? "Program" : "Studielinje"}</span>
+                      <span className="font-bold text-primary">{programs.find(p => p.id === formData.program)?.code}</span>
+                    </div>
+                    <div>
+                      <span className="text-outline text-[10px] uppercase font-bold block">{language === 'en' ? "Kickoff" : "Kickoff"}</span>
+                      <span className="font-bold text-primary">27. aug 2027 (Norge)</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex flex-col sm:flex-row justify-center gap-3">
                   <button
                     onClick={() => navigate('/')}
                     className="px-6 py-3 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95"
                   >
-                    <CmsText slug="admission-success-home-btn" fallback={language === 'en' ? "Go to Home" : "Gå til forsiden"} />
+                    <CmsText slug="admission-success-home-btn" fallback={language === 'en' ? "Back to Home" : "Gå til forsiden"} />
                   </button>
                   <button
-                    onClick={() => navigate('/student/dashboard')}
-                    className="px-6 py-3 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all active:scale-95 border border-slate-200 font-sans"
+                    onClick={() => navigate('/support')}
+                    className="px-6 py-3 bg-slate-50 hover:bg-slate-100 text-primary text-xs font-bold uppercase tracking-wider rounded-xl transition-all active:scale-95 border border-slate-200 font-sans"
                   >
-                    <CmsText slug="admission-success-portal-btn" fallback={language === 'en' ? "Open Study Portal" : "Åpne studieportal"} />
+                    <CmsText slug="admission-success-contact-btn" fallback={language === 'en' ? "Contact Administration" : "Kontakt administrasjonen"} />
                   </button>
                 </div>
               </motion.div>
