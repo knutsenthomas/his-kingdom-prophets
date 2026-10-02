@@ -377,7 +377,7 @@ export default function AdmissionPage() {
       try {
         const emailRef = doc(collection(db, "support_emails"));
         await setDoc(emailRef, {
-          to: 'hiskingdomprophets@hiskingdomministry.no',
+          to: ['school@hiskingdomministry.no', 'hiskingdomprophets@hiskingdomministry.no'],
           replyTo: formData.email.trim(),
           message: {
             subject: `[HKM Opptak] Ny søknad: ${formData.name.trim()} (${prog.code})`,
