@@ -528,32 +528,6 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-
-          {/* Dream & Launch Details */}
-          <div className="bg-gradient-to-r from-[#3c096c]/5 to-transparent border border-[#3c096c]/10 p-8 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div className="space-y-2">
-              <CmsText slug="landing-school-launch-title" fallback={language === 'no' ? "Søkeperiode & Oppstart" : "Applications & Launch"} as="h4" className="font-serif text-lg font-bold text-[#3c096c] block" />
-              <CmsText 
-                slug="landing-school-launch-desc" 
-                fallback={language === 'no'
-                  ? "Søkeperioden er fra 1. januar 2027 til 30. juni 2027. Skolen starter 27. august 2027."
-                  : "The application period runs from January 1, 2027 to June 30, 2027. School starts August 27, 2027."} 
-                as="p" 
-                className="text-xs text-on-surface-variant leading-relaxed" 
-              />
-            </div>
-            <div className="space-y-2">
-              <CmsText slug="landing-school-dream-title" fallback={language === 'no' ? "Vår Drøm" : "Our Dream"} as="h4" className="font-serif text-lg font-bold text-[#3c096c] block" />
-              <CmsText 
-                slug="landing-school-dream-desc" 
-                fallback={language === 'no'
-                  ? "Vår drøm er å ha et hus og et sted hvor vi også kan være vertskap for fysiske arrangementer som vil bli strømmet på Zoom eller i lukkede Facebook-grupper."
-                  : "Our Dream: To have a house and place where we can also host in-person events that will be streamed on Zoom/closed Facebook groups."} 
-                as="p" 
-                className="text-xs text-on-surface-variant leading-relaxed" 
-              />
-            </div>
-          </div>
         </section>
 
         {/* Section 2: Teaching Topics / Curriculum */}
