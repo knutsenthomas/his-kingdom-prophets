@@ -83,8 +83,8 @@ const assetDefinitions = [
   { slug: 'landing-nav-programs', title: 'Navigasjonslenke Studielinjer', section: 'Hjemmeside', type: 'text', description: 'Tekst på menylenken for studielinjer.' },
   { slug: 'landing-nav-faculty', title: 'Navigasjonslenke Mentorer', section: 'Hjemmeside', type: 'text', description: 'Tekst på menylenken for mentorer.' },
   { slug: 'landing-nav-resources', title: 'Navigasjonslenke Bibelressurser', section: 'Hjemmeside', type: 'text', description: 'Tekst på menylenken for bibelressurser.' },
-  { slug: 'landing-nav-admissions', title: 'Navigasjonslenke Søk Opptak', section: 'Hjemmeside', type: 'text', description: 'Tekst på menylenken for søknad.' },
-  { slug: 'landing-btn-login', title: 'Knappetekst Logg Inn', section: 'Hjemmeside', type: 'text', description: 'Tekst på logg-inn knappen i topplinjen.' },
+  { slug: 'landing-nav-admissions', title: 'Navigasjonslenke Søk opptak', section: 'Hjemmeside', type: 'text', description: 'Tekst på menylenken for søknad.' },
+  { slug: 'landing-btn-login', title: 'Knappetekst Logg inn', section: 'Hjemmeside', type: 'text', description: 'Tekst på logg-inn knappen i topplinjen.' },
   { slug: 'landing-btn-portal', title: 'Knappetekst Gå til Portal', section: 'Hjemmeside', type: 'text', description: 'Tekst på portal-knappen som vises når man er pålogget.' },
   { slug: 'landing-btn-apply', title: 'Knappetekst Søk Nå', section: 'Hjemmeside', type: 'text', description: 'Tekst på søknadsknappen i topplinjen.' },
   { slug: 'landing-network-btn', title: 'Nettverk Handlingsknapp', section: 'Hjemmeside', type: 'text', description: 'Tekst på knappen i det globale nettverksbanneret.' },
@@ -1425,7 +1425,7 @@ export default function CMSDashboard() {
                 <div className="bg-[#561291] text-white p-5 rounded-2xl shadow-sm border border-[#7924c7]/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] uppercase font-extrabold tracking-wider text-[#D7B978]">Hovedbryter for Opptak</span>
+                      <span className="text-[10px] uppercase font-extrabold tracking-wider text-[#D7B978]">Hovedbryter for opptak</span>
                       <span className="text-xs px-2.5 py-0.5 rounded-md bg-white/10 font-semibold">
                         {admissionFormOpen ? 'Status: ÅPENT FOR ALLE' : 'Status: LÅST (Planlagt 1. jan 2027)'}
                       </span>

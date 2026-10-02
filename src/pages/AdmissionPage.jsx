@@ -607,7 +607,7 @@ export default function AdmissionPage() {
     {
       id: "prophets_advanced",
       code: "TRACK 2 (YEAR 2)",
-      title: "His Kingdom Prophets (Oppstart 2028)",
+      title: "His Kingdom Prophets (oppstart 2028)",
       duration: language === 'en' ? "Starts in 2028 (Requires Track 1)" : "Starter i 2028 (Krever 1. År)",
       credits: "2. År / Year 2",
       priceSemester: language === 'en' ? "$500 USD" : "5 000,-",
@@ -620,7 +620,7 @@ export default function AdmissionPage() {
         "Reading list, paper writing & physical SUPER CHARGE",
         "PREREQUISITE: Must complete Track 1 (1st Year) first"
       ] : [
-        "Spesifikt for de kalt til embetet som profet (Oppstart 2028)",
+        "Spesifikt for de kalt til embetet som profet (oppstart 2028)",
         "Studieavgift: 5 000,- per semester (10 000,- fullt år)",
         "Krever ny søknad, pensumliste og skriftlig oppgave",
         "Krav om deltakelse på 1-2 ukers fysisk samling",
@@ -2101,7 +2101,7 @@ export default function AdmissionPage() {
                     </div>
                     <div className="space-y-1">
                       <h4 className="text-base font-bold text-[#561291]">
-                        {language === 'en' ? "Next Steps: Review & Account Assignment" : "Veien videre: Opptaksbehandling & tildeling av konto"}
+                        {language === 'en' ? "Next Steps: Review & Account Assignment" : "Veien videre: opptaksbehandling & tildeling av konto"}
                       </h4>
                       <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
                         {language === 'en'

@@ -1228,7 +1228,7 @@ export default function BibleResourcesPage() {
                               onClick={() => navigate('/login')}
                               className="w-full py-1.5 bg-white border border-[#561291]/20 hover:border-primary text-primary font-bold rounded-lg text-[9px] uppercase tracking-wider transition-all shadow-sm"
                             >
-                              {isEn ? "Log In / Register" : "Logg Inn / Søk Opptak"}
+                              {isEn ? "Log In / Register" : "Logg inn / søk opptak"}
                             </button>
                           </div>
                         </div>

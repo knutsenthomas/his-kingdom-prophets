@@ -299,7 +299,7 @@ export default function AboutPage() {
                 onClick={handleApplyClick}
                 className="flex-1 min-h-[44px] py-3 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-xs font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5"
               >
-                <span><CmsText slug="about-start-btn-apply" fallback={language === 'en' ? "Apply Now" : "Søk Opptak"} /></span>
+                <span><CmsText slug="about-start-btn-apply" fallback={language === 'en' ? "Apply Now" : "Søk opptak"} /></span>
                 <ArrowRight size={13} />
               </button>
               <button 

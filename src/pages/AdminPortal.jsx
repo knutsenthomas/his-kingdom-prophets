@@ -967,7 +967,7 @@ export default function AdminPortal() {
                 <div className="space-y-3 max-w-2xl">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-xs uppercase font-extrabold tracking-wider text-[#561291] bg-[#561291]/10 px-3 py-1 rounded-full">
-                      Hovedbryter for Opptak
+                      Hovedbryter for opptak
                     </span>
                     <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full border ${
                       admissionFormOpen 

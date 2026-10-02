@@ -380,7 +380,7 @@ export default function HkmAboutPage() {
                 className="min-h-[44px] px-6 py-3 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-xs font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-1.5"
               >
                 <span>
-                  <CmsText slug="hkm-bottom-btn1" fallback={isEn ? "Apply to Prophets School" : "Søk Opptak til skolen"} />
+                  <CmsText slug="hkm-bottom-btn1" fallback={isEn ? "Apply to Prophets School" : "Søk opptak til skolen"} />
                 </span>
                 <ArrowRight size={13} />
               </button>
