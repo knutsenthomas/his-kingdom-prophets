@@ -475,7 +475,7 @@ export default function LandingPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Check size={14} className="text-green-600 shrink-0" />
-                  <span><CmsText slug="landing-track1-check3" fallback={language === 'no' ? "Studieavgift: 5 000,- / sem. (10 000,- fullt år) + 500,- oppstart/admin & 500,- kickoff kost/losji" : "Tuition: NOK 5,000 / sem. (NOK 10,000 full year) + NOK 500 admin & NOK 500 kickoff room/board"} /></span>
+                  <span><CmsText slug="landing-track1-check3" fallback={language === 'no' ? "Studieavgift: 5 000,- / sem. (10 000,- fullt år) + 500,- oppstart/admin & 500,- kickoff kost/losji" : "Tuition: $500 USD / sem. ($1,000 USD full year) + $50 USD admin & $50 USD kickoff room/board"} /></span>
                 </div>
               </div>
             </div>

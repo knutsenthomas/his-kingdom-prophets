@@ -159,10 +159,9 @@ export default function AdmissionPage() {
     setPaymentError('');
 
     try {
-      const selectedProgram = programs.find(p => p.id === formData.program);
       const amount = formData.paymentPlan === 'year'
-        ? (parseFloat(selectedProgram?.priceYear?.replace(/\s/g, '').replace(',-', '')) || 10000)
-        : (parseFloat(selectedProgram?.priceSemester?.replace(/\s/g, '').replace(',-', '')) || 5000);
+        ? (language === 'en' ? 1000 : 10000)
+        : (language === 'en' ? 500 : 5000);
 
       const isRecurring = false;
       const targetUrl = "https://createpaymentintent-42bhgdjkcq-uc.a.run.app";
@@ -172,7 +171,7 @@ export default function AdmissionPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: amount,
-          currency: "nok",
+          currency: language === 'en' ? "usd" : "nok",
           customerDetails: {
             name: formData.name,
             email: formData.email,
@@ -252,15 +251,15 @@ export default function AdmissionPage() {
       title: "His Kingdom Prophetic Community",
       duration: language === 'en' ? "1 Year • English • On-site Kickoff Aug 27" : "1 År • Engelsk • Kickoff i Norge 27. aug",
       credits: "1. År / Year 1",
-      priceSemester: "5 000,-",
-      priceYear: "10 000,-",
+      priceSemester: language === 'en' ? "$500 USD" : "5 000,-",
+      priceYear: language === 'en' ? "$1,000 USD" : "10 000,-",
       isLocked: false,
       features: language === 'en' ? [
         "All instruction & teaching conducted in English",
         "On-site kickoff gathering in Norway August 27, 2027",
-        "Tuition: NOK 5,000 / semester (NOK 10,000 full year)",
-        "Admin startup fee: NOK 500",
-        "Kickoff room & board: NOK 500 (own hotel not covered)",
+        "Tuition: $500 USD / semester ($1,000 USD full year)",
+        "Admin startup fee: $50 USD",
+        "Kickoff room & board: $50 USD (own hotel not covered)",
         "Grow in relationship with Jesus & gifts of the Spirit",
         "Prophecy 101, How to Hear God, Gift vs Office",
         "Join year after year (different subjects yearly)"
@@ -281,12 +280,12 @@ export default function AdmissionPage() {
       title: "His Kingdom Prophets (Oppstart 2028)",
       duration: language === 'en' ? "Starts in 2028 (Requires Track 1)" : "Starter i 2028 (Krever 1. År)",
       credits: "2. År / Year 2",
-      priceSemester: "5 000,-",
-      priceYear: "10 000,-",
+      priceSemester: language === 'en' ? "$500 USD" : "5 000,-",
+      priceYear: language === 'en' ? "$1,000 USD" : "10 000,-",
       isLocked: true,
       features: language === 'en' ? [
         "Specifically for those called to the office of a prophet (Launches 2028)",
-        "Tuition: NOK 5,000 / semester (NOK 10,000 full year)",
+        "Tuition: $500 USD / semester ($1,000 USD full year)",
         "Requires separate reapplication & prayer evaluation",
         "Reading list, paper writing & physical SUPER CHARGE",
         "PREREQUISITE: Must complete Track 1 (1st Year) first"
@@ -566,16 +565,20 @@ export default function AdmissionPage() {
                 </span>
                 
                 <div className="font-serif text-3xl sm:text-5xl font-extrabold text-primary">
-                  {activePlan === 'semester' ? (
-                    <CmsText slug="admission-price-amount-semester" fallback="5 000,- NOK" />
+                  {language === 'en' ? (
+                    activePlan === 'semester' ? "$500 USD" : "$1,000 USD"
                   ) : (
-                    <CmsText slug="admission-price-amount-year" fallback="10 000,- NOK" />
+                    activePlan === 'semester' ? (
+                      <CmsText slug="admission-price-amount-semester" fallback="5 000,- NOK" />
+                    ) : (
+                      <CmsText slug="admission-price-amount-year" fallback="10 000,- NOK" />
+                    )
                   )}
                 </div>
                 
                 <p className="text-[11px] text-on-surface-variant font-semibold leading-relaxed max-w-sm mx-auto">
                   {language === 'en'
-                    ? "*In addition: NOK 500 admin/startup fee and NOK 500 room & board for the kickoff weekend. (Self-chosen hotel during kickoff weekend is not covered by the school)."
+                    ? "*In addition: $50 USD admin/startup fee and $50 USD room & board for the kickoff weekend. (Self-chosen hotel during kickoff weekend is not covered by the school)."
                     : "*I tillegg: 500 kr i admin oppstart og 500 kr for kost og losji for kickoff-helgen. (Hvis man skal bo på egenvalgt hotell i kickoff-helgen dekker skolen ikke dette)."}
                 </p>
               </div>
@@ -585,11 +588,11 @@ export default function AdmissionPage() {
               <div className="space-y-2.5 text-xs text-on-surface-variant font-semibold font-sans">
                 <div className="flex justify-between items-center">
                   <span><CmsText slug="admission-price-row1-label" fallback={language === 'en' ? "Admin / Startup fee" : "Admin / oppstartsgebyr"} /></span>
-                  <span className="text-primary font-bold"><CmsText slug="admission-price-row1-val" fallback="500,- NOK" /></span>
+                  <span className="text-primary font-bold"><CmsText slug="admission-price-row1-val" fallback={language === 'en' ? "$50 USD" : "500,- NOK"} /></span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span><CmsText slug="admission-price-row2-label" fallback={language === 'en' ? "Kickoff weekend room & board" : "Kickoff-helg kost og losji"} /></span>
-                  <span className="text-primary font-bold"><CmsText slug="admission-price-row2-val" fallback="500,- NOK" /></span>
+                  <span className="text-primary font-bold"><CmsText slug="admission-price-row2-val" fallback={language === 'en' ? "$50 USD" : "500,- NOK"} /></span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span><CmsText slug="admission-price-row3-label" fallback={language === 'en' ? "Assigned Personal Mentor" : "Tildelt Personlig Mentor"} /></span>
