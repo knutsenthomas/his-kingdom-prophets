@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 export default function AdmissionPage() {
   const navigate = useNavigate();
@@ -103,7 +105,7 @@ export default function AdmissionPage() {
       const appearance = {
         theme: 'stripe',
         variables: {
-          colorPrimary: '#3c096c',
+          colorPrimary: '#561291',
           colorBackground: '#ffffff',
           colorText: '#30313d',
           colorDanger: '#df1b41',
@@ -188,15 +190,15 @@ export default function AdmissionPage() {
             subject: `[HKM Opptak] Ny søknad: ${formData.name.trim()} (${prog.code})`,
             text: `Ny søknad om opptak ved His Kingdom Prophetic Community:\n\nNavn: ${formData.name.trim()}\nE-post: ${formData.email.trim()}\nTelefon: ${formData.phone.trim()}\nStudielinje: ${prog.title} (${prog.code})\nBetalingsplan: ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}\n\nMotivasjon / Bakgrunn:\n${formData.motivation?.trim() || 'Ikke oppgitt'}`,
             html: `
-              <div style="font-family: sans-serif; padding: 24px; color: #240046; max-width: 600px; border: 1px solid #dec2ef; border-radius: 12px;">
-                <h2 style="color: #3c096c; border-bottom: 2px solid #561291; padding-bottom: 8px; margin-top: 0;">Ny søknad om opptak</h2>
+              <div style="font-family: sans-serif; padding: 24px; color: #271f30; max-width: 600px; border: 1px solid #e2dce7; border-radius: 12px;">
+                <h2 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 8px; margin-top: 0;">Ny søknad om opptak</h2>
                 <p><strong>Navn:</strong> ${formData.name.trim()}</p>
                 <p><strong>E-post:</strong> <a href="mailto:${formData.email.trim()}">${formData.email.trim()}</a></p>
                 <p><strong>Telefon:</strong> ${formData.phone.trim()}</p>
                 <p><strong>Studielinje:</strong> ${prog.title} (${prog.code})</p>
                 <p><strong>Betalingsordning:</strong> ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}</p>
-                <div style="background-color: #fbf8fe; padding: 16px; border-left: 4px solid #c5a059; margin-top: 16px; border-radius: 6px;">
-                  <p style="margin: 0 0 8px 0; font-weight: bold; font-size: 13px; color: #3c096c;">Motivasjon / Åndelig bakgrunn:</p>
+                <div style="background-color: #fbf8fe; padding: 16px; border-left: 4px solid #D7B978; margin-top: 16px; border-radius: 6px;">
+                  <p style="margin: 0 0 8px 0; font-weight: bold; font-size: 13px; color: #561291;">Motivasjon / Åndelig bakgrunn:</p>
                   <p style="margin: 0; white-space: pre-wrap; font-size: 14px; line-height: 1.6; color: #333;">${formData.motivation?.trim() || 'Ingen utfyllende tekst oppgitt.'}</p>
                 </div>
                 <p style="font-size: 11px; color: #888; margin-top: 24px; border-top: 1px solid #eee; padding-top: 8px;">
@@ -323,44 +325,13 @@ export default function AdmissionPage() {
   const selectedProg = programs.find(p => p.id === formData.program) || programs[0];
 
   return (
-    <div className="bg-[#faf7fc] text-[#240046] font-sans min-h-screen">
+    <div className="bg-[#F6F4F8] text-[#271f30] font-sans min-h-screen">
       
-      {/* Mini Brand Header Navigation */}
-      <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-[#dec2ef] px-6 py-4 shadow-sm select-none">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <button 
-            onClick={() => navigate('/')} 
-            className="flex items-center gap-2.5 font-serif font-extrabold text-primary text-base transition-all active:scale-95"
-          >
-            <img src={logo} alt="Logo" className="w-8 h-8 object-contain shrink-0" />
-            <span className="hidden sm:inline"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophetic Community" /></span>
-            <span className="inline sm:hidden"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
-          </button>
-          
-          <div className="flex items-center gap-3">
-            {/* Language Switcher Toggle */}
-            <button 
-              onClick={toggleLanguage}
-              className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
-              title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
-            >
-              <Globe size={13} />
-              <span>{language === 'no' ? 'NO' : 'EN'}</span>
-            </button>
-
-            <button 
-              onClick={() => navigate('/')} 
-              className="px-4 py-2 hover:bg-[#dec2ef]/20 rounded-xl text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1 transition-all"
-            >
-              <ArrowLeft size={14} />
-              <span>{language === 'en' ? "Back to Home" : "Gå tilbake"}</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* Site Header */}
+      <SiteHeader />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary via-[#561291] to-[#240046] text-white py-16 px-6 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#561291] to-[#561291] text-white py-16 px-6 overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-white/5 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-primary-container/10 blur-3xl pointer-events-none" />
@@ -377,20 +348,20 @@ export default function AdmissionPage() {
             slug="admission-hero-title" 
             fallback={language === 'en' ? "Be Equipped for Your God-Given Ministry" : "Bli utrustet til din gudgitte tjeneste"} 
             as="h1"
-            className="font-serif text-3xl sm:text-5xl font-extrabold leading-snug sm:leading-[1.25] tracking-normal max-w-3xl mx-auto text-white"
+            className="font-sans text-3xl sm:text-5xl font-extrabold leading-snug sm:leading-[1.25] tracking-normal max-w-3xl mx-auto text-white"
           />
 
           <CmsText 
             slug="admission-hero-subtitle" 
             fallback={language === 'en' ? "Application period: January 1 – June 30, 2027. On-site kickoff in Norway August 27, 2027. All teaching is conducted in English." : "Søkeperioden er fra 1. januar til 30. juni 2027, med on-site kickoff i Norge 27. august 2027. All undervisning foregår på engelsk."} 
             as="p"
-            className="text-base sm:text-lg text-[#e0aaff] font-medium max-w-2xl mx-auto leading-relaxed pt-1"
+            className="text-base sm:text-lg text-[#E5DDED] font-medium max-w-2xl mx-auto leading-relaxed pt-1"
           />
 
           <div className="pt-4">
             <a 
               href="#apply-form"
-              className="px-8 py-3.5 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-sm sm:text-base font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 inline-flex items-center gap-2"
+              className="px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-sm sm:text-base font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 inline-flex items-center gap-2"
             >
               <span><CmsText slug="admission-hero-cta" fallback={language === 'en' ? "Apply Now" : "Send Søknad Nå"} /></span>
               <ChevronRight size={16} />
@@ -409,7 +380,7 @@ export default function AdmissionPage() {
               slug="admission-programs-title" 
               fallback={language === 'en' ? "Our Study Lines and Courses" : "Våre Studielinjer og Fag"} 
               as="h2"
-              className="font-serif text-2xl sm:text-3xl font-bold text-primary"
+              className="font-sans text-2xl sm:text-3xl font-bold text-primary"
             />
             <CmsText 
               slug="admission-programs-subtitle" 
@@ -426,7 +397,7 @@ export default function AdmissionPage() {
                 className={`bg-white border rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden ${
                   prog.isLocked 
                     ? 'border-amber-200 hover:border-amber-300' 
-                    : 'border-[#dec2ef]/55 hover:border-primary/20'
+                    : 'border-[#e2dce7]/55 hover:border-primary/20'
                 }`}
               >
                 {prog.isLocked && (
@@ -445,12 +416,12 @@ export default function AdmissionPage() {
                     }`}>
                       <CmsText slug={`admission-${prog.id}-code`} fallback={prog.code} />
                     </span>
-                    <span className="text-xs font-bold text-[#c5a059] uppercase tracking-wider">
+                    <span className="text-xs font-bold text-[#D7B978] uppercase tracking-wider">
                       <CmsText slug={`admission-${prog.id}-credits`} fallback={prog.credits} />
                     </span>
                   </div>
 
-                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-primary leading-snug">
+                  <h3 className="font-sans text-xl sm:text-2xl font-bold text-primary leading-snug">
                     <CmsText slug={`admission-${prog.id}-title`} fallback={prog.title} />
                   </h3>
 
@@ -476,7 +447,7 @@ export default function AdmissionPage() {
                     <span className="text-xs uppercase font-bold text-outline block">
                       <CmsText slug="admission-tuition-fee-label" fallback={language === 'en' ? "Tuition Fee" : "Semesteravgift"} />
                     </span>
-                    <span className="font-serif text-xl font-extrabold text-primary">
+                    <span className="font-sans text-xl font-extrabold text-primary">
                       <CmsText slug={`admission-${prog.id}-price`} fallback={prog.priceSemester} />
                     </span>
                   </div>
@@ -496,7 +467,7 @@ export default function AdmissionPage() {
         </section>
 
         {/* SECTION 2: TUITION PAYMENT DETAILS */}
-        <section className="bg-white border border-[#dec2ef]/55 rounded-3xl p-8 shadow-sm">
+        <section className="bg-white border border-[#e2dce7]/55 rounded-3xl p-8 shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             
             {/* Payment Description */}
@@ -510,7 +481,7 @@ export default function AdmissionPage() {
                 slug="admission-payments-title" 
                 fallback={language === 'en' ? "Invest in Your Future Without Financial Stress" : "Invester i din fremtid uten økonomisk stress"} 
                 as="h2"
-                className="font-serif text-2xl sm:text-3xl font-bold text-primary leading-tight"
+                className="font-sans text-2xl sm:text-3xl font-bold text-primary leading-tight"
               />
 
               <CmsText 
@@ -554,7 +525,7 @@ export default function AdmissionPage() {
             </div>
 
             {/* Symmetrical Pricing Card Comparison */}
-            <div className="bg-[#faf7fc] border border-slate-200/60 rounded-2xl p-6 sm:p-8 space-y-6 animate-in fade-in duration-500">
+            <div className="bg-[#F6F4F8] border border-slate-200/60 rounded-2xl p-6 sm:p-8 space-y-6 animate-in fade-in duration-500">
               <div className="flex bg-white p-1 rounded-xl shadow-sm select-none border border-slate-100">
                 <button
                   onClick={() => setActivePlan('semester')}
@@ -587,7 +558,7 @@ export default function AdmissionPage() {
                   )}
                 </span>
                 
-                <div className="font-serif text-3xl sm:text-5xl font-extrabold text-primary">
+                <div className="font-sans text-3xl sm:text-5xl font-extrabold text-primary">
                   {language === 'en' ? (
                     activePlan === 'semester' ? "$500 USD" : "$1,000 USD"
                   ) : (
@@ -642,7 +613,7 @@ export default function AdmissionPage() {
               slug="admission-steps-title" 
               fallback={language === 'en' ? "How the Application Process Works" : "Slik fungerer søknadsprosessen"} 
               as="h2"
-              className="font-serif text-2xl sm:text-3xl font-bold text-primary"
+              className="font-sans text-2xl sm:text-3xl font-bold text-primary"
             />
             <CmsText 
               slug="admission-steps-subtitle" 
@@ -689,12 +660,12 @@ export default function AdmissionPage() {
             ].map((stepObj, i) => (
               <div 
                 key={i}
-                className="bg-white border border-[#dec2ef]/45 p-6 rounded-2xl relative shadow-sm hover:shadow transition-all space-y-3"
+                className="bg-white border border-[#e2dce7]/45 p-6 rounded-2xl relative shadow-sm hover:shadow transition-all space-y-3"
               >
-                <span className="font-serif text-3xl font-extrabold text-[#c5a059]/25 block">
+                <span className="font-sans text-3xl font-extrabold text-[#D7B978]/25 block">
                   <CmsText slug={stepObj.slugNum} fallback={stepObj.fallbackNum} />
                 </span>
-                <h4 className="font-serif text-base sm:text-lg font-bold text-primary font-sans">
+                <h4 className="font-sans text-base sm:text-lg font-bold text-primary font-sans">
                   <CmsText slug={stepObj.slugTitle} fallback={stepObj.fallbackTitle} />
                 </h4>
                 <p className="text-base text-slate-600 leading-relaxed font-normal">
@@ -706,7 +677,7 @@ export default function AdmissionPage() {
         </section>
 
         {/* SECTION 4: INTERACTIVE APPLICATION FORM */}
-        <section id="apply-form" className="bg-white border border-[#dec2ef]/65 rounded-3xl p-8 shadow-md max-w-2xl mx-auto scroll-mt-24">
+        <section id="apply-form" className="bg-white border border-[#e2dce7]/65 rounded-3xl p-8 shadow-md max-w-2xl mx-auto scroll-mt-24">
           <AnimatePresence mode="wait">
             {paymentStep === 'form' ? (
               <motion.form 
@@ -724,7 +695,7 @@ export default function AdmissionPage() {
                     slug="admission-form-title" 
                     fallback={language === 'en' ? "Application for Admission" : "Søknad om opptak"} 
                     as="h3"
-                    className="font-serif text-2xl font-bold text-primary"
+                    className="font-sans text-2xl font-bold text-primary"
                   />
                   <CmsText 
                     slug="admission-form-subtitle" 
@@ -916,7 +887,7 @@ export default function AdmissionPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-base font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2.5 disabled:opacity-50"
+                  className="w-full py-4 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2.5 disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>
@@ -947,7 +918,7 @@ export default function AdmissionPage() {
                     slug="admission-payment-title" 
                     fallback={language === 'en' ? "Complete Your Enrollment Payment" : "Fullfør din studieavgift"} 
                     as="h3"
-                    className="font-serif text-2xl font-bold text-primary"
+                    className="font-sans text-2xl font-bold text-primary"
                   />
                   <p className="text-base text-on-surface-variant font-medium">
                     {language === 'en' 
@@ -982,7 +953,7 @@ export default function AdmissionPage() {
                   <button
                     onClick={handleStripePaymentSubmit}
                     disabled={isSubmitting}
-                    className="flex-[2] py-4 bg-primary hover:bg-primary-container text-white text-base font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="flex-[2] py-4 bg-primary hover:bg-primary-container text-white text-base font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <>
@@ -1014,7 +985,7 @@ export default function AdmissionPage() {
                     slug="admission-success-title" 
                     fallback={language === 'en' ? "Application Successfully Submitted!" : "Søknad om opptak er mottatt!"} 
                     as="h3"
-                    className="font-serif text-2xl sm:text-3xl font-bold text-primary"
+                    className="font-sans text-2xl sm:text-3xl font-bold text-primary"
                   />
                   <p className="text-base text-slate-700 font-normal max-w-md mx-auto leading-relaxed">
                     {language === 'en'
@@ -1024,7 +995,7 @@ export default function AdmissionPage() {
                 </div>
 
                 {/* Information Card about Next Steps and Account Assignment */}
-                <div className="bg-[#fbf8fe] border border-[#dec2ef]/60 rounded-2xl p-6 text-left max-w-lg mx-auto space-y-3.5">
+                <div className="bg-[#fbf8fe] border border-[#e2dce7]/60 rounded-2xl p-6 text-left max-w-lg mx-auto space-y-3.5">
                   <div className="flex items-start gap-3">
                     <div className="p-2 rounded-xl bg-primary/10 text-primary shrink-0 mt-0.5">
                       <GraduationCap size={22} />
@@ -1041,7 +1012,7 @@ export default function AdmissionPage() {
                     </div>
                   </div>
 
-                  <div className="border-t border-[#dec2ef]/40 pt-3.5 grid grid-cols-2 gap-3 text-base">
+                  <div className="border-t border-[#e2dce7]/40 pt-3.5 grid grid-cols-2 gap-3 text-base">
                     <div>
                       <span className="text-outline text-xs uppercase font-bold block">{language === 'en' ? "Program" : "Studielinje"}</span>
                       <span className="font-bold text-primary">{programs.find(p => p.id === formData.program)?.code}</span>
@@ -1056,7 +1027,7 @@ export default function AdmissionPage() {
                 <div className="pt-2 flex flex-col sm:flex-row justify-center gap-3">
                   <button
                     onClick={() => navigate('/')}
-                    className="px-6 py-3.5 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-base font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95"
+                    className="px-6 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95"
                   >
                     <CmsText slug="admission-success-home-btn" fallback={language === 'en' ? "Back to Home" : "Gå til forsiden"} />
                   </button>
@@ -1075,31 +1046,7 @@ export default function AdmissionPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white">
-        <div className="flex flex-col gap-2 text-center md:text-left">
-          <div className="font-serif text-xl font-bold text-[#e0aaff]">His Kingdom Prophets</div>
-          <p className="text-sm text-slate-300 opacity-80 max-w-md">
-            {language === 'en'
-              ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church."
-              : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."}
-          </p>
-        </div>
-        <nav className="flex flex-wrap justify-center gap-6 text-sm font-semibold">
-          <button onClick={() => navigate('/privacy')} className="text-[#e0aaff] hover:text-white transition-opacity">
-            {language === 'en' ? "Privacy Policy" : "Personvern"}
-          </button>
-          <button onClick={() => navigate('/terms')} className="text-[#e0aaff] hover:text-white transition-opacity">
-            {language === 'en' ? "Terms of Service" : "Betingelser"}
-          </button>
-          <button onClick={() => navigate('/accessibility')} className="text-[#e0aaff] hover:text-white transition-opacity">
-            {language === 'en' ? "Accessibility" : "Tilgjengelighet"}
-          </button>
-          <button onClick={() => navigate('/support')} className="text-[#e0aaff] hover:text-white transition-opacity">
-            {language === 'en' ? "Contact Support" : "Kontakt Support"}
-          </button>
-        </nav>
-      </footer>
-
+      <SiteFooter />
     </div>
   );
 }

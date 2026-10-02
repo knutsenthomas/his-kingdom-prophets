@@ -254,9 +254,9 @@ export default function TeacherProfile() {
 
       <div className="bg-white border border-gray-100 rounded-2xl shadow-md overflow-hidden" data-purpose="profile-header">
         {/* Cover strip – Majestic deep lilla gradient banner with shimmers */}
-        <section className="h-[85px] relative overflow-hidden bg-gradient-to-br from-[#3c096c] via-[#561291] to-[#7b2cbf]" data-purpose="hero-banner">
+        <section className="h-[85px] relative overflow-hidden bg-gradient-to-br from-[#561291] via-[#561291] to-[#7b2cbf]" data-purpose="hero-banner">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
-          <div className="absolute bottom-0 left-1/3 w-48 h-48 bg-[#c5a059]/10 rounded-full blur-2xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 w-48 h-48 bg-[#D7B978]/10 rounded-full blur-2xl pointer-events-none" />
         </section>
 
         <div className="px-6 md:px-8 pb-6 pt-0 relative z-10" data-purpose="profile-details-section">
@@ -282,7 +282,7 @@ export default function TeacherProfile() {
                 )}
                 <button
                   onClick={() => setShowAvatarPicker(true)}
-                  className="absolute bottom-1 right-1 w-8 h-8 rounded-full bg-[#c5a059] text-white flex items-center justify-center shadow-lg hover:bg-[#b8904a] transition-all hover:scale-105 active:scale-95"
+                  className="absolute bottom-1 right-1 w-8 h-8 rounded-full bg-[#D7B978] text-white flex items-center justify-center shadow-lg hover:bg-[#b8904a] transition-all hover:scale-105 active:scale-95"
                   title="Endre profilbilde"
                 >
                   <Camera size={14} />
@@ -300,7 +300,7 @@ export default function TeacherProfile() {
                     <CmsText slug="profile-hero-teacher-role" fallback="Mentor" />
                   </span>
                   {draft.department && (
-                    <span className="px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-[#c5a059]/5 text-[#c5a059] border border-[#c5a059]/20 shadow-sm">
+                    <span className="px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-[#D7B978]/5 text-[#D7B978] border border-[#D7B978]/20 shadow-sm">
                       {draft.department}
                     </span>
                   )}
@@ -330,7 +330,7 @@ export default function TeacherProfile() {
                 <span className="text-2xl font-serif font-bold text-[#561291]">{completionPct}%</span>
                 <span className="text-[9px] font-bold tracking-wider text-[#561291]/80 uppercase mt-0.5"><CmsText slug="profile-hero-completion-kpi" fallback="Profil" /></span>
                 <div className="w-full bg-slate-200 h-1 rounded-full mt-2 overflow-hidden min-w-[50px]">
-                  <div className="bg-[#c5a059] h-full" style={{ width: `${completionPct}%`, transition: 'width 0.4s ease' }} />
+                  <div className="bg-[#D7B978] h-full" style={{ width: `${completionPct}%`, transition: 'width 0.4s ease' }} />
                 </div>
               </div>
             </div>
@@ -378,7 +378,7 @@ export default function TeacherProfile() {
             <div className="xl:col-span-8 flex flex-col gap-5">
               <section className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
                 <h2 className="font-serif text-base font-bold text-primary mb-5 flex items-center gap-2">
-                  <User size={16} className="text-[#c5a059]" /> <CmsText slug="profile-section-public" fallback="Offentlig lærerprofil" />
+                  <User size={16} className="text-[#D7B978]" /> <CmsText slug="profile-section-public" fallback="Offentlig lærerprofil" />
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Field label={<CmsText slug="profile-field-fullname" fallback="Fullt navn" />} icon={<User size={13} />} required>
@@ -405,7 +405,7 @@ export default function TeacherProfile() {
 
               <section className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
                 <h2 className="font-serif text-base font-bold text-primary mb-5 flex items-center gap-2">
-                  <Video size={16} className="text-[#c5a059]" /> <CmsText slug="profile-section-availability" fallback="Tilgjengelighet" />
+                  <Video size={16} className="text-[#D7B978]" /> <CmsText slug="profile-section-availability" fallback="Tilgjengelighet" />
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Field label={<CmsText slug="profile-field-hours" fallback="Kontortid" />} icon={<ShieldCheck size={13} />}>
@@ -444,7 +444,7 @@ export default function TeacherProfile() {
 
                 <div className="p-6">
                   <h2 className="font-serif text-base font-bold text-[#561291] mb-5 flex items-center gap-2">
-                    <Lock size={16} className="text-[#c5a059]" /> <CmsText slug="profile-section-private" fallback="Privat kontaktinformasjon" />
+                    <Lock size={16} className="text-[#D7B978]" /> <CmsText slug="profile-section-private" fallback="Privat kontaktinformasjon" />
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Field label={<CmsText slug="profile-field-phone" fallback="Mobilnummer" />} icon={<Phone size={13} />}>
@@ -558,7 +558,7 @@ export default function TeacherProfile() {
           <motion.div key="account" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex flex-col gap-5 max-w-3xl">
             <section className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
               <h2 className="font-serif text-base font-bold text-primary mb-5 flex items-center gap-2">
-                <Mail size={16} className="text-[#c5a059]" /> <CmsText slug="profile-section-email" fallback="E-postadresse" />
+                <Mail size={16} className="text-[#D7B978]" /> <CmsText slug="profile-section-email" fallback="E-postadresse" />
               </h2>
               <Field label={<CmsText slug="profile-field-email" fallback="E-post" />} icon={<Mail size={13} />}>
                 <input value={emailDraft} onChange={e => setEmailDraft(e.target.value)} type="email" className="field-input" placeholder={getPlaceholder('profile-placeholder-email', 'din@epost.no')} />
@@ -572,7 +572,7 @@ export default function TeacherProfile() {
 
             <section className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
               <h2 className="font-serif text-base font-bold text-primary mb-5 flex items-center gap-2">
-                <Lock size={16} className="text-[#c5a059]" /> <CmsText slug="profile-section-password" fallback="Endre passord" />
+                <Lock size={16} className="text-[#D7B978]" /> <CmsText slug="profile-section-password" fallback="Endre passord" />
               </h2>
               <div className="flex flex-col gap-4">
                 {[

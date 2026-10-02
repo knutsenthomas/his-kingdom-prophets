@@ -132,7 +132,7 @@ function ApprovalModal({ mod, courseId, onClose }) {
         <div className="bg-[#561291] text-white px-6 py-5 flex items-start justify-between gap-3">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <ShieldAlert size={18} className="text-[#c5a059]" />
+              <ShieldAlert size={18} className="text-[#D7B978]" />
               <h3 className="font-serif text-lg font-bold">Send til godkjenning</h3>
             </div>
             <p className="text-[11px] text-white/65 font-medium leading-relaxed">
@@ -258,7 +258,7 @@ function ModuleRow({ mod, index, total, courseId, linkedAssets, onOpenMediaDrawe
             />
             <div className="flex items-center gap-2 mt-0.5 flex-wrap">
               {linked.length > 0 && (
-                <span className="text-[9px] font-bold text-[#c5a059]">
+                <span className="text-[9px] font-bold text-[#D7B978]">
                   {linked.length} ressurs{linked.length !== 1 ? 'er' : ''} koblet
                 </span>
               )}
@@ -494,7 +494,7 @@ export default function CourseBuilder() {
             {/* Course selector */}
             <div className="bg-white border border-outline-variant/30 rounded-xl p-5 shadow-sm">
               <h2 className="font-serif text-lg font-bold text-primary mb-1 flex items-center gap-2">
-                <Layers size={18} className="text-[#c5a059] shrink-0" /> Studielinjer
+                <Layers size={18} className="text-[#D7B978] shrink-0" /> Studielinjer
               </h2>
               <p className="text-[11px] text-on-surface-variant mb-4 font-medium leading-relaxed">
                 Velg kurs for å redigere struktur og innhold.
@@ -524,7 +524,7 @@ export default function CourseBuilder() {
             {/* Progression rules */}
             <div className="bg-white border border-outline-variant/30 rounded-xl p-5 shadow-sm">
               <h2 className="font-serif text-base font-bold text-primary mb-1 flex items-center gap-2">
-                <Lock size={15} className="text-[#c5a059] shrink-0" /> Progresjonsregler
+                <Lock size={15} className="text-[#D7B978] shrink-0" /> Progresjonsregler
               </h2>
               <p className="text-[11px] text-on-surface-variant mb-4 font-medium">Styr tilgang og låsing av moduler.</p>
               <div className="space-y-2">
@@ -633,7 +633,7 @@ export default function CourseBuilder() {
                 {/* Add module form */}
                 <form onSubmit={handleAddModule} className="border-t border-outline-variant/20 px-5 sm:px-8 py-6 flex flex-col gap-4 bg-slate-50/50">
                   <h3 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-                    <PlusCircle size={16} className="text-[#c5a059] shrink-0" /> Legg til ny modul
+                    <PlusCircle size={16} className="text-[#D7B978] shrink-0" /> Legg til ny modul
                   </h3>
                   <div className="flex flex-col sm:flex-row gap-3 items-end">
                     <div className="flex-grow space-y-1.5 w-full">
@@ -678,7 +678,7 @@ export default function CourseBuilder() {
             >
               <div className="flex items-center justify-between p-5 border-b border-outline-variant/20 bg-[#561291] text-white shrink-0">
                 <div>
-                  <div className="flex items-center gap-2"><MediaIcon size={17} className="text-[#c5a059]" /><h3 className="font-serif text-lg font-bold">Koble Medieressurser</h3></div>
+                  <div className="flex items-center gap-2"><MediaIcon size={17} className="text-[#D7B978]" /><h3 className="font-serif text-lg font-bold">Koble Medieressurser</h3></div>
                   <p className="text-[11px] text-white/65 font-medium mt-0.5">Velg filer å knytte til modulen</p>
                 </div>
                 <button onClick={closeMediaDrawer} className="p-2 hover:bg-white/10 rounded-lg transition-colors active:scale-90"><X size={20} /></button>
@@ -733,7 +733,7 @@ export default function CourseBuilder() {
               <div className="border-t border-outline-variant/20 p-5 bg-white shrink-0">
                 {pendingAssetIds.length > 0 && (
                   <div className="flex items-center gap-2 mb-3.5 p-3 bg-primary/5 border border-primary/15 rounded-lg">
-                    <Sparkles size={13} className="text-[#c5a059] shrink-0" />
+                    <Sparkles size={13} className="text-[#D7B978] shrink-0" />
                     <p className="text-xs font-bold text-primary">{pendingAssetIds.length} ressurs{pendingAssetIds.length !== 1 ? 'er' : ''} valgt</p>
                   </div>
                 )}

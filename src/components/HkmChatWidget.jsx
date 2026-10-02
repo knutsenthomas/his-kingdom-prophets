@@ -246,7 +246,7 @@ export default function HkmChatWidget() {
           position: relative !important;
         }
         .hkm-chat-toggle {
-          background: linear-gradient(135deg, #561291 0%, #3c096c 100%) !important;
+          background: linear-gradient(135deg, #561291 0%, #561291 100%) !important;
           transform: translateZ(0) !important;
           backface-visibility: hidden !important;
           transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
@@ -330,7 +330,7 @@ export default function HkmChatWidget() {
                             onClick={() => {
                               window.dispatchEvent(new CustomEvent('hkm-paste-note', { detail: { text: msg.text } }));
                             }}
-                            className="text-[#561291] hover:text-[#3c096c] font-extrabold flex items-center gap-0.5 transition-colors"
+                            className="text-[#561291] hover:text-[#561291] font-extrabold flex items-center gap-0.5 transition-colors"
                           >
                             ➕ Lim inn i notat
                           </button>

@@ -156,7 +156,7 @@ export default function TeacherDashboard() {
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">
               <CmsText slug="teacher-kpi1-label" fallback="Aktive studenter" />
             </p>
-            <h3 className="text-3xl font-bold font-serif text-[#3c096c]">{students.length + 45}</h3>
+            <h3 className="text-3xl font-bold font-serif text-[#561291]">{students.length + 45}</h3>
             <p className="text-[10px] text-green-600 font-semibold flex items-center gap-1">
               <TrendingUp size={12} /> <CmsText slug="teacher-kpi1-trend" fallback="+12% fra forrige måned" />
             </p>
@@ -172,9 +172,9 @@ export default function TeacherDashboard() {
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">
               <CmsText slug="teacher-kpi2-label" fallback="Faglig Snittfremdrift" />
             </p>
-            <h3 className="text-3xl font-bold font-serif text-[#3c096c]">48%</h3>
+            <h3 className="text-3xl font-bold font-serif text-[#561291]">48%</h3>
             <div className="h-1.5 w-24 bg-slate-100 rounded-full overflow-hidden mt-2">
-              <div className="h-full bg-[#3c096c] w-[48%]" />
+              <div className="h-full bg-[#561291] w-[48%]" />
             </div>
           </div>
           <div className="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
@@ -188,7 +188,7 @@ export default function TeacherDashboard() {
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">
               <CmsText slug="teacher-kpi3-label" fallback="Gjennomføringsrate" />
             </p>
-            <h3 className="text-3xl font-bold font-serif text-[#3c096c]">95%</h3>
+            <h3 className="text-3xl font-bold font-serif text-[#561291]">95%</h3>
             <p className="text-[10px] text-outline font-semibold">
               <CmsText slug="teacher-kpi3-desc" fallback="Bestått-andel for aktive disipler" />
             </p>
@@ -225,7 +225,7 @@ export default function TeacherDashboard() {
           <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
             <div className="flex justify-between items-center mb-6">
               <h3 className="font-serif text-lg md:text-xl font-bold text-primary flex items-center gap-2">
-                <Video size={20} className="text-[#c5a059]" />
+                <Video size={20} className="text-[#D7B978]" />
                 <span><CmsText slug="teacher-classes-title" fallback="Dagens forelesninger & live-rom" /></span>
               </h3>
               <span className="text-[10px] bg-red-100 text-red-600 font-bold px-2 py-1 rounded-full uppercase tracking-wider flex items-center gap-1">
@@ -240,20 +240,20 @@ export default function TeacherDashboard() {
                   key={item.id}
                   className={`p-4 rounded-xl border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition-all duration-300 ${
                     item.status === 'live'
-                      ? 'border-[#c5a059] bg-[#c5a059]/5 shadow-sm'
-                      : 'border-outline-variant/40 bg-[#f8fafc]/50 hover:bg-[#f8fafc]'
+                      ? 'border-[#D7B978] bg-[#D7B978]/5 shadow-sm'
+                      : 'border-outline-variant/40 bg-[#F6F4F8]/50 hover:bg-[#F6F4F8]'
                   }`}
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        item.status === 'live' ? 'bg-[#c5a059] text-white' : 'bg-slate-200 text-slate-700'
+                        item.status === 'live' ? 'bg-[#D7B978] text-white' : 'bg-slate-200 text-slate-700'
                       }`}>
                         {item.code}
                       </span>
                       {item.status === 'live' && (
-                        <span className="text-[10px] text-[#c5a059] font-bold uppercase tracking-wider animate-pulse flex items-center gap-1">
-                          <Play size={10} className="fill-[#c5a059]" /> Pågår nå
+                        <span className="text-[10px] text-[#D7B978] font-bold uppercase tracking-wider animate-pulse flex items-center gap-1">
+                          <Play size={10} className="fill-[#D7B978]" /> Pågår nå
                         </span>
                       )}
                     </div>
@@ -265,7 +265,7 @@ export default function TeacherDashboard() {
                       <span className="text-slate-300">•</span>
                       <span>Lærer: {item.instructor}</span>
                       <span className="text-slate-300">•</span>
-                      <span className="flex items-center gap-1 text-[#3c096c]">
+                      <span className="flex items-center gap-1 text-[#561291]">
                         <Users size={12} /> {item.studentsCount} studenter
                       </span>
                     </div>
@@ -275,8 +275,8 @@ export default function TeacherDashboard() {
                     onClick={() => handleStartClass(item.title, item.zoomLink)}
                     className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all shrink-0 active:scale-95 shadow-sm ${
                       item.status === 'live'
-                        ? 'bg-[#c5a059] hover:bg-[#b08b45] text-white'
-                        : 'bg-[#3c096c] hover:opacity-95 text-white'
+                        ? 'bg-[#D7B978] hover:bg-[#b08b45] text-white'
+                        : 'bg-[#561291] hover:opacity-95 text-white'
                     }`}
                   >
                     <Video size={14} />
@@ -291,7 +291,7 @@ export default function TeacherDashboard() {
           <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
             <div className="flex justify-between items-center mb-6">
               <h3 className="font-serif text-lg md:text-xl font-bold text-primary flex items-center gap-2">
-                <ClipboardList size={20} className="text-[#c5a059]" />
+                <ClipboardList size={20} className="text-[#D7B978]" />
                 <span><CmsText slug="teacher-incoming-title" fallback="Innkomne oppgaver til sensur" /></span>
               </h3>
               <span className="text-xs bg-[#eaeef2] text-primary font-bold px-3 py-1 rounded-full border border-outline-variant/30">
@@ -302,7 +302,7 @@ export default function TeacherDashboard() {
             {submittedAssignments.length === 0 ? (
               <div className="text-center py-10 border border-dashed border-outline-variant/50 rounded-xl bg-slate-50">
                 <CheckCircle size={32} className="text-green-500 mx-auto mb-3" />
-                <p className="text-sm font-bold text-[#3c096c]">Alle oppgaver er vurdert!</p>
+                <p className="text-sm font-bold text-[#561291]">Alle oppgaver er vurdert!</p>
                 <p className="text-xs text-outline font-semibold mt-1">Gode mentorer holder orden i studieplanen.</p>
               </div>
             ) : (
@@ -314,7 +314,7 @@ export default function TeacherDashboard() {
                   >
                     <div className="space-y-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[9px] font-bold bg-[#f0f4f8] text-[#3c096c] px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        <span className="text-[9px] font-bold bg-[#f0f4f8] text-[#561291] px-2 py-0.5 rounded-full uppercase tracking-wider">
                           {assignment.courseCode}
                         </span>
                         <span className="text-[10px] text-outline font-semibold">
@@ -323,9 +323,9 @@ export default function TeacherDashboard() {
                       </div>
                       <h4 className="font-serif text-base font-bold text-primary truncate pr-4">{assignment.title}</h4>
                       <p className="text-xs text-on-surface-variant font-medium">
-                        Student: <span className="font-bold text-[#3c096c]">Thomas Knutsen</span> (Student-persona)
+                        Student: <span className="font-bold text-[#561291]">Thomas Knutsen</span> (Student-persona)
                       </p>
-                      <div className="flex items-center gap-1.5 text-xs text-[#c5a059] font-bold pt-1.5">
+                      <div className="flex items-center gap-1.5 text-xs text-[#D7B978] font-bold pt-1.5">
                         <FileText size={12} />
                         <span className="truncate max-w-md italic">"{assignment.submission?.text.substring(0, 80)}..."</span>
                       </div>
@@ -333,7 +333,7 @@ export default function TeacherDashboard() {
 
                     <button
                       onClick={() => handleOpenGrader(assignment)}
-                      className="flex items-center gap-1 px-4 py-2 bg-[#3c096c] hover:opacity-95 text-white rounded-lg text-xs font-bold transition-all shrink-0 active:scale-95"
+                      className="flex items-center gap-1 px-4 py-2 bg-[#561291] hover:opacity-95 text-white rounded-lg text-xs font-bold transition-all shrink-0 active:scale-95"
                     >
                       <span>Vurder besvarelse</span>
                       <ChevronRight size={14} />
@@ -368,7 +368,7 @@ export default function TeacherDashboard() {
               {atRiskStudents.map((stud, idx) => (
                 <div 
                   key={idx} 
-                  className="flex gap-3.5 items-start p-3 bg-[#f8fafc] border border-outline-variant/50 rounded-xl hover:border-primary/40 transition-all duration-300"
+                  className="flex gap-3.5 items-start p-3 bg-[#F6F4F8] border border-outline-variant/50 rounded-xl hover:border-primary/40 transition-all duration-300"
                 >
                   <img 
                     src={stud.avatar} 
@@ -407,7 +407,7 @@ export default function TeacherDashboard() {
           {/* Section D: Administrative Hurtigtjenester */}
           <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
             <h3 className="font-serif text-lg font-bold text-primary mb-4 flex items-center gap-2">
-              <Sliders size={18} className="text-[#c5a059]" />
+              <Sliders size={18} className="text-[#D7B978]" />
               <span>Administrative tjenester</span>
             </h3>
 
@@ -443,7 +443,7 @@ export default function TeacherDashboard() {
           {/* Section E: Live Course Metrics Graph Simulator */}
           <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
             <h3 className="font-serif text-lg font-bold text-primary mb-4 flex items-center gap-2">
-              <BarChart3 size={18} className="text-[#c5a059]" />
+              <BarChart3 size={18} className="text-[#D7B978]" />
               <span>Resultatfordeling</span>
             </h3>
             <div className="flex flex-col gap-3">
@@ -488,7 +488,7 @@ export default function TeacherDashboard() {
               className="bg-white rounded-3xl border border-outline-variant/30 max-w-2xl w-full overflow-hidden shadow-2xl relative z-10 text-on-surface flex flex-col max-h-[90vh]"
             >
               {/* Header */}
-              <div className="bg-[#3c096c] text-white px-6 py-4 flex justify-between items-center">
+              <div className="bg-[#561291] text-white px-6 py-4 flex justify-between items-center">
                 <div className="space-y-0.5">
                   <span className="text-[9px] font-bold bg-white/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
                     {selectedGradingAssignment.courseCode} • Sensur
@@ -515,7 +515,7 @@ export default function TeacherDashboard() {
 
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold text-outline uppercase tracking-wider">Studentens besvarelse (Thomas Knutsen)</label>
-                  <div className="text-xs text-slate-800 bg-[#f8fafc] p-4 rounded-xl border border-outline-variant/40 leading-relaxed font-mono whitespace-pre-wrap max-h-48 overflow-y-auto">
+                  <div className="text-xs text-slate-800 bg-[#F6F4F8] p-4 rounded-xl border border-outline-variant/40 leading-relaxed font-mono whitespace-pre-wrap max-h-48 overflow-y-auto">
                     {selectedGradingAssignment.submission?.text}
                   </div>
                 </div>
@@ -563,7 +563,7 @@ export default function TeacherDashboard() {
                 {/* Submit button */}
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-1.5 bg-[#3c096c] hover:opacity-95 text-white py-3 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
+                  className="w-full flex items-center justify-center gap-1.5 bg-[#561291] hover:opacity-95 text-white py-3 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
                 >
                   <CheckCircle size={16} />
                   Lagre og publiser vurdering
@@ -593,9 +593,9 @@ export default function TeacherDashboard() {
               className="bg-white rounded-3xl border border-outline-variant/30 max-w-md w-full overflow-hidden shadow-2xl relative z-10 text-on-surface"
             >
               {/* Header */}
-              <div className="bg-[#3c096c] text-white px-6 py-4 flex justify-between items-center">
+              <div className="bg-[#561291] text-white px-6 py-4 flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <AlertTriangle size={18} className="text-[#c5a059]" />
+                  <AlertTriangle size={18} className="text-[#D7B978]" />
                   <h3 className="font-serif text-sm sm:text-base font-bold">Pastoral oppmuntring & Veiledning</h3>
                 </div>
                 <button 
@@ -608,7 +608,7 @@ export default function TeacherDashboard() {
 
               {/* Form Body */}
               <form onSubmit={handleSendOutreach} className="p-6 space-y-4">
-                <div className="flex items-center gap-3 bg-[#f8fafc] p-3 rounded-xl border border-outline-variant/40">
+                <div className="flex items-center gap-3 bg-[#F6F4F8] p-3 rounded-xl border border-outline-variant/40">
                   <img 
                     src={selectedOutreachStudent.avatar} 
                     alt={selectedOutreachStudent.name} 
@@ -644,7 +644,7 @@ export default function TeacherDashboard() {
                   <button
                     type="submit"
                     disabled={isSendingOutreach}
-                    className="flex-grow flex items-center justify-center gap-1.5 bg-[#3c096c] hover:opacity-95 disabled:opacity-50 text-white py-2.5 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
+                    className="flex-grow flex items-center justify-center gap-1.5 bg-[#561291] hover:opacity-95 disabled:opacity-50 text-white py-2.5 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
                   >
                     <Send size={12} />
                     {isSendingOutreach ? 'Sender...' : 'Send melding'}

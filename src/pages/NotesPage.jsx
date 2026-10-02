@@ -1041,7 +1041,7 @@ ${rawContent}
                 else if (activeTab === 'lesson') navigate('/student/library');
                 else setIsCreateModalOpen(true);
               }}
-              className="px-5 py-2.5 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-md hover:bg-[#3c096c] transition-colors active:scale-95 flex items-center gap-2"
+              className="px-5 py-2.5 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-md hover:bg-[#561291] transition-colors active:scale-95 flex items-center gap-2"
             >
               {activeTab === 'all'
                 ? (language === 'en' ? "Create Note" : "Opprett notat")
@@ -1709,7 +1709,7 @@ ${rawContent}
                   <button
                     type="button"
                     onClick={() => handleSaveNote()}
-                    className="px-4 py-2 bg-primary text-white hover:bg-[#3c096c] rounded-xl flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider shadow-sm transition-all active:scale-95"
+                    className="px-4 py-2 bg-primary text-white hover:bg-[#561291] rounded-xl flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider shadow-sm transition-all active:scale-95"
                   >
                     <Save size={13} />
                     <span>{language === 'en' ? "Save now" : "Lagre nå"}</span>

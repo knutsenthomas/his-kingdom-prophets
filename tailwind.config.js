@@ -8,19 +8,24 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Core theme colors from design system (Majestic Royal Purple theme)
-        primary: "#3c096c",
+        // Core theme colors aligned with HKPC brand identity (#561291, #D7B978, #F6F4F8)
+        primary: "#561291",
         "primary-container": "#561291",
         "on-primary": "#ffffff",
-        "on-primary-container": "#e0aaff",
+        "on-primary-container": "#E5DDED",
         
-        secondary: "#7b2cbf",
+        secondary: "#561291",
         "secondary-container": "#f3e8ff",
         "on-secondary": "#ffffff",
         "on-secondary-container": "#561291",
         
-        tertiary: "#240046",
-        "tertiary-container": "#3c096c",
+        gold: "#D7B978",
+        "gold-dark": "#b8934e",
+        "gold-light": "#f6dc94",
+        "on-gold": "#561291",
+        
+        tertiary: "#561291",
+        "tertiary-container": "#561291",
         "on-tertiary": "#ffffff",
         "on-tertiary-container": "#f3e8ff",
         
@@ -29,53 +34,56 @@ export default {
         "on-error": "#ffffff",
         "on-error-container": "#93000a",
         
-        background: "#faf7fc",
-        "on-background": "#240046",
+        background: "#F6F4F8",
+        "on-background": "#271f30",
         
-        surface: "#faf7fc",
-        "on-surface": "#240046",
-        "on-surface-variant": "#5a4d66",
-        "surface-dim": "#dec2ef",
-        "surface-bright": "#faf7fc",
+        surface: "#ffffff",
+        "on-surface": "#271f30",
+        "on-surface-variant": "#6d6575",
+        "surface-dim": "#e2dce7",
+        "surface-bright": "#ffffff",
         "surface-tint": "#561291",
         
         "surface-container-lowest": "#ffffff",
-        "surface-container-low": "#f5eefb",
-        "surface-container": "#eedff7",
-        "surface-container-high": "#e6d1f3",
-        "surface-container-highest": "#dec2ef",
+        "surface-container-low": "#faf8fc",
+        "surface-container": "#F6F4F8",
+        "surface-container-high": "#eeeaf2",
+        "surface-container-highest": "#e2dce7",
         
-        outline: "#7e6d8a",
-        "outline-variant": "#dec2ef",
+        outline: "#6d6575",
+        "outline-variant": "#e2dce7",
         
-        "inverse-surface": "#32273c",
-        "inverse-on-surface": "#f5eefb",
-        "inverse-primary": "#d8b4fe",
+        "inverse-surface": "#271f30",
+        "inverse-on-surface": "#F6F4F8",
+        "inverse-primary": "#E5DDED",
         
         // Fixed variants
         "primary-fixed": "#f3e8ff",
         "primary-fixed-dim": "#d8b4fe",
-        "on-primary-fixed": "#240046",
+        "on-primary-fixed": "#271f30",
         "on-primary-fixed-variant": "#561291",
         
         "secondary-fixed": "#f3e8ff",
         "secondary-fixed-dim": "#d8b4fe",
-        "on-secondary-fixed": "#240046",
-        "on-secondary-fixed-variant": "#7b2cbf",
+        "on-secondary-fixed": "#271f30",
+        "on-secondary-fixed-variant": "#561291",
         
         "tertiary-fixed": "#f3e8ff",
         "tertiary-fixed-dim": "#d8b4fe",
         "on-tertiary-fixed": "#ffffff",
-        "on-tertiary-fixed-variant": "#3c096c",
+        "on-tertiary-fixed-variant": "#561291",
  
-        // Burnt orange gradient colors for premium accents & visual editor
-        "burnt-orange": "#d17d39",
-        "burnt-orange-dark": "#bd4f2a"
+        // Warm accents
+        "burnt-orange": "#D7B978",
+        "burnt-orange-dark": "#b8934e"
       },
       borderRadius: {
-        DEFAULT: "0.125rem",
-        lg: "0.25rem",
-        xl: "0.5rem",
+        DEFAULT: "0.375rem",
+        md: "0.5rem",
+        lg: "0.625rem",
+        xl: "0.6875rem", // 11px for buttons & inputs (8px grid / 10-14px)
+        "2xl": "1rem",   // 16px for cards (16-24px)
+        "3xl": "1.5rem", // 24px for major containers
         full: "9999px"
       },
       spacing: {
@@ -86,27 +94,27 @@ export default {
         "table-cell-padding": "12px 16px"
       },
       fontFamily: {
-        serif: ["Merriweather", "Georgia", "serif"],
-        sans: ["Inter", "Source Sans 3", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        serif: ["Playfair Display", "Merriweather", "Georgia", "serif"],
+        sans: ["DM Sans", "Inter", "Source Sans 3", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
         "mono-sm": ["JetBrains Mono"],
-        "headline-md": ["Merriweather"],
-        "headline-lg": ["Merriweather"],
-        "display-lg": ["Merriweather"],
-        "label-md": ["Source Sans 3"],
-        "headline-sm": ["Merriweather"],
-        "body-md": ["Source Sans 3"],
-        "body-lg": ["Source Sans 3"],
-        "body-sm": ["Source Sans 3"]
+        "headline-md": ["DM Sans", "sans-serif"],
+        "headline-lg": ["DM Sans", "sans-serif"],
+        "display-lg": ["DM Sans", "sans-serif"],
+        "label-md": ["DM Sans", "sans-serif"],
+        "headline-sm": ["DM Sans", "sans-serif"],
+        "body-md": ["DM Sans", "sans-serif"],
+        "body-lg": ["DM Sans", "sans-serif"],
+        "body-sm": ["DM Sans", "sans-serif"]
       },
       fontSize: {
         "mono-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
-        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
-        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
-        "display-lg": ["48px", {"lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
-        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "700"}],
-        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.035em", "fontWeight": "600"}],
+        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700"}],
+        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+        "body-md": ["16px", {"lineHeight": "26px", "fontWeight": "400"}],
         "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
         "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
       }

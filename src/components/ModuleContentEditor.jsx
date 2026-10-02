@@ -236,7 +236,7 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
             </AnimatePresence>
             <button
               onClick={handleSave}
-              className="flex items-center gap-1.5 px-4 py-2 bg-[#c5a059] hover:bg-[#b8904a] text-white text-xs font-bold uppercase rounded-lg transition-all active:scale-95 shadow-sm"
+              className="flex items-center gap-1.5 px-4 py-2 bg-[#D7B978] hover:bg-[#b8904a] text-white text-xs font-bold uppercase rounded-lg transition-all active:scale-95 shadow-sm"
             >
               <Save size={13} /> Lagre
             </button>
@@ -264,7 +264,7 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
                 <Icon size={14} />
                 {tab.label}
                 {hasContent[tab.id] && (
-                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isActive ? 'bg-primary' : 'bg-[#c5a059]'}`} />
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isActive ? 'bg-primary' : 'bg-[#D7B978]'}`} />
                 )}
               </button>
             );
@@ -288,7 +288,7 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
                 <>
                   <div>
                     <h3 className="font-serif text-base font-bold text-primary mb-1 flex items-center gap-2">
-                      <BookOpen size={16} className="text-[#c5a059]" /> Modulbeskrivelse
+                      <BookOpen size={16} className="text-[#D7B978]" /> Modulbeskrivelse
                     </h3>
                     <p className="text-[11px] text-on-surface-variant font-medium mb-3">
                       Skriv en introduksjon og oversikt over hva modulen inneholder. Vises for studenter øverst i modulen.
@@ -319,7 +319,7 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
                           onClick={() => setActiveTab(card.tab)}
                           className="flex flex-col items-center gap-2 p-4 bg-slate-50 border border-outline-variant/20 rounded-xl hover:border-primary/40 hover:bg-primary/5 transition-all group"
                         >
-                          <Icon size={18} className="text-[#c5a059] group-hover:text-primary transition-colors" />
+                          <Icon size={18} className="text-[#D7B978] group-hover:text-primary transition-colors" />
                           <span className="font-serif text-2xl font-bold text-primary">{card.value}</span>
                           <span className="text-[10px] font-bold uppercase tracking-wider text-outline text-center">{card.label}</span>
                         </button>
@@ -335,7 +335,7 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
                   <div className="flex items-center justify-between gap-4">
                     <div>
                       <h3 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-                        <ScrollText size={16} className="text-[#c5a059]" /> Forelesningstranskript
+                        <ScrollText size={16} className="text-[#D7B978]" /> Forelesningstranskript
                       </h3>
                       <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">
                         Legg inn tidsstemplede transkriptlinjer som vises i klasserommet.
@@ -384,7 +384,7 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
                   <div className="flex items-center justify-between gap-4">
                     <div>
                       <h3 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-                        <FilePlus2 size={16} className="text-[#c5a059]" /> Studieguider
+                        <FilePlus2 size={16} className="text-[#D7B978]" /> Studieguider
                       </h3>
                       <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">
                         Legg til PDF-er, notater eller lenker som vises i klasserommets studieguide-fane.
@@ -441,7 +441,7 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
                 <>
                   <div>
                     <h3 className="font-serif text-base font-bold text-primary mb-1 flex items-center gap-2">
-                      <Target size={16} className="text-[#c5a059]" /> Læringsmål
+                      <Target size={16} className="text-[#D7B978]" /> Læringsmål
                     </h3>
                     <p className="text-[11px] text-on-surface-variant font-medium mb-4">
                       Klargjør hva studenten skal forstå, kunne og erfare etter fullført modul.
@@ -514,7 +514,7 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-                        <PlaySquare size={16} className="text-[#c5a059]" /> Undervisningstimer
+                        <PlaySquare size={16} className="text-[#D7B978]" /> Undervisningstimer
                       </h3>
                       <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">
                         Del modulen inn i enkeltleksjoner med tittel, beskrivelse, varighet og eventuell videolenke.
@@ -612,7 +612,7 @@ export default function ModuleContentEditor({ courseId, mod, onClose }) {
                   <div className="flex items-center justify-between gap-4">
                     <div>
                       <h3 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-                        <ClipboardList size={16} className="text-[#c5a059]" /> Oppgaver i klasserommet
+                        <ClipboardList size={16} className="text-[#D7B978]" /> Oppgaver i klasserommet
                       </h3>
                       <p className="text-[11px] text-on-surface-variant font-medium mt-0.5">
                         Legg til én eller flere oppgaver som vises under Oppgaver-fanen i klasserommet og i oppgavemenyen.

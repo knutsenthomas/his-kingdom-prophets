@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { Shield, ArrowLeft, Globe, Lock, Eye, FileText } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 export default function PrivacyPolicyPage() {
   const navigate = useNavigate();
@@ -13,39 +15,9 @@ export default function PrivacyPolicyPage() {
   const isEn = language === 'en';
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen flex flex-col font-sans text-slate-800">
+    <div className="bg-[#F6F4F8] min-h-screen flex flex-col font-sans text-slate-800">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200/80 sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-12 h-20 max-w-[1440px] mx-auto">
-          <div className="font-serif text-xs min-[360px]:text-sm sm:text-lg md:text-xl lg:text-2xl text-primary font-bold cursor-pointer shrink-0 flex items-center gap-1.5 sm:gap-2.5" onClick={() => navigate('/')}>
-            <img src={logo} alt="His Kingdom Prophets Logo" className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0" />
-            <span className="hidden sm:inline">
-              <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
-            </span>
-            <span className="inline sm:hidden">
-              <CmsText slug="layout-logo-mobile-title" fallback="HKP" />
-            </span>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={toggleLanguage}
-              className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
-              title={isEn ? 'Bytt til norsk (Switch to Norwegian)' : 'Bytt til engelsk (Switch to English)'}
-            >
-              <Globe size={13} />
-              <span>{isEn ? 'EN' : 'NO'}</span>
-            </button>
-            <button 
-              onClick={() => navigate('/')}
-              className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-primary hover:text-primary-container transition-colors"
-            >
-              <ArrowLeft size={16} />
-              <span>{isEn ? 'Back' : 'Tilbake'}</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* Main Content */}
       <main className="flex-1 w-full max-w-[1000px] mx-auto px-4 sm:px-6 py-12 md:py-16">
@@ -59,7 +31,7 @@ export default function PrivacyPolicyPage() {
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mx-auto sm:mx-0">
               <Shield size={24} />
             </div>
-            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary break-words">
+            <h1 className="font-sans text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary break-words">
               <CmsText slug="privacy-title" fallback={isEn ? 'Privacy Policy' : 'Personvernserklæring'} />
             </h1>
             <p className="text-sm text-slate-500 font-medium">
@@ -101,7 +73,7 @@ export default function PrivacyPolicyPage() {
           {/* Detailed sections */}
           <div className="space-y-6 pt-4 text-slate-700 leading-relaxed text-xs sm:text-sm font-medium">
             <section className="space-y-3">
-              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+              <h2 className="font-sans text-lg sm:text-xl font-bold text-primary">
                 <CmsText slug="privacy-sec1-title" fallback={isEn ? '1. Overview of Data We Collect' : '1. Hvilke opplysninger vi samler inn'} />
               </h2>
               <p>
@@ -110,7 +82,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="space-y-3">
-              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+              <h2 className="font-sans text-lg sm:text-xl font-bold text-primary">
                 <CmsText slug="privacy-sec2-title" fallback={isEn ? '2. How We Use Your Information' : '2. Hvordan vi bruker opplysningene'} />
               </h2>
               <p>
@@ -119,7 +91,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="space-y-3">
-              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+              <h2 className="font-sans text-lg sm:text-xl font-bold text-primary">
                 <CmsText slug="privacy-sec3-title" fallback={isEn ? '3. Storage & Encryption' : '3. Dataselgersikkerhet og kryptering'} />
               </h2>
               <p>
@@ -128,7 +100,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="space-y-3">
-              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+              <h2 className="font-sans text-lg sm:text-xl font-bold text-primary">
                 <CmsText slug="privacy-sec4-title" fallback={isEn ? '4. Cookies & Analytics' : '4. Informasjonskapsler (Cookies) og Analyse'} />
               </h2>
               <p>
@@ -137,7 +109,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="space-y-3">
-              <h2 className="font-serif text-lg sm:text-xl font-bold text-primary">
+              <h2 className="font-sans text-lg sm:text-xl font-bold text-primary">
                 <CmsText slug="privacy-sec5-title" fallback={isEn ? '5. Contact Information' : '5. Kontaktinformasjon'} />
               </h2>
               <p>
@@ -149,30 +121,7 @@ export default function PrivacyPolicyPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white select-none shrink-0 border-t border-white/5 font-medium">
-        <div className="flex flex-col gap-2 text-center md:text-left">
-          <div className="font-serif text-lg font-bold text-[#e0aaff]">
-            <CmsText slug="landing-footer-title" fallback="His Kingdom Prophets" />
-          </div>
-          <p className="text-[10px] text-slate-300 opacity-80 max-w-md">
-            <CmsText slug="landing-footer-copyright" fallback={isEn ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."} />
-          </p>
-        </div>
-        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold text-[#e0aaff]">
-          <button onClick={() => navigate('/privacy')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-privacy" fallback={isEn ? "Privacy Policy" : "Personvern"} />
-          </button>
-          <button onClick={() => navigate('/terms')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-terms" fallback={isEn ? "Terms of Service" : "Betingelser"} />
-          </button>
-          <button onClick={() => navigate('/accessibility')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-accessibility" fallback={isEn ? "Accessibility" : "Tilgjengelighet"} />
-          </button>
-          <button onClick={() => navigate('/support')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-support" fallback={isEn ? "Contact Support" : "Kontakt Support"} />
-          </button>
-        </nav>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

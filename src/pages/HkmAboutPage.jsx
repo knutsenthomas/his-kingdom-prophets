@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 export default function HkmAboutPage() {
   const navigate = useNavigate();
@@ -67,48 +69,13 @@ export default function HkmAboutPage() {
   ];
 
   return (
-    <div className="bg-[#faf7fc] text-[#240046] font-sans min-h-screen flex flex-col justify-between">
+    <div className="bg-[#F6F4F8] text-[#271f30] font-sans min-h-screen flex flex-col justify-between">
       
-      {/* Brand Header Navigation */}
-      <header className="sticky top-0 z-40 w-full bg-white/85 backdrop-blur-md border-b border-[#dec2ef]/50 px-6 py-4 shadow-sm select-none">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <button 
-            onClick={() => navigate('/')} 
-            className="flex items-center gap-2.5 font-serif font-extrabold text-primary text-base transition-all active:scale-95"
-          >
-            <img src={logo} alt="Logo" className="w-8 h-8 object-contain shrink-0" />
-            <span className="hidden sm:inline">
-              <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
-            </span>
-            <span className="inline sm:hidden">
-              <CmsText slug="layout-logo-mobile-title" fallback="HKP" />
-            </span>
-          </button>
-          
-          <div className="flex items-center gap-3">
-            {/* Language Switcher Toggle */}
-            <button 
-              onClick={toggleLanguage}
-              className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
-              title={isEn ? 'Bytt til norsk (Switch to Norwegian)' : 'Bytt til engelsk (Switch to English)'}
-            >
-              <Globe size={13} />
-              <span>{isEn ? 'EN' : 'NO'}</span>
-            </button>
-
-            <button 
-              onClick={() => navigate('/')} 
-              className="px-4 py-2 hover:bg-[#dec2ef]/20 rounded-xl text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1 transition-all active:scale-95"
-            >
-              <ArrowLeft size={14} />
-              <span>{isEn ? "Back" : "Tilbake"}</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* Site Header */}
+      <SiteHeader />
 
       {/* Hero Header Section with vibrant blending colors */}
-      <section className="relative bg-gradient-to-br from-primary via-[#561291] to-[#240046] text-white py-20 px-6 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#561291] to-[#561291] text-white py-20 px-6 overflow-hidden">
         {/* Glow rings and absolute blobs */}
         <div className="absolute top-[-30%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#d17d39]/10 blur-3xl pointer-events-none" />
         <div className="absolute bottom-[-20%] left-[-15%] w-[450px] h-[450px] rounded-full bg-primary/20 blur-3xl pointer-events-none" />
@@ -128,7 +95,7 @@ export default function HkmAboutPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="font-serif text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight max-w-3xl mx-auto text-white"
+            className="font-sans text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight max-w-3xl mx-auto text-white"
           >
             <CmsText slug="hkm-hero-title" fallback="His Kingdom Ministry" />
           </motion.h1>
@@ -159,7 +126,7 @@ export default function HkmAboutPage() {
               <CmsText slug="hkm-about-tagline" fallback={isEn ? "About the NGO" : "Bli kjent med oss"} />
             </div>
             
-            <h2 className="font-serif text-3xl font-bold text-primary leading-tight">
+            <h2 className="font-sans text-3xl font-bold text-primary leading-tight">
               <CmsText slug="hkm-about-title" fallback={isEn ? "A Church Without Walls - Built for Growth" : "En kirke uten vegger - bygget for vekst"} />
             </h2>
             
@@ -185,12 +152,12 @@ export default function HkmAboutPage() {
           <div className="lg:col-span-5 relative flex justify-center">
             {/* Visual Design Element */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#d17d39]/10 to-[#bd4f2a]/10 rounded-3xl -rotate-3 scale-105 pointer-events-none" />
-            <div className="relative bg-white border border-[#dec2ef]/40 rounded-3xl p-8 shadow-md space-y-6 max-w-sm w-full z-10">
+            <div className="relative bg-white border border-[#e2dce7]/40 rounded-3xl p-8 shadow-md space-y-6 max-w-sm w-full z-10">
               <div className="w-12 h-12 bg-gradient-to-br from-[#d17d39] to-[#bd4f2a] rounded-2xl flex items-center justify-center text-white shadow-md">
                 <Award size={24} />
               </div>
               <div className="space-y-4">
-                <h4 className="font-serif text-lg font-bold text-primary">
+                <h4 className="font-sans text-lg font-bold text-primary">
                   <CmsText slug="hkm-strategy-title" fallback={isEn ? "Core NGO Strategy" : "Sentralt fokusområde"} />
                 </h4>
                 <div className="space-y-3.5 text-xs font-semibold text-slate-600">
@@ -221,12 +188,12 @@ export default function HkmAboutPage() {
         {/* SECTION 2: MISSION & HISTORY PILLARS */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Mission Card */}
-          <div className="bg-white border border-[#dec2ef]/30 p-8 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-5 flex flex-col justify-between group">
+          <div className="bg-white border border-[#e2dce7]/30 p-8 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-5 flex flex-col justify-between group">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-xl bg-orange-50 text-[#d17d39] flex items-center justify-center transition-colors group-hover:bg-[#d17d39]/10">
                 <Compass size={22} />
               </div>
-              <h3 className="font-serif text-xl font-bold text-primary">
+              <h3 className="font-sans text-xl font-bold text-primary">
                 <CmsText slug="hkm-mission-title" fallback={isEn ? "Our Mission" : "Vårt oppdrag"} />
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-semibold">
@@ -246,12 +213,12 @@ export default function HkmAboutPage() {
           </div>
 
           {/* History Card */}
-          <div className="bg-white border border-[#dec2ef]/30 p-8 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-5 flex flex-col justify-between group">
+          <div className="bg-white border border-[#e2dce7]/30 p-8 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-5 flex flex-col justify-between group">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-xl bg-purple-50 text-primary flex items-center justify-center transition-colors group-hover:bg-primary/10">
                 <ShieldCheck size={22} />
               </div>
-              <h3 className="font-serif text-xl font-bold text-primary">
+              <h3 className="font-sans text-xl font-bold text-primary">
                 <CmsText slug="hkm-history-title" fallback={isEn ? "Our History" : "Vår historie"} />
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-semibold">
@@ -272,12 +239,12 @@ export default function HkmAboutPage() {
         </section>
 
         {/* SECTION 3: IMPACT STATS */}
-        <section className="bg-white border border-[#dec2ef]/40 rounded-3xl p-8 sm:p-10 shadow-sm space-y-8">
+        <section className="bg-white border border-[#e2dce7]/40 rounded-3xl p-8 sm:p-10 shadow-sm space-y-8">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="section-label uppercase tracking-widest text-xs font-extrabold text-[#d17d39]">
               <CmsText slug="hkm-stats-tagline" fallback={isEn ? "Our Global Footprint" : "Våre resultater i tall"} />
             </span>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
+            <h2 className="font-sans text-2xl sm:text-3xl font-bold text-primary">
               <CmsText slug="hkm-stats-title" fallback={isEn ? "Ministry Impact" : "Arbeidet som utføres"} />
             </h2>
             <p className="text-xs text-slate-500 font-semibold">
@@ -287,15 +254,15 @@ export default function HkmAboutPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {stats.map((stat, i) => (
-              <div key={i} className="p-6 bg-[#faf7fc] border border-slate-200/50 rounded-2xl space-y-3 hover:border-[#dec2ef] transition-all hover:-translate-y-0.5 shadow-sm text-center sm:text-left">
+              <div key={i} className="p-6 bg-[#F6F4F8] border border-slate-200/50 rounded-2xl space-y-3 hover:border-[#e2dce7] transition-all hover:-translate-y-0.5 shadow-sm text-center sm:text-left">
                 <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center shadow-sm mx-auto sm:mx-0">
                   {stat.icon}
                 </div>
                 <div className="space-y-1">
-                  <span className="font-serif text-3xl font-extrabold text-primary block">
+                  <span className="font-sans text-3xl font-extrabold text-primary block">
                     <CmsText slug={stat.numberSlug} fallback={stat.numberFallback} />
                   </span>
-                  <span className="text-xs font-bold text-[#240046] block">
+                  <span className="text-xs font-bold text-[#271f30] block">
                     <CmsText slug={stat.labelSlug} fallback={stat.labelFallback} />
                   </span>
                   <span className="text-[10px] text-slate-500 font-semibold block leading-relaxed">
@@ -313,7 +280,7 @@ export default function HkmAboutPage() {
             <span className="section-label uppercase tracking-widest text-xs font-extrabold text-primary">
               <CmsText slug="hkm-engage-tagline" fallback={isEn ? "Get Involved" : "Bli involvert"} />
             </span>
-            <h2 className="font-serif text-2xl font-bold text-primary">
+            <h2 className="font-sans text-2xl font-bold text-primary">
               <CmsText slug="hkm-engage-title" fallback={isEn ? "How to Engage & Support" : "Hvordan stå sammen med oss"} />
             </h2>
             <p className="text-xs text-slate-500 font-semibold">
@@ -323,12 +290,12 @@ export default function HkmAboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Donor Support */}
-            <div className="bg-white border border-[#dec2ef]/40 p-8 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
+            <div className="bg-white border border-[#e2dce7]/40 p-8 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#f39c12] to-[#e74c3c] rounded-xl flex items-center justify-center text-white shadow-sm">
                   <Heart size={20} />
                 </div>
-                <h4 className="font-serif text-lg font-bold text-primary">
+                <h4 className="font-sans text-lg font-bold text-primary">
                   <CmsText slug="hkm-engage-card1-title" fallback={isEn ? "Support the Work" : "Støtt arbeidet"} />
                 </h4>
                 <p className="text-xs text-slate-600 leading-relaxed font-semibold">
@@ -344,12 +311,12 @@ export default function HkmAboutPage() {
             </div>
 
             {/* Church Seminars */}
-            <div className="bg-white border border-[#dec2ef]/40 p-8 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
+            <div className="bg-white border border-[#e2dce7]/40 p-8 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
                   <Calendar size={20} />
                 </div>
-                <h4 className="font-serif text-lg font-bold text-primary">
+                <h4 className="font-sans text-lg font-bold text-primary">
                   <CmsText slug="hkm-engage-card2-title" fallback={isEn ? "For Churches" : "For menigheter"} />
                 </h4>
                 <p className="text-xs text-slate-600 leading-relaxed font-semibold">
@@ -368,12 +335,12 @@ export default function HkmAboutPage() {
             </div>
 
             {/* Business Network */}
-            <div className="bg-white border border-[#dec2ef]/40 p-8 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
+            <div className="bg-white border border-[#e2dce7]/40 p-8 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
                   <Briefcase size={20} />
                 </div>
-                <h4 className="font-serif text-lg font-bold text-primary">
+                <h4 className="font-sans text-lg font-bold text-primary">
                   <CmsText slug="hkm-engage-card3-title" fallback={isEn ? "Business Network" : "Business Network"} />
                 </h4>
                 <p className="text-xs text-slate-600 leading-relaxed font-semibold">
@@ -382,7 +349,7 @@ export default function HkmAboutPage() {
               </div>
               <a 
                 href="mailto:kontakt@hiskingdomministry.no?subject=Business%20Network" 
-                className="w-full py-2.5 bg-primary hover:bg-[#240046] text-white text-xs font-bold uppercase rounded-lg transition-all text-center flex items-center justify-center gap-1.5 shadow active:scale-[0.98]"
+                className="w-full py-2.5 bg-primary hover:bg-[#430d70] text-white text-xs font-bold uppercase rounded-lg transition-all text-center flex items-center justify-center gap-1.5 shadow active:scale-[0.98]"
               >
                 <span>
                   <CmsText slug="hkm-engage-card3-btn" fallback={isEn ? "Join Network" : "Meld din interesse"} />
@@ -394,14 +361,14 @@ export default function HkmAboutPage() {
         </section>
 
         {/* BOTTOM CTA: COMBINED SCHOOL & MINISTRY */}
-        <section className="bg-gradient-to-br from-primary to-[#240046] border border-[#dec2ef]/30 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden">
+        <section className="bg-gradient-to-br from-primary to-[#430d70] border border-[#e2dce7]/30 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden">
           <div className="absolute top-[-40%] right-[-10%] w-[350px] h-[350px] rounded-full bg-white/5 blur-3xl pointer-events-none" />
           
           <div className="max-w-2xl space-y-6 relative z-10">
-            <span className="inline-flex items-center gap-1 bg-[#c5a059]/25 text-[#ffd580] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1 bg-[#D7B978]/25 text-[#ffd580] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
               <CmsText slug="hkm-bottom-tagline" fallback={isEn ? "His Kingdom Prophets School" : "Bibelundervisning & Utrustningsskole"} />
             </span>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold leading-tight">
+            <h2 className="font-sans text-2xl sm:text-3xl font-bold leading-tight">
               <CmsText slug="hkm-bottom-title" fallback={isEn ? "Ready to dive deeper into theology and revelation?" : "Ønsker du teologisk dybde og profetisk utrustning?"} />
             </h2>
             <p className="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed">
@@ -410,7 +377,7 @@ export default function HkmAboutPage() {
             <div className="flex flex-wrap gap-4 pt-2">
               <button 
                 onClick={handleApplyClick}
-                className="px-6 py-3 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-xs font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-1.5"
+                className="px-6 py-3 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-xs font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-1.5"
               >
                 <span>
                   <CmsText slug="hkm-bottom-btn1" fallback={isEn ? "Apply to Prophets School" : "Søk Opptak til skolen"} />
@@ -430,31 +397,7 @@ export default function HkmAboutPage() {
       </main>
 
       {/* Footer Segment */}
-      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white select-none shrink-0 border-t border-white/5">
-        <div className="flex flex-col gap-2 text-center md:text-left">
-          <div className="font-serif text-lg font-bold text-[#e0aaff]">
-            <CmsText slug="landing-footer-title" fallback="His Kingdom Prophets" />
-          </div>
-          <p className="text-[10px] text-slate-300 opacity-80 max-w-md">
-            <CmsText slug="landing-footer-copyright" fallback={isEn ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."} />
-          </p>
-        </div>
-        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold text-[#e0aaff]">
-          <button onClick={() => navigate('/privacy')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-privacy" fallback={isEn ? "Privacy Policy" : "Personvern"} />
-          </button>
-          <button onClick={() => navigate('/terms')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-terms" fallback={isEn ? "Terms of Service" : "Betingelser"} />
-          </button>
-          <button onClick={() => navigate('/accessibility')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-accessibility" fallback={isEn ? "Accessibility" : "Tilgjengelighet"} />
-          </button>
-          <button onClick={handleSupportClick} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-support" fallback={isEn ? "Contact Support" : "Kontakt Support"} />
-          </button>
-        </nav>
-      </footer>
-
+      <SiteFooter />
     </div>
   );
 }

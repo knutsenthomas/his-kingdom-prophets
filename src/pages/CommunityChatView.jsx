@@ -626,7 +626,7 @@ export default function CommunityChatView() {
               
               {/* Optional Pinned Announcement in group chats */}
               {activeChat.pinned && (
-                <div className="bg-purple-50/55 border border-[#dec2ef]/40 p-4 rounded-2xl flex items-start gap-3 shadow-inner">
+                <div className="bg-purple-50/55 border border-[#e2dce7]/40 p-4 rounded-2xl flex items-start gap-3 shadow-inner">
                   <Pin size={16} className="text-[#561291] mt-1 shrink-0" />
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center flex-wrap gap-2">
@@ -658,7 +658,7 @@ export default function CommunityChatView() {
                         
                         {/* Avatar */}
                         {!isCurrentUser && (
-                          <div className="w-9 h-9 rounded-full bg-[#f3e8ff] text-[#561291] flex items-center justify-center font-extrabold text-[12px] shrink-0 border border-[#dec2ef]/40 shadow-sm font-mono">
+                          <div className="w-9 h-9 rounded-full bg-[#f3e8ff] text-[#561291] flex items-center justify-center font-extrabold text-[12px] shrink-0 border border-[#e2dce7]/40 shadow-sm font-mono">
                             {msg.initials}
                           </div>
                         )}
@@ -674,7 +674,7 @@ export default function CommunityChatView() {
                           </div>
                           <div className={`p-3 rounded-2xl text-[12px] font-medium leading-relaxed shadow-sm border ${
                             isCurrentUser 
-                              ? 'bg-gradient-to-r from-primary to-[#3c096c] text-white rounded-tr-none text-left border-primary/20' 
+                              ? 'bg-gradient-to-r from-primary to-[#561291] text-white rounded-tr-none text-left border-primary/20' 
                               : 'bg-white text-slate-800 rounded-tl-none border-slate-100'
                           }`}>
                             {msg.text}
@@ -688,7 +688,7 @@ export default function CommunityChatView() {
                 {/* Animated Typing Indicator */}
                 {isTyping && (
                   <div className="flex gap-3 items-start text-xs leading-relaxed chat-message-item typing">
-                    <div className="w-9 h-9 rounded-full bg-[#f3e8ff] text-[#561291] flex items-center justify-center font-extrabold text-[12px] shrink-0 border border-[#dec2ef]/40 shadow-sm animate-pulse">
+                    <div className="w-9 h-9 rounded-full bg-[#f3e8ff] text-[#561291] flex items-center justify-center font-extrabold text-[12px] shrink-0 border border-[#e2dce7]/40 shadow-sm animate-pulse">
                       ...
                     </div>
                     <div className="space-y-1">
@@ -804,7 +804,7 @@ export default function CommunityChatView() {
                   <button 
                     type="submit"
                     disabled={!messageText.trim()}
-                    className="absolute right-3.5 bottom-3.5 p-2 bg-[#561291] text-white rounded-xl hover:bg-[#3c096c] disabled:opacity-40 transition-colors shadow"
+                    className="absolute right-3.5 bottom-3.5 p-2 bg-[#561291] text-white rounded-xl hover:bg-[#561291] disabled:opacity-40 transition-colors shadow"
                   >
                     <Send size={14} />
                   </button>

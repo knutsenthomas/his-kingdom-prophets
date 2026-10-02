@@ -77,7 +77,7 @@ export default function CourseInsights() {
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 md:px-10 py-6 md:py-10 flex flex-col gap-6 md:gap-8 font-sans bg-[#f8fafc]/30">
+    <div className="w-full px-4 sm:px-6 md:px-10 py-6 md:py-10 flex flex-col gap-6 md:gap-8 font-sans bg-[#F6F4F8]/30">
       
       {/* Breadcrumbs */}
       <div className="flex items-center gap-1.5 text-xs font-semibold text-outline">
@@ -95,7 +95,7 @@ export default function CourseInsights() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant/30 pb-6">
         <div>
           <h1 className="font-serif text-2xl md:text-4xl font-bold text-primary flex items-center gap-2">
-            <BarChart3 className="text-[#c5a059]" size={26} /> Kursinnsikt & Frafallsanalyse
+            <BarChart3 className="text-[#D7B978]" size={26} /> Kursinnsikt & Frafallsanalyse
           </h1>
           <p className="text-xs sm:text-sm text-on-surface-variant mt-1 font-medium">
             Følg studentenes tidsbruk, identifiser krevende leksjoner og ta kontakt med de som trenger ekstra støtte.
@@ -104,7 +104,7 @@ export default function CourseInsights() {
 
         <div className="flex items-center gap-3">
           <div className="flex items-center bg-white border border-outline-variant/30 rounded-xl px-3 py-2 text-xs font-bold text-primary shadow-sm">
-            <Filter size={14} className="mr-1.5 text-[#c5a059]" />
+            <Filter size={14} className="mr-1.5 text-[#D7B978]" />
             <select
               value={selectedCourse}
               onChange={(e) => setSelectedCourse(e.target.value)}
@@ -124,20 +124,20 @@ export default function CourseInsights() {
         <div className="bg-white border border-outline-variant/30 rounded-2xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
           <div className="space-y-1">
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">Gjennomsnittlig Tidsbruk</p>
-            <h3 className="text-lg font-bold font-serif text-[#3c096c]">1t 12m</h3>
+            <h3 className="text-lg font-bold font-serif text-[#561291]">1t 12m</h3>
             <p className="text-[9px] text-[#866324] font-semibold flex items-center gap-0.5">
               <Clock size={10} /> Per leksjonsmodul
             </p>
           </div>
           <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-center shrink-0 shadow-inner">
-            <Clock size={20} className="text-[#c5a059]" />
+            <Clock size={20} className="text-[#D7B978]" />
           </div>
         </div>
 
         <div className="bg-white border border-outline-variant/30 rounded-2xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
           <div className="space-y-1">
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">Gjennomføringsindeks</p>
-            <h3 className="text-lg font-bold font-serif text-[#3c096c]">74.5%</h3>
+            <h3 className="text-lg font-bold font-serif text-[#561291]">74.5%</h3>
             <p className="text-[9px] text-green-600 font-semibold flex items-center gap-0.5">
               <TrendingUp size={10} /> +2.4% denne måneden
             </p>
@@ -150,7 +150,7 @@ export default function CourseInsights() {
         <div className="bg-white border border-outline-variant/30 rounded-2xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
           <div className="space-y-1">
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">Kritiske Drops</p>
-            <h3 className="text-lg font-bold font-serif text-[#3c096c]">3 moduler</h3>
+            <h3 className="text-lg font-bold font-serif text-[#561291]">3 moduler</h3>
             <p className="text-[9px] text-red-600 font-semibold flex items-center gap-0.5">
               <AlertTriangle size={10} /> Har over 25% frafall
             </p>
@@ -163,7 +163,7 @@ export default function CourseInsights() {
         <div className="bg-white border border-outline-variant/30 rounded-2xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
           <div className="space-y-1">
             <p className="text-[10px] font-bold uppercase tracking-wider text-outline">Støttefrekvens</p>
-            <h3 className="text-lg font-bold font-serif text-[#3c096c]">88%</h3>
+            <h3 className="text-lg font-bold font-serif text-[#561291]">88%</h3>
             <p className="text-[9px] text-blue-600 font-semibold flex items-center gap-0.5">
               <CheckCircle size={10} /> Oppfølging innen 24t
             </p>
@@ -185,7 +185,7 @@ export default function CourseInsights() {
                 <TrendingDown size={16} className="text-red-500" /> Frafalls-indikator (Struggle Index)
               </h2>
               
-              <div className="relative flex items-center bg-slate-50 border border-outline-variant/30 rounded-lg px-2.5 py-1 text-xs focus-within:ring-1 focus-within:ring-[#c5a059]/40">
+              <div className="relative flex items-center bg-slate-50 border border-outline-variant/30 rounded-lg px-2.5 py-1 text-xs focus-within:ring-1 focus-within:ring-[#D7B978]/40">
                 <Search size={12} className="text-slate-400 mr-1.5" />
                 <input
                   type="text"
@@ -255,7 +255,7 @@ export default function CourseInsights() {
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm space-y-4">
             <h2 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-              <Users size={16} className="text-[#c5a059]" /> Mentee Risk Radar (Støttebehov)
+              <Users size={16} className="text-[#D7B978]" /> Mentee Risk Radar (Støttebehov)
             </h2>
             <p className="text-xs text-on-surface-variant leading-relaxed font-medium">
               Studenter som er flagget som "Kritisk" eller "Forsinket" på grunn av langvarig inaktivitet eller krevende moduler.
@@ -319,7 +319,7 @@ export default function CourseInsights() {
               <div className="bg-[#561291] p-5 text-white flex justify-between items-center">
                 <div>
                   <h3 className="font-serif font-bold text-base flex items-center gap-1.5">
-                    <Sparkles size={16} className="text-[#c5a059]" /> Send disippelskaps-oppfølging
+                    <Sparkles size={16} className="text-[#D7B978]" /> Send disippelskaps-oppfølging
                   </h3>
                   <p className="text-[10px] text-slate-300 font-medium">Mottaker: {selectedStudent.name}</p>
                 </div>

@@ -132,7 +132,7 @@ const migrateMarkdownToHtml = (text) => {
   let html = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-  html = html.replace(/^&gt;\s+(.*?)$/gm, '<blockquote style="border-left: 4px solid #561291; padding-left: 1rem; margin: 0.75rem 0; font-style: italic; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; padding-top: 0.375rem; padding-bottom: 0.375rem;">$1</blockquote>');
+  html = html.replace(/^&gt;\s+(.*?)$/gm, '<blockquote style="border-left: 4px solid #561291; padding-left: 1rem; margin: 0.75rem 0; font-style: italic; background-color: #F6F4F8; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; padding-top: 0.375rem; padding-bottom: 0.375rem;">$1</blockquote>');
   html = html.replace(/^-\s+(.*?)$/gm, '<li style="margin-left: 1.25rem; list-style-type: disc; margin-top: 0.25rem; margin-bottom: 0.25rem;">$1</li>');
   html = html.replace(/\n/g, '<br />');
   return html;
@@ -538,7 +538,7 @@ export default function LessonView() {
 
   const insertVerseToNotes = (verse) => {
     const transName = selectedBibleTranslation === 'bibelselskap' ? 'N11' : selectedBibleTranslation.toUpperCase();
-    const htmlRef = `<div class="bible-quote-block" contenteditable="false" style="margin: 1rem 0; padding: 0.5rem 0; border-left: 4px solid #561291; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; user-select: all;">
+    const htmlRef = `<div class="bible-quote-block" contenteditable="false" style="margin: 1rem 0; padding: 0.5rem 0; border-left: 4px solid #561291; background-color: #F6F4F8; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; user-select: all;">
       <blockquote style="margin: 0; padding: 0 1rem; font-style: italic; border: none; background: transparent; color: #1e293b;">
         "${verse.text.trim()}"
       </blockquote>
@@ -587,7 +587,7 @@ export default function LessonView() {
       : `${sortedVerseNums[0]}-${sortedVerseNums[sortedVerseNums.length - 1]}`;
 
     const transName = selectedBibleTranslation === 'bibelselskap' ? 'N11' : selectedBibleTranslation.toUpperCase();
-    const htmlRef = `<div class="bible-quote-block" contenteditable="false" style="margin: 1rem 0; padding: 0.5rem 0; border-left: 4px solid #561291; background-color: #f8fafc; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; user-select: all;">
+    const htmlRef = `<div class="bible-quote-block" contenteditable="false" style="margin: 1rem 0; padding: 0.5rem 0; border-left: 4px solid #561291; background-color: #F6F4F8; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; user-select: all;">
       <blockquote style="margin: 0; padding: 0 1rem; font-style: italic; border: none; background: transparent; color: #1e293b;">
         "${combinedText}"
       </blockquote>
@@ -829,7 +829,7 @@ export default function LessonView() {
           bq.style.paddingLeft = '1rem';
           bq.style.margin = '0.75rem 0';
           bq.style.fontStyle = 'italic';
-          bq.style.backgroundColor = '#f8fafc';
+          bq.style.backgroundColor = '#F6F4F8';
           bq.style.borderTopRightRadius = '0.375rem';
           bq.style.borderBottomRightRadius = '0.375rem';
           bq.style.paddingTop = '0.375rem';

@@ -220,7 +220,7 @@ export default function AssignmentsPage() {
               <button
                 type="submit"
                 disabled={!newTodoText.trim()}
-                className="px-3.5 py-2 bg-[#561291] text-white hover:bg-[#3c096c] disabled:opacity-40 transition-colors rounded-xl flex items-center justify-center shadow shrink-0 active:scale-95"
+                className="px-3.5 py-2 bg-[#561291] text-white hover:bg-[#561291] disabled:opacity-40 transition-colors rounded-xl flex items-center justify-center shadow shrink-0 active:scale-95"
               >
                 <Plus size={16} />
               </button>
@@ -250,7 +250,7 @@ export default function AssignmentsPage() {
                         {todo.done ? (
                           <CheckCircle2 size={16} className="text-green-600 fill-green-50" />
                         ) : (
-                          <Circle size={16} className="text-[#dec2ef]" />
+                          <Circle size={16} className="text-[#e2dce7]" />
                         )}
                       </button>
                       <div className="min-w-0">

@@ -54,7 +54,7 @@ export default function AffiliatePortal() {
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 md:px-10 py-6 md:py-10 flex flex-col gap-6 md:gap-8 font-sans max-w-5xl bg-[#f8fafc]/30">
+    <div className="w-full px-4 sm:px-6 md:px-10 py-6 md:py-10 flex flex-col gap-6 md:gap-8 font-sans max-w-5xl bg-[#F6F4F8]/30">
       
       {/* Breadcrumbs */}
       <div className="flex items-center gap-1.5 text-xs font-semibold text-outline">
@@ -72,7 +72,7 @@ export default function AffiliatePortal() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant/30 pb-6">
         <div>
           <h1 className="font-serif text-2xl md:text-4xl font-bold text-primary flex items-center gap-2">
-            <Gift className="text-[#c5a059]" size={26} /> Affiliate & Partnerportal
+            <Gift className="text-[#D7B978]" size={26} /> Affiliate & Partnerportal
           </h1>
           <p className="text-xs sm:text-sm text-on-surface-variant mt-1 font-medium">
             Promoter våre bibelstudier og tjen 15% provisjon for hver student du verver til skolen.
@@ -86,7 +86,7 @@ export default function AffiliatePortal() {
           label="Samlet provisjon" 
           value="2 715 kr" 
           desc="Utbetales månedlig"
-          icon={<DollarSign size={20} className="text-[#c5a059]" />} 
+          icon={<DollarSign size={20} className="text-[#D7B978]" />} 
         />
         <StatCard 
           label="Vervede studenter" 
@@ -115,7 +115,7 @@ export default function AffiliatePortal() {
         <div className="lg:col-span-7 space-y-6">
           <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm space-y-5">
             <h2 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-              <LinkIcon size={16} className="text-[#c5a059]" /> Generer din vervelenke
+              <LinkIcon size={16} className="text-[#D7B978]" /> Generer din vervelenke
             </h2>
             <p className="text-xs text-on-surface-variant leading-relaxed font-medium">
               Skriv inn en unik kode under (f.eks. ditt navn eller kampanjenavn) for å skreddersy vervelenken din.
@@ -124,7 +124,7 @@ export default function AffiliatePortal() {
             <div className="space-y-4">
               <div>
                 <label className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">Skreddersy kode</label>
-                <div className="flex bg-slate-50 border border-outline-variant/30 rounded-xl overflow-hidden px-3.5 py-2 group focus-within:ring-2 focus-within:ring-[#c5a059]/30 transition-all">
+                <div className="flex bg-slate-50 border border-outline-variant/30 rounded-xl overflow-hidden px-3.5 py-2 group focus-within:ring-2 focus-within:ring-[#D7B978]/30 transition-all">
                   <input
                     type="text"
                     value={promoCode}
@@ -159,7 +159,7 @@ export default function AffiliatePortal() {
           {/* Sales History list */}
           <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm space-y-4">
             <h2 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-              <Award size={16} className="text-[#c5a059]" /> Provisjonshistorikk
+              <Award size={16} className="text-[#D7B978]" /> Provisjonshistorikk
             </h2>
 
             <div className="overflow-x-auto">
@@ -181,7 +181,7 @@ export default function AffiliatePortal() {
                       <td className="py-3.5 pr-2 font-bold text-primary">{txn.name}</td>
                       <td className="py-3.5 pr-2 text-on-surface-variant font-medium">{txn.course}</td>
                       <td className="py-3.5 pr-2 font-medium">{txn.price}</td>
-                      <td className="py-3.5 pr-2 font-bold text-[#c5a059]">{txn.commission}</td>
+                      <td className="py-3.5 pr-2 font-bold text-[#D7B978]">{txn.commission}</td>
                       <td className="py-3.5">
                         <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
                           txn.status === 'Overført' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
@@ -201,7 +201,7 @@ export default function AffiliatePortal() {
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm space-y-4">
             <h2 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-              <Megaphone size={16} className="text-[#c5a059]" /> Markedsføringsmateriell
+              <Megaphone size={16} className="text-[#D7B978]" /> Markedsføringsmateriell
             </h2>
             <p className="text-xs text-on-surface-variant leading-relaxed font-medium">
               Kopier ferdigskrevne innlegg til sosiale medier eller e-poster og send dem ut direkte til dine nettverk.
@@ -237,7 +237,7 @@ export default function AffiliatePortal() {
 
           <div className="bg-[#561291]/5 border border-[#561291]/10 rounded-2xl p-6 space-y-3.5">
             <h3 className="text-xs font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-              <HelpCircle size={14} className="text-[#c5a059]" /> Slik fungerer det
+              <HelpCircle size={14} className="text-[#D7B978]" /> Slik fungerer det
             </h3>
             <ol className="text-xs font-medium text-on-surface-variant space-y-2 list-decimal list-inside pl-1 leading-relaxed">
               <li>Del din personlige vervelenke med andre.</li>
@@ -259,7 +259,7 @@ function StatCard({ label, value, desc, icon }) {
     <div className="bg-white border border-outline-variant/30 rounded-2xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
       <div className="space-y-1">
         <p className="text-[10px] font-bold uppercase tracking-wider text-outline">{label}</p>
-        <h3 className="text-lg font-bold font-serif text-[#3c096c]">{value}</h3>
+        <h3 className="text-lg font-bold font-serif text-[#561291]">{value}</h3>
         <p className="text-[9px] text-[#8a682d] font-semibold">{desc}</p>
       </div>
       <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-center shrink-0 shadow-inner">

@@ -233,7 +233,7 @@ export default function MediaLibrary() {
             onClick={() => setIsCreateFolderOpen(true)}
             className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-outline-variant hover:border-primary text-xs font-bold uppercase rounded-lg shadow-sm hover:text-primary transition-all active:scale-95 shrink-0 flex-grow sm:flex-grow-0"
           >
-            <FolderPlus size={16} className="text-[#c5a059]" />
+            <FolderPlus size={16} className="text-[#D7B978]" />
             Opprett Mappe
           </button>
           
@@ -559,10 +559,10 @@ export default function MediaLibrary() {
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] bg-primary border-b-4 border-[#c5a059] px-6 py-4 rounded-xl shadow-2xl flex flex-col sm:flex-row items-center gap-4 justify-between w-[90%] max-w-xl text-white origin-bottom"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] bg-primary border-b-4 border-[#D7B978] px-6 py-4 rounded-xl shadow-2xl flex flex-col sm:flex-row items-center gap-4 justify-between w-[90%] max-w-xl text-white origin-bottom"
           >
             <div className="flex items-center gap-2">
-              <Sparkles size={16} className="text-[#c5a059] shrink-0" />
+              <Sparkles size={16} className="text-[#D7B978] shrink-0" />
               <p className="text-xs font-bold">
                 Markerte filer: <span className="font-mono text-sm bg-white/10 px-2 py-0.5 rounded">{selectedFileIds.length}</span>
               </p>

@@ -43,9 +43,9 @@ export function generateFastingPdf(cmsContent, language) {
   // Header
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8.5);
-  doc.setTextColor('#3c096c');
+  doc.setTextColor('#561291');
   doc.text(isEn ? "HIS KINGDOM PROPHETS — STUDY RESOURCES" : "HIS KINGDOM PROPHETS — STUDIERESSURSER", startX, 52);
-  doc.setDrawColor('#dec2ef');
+  doc.setDrawColor('#e2dce7');
   doc.setLineWidth(0.75);
   doc.line(startX, 58, endX, 58);
 
@@ -67,14 +67,14 @@ export function generateFastingPdf(cmsContent, language) {
 
   // Define layout items for visual flex layout engine
   const layoutItems = [];
-  layoutItems.push({ type: 'text', text: title, fontSize: 22, fontStyle: 'bold', color: '#3c096c', leading: 26, weightAfter: 0.4 });
-  layoutItems.push({ type: 'text', text: subtitle, fontSize: 11.5, fontStyle: 'bold', color: '#c5a059', leading: 15, weightAfter: 0.6 });
+  layoutItems.push({ type: 'text', text: title, fontSize: 22, fontStyle: 'bold', color: '#561291', leading: 26, weightAfter: 0.4 });
+  layoutItems.push({ type: 'text', text: subtitle, fontSize: 11.5, fontStyle: 'bold', color: '#D7B978', leading: 15, weightAfter: 0.6 });
   layoutItems.push({ type: 'divider', height: 1.25, weightAfter: 0.8 });
   layoutItems.push({ type: 'text', text: intro, fontSize: 10.5, leading: 17, weightAfter: 1.4 });
-  layoutItems.push({ type: 'text', text: sec1Title, fontSize: 13, fontStyle: 'bold', color: '#3c096c', leading: 18, weightAfter: 0.5 });
+  layoutItems.push({ type: 'text', text: sec1Title, fontSize: 13, fontStyle: 'bold', color: '#561291', leading: 18, weightAfter: 0.5 });
   layoutItems.push({ type: 'text', text: sec1Text, fontSize: 10.5, leading: 17, weightAfter: 1.2 });
   layoutItems.push({ type: 'table', tableData, colWidths, weightAfter: 1.4 });
-  layoutItems.push({ type: 'text', text: sec2Title, fontSize: 13, fontStyle: 'bold', color: '#3c096c', leading: 18, weightAfter: 0.5 });
+  layoutItems.push({ type: 'text', text: sec2Title, fontSize: 13, fontStyle: 'bold', color: '#561291', leading: 18, weightAfter: 0.5 });
 
   const sec2Paragraphs = sec2Text.split(/<br\s*\/?>/i);
   sec2Paragraphs.forEach((pText, pIndex) => {
@@ -151,7 +151,7 @@ export function generateFastingPdf(cmsContent, language) {
         currentY += item.leading;
       });
     } else if (item.type === 'divider') {
-      doc.setDrawColor('#c5a059');
+      doc.setDrawColor('#D7B978');
       doc.setLineWidth(item.computedHeight);
       doc.line(startX, currentY, endX, currentY);
       currentY += item.computedHeight;
@@ -172,10 +172,10 @@ export function generateFastingPdf(cmsContent, language) {
         const rowHeight = isHeader ? 22 : (maxLines * 13 + 11);
         
         item.colWidths.forEach((w, colIndex) => {
-          doc.setFillColor(isHeader ? '#3c096c' : '#fdfbf7');
+          doc.setFillColor(isHeader ? '#561291' : '#fdfbf7');
           doc.rect(colX, tableY, w, rowHeight, 'F');
           
-          doc.setDrawColor('#dec2ef');
+          doc.setDrawColor('#e2dce7');
           doc.setLineWidth(0.5);
           doc.rect(colX, tableY, w, rowHeight, 'D');
           
@@ -255,9 +255,9 @@ export function generateIntercessionPdf(cmsContent, language) {
   // Header
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8.5);
-  doc.setTextColor('#3c096c');
+  doc.setTextColor('#561291');
   doc.text(isEn ? "HIS KINGDOM PROPHETS — STUDY RESOURCES" : "HIS KINGDOM PROPHETS — STUDIERESSURSER", startX, 52);
-  doc.setDrawColor('#dec2ef');
+  doc.setDrawColor('#e2dce7');
   doc.setLineWidth(0.75);
   doc.line(startX, 58, endX, 58);
 
@@ -279,14 +279,14 @@ export function generateIntercessionPdf(cmsContent, language) {
 
   // Define layout items for visual flex layout engine
   const layoutItems = [];
-  layoutItems.push({ type: 'text', text: title, fontSize: 22, fontStyle: 'bold', color: '#3c096c', leading: 26, weightAfter: 0.4 });
-  layoutItems.push({ type: 'text', text: subtitle, fontSize: 11.5, fontStyle: 'bold', color: '#c5a059', leading: 15, weightAfter: 0.6 });
+  layoutItems.push({ type: 'text', text: title, fontSize: 22, fontStyle: 'bold', color: '#561291', leading: 26, weightAfter: 0.4 });
+  layoutItems.push({ type: 'text', text: subtitle, fontSize: 11.5, fontStyle: 'bold', color: '#D7B978', leading: 15, weightAfter: 0.6 });
   layoutItems.push({ type: 'divider', height: 1.25, weightAfter: 0.8 });
   layoutItems.push({ type: 'text', text: intro, fontSize: 10.5, leading: 17, weightAfter: 1.4 });
-  layoutItems.push({ type: 'text', text: sec1Title, fontSize: 13, fontStyle: 'bold', color: '#3c096c', leading: 18, weightAfter: 0.5 });
+  layoutItems.push({ type: 'text', text: sec1Title, fontSize: 13, fontStyle: 'bold', color: '#561291', leading: 18, weightAfter: 0.5 });
   layoutItems.push({ type: 'text', text: sec1Text, fontSize: 10.5, leading: 17, weightAfter: 1.2 });
   layoutItems.push({ type: 'table', tableData, colWidths, weightAfter: 1.4 });
-  layoutItems.push({ type: 'text', text: sec2Title, fontSize: 13, fontStyle: 'bold', color: '#3c096c', leading: 18, weightAfter: 0.5 });
+  layoutItems.push({ type: 'text', text: sec2Title, fontSize: 13, fontStyle: 'bold', color: '#561291', leading: 18, weightAfter: 0.5 });
 
   const sec2Paragraphs = sec2Text.split(/<br\s*\/?>/i);
   sec2Paragraphs.forEach((pText, pIndex) => {
@@ -362,7 +362,7 @@ export function generateIntercessionPdf(cmsContent, language) {
         currentY += item.leading;
       });
     } else if (item.type === 'divider') {
-      doc.setDrawColor('#c5a059');
+      doc.setDrawColor('#D7B978');
       doc.setLineWidth(item.computedHeight);
       doc.line(startX, currentY, endX, currentY);
       currentY += item.computedHeight;
@@ -383,10 +383,10 @@ export function generateIntercessionPdf(cmsContent, language) {
         const rowHeight = isHeader ? 22 : (maxLines * 13 + 11);
         
         item.colWidths.forEach((w, colIndex) => {
-          doc.setFillColor(isHeader ? '#3c096c' : '#fdfbf7');
+          doc.setFillColor(isHeader ? '#561291' : '#fdfbf7');
           doc.rect(colX, tableY, w, rowHeight, 'F');
           
-          doc.setDrawColor('#dec2ef');
+          doc.setDrawColor('#e2dce7');
           doc.setLineWidth(0.5);
           doc.rect(colX, tableY, w, rowHeight, 'D');
           

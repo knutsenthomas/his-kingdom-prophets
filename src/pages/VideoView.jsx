@@ -200,7 +200,7 @@ export default function VideoView() {
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-tr from-slate-950 via-[#240046] to-[#561291]">
               {isPlaying ? (
                 <div className="text-center space-y-4 relative z-20 mx-4 p-6 animate-fade-in flex flex-col items-center">
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#561291]/30 border border-[#561291]/50 text-[#e0aaff] text-[10px] font-bold tracking-widest uppercase animate-pulse">
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#561291]/30 border border-[#561291]/50 text-[#E5DDED] text-[10px] font-bold tracking-widest uppercase animate-pulse">
                     <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block animate-ping" />
                     Spiller av undervisning
                   </div>
@@ -220,7 +220,7 @@ export default function VideoView() {
                           repeatType: "reverse",
                           ease: "easeInOut"
                         }}
-                        className="w-1 sm:w-1.5 bg-[#c5a059] rounded-full"
+                        className="w-1 sm:w-1.5 bg-[#D7B978] rounded-full"
                       />
                     ))}
                   </div>
@@ -228,22 +228,22 @@ export default function VideoView() {
                   <p className="text-[10px] text-white/50 font-mono">Tid: {currentTime} / 45:00</p>
                   <button 
                     onClick={() => setIsPlaying(false)}
-                    className="px-4 py-2 rounded-full bg-white text-[#3c096c] text-[11px] font-bold uppercase tracking-wider active:scale-95 transition-all shadow-md hover:bg-slate-50 flex items-center gap-1.5"
+                    className="px-4 py-2 rounded-full bg-white text-[#561291] text-[11px] font-bold uppercase tracking-wider active:scale-95 transition-all shadow-md hover:bg-slate-50 flex items-center gap-1.5"
                   >
-                    <Pause size={12} className="fill-[#3c096c] text-[#3c096c]" />
+                    <Pause size={12} className="fill-[#561291] text-[#561291]" />
                     Pause undervisning
                   </button>
                 </div>
               ) : (
                 <div className="text-center bg-[#240046]/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 max-w-md space-y-3.5 relative z-20 mx-4 shadow-2xl animate-fade-in flex flex-col items-center">
-                  <p className="text-[10px] sm:text-xs uppercase tracking-widest font-bold text-[#dec2ef]">{classroomCourse?.title}</p>
+                  <p className="text-[10px] sm:text-xs uppercase tracking-widest font-bold text-[#e2dce7]">{classroomCourse?.title}</p>
                   <h3 className="font-serif text-lg sm:text-2.5xl font-extrabold text-white leading-snug tracking-tight">{classroomModule?.title}</h3>
                   <p className="text-xs text-white/80 font-semibold font-sans">Foreleser: {classroomCourse?.instructor}</p>
                   <div className="pt-2 flex justify-center">
                     <button 
                       type="button"
                       onClick={() => setIsPlaying(true)} 
-                      className="h-14 w-14 rounded-full bg-[#c5a059] hover:bg-[#b08b45] text-white flex items-center justify-center shadow-lg active:scale-95 transition-all hover:scale-105 relative z-30"
+                      className="h-14 w-14 rounded-full bg-[#D7B978] hover:bg-[#b08b45] text-white flex items-center justify-center shadow-lg active:scale-95 transition-all hover:scale-105 relative z-30"
                       title="Spill av video"
                     >
                       <Play size={24} className="fill-white translate-x-0.5" />
@@ -359,7 +359,7 @@ export default function VideoView() {
                         <div key={guide.id} className="p-4 border border-outline-variant/30 rounded-xl bg-surface-container-lowest hover:border-primary/40 transition-colors">
                           <div className="flex items-start justify-between gap-3">
                             <div className="min-w-0">
-                              <span className="text-[9px] font-bold uppercase tracking-wider text-[#8a682d] bg-[#c5a059]/15 px-2 py-0.5 rounded-full">{guide.type || 'Guide'}</span>
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-[#8a682d] bg-[#D7B978]/15 px-2 py-0.5 rounded-full">{guide.type || 'Guide'}</span>
                               <h4 className="font-serif text-sm font-bold text-primary mt-2">{guide.title || 'Studieguide'}</h4>
                             </div>
                             <FileText size={18} className="text-primary shrink-0" />
@@ -534,7 +534,7 @@ export default function VideoView() {
                                 <div className={`p-2.5 rounded-2xl max-w-[220px] sm:max-w-[240px] text-[11.5px] font-medium leading-relaxed ${
                                   isCurrentUser 
                                     ? 'bg-primary text-white rounded-tr-none text-left' 
-                                    : 'bg-[#f3e8ff]/70 text-slate-800 rounded-tl-none border border-[#dec2ef]/30'
+                                    : 'bg-[#f3e8ff]/70 text-slate-800 rounded-tl-none border border-[#e2dce7]/30'
                                 }`}>
                                   {msg.text}
                                 </div>
@@ -555,7 +555,7 @@ export default function VideoView() {
                           key={p.id}
                           type="button"
                           onClick={() => setActiveDmUser(p)}
-                          className="w-full p-2.5 text-left border border-outline-variant/30 hover:border-primary/45 bg-[#f8fafc] hover:bg-[#f3e8ff]/20 rounded-xl transition-all flex gap-3 items-center group active:scale-[0.98]"
+                          className="w-full p-2.5 text-left border border-outline-variant/30 hover:border-primary/45 bg-[#F6F4F8] hover:bg-[#f3e8ff]/20 rounded-xl transition-all flex gap-3 items-center group active:scale-[0.98]"
                         >
                           <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 relative border border-primary/5">
                             {p.initials}

@@ -127,7 +127,7 @@ export default function GradesCalculator() {
         {/* Intro */}
         <div className="space-y-2">
           <h1 className="font-serif text-2xl sm:text-3xl font-bold text-primary flex items-center gap-2 flex-wrap">
-            <Calculator size={28} className="text-[#c5a059] shrink-0" /> <CmsText slug="teacher-grading-title" fallback="Bibelkalkulator & Vurderingsverktøy" />
+            <Calculator size={28} className="text-[#D7B978] shrink-0" /> <CmsText slug="teacher-grading-title" fallback="Bibelkalkulator & Vurderingsverktøy" />
           </h1>
           <p className="text-xs sm:text-sm text-on-surface-variant max-w-3xl leading-relaxed font-medium">
             <CmsText slug="teacher-grading-desc" fallback="Velg en disippel, angi vekting for de ulike studieelementene (quizer, praktiske tjenesteoppgaver og semesteroppgave), og oppgi foreløpige poengsummer. Kalkulatoren beregner automatisk vektet poengsum og endelig vurdering i sanntid." />
@@ -180,7 +180,7 @@ export default function GradesCalculator() {
             
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-2 border-b border-outline-variant/30">
               <h3 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-                <Percent size={18} className="shrink-0 text-[#c5a059]" /> <CmsText slug="teacher-grading-weights-title" fallback="Studieplanvekting (sum 100%)" />
+                <Percent size={18} className="shrink-0 text-[#D7B978]" /> <CmsText slug="teacher-grading-weights-title" fallback="Studieplanvekting (sum 100%)" />
               </h3>
               <span className={`text-xs font-bold px-2 py-0.5 rounded shrink-0 ${isWeightValid ? 'bg-green-100 text-green-700 font-bold' : 'bg-error-container text-error'}`}>
                 Sum: {weightsSum}%
@@ -350,7 +350,7 @@ export default function GradesCalculator() {
         <div className="p-5 sm:p-6 border-b border-outline-variant/20 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <h2 className="font-serif text-xl font-bold text-primary flex items-center gap-2">
-              <ClipboardList size={20} className="text-[#c5a059]" /> <CmsText slug="teacher-grading-assignments-title" fallback="Oppgaver fra elevsidene" />
+              <ClipboardList size={20} className="text-[#D7B978]" /> <CmsText slug="teacher-grading-assignments-title" fallback="Oppgaver fra elevsidene" />
             </h2>
             <p className="text-xs text-on-surface-variant font-semibold mt-1">
               <CmsText slug="teacher-grading-assignments-desc" fallback="Synkronisert med oppgavene som vises for elevene i klasserom og oppgavemeny." />

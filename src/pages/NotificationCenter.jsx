@@ -105,7 +105,7 @@ export default function NotificationCenter() {
               <div className="bg-white border border-outline-variant/30 rounded-xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
                 <div className="border-b border-outline-variant/20 pb-5">
                   <h2 className="font-serif text-xl sm:text-2xl font-bold text-primary flex items-center gap-2">
-                    <Megaphone size={22} className="text-[#c5a059] shrink-0" /> Send Kunngjøring
+                    <Megaphone size={22} className="text-[#D7B978] shrink-0" /> Send Kunngjøring
                   </h2>
                   <p className="text-xs text-on-surface-variant mt-1 font-medium">Opprett og send systemvarsel til valgte klasseromsgrupper.</p>
                 </div>
@@ -163,7 +163,7 @@ export default function NotificationCenter() {
                         <div className="flex justify-between items-start">
                           <div className="flex items-center gap-2 flex-wrap">
                             {not.category === 'system' && <span className="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded bg-primary text-white">System</span>}
-                            {not.category === 'broadcast' && <span className="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded bg-[#c5a059] text-white">Kunngjøring</span>}
+                            {not.category === 'broadcast' && <span className="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded bg-[#D7B978] text-white">Kunngjøring</span>}
                             {not.category === 'warning' && <span className="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded bg-red-500 text-white">Varsel</span>}
                             <span className="text-[9px] text-outline font-semibold">{not.sentBy}</span>
                           </div>

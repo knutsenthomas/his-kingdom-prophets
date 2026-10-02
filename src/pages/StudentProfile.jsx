@@ -243,9 +243,9 @@ export default function StudentProfile() {
       {/* ── Profile hero card ── */}
       <div className="bg-white border border-gray-100 rounded-2xl shadow-md overflow-hidden" data-purpose="profile-header">
         {/* Cover strip – Majestic deep lilla gradient banner with shimmers */}
-        <section className="h-[85px] relative overflow-hidden bg-gradient-to-br from-[#3c096c] via-[#561291] to-[#7b2cbf]" data-purpose="hero-banner">
+        <section className="h-[85px] relative overflow-hidden bg-gradient-to-br from-[#561291] via-[#561291] to-[#7b2cbf]" data-purpose="hero-banner">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
-          <div className="absolute bottom-0 left-1/3 w-48 h-48 bg-[#c5a059]/10 rounded-full blur-2xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 w-48 h-48 bg-[#D7B978]/10 rounded-full blur-2xl pointer-events-none" />
         </section>
 
         <div className="px-6 md:px-8 pb-6 pt-0 relative z-10" data-purpose="profile-details-section">
@@ -262,7 +262,7 @@ export default function StudentProfile() {
                 />
                 <button
                   onClick={() => setShowAvatarPicker(true)}
-                  className="absolute bottom-1 right-1 w-8 h-8 rounded-full bg-[#c5a059] text-white flex items-center justify-center shadow-lg hover:bg-[#b8904a] transition-all hover:scale-105 active:scale-95"
+                  className="absolute bottom-1 right-1 w-8 h-8 rounded-full bg-[#D7B978] text-white flex items-center justify-center shadow-lg hover:bg-[#b8904a] transition-all hover:scale-105 active:scale-95"
                   title="Endre profilbilde"
                 >
                   <Camera size={14} />
@@ -280,7 +280,7 @@ export default function StudentProfile() {
                     <CmsText slug="profile-hero-student-role" fallback="Student" />
                   </span>
                   {draft.ministry && (
-                    <span className="px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-[#c5a059]/5 text-[#c5a059] border border-[#c5a059]/20 shadow-sm">
+                    <span className="px-3 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase bg-[#D7B978]/5 text-[#D7B978] border border-[#D7B978]/20 shadow-sm">
                       {draft.ministry}
                     </span>
                   )}
@@ -363,7 +363,7 @@ export default function StudentProfile() {
             {/* Personal info */}
             <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
               <h2 className="font-serif text-base font-bold text-primary mb-5 flex items-center gap-2">
-                <User size={16} className="text-[#c5a059]" /> <CmsText slug="profile-section-personal" fallback="Personlig informasjon" />
+                <User size={16} className="text-[#D7B978]" /> <CmsText slug="profile-section-personal" fallback="Personlig informasjon" />
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
@@ -417,7 +417,7 @@ export default function StudentProfile() {
             {/* Social links */}
             <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
               <h2 className="font-serif text-base font-bold text-primary mb-5 flex items-center gap-2">
-                <ExternalLink size={16} className="text-[#c5a059]" /> <CmsText slug="profile-section-social" fallback="Sosiale medier" />
+                <ExternalLink size={16} className="text-[#D7B978]" /> <CmsText slug="profile-section-social" fallback="Sosiale medier" />
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Field label={<CmsText slug="profile-field-instagram" fallback="Instagram" />} icon={<Instagram size={13} />}>
@@ -475,7 +475,7 @@ export default function StudentProfile() {
 
               <div className="p-6">
                 <h2 className="font-serif text-base font-bold text-[#561291] mb-5 flex items-center gap-2">
-                  <Lock size={16} className="text-[#c5a059]" /> <CmsText slug="profile-section-private" fallback="Privat kontaktinformasjon" />
+                  <Lock size={16} className="text-[#D7B978]" /> <CmsText slug="profile-section-private" fallback="Privat kontaktinformasjon" />
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Field label={<CmsText slug="profile-field-phone" fallback="Mobilnummer" />} icon={<Phone size={13} />}>
@@ -580,7 +580,7 @@ export default function StudentProfile() {
             {/* Email */}
             <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
               <h2 className="font-serif text-base font-bold text-primary mb-5 flex items-center gap-2">
-                <Mail size={16} className="text-[#c5a059]" /> <CmsText slug="profile-section-email" fallback="E-postadresse" />
+                <Mail size={16} className="text-[#D7B978]" /> <CmsText slug="profile-section-email" fallback="E-postadresse" />
               </h2>
               <Field label={<CmsText slug="profile-field-email" fallback="E-post" />} icon={<Mail size={13} />}>
                 <input
@@ -603,7 +603,7 @@ export default function StudentProfile() {
             {/* Password change */}
             <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
               <h2 className="font-serif text-base font-bold text-primary mb-5 flex items-center gap-2">
-                <Lock size={16} className="text-[#c5a059]" /> <CmsText slug="profile-section-password" fallback="Endre passord" />
+                <Lock size={16} className="text-[#D7B978]" /> <CmsText slug="profile-section-password" fallback="Endre passord" />
               </h2>
               <div className="flex flex-col gap-4">
                 {[

@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, ArrowLeft, Globe, Send, User, HelpCircle, Phone, MapPin, Sparkles } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 export default function ContactSupportPage() {
   const navigate = useNavigate();
@@ -49,39 +51,9 @@ export default function ContactSupportPage() {
   };
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen flex flex-col font-sans text-slate-800">
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200/80 sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-12 h-20 max-w-[1440px] mx-auto">
-          <div className="font-serif text-xs min-[360px]:text-sm sm:text-lg md:text-xl lg:text-2xl text-primary font-bold cursor-pointer shrink-0 flex items-center gap-1.5 sm:gap-2.5" onClick={() => navigate('/')}>
-            <img src={logo} alt="His Kingdom Prophets Logo" className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0" />
-            <span className="hidden sm:inline">
-              <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
-            </span>
-            <span className="inline sm:hidden">
-              <CmsText slug="layout-logo-mobile-title" fallback="HKP" />
-            </span>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={toggleLanguage}
-              className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
-              title={isEn ? 'Bytt til norsk (Switch to Norwegian)' : 'Bytt til engelsk (Switch to English)'}
-            >
-              <Globe size={13} />
-              <span>{isEn ? 'EN' : 'NO'}</span>
-            </button>
-            <button 
-              onClick={() => navigate('/')}
-              className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-primary hover:text-primary-container transition-colors"
-            >
-              <ArrowLeft size={16} />
-              <span><CmsText slug="support-back-btn" fallback={isEn ? 'Back' : 'Tilbake'} /></span>
-            </button>
-          </div>
-        </div>
-      </header>
+    <div className="bg-[#F6F4F8] min-h-screen flex flex-col font-sans text-slate-800">
+      {/* Site Header */}
+      <SiteHeader />
 
       {/* Main Container */}
       <main className="flex-1 w-full max-w-[1100px] mx-auto px-4 sm:px-6 py-12 md:py-16">
@@ -93,7 +65,7 @@ export default function ContactSupportPage() {
               <span className="px-3.5 py-1 rounded-full bg-[#561291]/10 text-primary text-[10px] font-bold uppercase tracking-wider border border-[#561291]/20">
                 <CmsText slug="support-hero-tag" fallback={isEn ? 'Direct Support' : 'Brukerstøtte'} />
               </span>
-              <h1 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#561291] leading-tight break-words">
+              <h1 className="font-sans text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#561291] leading-tight break-words">
                 <CmsText slug="support-hero-title" fallback={isEn ? 'Get in Touch with Us' : 'Kontakt Kundestøtte'} />
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-medium">
@@ -150,8 +122,8 @@ export default function ContactSupportPage() {
                   exit={{ opacity: 0, x: -20 }}
                   className="bg-white border border-slate-200/60 rounded-2xl p-6 sm:p-10 shadow-md space-y-6"
                 >
-                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-primary border-b border-slate-100 pb-4 flex items-center gap-2">
-                    <Mail size={20} className="text-[#c5a059]" /> 
+                  <h3 className="font-sans text-xl sm:text-2xl font-bold text-primary border-b border-slate-100 pb-4 flex items-center gap-2">
+                    <Mail size={20} className="text-[#D7B978]" /> 
                     <CmsText slug="support-form-title" fallback={isEn ? 'Send us a Message' : 'Send oss en henvendelse'} />
                   </h3>
 
@@ -249,7 +221,7 @@ export default function ContactSupportPage() {
                   </div>
                   
                   <div className="space-y-2">
-                    <h3 className="font-serif text-2xl font-bold text-primary">
+                    <h3 className="font-sans text-2xl font-bold text-primary">
                       <CmsText slug="support-success-title" fallback={isEn ? 'Thank you!' : 'Tusen takk!'} />
                     </h3>
                     <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-semibold">
@@ -275,30 +247,7 @@ export default function ContactSupportPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white select-none shrink-0 border-t border-white/5 font-medium">
-        <div className="flex flex-col gap-2 text-center md:text-left">
-          <div className="font-serif text-lg font-bold text-[#e0aaff]">
-            <CmsText slug="landing-footer-title" fallback="His Kingdom Prophets" />
-          </div>
-          <p className="text-[10px] text-slate-300 opacity-80 max-w-md">
-            <CmsText slug="landing-footer-copyright" fallback={isEn ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."} />
-          </p>
-        </div>
-        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold text-[#e0aaff]">
-          <button onClick={() => navigate('/privacy')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-privacy" fallback={isEn ? "Privacy Policy" : "Personvern"} />
-          </button>
-          <button onClick={() => navigate('/terms')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-terms" fallback={isEn ? "Terms of Service" : "Betingelser"} />
-          </button>
-          <button onClick={() => navigate('/accessibility')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-accessibility" fallback={isEn ? "Accessibility" : "Tilgjengelighet"} />
-          </button>
-          <button onClick={() => navigate('/support')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-support" fallback={isEn ? "Contact Support" : "Kontakt Support"} />
-          </button>
-        </nav>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

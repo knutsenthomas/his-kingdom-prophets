@@ -173,7 +173,7 @@ export default function SupportCenter() {
   });
 
   return (
-    <div className="w-full px-4 sm:px-6 md:px-10 py-6 md:py-10 flex flex-col gap-6 md:gap-8 font-sans max-w-5xl bg-[#f8fafc]/30">
+    <div className="w-full px-4 sm:px-6 md:px-10 py-6 md:py-10 flex flex-col gap-6 md:gap-8 font-sans max-w-5xl bg-[#F6F4F8]/30">
       
       {/* Breadcrumbs */}
       <div className="flex items-center gap-1.5 text-xs font-semibold text-outline">
@@ -190,19 +190,19 @@ export default function SupportCenter() {
       </div>
 
       {/* Hero Search Section */}
-      <div className="bg-gradient-to-r from-[#561291] to-[#240046] rounded-2xl p-6 sm:p-10 text-white relative overflow-hidden shadow-lg border border-slate-800">
+      <div className="bg-gradient-to-r from-[#561291] to-[#271f30] rounded-2xl p-6 sm:p-10 text-white relative overflow-hidden shadow-lg border border-slate-800">
         <div className="absolute inset-0 opacity-15"
           style={{ backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(197, 160, 89, 0.5), transparent 70%)' }} />
         
         <div className="relative z-10 max-w-xl space-y-4">
-          <span className="px-3 py-1 rounded-full bg-[#c5a059]/25 text-[#f1d297] text-[10px] font-bold uppercase tracking-wider border border-[#c5a059]/30">
+          <span className="px-3 py-1 rounded-full bg-[#D7B978]/25 text-[#f1d297] text-[10px] font-bold uppercase tracking-wider border border-[#D7B978]/30">
             <CmsText slug="support-hero-tag" fallback={language === 'en' ? "Documentation & Support" : "Dokumentasjon & Støtte"} />
           </span>
           <CmsText 
             slug="support-hero-title" 
             fallback={language === 'en' ? "How can we help you today?" : "Hvordan kan vi hjelpe deg i dag?"} 
             as="h1"
-            className="font-serif text-2xl sm:text-4xl font-bold tracking-tight leading-tight"
+            className="font-sans text-2xl sm:text-4xl font-bold tracking-tight leading-tight"
           />
           <CmsText 
             slug="support-hero-desc" 
@@ -211,7 +211,7 @@ export default function SupportCenter() {
             className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium"
           />
 
-          <div className="relative flex items-center bg-white text-slate-800 rounded-xl overflow-hidden shadow-md px-4 py-3.5 border border-slate-100 group focus-within:ring-2 focus-within:ring-[#c5a059]/40 transition-all">
+          <div className="relative flex items-center bg-white text-slate-800 rounded-xl overflow-hidden shadow-md px-4 py-3.5 border border-slate-100 group focus-within:ring-2 focus-within:ring-[#D7B978]/40 transition-all">
             <Search size={18} className="text-slate-400 group-focus-within:text-[#561291] transition-colors shrink-0 mr-2.5" />
             <input
               type="text"
@@ -292,7 +292,7 @@ export default function SupportCenter() {
                           </span>
                           <PlayCircle size={14} className="text-slate-400 group-hover:text-primary transition-colors" />
                         </div>
-                        <h3 className="font-serif font-bold text-primary text-sm group-hover:text-[#c5a059] transition-colors leading-snug">
+                        <h3 className="font-sans font-bold text-primary text-sm group-hover:text-[#D7B978] transition-colors leading-snug">
                           <CmsText slug={art.titleSlug} fallback={language === 'en' ? art.titleEn : art.title} />
                         </h3>
                         <CmsText 
@@ -325,8 +325,8 @@ export default function SupportCenter() {
 
           {/* Interactive FAQs Section */}
           <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm space-y-5">
-            <h2 className="font-serif text-base font-bold text-primary flex items-center gap-2">
-              <HelpIcon size={16} className="text-[#c5a059]" /> 
+            <h2 className="font-sans text-base font-bold text-primary flex items-center gap-2">
+              <HelpIcon size={16} className="text-[#D7B978]" /> 
               <CmsText slug="support-faqs-header" fallback={language === 'en' ? "Frequently Asked Questions (FAQ)" : "Ofte stilte spørsmål (FAQ)"} />
             </h2>
 
@@ -367,8 +367,8 @@ export default function SupportCenter() {
         {/* Right Side: Sidebar & Contact Form */}
         <div className="lg:col-span-4 space-y-6">
           <div className="bg-white border border-outline-variant/30 rounded-2xl p-6 shadow-sm space-y-4">
-            <h3 className="font-serif font-bold text-primary text-sm flex items-center gap-2">
-              <MessageSquare size={16} className="text-[#c5a059]" /> 
+            <h3 className="font-sans font-bold text-primary text-sm flex items-center gap-2">
+              <MessageSquare size={16} className="text-[#D7B978]" /> 
               <CmsText slug="support-direct-title" fallback={language === 'en' ? "Direct Help" : "Direkte hjelp"} />
             </h3>
             <CmsText 
@@ -438,23 +438,23 @@ export default function SupportCenter() {
             </form>
           </div>
 
-          <div className="bg-[#c5a059]/10 border border-[#c5a059]/20 rounded-2xl p-6 space-y-3.5">
+          <div className="bg-[#D7B978]/10 border border-[#D7B978]/20 rounded-2xl p-6 space-y-3.5">
             <h4 className="text-xs font-bold text-[#866324] uppercase tracking-wider">
               <CmsText slug="support-guides-title" fallback={language === 'en' ? "Quick Guides" : "Hurtigguider"} />
             </h4>
             <div className="space-y-2 text-xs font-semibold text-primary">
               <button 
                 onClick={() => showToast('Starter videoguide...')} 
-                className="flex items-center gap-2 hover:text-[#c5a059] transition-colors text-left"
+                className="flex items-center gap-2 hover:text-[#D7B978] transition-colors text-left"
               >
-                <PlayCircle size={14} className="text-[#c5a059]" /> 
+                <PlayCircle size={14} className="text-[#D7B978]" /> 
                 <span><CmsText slug="support-guide1-title" fallback={language === 'en' ? "Video: Getting started with the portal" : "Video: Kom i gang med portalen"} /></span>
               </button>
               <button 
                 onClick={() => navigate('/student/library')} 
-                className="flex items-center gap-2 hover:text-[#c5a059] transition-colors text-left"
+                className="flex items-center gap-2 hover:text-[#D7B978] transition-colors text-left"
               >
-                <BookOpen size={14} className="text-[#c5a059]" /> 
+                <BookOpen size={14} className="text-[#D7B978]" /> 
                 <span><CmsText slug="support-guide2-title" fallback={language === 'en' ? "Documentation: Student Handbook 2026" : "Dokumentasjon: Studiehåndboken 2026"} /></span>
               </button>
             </div>

@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 import { generateFastingPdf, generateIntercessionPdf } from '@/utils/pdfGenerator';
 import { 
   BIBLE_BOOKS, TRANSLATIONS, STUDY_BIBLE_DATA, 
@@ -639,41 +641,12 @@ export default function BibleResourcesPage() {
   const activeCommentary = generatedCommentaries[refKey] || STUDY_BIBLE_DATA[refKey];
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen flex flex-col font-sans text-slate-800" ref={topRef}>
-      {/* Public Header */}
-      <header className="bg-white border-b border-slate-200/80 sticky top-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-12 h-20 max-w-[1440px] mx-auto">
-          <div className="font-serif text-xs min-[360px]:text-sm sm:text-lg md:text-xl lg:text-2xl text-primary font-bold cursor-pointer shrink-0 flex items-center gap-1.5 sm:gap-2.5" onClick={() => navigate('/')}>
-            <img src={logo} alt="His Kingdom Prophets Logo" className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0" />
-            <span className="hidden sm:inline">
-              <CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" />
-            </span>
-            <span className="inline sm:hidden">
-              <CmsText slug="layout-logo-mobile-title" fallback="HKP" />
-            </span>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={toggleLanguage}
-              className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
-            >
-              <Globe size={13} />
-              <span>{isEn ? 'EN' : 'NO'}</span>
-            </button>
-            <button 
-              onClick={() => navigate('/')}
-              className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-primary hover:text-primary-container transition-colors"
-            >
-              <ArrowLeft size={16} />
-              <span>{isEn ? 'Back' : 'Tilbake'}</span>
-            </button>
-          </div>
-        </div>
-      </header>
+    <div className="bg-[#F6F4F8] min-h-screen flex flex-col font-sans text-slate-800" ref={topRef}>
+      {/* Site Header */}
+      <SiteHeader />
 
       {/* Hero Banner Section */}
-      <section className="bg-gradient-to-br from-[#3c096c] to-[#561291] text-white py-16 md:py-20 px-4 sm:px-6 md:px-12 relative overflow-hidden">
+      <section className="bg-gradient-to-br from-[#561291] to-[#561291] text-white py-16 md:py-20 px-4 sm:px-6 md:px-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(224,170,255,0.15),transparent)] pointer-events-none"></div>
         <div className="max-w-[1440px] mx-auto space-y-4 relative z-10 text-center sm:text-left">
           <CmsText 
@@ -686,7 +659,7 @@ export default function BibleResourcesPage() {
             slug="resources-hero-title" 
             fallback="Bibelressurser og studieportal" 
             as="h1" 
-            className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight" 
+            className="font-sans text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight" 
           />
           <CmsText 
             slug="resources-hero-desc" 
@@ -739,7 +712,7 @@ export default function BibleResourcesPage() {
             {/* Header info */}
             <div className="bg-white border border-slate-200/60 rounded-2xl p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div className="space-y-1">
-                <h3 className="font-serif text-xl font-bold text-primary flex items-center gap-2">
+                <h3 className="font-sans text-xl font-bold text-primary flex items-center gap-2">
                   <Sparkles size={20} className="text-amber-500" />
                   <CmsText slug="resources-bible-title" fallback="Interaktiv studiebibel" />
                 </h3>
@@ -773,7 +746,7 @@ export default function BibleResourcesPage() {
               {/* Left Column: Book selection (Desktop only) */}
               <div className={`hidden lg:block ${showStudyPanel ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-6 lg:sticky lg:top-40`}>
                 <div className="bg-white border border-slate-200/60 rounded-2xl p-5 shadow-sm space-y-5">
-                  <h4 className="font-serif font-bold text-sm text-primary flex items-center gap-2 border-b border-slate-100 pb-3">
+                  <h4 className="font-sans font-bold text-sm text-primary flex items-center gap-2 border-b border-slate-100 pb-3">
                     <BookMarked size={16} />
                     {isEn ? 'Book & Chapter' : 'Bok- og kapittelvelger'}
                   </h4>
@@ -899,7 +872,7 @@ export default function BibleResourcesPage() {
                       className={isFullscreenReading ? "text-center flex flex-col items-center select-none cursor-pointer group" : "hidden"}
                       title={isEn ? "Select Book and Chapter" : "Velg bok og kapittel"}
                     >
-                      <h2 className="font-serif font-extrabold text-base md:text-xl text-primary leading-tight flex items-center gap-1 sm:gap-2 justify-center">
+                      <h2 className="font-sans font-extrabold text-base md:text-xl text-primary leading-tight flex items-center gap-1 sm:gap-2 justify-center">
                         <span>{selectedBook.nor} {selectedChapter}</span>
                         {!isFullscreenReading && (
                           <ChevronDown size={14} className="hidden sm:inline-block text-slate-400 group-hover:text-primary transition-transform duration-200 shrink-0" />
@@ -1018,7 +991,7 @@ export default function BibleResourcesPage() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: 0.2 }}
-                          className={`select-text text-slate-800 font-serif space-y-4 pr-1 ${getTextSizeClass()}`}
+                          className={`select-text text-slate-800 font-sans space-y-4 pr-1 ${getTextSizeClass()}`}
                         >
                           <p className="text-justify md:text-left">
                             {verses.map((verse) => {
@@ -1059,7 +1032,7 @@ export default function BibleResourcesPage() {
               {showStudyPanel && (
                 <div 
                   onClick={() => setShowStudyPanel(false)}
-                  className="fixed inset-0 z-50 bg-[#240046]/45 backdrop-blur-sm flex items-end justify-center p-0 lg:static lg:bg-transparent lg:backdrop-blur-none lg:z-auto lg:block lg:col-span-4 lg:space-y-6 lg:sticky lg:top-40"
+                  className="fixed inset-0 z-50 bg-[#271f30]/45 backdrop-blur-sm flex items-end justify-center p-0 lg:static lg:bg-transparent lg:backdrop-blur-none lg:z-auto lg:block lg:col-span-4 lg:space-y-6 lg:sticky lg:top-40"
                 >
                   <motion.div 
                     initial={typeof window !== 'undefined' && window.innerWidth < 1024 ? { y: '100%' } : {}}
@@ -1072,7 +1045,7 @@ export default function BibleResourcesPage() {
                     
                     {/* Panel Header */}
                     <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                      <h4 className="font-serif font-bold text-sm text-primary flex items-center gap-1.5">
+                      <h4 className="font-sans font-bold text-sm text-primary flex items-center gap-1.5">
                         <Sparkles size={16} className="text-amber-500" />
                         {isEn ? 'Theological Study Center' : 'Studie- og kommentarer'}
                       </h4>
@@ -1134,7 +1107,7 @@ export default function BibleResourcesPage() {
                               {activeCommentary.commentary.map((comm, idx) => (
                                 <div key={idx} className="border-b border-slate-100 pb-3 last:border-0 space-y-1">
                                   <div className="flex items-center justify-between">
-                                    <h5 className="font-serif font-bold text-primary text-[12px]">{comm.title}</h5>
+                                    <h5 className="font-sans font-bold text-primary text-[12px]">{comm.title}</h5>
                                     <span className="text-[9px] font-bold font-mono px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded">{comm.verses}</span>
                                   </div>
                                   <p className="text-[11px] text-slate-600 leading-relaxed">{comm.text}</p>
@@ -1291,7 +1264,7 @@ export default function BibleResourcesPage() {
                 slug="resources-curriculums-title" 
                 fallback="Studieplaner og teologiske fagplaner" 
                 as="h3" 
-                className="font-serif text-2xl font-bold text-primary" 
+                className="font-sans text-2xl font-bold text-primary" 
               />
               <CmsText 
                 slug="resources-curriculums-desc" 
@@ -1357,7 +1330,7 @@ export default function BibleResourcesPage() {
                     <span className={`inline-block px-3 py-1 bg-gradient-to-r ${item.color} text-white font-mono text-[10px] font-bold uppercase rounded-lg shadow-sm`}>
                       {item.code}
                     </span>
-                    <h4 className="font-serif text-lg font-bold text-primary group-hover:text-primary-container transition-colors">
+                    <h4 className="font-sans text-lg font-bold text-primary group-hover:text-primary-container transition-colors">
                       <CmsText slug={item.titleSlug} fallback={item.titleFallback} />
                     </h4>
                     <p className="text-xs text-slate-500 leading-relaxed">
@@ -1400,7 +1373,7 @@ export default function BibleResourcesPage() {
                 slug="resources-video-title" 
                 fallback="Lyd- og videoundervisning" 
                 as="h3" 
-                className="font-serif text-2xl font-bold text-primary" 
+                className="font-sans text-2xl font-bold text-primary" 
               />
               <CmsText 
                 slug="resources-video-desc" 
@@ -1424,7 +1397,7 @@ export default function BibleResourcesPage() {
                       <span className="px-2 py-0.5 bg-amber-500 text-white font-bold rounded text-[9px] uppercase tracking-wider">
                         <CmsText slug="resources-video1-badge" fallback={isEn ? "Open Seminar" : "Åpent seminar"} />
                       </span>
-                      <h4 className="font-serif font-bold text-white text-base leading-tight">
+                      <h4 className="font-sans font-bold text-white text-base leading-tight">
                         <CmsText slug="resources-video1-title" fallback={isEn ? 'Understanding Prophetic Revelation & Ethics' : 'Å forstå profetisk åpenbaring og etikk'} />
                       </h4>
                     </div>
@@ -1463,7 +1436,7 @@ export default function BibleResourcesPage() {
                       <span className="px-2 py-0.5 bg-indigo-600 text-white font-bold rounded text-[9px] uppercase tracking-wider">
                         <CmsText slug="resources-video2-badge" fallback={isEn ? "Theological Deep-Dive" : "Teologisk dypdykk"} />
                       </span>
-                      <h4 className="font-serif font-bold text-white text-base leading-tight">
+                      <h4 className="font-sans font-bold text-white text-base leading-tight">
                         <CmsText slug="resources-video2-title" fallback={isEn ? 'Introduction to Covenant Theology & Typology' : 'Introduksjon til paktsteologi og typologi'} />
                       </h4>
                     </div>
@@ -1500,7 +1473,7 @@ export default function BibleResourcesPage() {
                 slug="resources-fasting-title" 
                 fallback="Fastemanualer og bønneguider" 
                 as="h3" 
-                className="font-serif text-2xl font-bold text-primary" 
+                className="font-sans text-2xl font-bold text-primary" 
               />
               <CmsText 
                 slug="resources-fasting-desc" 
@@ -1563,7 +1536,7 @@ export default function BibleResourcesPage() {
                       <div className="w-12 h-12 rounded-xl bg-purple-50 text-primary flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
                         <Icon size={22} className="text-[#561291]" />
                       </div>
-                      <h4 className="font-serif text-lg font-bold text-primary group-hover:text-[#561291] transition-colors">
+                      <h4 className="font-sans text-lg font-bold text-primary group-hover:text-[#561291] transition-colors">
                         <CmsText slug={manual.titleSlug} fallback={manual.titleFallback} />
                       </h4>
                       <CmsText slug={manual.descSlug} fallback={manual.descFallback} as="p" className="text-xs text-slate-500 leading-relaxed" />
@@ -1636,7 +1609,7 @@ export default function BibleResourcesPage() {
                 slug="resources-characters-title" 
                 fallback={isEn ? "Biblical Characters Catalog" : "Bibelske personer"} 
                 as="h3"
-                className="font-serif text-2xl font-bold text-primary"
+                className="font-sans text-2xl font-bold text-primary"
               />
               <CmsText 
                 slug="resources-characters-desc" 
@@ -1705,7 +1678,7 @@ export default function BibleResourcesPage() {
                               }}
                             />
                             <div 
-                              className="hidden absolute inset-0 bg-gradient-to-br from-[#3c096c]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-4xl text-primary"
+                              className="hidden absolute inset-0 bg-gradient-to-br from-[#561291]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-4xl text-primary"
                             >
                               {charName.substring(0, 1)}
                             </div>
@@ -1715,7 +1688,7 @@ export default function BibleResourcesPage() {
                           </div>
 
                           <div className="p-6 space-y-3">
-                            <h4 className="font-serif text-lg font-bold text-primary group-hover:text-burnt-orange transition-colors">
+                            <h4 className="font-sans text-lg font-bold text-primary group-hover:text-burnt-orange transition-colors">
                               {charName}
                             </h4>
                             <span className="text-[10px] font-bold text-burnt-orange uppercase tracking-wider block font-sans">
@@ -1753,7 +1726,7 @@ export default function BibleResourcesPage() {
                 slug="resources-timeline-title" 
                 fallback={isEn ? "Biblical Timeline" : "Bibelsk tidslinje og historiske epoker"} 
                 as="h3"
-                className="font-serif text-2xl font-bold text-primary"
+                className="font-sans text-2xl font-bold text-primary"
               />
               <CmsText 
                 slug="resources-timeline-desc" 
@@ -1904,7 +1877,7 @@ export default function BibleResourcesPage() {
                               <span className={`text-[10px] font-bold uppercase tracking-wider font-sans ${accentClass.split(' ')[1]}`}>
                                 {sectionEra}
                               </span>
-                              <h4 className="font-serif text-lg sm:text-xl font-bold text-primary">
+                              <h4 className="font-sans text-lg sm:text-xl font-bold text-primary">
                                 {sectionTitle}
                               </h4>
                               {sectionItalic && (
@@ -1950,7 +1923,7 @@ export default function BibleResourcesPage() {
                                 </span>
                                 <button
                                   onClick={() => handleScriptureRefLink(section.scripRef, 'timeline')}
-                                  className="text-xs font-bold hover:underline text-left block text-[#3c096c] transition-all cursor-pointer font-serif"
+                                  className="text-xs font-bold hover:underline text-left block text-[#561291] transition-all cursor-pointer font-sans"
                                 >
                                   {sectionScripTitle}
                                 </button>
@@ -1992,7 +1965,7 @@ export default function BibleResourcesPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedCharacter(null)}
-              className="fixed inset-0 z-[70] bg-[#3c096c]/40 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
+              className="fixed inset-0 z-[70] bg-[#561291]/40 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
             >
               <motion.div
                 initial={{ scale: 0.95, y: 20 }}
@@ -2007,7 +1980,7 @@ export default function BibleResourcesPage() {
                     <span className="text-[9px] font-bold text-burnt-orange uppercase tracking-wider block font-sans">
                       {isEn ? "Biblical Character Profile" : "Profil av bibelsk person"}
                     </span>
-                    <h3 className="font-serif font-extrabold text-lg text-primary leading-tight">
+                    <h3 className="font-sans font-extrabold text-lg text-primary leading-tight">
                       {charName}
                     </h3>
                   </div>
@@ -2035,7 +2008,7 @@ export default function BibleResourcesPage() {
                         }}
                       />
                       <div 
-                        className="hidden absolute inset-0 bg-gradient-to-br from-[#3c096c]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-6xl text-primary"
+                        className="hidden absolute inset-0 bg-gradient-to-br from-[#561291]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-6xl text-primary"
                       >
                         {charName.substring(0, 1)}
                       </div>
@@ -2072,13 +2045,13 @@ export default function BibleResourcesPage() {
                   {/* Right Column: Biography & Significance */}
                   <div className="md:col-span-8 space-y-6">
                     {/* Excerpt */}
-                    <p className="text-sm font-bold text-primary leading-relaxed font-serif bg-primary/5 p-4 rounded-xl border border-primary/10">
+                    <p className="text-sm font-bold text-primary leading-relaxed font-sans bg-primary/5 p-4 rounded-xl border border-primary/10">
                       {charSummary}
                     </p>
 
                     {/* Biography */}
                     <div className="space-y-2">
-                      <h4 className="font-serif font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
+                      <h4 className="font-sans font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
                         {isEn ? "Biblical Biography & History" : "Biografi og bibelsk historie"}
                       </h4>
                       <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium text-justify whitespace-pre-line">
@@ -2088,7 +2061,7 @@ export default function BibleResourcesPage() {
 
                     {/* Theological Significance */}
                     <div className="space-y-2">
-                      <h4 className="font-serif font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
+                      <h4 className="font-sans font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
                         {isEn ? "Theological Significance" : "Teologisk betydning"}
                       </h4>
                       <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium text-justify whitespace-pre-line">
@@ -2098,7 +2071,7 @@ export default function BibleResourcesPage() {
 
                     {/* Key Verses Links */}
                     <div className="space-y-2">
-                      <h4 className="font-serif font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
+                      <h4 className="font-sans font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
                         {isEn ? "Key Bible Passages" : "Sentrale bibelske skrifter"}
                       </h4>
                       <div className="flex flex-wrap gap-2 pt-1">
@@ -2109,7 +2082,7 @@ export default function BibleResourcesPage() {
                               setSelectedCharacter(null);
                               handleScriptureRefLink(ref, 'characters');
                             }}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-50 hover:bg-[#3c096c] hover:text-white border border-slate-200 text-primary rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer active:scale-95"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-50 hover:bg-[#561291] hover:text-white border border-slate-200 text-primary rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer active:scale-95"
                           >
                             <BookOpen size={11} />
                             <span>{ref}</span>
@@ -2186,7 +2159,7 @@ export default function BibleResourcesPage() {
                     <ArrowLeft size={20} />
                   </button>
                 )}
-                <h3 className="font-serif font-extrabold text-lg sm:text-xl text-primary">
+                <h3 className="font-sans font-extrabold text-lg sm:text-xl text-primary">
                   {selectorTab === 'book' ? (isEn ? 'Select Book' : 'Velg bibelbok') : (isEn ? 'Select Chapter' : 'Velg kapittel')}
                 </h3>
               </div>
@@ -2423,7 +2396,7 @@ export default function BibleResourcesPage() {
                   setSelectorSearch('');
                   setShowMobileSelector(true);
                 }}
-                className="flex-grow text-center font-serif font-extrabold text-[13px] hover:text-slate-900 active:scale-[0.97] transition-all flex items-center gap-1 justify-center py-1 px-2 bg-transparent border-none outline-none text-slate-800 cursor-pointer select-none"
+                className="flex-grow text-center font-sans font-extrabold text-[13px] hover:text-slate-900 active:scale-[0.97] transition-all flex items-center gap-1 justify-center py-1 px-2 bg-transparent border-none outline-none text-slate-800 cursor-pointer select-none"
               >
                 <span>{selectedBook.nor} {selectedChapter}</span>
                 <ChevronDown size={10} className="text-slate-400" />
@@ -2459,7 +2432,7 @@ export default function BibleResourcesPage() {
             }}
           >
             <div className="flex items-center gap-2 border-r border-slate-200/80 pr-2.5 sm:pr-3 shrink-0">
-              <span className="h-6 w-6 rounded-full bg-[#3c096c] text-white flex items-center justify-center text-xs font-bold font-mono">
+              <span className="h-6 w-6 rounded-full bg-[#561291] text-white flex items-center justify-center text-xs font-bold font-mono">
                 {selectedVerses.length}
               </span>
               <span className="text-[11px] sm:text-xs font-extrabold text-slate-800 hidden min-[360px]:inline">
@@ -2470,7 +2443,7 @@ export default function BibleResourcesPage() {
             <div className="flex items-center gap-1.5 sm:gap-2.5">
               <button 
                 onClick={handleBulkCopy}
-                className="px-2.5 sm:px-3 py-1.5 bg-[#3c096c] hover:bg-[#561291] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm cursor-pointer text-white text-[11px] sm:text-xs border-none"
+                className="px-2.5 sm:px-3 py-1.5 bg-[#561291] hover:bg-[#561291] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm cursor-pointer text-white text-[11px] sm:text-xs border-none"
               >
                 <Copy size={13} className="text-white" />
                 <span>Kopier</span>
@@ -2478,7 +2451,7 @@ export default function BibleResourcesPage() {
 
               <button 
                 onClick={() => navigate('/login')}
-                className="px-2.5 sm:px-3 py-1.5 bg-[#3c096c] hover:bg-[#561291] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm cursor-pointer text-white text-[11px] sm:text-xs border-none"
+                className="px-2.5 sm:px-3 py-1.5 bg-[#561291] hover:bg-[#561291] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm cursor-pointer text-white text-[11px] sm:text-xs border-none"
               >
                 <Sparkles size={13} />
                 <span>Logg inn</span>
@@ -2489,7 +2462,7 @@ export default function BibleResourcesPage() {
                   setSelectedVerses([]);
                   setHighlightedVerse(null);
                 }}
-                className="p-1.5 text-[#3c096c]/70 hover:text-[#3c096c] hover:bg-[#3c096c]/5 rounded-xl transition-all cursor-pointer font-bold shrink-0 bg-transparent border-none outline-none"
+                className="p-1.5 text-[#561291]/70 hover:text-[#561291] hover:bg-[#561291]/5 rounded-xl transition-all cursor-pointer font-bold shrink-0 bg-transparent border-none outline-none"
                 title="Nullstill"
               >
                 <X size={15} />
@@ -2500,26 +2473,7 @@ export default function BibleResourcesPage() {
       </AnimatePresence>
 
       {/* Footer */}
-      <footer className="w-full py-12 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6 bg-tertiary text-white">
-        <div className="flex flex-col gap-2 text-center md:text-left">
-          <CmsText slug="landing-footer-title" fallback="His Kingdom Prophets" as="div" className="font-serif text-lg font-bold text-on-tertiary" />
-          <CmsText slug="landing-footer-copyright" fallback="© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten." as="p" className="text-xs text-on-tertiary opacity-80 max-w-md" />
-        </div>
-        <nav className="flex flex-wrap justify-center gap-6 text-xs text-center">
-          <Link className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" to="/privacy">
-            <CmsText slug="landing-footer-link-privacy" fallback="Personvern" />
-          </Link>
-          <Link className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" to="/terms">
-            <CmsText slug="landing-footer-link-terms" fallback="Betingelser" />
-          </Link>
-          <Link className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" to="/accessibility">
-            <CmsText slug="landing-footer-link-accessibility" fallback="Tilgjengelighet" />
-          </Link>
-          <Link className="text-on-tertiary-container hover:text-on-tertiary transition-opacity" to="/support">
-            <CmsText slug="landing-footer-link-support" fallback="Kontakt Support" />
-          </Link>
-        </nav>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

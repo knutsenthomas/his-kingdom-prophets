@@ -31,14 +31,14 @@ export default function ArtikkelZoom() {
             <div className="flex flex-col gap-4">
               <button 
                 onClick={handleOpenChat}
-                className="flex items-center gap-3 w-fit text-left hover:text-[#c5a059] transition-colors focus:outline-none"
+                className="flex items-center gap-3 w-fit text-left hover:text-[#D7B978] transition-colors focus:outline-none"
               >
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>chat</span>
                 <span className="text-body-sm font-bold">Start en live-chat</span>
               </button>
               <button 
                 onClick={() => navigate('/student/support')}
-                className="flex items-center gap-3 w-fit text-left hover:text-[#c5a059] transition-colors focus:outline-none"
+                className="flex items-center gap-3 w-fit text-left hover:text-[#D7B978] transition-colors focus:outline-none"
               >
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: '"FILL" 1' }}>mail</span>
                 <span className="text-body-sm font-bold">Kontakt support via skjema</span>

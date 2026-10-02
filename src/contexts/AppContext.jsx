@@ -2422,7 +2422,7 @@ export const AppProvider = ({ children }) => {
               <p><strong>E-post:</strong> <a href="mailto:${ticketData.email}">${ticketData.email}</a></p>
               <p><strong>Kilde:</strong> ${ticketData.source === 'support_center' ? 'Studentportal / Hjelpesenter' : 'Offentlig kontaktside'}</p>
               <p><strong>Emne:</strong> ${ticketData.subject || 'Generell forespørsel'}</p>
-              <div style="background-color: #f8fafc; padding: 15px; border-left: 4px solid #c5a059; margin-top: 20px; border-radius: 4px;">
+              <div style="background-color: #F6F4F8; padding: 15px; border-left: 4px solid #D7B978; margin-top: 20px; border-radius: 4px;">
                 <p style="margin: 0; white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${ticketData.message}</p>
               </div>
               <p style="font-size: 11px; color: #666; margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px;">

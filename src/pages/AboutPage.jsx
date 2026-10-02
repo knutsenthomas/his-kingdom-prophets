@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 export default function AboutPage() {
   const navigate = useNavigate();
@@ -23,44 +25,13 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="bg-[#faf7fc] text-[#240046] font-sans min-h-screen flex flex-col justify-between">
+    <div className="bg-[#F6F4F8] text-[#271f30] font-sans min-h-screen flex flex-col justify-between">
       
-      {/* Mini Brand Header Navigation */}
-      <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-[#dec2ef] px-6 py-4 shadow-sm select-none">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <button 
-            onClick={() => navigate('/')} 
-            className="flex items-center gap-2.5 font-serif font-extrabold text-primary text-base transition-all active:scale-95"
-          >
-            <img src={logo} alt="Logo" className="w-8 h-8 object-contain shrink-0" />
-            <span className="hidden sm:inline"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophets" /></span>
-            <span className="inline sm:hidden"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
-          </button>
-          
-          <div className="flex items-center gap-3">
-            {/* Language Switcher Toggle */}
-            <button 
-              onClick={toggleLanguage}
-              className="px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
-              title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
-            >
-              <Globe size={13} />
-              <span>{language === 'no' ? 'NO' : 'EN'}</span>
-            </button>
-
-            <button 
-              onClick={() => navigate('/')} 
-              className="px-4 py-2 hover:bg-[#dec2ef]/20 rounded-xl text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1 transition-all"
-            >
-              <ArrowLeft size={14} />
-              <span>{language === 'en' ? "Back to Home" : "Gå tilbake"}</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* Site Header */}
+      <SiteHeader />
 
       {/* Hero Header Section */}
-      <section className="relative bg-gradient-to-br from-primary via-[#561291] to-[#240046] text-white py-20 px-6 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#561291] to-[#561291] text-white py-20 px-6 overflow-hidden">
         {/* Visual glassmorphic blobs for agency standards */}
         <div className="absolute top-[-20%] right-[-10%] w-96 h-96 rounded-full bg-white/5 blur-3xl pointer-events-none" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[450px] h-[450px] rounded-full bg-primary-container/10 blur-3xl pointer-events-none" />
@@ -75,14 +46,14 @@ export default function AboutPage() {
             slug="about-hero-title" 
             fallback={language === 'en' ? "Welcome to His Kingdom Prophets" : "Velkommen til His Kingdom Prophets"} 
             as="h1"
-            className="font-serif text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight max-w-3xl mx-auto text-white"
+            className="font-sans text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight max-w-3xl mx-auto text-white"
           />
 
           <CmsText 
             slug="about-hero-subtitle" 
             fallback={language === 'en' ? "Merging sound, rigorous biblical hermeneutics with active, mature prophetic ministry. We equip the body of Christ for the assignments of tomorrow." : "Vi forener grundig bibelsk hermeneutikk med en aktiv, sunn og moden profetisk gaverolle. Vi utruster Kristi kropp for morgendagens oppgaver."} 
             as="p"
-            className="text-sm sm:text-base text-[#e0aaff] font-medium max-w-2xl mx-auto leading-relaxed"
+            className="text-sm sm:text-base text-[#E5DDED] font-medium max-w-2xl mx-auto leading-relaxed"
           />
         </div>
       </section>
@@ -93,7 +64,7 @@ export default function AboutPage() {
         {/* SECTION 1: WHO WE ARE (TEXT & STATS) */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-primary">
+            <h2 className="font-sans text-2xl md:text-3xl font-bold text-primary">
               <CmsText slug="about-sec1-title" fallback={language === 'en' ? "Solid Theology. Authentic Spirit." : "Solid teologi. Autentisk Ånd."} />
             </h2>
             <p className="text-sm text-on-surface-variant leading-relaxed font-medium">
@@ -110,32 +81,32 @@ export default function AboutPage() {
 
           {/* Stats Cards Layout */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-6 bg-white border border-[#dec2ef]/40 rounded-2xl text-center space-y-1 shadow-sm">
-              <span className="font-serif text-3xl font-extrabold text-primary block">
+            <div className="p-6 bg-white border border-[#e2dce7]/40 rounded-2xl text-center space-y-1 shadow-sm">
+              <span className="font-sans text-3xl font-extrabold text-primary block">
                 <CmsText slug="about-stat1-num" fallback="8+" />
               </span>
               <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
                 <CmsText slug="about-stat1-lbl" fallback={language === 'en' ? "Modules per course" : "Moduler per fag"} />
               </span>
             </div>
-            <div className="p-6 bg-white border border-[#dec2ef]/40 rounded-2xl text-center space-y-1 shadow-sm">
-              <span className="font-serif text-3xl font-extrabold text-primary block">
+            <div className="p-6 bg-white border border-[#e2dce7]/40 rounded-2xl text-center space-y-1 shadow-sm">
+              <span className="font-sans text-3xl font-extrabold text-primary block">
                 <CmsText slug="about-stat2-num" fallback="1-on-1" />
               </span>
               <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
                 <CmsText slug="about-stat2-lbl" fallback={language === 'en' ? "Personal mentoring" : "Personlig veiledning"} />
               </span>
             </div>
-            <div className="p-6 bg-white border border-[#dec2ef]/40 rounded-2xl text-center space-y-1 shadow-sm">
-              <span className="font-serif text-3xl font-extrabold text-primary block">
+            <div className="p-6 bg-white border border-[#e2dce7]/40 rounded-2xl text-center space-y-1 shadow-sm">
+              <span className="font-sans text-3xl font-extrabold text-primary block">
                 <CmsText slug="about-stat3-num" fallback="100%" />
               </span>
               <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
                 <CmsText slug="about-stat3-lbl" fallback={language === 'en' ? "Digital Study Bible" : "Digital Studiebibel"} />
               </span>
             </div>
-            <div className="p-6 bg-white border border-[#dec2ef]/40 rounded-2xl text-center space-y-1 shadow-sm">
-              <span className="font-serif text-3xl font-extrabold text-primary block">
+            <div className="p-6 bg-white border border-[#e2dce7]/40 rounded-2xl text-center space-y-1 shadow-sm">
+              <span className="font-sans text-3xl font-extrabold text-primary block">
                 <CmsText slug="about-stat4-num" fallback="24/7" />
               </span>
               <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
@@ -148,7 +119,7 @@ export default function AboutPage() {
         {/* SECTION 2: THREE CORE PILLARS */}
         <section className="space-y-10">
           <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="font-serif text-2xl font-bold text-primary">
+            <h2 className="font-sans text-2xl font-bold text-primary">
               <CmsText slug="about-pillars-title" fallback={language === 'en' ? "Our Three Core Pillars" : "Våre tre grunnpilarer"} />
             </h2>
             <p className="text-xs text-on-surface-variant font-semibold">
@@ -160,11 +131,11 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Pillar 1 */}
-            <div className="bg-white border border-[#dec2ef]/50 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all space-y-4">
+            <div className="bg-white border border-[#e2dce7]/50 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all space-y-4">
               <div className="w-12 h-12 rounded-xl bg-purple-50 text-primary flex items-center justify-center">
                 <BookOpen size={22} />
               </div>
-              <h3 className="font-serif text-lg font-bold text-primary">
+              <h3 className="font-sans text-lg font-bold text-primary">
                 <CmsText slug="about-pillar1-title" fallback={language === 'en' ? "1. Hermeneutical Depth" : "1. Hermeneutisk dybde"} />
               </h3>
               <p className="text-xs text-on-surface-variant leading-relaxed font-semibold">
@@ -175,11 +146,11 @@ export default function AboutPage() {
             </div>
 
             {/* Pillar 2 */}
-            <div className="bg-white border border-[#dec2ef]/50 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all space-y-4">
+            <div className="bg-white border border-[#e2dce7]/50 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all space-y-4">
               <div className="w-12 h-12 rounded-xl bg-purple-50 text-primary flex items-center justify-center">
                 <ShieldCheck size={22} />
               </div>
-              <h3 className="font-serif text-lg font-bold text-primary">
+              <h3 className="font-sans text-lg font-bold text-primary">
                 <CmsText slug="about-pillar2-title" fallback={language === 'en' ? "2. Character & Accountability" : "2. Karakter & etikk"} />
               </h3>
               <p className="text-xs text-on-surface-variant leading-relaxed font-semibold">
@@ -190,11 +161,11 @@ export default function AboutPage() {
             </div>
 
             {/* Pillar 3 */}
-            <div className="bg-white border border-[#dec2ef]/50 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all space-y-4">
+            <div className="bg-white border border-[#e2dce7]/50 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all space-y-4">
               <div className="w-12 h-12 rounded-xl bg-purple-50 text-primary flex items-center justify-center">
                 <Compass size={22} />
               </div>
-              <h3 className="font-serif text-lg font-bold text-primary">
+              <h3 className="font-sans text-lg font-bold text-primary">
                 <CmsText slug="about-pillar3-title" fallback={language === 'en' ? "3. Practical Equipping" : "3. Tjenesteutrustning"} />
               </h3>
               <p className="text-xs text-on-surface-variant leading-relaxed font-semibold">
@@ -209,7 +180,7 @@ export default function AboutPage() {
         {/* SECTION 3: LEADERSHIP & MENTORS */}
         <section className="space-y-10">
           <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="font-serif text-2xl font-bold text-primary">
+            <h2 className="font-sans text-2xl font-bold text-primary">
               <CmsText slug="about-faculty-title" fallback={language === 'en' ? "Our Faculty & Leadership" : "Våre mentorer og ledere"} />
             </h2>
             <p className="text-xs text-on-surface-variant font-semibold">
@@ -229,7 +200,7 @@ export default function AboutPage() {
               />
               <div className="space-y-2">
                 <div>
-                  <h4 className="font-serif text-lg font-bold text-primary">
+                  <h4 className="font-sans text-lg font-bold text-primary">
                     <CmsText slug="about-faculty-m1-name" fallback="David Hansen" />
                   </h4>
                   <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
@@ -253,7 +224,7 @@ export default function AboutPage() {
               />
               <div className="space-y-2">
                 <div>
-                  <h4 className="font-serif text-lg font-bold text-primary">
+                  <h4 className="font-sans text-lg font-bold text-primary">
                     <CmsText slug="about-faculty-m2-name" fallback="Siri Knutsen" />
                   </h4>
                   <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
@@ -271,14 +242,14 @@ export default function AboutPage() {
         </section>
 
         {/* SECTION 4: DIGITAL PLATFORM WORKSPACE */}
-        <section className="bg-white border border-[#dec2ef]/55 rounded-3xl p-8 shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <section className="bg-white border border-[#e2dce7]/55 rounded-3xl p-8 shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f3e8ff] text-primary font-bold text-[10px] uppercase tracking-wider select-none">
               <Award size={12} />
               <CmsText slug="about-workspace-tag" fallback={language === 'en' ? "State-of-the-Art Student Workspace" : "Førsteklasses digitalt studiemiljø"} />
             </span>
 
-            <h2 className="font-serif text-2xl font-bold text-primary leading-tight">
+            <h2 className="font-sans text-2xl font-bold text-primary leading-tight">
               <CmsText slug="about-workspace-title" fallback={language === 'en' ? "A Modern Digital Workbook Built for Discipleship" : "Et moderne, digitalt verktøy bygget for vekst"} />
             </h2>
 
@@ -308,12 +279,12 @@ export default function AboutPage() {
             </ul>
           </div>
 
-          <div className="bg-[#faf7fc] border border-slate-200/60 rounded-2xl p-6 sm:p-8 space-y-6 flex flex-col justify-center items-center text-center">
-            <div className="w-16 h-16 bg-white border border-[#dec2ef] rounded-full flex items-center justify-center text-primary shadow-sm">
+          <div className="bg-[#F6F4F8] border border-slate-200/60 rounded-2xl p-6 sm:p-8 space-y-6 flex flex-col justify-center items-center text-center">
+            <div className="w-16 h-16 bg-white border border-[#e2dce7] rounded-full flex items-center justify-center text-primary shadow-sm">
               <MessageSquare size={28} />
             </div>
             <div className="space-y-2">
-              <h4 className="font-serif text-lg font-bold text-primary">
+              <h4 className="font-sans text-lg font-bold text-primary">
                 <CmsText slug="about-start-title" fallback={language === 'en' ? "Ready to Start?" : "Klar for å starte?"} />
               </h4>
               <p className="text-[11px] text-on-surface-variant font-semibold leading-relaxed max-w-xs">
@@ -326,7 +297,7 @@ export default function AboutPage() {
             <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
               <button 
                 onClick={handleApplyClick}
-                className="flex-1 py-3 bg-[#c5a059] hover:bg-[#b08e4f] text-white text-xs font-serif font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5"
+                className="flex-1 py-3 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-xs font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5"
               >
                 <span><CmsText slug="about-start-btn-apply" fallback={language === 'en' ? "Apply Now" : "Søk Opptak"} /></span>
                 <ArrowRight size={13} />
@@ -344,31 +315,7 @@ export default function AboutPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-12 px-6 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#240046] text-white select-none shrink-0 border-t border-white/5 font-medium">
-        <div className="flex flex-col gap-2 text-center md:text-left">
-          <div className="font-serif text-lg font-bold text-[#e0aaff]">
-            <CmsText slug="landing-footer-title" fallback="His Kingdom Prophets" />
-          </div>
-          <p className="text-[10px] text-slate-300 opacity-80 max-w-md">
-            <CmsText slug="landing-footer-copyright" fallback={language === 'en' ? "© 2026 His Kingdom Prophets. All rights reserved. Equipping prophetic ministries for the church." : "© 2026 His Kingdom Prophets. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten."} />
-          </p>
-        </div>
-        <nav className="flex flex-wrap justify-center gap-6 text-xs font-semibold text-[#e0aaff]">
-          <button onClick={() => navigate('/privacy')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-privacy" fallback={language === 'en' ? "Privacy Policy" : "Personvern"} />
-          </button>
-          <button onClick={() => navigate('/terms')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-terms" fallback={language === 'en' ? "Terms of Service" : "Betingelser"} />
-          </button>
-          <button onClick={() => navigate('/accessibility')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-accessibility" fallback={language === 'en' ? "Accessibility" : "Tilgjengelighet"} />
-          </button>
-          <button onClick={() => navigate('/support')} className="hover:text-white transition-opacity">
-            <CmsText slug="landing-footer-link-support" fallback={language === 'en' ? "Contact Support" : "Kontakt Support"} />
-          </button>
-        </nav>
-      </footer>
-
+      <SiteFooter />
     </div>
   );
 }
