@@ -1,9 +1,39 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
+import { motion } from 'framer-motion';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import '@/styles/hkpc-redesign.css';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } 
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.05
+    }
+  }
+};
+
+const imageFadeIn = {
+  hidden: { opacity: 0, scale: 0.98 },
+  visible: { 
+    opacity: 1, 
+    scale: 1, 
+    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] } 
+  }
+};
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -43,11 +73,16 @@ export default function LandingPage() {
         {/* Hero Section */}
         <section className="hero">
           <div className="hero-inner wrap">
-            <div className="hero-copy">
-              <p className="eyebrow">
+            <motion.div 
+              className="hero-copy"
+              initial="hidden"
+              animate="visible"
+              variants={staggerContainer}
+            >
+              <motion.p className="eyebrow" variants={fadeInUp}>
                 {language === 'no' ? 'BIBELSKOLE & PROFETISK UTRUSTNING' : 'BIBLE SCHOOL & PROPHETIC EQUIPPING'}
-              </p>
-              <h1>
+              </motion.p>
+              <motion.h1 variants={fadeInUp}>
                 {language === 'no' ? (
                   <>
                     Nærmere Jesus.<br />
@@ -59,8 +94,8 @@ export default function LandingPage() {
                     Confident in your calling.
                   </>
                 )}
-              </h1>
-              <p className="lead">
+              </motion.h1>
+              <motion.p className="lead" variants={fadeInUp}>
                 {language === 'no' ? (
                   <>
                     Voks i Guds ord og Åndens gaver.<br />
@@ -72,15 +107,22 @@ export default function LandingPage() {
                     In a community where you belong.
                   </>
                 )}
-              </p>
-              <div className="actions">
-                <button className="button gold" onClick={() => navigate('/admission')}>
+              </motion.p>
+              <motion.div className="actions" variants={fadeInUp}>
+                <motion.button 
+                  className="button gold" 
+                  onClick={() => navigate('/admission')}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
                   {language === 'no' ? 'Begynn din reise' : 'Begin your journey'}
-                </button>
-                <a 
+                </motion.button>
+                <motion.a 
                   className="intro" 
                   href="#introduction" 
                   onClick={(e) => handleNavClick(e, 'introduction')}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   <span className="play" aria-hidden="true">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -88,11 +130,16 @@ export default function LandingPage() {
                     </svg>
                   </span>
                   <span>{language === 'no' ? 'Se introduksjon' : 'See introduction'}</span>
-                </a>
-              </div>
-            </div>
+                </motion.a>
+              </motion.div>
+            </motion.div>
 
-            <div className="hero-image">
+            <motion.div 
+              className="hero-image"
+              initial="hidden"
+              animate="visible"
+              variants={imageFadeIn}
+            >
               <img 
                 src="/assets/students.jpg" 
                 alt={language === 'no' ? 'To mennesker leser og samtaler sammen' : 'Two students studying and conversing together'} 
@@ -101,39 +148,58 @@ export default function LandingPage() {
                 <span>{language === 'no' ? 'FELLESSKAP. TRO. UTRUSTNING.' : 'COMMUNITY. FAITH. EQUIPPING.'}</span>
                 <small>{language === 'no' ? 'Et sted å vokse sammen.' : 'A place to grow together.'}</small>
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          <div className="hero-base wrap">
+          <motion.div 
+            className="hero-base wrap"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
             <span>{language === 'no' ? 'Forankret i Skriften.' : 'Grounded in Scripture.'}</span>
             <span>{language === 'no' ? 'Ledet av Den Hellige Ånd.' : 'Led by the Holy Spirit.'}</span>
             <span>{language === 'no' ? 'Levd ut i hverdagen.' : 'Lived out in daily life.'}</span>
-          </div>
+          </motion.div>
         </section>
 
         {/* Practical Intake Section */}
-        <section className="intake wrap" aria-label="Praktisk informasjon">
-          <div>
+        <motion.section 
+          className="intake wrap" 
+          aria-label="Praktisk informasjon"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-40px" }}
+          variants={staggerContainer}
+        >
+          <motion.div variants={fadeInUp}>
             <span className="eyebrow">{language === 'no' ? 'NESTE SKOLEÅR' : 'NEXT ACADEMIC YEAR'}</span>
             <strong>{language === 'no' ? 'Din reise starter her.' : 'Your journey starts here.'}</strong>
-          </div>
-          <div>
+          </motion.div>
+          <motion.div variants={fadeInUp}>
             <small>{language === 'no' ? 'Søknadsperiode' : 'Application period'}</small>
             <strong>{language === 'no' ? '1. jan – 30. juni 2027' : 'Jan 1 – June 30, 2027'}</strong>
-          </div>
-          <div>
+          </motion.div>
+          <motion.div variants={fadeInUp}>
             <small>{language === 'no' ? 'Kickoff i Norge' : 'Kickoff in Norway'}</small>
             <strong>{language === 'no' ? '27. august 2027' : 'August 27, 2027'}</strong>
-          </div>
-          <div>
+          </motion.div>
+          <motion.div variants={fadeInUp}>
             <small>{language === 'no' ? 'Undervisning' : 'Instruction'}</small>
             <strong>{language === 'no' ? 'Nettbasert · på engelsk' : 'Online · in English'}</strong>
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
         {/* Introduction / Welcome Section */}
-        <section className="section wrap welcome" id="introduction">
-          <div>
+        <motion.section 
+          className="section wrap welcome" 
+          id="introduction"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          variants={staggerContainer}
+        >
+          <motion.div variants={fadeInUp}>
             <p className="eyebrow purple">
               {language === 'no' ? 'FELLESSKAP & UTRUSTNING' : 'COMMUNITY & EQUIPPING'}
             </p>
@@ -150,8 +216,8 @@ export default function LandingPage() {
                 </>
               )}
             </h2>
-          </div>
-          <div>
+          </motion.div>
+          <motion.div variants={fadeInUp}>
             <h3>{language === 'no' ? 'Alle er velkomne.' : 'All are welcome.'}</h3>
             <p>
               {language === 'no'
@@ -166,14 +232,20 @@ export default function LandingPage() {
             <div className="signature">
               {language === 'no' ? 'Guds ord som fundament. Jesus i sentrum.' : 'God’s word as our foundation. Jesus at the center.'}
             </div>
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
         {/* School & Programs Section */}
         <section className="school section" id="school">
           <div className="wrap">
-            <div className="section-head">
-              <div>
+            <motion.div 
+              className="section-head"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              variants={staggerContainer}
+            >
+              <motion.div variants={fadeInUp}>
                 <p className="eyebrow purple">
                   {language === 'no' ? 'SKOLE & STUDIEFORLØP' : 'SCHOOL & STUDY TRACKS'}
                 </p>
@@ -190,16 +262,26 @@ export default function LandingPage() {
                     </>
                   )}
                 </h2>
-              </div>
-              <p>
+              </motion.div>
+              <motion.p variants={fadeInUp}>
                 {language === 'no'
                   ? 'Studer i eget tempo, og bli en del av et fellesskap med ukentlige Zoom-kvelder og personlig veiledning.'
                   : 'Study at your own pace, and become part of a community with weekly live Zoom gatherings and personal mentoring.'}
-              </p>
-            </div>
+              </motion.p>
+            </motion.div>
 
-            <div className="programs">
-              <article className="program primary">
+            <motion.div 
+              className="programs"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              variants={staggerContainer}
+            >
+              <motion.article 
+                className="program primary"
+                variants={fadeInUp}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              >
                 <div className="program-top">
                   <span>{language === 'no' ? '01 / FØRSTE ÅR' : '01 / FIRST YEAR'}</span>
                   <span className="pill">{language === 'no' ? 'Oppstart 2027' : 'Starts 2027'}</span>
@@ -227,9 +309,13 @@ export default function LandingPage() {
                     {language === 'no' ? 'Utforsk førsteåret' : 'Explore Year 1'}
                   </a>
                 </div>
-              </article>
+              </motion.article>
 
-              <article className="program secondary">
+              <motion.article 
+                className="program secondary"
+                variants={fadeInUp}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              >
                 <div className="program-top">
                   <span>{language === 'no' ? '02 / ANDRE ÅR' : '02 / SECOND YEAR'}</span>
                   <span className="pill">{language === 'no' ? 'Oppstart 2028' : 'Starts 2028'}</span>
@@ -257,33 +343,45 @@ export default function LandingPage() {
                     {language === 'no' ? 'Se opptakskrav' : 'View requirements'}
                   </a>
                 </div>
-              </article>
-            </div>
+              </motion.article>
+            </motion.div>
 
-            <div className="format">
-              <div>
+            <motion.div 
+              className="format"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              variants={staggerContainer}
+            >
+              <motion.div variants={fadeInUp} whileHover={{ y: -3, transition: { duration: 0.2 } }}>
                 <span>01</span>
                 <h4>{language === 'no' ? 'Fleksibelt i hverdagen' : 'Flexible in everyday life'}</h4>
                 <p>{language === 'no' ? 'Videoer og oppgaver i ditt eget tempo.' : 'Video lectures and assignments at your own pace.'}</p>
-              </div>
-              <div>
+              </motion.div>
+              <motion.div variants={fadeInUp} whileHover={{ y: -3, transition: { duration: 0.2 } }}>
                 <span>02</span>
                 <h4>{language === 'no' ? 'Sammen hver uke' : 'Together every week'}</h4>
                 <p>{language === 'no' ? 'Zoom-kvelder med bønn og fagdrøfting.' : 'Live Zoom gatherings with prayer and curriculum discussions.'}</p>
-              </div>
-              <div>
+              </motion.div>
+              <motion.div variants={fadeInUp} whileHover={{ y: -3, transition: { duration: 0.2 } }}>
                 <span>03</span>
                 <h4>{language === 'no' ? 'Fra ord til praksis' : 'From word to practice'}</h4>
                 <p>{language === 'no' ? 'Profetisk trening i et trygt fellesskap.' : 'Prophetic activation in a supportive environment.'}</p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
         {/* Curriculum Section */}
         <section className="section wrap curriculum" id="curriculum">
-          <div className="section-head">
-            <div>
+          <motion.div 
+            className="section-head"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            variants={staggerContainer}
+          >
+            <motion.div variants={fadeInUp}>
               <p className="eyebrow purple">
                 {language === 'no' ? 'FAGPLAN · FØRSTE ÅR' : 'CURRICULUM · FIRST YEAR'}
               </p>
@@ -300,36 +398,42 @@ export default function LandingPage() {
                   </>
                 )}
               </h2>
-            </div>
-            <p>
+            </motion.div>
+            <motion.p variants={fadeInUp}>
               {language === 'no'
                 ? 'Sunn teologi, personlig relasjon til Jesus og praktisk åpenbaring. Fire områder som henger sammen.'
                 : 'Sound theology, personal intimacy with Jesus, and practical revelation. Four connected core areas.'}
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
-          <div className="topics">
-            <article>
+          <motion.div 
+            className="topics"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            variants={staggerContainer}
+          >
+            <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
               <span>01</span>
               <h3>{language === 'no' ? 'Fundament & relasjon' : 'Foundation & Intimacy'}</h3>
               <p>{language === 'no' ? 'Bønn, identitet i Kristus og å høre Guds røst.' : 'Prayer, identity in Christ, and hearing God’s voice.'}</p>
-            </article>
-            <article>
+            </motion.article>
+            <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
               <span>02</span>
               <h3>{language === 'no' ? 'Profetisk utrustning & gaver' : 'Prophetic Equipping & Gifts'}</h3>
               <p>{language === 'no' ? 'Åndens gaver, personlig profeti og sunn praksis.' : 'Gifts of the Spirit, personal prophecy, and sound biblical practice.'}</p>
-            </article>
-            <article>
+            </motion.article>
+            <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
               <span>03</span>
               <h3>{language === 'no' ? 'Indre helbredelse & utfrielse' : 'Inner Healing & Deliverance'}</h3>
               <p>{language === 'no' ? 'Undervisning om frihet, omvendelse og helbredelse.' : 'Teaching on freedom, repentance, and emotional healing.'}</p>
-            </article>
-            <article>
+            </motion.article>
+            <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
               <span>04</span>
               <h3>{language === 'no' ? 'Kristenliv & tjeneste' : 'Christian Living & Ministry'}</h3>
               <p>{language === 'no' ? 'Tro i hverdagen, forvaltning, smågrupper og misjon.' : 'Faith in daily life, stewardship, small groups, and mission.'}</p>
-            </article>
-          </div>
+            </motion.article>
+          </motion.div>
 
           <details>
             <summary>{language === 'no' ? 'Se mer om fagene' : 'Read more about the courses'}</summary>
@@ -344,8 +448,14 @@ export default function LandingPage() {
         {/* About Section */}
         <section className="about section" id="about">
           <div className="wrap about-layout">
-            <div className="portraits">
-              <figure>
+            <motion.div 
+              className="portraits"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              variants={staggerContainer}
+            >
+              <motion.figure variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
                 <img 
                   src="/assets/hilde.jpg" 
                   alt="Hilde Karin Knutsen" 
@@ -354,8 +464,8 @@ export default function LandingPage() {
                   Hilde Karin Knutsen
                   <small>{language === 'no' ? 'Rektor og underviser' : 'Principal & Teacher'}</small>
                 </figcaption>
-              </figure>
-              <figure>
+              </motion.figure>
+              <motion.figure variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
                 <img 
                   src="/assets/thomas.jpeg" 
                   alt="Thomas Knutsen" 
@@ -364,10 +474,16 @@ export default function LandingPage() {
                   Thomas Knutsen
                   <small>{language === 'no' ? 'Administrator og faglærer' : 'Administrator & Teacher'}</small>
                 </figcaption>
-              </figure>
-            </div>
+              </motion.figure>
+            </motion.div>
 
-            <div className="about-copy">
+            <motion.div 
+              className="about-copy"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
               <p className="eyebrow">{language === 'no' ? 'HJERTENE BAK HKPC' : 'THE HEARTS BEHIND HKPC'}</p>
               <h2>
                 {language === 'no' ? (
@@ -402,25 +518,39 @@ export default function LandingPage() {
                     : 'The ministry has roots in His Kingdom Foundation, established in 2008. After Hilde Karin and Thomas married in 2023, the work was continued and expanded as His Kingdom Ministry.'}
                 </p>
               </details>
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* Resources Section */}
         <section className="section wrap resources" id="resources">
-          <p className="eyebrow purple">
-            {language === 'no' ? 'RESSURSER FOR REISEN' : 'RESOURCES FOR THE JOURNEY'}
-          </p>
-          <div className="section-head">
-            <h2>{language === 'no' ? 'Ta læringen med deg.' : 'Take your learning further.'}</h2>
-            <p>
-              {language === 'no'
-                ? 'Fordyp deg videre med undervisning, bøker og læremidler fra His Kingdom.'
-                : 'Deepen your walk with teachings, books, and study materials from His Kingdom.'}
-            </p>
-          </div>
-          <div className="resource-grid">
-            <article>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            variants={staggerContainer}
+          >
+            <motion.p className="eyebrow purple" variants={fadeInUp}>
+              {language === 'no' ? 'RESSURSER FOR REISEN' : 'RESOURCES FOR THE JOURNEY'}
+            </motion.p>
+            <motion.div className="section-head" variants={fadeInUp}>
+              <h2>{language === 'no' ? 'Ta læringen med deg.' : 'Take your learning further.'}</h2>
+              <p>
+                {language === 'no'
+                  ? 'Fordyp deg videre med undervisning, bøker og læremidler fra His Kingdom.'
+                  : 'Deepen your walk with teachings, books, and study materials from His Kingdom.'}
+              </p>
+            </motion.div>
+          </motion.div>
+
+          <motion.div 
+            className="resource-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            variants={staggerContainer}
+          >
+            <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
               <small>{language === 'no' ? 'UNDERVISNING & INSPIRASJON' : 'TEACHING & INSPIRATION'}</small>
               <h3>His Kingdom Ministry</h3>
               <p>{language === 'no' ? 'Blogg, YouTube, podcast og bibelverktøy.' : 'Blog, YouTube, podcast, and biblical study tools.'}</p>
@@ -431,8 +561,8 @@ export default function LandingPage() {
               >
                 {language === 'no' ? 'Besøk hovedsiden' : 'Visit ministry site'}
               </a>
-            </article>
-            <article>
+            </motion.article>
+            <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
               <small>{language === 'no' ? 'BØKER & STUDIEMATERIELL' : 'BOOKS & STUDY MATERIALS'}</small>
               <h3>His Kingdom Designs</h3>
               <p>{language === 'no' ? 'Fysiske og digitale læremidler. En butikk som også støtter misjonsprosjekter.' : 'Physical and digital educational products. A store that also directly supports mission work.'}</p>
@@ -443,16 +573,23 @@ export default function LandingPage() {
               >
                 {language === 'no' ? 'Utforsk nettbutikken' : 'Explore online store'}
               </a>
-            </article>
-          </div>
+            </motion.article>
+          </motion.div>
         </section>
 
         {/* Admissions Section */}
-        <section className="admissions" id="admissions">
+        <motion.section 
+          className="admissions" 
+          id="admissions"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          variants={staggerContainer}
+        >
           <div className="wrap">
-            <p className="eyebrow purple">{language === 'no' ? 'DITT NESTE STEG' : 'YOUR NEXT STEP'}</p>
-            <h2>{language === 'no' ? 'Begynn din reise.' : 'Begin your journey.'}</h2>
-            <p>
+            <motion.p className="eyebrow purple" variants={fadeInUp}>{language === 'no' ? 'DITT NESTE STEG' : 'YOUR NEXT STEP'}</motion.p>
+            <motion.h2 variants={fadeInUp}>{language === 'no' ? 'Begynn din reise.' : 'Begin your journey.'}</motion.h2>
+            <motion.p variants={fadeInUp}>
               {language === 'no' ? (
                 <>
                   Et nærere forhold til Jesus. Et fellesskap å vokse i.<br />
@@ -464,9 +601,9 @@ export default function LandingPage() {
                   A faith you can live out.
                 </>
               )}
-            </p>
+            </motion.p>
 
-            <div className="admission-box">
+            <motion.div className="admission-box" variants={fadeInUp}>
               <div>
                 <b>{language === 'no' ? 'Opptak til skoleåret 2027' : 'Admissions for Academic Year 2027'}</b>
                 <span>
@@ -475,10 +612,15 @@ export default function LandingPage() {
                     : 'Application period Jan 1 – June 30 · Kickoff August 27'}
                 </span>
               </div>
-              <button className="button purple-button" onClick={() => navigate('/admission')}>
+              <motion.button 
+                className="button purple-button" 
+                onClick={() => navigate('/admission')}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
                 {language === 'no' ? 'Søk nå' : 'Apply now'}
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
 
             <details id="requirements">
               <summary>
@@ -491,7 +633,7 @@ export default function LandingPage() {
               </p>
             </details>
           </div>
-        </section>
+        </motion.section>
       </main>
 
       {/* Footer */}

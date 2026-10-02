@@ -215,6 +215,7 @@
   border-radius: 11px;
   min-height: 54px;
   line-height: 1.4;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hkpc-landing .gold {
@@ -234,6 +235,7 @@
   font-weight: 600;
   color: #FFFFFF;
   line-height: 1;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hkpc-landing .play {
@@ -436,6 +438,11 @@
   border: 1px solid #e2dce7;
   border-top: 0;
   box-shadow: 0 6px 20px rgba(86, 18, 145, 0.04);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hkpc-landing .program:hover {
+  box-shadow: 0 12px 32px rgba(86, 18, 145, 0.09);
 }
 
 .hkpc-landing .primary {
@@ -811,6 +818,12 @@
   background: white;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 16px rgba(86, 18, 145, 0.03);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hkpc-landing .resource-grid article:hover {
+  box-shadow: 0 10px 28px rgba(86, 18, 145, 0.08);
 }
 
 .hkpc-landing .resource-grid small {
