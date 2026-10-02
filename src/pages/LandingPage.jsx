@@ -1,1101 +1,599 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
-import { motion, AnimatePresence } from 'framer-motion';
-import worshipHero from '@/assets/worship_hero.png';
-import logo from '@/assets/logo.png';
-import CmsText from '@/components/CmsText';
-import { 
-  Sparkles, BookOpen, UserCheck, Globe, ArrowRight, Check, Menu, X,
-  Heart, Info, Calendar, Award, ShoppingBag, Link2, Users, Laptop, 
-  BookOpenCheck, ShieldCheck, HelpCircle, Lock, Instagram, Facebook, Youtube, ChevronDown, ChevronUp
-} from 'lucide-react';
+import '@/styles/hkpc-redesign.css';
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const { user, cmsContent, language, toggleLanguage } = useApp();
+  const { user, language, toggleLanguage } = useApp();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('school');
-  const [activeCurriculumTab, setActiveCurriculumTab] = useState('community');
-  const [showFullHilde, setShowFullHilde] = useState(true);
-  const [showFullThomas, setShowFullThomas] = useState(true);
-  
+
   const logoClicksRef = useRef(0);
-  const handleLogoClick = () => {
+  const handleLogoClick = (e) => {
+    e.preventDefault();
     logoClicksRef.current += 1;
     if (logoClicksRef.current >= 3) {
       logoClicksRef.current = 0;
       window.dispatchEvent(new CustomEvent('hkm-toggle-cms'));
     }
     setTimeout(() => { logoClicksRef.current = 0; }, 1500);
-    navigate('/');
   };
-  
-  const portalPath = user?.role === 'teacher' || user?.role === 'admin' || user?.role === 'superadmin' ? '/teacher/dashboard' : '/student/dashboard';
 
-  const navItems = [
-    { slug: 'landing-nav-school', fallback: 'Utdanning', href: '#school', id: 'school' },
-    { slug: 'landing-nav-curriculum', fallback: 'Fagplaner', href: '#curriculum', id: 'curriculum' },
-    { slug: 'landing-nav-about', fallback: 'Om oss', href: '#about', id: 'about' },
-    { slug: 'landing-nav-shop', fallback: 'Designbutikk', href: '#shop', id: 'shop' }
-  ];
+  const portalPath = user?.role === 'teacher' || user?.role === 'admin' || user?.role === 'superadmin' 
+    ? '/teacher/dashboard' 
+    : '/student/dashboard';
 
-  const handleNavClick = (e, item) => {
-    if (item.href.startsWith('/')) {
-      navigate(item.href);
-      return;
-    }
+  const handleNavClick = (e, targetId) => {
     e.preventDefault();
-    setActiveSection(item.id);
-    const element = document.getElementById(item.id);
+    setIsMobileMenuOpen(false);
+    const element = document.getElementById(targetId);
     if (element) {
-      const offset = 80;
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
-  useEffect(() => {
-    const sections = ['school', 'curriculum', 'about', 'shop'];
-    const observerOptions = {
-      root: null,
-      rootMargin: '-30% 0px -60% 0px',
-      threshold: 0
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    }, observerOptions);
-
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    // Fallback when scrolled to top
-    const handleScroll = () => {
-      if (window.scrollY < 100) {
-        setActiveSection('school');
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      sections.forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) observer.unobserve(el);
-      });
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   return (
-    <div className="bg-background text-on-background font-sans min-h-screen">
-      {/* TopNavBar */}
-      <header className="sticky top-0 z-40 w-full glass-nav border-b border-outline-variant">
-        <div className="flex justify-between items-center w-full px-3 sm:px-4 md:px-6 lg:px-8 h-20 max-w-[1440px] mx-auto">
-          <div className="font-serif text-[11px] min-[360px]:text-xs sm:text-sm md:text-base lg:text-base xl:text-lg text-primary font-bold cursor-pointer shrink-0 flex items-center gap-1.5 sm:gap-2" onClick={handleLogoClick} title="His Kingdom Prophets">
-            <img 
-              src={logo} 
-              alt="His Kingdom Prophets Logo" 
-              className="w-6 h-6 sm:w-7 sm:h-7 object-contain shrink-0" 
-            />
-            <span className="hidden sm:inline"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophetic Community" /></span>
-            <span className="inline sm:hidden"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
-          </div>
-          
-          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-base">
-            {navItems.map((item) => {
-              const isActive = activeSection === item.id;
-              return (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item)}
-                  className={`font-bold cursor-pointer pb-1 border-b-2 transition-all duration-200 ${
-                    isActive 
-                      ? 'text-primary border-primary' 
-                      : 'text-on-surface-variant border-transparent hover:text-primary hover:border-primary/40'
-                  }`}
-                >
-                  <CmsText slug={item.slug} fallback={item.fallback} />
-                </a>
-              );
-            })}
-          </nav>
+    <div className="hkpc-landing min-h-screen">
+      {/* Header */}
+      <header className="wrap">
+        <a className="brand" href="#" onClick={handleLogoClick}>
+          <img src="/assets/logo.png" alt="HKPC logo" />
+          <span>
+            HKPC
+            <small>His Kingdom Prophetic Community</small>
+          </span>
+        </a>
 
-          <div className="flex items-center gap-1 min-[360px]:gap-2 sm:gap-4">
-            {/* Desktop Actions */}
-            <div className="hidden lg:flex items-center gap-4">
-              <button 
-                onClick={toggleLanguage}
-                className="px-3.5 py-2 border border-[#561291]/20 hover:border-primary text-sm font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm shrink-0"
-                title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
-              >
-                <Globe size={15} />
-                <span>{language === 'no' ? 'NO' : 'EN'}</span>
-              </button>
-              {user ? (
-                <button 
-                  onClick={() => navigate(portalPath)} 
-                  className="px-6 py-2.5 bg-primary text-on-primary font-bold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-base shrink-0 flex items-center gap-1.5"
-                >
-                  <CmsText slug="landing-btn-portal" fallback="Gå til portal" />
-                  <ArrowRight size={16} />
-                </button>
-              ) : (
-                <>
-                  <a 
-                    href="https://app.hkpc.no" 
-                    className="px-5 py-2.5 font-bold text-on-surface-variant hover:text-primary transition-colors text-base shrink-0 flex items-center justify-center"
-                  >
-                    <CmsText slug="landing-btn-login" fallback="Logg inn" />
-                  </a>
-                  <button 
-                    onClick={() => navigate('/admission')} 
-                    className="px-6 py-2.5 bg-primary text-on-primary font-bold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-base shrink-0"
-                  >
-                    <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
-                  </button>
-                </>
-              )}
-            </div>
-            
-            {/* Mobile/Tablet Actions & Toggle */}
-            <div className="lg:hidden flex items-center gap-1.5 sm:gap-3">
-              <button 
-                onClick={toggleLanguage}
-                className="px-2.5 sm:px-3 py-1.5 border border-[#561291]/20 hover:border-primary text-xs sm:text-sm font-bold uppercase rounded-lg text-primary bg-[#561291]/5 transition-all active:scale-95 flex items-center gap-1 shadow-sm shrink-0"
-                title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
-              >
-                <Globe size={13} />
-                <span>{language === 'no' ? 'NO' : 'EN'}</span>
-              </button>
-              {user ? (
-                <button 
-                  onClick={() => navigate(portalPath)} 
-                  className="px-3 sm:px-4 py-2 bg-primary text-on-primary font-bold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-xs sm:text-sm shrink-0 flex items-center gap-0.5"
-                >
-                  <CmsText slug="landing-btn-portal" fallback="Gå til portal" />
-                  <ArrowRight size={14} />
-                </button>
-              ) : (
-                <button 
-                  onClick={() => navigate('/admission')} 
-                  className="px-3 sm:px-4 py-2 bg-primary text-on-primary font-bold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-sm text-xs sm:text-sm shrink-0"
-                >
-                  <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
-                </button>
-              )}
-              <button 
-                onClick={() => setIsMobileMenuOpen(true)}
-                className="p-2 hover:bg-primary/5 rounded-lg text-primary transition-all shrink-0 active:scale-95"
-                aria-label="Åpne meny"
-              >
-                <Menu size={22} />
-              </button>
-            </div>
+        <nav aria-label="Hovedmeny" className={isMobileMenuOpen ? 'open' : ''}>
+          <a href="#school" onClick={(e) => handleNavClick(e, 'school')}>
+            {language === 'no' ? 'Utdanning' : 'Programs'}
+          </a>
+          <a href="#curriculum" onClick={(e) => handleNavClick(e, 'curriculum')}>
+            {language === 'no' ? 'Fagplan' : 'Curriculum'}
+          </a>
+          <a href="#about" onClick={(e) => handleNavClick(e, 'about')}>
+            {language === 'no' ? 'Om oss' : 'About'}
+          </a>
+          <a href="#resources" onClick={(e) => handleNavClick(e, 'resources')}>
+            {language === 'no' ? 'Ressurser' : 'Resources'}
+          </a>
+
+          {/* Mobile only action items */}
+          <div className="mobile-nav-actions">
+            <button onClick={toggleLanguage} className="mobile-action-btn">
+              {language === 'no' ? '🌐 Switch to English' : '🌐 Bytt til Norsk'}
+            </button>
+            <button 
+              onClick={() => { setIsMobileMenuOpen(false); navigate(user ? portalPath : '/login'); }} 
+              className="mobile-action-btn"
+            >
+              {user 
+                ? (language === 'no' ? 'Min side (Portal)' : 'My Portal') 
+                : (language === 'no' ? 'Logg inn' : 'Log in')}
+            </button>
+            <button 
+              onClick={() => { setIsMobileMenuOpen(false); navigate('/admission'); }} 
+              className="mobile-cta-btn"
+            >
+              {language === 'no' ? 'Opptak 2027' : 'Admissions 2027'}
+            </button>
           </div>
+        </nav>
+
+        {/* Desktop actions */}
+        <div className="header-actions">
+          <button 
+            onClick={toggleLanguage} 
+            className="lang-toggle-btn" 
+            title={language === 'no' ? 'Bytt språk til engelsk' : 'Switch language to Norwegian'}
+          >
+            {language === 'no' ? 'NO' : 'EN'}
+          </button>
+          <button 
+            onClick={() => navigate(user ? portalPath : '/login')} 
+            className="login-btn"
+          >
+            {user 
+              ? (language === 'no' ? 'Min side' : 'Portal') 
+              : (language === 'no' ? 'Logg inn' : 'Log in')}
+          </button>
+          <button className="headerlink" onClick={() => navigate('/admission')}>
+            {language === 'no' ? 'Opptak 2027' : 'Admissions 2027'}
+          </button>
         </div>
+
+        <button 
+          className="menu" 
+          aria-expanded={isMobileMenuOpen} 
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+          aria-label="Åpne meny"
+        >
+          {isMobileMenuOpen ? (language === 'no' ? 'Lukk' : 'Close') : (language === 'no' ? 'Meny' : 'Menu')}
+        </button>
       </header>
 
-      {/* Mobile Navigation Drawer */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
-            {/* Backdrop overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="absolute inset-0 bg-[#3c096c]/45 backdrop-blur-sm"
-            />
-
-            {/* Slide-in Panel */}
-            <motion.aside
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 26, stiffness: 220 }}
-              className="absolute top-0 bottom-0 right-0 w-80 bg-white shadow-2xl flex flex-col justify-between p-6 border-l border-surface-container overflow-y-auto"
-            >
-              <div className="space-y-8">
-                {/* Header */}
-                <div className="flex justify-between items-center pb-4 border-b border-outline-variant/30">
-                  <div className="font-serif text-base font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => { navigate('/'); setIsMobileMenuOpen(false); }}>
-                    <img 
-                      src={logo} 
-                      alt="His Kingdom Prophets Logo" 
-                      className="w-7 h-7 object-contain shrink-0" 
-                    />
-                    <CmsText slug="layout-logo-title" fallback="His Kingdom Prophetic Community" />
-                  </div>
-                  <button 
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-1.5 hover:bg-primary/5 rounded-lg text-primary transition-colors active:scale-95"
-                    aria-label="Lukk meny"
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-
-                {/* Navigation Links */}
-                <nav className="flex flex-col gap-2">
-                  {navItems.map(item => {
-                    const isActive = activeSection === item.id;
-                    return (
-                      <a
-                        key={item.href}
-                        href={item.href}
-                        onClick={(e) => {
-                          handleNavClick(e, item);
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className={`px-4 py-3.5 text-base font-semibold rounded-xl transition-all ${
-                          isActive 
-                            ? 'text-primary bg-primary/5 font-bold' 
-                            : 'text-on-surface-variant hover:text-primary hover:bg-surface-container-low'
-                        }`}
-                      >
-                        <CmsText slug={item.slug} fallback={item.fallback} />
-                      </a>
-                    );
-                  })}
-                </nav>
-              </div>
-
-              {/* Footer Actions inside Drawer */}
-              <div className="pt-6 border-t border-surface-container space-y-3.5">
-                <button
-                  onClick={toggleLanguage}
-                  className="w-full py-3.5 border border-[#561291]/20 text-primary hover:bg-[#561291]/5 font-bold rounded-xl text-sm transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 bg-white shadow-sm"
-                >
-                  <Globe size={16} />
-                  <span>{language === 'no' ? 'Bytt til Engelsk (EN)' : 'Switch to Norwegian (NO)'}</span>
-                </button>
-                {user ? (
-                  <button
-                    onClick={() => { navigate(portalPath); setIsMobileMenuOpen(false); }}
-                    className="w-full py-3.5 bg-primary text-white font-bold rounded-xl text-base transition-all active:scale-[0.98] shadow-md flex items-center justify-center gap-2"
-                  >
-                    <CmsText slug="landing-btn-portal" fallback="Gå til portal" />
-                    <ArrowRight size={16} />
-                  </button>
+      <main>
+        {/* Hero Section */}
+        <section className="hero">
+          <div className="hero-inner wrap">
+            <div className="hero-copy">
+              <p className="eyebrow">
+                {language === 'no' ? 'BIBELSKOLE & PROFETISK UTRUSTNING' : 'BIBLE SCHOOL & PROPHETIC EQUIPPING'}
+              </p>
+              <h1>
+                {language === 'no' ? (
+                  <>
+                    Nærmere Jesus.<br />
+                    Tryggere i<br />
+                    <em>ditt kall.</em>
+                  </>
                 ) : (
                   <>
-                    <a
-                      href="https://app.hkpc.no"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="w-full py-3.5 border border-outline-variant text-primary hover:bg-primary/5 font-bold rounded-xl text-base transition-all active:scale-[0.98] flex items-center justify-center"
-                    >
-                      <CmsText slug="landing-btn-login" fallback="Logg inn" />
-                    </a>
-                    <button
-                      onClick={() => { navigate('/admission'); setIsMobileMenuOpen(false); }}
-                      className="w-full py-3.5 bg-primary text-white font-bold rounded-xl text-base transition-all active:scale-[0.98] shadow-md"
-                    >
-                      <CmsText slug="landing-btn-apply" fallback="Søk Nå" />
-                    </button>
+                    Closer to Jesus.<br />
+                    Confident in<br />
+                    <em>your calling.</em>
                   </>
                 )}
+              </h1>
+              <p className="lead">
+                {language === 'no' ? (
+                  <>
+                    Voks i Guds ord og Åndens gaver.<br />
+                    I et fellesskap der du kan høre til.
+                  </>
+                ) : (
+                  <>
+                    Grow in God's word and the gifts of the Spirit.<br />
+                    In a community where you belong.
+                  </>
+                )}
+              </p>
+              <div className="actions">
+                <button className="button gold" onClick={() => navigate('/admission')}>
+                  {language === 'no' ? 'Begynn din reise' : 'Begin your journey'}
+                </button>
+                <a 
+                  className="intro" 
+                  href="#introduction" 
+                  onClick={(e) => handleNavClick(e, 'introduction')}
+                >
+                  <span className="play">▷</span> {language === 'no' ? 'Se introduksjon' : 'See introduction'}
+                </a>
               </div>
-            </motion.aside>
-          </div>
-        )}
-      </AnimatePresence>
+            </div>
 
-      <main>
-        {/* Modern Authentic Hero Section */}
-        <section className="relative overflow-hidden bg-[#3c096c] text-white">
-          {/* Mobile Top Image with Organic Wave Divider (screens < lg) */}
-          <div className="lg:hidden relative w-full h-72 sm:h-96 overflow-hidden bg-slate-900">
-            <img 
-              src="/img/hero-students.jpg" 
-              alt="Prophetic Community Students Studying" 
-              className="w-full h-full object-cover object-center"
-            />
-            {/* Organic Wave Transition into purple content */}
-            <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
-              <svg 
-                viewBox="0 0 1200 120" 
-                preserveAspectRatio="none" 
-                className="relative block w-full h-12 sm:h-16 text-[#3c096c] fill-current"
-              >
-                <path d="M0,0 C150,90 350,-40 500,45 C650,130 900,10 1200,60 L1200,120 L0,120 Z"></path>
-              </svg>
+            <div className="hero-image">
+              <img 
+                src="/assets/students.jpg" 
+                alt={language === 'no' ? 'To mennesker leser og samtaler sammen' : 'Two students studying and conversing together'} 
+              />
+              <div className="image-caption">
+                <span>{language === 'no' ? 'FELLESSKAP. TRO. UTRUSTNING.' : 'COMMUNITY. FAITH. EQUIPPING.'}</span>
+                <small>{language === 'no' ? 'Et sted å vokse sammen.' : 'A place to grow together.'}</small>
+              </div>
             </div>
           </div>
 
-          <div className="relative z-10 max-w-[1440px] mx-auto px-5 sm:px-8 md:px-12 py-10 sm:py-16 lg:py-20">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-              
-              {/* Left Column: Direct, Grounded & Authentic Copy */}
-              <div className="lg:col-span-7 space-y-6 sm:space-y-8 animate-in fade-in duration-500">
-                
-                {/* Main Headline */}
-                <CmsText 
-                  slug="landing-hero-calm-title" 
-                  fallback={language === 'no' 
-                    ? "Bli med i vår profetiske treningsarena" 
-                    : "Join our prophetic training ground"
-                  } 
-                  as="h1" 
-                  className="font-sans text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.12] tracking-tight" 
-                />
-
-                {/* Subtitle */}
-                <CmsText 
-                  slug="landing-hero-calm-subtitle" 
-                  fallback={language === 'no'
-                    ? "Voks i din relasjon til Jesus gjennom Den Hellige Ånd og Guds ord."
-                    : "Grow in your relationship with Jesus through the Holy Spirit and God's word."
-                  } 
-                  as="p" 
-                  className="font-sans text-lg sm:text-xl text-purple-100/90 max-w-2xl leading-relaxed font-normal" 
-                />
-
-                {/* Application Period info line */}
-                <div className="inline-flex items-center gap-2.5 text-sm sm:text-base text-purple-200 font-sans">
-                  <Calendar size={18} className="text-[#c5a059] flex-shrink-0" />
-                  <span>
-                    <span className="text-purple-300 font-normal">
-                      {language === 'no' ? "Søknadsperiode: " : "Application period: "}
-                    </span>
-                    <strong className="text-white font-semibold">
-                      {language === 'no' ? "1. jan – 30. juni 2027" : "Jan 1 – June 30, 2027"}
-                    </strong>
-                  </span>
-                </div>
-
-                {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                  <button 
-                    onClick={() => navigate('/admission')} 
-                    className="min-h-[44px] px-8 py-4 bg-[#c5a059] hover:bg-[#b08e4f] text-white font-extrabold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.98] text-base font-sans inline-flex items-center justify-center gap-2"
-                  >
-                    <CmsText slug="landing-hero-calm-cta-primary" fallback={language === 'no' ? "Begynn din reise" : "Begin your journey"} />
-                    <ArrowRight size={18} />
-                  </button>
-                  <button 
-                    onClick={(e) => handleNavClick(e, { href: '#school', id: 'school' })} 
-                    className="min-h-[44px] px-8 py-4 border border-white/30 text-white font-bold rounded-xl hover:bg-white/10 transition-all duration-200 group flex items-center justify-center gap-2 text-base active:scale-[0.98] font-sans"
-                  >
-                    <CmsText slug="landing-hero-calm-cta-secondary" fallback={language === 'no' ? "Se introduksjon" : "See introduction"} />
-                    <ChevronDown size={18} className="group-hover:translate-y-0.5 transition-transform" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Right Column: Natural Real Photo (Desktop) */}
-              <div className="hidden lg:block lg:col-span-5 relative">
-                <div className="relative mx-auto max-w-md xl:max-w-lg">
-                  {/* Clean Real Photo Frame */}
-                  <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 aspect-[4/3] sm:aspect-[16/11]">
-                    <img 
-                      src="/img/hero-students.jpg" 
-                      alt="His Kingdom Prophetic Community Students" 
-                      className="w-full h-full object-cover object-center"
-                    />
-                  </div>
-
-                  {/* Clean geometric white arc accent from user's design */}
-                  <div className="absolute -bottom-8 -right-8 w-40 h-40 rounded-full bg-white shadow-xl pointer-events-none -z-10 border-4 border-[#3c096c]/20" />
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          {/* Mobile geometric white arc accent from user's design */}
-          <div className="lg:hidden absolute bottom-12 -right-12 w-32 h-32 rounded-full bg-white pointer-events-none z-0 opacity-95 shadow-lg border-4 border-[#3c096c]/20" />
-
-          {/* Bottom Wave Divider into the next section */}
-          <div className="relative w-full overflow-hidden leading-none z-10 -mb-1">
-            <svg 
-              viewBox="0 0 1440 80" 
-              preserveAspectRatio="none" 
-              className="w-full h-10 sm:h-14 text-background fill-current"
-            >
-              <path d="M0,0 C360,70 1080,70 1440,0 L1440,80 L0,80 Z"></path>
-            </svg>
+          <div className="hero-base wrap">
+            <span>{language === 'no' ? 'Forankret i Skriften.' : 'Grounded in Scripture.'}</span>
+            <span>{language === 'no' ? 'Ledet av Den Hellige Ånd.' : 'Led by the Holy Spirit.'}</span>
+            <span>{language === 'no' ? 'Levd ut i hverdagen.' : 'Lived out in daily life.'}</span>
           </div>
         </section>
 
-        {/* Section 1: The Prophetic School and Online Concept */}
-        <section id="school" className="py-20 px-4 sm:px-6 md:px-12 max-w-[1200px] mx-auto space-y-16">
-          <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-sm uppercase tracking-wider">
-              <Laptop size={15} />
-              <CmsText slug="landing-school-tag" fallback={language === 'no' ? "Skole og Studieforløp" : "Prophetic School & Concept"} />
-            </span>
-            <CmsText 
-              slug="landing-school-title" 
-              fallback={language === 'no' ? "En skole bygget på åpenbaring og sannhet" : "A School Built on Revelation and Truth"} 
-              as="h2" 
-              className="font-serif text-3xl md:text-4xl text-[#3c096c] font-extrabold leading-tight block" 
-            />
-            <CmsText 
-              slug="landing-school-desc" 
-              fallback={language === 'no'
-                ? "Vår nettbaserte bibelskole gir deg fleksibiliteten til å studere i ditt eget tempo, kombinert med ukentlige live-samlinger og personlig veiledning."
-                : "Our online Bible school gives you the flexibility to study at your own pace, combined with weekly live gatherings and personal mentoring."} 
-              as="p" 
-              className="text-base md:text-lg text-on-surface-variant leading-relaxed max-w-2xl mx-auto" 
-            />
+        {/* Practical Intake Section */}
+        <section className="intake wrap" aria-label="Praktisk informasjon">
+          <div>
+            <span className="eyebrow">{language === 'no' ? 'NESTE SKOLEÅR' : 'NEXT ACADEMIC YEAR'}</span>
+            <strong>{language === 'no' ? 'Din reise starter her.' : 'Your journey starts here.'}</strong>
           </div>
+          <div>
+            <small>{language === 'no' ? 'Søknadsperiode' : 'Application period'}</small>
+            <strong>{language === 'no' ? '1. jan – 30. juni 2027' : 'Jan 1 – June 30, 2027'}</strong>
+          </div>
+          <div>
+            <small>{language === 'no' ? 'Kickoff i Norge' : 'Kickoff in Norway'}</small>
+            <strong>{language === 'no' ? '27. august 2027' : 'August 27, 2027'}</strong>
+          </div>
+          <div>
+            <small>{language === 'no' ? 'Undervisning' : 'Instruction'}</small>
+            <strong>{language === 'no' ? 'Nettbasert · på engelsk' : 'Online · in English'}</strong>
+          </div>
+        </section>
 
-          {/* Welcome & Kickoff Banner (Flyttet fra hero) */}
-          <div className="bg-gradient-to-br from-purple-50/90 via-white to-amber-50/30 border border-[#dec2ef]/60 rounded-3xl p-6 sm:p-8 shadow-sm">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-              <div className="md:col-span-7 space-y-2">
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#3c096c] bg-[#3c096c]/10 px-3 py-1 rounded-full">
-                  <Users size={14} />
-                  {language === 'no' ? "Fellesskap & Utrustning" : "Community & Equipping"}
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-[#3c096c] font-sans">
-                  {language === 'no' ? "Alle er velkomne" : "All Are Welcome"}
-                </h3>
-                <p className="text-base text-slate-700 leading-relaxed font-sans">
-                  {language === 'no' 
-                    ? "For alle som lengter etter dypere fellesskap og utrustning. Vår visjon er å trene og utruste troende til et liv i fortrolighet med Gud og virksom tro i hverdagen." 
-                    : "For everyone longing for deeper fellowship and equipping. Our vision is to train and equip believers for a life of intimacy with God and active faith in daily life."}
+        {/* Introduction / Welcome Section */}
+        <section className="section wrap welcome" id="introduction">
+          <div>
+            <p className="eyebrow purple">
+              {language === 'no' ? 'FELLESSKAP & UTRUSTNING' : 'COMMUNITY & EQUIPPING'}
+            </p>
+            <h2>
+              {language === 'no' ? (
+                <>
+                  En dypere tro.<br />
+                  Et levende fellesskap.
+                </>
+              ) : (
+                <>
+                  A deeper faith.<br />
+                  A living fellowship.
+                </>
+              )}
+            </h2>
+          </div>
+          <div>
+            <h3>{language === 'no' ? 'Alle er velkomne.' : 'All are welcome.'}</h3>
+            <p>
+              {language === 'no'
+                ? 'Du trenger ikke å være kalt til profetembetet for å vokse i de profetiske gavene. HKPC er for deg som lengter etter et nærere forhold til Jesus og et trygt sted å bli utrustet.'
+                : 'You do not need to be called to the fivefold prophetic office to grow in the prophetic gifts. HKPC is for anyone who longs for a closer relationship with Jesus and a safe place to be equipped.'}
+            </p>
+            <p>
+              {language === 'no'
+                ? 'Vi forener bibelundervisning, bønn og praktisk trening — med rom for å lære, spørre og vokse sammen.'
+                : 'We unite Bible teaching, prayer, and hands-on activation — with room to learn, ask questions, and grow together.'}
+            </p>
+            <div className="signature">
+              {language === 'no' ? 'Guds ord som fundament. Jesus i sentrum.' : 'God’s word as our foundation. Jesus at the center.'}
+            </div>
+          </div>
+        </section>
+
+        {/* School & Programs Section */}
+        <section className="school section" id="school">
+          <div className="wrap">
+            <div className="section-head">
+              <div>
+                <p className="eyebrow purple">
+                  {language === 'no' ? 'SKOLE & STUDIEFORLØP' : 'SCHOOL & STUDY TRACKS'}
                 </p>
+                <h2>
+                  {language === 'no' ? (
+                    <>
+                      Rom for å vokse.<br />
+                      Retning for ditt kall.
+                    </>
+                  ) : (
+                    <>
+                      Room to grow.<br />
+                      Direction for your calling.
+                    </>
+                  )}
+                </h2>
               </div>
-              <div className="md:col-span-5 flex flex-col justify-center sm:items-start md:items-end border-t md:border-t-0 md:border-l border-purple-200/50 pt-5 md:pt-0 md:pl-8 space-y-3">
-                <div className="space-y-1">
-                  <span className="text-xs uppercase font-bold tracking-wider text-purple-700 block font-sans">
-                    {language === 'no' ? "Kickoff i Norge (On-site):" : "Kickoff in Norway (On-site):"}
-                  </span>
-                  <div className="flex items-center gap-2 text-lg font-extrabold text-[#3c096c] font-sans">
-                    <Calendar size={20} className="text-[#c5a059] flex-shrink-0" />
-                    <span>{language === 'no' ? "27. august 2027" : "August 27, 2027"}</span>
-                  </div>
+              <p>
+                {language === 'no'
+                  ? 'Studer i eget tempo, og bli en del av et fellesskap med ukentlige Zoom-kvelder og personlig veiledning.'
+                  : 'Study at your own pace, and become part of a community with weekly live Zoom gatherings and personal mentoring.'}
+              </p>
+            </div>
+
+            <div className="programs">
+              <article className="program primary">
+                <div className="program-top">
+                  <span>{language === 'no' ? '01 / FØRSTE ÅR' : '01 / FIRST YEAR'}</span>
+                  <span className="pill">{language === 'no' ? 'Oppstart 2027' : 'Starts 2027'}</span>
                 </div>
-                <div className="space-y-0.5 pt-1">
-                  <span className="text-xs uppercase font-bold tracking-wider text-slate-500 block font-sans">
-                    {language === 'no' ? "Søknadsperiode:" : "Application Period:"}
+                <h3>
+                  His Kingdom<br />
+                  Prophetic Community
+                </h3>
+                <p>
+                  {language === 'no'
+                    ? 'Et bibelsk fundament og praktisk utrustning i Åndens gaver. For alle som ønsker å vokse med Jesus.'
+                    : 'A biblical foundation and practical equipping in the gifts of the Spirit. For anyone desiring to grow with Jesus.'}
+                </p>
+                <ul>
+                  <li>{language === 'no' ? 'Hør Guds stemme og modnes i de profetiske gavene' : 'Hear God’s voice and mature in the prophetic gifts'}</li>
+                  <li>{language === 'no' ? 'Fellesskap, bønn og praktisk trening' : 'Fellowship, prayer, and practical activation'}</li>
+                  <li>{language === 'no' ? 'Nye temaer hvert år — kan tas flere ganger' : 'New themes every year — can be taken multiple times'}</li>
+                </ul>
+                <div className="program-bottom">
+                  <span>
+                    <b>5 000 kr</b> {language === 'no' ? '/ semester' : '/ semester'}
+                    <small>{language === 'no' ? '+ oppstart og kickoff' : '+ registration & kickoff'}</small>
                   </span>
-                  <span className="text-sm font-semibold text-slate-800 font-sans">
-                    {language === 'no' ? "1. jan – 30. juni 2027" : "Jan 1 – June 30, 2027"}
-                  </span>
+                  <a href="#curriculum" onClick={(e) => handleNavClick(e, 'curriculum')}>
+                    {language === 'no' ? 'Utforsk førsteåret' : 'Explore Year 1'}
+                  </a>
                 </div>
-              </div>
-            </div>
-          </div>
+              </article>
 
-          {/* Quick Facts Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white border border-[#dec2ef]/40 p-6 rounded-2xl shadow-sm space-y-2.5 hover:border-[#3c096c]/30 hover:shadow-md transition-all duration-200">
-              <div className="w-10 h-10 rounded-xl bg-[#3c096c]/10 text-[#3c096c] flex items-center justify-center">
-                <Laptop size={20} />
-              </div>
-              <h4 className="font-serif text-base font-bold text-[#3c096c]">
-                {language === 'no' ? '100% Nettbasert' : '100% Online'}
-              </h4>
-              <p className="text-base text-slate-700 leading-relaxed">
-                {language === 'no' ? 'Studer i eget tempo med fleksible videoforelesninger og oppgaver.' : 'Study at your own pace with on-demand video lectures and digital assignments.'}
-              </p>
-            </div>
-
-            <div className="bg-white border border-[#dec2ef]/40 p-6 rounded-2xl shadow-sm space-y-2.5 hover:border-[#3c096c]/30 hover:shadow-md transition-all duration-200">
-              <div className="w-10 h-10 rounded-xl bg-[#3c096c]/10 text-[#3c096c] flex items-center justify-center">
-                <Users size={20} />
-              </div>
-              <h4 className="font-serif text-base font-bold text-[#3c096c]">
-                {language === 'no' ? 'Ukentlige Zoom-kvelder' : 'Weekly Zoom Gatherings'}
-              </h4>
-              <p className="text-base text-slate-700 leading-relaxed">
-                {language === 'no' ? 'Live fellesskap for bønn, fagdrøfting og praktisk profetisk trening.' : 'Live prayer, curriculum discussion, and hands-on prophetic activation.'}
-              </p>
-            </div>
-
-            <div className="bg-white border border-[#dec2ef]/40 p-6 rounded-2xl shadow-sm space-y-2.5 hover:border-[#3c096c]/30 hover:shadow-md transition-all duration-200">
-              <div className="w-10 h-10 rounded-xl bg-[#3c096c]/10 text-[#3c096c] flex items-center justify-center">
-                <Globe size={20} />
-              </div>
-              <h4 className="font-serif text-base font-bold text-[#3c096c]">
-                {language === 'no' ? 'Engelsk Undervisning' : 'English Instruction'}
-              </h4>
-              <p className="text-base text-slate-700 leading-relaxed">
-                {language === 'no' ? 'All undervisning foregår på engelsk.' : 'All teaching and instruction is conducted in English.'}
-              </p>
+              <article className="program secondary">
+                <div className="program-top">
+                  <span>{language === 'no' ? '02 / ANDRE ÅR' : '02 / SECOND YEAR'}</span>
+                  <span className="pill">{language === 'no' ? 'Oppstart 2028' : 'Starts 2028'}</span>
+                </div>
+                <h3>
+                  His Kingdom<br />
+                  Prophets
+                </h3>
+                <p>
+                  {language === 'no'
+                    ? 'Videre utrustning for deg som vet at du er kalt til tjenesten som profet.'
+                    : 'Advanced equipping for those who know they are called to the office of the prophet.'}
+                </p>
+                <ul>
+                  <li>{language === 'no' ? 'Bygger videre på fullført førsteår' : 'Builds upon completed first year'}</li>
+                  <li>{language === 'no' ? 'Ny søknad, pensum og skriftlig oppgave' : 'New application, curriculum, and written assignment'}</li>
+                  <li>{language === 'no' ? 'Fysisk samling på 1–2 uker' : 'In-person intensive gathering for 1–2 weeks'}</li>
+                </ul>
+                <div className="program-bottom">
+                  <span>
+                    {language === 'no' ? 'Et videre steg' : 'A further step'}
+                    <small>{language === 'no' ? 'Forankret i fellesskap og tjeneste' : 'Rooted in community and ministry'}</small>
+                  </span>
+                  <a href="#requirements" onClick={(e) => handleNavClick(e, 'requirements')}>
+                    {language === 'no' ? 'Se opptakskrav' : 'View requirements'}
+                  </a>
+                </div>
+              </article>
             </div>
 
-            <div className="bg-white border border-[#dec2ef]/40 p-6 rounded-2xl shadow-sm space-y-2.5 hover:border-[#3c096c]/30 hover:shadow-md transition-all duration-200">
-              <div className="w-10 h-10 rounded-xl bg-[#3c096c]/10 text-[#3c096c] flex items-center justify-center">
-                <Calendar size={20} />
-              </div>
-              <h4 className="font-serif text-base font-bold text-[#3c096c]">
-                {language === 'no' ? 'Søknad & Kickoff' : 'Applications & Kickoff'}
-              </h4>
-              <p className="text-base text-slate-700 leading-relaxed">
-                {language === 'no' ? 'Søknad: 1. jan – 30. juni 2027. Kickoff er on-site i Norge 27. august.' : 'Apply: Jan 1 – June 30, 2027. On-site kickoff in Norway August 27.'}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-            {/* Track 1 Box */}
-            <div className="bg-white border border-[#dec2ef]/55 p-8 rounded-3xl shadow-sm flex flex-col justify-between hover:border-[#3c096c]/20 transition-all min-h-[420px]">
+            <div className="format">
               <div>
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-xs font-bold px-3 py-1 bg-[#3c096c]/5 text-[#3c096c] border border-[#3c096c]/10 rounded-md uppercase tracking-wider">
-                    <CmsText slug="landing-track1-badge" fallback={language === 'no' ? "Linje 1 (1. år)" : "Track 1 (Year 1)"} />
-                  </span>
-                  <span className="text-sm font-bold text-[#c5a059] uppercase tracking-wider flex items-center gap-1.5">
-                    <Sparkles size={16} />
-                    <CmsText slug="landing-track1-status" fallback={language === 'no' ? "Søknad: 1. jan – 30. juni 2027" : "Applications: Jan 1 – June 30, 2027"} />
-                  </span>
-                </div>
-                <CmsText 
-                  slug="landing-track1-title" 
-                  fallback="His Kingdom Prophetic Community" 
-                  as="h3" 
-                  className="font-serif text-2xl font-bold text-[#3c096c] mb-4 block" 
-                />
-                <CmsText 
-                  slug="landing-track1-desc" 
-                  fallback={language === 'no'
-                    ? "Dette sporet er for alle som ønsker å vokse i sitt forhold til Jesus og i Åndens gaver, uavhengig av om de er kalt til profetembetet eller ikke. Vi ønsker å bygge et trygt fellesskap for profetiske mennesker til å vokse."
-                    : "This track is for everyone who wants to grow in their relationship with Jesus and in the gifts of the Spirit, regardless of whether they are called into the office as a prophet or not. We want to build a safe community for prophetic people to grow and be seen."} 
-                  as="p" 
-                  className="text-base text-slate-700 leading-relaxed mb-6 font-normal" 
-                />
+                <span>01</span>
+                <h4>{language === 'no' ? 'Fleksibelt i hverdagen' : 'Flexible in everyday life'}</h4>
+                <p>{language === 'no' ? 'Videoer og oppgaver i ditt eget tempo.' : 'Video lectures and assignments at your own pace.'}</p>
               </div>
-              
-              <div className="border-t border-slate-100 pt-6 space-y-3.5 text-base text-slate-700">
-                <div className="flex items-start gap-2.5">
-                  <Check size={18} className="text-green-600 shrink-0 mt-0.5" />
-                  <span><CmsText slug="landing-track1-check1" fallback={language === 'no' ? "Kan tas år etter år (nye temaer hvert år)" : "Can join year after year (different subjects yearly)"} /></span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <Check size={18} className="text-green-600 shrink-0 mt-0.5" />
-                  <span><CmsText slug="landing-track1-check2" fallback={language === 'no' ? "Basisfag: Profeti 101, Å høre Guds stemme, Gave vs Tjeneste" : "Fundamentals: Prophecy 101, Hearing God, Gift vs Office"} /></span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <Check size={18} className="text-green-600 shrink-0 mt-0.5" />
-                  <span><CmsText slug="landing-track1-check3" fallback={language === 'no' ? "Studieavgift: 5 000,- / sem. (10 000,- fullt år) + 500,- oppstart/admin & 500,- kickoff kost/losji" : "Tuition: $500 USD / sem. ($1,000 USD full year) + $50 USD admin & $50 USD kickoff room/board"} /></span>
-                </div>
-              </div>
-            </div>
-
-            {/* Track 2 Box */}
-            <div className="bg-white border border-[#dec2ef]/55 p-8 rounded-3xl shadow-sm flex flex-col justify-between hover:border-[#3c096c]/20 transition-all min-h-[420px] relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-amber-500/10 to-transparent pointer-events-none" />
               <div>
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-xs font-bold px-3 py-1 bg-amber-500/10 text-amber-700 border border-amber-500/20 rounded-md uppercase tracking-wider flex items-center gap-1.5">
-                    <Lock size={14} />
-                    <CmsText slug="landing-track2-badge" fallback={language === 'no' ? "Linje 2 (2. år)" : "Track 2 (Year 2)"} />
-                  </span>
-                  <span className="text-xs font-bold bg-amber-500 text-white px-2.5 py-1 rounded-full uppercase tracking-wider">
-                    <CmsText slug="landing-track2-status" fallback={language === 'no' ? "Oppstart 2028" : "Launches 2028"} />
-                  </span>
-                </div>
-                <CmsText 
-                  slug="landing-track2-title" 
-                  fallback="His Kingdom Prophets" 
-                  as="h3" 
-                  className="font-serif text-2xl font-bold text-[#3c096c] mb-4 block" 
-                />
-                <CmsText 
-                  slug="landing-track2-desc" 
-                  fallback={language === 'no'
-                    ? "Dette er sporet for de som vet at de er kalt til tjenesten som profet (profetembetet). Vi er Hans profeter som sprer Hans Rike, og fokuserer ikke på oss selv eller våre egne plattformer."
-                    : "This is the track for those who know they are called to the office of a prophet. We are His prophets, spreading His Kingdom, not focusing on ourselves or \"our\" platforms."} 
-                  as="p" 
-                  className="text-base text-slate-700 leading-relaxed mb-6 font-normal" 
-                />
-
-                <div className="bg-amber-50 p-5 rounded-2xl border border-amber-100 text-base font-medium text-amber-950 mb-6 space-y-1">
-                  <CmsText slug="landing-track2-prereq-label" fallback={language === 'no' ? "⚠️ Opptakskrav:" : "⚠️ Admission Requirements:"} className="text-amber-900 block font-bold text-base" />
-                  <CmsText 
-                    slug="landing-track2-prereq-desc" 
-                    fallback={language === 'no' 
-                      ? "Alle som skal gå His Kingdom Prophets må først fullføre det 1. året (Prophetic Community)." 
-                      : "Everyone who wants to attend His Kingdom Prophets must go through the 1st year (Track 1)."} 
-                    className="leading-relaxed block"
-                  />
-                </div>
+                <span>02</span>
+                <h4>{language === 'no' ? 'Sammen hver uke' : 'Together every week'}</h4>
+                <p>{language === 'no' ? 'Zoom-kvelder med bønn og fagdrøfting.' : 'Live Zoom gatherings with prayer and curriculum discussions.'}</p>
               </div>
-
-              <div className="border-t border-slate-100 pt-6 space-y-3.5 text-base text-slate-700">
-                <div className="flex items-start gap-2.5">
-                  <Check size={18} className="text-green-600 shrink-0 mt-0.5" />
-                  <span><CmsText slug="landing-track2-check1" fallback={language === 'no' ? "Krever ny søknad, pensumliste og skriftlig oppgave" : "Requires reapplication, reading list, and writing a paper"} /></span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <Check size={18} className="text-green-600 shrink-0 mt-0.5" />
-                  <span><CmsText slug="landing-track2-check2" fallback={language === 'no' ? "Krav om deltakelse på 1-2 ukers fysisk samling («Supercharge» samling)" : "Requires attending a 1-2 week physical immersion («Supercharge» event)"} /></span>
-                </div>
+              <div>
+                <span>03</span>
+                <h4>{language === 'no' ? 'Fra ord til praksis' : 'From word to practice'}</h4>
+                <p>{language === 'no' ? 'Profetisk trening i et trygt fellesskap.' : 'Prophetic activation in a supportive environment.'}</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Section 2: Teaching Topics / Curriculum */}
-        <section id="curriculum" className="py-20 bg-surface-container-low border-t border-outline-variant/40">
-          <div className="px-4 sm:px-6 md:px-12 max-w-[1200px] mx-auto space-y-12">
-            <div className="text-center max-w-3xl mx-auto space-y-4">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-sm uppercase tracking-wider">
-                <BookOpenCheck size={16} />
-                <CmsText slug="landing-curriculum-tag" fallback={language === 'no' ? "Fagplan & Emner" : "Curriculum & Topics"} />
-              </span>
-              <CmsText 
-                slug="landing-curriculum-title" 
-                fallback={language === 'no' ? "Hva lærer du hos oss?" : "Teaching Topics & Curriculum"} 
-                as="h2" 
-                className="font-serif text-3xl md:text-4xl font-extrabold text-[#3c096c] block" 
-              />
+        {/* Curriculum Section */}
+        <section className="section wrap curriculum" id="curriculum">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow purple">
+                {language === 'no' ? 'FAGPLAN · FØRSTE ÅR' : 'CURRICULUM · FIRST YEAR'}
+              </p>
+              <h2>
+                {language === 'no' ? (
+                  <>
+                    Tro som får røtter.<br />
+                    Gaver som får vokse.
+                  </>
+                ) : (
+                  <>
+                    Faith that takes root.<br />
+                    Gifts that flourish.
+                  </>
+                )}
+              </h2>
+            </div>
+            <p>
+              {language === 'no'
+                ? 'Sunn teologi, personlig relasjon til Jesus og praktisk åpenbaring. Fire områder som henger sammen.'
+                : 'Sound theology, personal intimacy with Jesus, and practical revelation. Four connected core areas.'}
+            </p>
+          </div>
+
+          <div className="topics">
+            <article>
+              <span>01</span>
+              <h3>{language === 'no' ? 'Fundament & relasjon' : 'Foundation & Intimacy'}</h3>
+              <p>{language === 'no' ? 'Bønn, identitet i Kristus og å høre Guds røst.' : 'Prayer, identity in Christ, and hearing God’s voice.'}</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>{language === 'no' ? 'Profetisk utrustning & gaver' : 'Prophetic Equipping & Gifts'}</h3>
+              <p>{language === 'no' ? 'Åndens gaver, personlig profeti og sunn praksis.' : 'Gifts of the Spirit, personal prophecy, and sound biblical practice.'}</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>{language === 'no' ? 'Indre helbredelse & utfrielse' : 'Inner Healing & Deliverance'}</h3>
+              <p>{language === 'no' ? 'Undervisning om frihet, omvendelse og helbredelse.' : 'Teaching on freedom, repentance, and emotional healing.'}</p>
+            </article>
+            <article>
+              <span>04</span>
+              <h3>{language === 'no' ? 'Kristenliv & tjeneste' : 'Christian Living & Ministry'}</h3>
+              <p>{language === 'no' ? 'Tro i hverdagen, forvaltning, smågrupper og misjon.' : 'Faith in daily life, stewardship, small groups, and mission.'}</p>
+            </article>
+          </div>
+
+          <details>
+            <summary>{language === 'no' ? 'Se mer om fagene' : 'Read more about the courses'}</summary>
+            <p>
+              {language === 'no'
+                ? 'Førsteåret omfatter blant annet Profeti 101, å høre Guds stemme, gave versus tjeneste, bønn og faste, gudsfrykt, nådegaver og praktisk kristenliv. Fagområdene er hentet fra dagens HKPC-side.'
+                : 'The first year covers Prophecy 101, hearing God’s voice, spiritual gift versus office, prayer and fasting, the fear of the Lord, spiritual gifts, and practical Christian discipleship.'}
+            </p>
+          </details>
+        </section>
+
+        {/* About Section */}
+        <section className="about section" id="about">
+          <div className="wrap about-layout">
+            <div className="portraits">
+              <figure>
+                <img 
+                  src="/assets/hilde.jpg" 
+                  alt="Hilde Karin Knutsen" 
+                />
+                <figcaption>
+                  Hilde Karin Knutsen
+                  <small>{language === 'no' ? 'Rektor og underviser' : 'Principal & Teacher'}</small>
+                </figcaption>
+              </figure>
+              <figure>
+                <img 
+                  src="/assets/thomas.jpeg" 
+                  alt="Thomas Knutsen" 
+                />
+                <figcaption>
+                  Thomas Knutsen
+                  <small>{language === 'no' ? 'Administrator og faglærer' : 'Administrator & Teacher'}</small>
+                </figcaption>
+              </figure>
             </div>
 
-            {/* Directly display Year 1 Curriculum */}
-            <div className="bg-white border border-[#dec2ef]/40 p-6 sm:p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all space-y-8">
-              <div className="space-y-4 border-b border-slate-100 pb-6">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                  <CmsText 
-                    slug="landing-curriculum-y1-title" 
-                    fallback={language === 'no' ? "Fagplan: 1. år (Prophetic Community)" : "Teaching Plan: Year 1 (Prophetic Community)"} 
-                    as="h3" 
-                    className="font-serif text-xl font-bold text-[#3c096c] uppercase tracking-wider" 
-                  />
-                  <span className="self-start text-xs font-bold bg-[#c5a059] text-white px-3 py-1 rounded-full uppercase tracking-wider">
-                    <CmsText slug="landing-curriculum-y1-badge" fallback={language === 'no' ? "Søkeperiode: 1. jan – 30. juni 2027" : "Applications: Jan 1 – June 30, 2027"} />
-                  </span>
-                </div>
-                
-                <CmsText 
-                  slug="landing-curriculum-y1-desc" 
-                  fallback={language === 'no'
-                    ? "Førsteåret fokuserer på å bygge et solid bibelsk fundament, styrke din personlige relasjon til Jesus og utruste deg i Åndens profetiske gaver. Undervisningen forener sunn teologi med praktisk åpenbaring og et trygt trosfellesskap."
-                    : "The first year focuses on building a solid biblical foundation, strengthening your personal relationship with Jesus, and equipping you in the prophetic gifts of the Spirit. The teaching unites sound theology with practical revelation and a safe faith community."} 
-                  as="p" 
-                  className="text-base text-slate-700 leading-relaxed" 
-                />
-              </div>
-
-              {/* Categorized Curriculum Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[
-                  {
-                    slugTitle: "landing-curriculum-mod1-title",
-                    fallbackTitle: language === 'no' ? "1. Fundament & Relasjon" : "1. Foundation & Relationship",
-                    slugDesc: "landing-curriculum-mod1-desc",
-                    fallbackDesc: language === 'no'
-                      ? "Fokus på å legge et solid bibelsk grunnlag for det kristne livet. Her lærer du om bønn, faste, ydmykhet, gudsfrykt, din identitet og autoritet i Kristus, samt praktiske nøkler til å høre Guds røst i lønnkammeret."
-                      : "Focus on laying a solid biblical foundation for the Christian life. Here you will learn about prayer, fasting, humility, the fear of God, your identity and authority in Christ, as well as practical keys to hearing God's voice in the secret place."
-                  },
-                  {
-                    slugTitle: "landing-curriculum-mod2-title",
-                    fallbackTitle: language === 'no' ? "2. Profetisk Utrustning & Gaver" : "2. Prophetic Equipping & Gifts",
-                    slugDesc: "landing-curriculum-mod2-desc",
-                    fallbackDesc: language === 'no'
-                      ? "Utrustning og modning i de profetiske nådegavene. Modulen dekker personlig profeti, Åndens gaver, kunnskapsord, tydning av tunger, profetiske erklæringer og retningslinjer for sunn praksis i fellesskapet."
-                      : "Equipping and maturing in the prophetic gifts of the Spirit. The module covers personal prophecy, spiritual gifts, words of knowledge, interpretation of tongues, prophetic decrees, and guidelines for healthy practice in the community."
-                  },
-                  {
-                    slugTitle: "landing-curriculum-mod3-title",
-                    fallbackTitle: language === 'no' ? "3. Indre Helbredelse & Utfrielse" : "3. Inner Healing & Deliverance",
-                    slugDesc: "landing-curriculum-mod3-desc",
-                    fallbackDesc: language === 'no'
-                      ? "Undervisning og tjeneste rettet mot personlig frihet og helbredelse. Vi går i dybden på omvendelse, oppgjør med forbannelser, bryte okkulte bånd, helbrede emosjonelle sår og traumer, samt frihet fra undertrykkende åndskrefter."
-                      : "Teaching and ministry aimed at personal freedom and healing. We go in-depth on repentance, dealing with curses, breaking occult ties, healing emotional wounds and traumas, as well as freedom from oppressive spiritual forces."
-                  },
-                  {
-                    slugTitle: "landing-curriculum-mod4-title",
-                    fallbackTitle: language === 'no' ? "4. Praktisk Kristenliv & Tjeneste" : "4. Practical Christian Life & Ministry",
-                    slugDesc: "landing-curriculum-mod4-desc",
-                    fallbackDesc: language === 'no'
-                      ? "Praktisk anvendelse av troen i hverdagen og misjon. Emner inkluderer overnaturlig økonomi og forvaltning, misjon og misjonærens kall, etablering av bønnevakter og deltakelse i nære smågrupper."
-                      : "Practical application of faith in everyday life and missions. Topics include supernatural finances and stewardship, missions and the missionary calling, establishing prayer watches, and participating in close-knit small groups."
-                  }
-                ].map((cat, i) => (
-                  <div key={i} className="bg-slate-50 border border-slate-100/70 p-6 rounded-2xl space-y-3 hover:bg-slate-100/50 transition-all duration-200">
-                    <h4 className="font-serif text-base sm:text-lg font-bold text-[#3c096c] uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-[#3c096c]" />
-                      <CmsText slug={cat.slugTitle} fallback={cat.fallbackTitle} />
-                    </h4>
-                    <CmsText slug={cat.slugDesc} fallback={cat.fallbackDesc} as="p" className="text-base text-slate-700 leading-relaxed font-normal" />
-                  </div>
-                ))}
-              </div>
+            <div className="about-copy">
+              <p className="eyebrow">{language === 'no' ? 'HJERTENE BAK HKPC' : 'THE HEARTS BEHIND HKPC'}</p>
+              <h2>
+                {language === 'no' ? (
+                  <>
+                    Et liv overgitt.<br />
+                    Et hjerte for<br />
+                    <em>Guds folk.</em>
+                  </>
+                ) : (
+                  <>
+                    A life surrendered.<br />
+                    A heart for<br />
+                    <em>God’s people.</em>
+                  </>
+                )}
+              </h2>
+              <p>
+                {language === 'no'
+                  ? 'Hilde Karin og Thomas Knutsen leder His Kingdom Ministry med et hjerte for misjon, disippelskap og utrustning.'
+                  : 'Hilde Karin and Thomas Knutsen lead His Kingdom Ministry with a heart for mission, discipleship, and equipping believers.'}
+              </p>
+              <p>
+                {language === 'no'
+                  ? 'Gjennom bønn, bibelundervisning og tjeneste ønsker de å hjelpe mennesker til å vokse i fortrolighet med Gud og virksom tro i hverdagen.'
+                  : 'Through prayer, Bible teaching, and ministry, they desire to help people grow in intimacy with God and active faith in everyday life.'}
+              </p>
+              <details>
+                <summary>{language === 'no' ? 'Les historien bak' : 'Read the story behind'}</summary>
+                <p>
+                  {language === 'no'
+                    ? 'Arbeidet har røtter i His Kingdom Foundation, grunnlagt i 2008. Etter at Hilde Karin og Thomas giftet seg i 2023, ble tjenesten videreført og utvidet som His Kingdom Ministry.'
+                    : 'The ministry has roots in His Kingdom Foundation, established in 2008. After Hilde Karin and Thomas married in 2023, the work was continued and expanded as His Kingdom Ministry.'}
+                </p>
+              </details>
             </div>
           </div>
         </section>
 
-        {/* Section 3: About the Organization & Founders */}
-        <section id="about" className="py-20 px-4 sm:px-6 md:px-12 max-w-[1200px] mx-auto space-y-16 border-t border-outline-variant/40">
-          <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3c096c]/10 text-[#3c096c] font-bold text-sm uppercase tracking-wider">
-              <Info size={16} />
-              <CmsText slug="landing-about-tag" fallback={language === 'no' ? "Vårt fundament & Grunnleggere" : "Our Foundation & Founders"} />
-            </span>
-            <CmsText 
-              slug="landing-about-title" 
-              fallback={language === 'no' ? "Et åndelig fellesskap forankret i Skriften" : "About the Organization & Founders"} 
-              as="h2"
-              className="font-serif text-3xl md:text-4xl text-[#3c096c] font-extrabold leading-tight block"
-            />
+        {/* Resources Section */}
+        <section className="section wrap resources" id="resources">
+          <p className="eyebrow purple">
+            {language === 'no' ? 'RESSURSER FOR REISEN' : 'RESOURCES FOR THE JOURNEY'}
+          </p>
+          <div className="section-head">
+            <h2>{language === 'no' ? 'Ta læringen med deg.' : 'Take your learning further.'}</h2>
+            <p>
+              {language === 'no'
+                ? 'Fordyp deg videre med undervisning, bøker og læremidler fra His Kingdom.'
+                : 'Deepen your walk with teachings, books, and study materials from His Kingdom.'}
+            </p>
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            {/* The Foundation text */}
-            <div className="space-y-6 bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all">
-              <div className="flex items-center gap-3 text-[#3c096c]">
-                <Award size={26} className="shrink-0" />
-                <CmsText slug="landing-about-sec1-title" fallback={language === 'no' ? "Vårt fundament" : "Our Foundation"} as="h3" className="font-serif text-2xl font-bold" />
-              </div>
-              <CmsText 
-                slug="landing-about-sec1-desc" 
-                fallback={language === 'no' 
-                  ? "His Kingdom Ministry har fokus på misjon, utrustning av de hellige, bibelundervisning, bønn, forbønn, helbredelse og utfrielse, samt å vokse i Åndens profetiske gaver. Alt vi gjør skal gjøres etter bibelske standarder og med Guds ledelse."
-                  : "Our Foundation: His Kingdom Ministry focuses on missions, equipping the saints, Bible teaching, prayer, intercession, healing and deliverance, and growing in the prophetic gifts of the Spirit. Everything we do will be done by Biblical standards and God’s guidance."}
-                as="p"
-                className="text-base text-slate-700 leading-relaxed font-normal"
-              />
-
-              <div className="w-full h-[1px] bg-slate-100 my-4" />
-
-              <div className="space-y-2">
-                <CmsText 
-                  slug="landing-about-sec2-title" 
-                  fallback={language === 'no' ? "Videreføring og utvidelse av tjenesten" : "Continuation & Growth of the Ministry"} 
-                  as="h4" 
-                  className="font-serif text-lg font-bold text-[#3c096c] block"
-                />
-                <CmsText 
-                  slug="landing-about-sec2-desc"
-                  fallback={language === 'no'
-                    ? "Før Hilde Karin møtte Thomas, ledet hun stiftelsen His Kingdom Foundation, et arbeid grunnlagt i bønn i 2008 etter Herrens ledelse. Etter at de giftet seg i 2023, ble tjenesten videreført og utvidet som His Kingdom Ministry, med uforandret forpliktelse til bibelske standarder og åndelig utrustning."
-                    : "Before Hilde Karin met Thomas, she led His Kingdom Foundation, a ministry founded in prayer in 2008 following the Lord's guidance. After they married in 2023, the ministry was continued and expanded as His Kingdom Ministry, with an unchanged commitment to biblical standards and spiritual equipping."}
-                  as="p"
-                  className="text-base text-slate-700 leading-relaxed font-normal"
-                />
-              </div>
-            </div>
-
-            {/* The Story Behind */}
-            <div className="space-y-6 bg-white border border-[#dec2ef]/40 p-8 rounded-3xl shadow-sm hover:border-[#3c096c]/20 transition-all">
-              <div className="flex items-center gap-3 text-[#3c096c]">
-                <Heart size={26} className="shrink-0 text-red-500" />
-                <CmsText slug="landing-about-sec3-title" fallback={language === 'no' ? "Historien bak" : "The Story Behind"} as="h3" className="font-serif text-2xl font-bold" />
-              </div>
-              <CmsText 
-                slug="landing-about-sec3-p1"
-                fallback={language === 'no'
-                  ? "Hilde Karin begynte å dra på misjonsturer da hun var 14 år, og har siden levd som misjonær i Midtøsten, Afrika og Spania. I mai 2022 kalte Gud henne hjem til Norge, hvor hun møtte Thomas Knutsen. De giftet seg 2. desember 2023."
-                  : "Hilde Karin started going on mission trips when she was 14 and has since lived as a missionary in the Middle East, Africa, and Spain. In May 2022, God called her back home to Norway, where she met Thomas Knutsen. They were married on December 2, 2023."}
-                as="p"
-                className="text-base text-slate-700 leading-relaxed font-normal"
-              />
-              <CmsText 
-                slug="landing-about-sec3-p2"
-                fallback={language === 'no'
-                  ? "Thomas har arbeidet 16 år i kirkeadministrasjon og regnskap, og har vært på flere korttidsmisjonsturer. Sammen har de besøkt 9 land, og det å nå de fortapte ligger tungt på hjertet deres."
-                  : "Thomas has worked for 16 years in Church Administration and Accounting and has gone on several short-term mission trips. Together, they have visited 9 countries, and reaching the lost is heavy on their hearts."}
-                as="p"
-                className="text-base text-slate-700 leading-relaxed font-normal"
-              />
-            </div>
-          </div>
-
-          {/* Subsection: Møt hjertene bak His Kingdom Ministry */}
-          <div className="pt-6 space-y-10">
-            <div className="text-center max-w-2xl mx-auto space-y-2">
-              <CmsText 
-                slug="landing-leaders-title" 
-                fallback={language === 'no' ? "Møt hjertene bak His Kingdom Ministry" : "Meet the Hearts Behind His Kingdom Ministry"} 
-                as="h3"
-                className="font-serif text-2xl sm:text-3xl font-bold text-[#3c096c]"
-              />
-              <CmsText 
-                slug="landing-leaders-subtitle" 
-                fallback={language === 'no' 
-                  ? "Et liv overgitt til disippelskap, forbønn og utrustning av Guds folk" 
-                  : "A life dedicated to discipleship, intercession, and equipping God's people"} 
-                as="p"
-                className="text-base text-slate-600 font-medium"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* Card 1: Hilde Karin Knutsen */}
-              <div className="bg-white border border-[#dec2ef]/50 rounded-3xl p-8 shadow-sm hover:shadow-md transition-all text-center flex flex-col justify-between space-y-6">
-                <div className="space-y-4">
-                  <div className="w-28 h-28 mx-auto relative">
-                    <img 
-                      src="/img/hilde-karin-knutsen.jpg" 
-                      alt="Hilde Karin Knutsen" 
-                      className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-md mx-auto"
-                    />
-                  </div>
-                  <div>
-                    <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#240046]">
-                      Hilde Karin Knutsen
-                    </h4>
-                    <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#bd4f2a] block mt-1 font-sans">
-                      <CmsText 
-                        slug="landing-leader-hilde-role" 
-                        fallback={language === 'no' ? "PROFETISK FORBEDER OG UNDERVISER" : "PROPHETIC INTERCESSOR & TEACHER"} 
-                      />
-                    </span>
-                  </div>
-                  <div className="text-base text-slate-700 leading-relaxed text-left font-normal">
-                    {showFullHilde ? (
-                      <p>
-                        <CmsText 
-                          slug="landing-leader-hilde-bio"
-                          fallback={language === 'no'
-                            ? "Velkommen til vår side. Jeg heter Hilde Karin. Jeg er gift med Thomas. Vi bor i Norge. Jeg har reist som misjonær og profetisk forbeder store deler av livet mitt. Ved Guds nåde, gjennom Bibelens prinsipper og ved Den Hellige Ånds ledelse er jeg en profetisk stemme klar til å hjelpe deg å vokse i ditt personlige forhold til Jesus Kristus og utruste deg til å bli alt det han har skapt deg til å være."
-                            : "Welcome to our page. My name is Hilde Karin. I am married to Thomas. We live in Norway. I have traveled as a missionary and prophetic intercessor for much of my life. By God's grace, through Biblical principles, and by the Holy Spirit's guidance, I am a prophetic voice ready to help you grow in your personal relationship with Jesus Christ and equip you to become everything He has created you to be."}
-                        />
-                      </p>
-                    ) : (
-                      <p>
-                        {language === 'no'
-                          ? "Velkommen til vår side. Jeg heter Hilde Karin. Jeg er gift med Thomas. Vi bor i Norge..."
-                          : "Welcome to our page. My name is Hilde Karin. I am married to Thomas. We live in Norway..."}
-                      </p>
-                    )}
-                  </div>
-                  <button 
-                    type="button"
-                    onClick={() => setShowFullHilde(!showFullHilde)}
-                    className="px-5 py-2 rounded-full border border-[#bd4f2a]/60 text-[#bd4f2a] hover:bg-[#bd4f2a]/5 text-sm font-bold transition-all active:scale-95 inline-flex items-center gap-1.5 mx-auto"
-                  >
-                    <span>{showFullHilde ? (language === 'no' ? "Vis mindre" : "Show less") : (language === 'no' ? "Vis mer" : "Show more")}</span>
-                    {showFullHilde ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                  </button>
-                </div>
-
-                <div className="pt-4 border-t border-slate-100 flex justify-center items-center gap-3 text-slate-500">
-                  <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Instagram">
-                    <Instagram size={16} />
-                  </a>
-                  <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Facebook">
-                    <Facebook size={16} />
-                  </a>
-                  <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="YouTube">
-                    <Youtube size={16} />
-                  </a>
-                  <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="TikTok">
-                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.46V11.8a8.28 8.28 0 0 0 5.77 2.29V10.64a4.84 4.84 0 0 1-3.77-3.95h3.77Z"/>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-
-              {/* Card 2: Thomas Knutsen */}
-              <div className="bg-white border border-[#dec2ef]/50 rounded-3xl p-8 shadow-sm hover:shadow-md transition-all text-center flex flex-col justify-between space-y-6">
-                <div className="space-y-4">
-                  <div className="w-28 h-28 mx-auto relative">
-                    <img 
-                      src="/img/thomas-knutsen.jpeg" 
-                      alt="Thomas Knutsen" 
-                      className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-md mx-auto"
-                    />
-                  </div>
-                  <div>
-                    <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#240046]">
-                      Thomas Knutsen
-                    </h4>
-                    <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#bd4f2a] block mt-1 font-sans">
-                      <CmsText 
-                        slug="landing-leader-thomas-role" 
-                        fallback={language === 'no' ? "DAGLIG LEDER OG LOVSANG" : "GENERAL MANAGER & WORSHIP"} 
-                      />
-                    </span>
-                  </div>
-                  <div className="text-base text-slate-700 leading-relaxed text-left font-normal">
-                    {showFullThomas ? (
-                      <p>
-                        <CmsText 
-                          slug="landing-leader-thomas-bio"
-                          fallback={language === 'no'
-                            ? "Hei og velkommen til siden vår. Vi er så glade for at du kom inn på vår tjeneteside. Jeg har ikke reist rundt i verden. Jeg har jobbet og bodd stort sett i samme by hele livet. Jeg jobbet i samme kirke i 15 år før jeg møtte Hilde. Vi koblet sammen med en gang og er så velsignet at Gud forente livene våre sammen."
-                            : "Hello and welcome to our page. We are so glad you found our ministry page. I have not traveled all around the world. I have worked and lived mostly in the same city all my life. I worked in the same church for 15 years before meeting Hilde. We connected immediately and are so blessed that God joined our lives together."}
-                        />
-                      </p>
-                    ) : (
-                      <p>
-                        {language === 'no'
-                          ? "Hei og velkommen til siden vår. Vi er så glade for at du kom inn på vår tjeneteside..."
-                          : "Hello and welcome to our page. We are so glad you found our ministry page..."}
-                      </p>
-                    )}
-                  </div>
-                  <button 
-                    type="button"
-                    onClick={() => setShowFullThomas(!showFullThomas)}
-                    className="px-5 py-2 rounded-full border border-[#bd4f2a]/60 text-[#bd4f2a] hover:bg-[#bd4f2a]/5 text-sm font-bold transition-all active:scale-95 inline-flex items-center gap-1.5 mx-auto"
-                  >
-                    <span>{showFullThomas ? (language === 'no' ? "Vis mindre" : "Show less") : (language === 'no' ? "Vis mer" : "Show more")}</span>
-                    {showFullThomas ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                  </button>
-                </div>
-
-                <div className="pt-4 border-t border-slate-100 flex justify-center items-center gap-3 text-slate-500">
-                  <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Instagram">
-                    <Instagram size={16} />
-                  </a>
-                  <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-slate-50 hover:bg-[#3c096c]/10 hover:text-[#3c096c] border border-slate-200 flex items-center justify-center transition-all" aria-label="Facebook">
-                    <Facebook size={16} />
-                  </a>
-                </div>
-              </div>
-            </div>
+          <div className="resource-grid">
+            <article>
+              <small>{language === 'no' ? 'UNDERVISNING & INSPIRASJON' : 'TEACHING & INSPIRATION'}</small>
+              <h3>His Kingdom Ministry</h3>
+              <p>{language === 'no' ? 'Blogg, YouTube, podcast og bibelverktøy.' : 'Blog, YouTube, podcast, and biblical study tools.'}</p>
+              <a 
+                href="https://hiskingdomministry.no/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                {language === 'no' ? 'Besøk hovedsiden' : 'Visit ministry site'}
+              </a>
+            </article>
+            <article>
+              <small>{language === 'no' ? 'BØKER & STUDIEMATERIELL' : 'BOOKS & STUDY MATERIALS'}</small>
+              <h3>His Kingdom Designs</h3>
+              <p>{language === 'no' ? 'Fysiske og digitale læremidler. En butikk som også støtter misjonsprosjekter.' : 'Physical and digital educational products. A store that also directly supports mission work.'}</p>
+              <a 
+                href="https://hiskingdomdesigns.no/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                {language === 'no' ? 'Utforsk nettbutikken' : 'Explore online store'}
+              </a>
+            </article>
           </div>
         </section>
 
-        {/* Section 4: Creative Work & Digital Platforms */}
-        <section id="shop" className="py-20 bg-surface-container-low border-y border-outline-variant/40">
-          <div className="px-4 sm:px-6 md:px-12 max-w-[1200px] mx-auto space-y-12">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-              <div className="lg:col-span-7 space-y-6">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#3c096c]/10 text-[#3c096c] rounded-full text-sm font-bold uppercase tracking-wider">
-                  <ShoppingBag size={16} />
-                  <CmsText slug="landing-shop-tag" fallback={language === 'no' ? "Kreativt Arbeid & Butikk" : "Creative Work & Store"} />
+        {/* Admissions Section */}
+        <section className="admissions" id="admissions">
+          <div className="wrap">
+            <p className="eyebrow purple">{language === 'no' ? 'DITT NESTE STEG' : 'YOUR NEXT STEP'}</p>
+            <h2>{language === 'no' ? 'Begynn din reise.' : 'Begin your journey.'}</h2>
+            <p>
+              {language === 'no' ? (
+                <>
+                  Et nærere forhold til Jesus. Et fellesskap å vokse i.<br />
+                  En tro du kan leve ut.
+                </>
+              ) : (
+                <>
+                  A closer walk with Jesus. A community to grow in.<br />
+                  A faith you can live out.
+                </>
+              )}
+            </p>
+
+            <div className="admission-box">
+              <div>
+                <b>{language === 'no' ? 'Opptak til skoleåret 2027' : 'Admissions for Academic Year 2027'}</b>
+                <span>
+                  {language === 'no'
+                    ? 'Søknadsperiode 1. januar – 30. juni · Kickoff 27. august'
+                    : 'Application period Jan 1 – June 30 · Kickoff August 27'}
                 </span>
-                <CmsText 
-                  slug="landing-shop-title" 
-                  fallback={language === 'no' ? "Bøker, Studiehefter & Trykte Manualer" : "Books, Study Guides & Printed Manuals"} 
-                  as="h2" 
-                  className="font-serif text-3xl md:text-4xl font-bold text-[#3c096c] leading-tight block" 
-                />
-                <CmsText 
-                  slug="landing-shop-desc"
-                  fallback={language === 'no'
-                    ? "Fysiske og digitale læremidler utviklet av fakultetet ved His Kingdom Prophetic Community. Butikken tilbyr materiell til bruk i personlig bibelstudium og evangelisering, og inntektene går til stiftelsens misjonsprosjekter."
-                    : "Physical and digital study resources developed by faculty at His Kingdom Prophetic Community. The shop offers materials for personal Bible study and evangelism, supporting our mission projects."}
-                  as="p"
-                  className="text-base text-slate-700 leading-relaxed font-normal"
-                />
-                <div className="bg-white p-6 sm:p-7 rounded-2xl border border-outline-variant/30 space-y-4">
-                  <CmsText slug="landing-shop-team-title" fallback={language === 'no' ? "Rollefordeling i teamet:" : "Team Roles:"} as="h4" className="font-serif text-lg font-bold text-[#3c096c] block" />
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-base text-slate-700">
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-[#3c096c] rounded-full shrink-0" />
-                      <span><strong>Thomas:</strong> <CmsText slug="landing-shop-team-thomas" fallback={language === 'no' ? "Administrasjon & Digitale plattformer" : "Administration & Digital Platforms"} /></span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-[#3c096c] rounded-full shrink-0" />
-                      <span><strong>Hilde Karin:</strong> <CmsText slug="landing-shop-team-hilde" fallback={language === 'no' ? "Produktutvikling & Design" : "Product Development & Design"} /></span>
-                    </li>
-                  </ul>
-                  <CmsText 
-                    slug="landing-shop-team-vision"
-                    fallback={language === 'no'
-                      ? "Vår visjon for butikken: Vi har en visjon om å hjelpe andre designere til å bli sett og kunne selge sine ting gjennom vår butikk, slik at det kan velsigne mange!"
-                      : "Our vision for the shop: We have a vision of helping other designers to be seen and able to sell their things through our store, so that it can help bless many people!"}
-                    as="p"
-                    className="text-base text-slate-600 italic mt-2"
-                  />
-                </div>
               </div>
-
-              <div className="lg:col-span-5 space-y-6">
-                <div className="bg-white border border-[#dec2ef]/55 p-8 rounded-3xl shadow-sm space-y-6">
-                  <CmsText slug="landing-shop-links-title" fallback={language === 'no' ? "Nettsteder & Ressurser" : "Websites & Resources"} as="h3" className="font-serif text-xl font-bold text-[#3c096c] block" />
-                  
-                  <div className="space-y-4">
-                    <a 
-                      href="https://hiskingdomministry.no" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-100 transition-all group"
-                    >
-                      <div className="space-y-1">
-                        <span className="text-base font-bold text-[#3c096c] flex items-center gap-1.5">
-                          hiskingdomministry.no
-                          <Link2 size={14} className="opacity-60" />
-                        </span>
-                        <CmsText slug="landing-shop-link1-desc" fallback={language === 'no' ? "Hovedsiden (Blogg, YouTube, podcast, bibelverktøy)" : "Ministry page (Blog, YouTube, podcast, Bible tools)"} as="p" className="text-sm text-slate-600" />
-                      </div>
-                      <ArrowRight size={16} className="text-[#3c096c] group-hover:translate-x-1 transition-transform" />
-                    </a>
-
-                    <a 
-                      href="https://hiskingdomdesigns.no" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-100 transition-all group"
-                    >
-                      <div className="space-y-1">
-                        <span className="text-base font-bold text-[#3c096c] flex items-center gap-1.5">
-                          hiskingdomdesigns.no
-                          <Link2 size={14} className="opacity-60" />
-                        </span>
-                        <CmsText slug="landing-shop-link2-desc" fallback={language === 'no' ? "Nettbutikken (inntektskilde for misjonsprosjekter)" : "The store (income source for the ministry)"} as="p" className="text-sm text-slate-600" />
-                      </div>
-                      <ArrowRight size={16} className="text-[#3c096c] group-hover:translate-x-1 transition-transform" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Call to action section */}
-        <section id="admissions" className="py-24 bg-background border-t border-outline-variant/30 text-center">
-          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12">
-            <div className="inline-flex items-center gap-2 mb-6 text-[#3c096c]">
-              <Sparkles size={18} />
-              <CmsText slug="landing-cta-tagline" fallback={language === 'no' ? "Søkeperiode: 1. januar – 30. juni 2027" : "Applications: January 1 – June 30, 2027"} as="span" className="text-sm font-bold tracking-widest uppercase" />
-            </div>
-            <CmsText slug="landing-cta-title" fallback="Er du klar til å vokse i dine åndelige gaver?" as="h2" className="font-serif text-3xl md:text-4xl text-[#3c096c] font-bold mb-6 max-w-2xl mx-auto" />
-            <CmsText slug="landing-cta-desc" fallback={language === 'no' ? "Søkeperioden er fra 1. januar til 30. juni 2027, og oppstarten er med on-site kickoff i Norge 27. august 2027. All undervisning foregår på engelsk." : "The application window runs from January 1 to June 30, 2027, with on-site kickoff in Norway on August 27, 2027. All teaching is conducted in English."} as="p" className="text-lg text-slate-700 mb-10 max-w-2xl mx-auto leading-relaxed" />
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-              <button 
-                onClick={() => navigate('/admission')} 
-                className="w-full sm:w-auto px-8 py-4 bg-[#3c096c] hover:bg-[#3c096c]/90 text-white font-bold text-base rounded-xl hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
-              >
-                <CmsText slug="landing-cta-btn-primary" fallback="Søk Opptak 2027" />
-              </button>
-              <button 
-                onClick={(e) => handleNavClick(e, { href: '#curriculum', id: 'curriculum' })}
-                className="w-full sm:w-auto px-8 py-4 bg-surface-container border border-outline-variant text-[#3c096c] font-bold text-base rounded-xl hover:bg-surface-container-high transition-all active:scale-[0.98]"
-              >
-                <CmsText slug="landing-cta-btn-secondary" fallback="Se Undervisningsemner" />
+              <button className="button purple-button" onClick={() => navigate('/admission')}>
+                {language === 'no' ? 'Søk nå' : 'Apply now'}
               </button>
             </div>
+
+            <details id="requirements">
+              <summary>
+                {language === 'no' ? 'Praktisk informasjon og opptakskrav' : 'Practical info & admission criteria'}
+              </summary>
+              <p>
+                {language === 'no'
+                  ? 'Førsteår: 10 000 kr for fullt år, pluss 500 kr i oppstart/administrasjon og 500 kr for kickoff kost/losji. Andreår starter i 2028 og krever fullført førsteår og ny søknad. Undervisningen foregår på engelsk.'
+                  : 'First year: 10,000 NOK for full academic year, plus 500 NOK in administration/registration and 500 NOK for kickoff meals and lodging. Second year begins in 2028 and requires completed first year and separate application. All instruction is in English.'}
+              </p>
+            </details>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-12 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#3c096c] text-white">
-        <div className="flex flex-col gap-2 text-center md:text-left">
-          <CmsText slug="landing-footer-title" fallback="His Kingdom Ministry" as="div" className="font-serif text-xl font-bold text-white" />
-          <CmsText slug="landing-footer-copyright" fallback="© 2026 His Kingdom Ministry. Alle rettigheter reservert. Utrustning av profetiske tjenester for Hans Rike." as="p" className="text-sm text-slate-200 opacity-90 max-w-md" />
+      <footer>
+        <div className="wrap">
+          <a className="brand" href="#" onClick={handleLogoClick}>
+            <img src="/assets/logo.png" alt="HKPC logo" />
+            <span>
+              HKPC
+              <small>His Kingdom Prophetic Community</small>
+            </span>
+          </a>
+          <p>{language === 'no' ? 'Forankret i Skriften. Utrustet til tjeneste.' : 'Grounded in Scripture. Equipped for ministry.'}</p>
+          
+          <div style={{ display: 'flex', gap: '20px', fontSize: '13px', color: 'var(--muted)', flexWrap: 'wrap' }}>
+            <Link to="/privacy" style={{ textDecoration: 'none', color: 'inherit' }}>
+              {language === 'no' ? 'Personvern' : 'Privacy Policy'}
+            </Link>
+            <Link to="/terms" style={{ textDecoration: 'none', color: 'inherit' }}>
+              {language === 'no' ? 'Brukervilkår' : 'Terms of Service'}
+            </Link>
+            <Link to="/accessibility" style={{ textDecoration: 'none', color: 'inherit' }}>
+              {language === 'no' ? 'Tilgjengelighet' : 'Accessibility'}
+            </Link>
+          </div>
+
+          <small>
+            {language === 'no'
+              ? '© 2027 His Kingdom Prophetic Community. All rights reserved.'
+              : '© 2027 His Kingdom Prophetic Community. All rights reserved.'}
+          </small>
         </div>
-        <nav className="flex flex-wrap justify-center gap-6 text-sm text-center">
-          <Link className="text-slate-200 hover:text-white transition-colors" to="/privacy">
-            <CmsText slug="landing-footer-link-privacy" fallback="Personvern" />
-          </Link>
-          <Link className="text-slate-200 hover:text-white transition-colors" to="/terms">
-            <CmsText slug="landing-footer-link-terms" fallback="Betingelser" />
-          </Link>
-          <Link className="text-slate-200 hover:text-white transition-colors" to="/accessibility">
-            <CmsText slug="landing-footer-link-accessibility" fallback="Tilgjengelighet" />
-          </Link>
-          <Link className="text-slate-200 hover:text-white transition-colors" to="/support">
-            <CmsText slug="landing-footer-link-support" fallback="Kontakt Support" />
-          </Link>
-        </nav>
       </footer>
     </div>
   );
