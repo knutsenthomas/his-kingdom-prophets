@@ -63,7 +63,7 @@ export default function PrivacyPolicyPage() {
               <CmsText slug="privacy-title" fallback={isEn ? 'Privacy Policy' : 'Personvernserklæring'} />
             </h1>
             <p className="text-sm text-slate-500 font-medium">
-              <CmsText slug="privacy-updated" fallback={isEn ? 'Last updated: May 23, 2026. Your privacy and security are paramount to us.' : 'Sist oppdatert: 23. mai 2026. Ditt personvern og din sikkerhet er av største betydning for oss.'} />
+              <CmsText slug="privacy-updated" fallback={isEn ? 'Last updated: October 2026. Your privacy and security are paramount to us.' : 'Sist oppdatert: Oktober 2026. Ditt personvern og din sikkerhet er av største betydning for oss.'} />
             </p>
           </div>
 
@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
                 <CmsText slug="privacy-secure-title" fallback={isEn ? 'Secure Data' : 'Sikker Lagring'} />
               </h3>
               <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                <CmsText slug="privacy-secure-desc" fallback={isEn ? 'All spiritual and profile data is stored on highly secure servers using Supabase.' : 'Alle åndelige- og profildata lagres på svært sikre servere ved bruk av Supabase.'} />
+                <CmsText slug="privacy-secure-desc" fallback={isEn ? 'All profile, course, and community data is stored on enterprise-grade servers powered by Google Cloud & Firebase.' : 'Alle profil-, kurs- og fellesskapsdata lagres på sikre servere levert av Google Cloud & Firebase.'} />
               </p>
             </div>
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
@@ -123,7 +123,7 @@ export default function PrivacyPolicyPage() {
                 <CmsText slug="privacy-sec3-title" fallback={isEn ? '3. Storage & Encryption' : '3. Dataselgersikkerhet og kryptering'} />
               </h2>
               <p>
-                <CmsText slug="privacy-sec3-desc" fallback={isEn ? 'We utilize enterprise-grade servers powered by Supabase with modern TLS encryption in transit and secure database access rules. Access to student prophetic profiles and development charts is strictly restricted to authorized mentors.' : 'Vi benytter datasikkerhet levert av Supabase med moderne TLS-kryptering under overføring og strenge tilgangsregler. Tilgang til studentenes profilerte åpenbaringer og evalueringer er strengt begrenset til autoriserte mentorer.'} />
+                <CmsText slug="privacy-sec3-desc" fallback={isEn ? 'We utilize enterprise-grade cloud architecture powered by Google Cloud Platform and Firebase with end-to-end TLS encryption and strict security rules. Authentication is handled seamlessly via Google, Apple ID, or passwordless email links. We never store passwords.' : 'Vi benytter sikker skyarkitektur levert av Google Cloud Platform og Firebase med ende-til-ende TLS-kryptering og strenge sikkerhetsregler. Autentisering håndteres sikkert via Google, Apple ID eller passordfrie e-postlenker. Vi lagrer aldri passord.'} />
               </p>
             </section>
 
@@ -141,7 +141,7 @@ export default function PrivacyPolicyPage() {
                 <CmsText slug="privacy-sec5-title" fallback={isEn ? '5. Contact Information' : '5. Kontaktinformasjon'} />
               </h2>
               <p>
-                <CmsText slug="privacy-sec5-desc" fallback={isEn ? 'If you have any questions, wish to access your stored data, or request permanent deletion of your profile under GDPR guidelines, please contact us at hiskingdomprophets@hiskingdomministry.no.' : 'Dersom du hopopplever spørsmål, ønsker innsyn i dine lagrede data, eller ber om permanent sletting av profilen din i henhold til GDPR-retningslinjene, vennligst kontakt oss på hiskingdomprophets@hiskingdomministry.no.'} />
+                <CmsText slug="privacy-sec5-desc" fallback={isEn ? 'If you have questions, wish to access your stored data, or request permanent deletion of your profile under GDPR guidelines, please contact us at school@hiskingdomministry.no or post@hiskingdomministry.no.' : 'Dersom du har spørsmål, ønsker innsyn i dine lagrede data, eller ber om sletting av profilen din i henhold til GDPR, vennligst kontakt oss på school@hiskingdomministry.no eller post@hiskingdomministry.no.'} />
               </p>
             </section>
           </div>

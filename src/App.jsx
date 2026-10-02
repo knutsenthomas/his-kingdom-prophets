@@ -228,6 +228,7 @@ function AppRoutes() {
 
         {/* Legal & Public Support Pages */}
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
+        <Route path="/personvern" element={<PrivacyPolicyPage />} />
         <Route path="/terms" element={<TermsOfServicePage />} />
         <Route path="/accessibility" element={<AccessibilityPage />} />
         <Route path="/support" element={<ContactSupportPage />} />
