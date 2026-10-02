@@ -4,9 +4,9 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, BookOpen, CreditCard, ChevronRight, Check, 
-  HelpCircle, ArrowLeft, Send, Award, Calendar, FileText, CheckCircle2, Globe, Lock, GraduationCap
+  HelpCircle, ArrowLeft, ArrowRight, Send, Award, Calendar, FileText, CheckCircle2, Globe, Lock, GraduationCap,
+  User, Mail, Phone, MapPin, Heart, Church
 } from 'lucide-react';
-import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
@@ -17,19 +17,43 @@ export default function AdmissionPage() {
 
   const stripePublicKey = "pk_live_51Pab8rAL393JGrO9bTUitYflDKlHGpLiqZCCBp0dCzBEV3ZFxARFfK6MgWraehq7i79tJHPIEzlpMwPiT2K3HsiZ00gJ1TQ71Y";
 
-  // Multi-step Application Form States
+  // Multi-step Application Form States (4 steps)
+  const [currentStep, setCurrentStep] = useState(1); // 1: Personalia, 2: Studielinje, 3: Åndelig bakgrunn, 4: Referanse
   const [formData, setFormData] = useState({
+    // Del 1: Personalia & kontaktinformasjon
     name: '',
+    gender: '', // 'Mann', 'Kvinne'
+    birthDate: '',
     email: '',
     phone: '',
+    address: '',
+    maritalStatus: '', // 'Gift', 'Ugift', 'Forlovet', 'Separert / skilt', 'Enke / enkemann'
+    occupation: '',
+
+    // Del 2: Studielinje & praktiske rammer
     program: 'prophetic_community',
     paymentPlan: 'semester',
-    motivation: ''
+    languageAgreement: false,
+    confirmYear1: false,
+
+    // Del 3: Åndelig bakgrunn, vandring & motivasjon
+    whySeeking: '',
+    expectations: '',
+    howHeard: '',
+    testimony: '',
+    churchCommunity: '',
+    currentMinistry: '',
+    ministryCalling: '',
+    dreamsVision: '',
+    hobbies: '',
+
+    // Del 4: Referanse & tilleggsopplysninger
+    reference: '',
+    additionalNotes: ''
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activePlan, setActivePlan] = useState('semester'); // semester, monthly
-  const [confirmYear1, setConfirmYear1] = useState(false);
+  const [activePlan, setActivePlan] = useState('semester'); // semester, year
   
   const [stripeElements, setStripeElements] = useState(null);
   const [stripeInstance, setStripeInstance] = useState(null);
@@ -37,27 +61,14 @@ export default function AdmissionPage() {
   const [clientSecret, setClientSecret] = useState('');
   const [paymentError, setPaymentError] = useState('');
 
-  // Dynamically load Stripe JS
-  useEffect(() => {
-    if (!window.Stripe) {
-      const script = document.createElement('script');
-      script.src = 'https://js.stripe.com/v3/';
-      script.async = true;
-      script.onload = () => {
-        console.log('Stripe SDK loaded');
-      };
-      document.body.appendChild(script);
-    }
-  }, []);
-
   // Prepopulate form if logged in
   useEffect(() => {
     if (user) {
       setFormData(prev => ({
         ...prev,
-        name: user.name || '',
-        email: user.email || '',
-        phone: user.phone || ''
+        name: prev.name || user.name || '',
+        email: prev.email || user.email || '',
+        phone: prev.phone || user.phone || ''
       }));
     }
   }, [user]);
@@ -74,10 +85,8 @@ export default function AdmissionPage() {
         try {
           const { db } = await import('@/firebase');
           const { doc, setDoc } = await import('firebase/firestore');
-          // Update user role to student
           await setDoc(doc(db, "users", user.uid), { role: 'student' }, { merge: true });
           
-          // Sync local storage cache
           localStorage.setItem('hkm-current-user', JSON.stringify({
             ...user,
             role: 'student'
@@ -96,65 +105,138 @@ export default function AdmissionPage() {
     }
   }, [user, language, showToast]);
 
-  // Mount Stripe elements when entering 'payment' step
-  useEffect(() => {
-    if (paymentStep === 'payment' && clientSecret && window.Stripe && !stripeElements) {
-      const stripe = window.Stripe(stripePublicKey);
-      setStripeInstance(stripe);
-
-      const appearance = {
-        theme: 'stripe',
-        variables: {
-          colorPrimary: '#561291',
-          colorBackground: '#ffffff',
-          colorText: '#30313d',
-          colorDanger: '#df1b41',
-          fontFamily: 'Inter, system-ui, sans-serif',
-          spacingUnit: '4px',
-          borderRadius: '12px',
-        },
-      };
-
-      const elementsOptions = {
-        appearance,
-        clientSecret,
-      };
-
-      const els = stripe.elements(elementsOptions);
-      setStripeElements(els);
-
-      const paymentElementOptions = {
-        layout: "tabs",
-      };
-
-      const paymentElement = els.create("payment", paymentElementOptions);
-      
-      // Wait for DOM layout to stabilize, then mount
-      setTimeout(() => {
-        const container = document.getElementById("hkm-stripe-element");
-        if (container) {
-          paymentElement.mount("#hkm-stripe-element");
-        }
-      }, 150);
-    }
-  }, [paymentStep, clientSecret, stripeElements]);
-
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: type === 'checkbox' ? checked : value 
+    }));
+  };
+
+  // Step Validation Helpers
+  const validateStep1 = () => {
+    if (!formData.name.trim()) {
+      showToast(language === 'en' ? "Please enter your full name." : "Vennligst fyll inn fullt navn.", "error");
+      return false;
+    }
+    if (!formData.gender) {
+      showToast(language === 'en' ? "Please select gender." : "Vennligst velg kjønn.", "error");
+      return false;
+    }
+    if (!formData.birthDate) {
+      showToast(language === 'en' ? "Please enter birth date." : "Vennligst fyll inn fødselsdato.", "error");
+      return false;
+    }
+    if (!formData.email.trim() || !formData.email.includes('@')) {
+      showToast(language === 'en' ? "Please enter a valid email address." : "Vennligst fyll inn en gyldig e-postadresse.", "error");
+      return false;
+    }
+    if (!formData.phone.trim()) {
+      showToast(language === 'en' ? "Please enter phone number." : "Vennligst fyll inn telefonnummer.", "error");
+      return false;
+    }
+    if (!formData.address.trim()) {
+      showToast(language === 'en' ? "Please enter residential address." : "Vennligst fyll inn bostedsadresse.", "error");
+      return false;
+    }
+    if (!formData.maritalStatus) {
+      showToast(language === 'en' ? "Please select marital status." : "Vennligst velg sivilstatus.", "error");
+      return false;
+    }
+    if (!formData.occupation.trim()) {
+      showToast(language === 'en' ? "Please enter your occupation / education." : "Vennligst fyll inn yrke / utdannelse.", "error");
+      return false;
+    }
+    return true;
+  };
+
+  const validateStep2 = () => {
+    if (!formData.languageAgreement) {
+      showToast(language === 'en' 
+        ? "Please confirm that you accept instruction in English and the kickoff in Norway." 
+        : "Vennligst bekreft at du godtar undervisningsspråk (engelsk) og kickoff-samlingen i Norge.", "error");
+      return false;
+    }
+    if (formData.program === 'prophets_advanced' && !formData.confirmYear1) {
+      showToast(language === 'en' 
+        ? "Please confirm that you plan to complete or have completed Track 1 first." 
+        : "Vennligst bekreft at du har fullført eller planlegger å fullføre 1. år (Track 1) først.", "error");
+      return false;
+    }
+    return true;
+  };
+
+  const validateStep3 = () => {
+    if (!formData.whySeeking.trim()) {
+      showToast(language === 'en' ? "Please explain why you are applying to Bible school." : "Vennligst svar på hvorfor du søker bibelskole.", "error");
+      return false;
+    }
+    if (!formData.expectations.trim()) {
+      showToast(language === 'en' ? "Please share what you expect from the school year." : "Vennligst svar på hva du forventer deg av skoleåret.", "error");
+      return false;
+    }
+    if (!formData.howHeard.trim()) {
+      showToast(language === 'en' ? "Please share how you heard about HKPC." : "Vennligst svar på hvordan du hørte om HKPC.", "error");
+      return false;
+    }
+    if (!formData.testimony.trim()) {
+      showToast(language === 'en' ? "Please share a bit about your experience with Jesus." : "Vennligst skriv litt om din erfaring med Jesus.", "error");
+      return false;
+    }
+    if (!formData.churchCommunity.trim()) {
+      showToast(language === 'en' ? "Please specify your church community." : "Vennligst oppgi menighetstilhørighet.", "error");
+      return false;
+    }
+    if (!formData.currentMinistry.trim()) {
+      showToast(language === 'en' ? "Please answer if you are in any ministry or volunteer work." : "Vennligst skriv litt om nåværende tjeneste eller frivillig arbeid.", "error");
+      return false;
+    }
+    if (!formData.ministryCalling.trim()) {
+      showToast(language === 'en' ? "Please describe the ministry/gift you feel called to grow in." : "Vennligst beskriv hvilken tjeneste/gave du ønsker å vokse i.", "error");
+      return false;
+    }
+    if (!formData.dreamsVision.trim()) {
+      showToast(language === 'en' ? "Please share your dreams and visions." : "Vennligst skriv litt om dine drømmer og visjoner.", "error");
+      return false;
+    }
+    if (!formData.hobbies.trim()) {
+      showToast(language === 'en' ? "Please share your hobbies and interests." : "Vennligst skriv litt om dine hobbyer og interesser.", "error");
+      return false;
+    }
+    return true;
+  };
+
+  const validateStep4 = () => {
+    if (!formData.reference.trim()) {
+      showToast(language === 'en' ? "Please provide a reference (name, phone, email)." : "Vennligst oppgi en referanse (navn, telefon og e-post).", "error");
+      return false;
+    }
+    return true;
+  };
+
+  const handleNextStep = () => {
+    if (currentStep === 1 && !validateStep1()) return;
+    if (currentStep === 2 && !validateStep2()) return;
+    if (currentStep === 3 && !validateStep3()) return;
+    
+    setCurrentStep(prev => Math.min(prev + 1, 4));
+    const element = document.getElementById('apply-form');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handlePrevStep = () => {
+    setCurrentStep(prev => Math.max(prev - 1, 1));
+    const element = document.getElementById('apply-form');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.name?.trim() || !formData.email?.trim() || !formData.phone?.trim()) {
-      showToast(language === 'en' ? "Please fill out all required fields." : "Vennligst fyll ut alle påkrevde felt.");
-      return;
-    }
-
-    if (formData.program === 'prophets_advanced' && !confirmYear1) {
-      showToast(language === 'en' ? "Please confirm that you plan to complete Track 1 first." : "Vennligst bekreft at du har fullført eller planlegger å fullføre 1. år først.");
-      return;
-    }
+    if (e) e.preventDefault();
+    if (!validateStep1() || !validateStep2() || !validateStep3() || !validateStep4()) return;
 
     setIsSubmitting(true);
     setPaymentError('');
@@ -165,20 +247,40 @@ export default function AdmissionPage() {
 
       const prog = programs.find(p => p.id === formData.program) || programs[0];
 
-      // 1. Lagre søknad i Firestore 'applications' for administrasjonens opptaksbehandling
-      await addDoc(collection(db, "applications"), {
+      const applicationPayload = {
         userId: user?.uid || null,
         name: formData.name.trim(),
+        gender: formData.gender,
+        birthDate: formData.birthDate,
         email: formData.email.trim(),
         phone: formData.phone.trim(),
+        address: formData.address.trim(),
+        maritalStatus: formData.maritalStatus,
+        occupation: formData.occupation.trim(),
         programId: formData.program,
         programTitle: prog.title,
         programCode: prog.code,
         paymentPlan: formData.paymentPlan,
-        motivation: formData.motivation ? formData.motivation.trim() : '',
+        languageAgreement: formData.languageAgreement,
+        confirmYear1: formData.confirmYear1 || false,
+        whySeeking: formData.whySeeking.trim(),
+        expectations: formData.expectations.trim(),
+        howHeard: formData.howHeard.trim(),
+        testimony: formData.testimony.trim(),
+        churchCommunity: formData.churchCommunity.trim(),
+        currentMinistry: formData.currentMinistry.trim(),
+        ministryCalling: formData.ministryCalling.trim(),
+        dreamsVision: formData.dreamsVision.trim(),
+        hobbies: formData.hobbies.trim(),
+        reference: formData.reference.trim(),
+        additionalNotes: formData.additionalNotes ? formData.additionalNotes.trim() : '',
         status: "pending_review",
+        submittedAt: new Date().toISOString(),
         createdAt: serverTimestamp()
-      });
+      };
+
+      // 1. Lagre søknad i Firestore 'applications' for administrasjonens opptaksbehandling
+      const docRef = await addDoc(collection(db, "applications"), applicationPayload);
 
       // 2. Send e-postvarsel til administrasjonen via 'support_emails'
       try {
@@ -188,22 +290,53 @@ export default function AdmissionPage() {
           replyTo: formData.email.trim(),
           message: {
             subject: `[HKM Opptak] Ny søknad: ${formData.name.trim()} (${prog.code})`,
-            text: `Ny søknad om opptak ved His Kingdom Prophetic Community:\n\nNavn: ${formData.name.trim()}\nE-post: ${formData.email.trim()}\nTelefon: ${formData.phone.trim()}\nStudielinje: ${prog.title} (${prog.code})\nBetalingsplan: ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}\n\nMotivasjon / Bakgrunn:\n${formData.motivation?.trim() || 'Ikke oppgitt'}`,
+            text: `Ny søknad om opptak ved His Kingdom Prophetic Community:\n\nNavn: ${formData.name.trim()}\nKjønn: ${formData.gender}\nFødselsdato: ${formData.birthDate}\nE-post: ${formData.email.trim()}\nTelefon: ${formData.phone.trim()}\nAdresse: ${formData.address.trim()}\nSivilstatus: ${formData.maritalStatus}\nYrke/utdannelse: ${formData.occupation.trim()}\n\nStudielinje: ${prog.title} (${prog.code})\nBetalingsplan: ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}\n\nHvorfor bibelskole:\n${formData.whySeeking.trim()}\n\nForventninger:\n${formData.expectations.trim()}\n\nHvordan hørt om HKPC:\n${formData.howHeard.trim()}\n\nErfaring med Jesus:\n${formData.testimony.trim()}\n\nMenighet:\n${formData.churchCommunity.trim()}\n\nTjeneste i dag:\n${formData.currentMinistry.trim()}\n\nKall / tjenesteønske:\n${formData.ministryCalling.trim()}\n\nDrømmer og visjoner:\n${formData.dreamsVision.trim()}\n\nHobbyer:\n${formData.hobbies.trim()}\n\nReferanse:\n${formData.reference.trim()}\n\nAnnet:\n${formData.additionalNotes?.trim() || 'Ingen'}`,
             html: `
-              <div style="font-family: sans-serif; padding: 24px; color: #271f30; max-width: 600px; border: 1px solid #e2dce7; border-radius: 12px;">
-                <h2 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 8px; margin-top: 0;">Ny søknad om opptak</h2>
-                <p><strong>Navn:</strong> ${formData.name.trim()}</p>
-                <p><strong>E-post:</strong> <a href="mailto:${formData.email.trim()}">${formData.email.trim()}</a></p>
-                <p><strong>Telefon:</strong> ${formData.phone.trim()}</p>
-                <p><strong>Studielinje:</strong> ${prog.title} (${prog.code})</p>
-                <p><strong>Betalingsordning:</strong> ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}</p>
-                <div style="background-color: #fbf8fe; padding: 16px; border-left: 4px solid #D7B978; margin-top: 16px; border-radius: 6px;">
-                  <p style="margin: 0 0 8px 0; font-weight: bold; font-size: 13px; color: #561291;">Motivasjon / Åndelig bakgrunn:</p>
-                  <p style="margin: 0; white-space: pre-wrap; font-size: 14px; line-height: 1.6; color: #333;">${formData.motivation?.trim() || 'Ingen utfyllende tekst oppgitt.'}</p>
+              <div style="font-family: Arial, sans-serif; padding: 24px; color: #271f30; max-width: 680px; border: 1px solid #e2dce7; border-radius: 16px; background: #ffffff;">
+                <div style="background: #561291; padding: 18px 24px; border-radius: 12px 12px 0 0; color: #ffffff;">
+                  <h2 style="margin: 0; font-size: 20px;">Ny søknad om opptak</h2>
+                  <p style="margin: 4px 0 0 0; font-size: 13px; color: #D7B978;">His Kingdom Prophetic Community</p>
                 </div>
-                <p style="font-size: 11px; color: #888; margin-top: 24px; border-top: 1px solid #eee; padding-top: 8px;">
-                  Registrert via www.hkpc.no/admission. Behandles av skolens administrasjon.
-                </p>
+                <div style="padding: 20px 8px;">
+                  <h3 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 6px;">1. Personalia & kontakt</h3>
+                  <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                    <tr><td style="padding: 6px 0; width: 180px; font-weight: bold;">Fullt navn:</td><td>${formData.name.trim()}</td></tr>
+                    <tr><td style="padding: 6px 0; font-weight: bold;">Kjønn:</td><td>${formData.gender}</td></tr>
+                    <tr><td style="padding: 6px 0; font-weight: bold;">Fødselsdato:</td><td>${formData.birthDate}</td></tr>
+                    <tr><td style="padding: 6px 0; font-weight: bold;">E-post:</td><td><a href="mailto:${formData.email.trim()}">${formData.email.trim()}</a></td></tr>
+                    <tr><td style="padding: 6px 0; font-weight: bold;">Telefon:</td><td>${formData.phone.trim()}</td></tr>
+                    <tr><td style="padding: 6px 0; font-weight: bold;">Adresse:</td><td>${formData.address.trim()}</td></tr>
+                    <tr><td style="padding: 6px 0; font-weight: bold;">Sivilstatus:</td><td>${formData.maritalStatus}</td></tr>
+                    <tr><td style="padding: 6px 0; font-weight: bold;">Yrke / utdannelse:</td><td>${formData.occupation.trim()}</td></tr>
+                  </table>
+
+                  <h3 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 6px; margin-top: 24px;">2. Studielinje & rammer</h3>
+                  <p style="margin: 6px 0; font-size: 14px;"><strong>Valgt linje:</strong> ${prog.title} (${prog.code})</p>
+                  <p style="margin: 6px 0; font-size: 14px;"><strong>Betalingsordning:</strong> ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}</p>
+                  <p style="margin: 6px 0; font-size: 14px;"><strong>Språk & kickoff:</strong> Godtatt (Engelsk undervisning + Kickoff 27. aug 2027 i Norge)</p>
+
+                  <h3 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 6px; margin-top: 24px;">3. Åndelig bakgrunn & kall</h3>
+                  <div style="font-size: 14px; line-height: 1.6;">
+                    <p><strong>Hvorfor søker du bibelskole:</strong><br/>${formData.whySeeking.trim()}</p>
+                    <p><strong>Forventninger til skoleåret:</strong><br/>${formData.expectations.trim()}</p>
+                    <p><strong>Hvordan hørte du om HKPC:</strong><br/>${formData.howHeard.trim()}</p>
+                    <p><strong>Erfaring og vandring med Jesus:</strong><br/>${formData.testimony.trim()}</p>
+                    <p><strong>Menighetstilhørighet:</strong><br/>${formData.churchCommunity.trim()}</p>
+                    <p><strong>Nåværende tjeneste/frivillig arbeid:</strong><br/>${formData.currentMinistry.trim()}</p>
+                    <p><strong>Tjeneste/nådegave som ønskes å vokse i:</strong><br/>${formData.ministryCalling.trim()}</p>
+                    <p><strong>Drømmer og visjoner:</strong><br/>${formData.dreamsVision.trim()}</p>
+                    <p><strong>Hobbyer og fritidsinteresser:</strong><br/>${formData.hobbies.trim()}</p>
+                  </div>
+
+                  <h3 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 6px; margin-top: 24px;">4. Referanse & tilleggsopplysninger</h3>
+                  <div style="font-size: 14px; line-height: 1.6;">
+                    <p><strong>Referanse:</strong><br/>${formData.reference.trim()}</p>
+                    <p><strong>Annet:</strong><br/>${formData.additionalNotes?.trim() || 'Ingen'}</p>
+                  </div>
+                </div>
+                <div style="font-size: 12px; color: #777; border-top: 1px solid #eee; padding-top: 12px; margin-top: 16px;">
+                  Søknads-ID: ${docRef.id} • Registrert via www.hkpc.no/admission
+                </div>
               </div>
             `
           }
@@ -212,56 +345,30 @@ export default function AdmissionPage() {
         console.warn("Kunne ikke sende e-postvarsel, men søknaden er lagret i Firestore:", emailErr);
       }
 
+      // 3. Webhook til Google Sheets (hvis miljøvariabel er satt)
+      const sheetsWebhook = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL;
+      if (sheetsWebhook) {
+        try {
+          await fetch(sheetsWebhook, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: docRef.id,
+              ...applicationPayload,
+              createdAt: new Date().toISOString()
+            })
+          });
+        } catch (sheetErr) {
+          console.warn("Google Sheets webhook varsel:", sheetErr);
+        }
+      }
+
       setPaymentStep('success');
-      showToast(language === 'en' ? "Application submitted successfully!" : "Søknaden er sendt inn!");
+      showToast(language === 'en' ? "Application submitted successfully!" : "Søknaden er sendt inn! Vi tar kontakt for en samtale.");
     } catch (err) {
       console.error("Submission failed:", err);
       showToast(language === 'en' ? "Failed to submit application: " + err.message : "Kunne ikke sende søknad: " + err.message, "error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleStripePaymentSubmit = async (e) => {
-    e.preventDefault();
-    if (!stripeInstance || !stripeElements) return;
-
-    setIsSubmitting(true);
-    setPaymentError('');
-
-    try {
-      // Save pending application details to firestore
-      const { db } = await import('@/firebase');
-      const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
-      await addDoc(collection(db, "applications"), {
-        userId: user.uid,
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        program: formData.program,
-        paymentPlan: formData.paymentPlan,
-        motivation: formData.motivation,
-        status: "pending_payment",
-        createdAt: serverTimestamp()
-      });
-
-      const { error } = await stripeInstance.confirmPayment({
-        elements: stripeElements,
-        confirmParams: {
-          return_url: window.location.href.split('?')[0],
-        },
-      });
-
-      if (error) {
-        if (error.type === "card_error" || error.type === "validation_error") {
-          setPaymentError(error.message);
-        } else {
-          setPaymentError("En uventet feil oppstod: " + error.message);
-        }
-      }
-    } catch (err) {
-      console.error("Payment confirmation failed:", err);
-      setPaymentError("Betalingsbekreftelsen feilet. Prøv igjen.");
     } finally {
       setIsSubmitting(false);
     }
@@ -331,15 +438,15 @@ export default function AdmissionPage() {
       <SiteHeader />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#561291] to-[#561291] text-white py-16 px-6 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#561291] to-[#3b0b66] text-white py-16 px-6 overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-white/5 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-primary-container/10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-[#D7B978]/10 blur-3xl pointer-events-none" />
 
         <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6 sm:space-y-8">
           <div className="inline-block">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 text-on-primary-container font-semibold text-xs sm:text-sm uppercase tracking-widest border border-white/20 shadow-sm">
-              <Award size={15} className="text-secondary-fixed-dim" />
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 text-white font-semibold text-xs sm:text-sm uppercase tracking-widest border border-white/20 shadow-sm">
+              <Award size={15} className="text-[#D7B978]" />
               <CmsText slug="admission-hero-tagline" fallback={language === 'en' ? "Application Period: January 1 – June 30, 2027" : "Søkeperiode: 1. januar – 30. juni 2027"} />
             </span>
           </div>
@@ -361,9 +468,9 @@ export default function AdmissionPage() {
           <div className="pt-4">
             <a 
               href="#apply-form"
-              className="px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-sm sm:text-base font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 inline-flex items-center gap-2"
+              className="px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-sm sm:text-base font-sans uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
             >
-              <span><CmsText slug="admission-hero-cta" fallback={language === 'en' ? "Apply Now" : "Send Søknad Nå"} /></span>
+              <span><CmsText slug="admission-hero-cta" fallback={language === 'en' ? "Fill Out Application Form" : "Gå til søknadsskjema"} /></span>
               <ChevronRight size={16} />
             </a>
           </div>
@@ -380,13 +487,13 @@ export default function AdmissionPage() {
               slug="admission-programs-title" 
               fallback={language === 'en' ? "Our Study Lines and Courses" : "Våre Studielinjer og Fag"} 
               as="h2"
-              className="font-sans text-2xl sm:text-3xl font-bold text-primary"
+              className="font-sans text-2xl sm:text-3xl font-bold text-[#561291]"
             />
             <CmsText 
               slug="admission-programs-subtitle" 
               fallback={language === 'en' ? "Each course consists of 8 step-by-step modules integrating thorough theology with personal mentoring." : "Hvert fag består av 8 trinnvise moduler som integrerer grundig teologi med personlig mentorskap."} 
               as="p"
-              className="text-base text-on-surface-variant font-medium leading-relaxed"
+              className="text-base text-slate-600 font-medium leading-relaxed"
             />
           </div>
 
@@ -394,10 +501,10 @@ export default function AdmissionPage() {
             {programs.map(prog => (
               <div 
                 key={prog.id}
-                className={`bg-white border rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden ${
+                className={`bg-white border rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between relative overflow-hidden ${
                   prog.isLocked 
                     ? 'border-amber-200 hover:border-amber-300' 
-                    : 'border-[#e2dce7]/55 hover:border-primary/20'
+                    : 'border-[#e2dce7]/70 hover:border-[#561291]/30'
                 }`}
               >
                 {prog.isLocked && (
@@ -412,21 +519,21 @@ export default function AdmissionPage() {
                     <span className={`text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider ${
                       prog.isLocked 
                         ? 'bg-amber-50 text-amber-700 border border-amber-200' 
-                        : 'bg-primary/5 text-primary border border-primary/10'
+                        : 'bg-[#561291]/10 text-[#561291] border border-[#561291]/15'
                     }`}>
                       <CmsText slug={`admission-${prog.id}-code`} fallback={prog.code} />
                     </span>
-                    <span className="text-xs font-bold text-[#D7B978] uppercase tracking-wider">
+                    <span className="text-xs font-bold text-[#b58c38] uppercase tracking-wider">
                       <CmsText slug={`admission-${prog.id}-credits`} fallback={prog.credits} />
                     </span>
                   </div>
 
-                  <h3 className="font-sans text-xl sm:text-2xl font-bold text-primary leading-snug">
+                  <h3 className="font-sans text-xl sm:text-2xl font-bold text-[#561291] leading-snug">
                     <CmsText slug={`admission-${prog.id}-title`} fallback={prog.title} />
                   </h3>
 
                   <div className="flex items-center gap-2 text-sm sm:text-base text-slate-600 font-medium">
-                    <Calendar size={16} className="text-primary/70 shrink-0" />
+                    <Calendar size={16} className="text-[#561291]/70 shrink-0" />
                     <span><CmsText slug={`admission-${prog.id}-duration`} fallback={prog.duration} /></span>
                   </div>
 
@@ -444,18 +551,21 @@ export default function AdmissionPage() {
 
                 <div className="pt-6 mt-6 border-t border-slate-100 flex justify-between items-end">
                   <div className="space-y-0.5">
-                    <span className="text-xs uppercase font-bold text-outline block">
+                    <span className="text-xs uppercase font-bold text-slate-500 block">
                       <CmsText slug="admission-tuition-fee-label" fallback={language === 'en' ? "Tuition Fee" : "Semesteravgift"} />
                     </span>
-                    <span className="font-sans text-xl font-extrabold text-primary">
+                    <span className="font-sans text-xl font-extrabold text-[#561291]">
                       <CmsText slug={`admission-${prog.id}-price`} fallback={prog.priceSemester} />
                     </span>
                   </div>
                   
                   <a 
                     href="#apply-form"
-                    onClick={() => setFormData(prev => ({ ...prev, program: prog.id }))}
-                    className="text-base font-bold text-primary hover:text-secondary flex items-center gap-1 font-sans"
+                    onClick={() => {
+                      setFormData(prev => ({ ...prev, program: prog.id }));
+                      setCurrentStep(2);
+                    }}
+                    className="text-base font-bold text-[#561291] hover:text-[#3b0b66] flex items-center gap-1 font-sans transition-colors"
                   >
                     <span><CmsText slug="admission-select-btn" fallback={language === 'en' ? "Select" : "Velg linje"} /></span>
                     <ChevronRight size={16} />
@@ -467,12 +577,12 @@ export default function AdmissionPage() {
         </section>
 
         {/* SECTION 2: TUITION PAYMENT DETAILS */}
-        <section className="bg-white border border-[#e2dce7]/55 rounded-3xl p-8 shadow-sm">
+        <section className="bg-white border border-[#e2dce7]/70 rounded-3xl p-8 shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             
             {/* Payment Description */}
             <div className="space-y-6">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-secondary-container text-primary font-bold text-xs uppercase tracking-wider select-none">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#561291]/10 text-[#561291] font-bold text-xs uppercase tracking-wider select-none">
                 <CreditCard size={14} />
                 <CmsText slug="admission-payments-tag" fallback={language === 'en' ? "Flexible Payments and Tuition" : "Fleksibel Betaling og Priser"} />
               </span>
@@ -481,7 +591,7 @@ export default function AdmissionPage() {
                 slug="admission-payments-title" 
                 fallback={language === 'en' ? "Invest in Your Future Without Financial Stress" : "Invester i din fremtid uten økonomisk stress"} 
                 as="h2"
-                className="font-sans text-2xl sm:text-3xl font-bold text-primary leading-tight"
+                className="font-sans text-2xl sm:text-3xl font-bold text-[#561291] leading-tight"
               />
 
               <CmsText 
@@ -497,7 +607,7 @@ export default function AdmissionPage() {
                     <Check size={16} className="stroke-[3]" />
                   </div>
                   <div>
-                    <CmsText slug="admission-payments-bullet1-title" fallback={language === 'en' ? "100% Interest-Free Installments" : "100 % rentefri delbetaling"} as="h4" className="text-base font-bold text-primary" />
+                    <CmsText slug="admission-payments-bullet1-title" fallback={language === 'en' ? "100% Interest-Free Installments" : "100 % rentefri delbetaling"} as="h4" className="text-base font-bold text-[#561291]" />
                     <CmsText slug="admission-payments-bullet1-desc" fallback={language === 'en' ? "The semester fee can be distributed over 5 monthly installments throughout the semester." : "Semesteravgiften kan fordeles over 5 månedlige rater gjennom semesteret."} as="p" className="text-base text-slate-600 mt-1 leading-relaxed font-normal" />
                   </div>
                 </div>
@@ -507,7 +617,7 @@ export default function AdmissionPage() {
                     <Check size={16} className="stroke-[3]" />
                   </div>
                   <div>
-                    <CmsText slug="admission-payments-bullet2-title" fallback={language === 'en' ? "All-Inclusive Tuition Fee" : "Alt inkludert i avgiften"} as="h4" className="text-base font-bold text-primary" />
+                    <CmsText slug="admission-payments-bullet2-title" fallback={language === 'en' ? "All-Inclusive Tuition Fee" : "Alt inkludert i avgiften"} as="h4" className="text-base font-bold text-[#561291]" />
                     <CmsText slug="admission-payments-bullet2-desc" fallback={language === 'en' ? "The fee covers study workbooks, 1-on-1 mentoring, Zoom gatherings, full access to the student portal and the video archives." : "Semesteravgiften dekker studiehefter, 1-til-1 samtaler, Zoom-møter, full tilgang til studentportalen og videoarkivet."} as="p" className="text-base text-slate-600 mt-1 leading-relaxed font-normal" />
                   </div>
                 </div>
@@ -517,32 +627,32 @@ export default function AdmissionPage() {
                     <Check size={16} className="stroke-[3]" />
                   </div>
                   <div>
-                    <CmsText slug="admission-payments-bullet3-title" fallback={language === 'en' ? "Scholarships & Partner Discounts" : "Stipend og partner-rabatter"} as="h4" className="text-base font-bold text-primary" />
+                    <CmsText slug="admission-payments-bullet3-title" fallback={language === 'en' ? "Scholarships & Partner Discounts" : "Stipend og partner-rabatter"} as="h4" className="text-base font-bold text-[#561291]" />
                     <CmsText slug="admission-payments-bullet3-desc" fallback={language === 'en' ? "Spouse discount, student discount, and special scholarship options for active church planters and missionary families." : "Ektepar-rabatt, studentrabatt og særskilte stipendordninger for aktive menighetsplantere og misjonærfamilier."} as="p" className="text-base text-slate-600 mt-1 leading-relaxed font-normal" />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Symmetrical Pricing Card Comparison */}
-            <div className="bg-[#F6F4F8] border border-slate-200/60 rounded-2xl p-6 sm:p-8 space-y-6 animate-in fade-in duration-500">
-              <div className="flex bg-white p-1 rounded-xl shadow-sm select-none border border-slate-100">
+            {/* Pricing Card Comparison */}
+            <div className="bg-[#F6F4F8] border border-slate-200/70 rounded-2xl p-6 sm:p-8 space-y-6">
+              <div className="flex bg-white p-1 rounded-xl shadow-sm select-none border border-slate-200/50">
                 <button
                   onClick={() => setActivePlan('semester')}
-                  className={`flex-1 py-2.5 text-sm sm:text-base font-bold uppercase tracking-wider rounded-lg transition-all ${
+                  className={`flex-1 py-2.5 text-sm sm:text-base font-bold uppercase tracking-wider rounded-lg transition-all duration-200 ${
                     activePlan === 'semester'
-                      ? 'bg-primary text-white shadow-sm'
-                      : 'text-outline hover:text-primary'
+                      ? 'bg-[#561291] text-white shadow-sm'
+                      : 'text-slate-600 hover:text-[#561291]'
                   }`}
                 >
                   <CmsText slug="admission-price-plan-semester" fallback={language === 'en' ? "Semester Fee" : "Semesteravgift"} />
                 </button>
                 <button
                   onClick={() => setActivePlan('year')}
-                  className={`flex-1 py-2.5 text-sm sm:text-base font-bold uppercase tracking-wider rounded-lg transition-all ${
+                  className={`flex-1 py-2.5 text-sm sm:text-base font-bold uppercase tracking-wider rounded-lg transition-all duration-200 ${
                     activePlan === 'year'
-                      ? 'bg-primary text-white shadow-sm'
-                      : 'text-outline hover:text-primary'
+                      ? 'bg-[#561291] text-white shadow-sm'
+                      : 'text-slate-600 hover:text-[#561291]'
                   }`}
                 >
                   <CmsText slug="admission-price-plan-year" fallback={language === 'en' ? "Full Academic Year" : "Fullt studieår"} />
@@ -550,7 +660,7 @@ export default function AdmissionPage() {
               </div>
 
               <div className="text-center space-y-3">
-                <span className="text-xs sm:text-sm font-bold text-outline uppercase tracking-widest block">
+                <span className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-widest block">
                   {activePlan === 'semester' ? (
                     <CmsText slug="admission-price-subhead-semester" fallback={language === 'en' ? "Tuition per semester" : "Studieavgift per semester"} />
                   ) : (
@@ -558,7 +668,7 @@ export default function AdmissionPage() {
                   )}
                 </span>
                 
-                <div className="font-sans text-3xl sm:text-5xl font-extrabold text-primary">
+                <div className="font-sans text-3xl sm:text-5xl font-extrabold text-[#561291]">
                   {language === 'en' ? (
                     activePlan === 'semester' ? "$500 USD" : "$1,000 USD"
                   ) : (
@@ -577,16 +687,16 @@ export default function AdmissionPage() {
                 </p>
               </div>
 
-              <div className="w-full h-[1px] bg-slate-200/50" />
+              <div className="w-full h-[1px] bg-slate-200/70" />
 
               <div className="space-y-3 text-base text-slate-700 font-medium font-sans">
                 <div className="flex justify-between items-center">
                   <span><CmsText slug="admission-price-row1-label" fallback={language === 'en' ? "Admin / Startup fee" : "Admin / oppstartsgebyr"} /></span>
-                  <span className="text-primary font-bold"><CmsText slug="admission-price-row1-val" fallback={language === 'en' ? "$50 USD" : "500,- NOK"} /></span>
+                  <span className="text-[#561291] font-bold"><CmsText slug="admission-price-row1-val" fallback={language === 'en' ? "$50 USD" : "500,- NOK"} /></span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span><CmsText slug="admission-price-row2-label" fallback={language === 'en' ? "Kickoff weekend room & board" : "Kickoff-helg kost og losji"} /></span>
-                  <span className="text-primary font-bold"><CmsText slug="admission-price-row2-val" fallback={language === 'en' ? "$50 USD" : "500,- NOK"} /></span>
+                  <span className="text-[#561291] font-bold"><CmsText slug="admission-price-row2-val" fallback={language === 'en' ? "$50 USD" : "500,- NOK"} /></span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span><CmsText slug="admission-price-row3-label" fallback={language === 'en' ? "Assigned Personal Mentor" : "Tildelt Personlig Mentor"} /></span>
@@ -598,7 +708,7 @@ export default function AdmissionPage() {
                 </div>
                 <div className="flex justify-between items-center">
                   <span><CmsText slug="admission-price-row5-label" fallback={language === 'en' ? "Spouse Partner Discount" : "Ektefelle/Familierabatt"} /></span>
-                  <span className="text-secondary font-bold"><CmsText slug="admission-price-row5-val" fallback="-25%" /></span>
+                  <span className="text-[#b58c38] font-bold"><CmsText slug="admission-price-row5-val" fallback="-25%" /></span>
                 </div>
               </div>
             </div>
@@ -613,13 +723,13 @@ export default function AdmissionPage() {
               slug="admission-steps-title" 
               fallback={language === 'en' ? "How the Application Process Works" : "Slik fungerer søknadsprosessen"} 
               as="h2"
-              className="font-sans text-2xl sm:text-3xl font-bold text-primary"
+              className="font-sans text-2xl sm:text-3xl font-bold text-[#561291]"
             />
             <CmsText 
               slug="admission-steps-subtitle" 
               fallback={language === 'en' ? "Four simple steps from submitting your application to your approved study space and access." : "Fire enkle steg fra innsendt søknad til godkjent studieplass og tilgang."} 
               as="p"
-              className="text-base text-on-surface-variant font-medium leading-relaxed"
+              className="text-base text-slate-600 font-medium leading-relaxed"
             />
           </div>
 
@@ -631,7 +741,7 @@ export default function AdmissionPage() {
                 slugTitle: 'admission-step1-title',
                 fallbackTitle: language === 'en' ? "Submit Form" : "Send søknad",
                 slugDesc: 'admission-step1-desc',
-                fallbackDesc: language === 'en' ? "Fill out the admission form below with your motivation and contact info." : "Fyll ut det enkle søknadsskjemaet nedenfor på under 3 minutter."
+                fallbackDesc: language === 'en' ? "Fill out the 4-step admission form below with your background and motivation." : "Fyll ut det 4-delte søknadsskjemaet nedenfor i ro og mak."
               },
               {
                 slugNum: 'admission-step2-num',
@@ -655,17 +765,17 @@ export default function AdmissionPage() {
                 slugTitle: 'admission-step4-title',
                 fallbackTitle: language === 'en' ? "Instant Portal Access" : "Portal-tilgang",
                 slugDesc: 'admission-step4-desc',
-                fallbackDesc: language === 'en' ? "Get your login, workbook, study materials, and PWA mobile portal active instantly." : "Du får tilsendt brukerkonto og kan umiddelbart logge inn i portalen og starte studiet!"
+                fallbackDesc: language === 'en' ? "Get your login, workbook, study materials, and mobile portal active." : "Du får tilsendt brukerkonto og kan logge inn i portalen og starte studiet!"
               }
             ].map((stepObj, i) => (
               <div 
                 key={i}
-                className="bg-white border border-[#e2dce7]/45 p-6 rounded-2xl relative shadow-sm hover:shadow transition-all space-y-3"
+                className="bg-white border border-[#e2dce7]/70 p-6 rounded-2xl relative shadow-sm hover:shadow transition-all duration-200 space-y-3"
               >
-                <span className="font-sans text-3xl font-extrabold text-[#D7B978]/25 block">
+                <span className="font-sans text-3xl font-extrabold text-[#D7B978]/30 block">
                   <CmsText slug={stepObj.slugNum} fallback={stepObj.fallbackNum} />
                 </span>
-                <h4 className="font-sans text-base sm:text-lg font-bold text-primary font-sans">
+                <h4 className="font-sans text-base sm:text-lg font-bold text-[#561291]">
                   <CmsText slug={stepObj.slugTitle} fallback={stepObj.fallbackTitle} />
                 </h4>
                 <p className="text-base text-slate-600 leading-relaxed font-normal">
@@ -676,297 +786,779 @@ export default function AdmissionPage() {
           </div>
         </section>
 
-        {/* SECTION 4: INTERACTIVE APPLICATION FORM */}
-        <section id="apply-form" className="bg-white border border-[#e2dce7]/65 rounded-3xl p-8 shadow-md max-w-2xl mx-auto scroll-mt-24">
+        {/* SECTION 4: INTERACTIVE 4-STEP APPLICATION FORM */}
+        <section id="apply-form" className="bg-white border border-[#e2dce7]/70 rounded-3xl p-6 sm:p-10 shadow-lg max-w-4xl mx-auto scroll-mt-24">
           <AnimatePresence mode="wait">
             {paymentStep === 'form' ? (
-              <motion.form 
-                key="form"
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onSubmit={handleFormSubmit}
-                className="space-y-6"
-              >
-                <div className="text-center space-y-2">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-2">
-                    <FileText size={22} />
+              <div key="form-container" className="space-y-8">
+                
+                {/* Header */}
+                <div className="text-center space-y-3">
+                  <div className="w-14 h-14 rounded-2xl bg-[#561291]/10 text-[#561291] flex items-center justify-center mx-auto shadow-sm">
+                    <FileText size={26} />
                   </div>
                   <CmsText 
                     slug="admission-form-title" 
-                    fallback={language === 'en' ? "Application for Admission" : "Søknad om opptak"} 
+                    fallback={language === 'en' ? "Application for Admission – HKPC" : "Søknad om opptak – His Kingdom Prophetic Community"} 
                     as="h3"
-                    className="font-sans text-2xl font-bold text-primary"
+                    className="font-sans text-2xl sm:text-3xl font-bold text-[#561291]"
                   />
                   <CmsText 
                     slug="admission-form-subtitle" 
-                    fallback={language === 'en' ? "Fill in your details below. We process your application within 24 hours." : "Fyll inn opplysningene dine under. Vi behandler søknaden din innen 24 timer."} 
+                    fallback={language === 'en' ? "Please complete all fields carefully. Applications are reviewed continuously by the leadership." : "Vennligst fyll ut feltene nedenfor. Alle søknader behandles konfidensielt og fortløpende av skolens ledelse."} 
                     as="p"
-                    className="text-base text-slate-600 font-normal leading-relaxed"
+                    className="text-base text-slate-600 font-normal leading-relaxed max-w-2xl mx-auto"
                   />
-                  <div className="pt-1.5">
-                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-secondary-container/70 text-primary font-semibold text-xs sm:text-sm uppercase tracking-wider border border-secondary/20">
-                      <GraduationCap size={15} className="text-primary" />
+                  <div className="pt-1">
+                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#561291]/5 text-[#561291] font-semibold text-xs sm:text-sm tracking-wide border border-[#561291]/15">
+                      <GraduationCap size={15} className="text-[#561291]" />
                       {language === 'en' 
-                        ? "No account needed to apply – Credentials assigned by administration upon admission" 
-                        : "Ingen konto kreves for å søke – Brukerkonto tildeles av administrasjonen etter godkjent opptak"}
+                        ? "No account required to apply – Login credentials are issued upon approved admission" 
+                        : "Ingen forhåndskonto kreves – Brukerkonto tildeles av administrasjonen etter godkjent opptak"}
                     </span>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Name Input */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-outline block">
-                      <CmsText slug="admission-form-name-label" fallback={language === 'en' ? "Full Name *" : "Fullt navn *"} />
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      placeholder={language === 'en' ? "E.g. Thomas Knutsen" : "F.eks. Thomas Knutsen"}
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-base rounded-xl focus:outline-none placeholder:text-outline font-normal transition-all font-sans"
+                {/* Progress Bar & Step Indicators */}
+                <div className="space-y-3 pt-2">
+                  <div className="flex justify-between items-center text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider">
+                    <span>
+                      {language === 'en' ? `Step ${currentStep} of 4` : `Steg ${currentStep} av 4`}
+                    </span>
+                    <span className="text-[#561291]">
+                      {currentStep === 1 && (language === 'en' ? "Personal Details" : "Personalia & Kontakt")}
+                      {currentStep === 2 && (language === 'en' ? "Study Line & Payment" : "Studielinje & Betaling")}
+                      {currentStep === 3 && (language === 'en' ? "Spiritual Background" : "Åndelig Bakgrunn & Kall")}
+                      {currentStep === 4 && (language === 'en' ? "Reference & Submit" : "Referanse & Fullfør")}
+                    </span>
+                  </div>
+
+                  {/* Visual Progress Bar */}
+                  <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-[#561291] to-[#D7B978] transition-all duration-300 ease-out rounded-full"
+                      style={{ width: `${(currentStep / 4) * 100}%` }}
                     />
                   </div>
 
-                  {/* Email Input */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-outline block">
-                      <CmsText slug="admission-form-email-label" fallback={language === 'en' ? "Email Address *" : "E-postadresse *"} />
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      placeholder={language === 'en' ? "thomas@example.com" : "thomas@eksempel.no"}
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-base rounded-xl focus:outline-none placeholder:text-outline font-normal transition-all font-sans"
-                    />
+                  {/* Step Pills Navigation */}
+                  <div className="grid grid-cols-4 gap-2 pt-2">
+                    {[
+                      { step: 1, title: language === 'en' ? "1. Details" : "1. Personalia" },
+                      { step: 2, title: language === 'en' ? "2. Program" : "2. Studielinje" },
+                      { step: 3, title: language === 'en' ? "3. Background" : "3. Bakgrunn" },
+                      { step: 4, title: language === 'en' ? "4. Reference" : "4. Referanse" }
+                    ].map(item => (
+                      <button
+                        key={item.step}
+                        type="button"
+                        onClick={() => {
+                          if (item.step < currentStep) {
+                            setCurrentStep(item.step);
+                          } else if (item.step === 2 && validateStep1()) {
+                            setCurrentStep(2);
+                          } else if (item.step === 3 && validateStep1() && validateStep2()) {
+                            setCurrentStep(3);
+                          } else if (item.step === 4 && validateStep1() && validateStep2() && validateStep3()) {
+                            setCurrentStep(4);
+                          }
+                        }}
+                        className={`py-2 px-2 text-center text-xs font-bold rounded-xl transition-all duration-200 ${
+                          currentStep === item.step
+                            ? 'bg-[#561291] text-white shadow-sm'
+                            : currentStep > item.step
+                            ? 'bg-green-50 text-green-700 border border-green-200'
+                            : 'bg-slate-50 text-slate-400 hover:text-slate-600'
+                        }`}
+                      >
+                        {item.title}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Phone Input */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-outline block">
-                      <CmsText slug="admission-form-phone-label" fallback={language === 'en' ? "Phone Number *" : "Mobiltelefon *"} />
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      required
-                      placeholder={language === 'en' ? "8-digit phone number" : "8-sifret mobilnummer"}
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-base rounded-xl focus:outline-none placeholder:text-outline font-normal transition-all font-sans"
-                    />
-                  </div>
+                {/* FORM CONTENT PER STEP */}
+                <form onSubmit={handleFormSubmit} className="space-y-6 pt-4">
 
-                  {/* Program Select */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-outline block">
-                      <CmsText slug="admission-form-program-label" fallback={language === 'en' ? "Choose Study Line" : "Velg studielinje"} />
-                    </label>
-                    <select
-                      name="program"
-                      value={formData.program}
-                      onChange={handleInputChange}
-                      className="w-full pl-4 pr-12 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-base rounded-xl focus:outline-none font-normal transition-all font-sans cursor-pointer appearance-none"
+                  {/* STEP 1: PERSONAL DETAILS */}
+                  {currentStep === 1 && (
+                    <motion.div 
+                      key="step-1"
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      className="space-y-6"
                     >
-                      {programs.map(p => (
-                        <option key={p.id} value={p.id}>
-                          {p.code} - {p.title}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
+                      <div className="border-b border-slate-100 pb-3 flex items-center gap-2">
+                        <User className="text-[#561291]" size={20} />
+                        <h4 className="font-bold text-lg text-[#561291]">
+                          {language === 'en' ? "1. Personal Information & Contact" : "1. Personalia & Kontaktinformasjon"}
+                        </h4>
+                      </div>
 
-                {/* Billing Plan Segment */}
-                <div className="space-y-2">
-                  <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-outline block">
-                    <CmsText slug="admission-form-billing-label" fallback={language === 'en' ? "Select Billing Plan" : "Foretrukket betalingsplan"} />
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <label className={`border rounded-xl p-4 flex flex-col justify-center items-center cursor-pointer transition-all active:scale-[0.98] ${
-                      formData.paymentPlan === 'semester'
-                        ? 'border-primary bg-primary/5 text-primary'
-                        : 'border-slate-200 hover:border-primary/30 text-on-surface-variant'
-                    }`}>
-                      <input
-                        type="radio"
-                        name="paymentPlan"
-                        value="semester"
-                        checked={formData.paymentPlan === 'semester'}
-                        onChange={handleInputChange}
-                        className="sr-only"
-                      />
-                      <span className="text-base font-bold block">
-                        <CmsText slug="admission-form-billing-semester-title" fallback={language === 'en' ? "Semester Invoice" : "Semesterfaktura"} />
-                      </span>
-                      <span className="text-xs sm:text-sm text-outline mt-1 font-medium">
-                        {language === 'en' ? `${selectedProg.priceSemester} per semester` : `${selectedProg.priceSemester} per semester`}
-                      </span>
-                    </label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Full Name */}
+                        <div className="space-y-1.5">
+                          <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
+                            {language === 'en' ? "Full Name *" : "Fullt navn *"}
+                          </label>
+                          <input
+                            type="text"
+                            name="name"
+                            required
+                            placeholder={language === 'en' ? "E.g. Thomas Knutsen" : "F.eks. Ola Nordmann"}
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
+                          />
+                        </div>
 
-                    <label className={`border rounded-xl p-4 flex flex-col justify-center items-center cursor-pointer transition-all active:scale-[0.98] ${
-                      formData.paymentPlan === 'year'
-                        ? 'border-primary bg-primary/5 text-primary'
-                        : 'border-slate-200 hover:border-primary/30 text-on-surface-variant'
-                    }`}>
-                      <input
-                        type="radio"
-                        name="paymentPlan"
-                        value="year"
-                        checked={formData.paymentPlan === 'year'}
-                        onChange={handleInputChange}
-                        className="sr-only"
-                      />
-                      <span className="text-base font-bold block">
-                        <CmsText slug="admission-form-billing-year-title" fallback={language === 'en' ? "Full Academic Year" : "Fullt studieår"} />
-                      </span>
-                      <span className="text-xs sm:text-sm text-outline mt-1 font-medium">
-                        {language === 'en' ? `${selectedProg.priceYear || '10 000,-'} full year` : `${selectedProg.priceYear || '10 000,-'} for hele året`}
-                      </span>
-                    </label>
-                  </div>
-                </div>
+                        {/* Gender */}
+                        <div className="space-y-1.5">
+                          <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
+                            {language === 'en' ? "Gender *" : "Kjønn *"}
+                          </label>
+                          <div className="grid grid-cols-2 gap-2">
+                            {['Mann', 'Kvinne'].map((g) => (
+                              <button
+                                key={g}
+                                type="button"
+                                onClick={() => setFormData(prev => ({ ...prev, gender: g }))}
+                                className={`py-3 px-4 rounded-xl border text-sm sm:text-base font-bold transition-all duration-200 ${
+                                  formData.gender === g
+                                    ? 'bg-[#561291]/10 border-[#561291] text-[#561291]'
+                                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
+                                }`}
+                              >
+                                {g}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
 
-                {/* Confirm Year 1 Checkbox for Track 2 */}
-                {formData.program === 'prophets_advanced' && (
-                  <div className="p-5 bg-amber-50 border border-amber-200 rounded-xl space-y-3">
-                    <div className="flex gap-2.5 text-amber-900 text-base">
-                      <Lock size={18} className="shrink-0 mt-0.5" />
-                      <p className="font-medium leading-relaxed">
-                        <CmsText 
-                          slug="admission-form-track2-alert" 
-                          fallback={language === 'en'
-                            ? "This program (Track 2) does not start until 2028. To apply, you must confirm that you plan to complete or have completed Track 1 (His Kingdom Prophetic Community) first."
-                            : "Dette studieløpet (Track 2) starter ikke før i 2028. For å søke opptak, må du bekrefte at du har fullført eller planlegger å fullføre 1. år (His Kingdom Prophetic Community) først."} 
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Birth Date */}
+                        <div className="space-y-1.5">
+                          <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
+                            {language === 'en' ? "Date of Birth *" : "Fødselsdato *"}
+                          </label>
+                          <input
+                            type="date"
+                            name="birthDate"
+                            required
+                            value={formData.birthDate}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
+                          />
+                        </div>
+
+                        {/* Email */}
+                        <div className="space-y-1.5">
+                          <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
+                            {language === 'en' ? "Email Address *" : "E-postadresse *"}
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            required
+                            placeholder="ola@eksempel.no"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Phone */}
+                        <div className="space-y-1.5">
+                          <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
+                            {language === 'en' ? "Phone Number *" : "Mobiltelefon *"}
+                          </label>
+                          <input
+                            type="tel"
+                            name="phone"
+                            required
+                            placeholder="+47 000 00 000"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
+                          />
+                        </div>
+
+                        {/* Occupation */}
+                        <div className="space-y-1.5">
+                          <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
+                            {language === 'en' ? "Occupation / Education *" : "Yrke / utdannelse *"}
+                          </label>
+                          <input
+                            type="text"
+                            name="occupation"
+                            required
+                            placeholder={language === 'en' ? "E.g. Teacher, Engineer, Student" : "F.eks. Lærer, Ingeniør, Student"}
+                            value={formData.occupation}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Residential Address */}
+                      <div className="space-y-1.5">
+                        <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
+                          {language === 'en' ? "Residential Address *" : "Bostedsadresse *"}
+                        </label>
+                        <input
+                          type="text"
+                          name="address"
+                          required
+                          placeholder={language === 'en' ? "Street address, postal code, city, country" : "Adresse, postnummer, poststed, land"}
+                          value={formData.address}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
                         />
-                      </p>
-                    </div>
-                    <label className="flex items-start gap-2.5 cursor-pointer select-none">
-                      <input
-                        type="checkbox"
-                        required
-                        checked={confirmYear1}
-                        onChange={(e) => setConfirmYear1(e.target.checked)}
-                        className="mt-1 accent-amber-600 rounded border-amber-300 focus:ring-amber-500 text-amber-600 w-4 h-4"
-                      />
-                      <span className="text-sm sm:text-base text-amber-950 font-bold leading-normal">
-                        <CmsText 
-                          slug="admission-form-track2-confirm" 
-                          fallback={language === 'en'
-                            ? "I confirm that I plan to complete or have completed Track 1 first *"
-                            : "Jeg bekrefter at jeg har fullført eller planlegger å fullføre 1. år først *"} 
-                        />
-                      </span>
-                    </label>
-                  </div>
-                )}
+                      </div>
 
-                {/* Motivation Textarea */}
-                <div className="space-y-1.5">
-                  <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-outline block">
-                    <CmsText slug="admission-form-motivation-label" fallback={language === 'en' ? "Motivation / Vision (Optional)" : "Kort om din motivasjon eller ditt kall (Valgfritt)"} />
-                  </label>
-                  <textarea
-                    name="motivation"
-                    rows={4}
-                    placeholder={language === 'en' ? "Briefly share your heart or what you hope to receive..." : "Skriv kort om hva du håper å få ut av studiet, eller din bakgrunn..."}
-                    value={formData.motivation}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-base rounded-xl focus:outline-none placeholder:text-outline font-normal transition-all resize-none font-sans"
-                  />
-                </div>
+                      {/* Marital Status */}
+                      <div className="space-y-2">
+                        <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
+                          {language === 'en' ? "Marital Status *" : "Sivilstatus *"}
+                        </label>
+                        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                          {['Gift', 'Ugift', 'Forlovet', 'Separert / skilt', 'Enke / enkemann'].map((ms) => (
+                            <button
+                              key={ms}
+                              type="button"
+                              onClick={() => setFormData(prev => ({ ...prev, maritalStatus: ms }))}
+                              className={`py-2.5 px-2 rounded-xl border text-xs sm:text-sm font-bold transition-all duration-200 text-center ${
+                                formData.maritalStatus === ms
+                                  ? 'bg-[#561291]/10 border-[#561291] text-[#561291]'
+                                  : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
+                              }`}
+                            >
+                              {ms}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
 
-                {/* Submit button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-4 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2.5 disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
-                      <span>{language === 'en' ? "Submitting..." : "Sender søknad..."}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Send size={16} />
-                      <span><CmsText slug="admission-form-submit-btn" fallback={language === 'en' ? "Submit Application" : "Send Inn Min Søknad"} /></span>
-                    </>
+                      {/* Next Button */}
+                      <div className="pt-4 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={handleNextStep}
+                          className="px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
+                        >
+                          <span>{language === 'en' ? "Next: Study Line & Payment" : "Neste: Studielinje & betaling"}</span>
+                          <ArrowRight size={18} />
+                        </button>
+                      </div>
+                    </motion.div>
                   )}
-                </button>
-              </motion.form>
-            ) : paymentStep === 'payment' ? (
-              <motion.div 
-                key="payment"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="space-y-6"
-              >
-                <div className="text-center space-y-2">
-                  <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-2">
-                    <CreditCard size={22} className="animate-pulse" />
-                  </div>
-                  <CmsText 
-                    slug="admission-payment-title" 
-                    fallback={language === 'en' ? "Complete Your Enrollment Payment" : "Fullfør din studieavgift"} 
-                    as="h3"
-                    className="font-sans text-2xl font-bold text-primary"
-                  />
-                  <p className="text-base text-on-surface-variant font-medium">
-                    {language === 'en' 
-                      ? `Program: ${programs.find(p => p.id === formData.program)?.title} (${formData.paymentPlan === 'year' ? 'Full academic year' : 'Semester'})`
-                      : `Valgt studielinje: ${programs.find(p => p.id === formData.program)?.title} (${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'})`}
-                  </p>
-                  <p className="text-lg font-bold text-primary">
-                    {language === 'en' ? "Amount: " : "Beløp å betale: "} 
-                    {formData.paymentPlan === 'year' 
-                      ? (programs.find(p => p.id === formData.program)?.priceYear || '10 000,- NOK')
-                      : (programs.find(p => p.id === formData.program)?.priceSemester || '5 000,- NOK')}
-                  </p>
-                </div>
 
-                <div id="hkm-stripe-element" className="bg-slate-50 p-4 border border-slate-200 rounded-2xl min-h-[150px]">
-                  {/* Stripe Payment Element mounts here */}
-                </div>
+                  {/* STEP 2: PROGRAM & TUITION */}
+                  {currentStep === 2 && (
+                    <motion.div 
+                      key="step-2"
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      className="space-y-6"
+                    >
+                      <div className="border-b border-slate-100 pb-3 flex items-center gap-2">
+                        <BookOpen className="text-[#561291]" size={20} />
+                        <h4 className="font-bold text-lg text-[#561291]">
+                          {language === 'en' ? "2. Program Track & Tuition Agreement" : "2. Studielinje & Betalingsordning"}
+                        </h4>
+                      </div>
 
-                {paymentError && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 text-base font-medium p-4 rounded-xl text-center">
-                    {paymentError}
-                  </div>
-                )}
+                      {/* Program Choice */}
+                      <div className="space-y-3">
+                        <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
+                          {language === 'en' ? "Select Study Line *" : "Velg studielinje *"}
+                        </label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {programs.map(p => (
+                            <label
+                              key={p.id}
+                              className={`border rounded-2xl p-5 cursor-pointer transition-all duration-200 flex flex-col justify-between ${
+                                formData.program === p.id
+                                  ? 'border-[#561291] bg-[#561291]/5 shadow-sm'
+                                  : 'border-slate-200 hover:border-slate-300 bg-white'
+                              }`}
+                            >
+                              <div className="flex items-start justify-between">
+                                <div className="space-y-1">
+                                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-[#561291]/10 text-[#561291] uppercase tracking-wider">
+                                    {p.code}
+                                  </span>
+                                  <h5 className="font-bold text-base text-[#561291] pt-1">{p.title}</h5>
+                                  <p className="text-xs text-slate-500">{p.duration}</p>
+                                </div>
+                                <input
+                                  type="radio"
+                                  name="program"
+                                  value={p.id}
+                                  checked={formData.program === p.id}
+                                  onChange={handleInputChange}
+                                  className="accent-[#561291] w-4 h-4 mt-1"
+                                />
+                              </div>
+                              <div className="pt-4 border-t border-slate-100 mt-4 flex justify-between items-center text-xs">
+                                <span className="text-slate-500 font-semibold">{language === 'en' ? "Semester Tuition:" : "Semesteravgift:"}</span>
+                                <span className="font-bold text-[#561291] text-sm">{p.priceSemester}</span>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
 
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setPaymentStep('form')}
-                    className="flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-base font-bold uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] text-center font-sans border border-slate-200"
-                  >
-                    <CmsText slug="admission-payment-back" fallback={language === 'en' ? "Back" : "Tilbake"} />
-                  </button>
-                  <button
-                    onClick={handleStripePaymentSubmit}
-                    disabled={isSubmitting}
-                    className="flex-[2] py-4 bg-primary hover:bg-primary-container text-white text-base font-sans font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="w-4 h-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
-                        <span>{language === 'en' ? "Processing..." : "Behandler betaling..."}</span>
-                      </>
-                    ) : (
-                      <span><CmsText slug="admission-payment-confirm-btn" fallback={language === 'en' ? "Pay and Enroll" : "Betal og fullfør"} /></span>
-                    )}
-                  </button>
-                </div>
-              </motion.div>
+                      {/* Billing Plan */}
+                      <div className="space-y-3">
+                        <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
+                          {language === 'en' ? "Preferred Billing Plan *" : "Foretrukket betalingsplan *"}
+                        </label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <label className={`border rounded-xl p-4 flex items-center justify-between cursor-pointer transition-all ${
+                            formData.paymentPlan === 'semester'
+                              ? 'border-[#561291] bg-[#561291]/5 text-[#561291]'
+                              : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                          }`}>
+                            <div className="space-y-0.5">
+                              <span className="text-base font-bold block">
+                                {language === 'en' ? "Semester Invoice" : "Semesterfaktura"}
+                              </span>
+                              <span className="text-xs text-slate-500">
+                                {selectedProg.priceSemester} per semester
+                              </span>
+                            </div>
+                            <input
+                              type="radio"
+                              name="paymentPlan"
+                              value="semester"
+                              checked={formData.paymentPlan === 'semester'}
+                              onChange={handleInputChange}
+                              className="accent-[#561291] w-4 h-4"
+                            />
+                          </label>
+
+                          <label className={`border rounded-xl p-4 flex items-center justify-between cursor-pointer transition-all ${
+                            formData.paymentPlan === 'year'
+                              ? 'border-[#561291] bg-[#561291]/5 text-[#561291]'
+                              : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                          }`}>
+                            <div className="space-y-0.5">
+                              <span className="text-base font-bold block">
+                                {language === 'en' ? "Full Academic Year" : "Fullt studieår"}
+                              </span>
+                              <span className="text-xs text-slate-500">
+                                {selectedProg.priceYear || '10 000,- NOK'} for hele året
+                              </span>
+                            </div>
+                            <input
+                              type="radio"
+                              name="paymentPlan"
+                              value="year"
+                              checked={formData.paymentPlan === 'year'}
+                              onChange={handleInputChange}
+                              className="accent-[#561291] w-4 h-4"
+                            />
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Language & Kickoff Agreement Checkbox */}
+                      <div className="p-4 bg-[#561291]/5 border border-[#561291]/20 rounded-2xl space-y-2">
+                        <label className="flex items-start gap-3 cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            name="languageAgreement"
+                            required
+                            checked={formData.languageAgreement}
+                            onChange={handleInputChange}
+                            className="mt-1 accent-[#561291] rounded border-slate-300 text-[#561291] w-5 h-5 shrink-0"
+                          />
+                          <div className="text-sm sm:text-base text-slate-800 font-medium leading-relaxed">
+                            <span className="font-bold text-[#561291] block">
+                              {language === 'en' ? "Instruction Language & Kickoff Gathering Agreement *" : "Bekreftelse på undervisningsspråk & kickoff-samling *"}
+                            </span>
+                            {language === 'en'
+                              ? "I confirm that I understand all instruction and materials are conducted in English, with an on-site kickoff gathering in Norway on August 27, 2027."
+                              : "Jeg bekrefter at jeg er innforstått med at all undervisning foregår på engelsk via nett, med en obligatorisk/anbefalt kickoff-samling i Norge 27. august 2027."}
+                          </div>
+                        </label>
+                      </div>
+
+                      {/* Track 2 Prerequisite Checkbox (if applicable) */}
+                      {formData.program === 'prophets_advanced' && (
+                        <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl space-y-2">
+                          <div className="flex gap-2.5 text-amber-900 text-sm">
+                            <Lock size={16} className="shrink-0 mt-0.5" />
+                            <p className="font-medium leading-relaxed">
+                              {language === 'en'
+                                ? "This program (Track 2) launches in 2028. To apply, you must confirm that you plan to complete or have completed Track 1 (His Kingdom Prophetic Community) first."
+                                : "Dette studieløpet (Track 2) starter ikke før i 2028. For å søke opptak, må du bekrefte at du har fullført eller planlegger å fullføre 1. år (Track 1) først."}
+                            </p>
+                          </div>
+                          <label className="flex items-start gap-3 cursor-pointer select-none pt-1">
+                            <input
+                              type="checkbox"
+                              name="confirmYear1"
+                              required
+                              checked={formData.confirmYear1}
+                              onChange={handleInputChange}
+                              className="mt-1 accent-amber-600 rounded border-amber-300 text-amber-600 w-5 h-5 shrink-0"
+                            />
+                            <span className="text-sm sm:text-base text-amber-950 font-bold leading-normal">
+                              {language === 'en'
+                                ? "I confirm that I plan to complete or have completed Track 1 first *"
+                                : "Jeg bekrefter at jeg har fullført eller planlegger å fullføre 1. år først *"}
+                            </span>
+                          </label>
+                        </div>
+                      )}
+
+                      {/* Navigation Buttons */}
+                      <div className="pt-4 flex justify-between gap-3">
+                        <button
+                          type="button"
+                          onClick={handlePrevStep}
+                          className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center gap-2"
+                        >
+                          <ArrowLeft size={18} />
+                          <span>{language === 'en' ? "Back" : "Tilbake"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleNextStep}
+                          className="px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
+                        >
+                          <span>{language === 'en' ? "Next: Spiritual Background" : "Neste: Åndelig bakgrunn"}</span>
+                          <ArrowRight size={18} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* STEP 3: SPIRITUAL BACKGROUND & CALLING */}
+                  {currentStep === 3 && (
+                    <motion.div 
+                      key="step-3"
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      className="space-y-6"
+                    >
+                      <div className="border-b border-slate-100 pb-3 flex items-center gap-2">
+                        <Heart className="text-[#561291]" size={20} />
+                        <h4 className="font-bold text-lg text-[#561291]">
+                          {language === 'en' ? "3. Spiritual Walk, Calling & Motivation" : "3. Åndelig Bakgrunn, Vandring & Motivasjon"}
+                        </h4>
+                      </div>
+
+                      {/* Q1: whySeeking */}
+                      <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
+                        <label className="text-sm font-bold text-[#561291] block">
+                          {language === 'en' ? "Why are you applying to Bible school? *" : "Hvorfor søker du bibelskole? *"}
+                        </label>
+                        <p className="text-xs text-slate-500 font-normal">
+                          {language === 'en' ? "What inspires you to set aside this year to grow?" : "Hva motiverer deg til å sette av dette året til å vokse?"}
+                        </p>
+                        <textarea
+                          name="whySeeking"
+                          required
+                          rows={3}
+                          value={formData.whySeeking}
+                          onChange={handleInputChange}
+                          placeholder={language === 'en' ? "Write your answer here..." : "Skriv ditt svar her..."}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all resize-y"
+                        />
+                      </div>
+
+                      {/* Q2: expectations */}
+                      <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
+                        <label className="text-sm font-bold text-[#561291] block">
+                          {language === 'en' ? "What do you expect from the school year and community? *" : "Hva forventer du deg av skoleåret og fellesskapet? *"}
+                        </label>
+                        <textarea
+                          name="expectations"
+                          required
+                          rows={3}
+                          value={formData.expectations}
+                          onChange={handleInputChange}
+                          placeholder={language === 'en' ? "Write your answer here..." : "Skriv ditt svar her..."}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all resize-y"
+                        />
+                      </div>
+
+                      {/* Q3: howHeard */}
+                      <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
+                        <label className="text-sm font-bold text-[#561291] block">
+                          {language === 'en' ? "How did you hear about HKPC, and why are you applying here? *" : "Hvordan hørte du om His Kingdom Prophetic Community, og hvorfor søker du her? *"}
+                        </label>
+                        <textarea
+                          name="howHeard"
+                          required
+                          rows={3}
+                          value={formData.howHeard}
+                          onChange={handleInputChange}
+                          placeholder={language === 'en' ? "Write your answer here..." : "Skriv ditt svar her..."}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all resize-y"
+                        />
+                      </div>
+
+                      {/* Q4: testimony */}
+                      <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
+                        <label className="text-sm font-bold text-[#561291] block">
+                          {language === 'en' ? "Share a bit about your experience with Jesus *" : "Skriv litt om din erfaring og vandring med Jesus *"}
+                        </label>
+                        <p className="text-xs text-slate-500 font-normal">
+                          {language === 'en' ? "Your salvation testimony and how your daily relationship with God looks like." : "Din frelsesopplevelse og hvordan hverdagen din med Jesus ser ut."}
+                        </p>
+                        <textarea
+                          name="testimony"
+                          required
+                          rows={3}
+                          value={formData.testimony}
+                          onChange={handleInputChange}
+                          placeholder={language === 'en' ? "Write your answer here..." : "Skriv ditt svar her..."}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all resize-y"
+                        />
+                      </div>
+
+                      {/* Q5: churchCommunity */}
+                      <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
+                        <label className="text-sm font-bold text-[#561291] block">
+                          {language === 'en' ? "Do you belong to a local church / community? If yes, which one? *" : "Tilhører du en menighet? Hvis ja, hvilken? *"}
+                        </label>
+                        <p className="text-xs text-slate-500 font-normal">
+                          {language === 'en' ? "Church name, location, and optionally pastor/leader name." : "Navn på menighet/fellesskap, sted og eventuelt pastor/leder."}
+                        </p>
+                        <input
+                          type="text"
+                          name="churchCommunity"
+                          required
+                          value={formData.churchCommunity}
+                          onChange={handleInputChange}
+                          placeholder={language === 'en' ? "E.g. Filadelfia Oslo, Pastor..." : "F.eks. Filadelfia Oslo, Pastor..."}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
+                        />
+                      </div>
+
+                      {/* Q6: currentMinistry */}
+                      <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
+                        <label className="text-sm font-bold text-[#561291] block">
+                          {language === 'en' ? "Are you in any form of ministry or volunteer work? If yes, please describe *" : "Er du i en form for tjeneste eller frivillig arbeid? Hvis ja, skriv litt om det *"}
+                        </label>
+                        <textarea
+                          name="currentMinistry"
+                          required
+                          rows={3}
+                          value={formData.currentMinistry}
+                          onChange={handleInputChange}
+                          placeholder={language === 'en' ? "E.g. worship team, hospitality, prayer group, youth work..." : "F.eks. lovsang, vertskap, forbønn, lederansvar, barne-/ungdomsarbeid..."}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all resize-y"
+                        />
+                      </div>
+
+                      {/* Q7: ministryCalling */}
+                      <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
+                        <label className="text-sm font-bold text-[#561291] block">
+                          {language === 'en' ? "What ministry or spiritual gift do you feel called to grow in? *" : "Hvilken tjeneste kunne du tenke deg å være i / nådegave å vokse i? *"}
+                        </label>
+                        <textarea
+                          name="ministryCalling"
+                          required
+                          rows={3}
+                          value={formData.ministryCalling}
+                          onChange={handleInputChange}
+                          placeholder={language === 'en' ? "Write your answer here..." : "Skriv ditt svar her..."}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all resize-y"
+                        />
+                      </div>
+
+                      {/* Q8: dreamsVision */}
+                      <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
+                        <label className="text-sm font-bold text-[#561291] block">
+                          {language === 'en' ? "Tell us a bit about your dreams and visions *" : "Si litt om dine drømmer og visjoner *"}
+                        </label>
+                        <p className="text-xs text-slate-500 font-normal">
+                          {language === 'en' ? "What has God placed on your heart for His kingdom and people?" : "Hva har Gud lagt på hjertet ditt for Hans rike og mennesker rundt deg?"}
+                        </p>
+                        <textarea
+                          name="dreamsVision"
+                          required
+                          rows={3}
+                          value={formData.dreamsVision}
+                          onChange={handleInputChange}
+                          placeholder={language === 'en' ? "Write your answer here..." : "Skriv ditt svar her..."}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all resize-y"
+                        />
+                      </div>
+
+                      {/* Q9: hobbies */}
+                      <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
+                        <label className="text-sm font-bold text-[#561291] block">
+                          {language === 'en' ? "What do you like to do? (Hobbies and leisure interests) *" : "Hva liker du å gjøre? (hobbyer / fritidsinteresser) *"}
+                        </label>
+                        <textarea
+                          name="hobbies"
+                          required
+                          rows={2}
+                          value={formData.hobbies}
+                          onChange={handleInputChange}
+                          placeholder={language === 'en' ? "E.g. music, outdoors, sports, reading, crafting..." : "F.eks. musikk, friluftsliv, trening, lesing, baking, kunst..."}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all resize-y"
+                        />
+                      </div>
+
+                      {/* Navigation Buttons */}
+                      <div className="pt-4 flex justify-between gap-3">
+                        <button
+                          type="button"
+                          onClick={handlePrevStep}
+                          className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center gap-2"
+                        >
+                          <ArrowLeft size={18} />
+                          <span>{language === 'en' ? "Back" : "Tilbake"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleNextStep}
+                          className="px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
+                        >
+                          <span>{language === 'en' ? "Next: Reference & Final Review" : "Neste: Referanse & fullfør"}</span>
+                          <ArrowRight size={18} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* STEP 4: REFERENCE & FINAL REVIEW */}
+                  {currentStep === 4 && (
+                    <motion.div 
+                      key="step-4"
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      className="space-y-6"
+                    >
+                      <div className="border-b border-slate-100 pb-3 flex items-center gap-2">
+                        <GraduationCap className="text-[#561291]" size={20} />
+                        <h4 className="font-bold text-lg text-[#561291]">
+                          {language === 'en' ? "4. Reference & Final Submission" : "4. Referanse & Innsending"}
+                        </h4>
+                      </div>
+
+                      {/* Reference */}
+                      <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
+                        <label className="text-sm font-bold text-[#561291] block">
+                          {language === 'en' ? "Reference (Pastor, leader, or trusted mature Christian) *" : "Referanse (Pastor, leder eller annen betrodd person) *"}
+                        </label>
+                        <p className="text-xs text-slate-500 font-normal">
+                          {language === 'en' 
+                            ? "Please include: Full Name, Relationship/Title, Phone number, and Email address." 
+                            : "Vennligst oppgi: Fullt navn, relasjon/rolle, telefonnummer og e-postadresse."}
+                        </p>
+                        <textarea
+                          name="reference"
+                          required
+                          rows={3}
+                          value={formData.reference}
+                          onChange={handleInputChange}
+                          placeholder={language === 'en' 
+                            ? "E.g. Pastor John Doe, Cornerstone Church, Phone: +47 900 00 000, Email: pastor@church.com" 
+                            : "F.eks. Pastor Ola Hansen, Salemkirken, Tlf: +47 900 00 000, E-post: pastor@salem.no"}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all resize-y"
+                        />
+                      </div>
+
+                      {/* Optional Notes */}
+                      <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
+                        <label className="text-sm font-bold text-slate-700 block">
+                          {language === 'en' ? "Other notes or health considerations (Optional)" : "Annet du ønsker at vi skal vite om deg (Valgfritt)"}
+                        </label>
+                        <p className="text-xs text-slate-500 font-normal">
+                          {language === 'en' 
+                            ? "Health conditions, special needs, or any additional context you wish to share." 
+                            : "Eventuelle helsemessige hensyn, spesielle behov, eller andre opplysninger du vil dele med ledelsen."}
+                        </p>
+                        <textarea
+                          name="additionalNotes"
+                          rows={3}
+                          value={formData.additionalNotes}
+                          onChange={handleInputChange}
+                          placeholder={language === 'en' ? "Any optional info..." : "Skriv eventuelle tilleggsopplysninger her..."}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all resize-y"
+                        />
+                      </div>
+
+                      {/* Summary Review Card */}
+                      <div className="bg-[#561291]/5 border border-[#561291]/20 rounded-2xl p-5 space-y-3">
+                        <h5 className="font-bold text-[#561291] text-sm uppercase tracking-wider flex items-center gap-1.5">
+                          <CheckCircle2 size={16} className="text-[#561291]" />
+                          <span>{language === 'en' ? "Application Summary" : "Oppsummering av søknaden"}</span>
+                        </h5>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                          <div>
+                            <span className="text-slate-500 block text-xs uppercase font-semibold">{language === 'en' ? "Applicant" : "Søker"}</span>
+                            <span className="font-bold text-slate-800">{formData.name || '-'} ({formData.gender || '-'})</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-xs uppercase font-semibold">{language === 'en' ? "Email / Phone" : "E-post & telefon"}</span>
+                            <span className="font-bold text-slate-800">{formData.email} • {formData.phone}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-xs uppercase font-semibold">{language === 'en' ? "Study Line" : "Studielinje"}</span>
+                            <span className="font-bold text-[#561291]">{selectedProg.title}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-xs uppercase font-semibold">{language === 'en' ? "Billing Plan" : "Betalingsordning"}</span>
+                            <span className="font-bold text-[#561291]">
+                              {formData.paymentPlan === 'year' ? "Fullt studieår" : "Semesterfaktura"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Navigation & Submit Buttons */}
+                      <div className="pt-4 flex flex-col sm:flex-row justify-between gap-3">
+                        <button
+                          type="button"
+                          onClick={handlePrevStep}
+                          className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
+                        >
+                          <ArrowLeft size={18} />
+                          <span>{language === 'en' ? "Back" : "Tilbake"}</span>
+                        </button>
+                        
+                        <button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="px-10 py-4 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base font-sans uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2.5 disabled:opacity-50"
+                        >
+                          {isSubmitting ? (
+                            <>
+                              <div className="w-5 h-5 rounded-full border-2 border-[#561291]/30 border-t-[#561291] animate-spin" />
+                              <span>{language === 'en' ? "Submitting Application..." : "Sender inn søknad..."}</span>
+                            </>
+                          ) : (
+                            <>
+                              <Send size={18} />
+                              <span>{language === 'en' ? "Submit Application" : "Send Inn Min Søknad"}</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                </form>
+
+              </div>
             ) : (
+              /* SUCCESS CONFIRMATION SCREEN */
               <motion.div 
                 key="success"
                 initial={{ scale: 0.95, opacity: 0 }}
@@ -985,26 +1577,26 @@ export default function AdmissionPage() {
                     slug="admission-success-title" 
                     fallback={language === 'en' ? "Application Successfully Submitted!" : "Søknad om opptak er mottatt!"} 
                     as="h3"
-                    className="font-sans text-2xl sm:text-3xl font-bold text-primary"
+                    className="font-sans text-2xl sm:text-3xl font-bold text-[#561291]"
                   />
                   <p className="text-base text-slate-700 font-normal max-w-md mx-auto leading-relaxed">
                     {language === 'en'
-                      ? `Thank you, ${formData.name}! Your application has been submitted to the administration at His Kingdom Prophetic Community.`
-                      : `Takk for din søknad, ${formData.name}! Søknaden din er nå oversendt til administrasjonen ved His Kingdom Prophetic Community.`}
+                      ? `Thank you, ${formData.name}! Your application has been submitted directly to the leadership at His Kingdom Prophetic Community.`
+                      : `Takk for din søknad, ${formData.name}! Søknaden din er nå oversendt til ledelsen ved His Kingdom Prophetic Community.`}
                   </p>
                 </div>
 
                 {/* Information Card about Next Steps and Account Assignment */}
-                <div className="bg-[#fbf8fe] border border-[#e2dce7]/60 rounded-2xl p-6 text-left max-w-lg mx-auto space-y-3.5">
+                <div className="bg-[#fbf8fe] border border-[#e2dce7]/70 rounded-2xl p-6 text-left max-w-lg mx-auto space-y-3.5">
                   <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-primary/10 text-primary shrink-0 mt-0.5">
+                    <div className="p-2 rounded-xl bg-[#561291]/10 text-[#561291] shrink-0 mt-0.5">
                       <GraduationCap size={22} />
                     </div>
                     <div className="space-y-1">
-                      <h4 className="text-base font-bold text-primary">
+                      <h4 className="text-base font-bold text-[#561291]">
                         {language === 'en' ? "Next Steps: Review & Account Assignment" : "Veien videre: Opptaksbehandling & tildeling av konto"}
                       </h4>
-                      <p className="text-base text-slate-600 leading-relaxed font-normal">
+                      <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
                         {language === 'en'
                           ? "We review all applications continuously and will contact you for a brief conversation. Upon approved admission, your personal user account and portal login credentials will be issued directly by the school administration."
                           : "Vi behandler søknader fortløpende og kontakter deg for en kort samtale. Når opptaket er godkjent, vil din personlige brukerkonto og innloggingsdetaljer til portalen bli opprettet og tildelt direkte av skolens administrasjon."}
@@ -1012,14 +1604,14 @@ export default function AdmissionPage() {
                     </div>
                   </div>
 
-                  <div className="border-t border-[#e2dce7]/40 pt-3.5 grid grid-cols-2 gap-3 text-base">
+                  <div className="border-t border-[#e2dce7]/40 pt-3.5 grid grid-cols-2 gap-3 text-sm">
                     <div>
-                      <span className="text-outline text-xs uppercase font-bold block">{language === 'en' ? "Program" : "Studielinje"}</span>
-                      <span className="font-bold text-primary">{programs.find(p => p.id === formData.program)?.code}</span>
+                      <span className="text-slate-500 text-xs uppercase font-bold block">{language === 'en' ? "Program" : "Studielinje"}</span>
+                      <span className="font-bold text-[#561291]">{programs.find(p => p.id === formData.program)?.code}</span>
                     </div>
                     <div>
-                      <span className="text-outline text-xs uppercase font-bold block">{language === 'en' ? "Kickoff" : "Kickoff"}</span>
-                      <span className="font-bold text-primary">27. aug 2027 (Norge)</span>
+                      <span className="text-slate-500 text-xs uppercase font-bold block">{language === 'en' ? "Kickoff" : "Kickoff"}</span>
+                      <span className="font-bold text-[#561291]">27. aug 2027 (Norge)</span>
                     </div>
                   </div>
                 </div>
@@ -1027,13 +1619,13 @@ export default function AdmissionPage() {
                 <div className="pt-2 flex flex-col sm:flex-row justify-center gap-3">
                   <button
                     onClick={() => navigate('/')}
-                    className="px-6 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all shadow-sm active:scale-95"
+                    className="px-6 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-sm active:scale-95"
                   >
                     <CmsText slug="admission-success-home-btn" fallback={language === 'en' ? "Back to Home" : "Gå til forsiden"} />
                   </button>
                   <button
                     onClick={() => navigate('/support')}
-                    className="px-6 py-3.5 bg-slate-50 hover:bg-slate-100 text-primary text-base font-bold uppercase tracking-wider rounded-xl transition-all active:scale-95 border border-slate-200 font-sans"
+                    className="px-6 py-3.5 bg-slate-50 hover:bg-slate-100 text-[#561291] text-base font-bold uppercase tracking-wider rounded-xl transition-all duration-200 active:scale-95 border border-slate-200 font-sans"
                   >
                     <CmsText slug="admission-success-contact-btn" fallback={language === 'en' ? "Contact Administration" : "Kontakt administrasjonen"} />
                   </button>
