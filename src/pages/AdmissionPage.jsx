@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, BookOpen, CreditCard, ChevronRight, Check, 
   HelpCircle, ArrowLeft, ArrowRight, Send, Award, Calendar, FileText, CheckCircle2, Globe, Lock, GraduationCap,
-  User, Mail, Phone, MapPin, Heart, Church, Save, RotateCcw
+  User, Mail, Phone, MapPin, Heart, Church, Save, RotateCcw, Clock, Bell
 } from 'lucide-react';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
@@ -14,11 +14,65 @@ import SiteFooter from '@/components/SiteFooter';
 const DRAFT_KEY = 'hkpc_application_draft_v1';
 const DRAFT_STEP_KEY = 'hkpc_application_draft_step';
 
+// Admission period officially opens January 1, 2027 00:00:00
+const ADMISSION_OPEN_DATE = new Date('2027-01-01T00:00:00');
+
 export default function AdmissionPage() {
   const navigate = useNavigate();
   const { language, toggleLanguage, showToast, user } = useApp();
 
   const stripePublicKey = "pk_live_51Pab8rAL393JGrO9bTUitYflDKlHGpLiqZCCBp0dCzBEV3ZFxARFfK6MgWraehq7i79tJHPIEzlpMwPiT2K3HsiZ00gJ1TQ71Y";
+
+  // Check if admission is open (automatically unlocks on Jan 1, 2027, or with ?preview=true / admin)
+  const isPreviewMode = new URLSearchParams(window.location.search).get('preview') === 'true' || user?.role === 'admin';
+  const isAdmissionOpen = isPreviewMode || (new Date() >= ADMISSION_OPEN_DATE);
+
+  // Interest List / Reminder State (for visitors before Jan 1, 2027)
+  const [interestEmail, setInterestEmail] = useState('');
+  const [interestName, setInterestName] = useState('');
+  const [interestSubmitted, setInterestSubmitted] = useState(false);
+  const [isSubmittingInterest, setIsSubmittingInterest] = useState(false);
+
+  const handleInterestSubmit = async (e) => {
+    if (e) e.preventDefault();
+    if (!interestEmail.trim() || !interestEmail.includes('@')) {
+      showToast(language === 'en' ? "Please enter a valid email address." : "Vennligst oppgi en gyldig e-postadresse.", "error");
+      return;
+    }
+
+    setIsSubmittingInterest(true);
+    try {
+      const { db } = await import('@/firebase');
+      const { collection, addDoc, serverTimestamp, doc, setDoc } = await import('firebase/firestore');
+
+      await addDoc(collection(db, "admission_leads"), {
+        name: interestName.trim(),
+        email: interestEmail.trim(),
+        createdAt: serverTimestamp(),
+        source: 'admission_portal_reminder_2027'
+      });
+
+      try {
+        const emailRef = doc(collection(db, "support_emails"));
+        await setDoc(emailRef, {
+          to: 'school@hiskingdomministry.no',
+          replyTo: interestEmail.trim(),
+          message: {
+            subject: `[HKPC Opptak 2027] Ny interessert student: ${interestName.trim() || interestEmail.trim()}`,
+            text: `En potensiell søker har registrert seg for påminnelse når søknadsportalen åpner 1. januar 2027:\n\nNavn: ${interestName.trim() || 'Ikke oppgitt'}\nE-post: ${interestEmail.trim()}`
+          }
+        });
+      } catch (mailErr) {}
+
+      setInterestSubmitted(true);
+      showToast(language === 'en' ? "Thank you! We will notify you when applications open." : "Takk! Vi sender deg varsel så snart søknaden åpner 1. januar 2027.");
+    } catch (err) {
+      console.error("Kunne ikke lagre interesse:", err);
+      showToast("Noe gikk galt: " + err.message, "error");
+    } finally {
+      setIsSubmittingInterest(false);
+    }
+  };
 
   // Multi-step Application Form States (4 steps)
   const [currentStep, setCurrentStep] = useState(1); // 1: Personalia, 2: Studielinje, 3: Åndelig bakgrunn, 4: Referanse
@@ -327,6 +381,10 @@ export default function AdmissionPage() {
 
   const handleFormSubmit = async (e) => {
     if (e) e.preventDefault();
+    if (!isAdmissionOpen) {
+      showToast(language === 'en' ? "The application portal opens January 1, 2027." : "Søknadsportalen åpner offisielt 1. januar 2027.", "error");
+      return;
+    }
     if (!validateStep1() || !validateStep2() || !validateStep3() || !validateStep4()) return;
 
     setIsSubmitting(true);
@@ -569,7 +627,13 @@ export default function AdmissionPage() {
               href="#apply-form"
               className="px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-sm sm:text-base font-sans uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
             >
-              <span><CmsText slug="admission-hero-cta" fallback={language === 'en' ? "Fill Out Application Form" : "Gå til søknadsskjema"} /></span>
+              <span>
+                {isAdmissionOpen ? (
+                  <CmsText slug="admission-hero-cta" fallback={language === 'en' ? "Fill Out Application Form" : "Gå til søknadsskjema"} />
+                ) : (
+                  <CmsText slug="admission-hero-cta-closed" fallback={language === 'en' ? "Applications Open Jan 1, 2027" : "Søknaden åpner 1. jan 2027"} />
+                )}
+              </span>
               <ChevronRight size={16} />
             </a>
           </div>
@@ -886,11 +950,157 @@ export default function AdmissionPage() {
           </div>
         </section>
 
-        {/* SECTION 4: INTERACTIVE 4-STEP APPLICATION FORM */}
-        <section id="apply-form" className="bg-white border border-[#e2dce7]/70 rounded-3xl p-6 sm:p-10 shadow-lg max-w-4xl mx-auto scroll-mt-24">
-          <AnimatePresence mode="wait">
-            {paymentStep === 'form' ? (
-              <div key="form-container" className="space-y-8">
+        {/* SECTION 4: INTERACTIVE 4-STEP APPLICATION FORM OR OPENING ANNOUNCEMENT */}
+        <section id="apply-form" className="max-w-4xl mx-auto scroll-mt-24">
+          {!isAdmissionOpen ? (
+            /* LOCKED / COMING SOON VIEW (Before January 1, 2027) */
+            <div className="bg-white border border-[#e2dce7]/70 rounded-3xl p-8 sm:p-12 shadow-lg text-center space-y-8 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-[#561291]/5 blur-3xl pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-[#D7B978]/10 blur-3xl pointer-events-none" />
+
+              <div className="relative z-10 space-y-3">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#561291]/10 text-[#561291] font-bold text-xs sm:text-sm uppercase tracking-wider border border-[#561291]/20">
+                  <Lock size={15} className="text-[#561291]" />
+                  <span><CmsText slug="admission-locked-badge" fallback={language === 'en' ? "Application Opens January 1, 2027" : "Søknadsportalen åpner 1. januar 2027"} /></span>
+                </div>
+
+                <h3 className="font-sans text-2xl sm:text-4xl font-extrabold text-[#561291]">
+                  <CmsText slug="admission-locked-title" fallback={language === 'en' ? "Applications Open January 1, 2027" : "Søknadsportalen åpner 1. januar 2027"} />
+                </h3>
+                
+                <p className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto">
+                  <CmsText 
+                    slug="admission-locked-desc" 
+                    fallback={language === 'en' 
+                      ? "The application period for the 2027/2028 academic year officially opens January 1, 2027 and remains open through June 30, 2027. Review our study lines and tuition plans above, and leave your details below to get a reminder when applications open."
+                      : "Søkeperioden for studieåret 2027/2028 åpner offisielt 1. januar 2027 og varer frem til 30. juni 2027. Les om våre linjer og opplegg ovenfor, og meld deg på under for å få påminnelse så snart søknadsskjemaet åpner."
+                    } 
+                  />
+                </p>
+              </div>
+
+              {/* Timeline Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto text-left relative z-10">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                  <div className="flex items-center gap-1.5 text-[#561291] text-xs font-bold uppercase tracking-wider">
+                    <Calendar size={14} />
+                    <span>{language === 'en' ? "Opening" : "Søknad åpner"}</span>
+                  </div>
+                  <div className="font-bold text-slate-800 text-base">1. januar 2027</div>
+                  <p className="text-xs text-slate-500 font-normal">{language === 'en' ? "Digital form available" : "Digitalt skjema åpner"}</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                  <div className="flex items-center gap-1.5 text-[#561291] text-xs font-bold uppercase tracking-wider">
+                    <Clock size={14} />
+                    <span>{language === 'en' ? "Deadline" : "Søknadsfrist"}</span>
+                  </div>
+                  <div className="font-bold text-slate-800 text-base">30. juni 2027</div>
+                  <p className="text-xs text-slate-500 font-normal">{language === 'en' ? "Continuous evaluation" : "Fortløpende opptak"}</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#561291]/5 border border-[#561291]/20 space-y-1">
+                  <div className="flex items-center gap-1.5 text-[#561291] text-xs font-bold uppercase tracking-wider">
+                    <Sparkles size={14} className="text-[#D7B978]" />
+                    <span>{language === 'en' ? "Kickoff" : "Kickoff i Norge"}</span>
+                  </div>
+                  <div className="font-bold text-[#561291] text-base">27. august 2027</div>
+                  <p className="text-xs text-slate-600 font-normal">{language === 'en' ? "On-site gathering" : "Fysisk samling"}</p>
+                </div>
+              </div>
+
+              {/* Get Notified / Lead Capture Form */}
+              <div className="max-w-lg mx-auto bg-gradient-to-br from-[#561291]/5 to-[#D7B978]/10 border border-[#561291]/15 rounded-2xl p-6 sm:p-8 space-y-4 relative z-10 text-center">
+                <div className="space-y-1">
+                  <div className="w-11 h-11 rounded-2xl bg-[#561291]/10 text-[#561291] flex items-center justify-center mx-auto mb-2 shadow-xs">
+                    <Bell size={20} />
+                  </div>
+                  <h4 className="font-bold text-lg text-[#561291]">
+                    {language === 'en' ? "Get Notified When Applications Open" : "Få påminnelse når søknaden åpner"}
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed">
+                    {language === 'en'
+                      ? "Leave your name and email to receive an instant reminder the moment the portal opens on January 1, 2027."
+                      : "Legg igjen navn og e-post, så sender vi deg en påminnelse så snart søknadsskjemaet åpner 1. januar 2027."}
+                  </p>
+                </div>
+
+                {interestSubmitted ? (
+                  <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-800 text-sm font-semibold flex items-center justify-center gap-2">
+                    <CheckCircle2 size={18} className="text-green-600 shrink-0" />
+                    <span>{language === 'en' ? "Thank you! We will notify you on January 1, 2027." : "Takk! Vi sender deg en påminnelse 1. januar 2027."}</span>
+                  </div>
+                ) : (
+                  <form onSubmit={handleInterestSubmit} className="space-y-3 pt-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-left">
+                      <input
+                        type="text"
+                        placeholder={language === 'en' ? "Your Name" : "Ditt navn"}
+                        value={interestName}
+                        onChange={(e) => setInterestName(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-white border border-slate-200 focus:border-[#561291] rounded-xl text-sm focus:outline-none"
+                      />
+                      <input
+                        type="email"
+                        required
+                        placeholder={language === 'en' ? "Your Email *" : "Din e-post *"}
+                        value={interestEmail}
+                        onChange={(e) => setInterestEmail(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-white border border-slate-200 focus:border-[#561291] rounded-xl text-sm focus:outline-none"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmittingInterest}
+                      className="w-full py-3 bg-[#561291] hover:bg-[#430d72] text-white font-bold text-sm uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                      <Bell size={16} />
+                      <span>{isSubmittingInterest ? (language === 'en' ? "Saving..." : "Lagrer...") : (language === 'en' ? "Notify Me" : "Send meg påminnelse")}</span>
+                    </button>
+                  </form>
+                )}
+              </div>
+
+              {/* Discreet Admin Preview Link */}
+              <div className="pt-2 relative z-10">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('preview', 'true');
+                    window.location.href = url.toString();
+                  }}
+                  className="text-xs text-slate-400 hover:text-[#561291] underline decoration-slate-300 transition-colors"
+                >
+                  {language === 'en' ? "Admin / Developer: Preview & test application form" : "Admin / Utvikler: Forhåndsvis og test søknadsskjema"}
+                </button>
+              </div>
+            </div>
+          ) : (
+            /* ACTIVE APPLICATION WIZARD (Opens Jan 1, 2027 or in ?preview=true mode) */
+            <div className="bg-white border border-[#e2dce7]/70 rounded-3xl p-6 sm:p-10 shadow-lg">
+              {isPreviewMode && (
+                <div className="mb-6 p-3 px-4 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold">⚠️ Forhåndsvisningsmodus aktiv (?preview=true):</span>
+                    <span>Søknadsskjemaet er synlig for deg, men åpner offisielt for publikum 1. januar 2027.</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const url = new URL(window.location.href);
+                      url.searchParams.delete('preview');
+                      window.location.href = url.toString();
+                    }}
+                    className="font-bold underline text-amber-800 hover:text-amber-950"
+                  >
+                    Avslutt forhåndsvisning
+                  </button>
+                </div>
+              )}
+              <AnimatePresence mode="wait">
+                {paymentStep === 'form' ? (
+                  <div key="form-container" className="space-y-8">
                 
                 {/* Header */}
                 <div className="text-center space-y-3">
@@ -1815,6 +2025,8 @@ export default function AdmissionPage() {
               </motion.div>
             )}
           </AnimatePresence>
+            </div>
+          )}
         </section>
 
       </main>
