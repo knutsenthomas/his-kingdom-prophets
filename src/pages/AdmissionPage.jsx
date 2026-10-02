@@ -802,7 +802,7 @@ export default function AdmissionPage() {
                       name="program"
                       value={formData.program}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-base rounded-xl focus:outline-none font-normal transition-all font-sans"
+                      className="w-full pl-4 pr-12 py-3 bg-slate-50 border border-slate-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20 text-base rounded-xl focus:outline-none font-normal transition-all font-sans cursor-pointer appearance-none"
                     >
                       {programs.map(p => (
                         <option key={p.id} value={p.id}>
