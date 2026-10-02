@@ -157,7 +157,12 @@ export default function LandingPage() {
                   href="#introduction" 
                   onClick={(e) => handleNavClick(e, 'introduction')}
                 >
-                  <span className="play">▷</span> {language === 'no' ? 'Se introduksjon' : 'See introduction'}
+                  <span className="play" aria-hidden="true">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="6 3 20 12 6 21 6 3" />
+                    </svg>
+                  </span>
+                  <span>{language === 'no' ? 'Se introduksjon' : 'See introduction'}</span>
                 </a>
               </div>
             </div>
