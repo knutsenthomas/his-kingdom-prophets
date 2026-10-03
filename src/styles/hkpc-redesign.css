@@ -1145,23 +1145,42 @@
 /* Responsive: Mobile */
 @media (max-width: 640px) {
   .hkpc-landing .site-footer {
-    padding: 32px 0 max(28px, env(safe-area-inset-bottom, 28px));
+    padding: 48px 0 max(36px, env(safe-area-inset-bottom, 36px));
   }
   .hkpc-landing .site-footer .wrap {
-    gap: 24px;
+    gap: 32px;
+    padding: 0 20px;
   }
   .hkpc-landing .footer-main-row {
     flex-direction: column;
-    align-items: stretch;
-    gap: 20px;
+    align-items: center;
+    gap: 28px;
+    text-align: center;
   }
   .hkpc-landing .footer-brand-col {
     align-items: center;
     text-align: center;
+    gap: 12px;
+    max-width: 100%;
+  }
+  .hkpc-landing .footer-brand-col .brand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .hkpc-landing .footer-brand-col .brand img {
+    height: 38px;
+  }
+  .hkpc-landing .footer-brand-col .brand span {
+    text-align: left;
   }
   .hkpc-landing .footer-tagline {
-    font-size: 13.5px;
-    max-width: 320px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #64748b;
+    max-width: 300px;
+    margin: 0 auto;
   }
   .hkpc-landing .footer-links-col {
     width: 100%;
@@ -1169,39 +1188,64 @@
   }
   .hkpc-landing .footer-nav {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px 12px;
+    grid-template-columns: repeat(2, minmax(0, auto));
+    justify-content: center;
+    gap: 6px 28px;
     width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
   }
   .hkpc-landing .footer-link {
-    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 6px 4px;
     min-height: 44px;
-    padding: 10px 8px;
-    background: rgba(112, 38, 176, 0.03);
-    border: 1px solid rgba(112, 38, 176, 0.06);
-    border-radius: 10px;
-    font-size: 13.5px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4b5563;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    white-space: nowrap;
+    transition: color 150ms ease;
+  }
+  .hkpc-landing .footer-link:active {
+    color: var(--violet);
   }
   .hkpc-landing .footer-admin-link {
     grid-column: span 2;
-    justify-content: center;
-    min-height: 44px;
-    font-size: 13.5px;
-    margin-top: 4px;
+    justify-self: center;
+    margin-top: 10px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 20px;
+    background: rgba(112, 38, 176, 0.05);
+    border: 1px solid rgba(112, 38, 176, 0.14);
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
   }
   .hkpc-landing .footer-bottom-bar {
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 8px;
-    padding-top: 20px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
   }
   .hkpc-landing .copyright-text {
-    font-size: 12.5px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #94a3b8;
+    max-width: 320px;
+    margin: 0 auto;
   }
   .hkpc-landing .footer-ministry-note {
     font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
   }
 }
 
