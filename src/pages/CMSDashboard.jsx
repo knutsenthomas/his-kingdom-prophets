@@ -134,6 +134,9 @@ const assetDefinitions = [
   { slug: 'landing-faq-a-6', title: 'FAQ Svar 7', section: 'Hjemmeside', type: 'textarea', description: 'Svar på spørsmål 7.' },
   { slug: 'landing-faq-q-7', title: 'FAQ Spørsmål 8', section: 'Hjemmeside', type: 'text', description: 'Hva er opptakskravene til HKPC?' },
   { slug: 'landing-faq-a-7', title: 'FAQ Svar 8', section: 'Hjemmeside', type: 'textarea', description: 'Svar på spørsmål 8.' },
+  { slug: 'landing-faq-cta-title', title: 'FAQ Bunn-boks Tittel', section: 'Hjemmeside', type: 'text', description: 'Overskrift i hjelpeboksen under FAQ (Fant du ikke det du lette etter?).' },
+  { slug: 'landing-faq-cta-desc', title: 'FAQ Bunn-boks Beskrivelse', section: 'Hjemmeside', type: 'textarea', description: 'Hjelpetekst i boksen under FAQ.' },
+  { slug: 'landing-faq-cta-btn', title: 'FAQ Bunn-boks Knapp', section: 'Hjemmeside', type: 'text', description: 'Tekst på kontakt-knappen under FAQ.' },
 
   // Hjemmeside Siste CTA
   { slug: 'landing-cta-tagline', title: 'CTA Seksjon Tagline', section: 'Hjemmeside', type: 'text', description: 'Liten tekst øverst i siste handlingsseksjon (f.eks. Opptak Åpent...).' },

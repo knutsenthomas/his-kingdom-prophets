@@ -756,20 +756,34 @@ export default function LandingPage() {
           <div className="faq-cta-box">
             <div>
               <strong className="block text-base text-[#271f30] font-bold">
-                {language === 'no' ? 'Fant du ikke det du lette etter?' : 'Didn’t find what you were looking for?'}
+                <CmsText 
+                  slug="landing-faq-cta-title" 
+                  fallback={language === 'no' ? 'Fant du ikke det du lette etter?' : 'Didn’t find what you were looking for?'} 
+                />
               </strong>
               <small className="block text-sm text-[#6d6575] mt-1">
-                {language === 'no' 
-                  ? 'Vi hjelper deg gjerne! Ta kontakt med oss via vår kontaktside.' 
-                  : 'We are here to help! Reach out to us via our support page.'}
+                <CmsText 
+                  slug="landing-faq-cta-desc" 
+                  fallback={language === 'no' 
+                    ? 'Vi hjelper deg gjerne! Ta kontakt med oss via vår kontaktside.' 
+                    : 'We are here to help! Reach out to us via our support page.'} 
+                />
               </small>
             </div>
             <button
-              onClick={() => navigate('/support')}
+              type="button"
+              onClick={() => {
+                if (!isAdminEditing) navigate('/support');
+              }}
               className="faq-cta-btn"
             >
               <HelpCircle size={16} />
-              <span>{language === 'no' ? 'Kontakt oss' : 'Contact Support'}</span>
+              <span>
+                <CmsText 
+                  slug="landing-faq-cta-btn" 
+                  fallback={language === 'no' ? 'Kontakt oss' : 'Contact Support'} 
+                />
+              </span>
             </button>
           </div>
         </section>
