@@ -473,6 +473,34 @@ export default function CMSDashboard() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [activeMenuRow, setActiveMenuRow] = useState(null);
 
+  const currentAuthorName = user?.name ? `${user.name} (Administrator)` : 'Thomas Knutsen (Administrator)';
+  const [revisions, setRevisions] = useState(() => {
+    try {
+      const saved = localStorage.getItem('hkm-cms-revisions');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    const defaultAuthor = user?.name ? `${user.name} (Administrator)` : 'Thomas Knutsen (Administrator)';
+    return [
+      { 
+        id: 2, 
+        date: 'I dag - ' + new Date().toLocaleTimeString('no-NO', { hour: '2-digit', minute: '2-digit' }), 
+        author: defaultAuthor, 
+        action: 'Oppdaterte og publiserte FAQ og nettsidetekster' 
+      },
+      { 
+        id: 1, 
+        date: 'Oppstart', 
+        author: defaultAuthor, 
+        action: 'Initialiserte CMS-innhold for His Kingdom Prophetic Community' 
+      }
+    ];
+  });
+
   // Initialize draftContent as a clean local copy of global cmsContent state merged with defaults
   useEffect(() => {
     const copy = { ...DEFAULT_CMS_CONTENT, ...(cmsContent || {}) };
@@ -595,10 +623,29 @@ export default function CMSDashboard() {
     await new Promise(resolve => setTimeout(resolve, 1500));
 
     // Save all local drafts into the global App context
+    let changedCount = 0;
     Object.keys(draftContent).forEach(key => {
       if (draftContent[key] !== cmsContent[key]) {
         updateCmsContent(key, draftContent[key]);
+        changedCount++;
       }
+    });
+
+    const now = new Date();
+    const dateFormatted = `I dag - ${now.toLocaleTimeString('no-NO', { hour: '2-digit', minute: '2-digit' })}`;
+    const newRev = {
+      id: Date.now(),
+      date: dateFormatted,
+      author: currentAuthorName,
+      action: changedCount > 0 ? `Oppdaterte ${changedCount} CMS-tekster` : `Publiserte og verifiserte innhold`,
+      snapshot: { ...draftContent }
+    };
+    setRevisions(prev => {
+      const updated = [newRev, ...prev.slice(0, 19)];
+      try {
+        localStorage.setItem('hkm-cms-revisions', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
     });
 
     setIsPublishing(false);
@@ -819,13 +866,6 @@ export default function CMSDashboard() {
     e.target.value = null; // Clear input
   };
 
-  // Timeline Mock Revision entries
-  const mockRevisions = [
-    { id: 4, date: 'I dag - 17:45', author: 'Siri Hansen (Administrator)', action: 'Oppdaterte landing-hero-title til "His Kingdom prophets"' },
-    { id: 3, date: 'I dag - 14:20', author: 'Siri Hansen (Administrator)', action: 'La inn engelske oversettelser for student-welcome-subtitle' },
-    { id: 2, date: 'I går - 09:15', author: 'Thomas Knutsen (Utvikler)', action: 'Konfigurerte onboarding felt-strings for nye studentprofiler' },
-    { id: 1, date: '20. Mai - 10:00', author: 'System (Initialisering)', action: 'Etablerte CMS-språkbase med 75 nøkler' }
-  ];
 
   // DocumentCMSPanel subcomponent for custom PDF uploads via Firebase Storage
   const DocumentCMSPanel = () => {
@@ -1952,13 +1992,35 @@ export default function CMSDashboard() {
                 </p>
                 
                 <div className="relative border-l border-outline-variant/40 ml-3 pl-6 space-y-8 mt-4">
-                  {mockRevisions.map((rev, index) => (
-                    <div key={rev.id} className="relative">
+                  {revisions.map((rev, index) => (
+                    <div key={rev.id || index} className="relative">
                       {/* Timeline dot styling */}
-                      <span className={`absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full border-2 border-white shadow flex items-center justify-center ${index === 0 ? 'bg-primary ring-4 ring-primary/20' : 'bg-outline-variant'}`} />
+                      <span className={`absolute -left-[31px] top-1 w-3.5 h-3.5 rounded-full border-2 border-white shadow flex items-center justify-center ${index === 0 ? 'bg-[#561291] ring-4 ring-[#561291]/20' : 'bg-outline-variant'}`} />
                       
-                      <span className="text-[10px] text-outline font-bold block">{rev.date}</span>
-                      <span className="text-xs font-bold text-primary mt-1 block">{rev.author}</span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] text-outline font-bold block">{rev.date}</span>
+                        {rev.snapshot && index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (window.confirm(`Vil du gjenopprette innholdet fra revisjonen gjort av ${rev.author} (${rev.date})?`)) {
+                                setDraftContent({ ...rev.snapshot });
+                                setIsHistoryOpen(false);
+                                setToastMessage({
+                                  title: 'Revisjon gjenopprettet',
+                                  desc: `Innholdet fra ${rev.date} er lagt inn i redigeringsfeltet ditt.`
+                                });
+                                setShowToast(true);
+                                setTimeout(() => setShowToast(false), 3000);
+                              }
+                            }}
+                            className="text-[10px] font-bold text-primary hover:underline cursor-pointer"
+                          >
+                            Rull tilbake til denne
+                          </button>
+                        )}
+                      </div>
+                      <span className="text-xs font-bold text-[#561291] mt-1 block">{rev.author}</span>
                       <p className="text-[11px] text-on-surface-variant mt-1.5 leading-normal bg-slate-50 p-2.5 rounded-lg border border-outline-variant/30 font-medium">
                         {rev.action}
                       </p>
@@ -1968,27 +2030,45 @@ export default function CMSDashboard() {
               </div>
 
               {/* Revision Reversion Action Button */}
-              <div className="pt-4 border-t border-outline-variant/30 shrink-0">
+              <div className="pt-4 border-t border-outline-variant/30 shrink-0 space-y-2">
                 <button 
                   onClick={() => {
-                    if (window.confirm('Vil du hente den forrige revisjonen (Revisjon 3)? Dette vil overskrive dine nåværende utkast.')) {
-                      setDraftContent(prev => ({
-                        ...prev,
-                        'landing-hero-title': 'His Kingdom prophets',
-                        'student-welcome-subtitle-en': 'You are making exceptional progress in prophetic ministry and hermeneutics this week. Your mentors have published 2 new study books in the library.'
-                      }));
+                    const prevSnapshotRev = revisions.find((r, i) => i > 0 && r.snapshot);
+                    if (window.confirm('Vil du hente den forrige revisjonen? Dette vil overskrive dine nåværende ulagrede utkast.')) {
+                      if (prevSnapshotRev?.snapshot) {
+                        setDraftContent({ ...prevSnapshotRev.snapshot });
+                      } else {
+                        setDraftContent({ ...DEFAULT_CMS_CONTENT });
+                      }
                       setIsHistoryOpen(false);
                       setToastMessage({
                         title: 'Historikk gjenopprettet',
-                        desc: 'Innholdet fra Revisjon 3 er lagt inn i redigeringsfeltet ditt.'
+                        desc: 'Forrige revisjon er lagt inn i utkastet ditt.'
                       });
                       setShowToast(true);
                       setTimeout(() => setShowToast(false), 3000);
                     }
                   }}
-                  className="w-full py-3 bg-[#561291] hover:bg-[#561291]/90 text-white text-xs font-bold uppercase rounded-lg shadow active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                  className="w-full py-2.5 bg-[#561291] hover:bg-[#561291]/90 text-white text-xs font-bold uppercase rounded-lg shadow active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <RotateCcw size={16} /> Gjenopprett forrige revisjon (#3)
+                  <RotateCcw size={15} /> Gjenopprett forrige revisjon
+                </button>
+                <button 
+                  onClick={() => {
+                    if (window.confirm('Er du sikker på at du vil tømme revisjonsloggen?')) {
+                      const cleared = [{
+                        id: Date.now(),
+                        date: 'I dag - ' + new Date().toLocaleTimeString('no-NO', { hour: '2-digit', minute: '2-digit' }),
+                        author: currentAuthorName,
+                        action: 'Revisjonslogg nullstilt'
+                      }];
+                      setRevisions(cleared);
+                      localStorage.setItem('hkm-cms-revisions', JSON.stringify(cleared));
+                    }
+                  }}
+                  className="w-full py-1.5 text-[11px] text-slate-500 hover:text-red-600 transition-colors cursor-pointer text-center"
+                >
+                  Tøm revisjonslogg
                 </button>
               </div>
             </motion.div>
