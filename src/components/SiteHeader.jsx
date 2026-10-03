@@ -309,11 +309,6 @@ export default function SiteHeader() {
                         </div>
                         <div className="choice-text">
                           <h4>{language === 'no' ? 'Nettside Admin' : 'Website Admin'}</h4>
-                          <p>
-                            {language === 'no' 
-                              ? 'For administratorer som skal redigere tekst, opptak og innhold på hkpc.no.' 
-                              : 'For administrators editing text, admissions, and content on hkpc.no.'}
-                          </p>
                           <span className="choice-action-link secondary-link">
                             {isAdmin 
                               ? (language === 'no' ? 'Åpne CMS Dashboard →' : 'Open CMS Dashboard →') 
