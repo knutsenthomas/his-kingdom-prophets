@@ -2236,3 +2236,264 @@
     padding-bottom: max(25px, env(safe-area-inset-bottom, 25px));
   }
 }
+
+/* ========================================================
+   Login Dropdown & 2-Choice Navigation Popover
+   ======================================================== */
+.hkpc-landing .login-dropdown-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.hkpc-landing .login-btn.active {
+  color: var(--violet);
+  background: var(--soft);
+}
+
+.hkpc-landing .login-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 350px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 20px 48px -10px rgba(39, 31, 48, 0.22), 0 0 0 1px rgba(86, 18, 145, 0.12);
+  padding: 16px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hkpc-landing .login-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1ecf5;
+}
+
+.hkpc-landing .login-dropdown-badge {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--violet);
+}
+
+.hkpc-landing .login-dropdown-close {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: #8e8399;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.hkpc-landing .login-dropdown-close:hover {
+  color: #271f30;
+  background: #f1ecf5;
+}
+
+.hkpc-landing .login-dropdown-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hkpc-landing .login-choice-card {
+  border-radius: 14px;
+  padding: 14px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  text-align: left;
+  border: 1px solid #ded7e4;
+  background: #ffffff;
+}
+
+.hkpc-landing .login-choice-card.primary-choice {
+  background: linear-gradient(135deg, rgba(86, 18, 145, 0.05) 0%, rgba(86, 18, 145, 0.12) 100%);
+  border: 2px solid var(--violet);
+}
+
+.hkpc-landing .login-choice-card.primary-choice:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(86, 18, 145, 0.16);
+  border-color: #430d70;
+}
+
+.hkpc-landing .login-choice-card.primary-choice:active {
+  transform: scale(0.98);
+}
+
+.hkpc-landing .login-choice-card.secondary-choice {
+  background: #ffffff;
+  border: 1px solid #ded7e4;
+}
+
+.hkpc-landing .login-choice-card.secondary-choice:hover {
+  transform: scale(1.02);
+  border-color: var(--violet);
+  background: #FAF8FC;
+  box-shadow: 0 6px 18px rgba(39, 31, 48, 0.08);
+}
+
+.hkpc-landing .login-choice-card.secondary-choice:active {
+  transform: scale(0.98);
+}
+
+.hkpc-landing .choice-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hkpc-landing .choice-priority-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--violet);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.hkpc-landing .choice-admin-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #eeeaf2;
+  color: #564c61;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.hkpc-landing .choice-arrow {
+  color: var(--violet);
+  transition: transform 0.2s ease;
+}
+
+.hkpc-landing .login-choice-card:hover .choice-arrow {
+  transform: translateX(3px);
+}
+
+.hkpc-landing .choice-body {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.hkpc-landing .choice-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hkpc-landing .choice-icon-wrap.primary-icon {
+  background: var(--violet);
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(86, 18, 145, 0.25);
+}
+
+.hkpc-landing .choice-icon-wrap.secondary-icon {
+  background: #eeeaf2;
+  color: var(--violet);
+}
+
+.hkpc-landing .choice-text {
+  flex: 1;
+}
+
+.hkpc-landing .choice-text h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #271f30;
+  font-family: 'DM Sans', Arial, sans-serif;
+}
+
+.hkpc-landing .choice-text p {
+  margin: 3px 0 0 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #6d6575;
+}
+
+.hkpc-landing .choice-action-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--violet);
+}
+
+.hkpc-landing .choice-action-link.secondary-link {
+  color: #4a3e5c;
+}
+
+/* Mobile Login Choices */
+.hkpc-landing .mobile-login-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  background: #FAF8FC;
+  border: 1px solid #ded7e4;
+  border-radius: 14px;
+}
+
+.hkpc-landing .mobile-login-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #796c88;
+  margin-bottom: 2px;
+}
+
+.hkpc-landing .mobile-choice-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 11px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.15s ease;
+  min-height: 48px;
+}
+
+.hkpc-landing .mobile-choice-btn.primary {
+  background: var(--violet);
+  color: #ffffff;
+  border: 0;
+  box-shadow: 0 4px 12px rgba(86, 18, 145, 0.2);
+}
+
+.hkpc-landing .mobile-choice-btn.secondary {
+  background: #ffffff;
+  color: #271f30;
+  border: 1px solid #ded7e4;
+}
+
