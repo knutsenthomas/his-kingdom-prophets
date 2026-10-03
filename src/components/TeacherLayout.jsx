@@ -84,7 +84,7 @@ export default function TeacherLayout() {
   };
 
   return (
-    <div className="relative font-sans antialiased text-on-surface bg-background min-h-screen lg:pl-72 overflow-x-clip">
+    <div className="admin-app-theme relative font-sans antialiased text-on-surface bg-background min-h-screen lg:pl-72 overflow-x-clip">
       
       {/* ========================================================
           1. DESKTOP SIDEBAR (Identical to HKP Community App DesktopSidebar)
@@ -105,22 +105,17 @@ export default function TeacherLayout() {
                 alt="HKP Admin Logo" 
                 className="w-10 h-10 rounded-full object-contain shadow-xs shrink-0 select-none group-hover:scale-105 transition-transform duration-200" 
               />
-              <div className="min-w-0 flex-1">
-                <span className="text-xl font-extrabold text-primary tracking-tight block truncate">
-                  HKP Admin
-                </span>
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block truncate">
-                  Landingsside & Synk
-                </span>
-              </div>
+              <span className="text-xl font-extrabold text-primary tracking-tight group-hover:opacity-90 transition-opacity">
+                HKP Admin
+              </span>
             </button>
           </div>
 
           {/* Grouped Nav Items */}
-          <nav className="px-3 py-2 space-y-3">
+          <nav className="flex-1 px-3 py-3 space-y-4">
             {adminNavGroups.map((section, sIdx) => (
-              <div key={sIdx} className="space-y-0.5">
-                <p className="px-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider pt-1.5 pb-0.5">
+              <div key={sIdx} className="space-y-1">
+                <p className="px-3.5 text-xs font-bold text-outline uppercase tracking-wider pt-2 pb-0.5">
                   {section.group}
                 </p>
                 {section.items.map((item) => {
@@ -130,14 +125,14 @@ export default function TeacherLayout() {
                     <button
                       key={item.id}
                       onClick={() => handleItemClick(item)}
-                      className={`w-full flex items-center text-left gap-3 px-3 py-2 rounded-xl transition-all text-sm font-semibold cursor-pointer group ${
+                      className={`w-full flex items-center text-left gap-3.5 px-3.5 py-2.5 rounded-xl transition-all text-[15px] font-semibold cursor-pointer group ${
                         isActive 
                           ? 'bg-primary text-on-primary shadow-xs' 
-                          : 'text-slate-800 hover:bg-slate-100 hover:text-purple-950'
+                          : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                       }`}
                     >
-                      <Icon size={18} className={`shrink-0 ${isActive ? 'text-on-primary' : 'text-slate-600 group-hover:text-purple-900'}`} />
-                      <span className="text-left flex-1 text-[13.5px] font-semibold">{item.label}</span>
+                      <Icon size={20} className={`shrink-0 ${isActive ? 'text-on-primary' : 'text-primary'}`} />
+                      <span className="text-left flex-1">{item.label}</span>
                       {item.isExternal && (
                         <span className="text-[10px] bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white px-2 py-0.5 rounded-full font-mono font-bold transition-colors">
                           app.hkpc.no
@@ -303,20 +298,15 @@ export default function TeacherLayout() {
                   <img 
                     src="/hkp-logo.png" 
                     alt="HKP Admin Logo" 
-                    className="w-8 h-8 rounded-full object-contain shadow-xs shrink-0 select-none" 
+                    className="w-9 h-9 rounded-full object-contain shadow-xs shrink-0 select-none" 
                   />
-                  <div>
-                    <span className="text-base font-extrabold text-primary tracking-tight block leading-tight">
-                      HKP Admin
-                    </span>
-                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">
-                      Landingsside & Synk
-                    </span>
-                  </div>
+                  <span className="text-lg font-extrabold text-primary tracking-tight block">
+                    HKP Admin
+                  </span>
                 </div>
                 <button 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-10 h-10 flex items-center justify-center hover:bg-surface-container rounded-lg text-primary"
+                  className="w-10 h-10 flex items-center justify-center hover:bg-surface-container rounded-lg text-primary cursor-pointer"
                   aria-label="Lukk meny"
                 >
                   <X size={20} />
@@ -327,7 +317,7 @@ export default function TeacherLayout() {
               <nav className="px-3 py-3 space-y-4">
                 {adminNavGroups.map((section, sIdx) => (
                   <div key={sIdx} className="space-y-1">
-                    <p className="px-3.5 text-xs font-bold text-slate-600 uppercase tracking-wider pt-2 pb-0.5">
+                    <p className="px-3.5 text-xs font-bold text-outline uppercase tracking-wider pt-2 pb-0.5">
                       {section.group}
                     </p>
                     {section.items.map((item) => {
@@ -340,10 +330,10 @@ export default function TeacherLayout() {
                           className={`w-full flex items-center text-left gap-3.5 px-3.5 py-2.5 rounded-xl transition-all text-[15px] font-semibold cursor-pointer group ${
                             isActive 
                               ? 'bg-primary text-on-primary shadow-xs' 
-                              : 'text-slate-800 hover:bg-slate-100 hover:text-purple-950'
+                              : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                           }`}
                         >
-                          <Icon size={20} className={`shrink-0 ${isActive ? 'text-on-primary' : 'text-slate-600 group-hover:text-purple-900'}`} />
+                          <Icon size={20} className={`shrink-0 ${isActive ? 'text-on-primary' : 'text-primary'}`} />
                           <span className="text-left flex-1 text-[14px] font-semibold">{item.label}</span>
                           {item.isExternal && (
                             <span className="text-[10px] bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white px-2 py-0.5 rounded-full font-mono font-bold transition-colors">

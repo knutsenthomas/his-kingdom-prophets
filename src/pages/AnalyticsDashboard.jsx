@@ -23,7 +23,7 @@ export default function AnalyticsDashboard() {
         {/* Intro */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-primary flex items-center gap-2 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2 flex-wrap">
               <BarChart3 size={28} className="text-secondary shrink-0" /> Administrativ Analyse & Rapportering
             </h1>
             <p className="text-xs sm:text-sm text-on-surface-variant mt-1">
@@ -42,7 +42,7 @@ export default function AnalyticsDashboard() {
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
               <p className="text-xs font-bold uppercase tracking-wider text-outline">Daglige Aktive Studenter</p>
-              <h3 className="text-3xl font-bold font-serif text-primary">142</h3>
+              <h3 className="text-3xl font-extrabold text-slate-900">142</h3>
               <p className="text-[10px] text-green-600 font-semibold flex items-center gap-1">
                 <TrendingUp size={12} className="shrink-0" /> +18% økning siste uke
               </p>
@@ -56,7 +56,7 @@ export default function AnalyticsDashboard() {
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
               <p className="text-xs font-bold uppercase tracking-wider text-outline">Oppmøte på Bønneseminar</p>
-              <h3 className="text-3xl font-bold font-serif text-primary">94.6%</h3>
+              <h3 className="text-3xl font-extrabold text-slate-900">94.6%</h3>
               <p className="text-[10px] text-outline font-semibold">Gjennomsnitt alle 3 studiespor</p>
             </div>
             <div className="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary shrink-0">
@@ -68,7 +68,7 @@ export default function AnalyticsDashboard() {
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
               <p className="text-xs font-bold uppercase tracking-wider text-outline">Leksjons-fullføring</p>
-              <h3 className="text-3xl font-bold font-serif text-primary">78%</h3>
+              <h3 className="text-3xl font-extrabold text-slate-900">78%</h3>
               <p className="text-[10px] text-outline font-semibold">Totalt fullførte leksjoner</p>
             </div>
             <div className="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary shrink-0">
@@ -80,7 +80,7 @@ export default function AnalyticsDashboard() {
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
               <p className="text-xs font-bold uppercase tracking-wider text-outline">Plattform-engasjement</p>
-              <h3 className="text-3xl font-bold font-serif text-primary">8.4 / 10</h3>
+              <h3 className="text-3xl font-extrabold text-slate-900">8.4 / 10</h3>
               <p className="text-[10px] text-green-600 font-semibold">Utmerket bruksindeks</p>
             </div>
             <div className="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary shrink-0">
@@ -95,7 +95,7 @@ export default function AnalyticsDashboard() {
           {/* Downloadable Reports: Left (7 cols) */}
           <div className="lg:col-span-7 flex flex-col gap-6">
             <div className="bg-white border border-outline-variant rounded-xl p-5 sm:p-6 shadow-sm flex flex-col gap-6">
-              <h3 className="font-serif text-lg font-bold text-primary flex items-center gap-2 border-b border-outline-variant/30 pb-4">
+              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2 border-b border-outline-variant/30 pb-4">
                 <FileText size={18} className="shrink-0" /> Rapportsenter / PDF & CSV Eksport
               </h3>
 
@@ -171,7 +171,7 @@ export default function AnalyticsDashboard() {
           {/* Activity Log: Right (5 cols) */}
           <div className="lg:col-span-5 flex flex-col gap-6">
             <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col gap-6">
-              <h3 className="font-serif text-lg font-bold text-primary flex items-center gap-2 border-b border-outline-variant/30 pb-4">
+              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2 border-b border-outline-variant/30 pb-4">
                 <RefreshCw size={18} /> Aktivitetslogg
               </h3>
 

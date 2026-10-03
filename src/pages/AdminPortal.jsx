@@ -410,7 +410,7 @@ export default function AdminPortal() {
           <div className="w-16 h-16 bg-red-50 text-[#ba1a1a] rounded-full flex items-center justify-center mx-auto shadow-inner">
             <Lock className="w-8 h-8" />
           </div>
-          <h2 className="font-serif text-2xl font-bold text-[#561291]">Adgang Avvist</h2>
+          <h2 className="text-2xl font-bold text-slate-900">Adgang Avvist</h2>
           <p className="text-sm text-[#41474d] leading-relaxed">
             Kun administratorer og super admin har tilgang til denne portalen. Vennligst logg på med en autorisert konto for å administrere systemet.
           </p>
@@ -603,7 +603,7 @@ export default function AdminPortal() {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4 border-b border-outline-variant/40 pb-6">
         <div>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#561291] mb-2 tracking-tight">Admin Portal</h1>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-2 tracking-tight">Admin Portal</h1>
           <p className="text-sm text-on-surface-variant">
             Overordnet system- og brukerhåndtering for His Kingdom Prophets.
           </p>
@@ -663,19 +663,19 @@ export default function AdminPortal() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-white border border-outline-variant/40 p-5 rounded-2xl shadow-sm">
                 <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Totalt antall brukere</p>
-                <p className="text-3xl font-serif font-bold text-[#561291] mt-2">{(usersList || []).length}</p>
+                <p className="text-3xl font-extrabold text-slate-900 mt-2">{(usersList || []).length}</p>
               </div>
               <div className="bg-white border border-outline-variant/40 p-5 rounded-2xl shadow-sm">
                 <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Studenter</p>
-                <p className="text-3xl font-serif font-bold text-[#561291] mt-2">{(usersList || []).filter(u=>u?.role==='student').length}</p>
+                <p className="text-3xl font-extrabold text-slate-900 mt-2">{(usersList || []).filter(u=>u?.role==='student').length}</p>
               </div>
               <div className="bg-white border border-outline-variant/40 p-5 rounded-2xl shadow-sm">
                 <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Mentorer / Lærere</p>
-                <p className="text-3xl font-serif font-bold text-secondary mt-2">{(usersList || []).filter(u=>u?.role==='teacher').length}</p>
+                <p className="text-3xl font-extrabold text-secondary mt-2">{(usersList || []).filter(u=>u?.role==='teacher').length}</p>
               </div>
               <div className="bg-white border border-outline-variant/40 p-5 rounded-2xl shadow-sm">
                 <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Administratorer</p>
-                <p className="text-3xl font-serif font-bold text-tertiary mt-2">{(usersList || []).filter(u=>u?.role==='admin' || u?.role==='superadmin').length}</p>
+                <p className="text-3xl font-extrabold text-slate-900 mt-2">{(usersList || []).filter(u=>u?.role==='admin' || u?.role==='superadmin').length}</p>
               </div>
             </div>
 
@@ -979,7 +979,7 @@ export default function AdminPortal() {
                     </span>
                   </div>
 
-                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#561291] tracking-tight">
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
                     {admissionFormOpen 
                       ? 'Skjemaet er åpent for alle søkere' 
                       : 'Skjemaet er låst for vanlige besøkende'}
@@ -1077,7 +1077,7 @@ export default function AdminPortal() {
                   <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Mottatte søknader</p>
                   <FileText size={18} />
                 </div>
-                <p className="text-3xl font-serif font-bold text-[#561291]">{applicationsList.length}</p>
+                <p className="text-3xl font-extrabold text-slate-900">{applicationsList.length}</p>
                 <p className="text-xs text-slate-500">Innsendte skjemaer via nettsiden</p>
               </div>
 
@@ -1086,7 +1086,7 @@ export default function AdminPortal() {
                   <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Interesseliste</p>
                   <Mail size={18} />
                 </div>
-                <p className="text-3xl font-serif font-bold text-[#561291]">{leadsList.length}</p>
+                <p className="text-3xl font-extrabold text-slate-900">{leadsList.length}</p>
                 <p className="text-xs text-slate-500">Registrert for forhåndsvarsel</p>
               </div>
 
@@ -1095,7 +1095,7 @@ export default function AdminPortal() {
                   <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Ordinær åpning</p>
                   <Calendar size={18} />
                 </div>
-                <p className="text-2xl font-serif font-bold text-slate-800">1. jan 2027</p>
+                <p className="text-2xl font-extrabold text-slate-900">1. jan 2027</p>
                 <p className="text-xs text-slate-500">Automatisk låsing før denne dato</p>
               </div>
 
@@ -1104,7 +1104,7 @@ export default function AdminPortal() {
                   <p className="text-xs text-on-surface-variant font-bold uppercase tracking-wider">Søknadsfrist</p>
                   <Clock size={18} />
                 </div>
-                <p className="text-2xl font-serif font-bold text-slate-800">30. juni 2027</p>
+                <p className="text-2xl font-extrabold text-slate-900">30. juni 2027</p>
                 <p className="text-xs text-slate-500">Fortløpende opptaksevaluering</p>
               </div>
             </div>
@@ -1465,7 +1465,7 @@ export default function AdminPortal() {
                 {/* Right checklist toggles */}
                 <div className="col-span-12 md:col-span-9 space-y-6">
                   <div className="flex justify-between items-center border-b border-[#c1c7ce]/30 pb-3">
-                    <h3 className="font-serif text-lg font-bold text-[#561291]">
+                    <h3 className="text-lg font-bold text-slate-900">
                       {activePermissionGroup === 'course' ? 'Rettigheter for Kursutvikling' :
                        activePermissionGroup === 'user' ? 'Rettigheter for Brukerhåndtering' :
                        activePermissionGroup === 'media' ? 'Rettigheter for Mediebibliotek' :
@@ -1617,7 +1617,7 @@ export default function AdminPortal() {
                 <X className="w-5 h-5" />
               </button>
 
-              <h3 className="font-serif text-xl font-bold text-[#561291] mb-2 flex items-center gap-2">
+              <h3 className="text-xl font-bold text-slate-900 mb-2 flex items-center gap-2">
                 <Users className="w-5 h-5 text-[#561291]" />
                 Legg til ny bruker
               </h3>
@@ -1726,7 +1726,7 @@ export default function AdminPortal() {
                   </span>
                   <span className="text-xs text-slate-400">ID: {selectedApplication.id}</span>
                 </div>
-                <h3 className="font-serif text-2xl font-bold text-[#561291]">
+                <h3 className="text-2xl font-bold text-slate-900">
                   {selectedApplication.name || 'Ukjent søker'}
                 </h3>
                 <p className="text-xs text-slate-500">

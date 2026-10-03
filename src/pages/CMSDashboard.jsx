@@ -958,7 +958,7 @@ export default function CMSDashboard() {
     return (
       <div className="flex flex-col gap-6">
         <div className="bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm">
-          <h2 className="font-serif text-lg font-bold text-primary mb-1">
+          <h2 className="text-lg font-bold text-slate-900 mb-1">
             <CmsText slug="admin-doc-panel-title" fallback="Dokumentbehandling" />
           </h2>
           <p className="text-xs text-outline font-medium">
@@ -1008,7 +1008,7 @@ export default function CMSDashboard() {
                     )}
                   </div>
 
-                  <h3 className="font-serif text-base font-bold text-primary mb-1">
+                  <h3 className="text-base font-bold text-slate-900 mb-1">
                     <CmsText slug={`admin-doc-${doc.id}-title`} fallback={doc.title} />
                   </h3>
                   <p className="text-xs text-on-surface-variant font-medium mb-6">
@@ -1316,7 +1316,7 @@ export default function CMSDashboard() {
       {/* Page Header and Main Controls */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="font-serif text-2xl md:text-4xl font-bold text-primary flex items-center gap-2">
+          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
             <Languages className="text-primary shrink-0" size={32} /> <CmsText slug="admin-cms-title-header" fallback="Global CMS Styring" />
           </h1>
           <p className="text-xs sm:text-sm text-on-surface-variant mt-1 font-medium">
@@ -1359,7 +1359,7 @@ export default function CMSDashboard() {
         {/* Categories Rail (Left 3 cols) */}
         <div className="lg:col-span-3 flex flex-col gap-6 bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm">
           <div>
-            <h3 className="font-serif text-base font-bold text-primary border-b border-outline-variant/30 pb-3 mb-4 flex items-center gap-2">
+            <h3 className="text-base font-bold text-slate-900 border-b border-outline-variant/30 pb-3 mb-4 flex items-center gap-2">
               <Settings className="text-primary" size={20} /> Kategori
             </h3>
             <ul className="space-y-1.5">
@@ -1394,7 +1394,7 @@ export default function CMSDashboard() {
 
           {/* Export / Import Panel */}
           <div className="border-t border-outline-variant/30 pt-5">
-            <h3 className="font-serif text-base font-bold text-primary mb-3">Eksporter / Importer</h3>
+            <h3 className="text-base font-bold text-slate-900 mb-3">Eksporter / Importer</h3>
             <div className="flex flex-col gap-2">
               <button 
                 onClick={handleExportJSON}
@@ -1434,7 +1434,7 @@ export default function CMSDashboard() {
                     <span className="p-2 bg-[#561291] text-white rounded-xl shadow-sm">
                       <Edit3 size={18} />
                     </span>
-                    <h3 className="text-base font-bold text-[#271f30] font-serif">
+                    <h3 className="text-base font-bold text-[#271f30]">
                       Direkte tekstredigering på nettsiden (hkpc.no)
                     </h3>
                     <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
@@ -1629,7 +1629,7 @@ export default function CMSDashboard() {
             {paginatedAssets.length === 0 && (
               <div className="bg-white border border-dashed border-outline-variant/50 rounded-2xl p-16 text-center text-outline select-none shadow-sm">
                 <Info className="text-outline-variant mx-auto mb-3" size={48} />
-                <p className="font-serif text-lg font-bold text-primary">Ingen treff</p>
+                <p className="text-lg font-bold text-slate-900">Ingen treff</p>
                 <p className="text-xs mt-1 text-on-surface-variant font-medium">
                   Ingen språknøkler matcher valgte søk eller filterkriterier.
                 </p>
@@ -1907,7 +1907,7 @@ export default function CMSDashboard() {
               <div className="flex justify-between items-center pb-4 border-b border-outline-variant/30 shrink-0">
                 <div className="flex items-center gap-2">
                   <History className="text-primary" size={24} />
-                  <h3 className="font-serif text-lg font-bold text-primary">Revisjonshistorikk</h3>
+                  <h3 className="text-lg font-bold text-slate-900">Revisjonshistorikk</h3>
                 </div>
                 <button 
                   onClick={() => setIsHistoryOpen(false)} 
