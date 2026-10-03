@@ -1,23 +1,35 @@
 {
-  "short_name": "HKM Portal",
-  "name": "His Kingdom Prophets Portal",
+  "short_name": "HKPC Portal",
+  "name": "HKPC Portal",
+  "description": "His Kingdom Prophetic Community Portal",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/icon-192.png",
       "type": "image/png",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "/logo.png",
+      "src": "/icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512-maskable.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
     }
   ],
   "start_url": "/",
-  "background_color": "#faf7fc",
-  "theme_color": "#3c096c",
+  "background_color": "#561291",
+  "theme_color": "#561291",
   "display": "standalone",
   "orientation": "portrait"
 }
