@@ -3,21 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { db } from '@/firebase';
 import { collection, getDocs } from 'firebase/firestore';
-import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Globe, RefreshCw, ExternalLink, Edit3, GraduationCap, CheckCircle2, 
-  Users, FileText, Search, Shield, Lock, ArrowRight, Download, Eye, 
-  Sparkles, Check, Database, Smartphone, Layers, ToggleLeft, ToggleRight
+  Globe, ExternalLink, Edit3, GraduationCap, Users, 
+  Download, ArrowRight, Sparkles, ToggleLeft, ToggleRight,
+  Clock, CheckCircle2, ChevronRight
 } from 'lucide-react';
-import CmsText from '@/components/CmsText';
 
 export default function TeacherDashboard() {
   const navigate = useNavigate();
   const { 
     user, 
-    cmsContent, 
     showToast,
-    language,
     admissionFormOpen,
     setAdmissionFormOpenState
   } = useApp();
@@ -25,7 +21,6 @@ export default function TeacherDashboard() {
   const [applications, setApplications] = useState([]);
   const [leadsCount, setLeadsCount] = useState(0);
   const [isLoadingData, setIsLoadingData] = useState(true);
-  const [isSyncing, setIsSyncing] = useState(false);
   const [isTogglingAdmission, setIsTogglingAdmission] = useState(false);
 
   // Fetch real applications and leads from Firestore
@@ -35,6 +30,11 @@ export default function TeacherDashboard() {
       try {
         const appSnap = await getDocs(collection(db, "applications"));
         const apps = appSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        apps.sort((a, b) => {
+          const dateA = a.submittedAt?.toDate?.() || new Date(a.date || 0);
+          const dateB = b.submittedAt?.toDate?.() || new Date(b.date || 0);
+          return dateB - dateA;
+        });
         
         const leadSnap = await getDocs(collection(db, "admission_leads"));
         
@@ -53,23 +53,15 @@ export default function TeacherDashboard() {
     return () => { isMounted = false; };
   }, []);
 
-  const handleSyncCheck = () => {
-    setIsSyncing(true);
-    setTimeout(() => {
-      setIsSyncing(false);
-      showToast("Synkronisering verifisert: Skyfunksjonen communitySso og tilgangstabeller er online.");
-    }, 1200);
-  };
-
   const handleToggleAdmission = async () => {
     if (isTogglingAdmission) return;
     setIsTogglingAdmission(true);
     try {
       const next = !admissionFormOpen;
       await setAdmissionFormOpenState(next);
-      showToast(next ? "Søknadsskjemaet er nå ÅPENT på landingssiden!" : "Søknadsskjemaet er nå LÅST på landingssiden.");
+      showToast(next ? "Søknadsskjemaet er nå ÅPENT på nettsiden!" : "Søknadsskjemaet er nå LÅST (interesseliste aktiv).");
     } catch (err) {
-      showToast("Feil ved endring av opptaksstatus: " + err.message, "error");
+      showToast("Feil ved endring av opptaksstatus: " + err.message);
     } finally {
       setIsTogglingAdmission(false);
     }
@@ -103,329 +95,269 @@ export default function TeacherDashboard() {
   };
 
   return (
-    <main className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 pb-28 space-y-7">
+    <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 pb-20 space-y-8">
       
-      {/* 1. Page Header (Identical to Community App TeacherOverview) */}
-      <header className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 px-4 sm:px-6 pt-3 sm:pt-4 pb-5 sm:pb-6 border-b border-outline-variant/20">
-        <div className="max-w-xl lg:max-w-2xl min-w-0">
-          <h1 className="page-title mt-1 lg:mt-0">Hei, {user?.name?.split(' ')[0] || 'Thomas'}</h1>
-          <p className="text-sm text-on-surface-variant mt-2 leading-relaxed">
-            Velkommen til administrasjon og synkronisering for HKPC. Få samlet oversikt over innhold og opptak på <strong>hkpc.no</strong>, samt sømløs integrasjon og tilgangssynk mot Community-appen (<strong>app.hkpc.no</strong>).
+      {/* 1. Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant/15 pb-6">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
+            Hei, {user?.name?.split(' ')[0] || 'Thomas'}
+          </h1>
+          <p className="text-sm text-slate-500 mt-1">
+            Administrasjon og opptak for <strong>hkpc.no</strong>
           </p>
         </div>
-        <div className="flex items-center justify-end gap-3 shrink-0 pt-0.5">
-          <p className="inline-flex items-center rounded-full border border-primary/10 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary">
-            Administrator · hkpc.no
-          </p>
+
+        <div className="flex items-center gap-2.5">
+          <a
+            href="/"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-primary hover:border-primary/40 text-xs font-semibold shadow-xs transition-all cursor-pointer"
+          >
+            <Globe size={14} className="text-slate-400" />
+            <span>Se nettsiden</span>
+            <ExternalLink size={12} className="opacity-60" />
+          </a>
+          <a
+            href="https://app.hkpc.no"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-primary text-white text-xs font-semibold shadow-sm hover:bg-primary/90 transition-all cursor-pointer"
+          >
+            <span>Åpne Community App</span>
+            <ExternalLink size={12} className="opacity-80" />
+          </a>
         </div>
-      </header>
-
-      {/* 2. Action Toolbar */}
-      <div className="flex flex-wrap items-center gap-2.5">
-        <button
-          onClick={() => window.open('/', '_blank')}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-container-lowest border border-outline-variant/25 text-on-surface text-xs font-semibold hover:border-primary/40 hover:bg-primary/5 transition-all shadow-xs cursor-pointer"
-        >
-          <Globe size={15} className="text-primary" />
-          <span>Vis landingsside (hkpc.no)</span>
-          <ExternalLink size={12} className="text-outline" />
-        </button>
-
-        <button
-          onClick={() => window.open('https://app.hkpc.no', '_blank')}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-on-primary text-xs font-semibold hover:bg-primary/90 transition-all shadow-xs cursor-pointer"
-        >
-          <Smartphone size={15} />
-          <span>Åpne Community App</span>
-          <ExternalLink size={12} className="opacity-80" />
-        </button>
-
-        <button
-          onClick={handleSyncCheck}
-          disabled={isSyncing}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-container-lowest border border-outline-variant/25 text-on-surface text-xs font-semibold hover:border-primary/40 hover:bg-primary/5 transition-all shadow-xs cursor-pointer"
-        >
-          <RefreshCw size={15} className={`text-primary ${isSyncing ? 'animate-spin' : ''}`} />
-          <span>{isSyncing ? "Verifiserer..." : "Synk-sjekk"}</span>
-        </button>
       </div>
 
-      {/* 3. 4 KPI Cards (Identical to Community App TeacherOverview) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+      {/* 2. Key Status Indicators (3 Clean Cards) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         
         {/* Card 1: Søknader */}
-        <button 
-          onClick={() => navigate('/admin/portal?tab=admissions')} 
-          className="text-left bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-4 sm:p-6 hover:border-primary/40 transition-colors shadow-xs cursor-pointer"
+        <div 
+          onClick={() => navigate('/admin/portal?tab=admissions')}
+          className="bg-white border border-outline-variant/20 rounded-2xl p-5 hover:border-primary/40 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
         >
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-semibold text-on-surface">Opptakssøknader</span>
-            <GraduationCap size={20} className="text-primary" />
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Søknader & Opptak</span>
+            <div className="p-2 rounded-xl bg-purple-50 text-primary group-hover:scale-105 transition-transform">
+              <GraduationCap size={18} />
+            </div>
           </div>
-          <strong className="text-3xl sm:text-4xl block mt-4 font-extrabold text-on-surface">
-            {isLoadingData ? '—' : applications.length}
-          </strong>
-          <span className="block mt-2 text-sm text-on-surface-variant">
-            {leadsCount} på interesseliste
-          </span>
-        </button>
-
-        {/* Card 2: Opptaksstatus Toggle */}
-        <div className="text-left bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-4 sm:p-6 hover:border-primary/40 transition-colors shadow-xs flex flex-col justify-between">
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-semibold text-on-surface">Opptak på nettsiden</span>
-            <button
-              onClick={handleToggleAdmission}
-              disabled={isTogglingAdmission}
-              className="text-primary hover:opacity-80 transition-opacity cursor-pointer"
-              title={admissionFormOpen ? "Lås søknadsskjema" : "Åpne søknadsskjema"}
-            >
-              {admissionFormOpen ? <ToggleRight size={26} className="text-emerald-600" /> : <ToggleLeft size={26} className="text-slate-400" />}
-            </button>
+          <div className="mt-4">
+            <strong className="text-3xl font-extrabold text-on-surface">
+              {isLoadingData ? '—' : applications.length}
+            </strong>
+            <p className="text-xs text-slate-500 mt-1">
+              {leadsCount} registrert på interesselisten
+            </p>
           </div>
-          <strong className="text-3xl sm:text-4xl block mt-4 font-extrabold text-on-surface">
-            {admissionFormOpen ? 'Åpent' : 'Låst'}
-          </strong>
-          <span className="block mt-2 text-sm text-on-surface-variant">
-            {admissionFormOpen ? 'Direkte påmelding aktiv' : 'Interesseliste aktiv'}
-          </span>
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-primary">
+            <span>Behandle søknader</span>
+            <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+          </div>
         </div>
 
-        {/* Card 3: Landingsside Status */}
-        <button 
-          onClick={() => navigate('/admin/cms')} 
-          className="text-left bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-4 sm:p-6 hover:border-primary/40 transition-colors shadow-xs cursor-pointer"
-        >
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-semibold text-on-surface">Landingsside</span>
-            <Globe size={20} className="text-primary" />
+        {/* Card 2: Opptaksbryter */}
+        <div className="bg-white border border-outline-variant/20 rounded-2xl p-5 hover:border-primary/40 hover:shadow-md transition-all flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Opptak på nettsiden</span>
+            <button
+              type="button"
+              onClick={handleToggleAdmission}
+              disabled={isTogglingAdmission}
+              className="cursor-pointer focus:outline-none"
+              title={admissionFormOpen ? "Lås søknadsskjema" : "Åpne søknadsskjema"}
+            >
+              {admissionFormOpen ? (
+                <ToggleRight size={28} className="text-emerald-600" />
+              ) : (
+                <ToggleLeft size={28} className="text-slate-400 hover:text-slate-500" />
+              )}
+            </button>
           </div>
-          <strong className="text-3xl sm:text-4xl block mt-4 font-extrabold text-emerald-700">
-            Live
-          </strong>
-          <span className="block mt-2 text-sm text-on-surface-variant">
-            SEO & GEO 100% validert
-          </span>
-        </button>
+          <div className="mt-4">
+            <strong className={`text-3xl font-extrabold ${admissionFormOpen ? 'text-emerald-700' : 'text-slate-700'}`}>
+              {admissionFormOpen ? 'Åpent' : 'Låst'}
+            </strong>
+            <p className="text-xs text-slate-500 mt-1">
+              {admissionFormOpen ? 'Søknadsskjemaet er tilgjengelig for alle' : 'Interesseliste vises for skoleåret 2027'}
+            </p>
+          </div>
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span>Klikk bryter for å {admissionFormOpen ? 'låse' : 'åpne'}</span>
+          </div>
+        </div>
 
-        {/* Card 4: App-synkronisering */}
-        <button 
-          onClick={() => navigate('/admin/portal?tab=users')} 
-          className="text-left bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-4 sm:p-6 hover:border-primary/40 transition-colors shadow-xs cursor-pointer"
+        {/* Card 3: Innholdsstatus */}
+        <div 
+          onClick={() => navigate('/admin/cms')}
+          className="bg-white border border-outline-variant/20 rounded-2xl p-5 hover:border-primary/40 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
         >
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-semibold text-on-surface">App-synk</span>
-            <Database size={20} className="text-primary" />
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Nettside & Innhold</span>
+            <div className="p-2 rounded-xl bg-emerald-50 text-emerald-700 group-hover:scale-105 transition-transform">
+              <Globe size={18} />
+            </div>
           </div>
-          <strong className="text-3xl sm:text-4xl block mt-4 font-extrabold text-primary">
-            Tilkoblet
-          </strong>
-          <span className="block mt-2 text-sm text-on-surface-variant">
-            communitySso aktiv
-          </span>
-        </button>
+          <div className="mt-4">
+            <strong className="text-3xl font-extrabold text-emerald-700 flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Live</span>
+            </strong>
+            <p className="text-xs text-slate-500 mt-1">
+              SEO, tospråklig synk og CMS aktivt
+            </p>
+          </div>
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-primary">
+            <span>Åpne CMS Dashboard</span>
+            <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+          </div>
+        </div>
 
       </div>
 
-      {/* 4. Main 2-Column Grid (Identical to Community App TeacherOverview) */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      {/* 3. Main Sections */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* Left Column (lg:col-span-2): Landingsside Innhold (CMS) */}
-        <section className="lg:col-span-2 bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-5 sm:p-7 space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-outline-variant/20 pb-4">
+        {/* Left Column (2 cols): Søknadsoversikt */}
+        <div className="lg:col-span-2 bg-white border border-outline-variant/20 rounded-2xl p-6 space-y-5">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
             <div>
-              <h2 className="flex gap-2 items-center font-bold text-lg text-on-surface">
-                <Edit3 size={20} className="text-primary" />
-                <span>Landingsside Innhold & CMS</span>
+              <h2 className="text-base font-bold text-on-surface flex items-center gap-2">
+                <GraduationCap size={18} className="text-primary" />
+                <span>Nylige søknader</span>
               </h2>
-              <p className="text-sm text-on-surface-variant mt-1">
-                Rediger tekster, studielinjer og informasjon på hkpc.no
+              <p className="text-xs text-slate-500 mt-0.5">
+                Kandidater som har søkt opptak til HKPC
               </p>
             </div>
-            <button
-              onClick={() => navigate('/admin/cms')}
-              className="rounded-xl bg-primary text-on-primary px-4 py-2.5 text-xs font-semibold hover:bg-primary/90 transition-colors cursor-pointer"
-            >
-              Åpne Global CMS
-            </button>
-          </div>
 
-          {/* Grid of section shortcuts */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {[
-              { title: "Forside Hero & Tittel", desc: "Hovedoverskrift, ingress og CTA-knapp", section: "Forside Hero" },
-              { title: "Studielinjer (PROP/BIBLE/MIN)", desc: "Beskrivelser, emner og kursstruktur", section: "Studieprogram" },
-              { title: "Priser & Finansiering", desc: "Studieavgift, delbetaling og vilkår", section: "Opptaksside" },
-              { title: "Lærere & Fakultet", desc: "Hilde Karin Knutsen & Thomas Knutsen", section: "Fakultet" },
-              { title: "Ofte Stilte Spørsmål (FAQ)", desc: "GEO-optimaliserte svar og veiledning", section: "Kundestøtte" },
-              { title: "Dokumenter & Studieplan", desc: "Last opp pensumhefter og studieguider", section: "documents" }
-            ].map((item, idx) => (
-              <div 
-                key={idx}
-                onClick={() => navigate(item.section === 'documents' ? '/admin/cms?category=documents' : `/admin/cms?search=${encodeURIComponent(item.title.split(' ')[0])}`)}
-                className="p-4 rounded-xl border border-outline-variant/20 bg-surface hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer group flex flex-col justify-between"
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={exportApplicationsCsv}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition cursor-pointer"
+                title="Last ned som regneark"
               >
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-on-surface group-hover:text-primary transition-colors">
-                      {item.title}
-                    </span>
-                    <ArrowRight size={15} className="text-outline group-hover:text-primary transition-transform group-hover:translate-x-0.5" />
+                <Download size={13} />
+                <span className="hidden sm:inline">Eksporter CSV</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/admin/portal?tab=admissions')}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition cursor-pointer"
+              >
+                <span>Se alle ({applications.length})</span>
+                <ArrowRight size={12} />
+              </button>
+            </div>
+          </div>
+
+          {applications.length > 0 ? (
+            <div className="divide-y divide-slate-100">
+              {applications.slice(0, 5).map((app, idx) => {
+                const dateStr = app.submittedAt?.toDate?.() 
+                  ? app.submittedAt.toDate().toLocaleDateString('no-NO') 
+                  : (app.date || 'Nylig');
+
+                return (
+                  <div 
+                    key={app.id || idx}
+                    onClick={() => navigate('/admin/portal?tab=admissions')}
+                    className="py-3 flex items-center justify-between gap-4 hover:bg-slate-50/80 px-2 rounded-xl transition cursor-pointer"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-on-surface truncate">{app.name || 'Uten navn'}</p>
+                      <p className="text-xs text-slate-500 truncate">{app.email} · {app.phone || 'Ikke oppgitt'}</p>
+                    </div>
+                    <div className="text-right shrink-0 flex items-center gap-3">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-purple-50 text-primary">
+                        {app.program === 'prophetic_community' ? 'PROP 101' : (app.program || 'Første år')}
+                      </span>
+                      <span className="text-xs text-slate-400 hidden sm:inline">{dateStr}</span>
+                    </div>
                   </div>
-                  <p className="text-xs text-on-surface-variant leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Direct in-place editor banner */}
-          <div className="p-4 rounded-xl bg-surface border border-outline-variant/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-on-surface flex items-center gap-1.5">
-                <Sparkles size={16} className="text-primary" />
-                <span>Visuell redigering direkte på nettsiden</span>
-              </p>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                Klikk på blyant-ikonet nede til høyre på nettsiden for å redigere tekst direkte i layouten.
-              </p>
+                );
+              })}
             </div>
-            <button
-              onClick={() => window.open('/?cmsEdit=true', '_blank')}
-              className="rounded-xl border border-outline-variant/40 hover:bg-primary/5 text-primary px-3.5 py-2 text-xs font-semibold transition-colors shrink-0 self-start sm:self-auto cursor-pointer"
-            >
-              Åpne nettsiden med editor
-            </button>
-          </div>
-        </section>
-
-        {/* Right Column (lg:col-span-1): Arbeidsverktøy & App-synk */}
-        <section className="bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-5 sm:p-6 flex flex-col justify-between space-y-6">
-          <div>
-            <h2 className="text-lg font-semibold text-on-surface">Arbeidsverktøy & Synk</h2>
-            <div className="mt-4 space-y-2">
-              {[
-                { title: 'Åpne Community App', action: () => window.open('https://app.hkpc.no', '_blank'), isExternal: true },
-                { title: 'Elever & Tilgangssynk', action: () => navigate('/admin/portal?tab=users') },
-                { title: 'Opptakssøknader', action: () => navigate('/admin/portal?tab=admissions') },
-                { title: 'SEO & GEO Status', action: () => navigate('/admin/cms?category=seo') },
-                { title: 'Eksporter søknader (CSV)', action: exportApplicationsCsv },
-                { title: 'Verifiser synkronisering', action: handleSyncCheck },
-              ].map((act, idx) => (
-                <button
-                  key={idx}
-                  onClick={act.action}
-                  className="w-full text-left flex items-center justify-between gap-3 p-3 rounded-xl hover:bg-primary/5 text-sm font-semibold text-on-surface cursor-pointer transition-colors"
-                >
-                  <span>{act.title}</span>
-                  {act.isExternal ? <ExternalLink size={16} className="text-primary" /> : <ArrowRight size={17} className="text-primary" />}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Sync Status Card inside Right Column */}
-          <div className="p-3.5 rounded-xl bg-surface border border-outline-variant/20 space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="text-xs font-semibold text-on-surface">Autentisering (SSO)</span>
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Aktiv
-              </span>
-            </div>
-            <p className="text-[11px] text-on-surface-variant leading-relaxed">
-              Skyfunksjon <code className="font-mono text-primary font-bold">communitySso</code> overfører automatisk godkjente elever til klasserommet i appen.
-            </p>
-          </div>
-        </section>
-
-      </div>
-
-      {/* 5. Bottom Section: SEO, GEO & Siste Søknader */}
-      <div className="grid lg:grid-cols-2 gap-6">
-        
-        {/* SEO & GEO Card */}
-        <section className="bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-5 sm:p-7 space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold inline-flex gap-2 items-center text-on-surface">
-              <Search size={20} className="text-primary" />
-              <span>SEO & GEO (AI-synlighet)</span>
-            </h2>
-            <span className="inline-flex items-center rounded-full border border-emerald-500/20 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">
-              100% Validert
-            </span>
-          </div>
-          <p className="text-sm text-on-surface-variant">
-            hkpc.no er optimalisert for Google og generative søkemotorer (Perplexity, ChatGPT, Gemini) med strukturerte data og robots-direktiver.
-          </p>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
-            <div className="p-3 rounded-xl bg-surface border border-outline-variant/20 text-center">
-              <span className="text-[10px] font-bold text-outline uppercase block">JSON-LD</span>
-              <span className="text-xs font-bold text-emerald-700 mt-1 block">4 Schemaer</span>
-            </div>
-            <div className="p-3 rounded-xl bg-surface border border-outline-variant/20 text-center">
-              <span className="text-[10px] font-bold text-outline uppercase block">Sitemap</span>
-              <a href="/sitemap.xml" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:underline mt-1 block">
-                sitemap.xml ↗
-              </a>
-            </div>
-            <div className="p-3 rounded-xl bg-surface border border-outline-variant/20 text-center">
-              <span className="text-[10px] font-bold text-outline uppercase block">AI-feed</span>
-              <a href="/llms.txt" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:underline mt-1 block">
-                llms.txt ↗
-              </a>
-            </div>
-            <div className="p-3 rounded-xl bg-surface border border-outline-variant/20 text-center">
-              <span className="text-[10px] font-bold text-outline uppercase block">Robots</span>
-              <a href="/robots.txt" target="_blank" rel="noreferrer" className="text-xs font-bold text-primary hover:underline mt-1 block">
-                robots.txt ↗
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* Siste Søknader Card */}
-        <section className="bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-5 sm:p-7 space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold inline-flex gap-2 items-center text-on-surface">
-              <GraduationCap size={20} className="text-primary" />
-              <span>Siste Søknader fra hkpc.no</span>
-            </h2>
-            <button
-              onClick={() => navigate('/admin/portal?tab=admissions')}
-              className="text-sm font-semibold text-primary py-1 hover:underline cursor-pointer"
-            >
-              Alle søknader →
-            </button>
-          </div>
-
-          {applications.length === 0 ? (
-            <p className="text-sm text-on-surface-variant pt-2">
-              {isLoadingData ? "Laster inn søknader..." : "Ingen nye søknader mottatt ennå. Søknader via opptakssiden dukker opp her automatisk."}
-            </p>
           ) : (
-            <div className="space-y-2 pt-1 max-h-[180px] overflow-y-auto">
-              {applications.slice(0, 3).map((app) => (
-                <div 
-                  key={app.id}
-                  className="p-3 rounded-xl border border-outline-variant/20 bg-surface flex items-center justify-between gap-3 text-xs"
-                >
-                  <div className="min-w-0">
-                    <span className="font-bold text-on-surface block truncate">{app.name}</span>
-                    <span className="text-[11px] text-on-surface-variant block truncate">{app.email} · {app.program || 'HKPC'}</span>
-                  </div>
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 shrink-0">
-                    {app.status || 'Mottatt'}
-                  </span>
-                </div>
-              ))}
+            <div className="py-12 text-center space-y-2">
+              <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+                <Clock size={20} />
+              </div>
+              <p className="text-sm font-semibold text-slate-700">Ingen søknader mottatt ennå</p>
+              <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                Søknadene som sendes inn via nettsiden dukker opp her. Neste ordinære opptaksperiode åpner 1. januar 2027.
+              </p>
             </div>
           )}
-        </section>
+        </div>
+
+        {/* Right Column (1 col): Hurtigverktøy */}
+        <div className="bg-white border border-outline-variant/20 rounded-2xl p-6 space-y-5">
+          <div className="border-b border-slate-100 pb-4">
+            <h2 className="text-base font-bold text-on-surface">Redigering & Verktøy</h2>
+            <p className="text-xs text-slate-500 mt-0.5">Hurtighandlinger for nettsiden</p>
+          </div>
+
+          <div className="space-y-3">
+            {/* Visual Editor shortcut */}
+            <div 
+              onClick={() => window.open('/?cms=1', '_blank')}
+              className="p-4 rounded-xl border border-outline-variant/20 hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer group"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-on-surface group-hover:text-primary transition-colors flex items-center gap-2">
+                  <Sparkles size={15} className="text-burnt-orange" />
+                  <span>Visuell redigering</span>
+                </span>
+                <ExternalLink size={13} className="text-slate-400 group-hover:text-primary transition-colors" />
+              </div>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Åpne forsiden og rediger tekster direkte i visningen med blyanten.
+              </p>
+            </div>
+
+            {/* CMS Dashboard */}
+            <div 
+              onClick={() => navigate('/admin/cms')}
+              className="p-4 rounded-xl border border-outline-variant/20 hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer group"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-on-surface group-hover:text-primary transition-colors flex items-center gap-2">
+                  <Edit3 size={15} className="text-primary" />
+                  <span>Tekster & CMS</span>
+                </span>
+                <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+              </div>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Fullstendig oversikt over alle tekster, oversettelser og dokumenter.
+              </p>
+            </div>
+
+            {/* User Directory */}
+            <div 
+              onClick={() => navigate('/admin/portal?tab=users')}
+              className="p-4 rounded-xl border border-outline-variant/20 hover:border-primary/40 hover:bg-primary/5 transition-all cursor-pointer group"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-on-surface group-hover:text-primary transition-colors flex items-center gap-2">
+                  <Users size={15} className="text-primary" />
+                  <span>Elever & Brukere</span>
+                </span>
+                <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+              </div>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Se registrerte brukerkontoer og administrer rettigheter.
+              </p>
+            </div>
+          </div>
+        </div>
 
       </div>
-    </main>
+
+    </div>
   );
 }

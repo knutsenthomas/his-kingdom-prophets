@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { 
-  LayoutDashboard, Edit3, GraduationCap, Search, BarChart3, 
-  FileText, Users, ExternalLink, Globe, Power, Menu, X, Smartphone
+  LayoutDashboard, Edit3, GraduationCap, Users, ExternalLink, 
+  Globe, Power, Menu, X
 } from 'lucide-react';
-import HkmChatWidget from '@/components/HkmChatWidget';
 
 export default function TeacherLayout() {
   const navigate = useNavigate();
@@ -39,28 +38,22 @@ export default function TeacherLayout() {
     navigate('/');
   };
 
-  // Structured navigation groups mirroring the HKP Community App layout
+  // Clean, focused admin navigation
   const adminNavGroups = [
     {
-      group: 'HOVEDSTYRING',
+      group: 'ADMINISTRASJON',
       items: [
-        { id: 'dashboard', label: 'Oversikt (Synk & Status)', path: '/teacher/dashboard', icon: LayoutDashboard },
-      ]
-    },
-    {
-      group: 'LANDINGSSIDE (HKPC.NO)',
-      items: [
-        { id: 'cms', label: 'Innhold & Tekster', path: '/admin/cms', icon: Edit3 },
+        { id: 'dashboard', label: 'Oversikt & Status', path: '/teacher/dashboard', icon: LayoutDashboard },
         { id: 'admissions', label: 'Opptak & Søknader', path: '/admin/portal?tab=admissions', icon: GraduationCap },
-        { id: 'seo', label: 'SEO & Søkemotorer', path: '/admin/cms?category=seo', icon: Search },
-        { id: 'documents', label: 'PDF & Dokumenter', path: '/admin/cms?category=documents', icon: FileText },
+        { id: 'cms', label: 'Innhold & Tekster (CMS)', path: '/admin/cms', icon: Edit3 },
+        { id: 'users', label: 'Elever & Brukere', path: '/admin/portal?tab=users', icon: Users },
       ]
     },
     {
-      group: 'APP-SYNKRONISERING',
+      group: 'SNARVEIER',
       items: [
-        { id: 'users', label: 'Elever & Tilgangssynk', path: '/admin/portal?tab=users', icon: Users },
         { id: 'communityApp', label: 'Åpne Community App', path: 'https://app.hkpc.no', icon: ExternalLink, isExternal: true },
+        { id: 'publicWeb', label: 'Se nettsiden (hkpc.no)', path: '/', icon: Globe, isExternal: true },
       ]
     }
   ];
@@ -86,7 +79,7 @@ export default function TeacherLayout() {
     <div className="admin-app-theme relative font-sans antialiased text-on-surface bg-background min-h-screen lg:pl-72 overflow-x-clip">
       
       {/* ========================================================
-          1. DESKTOP SIDEBAR (Identical to HKP Community App DesktopSidebar)
+          1. DESKTOP SIDEBAR
          ======================================================== */}
       <aside className="hidden lg:flex flex-col w-72 h-screen fixed left-0 top-0 border-r border-outline-variant/20 bg-surface/95 backdrop-blur-lg z-50 overflow-y-auto justify-between">
         <div>
@@ -99,74 +92,66 @@ export default function TeacherLayout() {
               aria-label="HKP Admin - Gå til oversikt"
               className="flex items-center gap-3 text-left group cursor-pointer transition-all active:scale-[0.98] w-full"
             >
-              <img 
-                src="/hkp-logo.png" 
-                alt="HKP Admin Logo" 
-                className="w-10 h-10 rounded-full object-contain shadow-xs shrink-0 select-none group-hover:scale-105 transition-transform duration-200" 
-              />
-              <span className="text-xl font-extrabold text-primary tracking-tight group-hover:opacity-90 transition-opacity">
-                HKP Admin
-              </span>
+              <div className="relative">
+                <img 
+                  src="/hkp-logo.png" 
+                  alt="HKP Admin Logo" 
+                  className="w-10 h-10 rounded-full object-contain shadow-xs shrink-0 select-none group-hover:scale-105 transition-transform" 
+                />
+                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <span className="block text-base font-extrabold text-primary tracking-tight leading-none group-hover:text-primary/90 transition-colors">
+                  HKP Admin
+                </span>
+                <span className="block text-[11px] font-medium text-slate-500 mt-1 truncate">
+                  hkpc.no kontrollpanel
+                </span>
+              </div>
             </button>
           </div>
 
-          {/* Grouped Nav Items */}
-          <nav className="flex-1 px-3 py-3 space-y-4">
-            {adminNavGroups.map((section, sIdx) => (
-              <div key={sIdx} className="space-y-1">
-                <p className="px-3.5 text-xs font-bold text-outline uppercase tracking-wider pt-2 pb-0.5">
-                  {section.group}
+          {/* Navigation Links */}
+          <nav className="p-3.5 space-y-6">
+            {adminNavGroups.map((grp, gIdx) => (
+              <div key={gIdx} className="space-y-1.5">
+                <p className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest select-none">
+                  {grp.group}
                 </p>
-                {section.items.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = checkActive(item.path);
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => handleItemClick(item)}
-                      className={`w-full flex items-center text-left gap-3.5 px-3.5 py-2.5 rounded-xl transition-all text-[15px] font-semibold cursor-pointer group ${
-                        isActive 
-                          ? 'bg-primary text-on-primary shadow-xs' 
-                          : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
-                      }`}
-                    >
-                      <Icon size={20} className={`shrink-0 ${isActive ? 'text-on-primary' : 'text-primary'}`} />
-                      <span className="text-left flex-1">{item.label}</span>
-                      {item.isExternal && (
-                        <span className="text-[10px] bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white px-2 py-0.5 rounded-full font-mono font-bold transition-colors">
-                          app.hkpc.no
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
+                <div className="space-y-0.5">
+                  {grp.items.map((item) => {
+                    const Icon = item.icon;
+                    const active = checkActive(item.path);
+
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => handleItemClick(item)}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer text-left ${
+                          active
+                            ? 'bg-primary text-white shadow-sm font-bold'
+                            : 'text-on-surface hover:bg-primary/5 hover:text-primary'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <Icon size={17} className={active ? 'text-white' : 'text-slate-400'} />
+                          <span>{item.label}</span>
+                        </div>
+                        {item.isExternal && (
+                          <ExternalLink size={12} className={active ? 'text-white/80' : 'text-slate-400'} />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             ))}
           </nav>
-
-          {/* System Status in Sidebar */}
-          <div className="mx-3 my-2 p-2.5 bg-surface-container-low rounded-xl border border-outline-variant/30 space-y-1.5">
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Systemstatus</p>
-            <div className="flex justify-between items-center text-[11px] font-semibold">
-              <span className="text-on-surface-variant">Landingsside (hkpc.no)</span>
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Live
-              </span>
-            </div>
-            <div className="flex justify-between items-center text-[11px] font-semibold pt-1 border-t border-outline-variant/20">
-              <span className="text-on-surface-variant">App-synk (app.hkpc.no)</span>
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                Tilkoblet
-              </span>
-            </div>
-          </div>
         </div>
 
-        {/* Footer User & Teacher Authentication Status */}
-        <div className="p-3 border-t border-outline-variant/20 bg-surface-container-lowest/60 space-y-1.5">
-          {/* User Profile Info */}
+        {/* Footer User Profile & Logout */}
+        <div className="p-3.5 border-t border-outline-variant/20 bg-surface-container-lowest/60 space-y-2">
           <div className="flex items-center gap-2.5 px-1 py-1 rounded-xl">
             {user?.avatar ? (
               <img 
@@ -189,33 +174,9 @@ export default function TeacherLayout() {
             </div>
           </div>
 
-          {/* Quick Action: Open Community App */}
-          <a
-            href="https://app.hkpc.no"
-            target="_blank"
-            rel="noreferrer"
-            className="w-full py-1.5 px-3 bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200/60 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 shadow-xs"
-          >
-            <Smartphone size={13} />
-            <span>Åpne Community App</span>
-            <ExternalLink size={11} className="opacity-70" />
-          </a>
-
-          {/* Quick Action: View Public Website */}
-          <a
-            href="/"
-            target="_blank"
-            rel="noreferrer"
-            className="w-full py-1.5 px-3 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
-          >
-            <Globe size={13} />
-            <span>Se nettsiden (hkpc.no)</span>
-          </a>
-
-          {/* Log out */}
           <button 
             onClick={handleLogOut} 
-            className="w-full py-1.5 px-3 text-on-surface-variant hover:bg-surface-container rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-colors active:scale-[0.98]"
+            className="w-full py-2 px-3 text-slate-600 hover:text-red-700 hover:bg-red-50 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-colors active:scale-[0.98]"
           >
             <Power size={13} />
             <span>Logg ut</span>
@@ -224,14 +185,13 @@ export default function TeacherLayout() {
       </aside>
 
       {/* ========================================================
-          2. MOBILE HEADER (Identical to HKP Community App MobileHeader)
+          2. MOBILE HEADER
          ======================================================== */}
       <header 
         className="lg:hidden sticky top-0 z-40 bg-surface/95 backdrop-blur-xl border-b border-outline-variant/20 px-4 py-3 transition-colors shadow-xs"
         style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 8px)' }}
       >
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
-          {/* Logo & Brand */}
           <button 
             type="button"
             onClick={() => navigate('/teacher/dashboard')}
@@ -248,7 +208,6 @@ export default function TeacherLayout() {
             </span>
           </button>
 
-          {/* Right actions: Role pill & menu trigger button */}
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-2.5 py-1 text-[11px] font-semibold text-primary select-none whitespace-nowrap">
               Admin
@@ -258,8 +217,7 @@ export default function TeacherLayout() {
               type="button"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Åpne administratormeny"
-              title="Meny"
-              className="w-11 h-11 rounded-xl border border-outline-variant/25 bg-surface-container-low/60 hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-all flex items-center justify-center cursor-pointer active:scale-95"
+              className="p-2.5 rounded-xl border border-outline-variant/30 text-on-surface hover:bg-primary/5 transition-colors cursor-pointer min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               <Menu size={20} />
             </button>
@@ -268,157 +226,87 @@ export default function TeacherLayout() {
       </header>
 
       {/* ========================================================
-          3. MOBILE SLIDING DRAWER MENU
+          3. MOBILE DRAWER
          ======================================================== */}
       <div 
-        className={`fixed inset-0 z-50 lg:hidden transition-all duration-300 ease-in-out ${
+        className={`fixed inset-0 z-50 lg:hidden transition-all duration-300 ${
           isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
+        aria-hidden={!isMobileMenuOpen}
       >
-        {/* Backdrop overlay */}
-        <div
+        <div 
           onClick={() => setIsMobileMenuOpen(false)}
-          className={`absolute inset-0 bg-slate-900/60 transition-opacity duration-300 ${
-            isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
-          }`}
+          className="absolute inset-0 bg-slate-900/60 backdrop-blur-xs cursor-pointer"
         />
 
-        {/* Sliding Menu Panel */}
-        <aside
-          className={`absolute top-0 bottom-0 left-0 w-72 bg-white flex flex-col justify-between shadow-2xl border-r border-outline-variant/20 overflow-y-auto h-full transition-transform duration-300 ease-out transform ${
-            isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        <aside 
+          className={`absolute top-0 right-0 w-[84%] max-w-xs h-full bg-surface shadow-2xl flex flex-col justify-between transition-transform duration-300 ease-out ${
+            isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
+          style={{ 
+            paddingTop: 'env(safe-area-inset-top, 16px)',
+            paddingBottom: 'env(safe-area-inset-bottom, 16px)'
+          }}
         >
-          <div className="flex flex-col justify-between h-full">
-            <div>
-              {/* Header in Drawer */}
-              <div className="p-4 border-b border-outline-variant/15 flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <img 
-                    src="/hkp-logo.png" 
-                    alt="HKP Admin Logo" 
-                    className="w-9 h-9 rounded-full object-contain shadow-xs shrink-0 select-none" 
-                  />
-                  <span className="text-lg font-extrabold text-primary tracking-tight block">
-                    HKP Admin
-                  </span>
-                </div>
-                <button 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-10 h-10 flex items-center justify-center hover:bg-surface-container rounded-lg text-primary cursor-pointer"
-                  aria-label="Lukk meny"
-                >
-                  <X size={20} />
-                </button>
-              </div>
+          <div>
+            <div className="p-4 border-b border-outline-variant/20 flex items-center justify-between">
+              <span className="font-extrabold text-primary text-base">HKP Admin</span>
+              <button 
+                type="button"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 text-on-surface-variant hover:text-on-surface rounded-xl hover:bg-surface-container transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer"
+                aria-label="Lukk meny"
+              >
+                <X size={20} />
+              </button>
+            </div>
 
-              {/* Grouped Nav Items */}
-              <nav className="px-3 py-3 space-y-4">
-                {adminNavGroups.map((section, sIdx) => (
-                  <div key={sIdx} className="space-y-1">
-                    <p className="px-3.5 text-xs font-bold text-outline uppercase tracking-wider pt-2 pb-0.5">
-                      {section.group}
-                    </p>
-                    {section.items.map((item) => {
+            <nav className="p-3 space-y-5 overflow-y-auto max-h-[calc(100vh-220px)]">
+              {adminNavGroups.map((grp, gIdx) => (
+                <div key={gIdx} className="space-y-1">
+                  <p className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest select-none">
+                    {grp.group}
+                  </p>
+                  <div className="space-y-0.5">
+                    {grp.items.map((item) => {
                       const Icon = item.icon;
-                      const isActive = checkActive(item.path);
+                      const active = checkActive(item.path);
+
                       return (
                         <button
                           key={item.id}
+                          type="button"
                           onClick={() => handleItemClick(item)}
-                          className={`w-full flex items-center text-left gap-3.5 px-3.5 py-2.5 rounded-xl transition-all text-[15px] font-semibold cursor-pointer group ${
-                            isActive 
-                              ? 'bg-primary text-on-primary shadow-xs' 
-                              : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
+                          className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer text-left min-h-[44px] ${
+                            active
+                              ? 'bg-primary text-white shadow-sm font-bold'
+                              : 'text-on-surface hover:bg-primary/5 hover:text-primary'
                           }`}
                         >
-                          <Icon size={20} className={`shrink-0 ${isActive ? 'text-on-primary' : 'text-primary'}`} />
-                          <span className="text-left flex-1 text-[14px] font-semibold">{item.label}</span>
+                          <div className="flex items-center gap-3">
+                            <Icon size={18} className={active ? 'text-white' : 'text-slate-400'} />
+                            <span>{item.label}</span>
+                          </div>
                           {item.isExternal && (
-                            <span className="text-[10px] bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white px-2 py-0.5 rounded-full font-mono font-bold transition-colors">
-                              app.hkpc.no
-                            </span>
+                            <ExternalLink size={14} className={active ? 'text-white/80' : 'text-slate-400'} />
                           )}
                         </button>
                       );
                     })}
                   </div>
-                ))}
-              </nav>
-
-              {/* System status */}
-              <div className="mx-3.5 my-2 p-3 bg-surface-container-low rounded-xl border border-outline-variant/30 space-y-2">
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Systemstatus</p>
-                <div className="flex justify-between items-center text-[11px] font-semibold">
-                  <span className="text-on-surface-variant">Landingsside (hkpc.no)</span>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    Live
-                  </span>
                 </div>
-                <div className="flex justify-between items-center text-[11px] font-semibold pt-1 border-t border-outline-variant/20">
-                  <span className="text-on-surface-variant">App-synk (app.hkpc.no)</span>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                    Tilkoblet
-                  </span>
-                </div>
-              </div>
-            </div>
+              ))}
+            </nav>
+          </div>
 
-            {/* Mobile Drawer Footer */}
-            <div className="p-3.5 border-t border-outline-variant/20 bg-surface-container-lowest/60 space-y-2">
-              <div className="flex items-center gap-3 px-2 py-1.5 rounded-xl">
-                {user?.avatar ? (
-                  <img 
-                    src={user.avatar} 
-                    alt="Profilbilde" 
-                    className="w-10 h-10 rounded-full object-cover ring-1 ring-outline-variant/30 shrink-0" 
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs shrink-0 bg-primary text-on-primary">
-                    {user?.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'TK'}
-                  </div>
-                )}
-                <div className="text-left flex-1 min-w-0">
-                  <p className="text-sm font-bold text-on-surface truncate">
-                    {user?.name || 'Thomas Knutsen'}
-                  </p>
-                  <p className="text-xs text-slate-600 font-medium truncate">
-                    Administrator · hkpc.no
-                  </p>
-                </div>
-              </div>
-
-              <a
-                href="https://app.hkpc.no"
-                target="_blank"
-                rel="noreferrer"
-                className="w-full py-2 px-3 bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200/60 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 shadow-xs"
-              >
-                <Smartphone size={14} />
-                <span>Åpne Community App</span>
-                <ExternalLink size={12} className="opacity-70" />
-              </a>
-
-              <a
-                href="/"
-                target="_blank"
-                rel="noreferrer"
-                className="w-full py-1.5 px-3 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
-              >
-                <Globe size={13} />
-                <span>Se nettsiden (hkpc.no)</span>
-              </a>
-
-              <button 
-                onClick={handleLogOut} 
-                className="w-full py-2 px-3 text-on-surface-variant hover:bg-surface-container rounded-xl text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-colors active:scale-[0.98]"
-              >
-                <Power size={14} />
-                <span>Logg ut</span>
-              </button>
-            </div>
+          <div className="p-4 border-t border-outline-variant/20 bg-surface-container-lowest/60 space-y-2">
+            <button 
+              onClick={handleLogOut} 
+              className="w-full py-2.5 px-3 text-slate-600 hover:text-red-700 hover:bg-red-50 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-colors min-h-[44px]"
+            >
+              <Power size={14} />
+              <span>Logg ut</span>
+            </button>
           </div>
         </aside>
       </div>
@@ -429,9 +317,6 @@ export default function TeacherLayout() {
       <main className="flex-grow min-w-0 transition-all duration-300 relative">
         <Outlet />
       </main>
-
-      {/* Global HKM Assistent Chat Widget rendered once at layout level */}
-      <HkmChatWidget />
     </div>
   );
 }

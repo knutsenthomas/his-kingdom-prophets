@@ -20,8 +20,17 @@ export default function AdminPortal() {
     return 'admissions';
   });
   
-  // Guard Check
-  const isAuthorized = currentUser?.role === 'admin' || currentUser?.role === 'superadmin';
+  // Guard Check - Allow admin, superadmin, teacher, and verified admin emails
+  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
+  const userEmail = currentUser?.email?.toLowerCase();
+  const isAuthorized = Boolean(
+    currentUser && (
+      currentUser.role === 'admin' || 
+      currentUser.role === 'superadmin' || 
+      currentUser.role === 'teacher' ||
+      ADMIN_EMAILS.includes(userEmail)
+    )
+  );
 
   // --- TAB 1: USERS STATE ---
   const [usersList, setUsersList] = useState(() => {
@@ -67,10 +76,6 @@ export default function AdminPortal() {
   const [admissionsSearch, setAdmissionsSearch] = useState('');
   const [admissionsSubTab, setAdmissionsSubTab] = useState('applications'); // 'applications' | 'leads'
 
-  // --- TAB 3: PERMISSIONS STATE ---
-  const [selectedRole, setSelectedRole] = useState('admin');
-  const [activePermissionGroup, setActivePermissionGroup] = useState('course'); // 'course' | 'user' | 'media' | 'analytics' | 'security'
-  const [permissionsMatrix, setPermissionsMatrix] = useState(DEFAULT_PERMISSIONS);
 
   // Fetch admissions & leads
   const fetchAdmissionsData = async () => {

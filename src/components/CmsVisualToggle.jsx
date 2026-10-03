@@ -95,7 +95,9 @@ export default function CmsVisualToggle() {
     return () => clearTimeout(timer);
   }, [location.pathname, isAdminEditing]);
 
-  if (!isAdminUser) {
+  // Don't display floating visual editor inside administrative backends
+  const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/teacher');
+  if (!isAdminUser || isAdminRoute) {
     return null;
   }
 
