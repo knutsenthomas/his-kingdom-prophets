@@ -647,23 +647,22 @@ export default function LandingPage() {
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
             variants={staggerContainer}
+            className="faq-header"
           >
-            <motion.p className="eyebrow purple text-center" variants={fadeInUp}>
+            <motion.p className="eyebrow purple" variants={fadeInUp}>
               <CmsText slug="landing-faq-eyebrow" fallback={language === 'no' ? 'SPØRSMÅL & SVAR' : 'FREQUENTLY ASKED QUESTIONS'} />
             </motion.p>
-            <motion.div className="section-head text-center max-w-2xl mx-auto" variants={fadeInUp}>
-              <h2 id="faq-heading">
-                <CmsText slug="landing-faq-title" fallback={language === 'no' ? 'Alt du lurer på om HKPC' : 'Everything you need to know about HKPC'} />
-              </h2>
-              <p>
-                <CmsText 
-                  slug="landing-faq-desc" 
-                  fallback={language === 'no'
-                    ? 'Her finner du svar på de vanligste spørsmålene om undervisning, opptak, priser og studiehverdagen.'
-                    : 'Here you will find answers to the most common questions regarding teaching, admissions, tuition, and student life.'} 
-                />
-              </p>
-            </motion.div>
+            <motion.h2 id="faq-heading" variants={fadeInUp}>
+              <CmsText slug="landing-faq-title" fallback={language === 'no' ? 'Alt du lurer på om HKPC' : 'Everything you need to know about HKPC'} />
+            </motion.h2>
+            <motion.p className="faq-subtitle" variants={fadeInUp}>
+              <CmsText 
+                slug="landing-faq-desc" 
+                fallback={language === 'no'
+                  ? 'Her finner du svar på de vanligste spørsmålene om undervisning, opptak, priser og studiehverdagen.'
+                  : 'Here you will find answers to the most common questions regarding teaching, admissions, tuition, and student life.'} 
+              />
+            </motion.p>
           </motion.div>
 
           <div className="faq-container">
