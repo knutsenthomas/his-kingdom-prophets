@@ -171,6 +171,7 @@ function AppRoutes() {
         <Route path="/landing/tablet" element={<LandingPage />} />
         <Route path="/landing/mobile" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin/login" element={<LoginPage />} />
         <Route path="/register" element={<LoginPage />} />
         <Route path="/interests" element={<InterestsPage />} />
         <Route path="/complete-profile" element={<CompleteProfilePage />} />

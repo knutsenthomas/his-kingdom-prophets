@@ -63,7 +63,7 @@ export default function TeacherLayout() {
 
     if (!user) {
       showToast(language === 'en' ? 'Please log in with your admin account.' : 'Vennligst logg inn med din admin-konto.');
-      navigate('/login?redirect=' + encodeURIComponent(location.pathname + location.search));
+      navigate('/admin/login?redirect=' + encodeURIComponent(location.pathname + location.search));
     } else if (!hasAccess) {
       showToast(language === 'en' ? 'Access denied. Administrator account required.' : 'Tilgang avslått. Krever admin-konto.');
       navigate('/');
