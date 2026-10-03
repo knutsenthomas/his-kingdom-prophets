@@ -76,7 +76,7 @@ export default function SiteFooter() {
             </div>
           </div>
 
-          {/* Bottom Bar: Copyright on Left, Ministry Attribution on Right */}
+          {/* Bottom Bar: Copyright */}
           <div className="footer-bottom-bar">
             <p className="copyright-text">
               <CmsText 
@@ -86,9 +86,6 @@ export default function SiteFooter() {
                   : '© 2027 His Kingdom Prophetic Community. All rights reserved.'} 
               />
             </p>
-            <span className="footer-ministry-note">
-              {language === 'no' ? 'En tjeneste under His Kingdom Ministry' : 'A ministry of His Kingdom Ministry'}
-            </span>
           </div>
         </div>
       </footer>
