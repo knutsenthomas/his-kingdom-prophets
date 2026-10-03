@@ -92,11 +92,8 @@ export default function SiteHeader() {
     <div className="hkpc-landing site-header-wrapper">
       <header className="wrap">
         <a className="brand" href="/" onClick={handleLogoClick}>
-          <img src="/assets/logo.png" alt="HKPC logo" />
-          <span>
-            HKPC
-            <small>His Kingdom Prophetic Community</small>
-          </span>
+          <img src="/assets/logo.png" alt="HKP Community" />
+          <span className="brand-name">HKP Community</span>
         </a>
 
         <nav aria-label="Hovedmeny" className={`header-nav ${isMobileMenuOpen ? 'open' : ''}`}>

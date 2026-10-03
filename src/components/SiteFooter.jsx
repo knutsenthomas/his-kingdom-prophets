@@ -34,10 +34,9 @@ export default function SiteFooter() {
           <div className="footer-main-row">
             <div className="footer-brand-col">
               <a className="brand" href="/" onClick={handleLogoClick}>
-                <img src="/assets/logo.png" alt="HKPC logo" />
-                <span>
-                  HKPC
-                  <small>His Kingdom Prophetic Community</small>
+                <img src="/assets/logo.png" alt="HKP Community" />
+                <span className="brand-name">
+                  <CmsText slug="landing-footer-title" fallback="HKP Community" />
                 </span>
               </a>
               <p className="footer-tagline">

@@ -86,23 +86,16 @@
   object-fit: contain;
 }
 
+.hkpc-landing .brand .brand-name,
 .hkpc-landing .brand span {
   font-weight: 700;
-  font-size: 25px;
-  letter-spacing: 0;
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   color: var(--violet);
-  font-family: Georgia,serif;
-}
-
-.hkpc-landing .brand small {
+  font-family: Georgia, serif;
+  white-space: nowrap;
   display: block;
-  font-size: 12px;
-  letter-spacing: 0;
-  font-weight: 400;
-  margin-top: 6px;
-  line-height: 1.3;
-  color: var(--ink);
-  font-family: 'DM Sans',Arial,sans-serif;
 }
 
 .hkpc-landing header nav,
@@ -1008,24 +1001,15 @@
   object-fit: contain;
 }
 
+.hkpc-landing .footer-brand-col .brand .brand-name,
 .hkpc-landing .footer-brand-col .brand span {
-  font-family: 'Cinzel', serif;
-  font-size: 20px;
+  font-family: Georgia, serif;
+  font-size: 19px;
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.2;
   color: var(--ink, #1f1d2b);
-  display: flex;
-  flex-direction: column;
-}
-
-.hkpc-landing .footer-brand-col .brand small {
-  font-family: 'DM Sans', Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--muted, #696871);
-  text-transform: uppercase;
-  margin-top: 2px;
+  white-space: nowrap;
+  display: block;
 }
 
 .hkpc-landing .footer-tagline {
@@ -1698,8 +1682,9 @@
   .hkpc-landing .header-nav {
     gap: 18px;
   }
-  .hkpc-landing .brand small {
-    max-width: 140px;
+  .hkpc-landing .brand .brand-name,
+  .hkpc-landing .brand span {
+    font-size: 18px;
   }
   .hkpc-landing h1 {
     font-size: 52px;
@@ -1902,12 +1887,10 @@
     padding-left: 20px;
     padding-right: 20px;
   }
+  .hkpc-landing .brand .brand-name,
   .hkpc-landing .brand span {
-    font-size: 23px;
-  }
-  .hkpc-landing .brand small {
-    font-size: 10px;
-    max-width: none;
+    font-size: 17px;
+    white-space: nowrap;
   }
   .hkpc-landing .brand img {
     width: 36px;
