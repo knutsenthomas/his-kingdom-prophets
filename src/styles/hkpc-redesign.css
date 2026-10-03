@@ -1004,7 +1004,7 @@
 .hkpc-landing .footer-brand-col .brand .brand-name,
 .hkpc-landing .footer-brand-col .brand span {
   font-family: Georgia, serif;
-  font-size: 19px;
+  font-size: clamp(14px, 4vw, 19px);
   font-weight: 700;
   line-height: 1.2;
   color: var(--ink, #1f1d2b);
