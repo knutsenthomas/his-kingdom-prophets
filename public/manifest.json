@@ -1,7 +1,7 @@
 {
-  "short_name": "HKPC Portal",
-  "name": "HKPC Portal",
-  "description": "His Kingdom Prophetic Community Portal",
+  "short_name": "HKP community",
+  "name": "HKP community",
+  "description": "HKP community",
   "icons": [
     {
       "src": "/icon-192.png",
