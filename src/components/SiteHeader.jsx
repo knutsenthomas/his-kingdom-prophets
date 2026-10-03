@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ExternalLink, ShieldCheck, GraduationCap, Sparkles, X, ArrowRight, Globe, Check } from 'lucide-react';
+import { ChevronDown, ExternalLink, ShieldCheck, GraduationCap, Sparkles, X, ArrowRight, Globe, Check, Menu } from 'lucide-react';
 import '@/styles/hkpc-redesign.css';
 
 export default function SiteHeader() {
@@ -422,9 +422,9 @@ export default function SiteHeader() {
             className="menu" 
             aria-expanded={isMobileMenuOpen} 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-            aria-label="Åpne meny"
+            aria-label={isMobileMenuOpen ? (language === 'no' ? 'Lukk meny' : 'Close menu') : (language === 'no' ? 'Åpne meny' : 'Open menu')}
           >
-            {isMobileMenuOpen ? (language === 'no' ? 'Lukk' : 'Close') : (language === 'no' ? 'Meny' : 'Menu')}
+            {isMobileMenuOpen ? <X size={22} strokeWidth={2.2} /> : <Menu size={22} strokeWidth={2.2} />}
           </button>
         </div>
       </header>
