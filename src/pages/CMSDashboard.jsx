@@ -147,6 +147,7 @@ const assetDefinitions = [
   
   // Hjemmeside Footer
   { slug: 'landing-footer-title', title: 'Footer Hovedoverskrift', section: 'Hjemmeside', type: 'text', description: 'Logo/tittel nederst i footeren på landingssiden.' },
+  { slug: 'landing-footer-tagline', title: 'Footer Slagord', section: 'Hjemmeside', type: 'text', description: 'Slagord under HKPC logoen i footeren.' },
   { slug: 'landing-footer-copyright', title: 'Footer Copyright-paragraf', section: 'Hjemmeside', type: 'textarea', description: 'Copyright og generell systemrettighets-paragraf.' },
   { slug: 'landing-footer-link-privacy', title: 'Footer Lenke Personvern', section: 'Hjemmeside', type: 'text', description: 'Tekst på lenken for personvern.' },
   { slug: 'landing-footer-link-terms', title: 'Footer Lenke Betingelser', section: 'Hjemmeside', type: 'text', description: 'Tekst på lenken for vilkår/betingelser.' },

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
+import { ShieldCheck } from 'lucide-react';
+import CmsText from '@/components/CmsText';
 import '@/styles/hkpc-redesign.css';
 
 export default function SiteFooter() {
@@ -26,43 +28,68 @@ export default function SiteFooter() {
 
   return (
     <div className="hkpc-landing site-footer-wrapper">
-      <footer>
+      <footer className="site-footer">
         <div className="wrap">
-          <a className="brand" href="/" onClick={handleLogoClick}>
-            <img src="/assets/logo.png" alt="HKPC logo" />
-            <span>
-              HKPC
-              <small>His Kingdom Prophetic Community</small>
-            </span>
-          </a>
-          <p>{language === 'no' ? 'Forankret i Skriften. Utrustet til tjeneste.' : 'Grounded in Scripture. Equipped for ministry.'}</p>
-          
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-[13px] text-slate-500 pt-2">
-            <Link to="/privacy" className="min-h-[44px] inline-flex items-center hover:text-[#561291] transition-colors">
-              {language === 'no' ? 'Personvern' : 'Privacy Policy'}
-            </Link>
-            <Link to="/terms" className="min-h-[44px] inline-flex items-center hover:text-[#561291] transition-colors">
-              {language === 'no' ? 'Brukervilkår' : 'Terms of Service'}
-            </Link>
-            <Link to="/accessibility" className="min-h-[44px] inline-flex items-center hover:text-[#561291] transition-colors">
-              {language === 'no' ? 'Tilgjengelighet' : 'Accessibility'}
-            </Link>
-            <Link to="/support" className="min-h-[44px] inline-flex items-center hover:text-[#561291] transition-colors">
-              {language === 'no' ? 'Kontakt support' : 'Support'}
-            </Link>
-            {isAdmin && (
-              <Link 
-                to="/admin/cms" 
-                className="min-h-[44px] inline-flex items-center text-[#561291] hover:underline transition-colors text-xs font-bold"
-              >
-                Admin CMS
-              </Link>
-            )}
+          {/* Main Row: Brand & Tagline on Left, Navigation on Right */}
+          <div className="footer-main-row">
+            <div className="footer-brand-col">
+              <a className="brand" href="/" onClick={handleLogoClick}>
+                <img src="/assets/logo.png" alt="HKPC logo" />
+                <span>
+                  HKPC
+                  <small>His Kingdom Prophetic Community</small>
+                </span>
+              </a>
+              <p className="footer-tagline">
+                <CmsText 
+                  slug="landing-footer-tagline" 
+                  fallback={language === 'no' ? 'Forankret i Skriften. Utrustet til tjeneste.' : 'Grounded in Scripture. Equipped for ministry.'} 
+                />
+              </p>
+            </div>
+
+            <div className="footer-links-col">
+              <nav className="footer-nav" aria-label="Bunnmeny">
+                <Link to="/privacy" className="footer-link">
+                  <CmsText slug="landing-footer-link-privacy" fallback={language === 'no' ? 'Personvern' : 'Privacy Policy'} />
+                </Link>
+                <Link to="/terms" className="footer-link">
+                  <CmsText slug="landing-footer-link-terms" fallback={language === 'no' ? 'Brukervilkår' : 'Terms of Service'} />
+                </Link>
+                <Link to="/accessibility" className="footer-link">
+                  <CmsText slug="landing-footer-link-accessibility" fallback={language === 'no' ? 'Tilgjengelighet' : 'Accessibility'} />
+                </Link>
+                <Link to="/support" className="footer-link">
+                  <CmsText slug="landing-footer-link-support" fallback={language === 'no' ? 'Kontakt support' : 'Support'} />
+                </Link>
+                {isAdmin && (
+                  <Link 
+                    to="/admin/cms" 
+                    className="footer-admin-link"
+                    title={language === 'no' ? 'Åpne CMS Dashboard' : 'Open CMS Dashboard'}
+                  >
+                    <ShieldCheck size={13} />
+                    <span>Admin CMS</span>
+                  </Link>
+                )}
+              </nav>
+            </div>
           </div>
 
-          <small>
-            © 2027 His Kingdom Prophetic Community. All rights reserved.
-          </small>
+          {/* Bottom Bar: Copyright on Left, Ministry Attribution on Right */}
+          <div className="footer-bottom-bar">
+            <p className="copyright-text">
+              <CmsText 
+                slug="landing-footer-copyright" 
+                fallback={language === 'no' 
+                  ? '© 2027 His Kingdom Prophetic Community. Alle rettigheter reservert.' 
+                  : '© 2027 His Kingdom Prophetic Community. All rights reserved.'} 
+              />
+            </p>
+            <span className="footer-ministry-note">
+              {language === 'no' ? 'En tjeneste under His Kingdom Ministry' : 'A ministry of His Kingdom Ministry'}
+            </span>
+          </div>
         </div>
       </footer>
     </div>

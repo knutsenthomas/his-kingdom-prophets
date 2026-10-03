@@ -99,7 +99,7 @@ export default function SiteHeader() {
           </span>
         </a>
 
-        <nav aria-label="Hovedmeny" className={isMobileMenuOpen ? 'open' : ''}>
+        <nav aria-label="Hovedmeny" className={`header-nav ${isMobileMenuOpen ? 'open' : ''}`}>
           <a href="/#school" onClick={(e) => handleNavClick(e, 'school')}>
             {language === 'no' ? 'Utdanning' : 'Programs'}
           </a>
