@@ -57,11 +57,18 @@ export default function TeacherLayout() {
 
   useEffect(() => {
     const allowedRoles = ['teacher', 'admin', 'superadmin'];
-    if (user && !allowedRoles.includes(user.role)) {
-      showToast(language === 'en' ? 'Access denied.' : 'Tilgang avslått.');
-      navigate('/admission');
+    const email = user?.email?.toLowerCase();
+    const isSpecialAdmin = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'].includes(email);
+    const hasAccess = Boolean(user && (allowedRoles.includes(user?.role) || isSpecialAdmin));
+
+    if (!user) {
+      showToast(language === 'en' ? 'Please log in with your admin account.' : 'Vennligst logg inn med din admin-konto.');
+      navigate('/login?redirect=' + encodeURIComponent(location.pathname + location.search));
+    } else if (!hasAccess) {
+      showToast(language === 'en' ? 'Access denied. Administrator account required.' : 'Tilgang avslått. Krever admin-konto.');
+      navigate('/');
     }
-  }, [user, navigate, language, showToast]);
+  }, [user, navigate, language, showToast, location.pathname, location.search]);
 
 
 
@@ -99,10 +106,15 @@ export default function TeacherLayout() {
     { slug: 'sidebar-teacher-profile', fallback: 'Min lærerprofil', path: '/teacher/profile', icon: User }
   ];
 
-  if (user?.role === 'admin' || user?.role === 'superadmin') {
+  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
+  const cleanEmail = user?.email?.toLowerCase();
+  const isCmsAuthorized = localStorage.getItem('hkm-cms-authorized') === 'true';
+  const isAdminOrAuthorized = user?.role === 'admin' || user?.role === 'superadmin' || isCmsAuthorized || ADMIN_EMAILS.includes(cleanEmail) || location.pathname.startsWith('/admin');
+
+  if (isAdminOrAuthorized) {
     navItems.push({ isHeader: true, slug: 'sidebar-administration', fallback: 'Administrasjon' });
-    navItems.push({ slug: 'sidebar-admissions-admin', fallback: 'Opptak & Søknader', path: '/admin/portal?tab=admissions', icon: GraduationCap });
     navItems.push({ slug: 'sidebar-cms-editor', fallback: 'Global CMS Styring', path: '/admin/cms', icon: Languages });
+    navItems.push({ slug: 'sidebar-admissions-admin', fallback: 'Opptak & Søknader', path: '/admin/portal?tab=admissions', icon: GraduationCap });
     navItems.push({ slug: 'sidebar-document-admin', fallback: 'Dokumentbehandling', path: '/admin/cms?category=documents', icon: FileText });
     navItems.push({ slug: 'sidebar-analytics', fallback: 'Analytics Dashboard', path: '/admin/analytics', icon: BarChart3 });
     navItems.push({ slug: 'sidebar-user-admin', fallback: 'Brukerhåndtering', path: '/admin/portal', icon: Users });
@@ -142,7 +154,7 @@ export default function TeacherLayout() {
               <span className="hidden sm:inline truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophetic Community" /></span>
               <span className="inline sm:hidden truncate"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
               <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 sm:px-3 py-1 rounded-full shrink-0">
-                {user?.role === 'admin' ? 'Admin' : 'Mentor'}
+                {user?.role === 'admin' || user?.role === 'superadmin' || isAdminOrAuthorized ? 'Admin' : (user ? 'Mentor' : 'Gjest')}
               </span>
             </div>
           </div>
@@ -151,7 +163,7 @@ export default function TeacherLayout() {
           <div className="flex items-center gap-4 text-primary shrink-0">
             
             {/* Superadmin System View Switcher */}
-            {(['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(user?.email?.toLowerCase()) || user?.email?.includes('superadmin')) && (
+            {(['thomas@tk-design.no', 'knutsenthomas@gmail.com', 'thomas@hiskingdomministry.no'].includes(user?.email?.toLowerCase()) || user?.email?.includes('superadmin') || isCmsAuthorized) && (
               <div className="hidden md:flex items-center gap-1 bg-[#561291]/5 p-1 rounded-xl border border-[#561291]/20 shrink-0">
                 <span className="text-[9px] font-bold uppercase tracking-wider text-[#561291] px-2">Visning:</span>
                 {[
@@ -206,14 +218,16 @@ export default function TeacherLayout() {
               >
                 <span className="text-right hidden sm:block min-w-0">
                   <span className="block text-xs font-bold text-primary group-hover:underline whitespace-nowrap md:max-w-none">
-                    {user?.name}
+                    {user?.name || (isAdminOrAuthorized ? 'Thomas Knutsen' : 'Gjest')}
                   </span>
-                  <span className="block text-[9px] text-outline font-semibold uppercase tracking-wide whitespace-nowrap md:max-w-none">{user?.email}</span>
+                  <span className="block text-[9px] text-outline font-semibold uppercase tracking-wide whitespace-nowrap md:max-w-none">
+                    {user?.email || (isAdminOrAuthorized ? 'thomas@hiskingdomministry.no' : '')}
+                  </span>
                 </span>
                 <span className="relative shrink-0">
                   <img
-                    src={user?.avatar}
-                    alt={user?.name}
+                    src={user?.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120"}
+                    alt={user?.name || "Bruker"}
                     className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary/20 shadow object-cover cursor-pointer transition-all group-hover:ring-2 group-hover:ring-primary/30 group-hover:ring-offset-2"
                   />
                   <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-primary text-white border-2 border-white flex items-center justify-center shadow-sm">

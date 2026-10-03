@@ -4,6 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import CmsText from '@/components/CmsText';
 import '@/styles/hkpc-redesign.css';
 
 const fadeInUp = {
@@ -80,33 +81,19 @@ export default function LandingPage() {
               variants={staggerContainer}
             >
               <motion.p className="eyebrow" variants={fadeInUp}>
-                {language === 'no' ? 'BIBELSKOLE & PROFETISK UTRUSTNING' : 'BIBLE SCHOOL & PROPHETIC EQUIPPING'}
+                <CmsText slug="landing-hero-tagline" fallback={language === 'no' ? 'BIBELSKOLE & PROFETISK UTRUSTNING' : 'BIBLE SCHOOL & PROPHETIC EQUIPPING'} />
               </motion.p>
               <motion.h1 variants={fadeInUp}>
-                {language === 'no' ? (
-                  <>
-                    Nærmere Jesus.<br />
-                    Tryggere i ditt kall.
-                  </>
-                ) : (
-                  <>
-                    Closer to Jesus.<br />
-                    Confident in your calling.
-                  </>
-                )}
+                <CmsText 
+                  slug="landing-hero-title" 
+                  fallback={language === 'no' ? 'Nærmere Jesus. Tryggere i ditt kall.' : 'Closer to Jesus. Confident in your calling.'} 
+                />
               </motion.h1>
               <motion.p className="lead" variants={fadeInUp}>
-                {language === 'no' ? (
-                  <>
-                    Voks i Guds ord og Åndens gaver.<br />
-                    I et fellesskap der du kan høre til.
-                  </>
-                ) : (
-                  <>
-                    Grow in God's word and the gifts of the Spirit.<br />
-                    In a community where you belong.
-                  </>
-                )}
+                <CmsText 
+                  slug="landing-hero-description" 
+                  fallback={language === 'no' ? 'Voks i Guds ord og Åndens gaver. I et fellesskap der du kan høre til.' : "Grow in God's word and the gifts of the Spirit. In a community where you belong."} 
+                />
               </motion.p>
               <motion.div className="actions" variants={fadeInUp}>
                 <motion.button 
@@ -115,7 +102,7 @@ export default function LandingPage() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  {language === 'no' ? 'Begynn din reise' : 'Begin your journey'}
+                  <CmsText slug="landing-hero-cta-primary" fallback={language === 'no' ? 'Begynn din reise' : 'Begin your journey'} />
                 </motion.button>
                 <motion.a 
                   className="intro" 
@@ -129,7 +116,7 @@ export default function LandingPage() {
                       <polygon points="6 3 20 12 6 21 6 3" />
                     </svg>
                   </span>
-                  <span>{language === 'no' ? 'Se introduksjon' : 'See introduction'}</span>
+                  <span><CmsText slug="landing-hero-cta-secondary" fallback={language === 'no' ? 'Se introduksjon' : 'See introduction'} /></span>
                 </motion.a>
               </motion.div>
             </motion.div>
@@ -157,9 +144,9 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span>{language === 'no' ? 'Forankret i Skriften.' : 'Grounded in Scripture.'}</span>
-            <span>{language === 'no' ? 'Ledet av Den Hellige Ånd.' : 'Led by the Holy Spirit.'}</span>
-            <span>{language === 'no' ? 'Levd ut i hverdagen.' : 'Lived out in daily life.'}</span>
+            <span><CmsText slug="landing-hero-base1" fallback={language === 'no' ? 'Forankret i Skriften.' : 'Grounded in Scripture.'} /></span>
+            <span><CmsText slug="landing-hero-base2" fallback={language === 'no' ? 'Ledet av Den Hellige Ånd.' : 'Led by the Holy Spirit.'} /></span>
+            <span><CmsText slug="landing-hero-base3" fallback={language === 'no' ? 'Levd ut i hverdagen.' : 'Lived out in daily life.'} /></span>
           </motion.div>
         </section>
 
@@ -201,36 +188,26 @@ export default function LandingPage() {
         >
           <motion.div variants={fadeInUp}>
             <p className="eyebrow purple">
-              {language === 'no' ? 'FELLESSKAP & UTRUSTNING' : 'COMMUNITY & EQUIPPING'}
+              <CmsText slug="landing-welcome-eyebrow" fallback={language === 'no' ? 'FELLESSKAP & UTRUSTNING' : 'COMMUNITY & EQUIPPING'} />
             </p>
             <h2>
-              {language === 'no' ? (
-                <>
-                  En dypere tro.<br />
-                  Et levende fellesskap.
-                </>
-              ) : (
-                <>
-                  A deeper faith.<br />
-                  A living fellowship.
-                </>
-              )}
+              <CmsText slug="landing-welcome-title" fallback={language === 'no' ? 'En dypere tro. Et levende fellesskap.' : 'A deeper faith. A living fellowship.'} />
             </h2>
           </motion.div>
           <motion.div variants={fadeInUp}>
-            <h3>{language === 'no' ? 'Alle er velkomne.' : 'All are welcome.'}</h3>
+            <h3><CmsText slug="landing-welcome-sub" fallback={language === 'no' ? 'Alle er velkomne.' : 'All are welcome.'} /></h3>
             <p>
-              {language === 'no'
+              <CmsText slug="landing-welcome-p1" fallback={language === 'no'
                 ? 'Du trenger ikke å være kalt til profetembetet for å vokse i de profetiske gavene. HKPC er for deg som lengter etter et nærere forhold til Jesus og et trygt sted å bli utrustet.'
-                : 'You do not need to be called to the fivefold prophetic office to grow in the prophetic gifts. HKPC is for anyone who longs for a closer relationship with Jesus and a safe place to be equipped.'}
+                : 'You do not need to be called to the fivefold prophetic office to grow in the prophetic gifts. HKPC is for anyone who longs for a closer relationship with Jesus and a safe place to be equipped.'} />
             </p>
             <p>
-              {language === 'no'
+              <CmsText slug="landing-welcome-p2" fallback={language === 'no'
                 ? 'Vi forener bibelundervisning, bønn og praktisk trening — med rom for å lære, spørre og vokse sammen.'
-                : 'We unite Bible teaching, prayer, and hands-on activation — with room to learn, ask questions, and grow together.'}
+                : 'We unite Bible teaching, prayer, and hands-on activation — with room to learn, ask questions, and grow together.'} />
             </p>
             <div className="signature">
-              {language === 'no' ? 'Guds ord som fundament. Jesus i sentrum.' : 'God’s word as our foundation. Jesus at the center.'}
+              <CmsText slug="landing-welcome-signature" fallback={language === 'no' ? 'Guds ord som fundament. Jesus i sentrum.' : 'God’s word as our foundation. Jesus at the center.'} />
             </div>
           </motion.div>
         </motion.section>

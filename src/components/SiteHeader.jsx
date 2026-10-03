@@ -10,6 +10,10 @@ export default function SiteHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [logoClicks, setLogoClicks] = useState(0);
 
+  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
+  const cleanEmail = user?.email?.toLowerCase();
+  const isAdmin = Boolean(user && (user.role === 'admin' || user.role === 'superadmin' || ADMIN_EMAILS.includes(cleanEmail)));
+
   const portalPath = user?.role === 'teacher' || user?.role === 'admin' 
     ? '/teacher/dashboard' 
     : '/student/dashboard';
@@ -74,6 +78,19 @@ export default function SiteHeader() {
             <button onClick={toggleLanguage} className="mobile-action-btn">
               {language === 'no' ? '🌐 Switch to English' : '🌐 Bytt til Norsk'}
             </button>
+            {isAdmin && (
+              <button 
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  localStorage.setItem('hkm-cms-authorized', 'true');
+                  navigate('/admin/cms');
+                }} 
+                className="mobile-action-btn"
+                style={{ fontWeight: 700, color: 'var(--violet)' }}
+              >
+                ⚙️ Admin
+              </button>
+            )}
             <button 
               onClick={() => { setIsMobileMenuOpen(false); navigate(user ? portalPath : '/login'); }} 
               className="mobile-action-btn"
@@ -100,6 +117,18 @@ export default function SiteHeader() {
           >
             {language === 'no' ? 'NO' : 'EN'}
           </button>
+          {isAdmin && (
+            <button 
+              onClick={() => {
+                localStorage.setItem('hkm-cms-authorized', 'true');
+                navigate('/admin/cms');
+              }} 
+              className="admin-badge-btn"
+              title="Åpne Admin & CMS"
+            >
+              Admin
+            </button>
+          )}
           <button 
             onClick={() => navigate(user ? portalPath : '/login')} 
             className="login-btn"

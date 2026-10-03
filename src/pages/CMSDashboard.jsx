@@ -6,7 +6,8 @@ import {
   Globe, History, Download, Upload, Search, Settings, AlertTriangle, 
   ChevronLeft, ChevronRight, MoreVertical, X, CheckCircle2, Trash2, 
   Copy, PlusCircle, Languages, Info, RotateCcw, Layout, UserCheck, 
-  BookOpen, Users, Rocket, Flag, UploadCloud, FileText, Award, HelpCircle, Lock
+  BookOpen, Users, Rocket, Flag, UploadCloud, FileText, Award, HelpCircle, Lock,
+  Edit3, ExternalLink, Sparkles
 } from 'lucide-react';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/firebase';
@@ -402,7 +403,7 @@ const assetDefinitions = [
 export default function CMSDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, cmsContent, updateCmsContent, admissionFormOpen, setAdmissionFormOpenState } = useApp();
+  const { user, cmsContent, updateCmsContent, admissionFormOpen, setAdmissionFormOpenState, isAdminEditing, setIsAdminEditing } = useApp();
   
   // Ref for global hotkey focusing of search input
   const searchInputRef = useRef(null);
@@ -520,10 +521,13 @@ export default function CMSDashboard() {
 
     allKeys.forEach(rawKey => {
       const slug = rawKey.endsWith('-en') ? rawKey.slice(0, -3) : rawKey;
+      if (slug === 'admission-form-open') return;
+      const rawVal = draftContent?.[slug] ?? cmsContent?.[slug];
+      if (typeof rawVal === 'boolean') return;
       if (!assetMap.has(slug)) {
         const section = inferSection(slug);
         const title = inferTitle(slug);
-        const sampleVal = draftContent[slug] || cmsContent[slug] || '';
+        const sampleVal = String(rawVal ?? '');
         const isLongText = sampleVal.length > 80 || sampleVal.includes('\n');
         assetMap.set(slug, {
           slug,
@@ -543,8 +547,8 @@ export default function CMSDashboard() {
     let count = 0;
     allAssets.forEach(asset => {
       const slug = asset.slug;
-      const savedNo = cmsContent[slug] || '';
-      const savedEn = cmsContent[slug + '-en'] || '';
+      const savedNo = String(cmsContent?.[slug] ?? '');
+      const savedEn = String(cmsContent?.[slug + '-en'] ?? '');
       
       // Fallback prefilled keys for mockup consistency
       const defaultNo = slug === 'nav.dashboard.title' ? 'Oversikt' :
@@ -561,8 +565,8 @@ export default function CMSDashboard() {
       const baseNo = savedNo || defaultNo;
       const baseEn = savedEn || defaultEn;
 
-      const draftNo = draftContent[slug] || '';
-      const draftEn = draftContent[slug + '-en'] || '';
+      const draftNo = String(draftContent?.[slug] ?? '');
+      const draftEn = String(draftContent?.[slug + '-en'] ?? '');
 
       if (draftNo !== baseNo || draftEn !== baseEn) {
         count++;
@@ -651,13 +655,13 @@ export default function CMSDashboard() {
       }
 
       // 2. Filter by search query
-      if (searchQuery.trim()) {
+      if (searchQuery && typeof searchQuery === 'string' && searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
-        const slug = asset.slug.toLowerCase();
-        const title = asset.title.toLowerCase();
-        const desc = (asset.description || '').toLowerCase();
-        const valNo = (draftContent[asset.slug] || '').toLowerCase();
-        const valEn = (draftContent[asset.slug + '-en'] || '').toLowerCase();
+        const slug = String(asset.slug || '').toLowerCase();
+        const title = String(asset.title || '').toLowerCase();
+        const desc = String(asset.description || '').toLowerCase();
+        const valNo = String(draftContent?.[asset.slug] ?? '').toLowerCase();
+        const valEn = String(draftContent?.[asset.slug + '-en'] ?? '').toLowerCase();
 
         if (!slug.includes(q) && !title.includes(q) && !desc.includes(q) && !valNo.includes(q) && !valEn.includes(q)) {
           return false;
@@ -665,10 +669,12 @@ export default function CMSDashboard() {
       }
 
       // 3. Filter by translation status
-      const isMissing = !draftContent[asset.slug]?.trim() || !draftContent[asset.slug + '-en']?.trim();
+      const strNo = String(draftContent?.[asset.slug] ?? '').trim();
+      const strEn = String(draftContent?.[asset.slug + '-en'] ?? '').trim();
+      const isMissing = !strNo || !strEn;
       
-      const savedNo = cmsContent[asset.slug] || '';
-      const savedEn = cmsContent[asset.slug + '-en'] || '';
+      const savedNo = String(cmsContent?.[asset.slug] ?? '');
+      const savedEn = String(cmsContent?.[asset.slug + '-en'] ?? '');
       
       // Prefilled fallbacks checking
       const defaultNo = asset.slug === 'nav.dashboard.title' ? 'Oversikt' :
@@ -685,7 +691,7 @@ export default function CMSDashboard() {
       const baseNo = savedNo || defaultNo;
       const baseEn = savedEn || defaultEn;
 
-      const isDraft = (draftContent[asset.slug] || '') !== baseNo || (draftContent[asset.slug + '-en'] || '') !== baseEn;
+      const isDraft = String(draftContent?.[asset.slug] ?? '') !== baseNo || String(draftContent?.[asset.slug + '-en'] ?? '') !== baseEn;
 
       if (filterStatus === 'Draft' && !isDraft) return false;
       if (filterStatus === 'Published' && (isDraft || isMissing)) return false;
@@ -1421,6 +1427,69 @@ export default function CMSDashboard() {
             <DocumentCMSPanel />
           ) : (
             <>
+              {/* Direkte visuell redigering på nettsiden Toggle Card */}
+              <div className="bg-gradient-to-r from-[#561291]/10 via-[#D7B978]/15 to-[#561291]/10 border border-[#561291]/25 rounded-2xl p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div className="space-y-1.5 max-w-xl">
+                  <div className="flex items-center gap-2.5">
+                    <span className="p-2 bg-[#561291] text-white rounded-xl shadow-sm">
+                      <Edit3 size={18} />
+                    </span>
+                    <h3 className="text-base font-bold text-[#271f30] font-serif">
+                      Direkte tekstredigering på nettsiden (hkpc.no)
+                    </h3>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                      isAdminEditing 
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-300 animate-pulse' 
+                        : 'bg-slate-100 text-slate-600 border-slate-200'
+                    }`}>
+                      {isAdminEditing ? 'AKTIVERT' : 'DEAKTIVERT'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed pl-11">
+                    Når denne modusen er slått på, kan du navigere fritt på nettsiden og klikke direkte på tekster for å skrive endringer. Trykk <b>Enter</b> eller klikk utenfor for å lagre umiddelbart.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 shrink-0 self-stretch md:self-center justify-end pl-11 md:pl-0">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const nextState = !isAdminEditing;
+                      setIsAdminEditing(nextState);
+                      localStorage.setItem('hkm-cms-authorized', 'true');
+                      setToastMessage({
+                        title: nextState ? "Visuell redigering er PÅ" : "Visuell redigering er AV",
+                        desc: nextState 
+                          ? "Gå til forsiden eller en underside på hkpc.no for å klikke og redigere direkte!" 
+                          : "Visuell redigering er nå deaktivert."
+                      });
+                      setShowToast(true);
+                    }}
+                    className={`px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-all duration-200 shadow-sm active:scale-[0.98] ${
+                      isAdminEditing
+                        ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-amber-600/20'
+                        : 'bg-[#561291] hover:bg-[#430d70] text-white shadow-[#561291]/20'
+                    }`}
+                  >
+                    <Edit3 size={15} />
+                    <span>{isAdminEditing ? 'Deaktiver redigering' : 'Aktiver direkte redigering'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAdminEditing(true);
+                      localStorage.setItem('hkm-cms-authorized', 'true');
+                      navigate('/?edit=1');
+                    }}
+                    className="px-4 py-2.5 rounded-xl border border-[#561291]/30 hover:border-[#561291] bg-white text-[#561291] hover:bg-[#561291]/5 font-bold text-xs flex items-center gap-2 transition-all duration-200 active:scale-[0.98] shadow-sm"
+                    title="Gå til forsiden med redigeringsmodus aktivert"
+                  >
+                    <span>Åpne nettsiden</span>
+                    <ExternalLink size={14} />
+                  </button>
+                </div>
+              </div>
               {selectedCategory === 'admission' && (
                 <div className="bg-[#561291] text-white p-5 rounded-2xl shadow-sm border border-[#7924c7]/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="space-y-1">
@@ -1570,14 +1639,14 @@ export default function CMSDashboard() {
             {/* Content Rows */}
             {paginatedAssets.map(asset => {
               const slug = asset.slug;
-              const valNo = draftContent[slug] || '';
-              const valEn = draftContent[slug + '-en'] || '';
+              const valNo = String(draftContent?.[slug] ?? '');
+              const valEn = String(draftContent?.[slug + '-en'] ?? '');
 
               // Compute status dynamically
               const isMissing = !valNo.trim() || !valEn.trim();
               
-              const savedNo = cmsContent[slug] || '';
-              const savedEn = cmsContent[slug + '-en'] || '';
+              const savedNo = String(cmsContent?.[slug] ?? '');
+              const savedEn = String(cmsContent?.[slug + '-en'] ?? '');
               
               // Prefilled fallbacks checking
               const defaultNo = slug === 'nav.dashboard.title' ? 'Oversikt' :

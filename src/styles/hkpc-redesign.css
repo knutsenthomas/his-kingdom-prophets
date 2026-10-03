@@ -2083,6 +2083,36 @@
   border-color: var(--violet);
 }
 
+.hkpc-landing .admin-badge-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 14px;
+  border-radius: 9px;
+  border: 1px solid rgba(86, 18, 145, 0.25);
+  background: rgba(86, 18, 145, 0.07);
+  color: var(--violet);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.hkpc-landing .admin-badge-btn:hover {
+  background: var(--violet);
+  color: #fff;
+  border-color: var(--violet);
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(86, 18, 145, 0.15);
+}
+
+.hkpc-landing .admin-badge-btn:active {
+  transform: scale(0.98);
+}
+
 .hkpc-landing .login-btn {
   display: inline-flex;
   align-items: center;

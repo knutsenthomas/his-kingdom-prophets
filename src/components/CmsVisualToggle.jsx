@@ -15,7 +15,7 @@ export default function CmsVisualToggle() {
   const [editableCount, setEditableCount] = React.useState(0);
 
   // Check admin status from AppContext user, localStorage, and query parameters
-  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no'];
+  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
   const cleanEmail = user?.email?.toLowerCase();
 
   // Parse localStorage user safely for public-page detection

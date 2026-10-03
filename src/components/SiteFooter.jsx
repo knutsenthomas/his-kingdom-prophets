@@ -5,8 +5,12 @@ import '@/styles/hkpc-redesign.css';
 
 export default function SiteFooter() {
   const navigate = useNavigate();
-  const { language } = useApp();
+  const { language, user } = useApp();
   const [logoClicks, setLogoClicks] = useState(0);
+
+  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
+  const cleanEmail = user?.email?.toLowerCase();
+  const isAdmin = Boolean(user && (user.role === 'admin' || user.role === 'superadmin' || ADMIN_EMAILS.includes(cleanEmail)));
 
   const handleLogoClick = (e) => {
     e.preventDefault();
@@ -46,6 +50,14 @@ export default function SiteFooter() {
             <Link to="/support" className="min-h-[44px] inline-flex items-center hover:text-[#561291] transition-colors">
               {language === 'no' ? 'Kontakt support' : 'Support'}
             </Link>
+            {isAdmin && (
+              <Link 
+                to="/admin/cms" 
+                className="min-h-[44px] inline-flex items-center text-[#561291] hover:underline transition-colors text-xs font-bold"
+              >
+                Admin CMS
+              </Link>
+            )}
           </div>
 
           <small>

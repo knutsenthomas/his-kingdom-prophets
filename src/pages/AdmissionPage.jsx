@@ -479,55 +479,215 @@ export default function AdmissionPage() {
           to: 'school@hiskingdomministry.no',
           replyTo: formData.email.trim(),
           message: {
-            subject: `[HKM Opptak] Ny søknad: ${formData.name.trim()} (${prog.code})`,
-            text: `Ny søknad om opptak ved His Kingdom Prophetic Community:\n\nNavn: ${formData.name.trim()}\nKjønn: ${formData.gender}\nFødselsdato: ${formData.birthDate}\nE-post: ${formData.email.trim()}\nTelefon: ${formData.phone.trim()}\nAdresse: ${formData.address.trim()}\nSivilstatus: ${formData.maritalStatus}\nYrke/utdannelse: ${formData.occupation.trim()}\n\nStudielinje: ${prog.title} (${prog.code})\nBetalingsplan: ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}\n\nHvorfor bibelskole:\n${formData.whySeeking.trim()}\n\nForventninger:\n${formData.expectations.trim()}\n\nHvordan hørt om HKPC:\n${formData.howHeard.trim()}\n\nErfaring med Jesus:\n${formData.testimony.trim()}\n\nMenighet:\n${formData.churchCommunity.trim()}\n\nTjeneste i dag:\n${formData.currentMinistry.trim()}\n\nKall / tjenesteønske:\n${formData.ministryCalling.trim()}\n\nDrømmer og visjoner:\n${formData.dreamsVision.trim()}\n\nHobbyer:\n${formData.hobbies.trim()}\n\nReferanse:\n${formData.reference.trim()}\n\nAnnet:\n${formData.additionalNotes?.trim() || 'Ingen'}`,
+            subject: `[HKPC Opptak] Ny søknad fra ${formData.name.trim()}`,
+            text: `Det har kommet inn en ny søknad om opptak ved HKPC!\n\nNavn: ${formData.name.trim()}\nE-post: ${formData.email.trim()}\nTelefon: ${formData.phone.trim()}\nStudielinje: ${prog.title} (${prog.code})\nBetalingsordning: ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}\n\nÅpne Google Regneark eller administrasjonsportalen for å se hele søknaden med vitnesbyrd og referanser.`,
             html: `
-              <div style="font-family: Arial, sans-serif; padding: 24px; color: #271f30; max-width: 680px; border: 1px solid #e2dce7; border-radius: 16px; background: #ffffff;">
-                <div style="background: #561291; padding: 18px 24px; border-radius: 12px 12px 0 0; color: #ffffff;">
-                  <h2 style="margin: 0; font-size: 20px;">Ny søknad om opptak</h2>
-                  <p style="margin: 4px 0 0 0; font-size: 13px; color: #D7B978;">His Kingdom Prophetic Community</p>
-                </div>
-                <div style="padding: 20px 8px;">
-                  <h3 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 6px;">1. Personalia & kontakt</h3>
-                  <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                    <tr><td style="padding: 6px 0; width: 180px; font-weight: bold;">Fullt navn:</td><td>${formData.name.trim()}</td></tr>
-                    <tr><td style="padding: 6px 0; font-weight: bold;">Kjønn:</td><td>${formData.gender}</td></tr>
-                    <tr><td style="padding: 6px 0; font-weight: bold;">Fødselsdato:</td><td>${formData.birthDate}</td></tr>
-                    <tr><td style="padding: 6px 0; font-weight: bold;">E-post:</td><td><a href="mailto:${formData.email.trim()}">${formData.email.trim()}</a></td></tr>
-                    <tr><td style="padding: 6px 0; font-weight: bold;">Telefon:</td><td>${formData.phone.trim()}</td></tr>
-                    <tr><td style="padding: 6px 0; font-weight: bold;">Adresse:</td><td>${formData.address.trim()}</td></tr>
-                    <tr><td style="padding: 6px 0; font-weight: bold;">Sivilstatus:</td><td>${formData.maritalStatus}</td></tr>
-                    <tr><td style="padding: 6px 0; font-weight: bold;">Yrke / utdannelse:</td><td>${formData.occupation.trim()}</td></tr>
-                  </table>
+              <!DOCTYPE html>
+              <html lang="no">
+              <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                  @media only screen and (max-width: 620px) {
+                    .email-container { width: 100% !important; border-radius: 12px !important; }
+                    .mobile-padding { padding-left: 16px !important; padding-right: 16px !important; }
+                    .mobile-header-padding { padding: 20px 16px !important; }
+                    .mobile-field-label { width: 110px !important; font-size: 13px !important; }
+                    .mobile-field-val { font-size: 13px !important; }
+                  }
+                </style>
+              </head>
+              <body style="margin: 0; padding: 0; background-color: #F6F4F8; font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #271F30;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F6F4F8; margin: 0; padding: 20px 8px 40px 8px;">
+                  <tr>
+                    <td align="center">
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="email-container" style="width: 100%; max-width: 600px; background-color: #FFFFFF; border-radius: 20px; overflow: hidden; border: 1px solid #E2DCE7; box-shadow: 0 10px 30px rgba(86, 18, 145, 0.07);">
+                        <tr>
+                          <td class="mobile-header-padding" style="background-color: #561291; border-top: 4px solid #D7B978; padding: 26px 28px; text-align: left;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <tr>
+                                <td width="52" valign="middle" style="padding-right: 14px;">
+                                  <img src="https://hkpc.no/logo.png" alt="HKPC Logo" width="48" height="48" style="display: block; border-radius: 50%; border: 2px solid #D7B978; background-color: #FFFFFF; object-fit: contain;">
+                                </td>
+                                <td valign="middle">
+                                  <div style="font-family: 'Playfair Display', Georgia, serif; font-size: 19px; font-weight: 700; color: #FFFFFF; line-height: 24px; letter-spacing: 0.01em;">
+                                    His Kingdom Prophetic Community
+                                  </div>
+                                  <div style="font-size: 10px; font-weight: 600; color: #D7B978; text-transform: uppercase; letter-spacing: 0.12em; margin-top: 2px;">
+                                    Profetisk Skole &amp; Utrustningssenter
+                                  </div>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="mobile-padding" style="padding: 28px 24px 20px 24px;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 16px;">
+                              <tr>
+                                <td style="background-color: #FBF5E7; border: 1px solid #D7B978; border-radius: 9999px; padding: 5px 14px; font-size: 11px; font-weight: 700; color: #561291; text-transform: uppercase; letter-spacing: 0.08em;">
+                                  ✦ Ny søknad om opptak
+                                </td>
+                              </tr>
+                            </table>
+                            <h1 style="margin: 0 0 10px 0; font-family: 'Playfair Display', Georgia, serif; font-size: 24px; line-height: 32px; font-weight: 700; color: #271F30;">
+                              Ny søknad fra ${formData.name.trim()}
+                            </h1>
+                            <p style="margin: 0 0 22px 0; font-size: 15px; line-height: 24px; color: #6D6575;">
+                              Det har kommet inn en ny søknad om opptak ved <strong>HKPC</strong>! Nedenfor finner du en oversikt over søkerens personalia og opptaksdetaljer:
+                            </p>
+                            
+                            <!-- BENTO KORT 1: Personalia -->
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #FAF8FC; border: 1px solid #EAE6EF; border-radius: 14px; margin-bottom: 16px; overflow: hidden;">
+                              <tr>
+                                <td style="padding: 18px 20px;">
+                                  <div style="font-size: 11px; font-weight: 700; color: #561291; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; border-bottom: 1px solid #EAE6EF; padding-bottom: 8px;">
+                                    1. Personalia &amp; Kontaktinformasjon
+                                  </div>
+                                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size: 14px; line-height: 22px;">
+                                    <tr>
+                                      <td width="130" valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Fullt navn:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30; font-weight: 700;">${formData.name.trim()}</td>
+                                    </tr>
+                                    <tr>
+                                      <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">E-postadresse:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0;">
+                                        <a href="mailto:${formData.email.trim()}" style="color: #561291; font-weight: 600; text-decoration: underline;">${formData.email.trim()}</a>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Telefon:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0;">
+                                        <a href="tel:${formData.phone.trim()}" style="color: #561291; font-weight: 600; text-decoration: none;">${formData.phone.trim()}</a>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Fødselsdato:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.birthDate}</td>
+                                    </tr>
+                                    <tr>
+                                      <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Kjønn / Sivil:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.gender} • ${formData.maritalStatus}</td>
+                                    </tr>
+                                    <tr>
+                                      <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Adresse / Sted:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.address.trim()}</td>
+                                    </tr>
+                                    <tr>
+                                      <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Yrke / Utdanning:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.occupation.trim()}</td>
+                                    </tr>
+                                  </table>
+                                </td>
+                              </tr>
+                            </table>
 
-                  <h3 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 6px; margin-top: 24px;">2. Studielinje & rammer</h3>
-                  <p style="margin: 6px 0; font-size: 14px;"><strong>Valgt linje:</strong> ${prog.title} (${prog.code})</p>
-                  <p style="margin: 6px 0; font-size: 14px;"><strong>Betalingsordning:</strong> ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}</p>
-                  <p style="margin: 6px 0; font-size: 14px;"><strong>Språk & kickoff:</strong> Godtatt (Engelsk undervisning + Kickoff 20.–22. aug 2027 i Norge)</p>
+                            <!-- BENTO KORT 2: Studielinje -->
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #FAF8FC; border: 1px solid #EAE6EF; border-radius: 14px; margin-bottom: 16px; overflow: hidden;">
+                              <tr>
+                                <td style="padding: 18px 20px;">
+                                  <div style="font-size: 11px; font-weight: 700; color: #561291; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; border-bottom: 1px solid #EAE6EF; padding-bottom: 8px;">
+                                    2. Studielinje &amp; Praktiske Rammer
+                                  </div>
+                                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size: 14px; line-height: 22px;">
+                                    <tr>
+                                      <td width="130" valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Studielinje:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30; font-weight: 700;">
+                                        ${prog.title} 
+                                        <span style="display: inline-block; background-color: #561291; color: #FFFFFF; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 4px; margin-left: 4px; text-transform: uppercase; letter-spacing: 0.04em;">${prog.code}</span>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Betalingsordning:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30; font-weight: 600;">${formData.paymentPlan === 'year' ? 'Fullt studieår (10 000,- / $1,000 USD)' : 'Semesterfaktura (5 000,- / $500 USD per sem)'}</td>
+                                    </tr>
+                                    <tr>
+                                      <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Språk &amp; Kickoff:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">Godtatt (Engelsk undervisning + Kickoff i Norge 20.–22. aug 2027)</td>
+                                    </tr>
+                                  </table>
+                                </td>
+                              </tr>
+                            </table>
 
-                  <h3 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 6px; margin-top: 24px;">3. Åndelig bakgrunn & kall</h3>
-                  <div style="font-size: 14px; line-height: 1.6;">
-                    <p><strong>Hvorfor søker du bibelskole:</strong><br/>${formData.whySeeking.trim()}</p>
-                    <p><strong>Forventninger til skoleåret:</strong><br/>${formData.expectations.trim()}</p>
-                    <p><strong>Hvordan hørte du om HKPC:</strong><br/>${formData.howHeard.trim()}</p>
-                    <p><strong>Erfaring og vandring med Jesus:</strong><br/>${formData.testimony.trim()}</p>
-                    <p><strong>Menighetstilhørighet:</strong><br/>${formData.churchCommunity.trim()}</p>
-                    <p><strong>Nåværende tjeneste/frivillig arbeid:</strong><br/>${formData.currentMinistry.trim()}</p>
-                    <p><strong>Tjeneste/nådegave som ønskes å vokse i:</strong><br/>${formData.ministryCalling.trim()}</p>
-                    <p><strong>Drømmer og visjoner:</strong><br/>${formData.dreamsVision.trim()}</p>
-                    <p><strong>Hobbyer og fritidsinteresser:</strong><br/>${formData.hobbies.trim()}</p>
-                  </div>
+                            <!-- BENTO KORT 3: Bakgrunn & Referanse -->
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #FAF8FC; border: 1px solid #EAE6EF; border-radius: 14px; margin-bottom: 22px; overflow: hidden;">
+                              <tr>
+                                <td style="padding: 18px 20px;">
+                                  <div style="font-size: 11px; font-weight: 700; color: #561291; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; border-bottom: 1px solid #EAE6EF; padding-bottom: 8px;">
+                                    3. Bakgrunn, Tjeneste &amp; Referanse
+                                  </div>
+                                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size: 14px; line-height: 22px;">
+                                    <tr>
+                                      <td width="130" valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Menighet:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.churchCommunity.trim()}</td>
+                                    </tr>
+                                    <tr>
+                                      <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Nåværende tjeneste:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.currentMinistry.trim()}</td>
+                                    </tr>
+                                    <tr>
+                                      <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Kall / nådegave:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.ministryCalling.trim()}</td>
+                                    </tr>
+                                    <tr>
+                                      <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Oppgitt referanse:</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30; font-weight: 700;">${formData.reference.trim()}</td>
+                                    </tr>
+                                  </table>
 
-                  <h3 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 6px; margin-top: 24px;">4. Referanse & tilleggsopplysninger</h3>
-                  <div style="font-size: 14px; line-height: 1.6;">
-                    <p><strong>Referanse:</strong><br/>${formData.reference.trim()}</p>
-                    <p><strong>Annet:</strong><br/>${formData.additionalNotes?.trim() || 'Ingen'}</p>
-                  </div>
-                </div>
-                <div style="font-size: 12px; color: #777; border-top: 1px solid #eee; padding-top: 12px; margin-top: 16px;">
-                  Søknads-ID: ${docRef.id} • Registrert via www.hkpc.no/admission
-                </div>
-              </div>
+                                  ${formData.testimony || formData.whySeeking ? `
+                                  <div style="margin-top: 14px; padding: 12px 16px; background-color: #FFFFFF; border-left: 3px solid #561291; border-radius: 0 10px 10px 0; font-size: 13px; line-height: 20px; color: #464554; font-style: italic;">
+                                    &ldquo;${(formData.testimony || formData.whySeeking).trim()}&rdquo;
+                                  </div>` : ''}
+                                </td>
+                              </tr>
+                            </table>
+
+                            <!-- Call to Action Box -->
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, #FAF8FC 0%, #F5EEFC 100%); border: 1px solid #E2DCE7; border-radius: 16px; margin-bottom: 6px;">
+                              <tr>
+                                <td style="padding: 24px 20px; text-align: center;">
+                                  <div style="font-size: 13px; font-weight: 600; color: #561291; margin-bottom: 6px;">
+                                    Fullstendig søknadsdokumentasjon
+                                  </div>
+                                  <div style="font-size: 14px; color: #464554; line-height: 20px; margin-bottom: 18px;">
+                                    Åpne Google Regneark eller administrasjonsportalen for å se hele søknaden med vitnesbyrd og referanser.
+                                  </div>
+                                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+                                    <tr>
+                                      <td align="center" style="border-radius: 12px; background-color: #561291;">
+                                        <a href="https://hkpc.no/admin" target="_blank" style="display: inline-block; padding: 14px 28px; font-size: 14px; font-weight: 700; color: #FFFFFF; text-decoration: none; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em; min-height: 44px; line-height: 20px; box-sizing: border-box;">
+                                          Åpne Adminportalen &rarr;
+                                        </a>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </td>
+                              </tr>
+                            </table>
+
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="background-color: #FAF8FC; border-top: 1px solid #EAE6EF; padding: 22px 24px; text-align: center;">
+                            <div style="font-size: 12px; font-weight: 700; color: #561291; margin-bottom: 4px;">
+                              His Kingdom Prophetic Community (HKPC)
+                            </div>
+                            <div style="font-size: 11px; color: #6D6575; line-height: 18px; margin-bottom: 8px;">
+                              Offisiell søknadsportal: <a href="https://hkpc.no" target="_blank" style="color: #561291; text-decoration: underline;">hkpc.no</a> • Kontakt: <a href="mailto:school@hiskingdomministry.no" style="color: #561291; text-decoration: underline;">school@hiskingdomministry.no</a>
+                            </div>
+                            <div style="font-size: 10px; color: #8F8B99;">
+                              Søknads-ID: ${docRef.id} • Registrert via www.hkpc.no/admission
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </body>
+              </html>
             `
           }
         });

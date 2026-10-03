@@ -1626,12 +1626,12 @@ export const AppProvider = ({ children }) => {
             console.warn("Could not read local cache for merge:", e);
           }
 
-          const fallbackRole = (userEmail === 'knutsenthomas@gmail.com' || userEmail === 'thomas@tk-design.no') ? 'superadmin' : 'member';
+          const fallbackRole = (userEmail === 'knutsenthomas@gmail.com' || userEmail === 'thomas@tk-design.no' || userEmail === 'thomas@hiskingdomministry.no') ? 'superadmin' : 'member';
           
           const optimisticUserData = {
             uid: firebaseUser.uid,
             email: userEmail,
-            name: firebaseUser.displayName || (userEmail === 'knutsenthomas@gmail.com' ? 'Thomas Knutsen' : 'Ny Bruker'),
+            name: firebaseUser.displayName || ((userEmail === 'knutsenthomas@gmail.com' || userEmail === 'thomas@hiskingdomministry.no' || userEmail === 'thomas@tk-design.no') ? 'Thomas Knutsen' : 'Ny Bruker'),
             role: fallbackRole,
             onboardingCompleted: true,
             avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
@@ -1639,7 +1639,7 @@ export const AppProvider = ({ children }) => {
           };
 
           // Strict Super-Admin override with robust default profile fallbacks
-          if (['knutsenthomas@gmail.com', 'thomas@tk-design.no'].includes(userEmail)) {
+          if (['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'].includes(userEmail)) {
             optimisticUserData.role = 'superadmin';
             optimisticUserData.name = 'Thomas Knutsen';
             optimisticUserData.title = optimisticUserData.title || 'Systemeier & Utvikler';
@@ -1664,7 +1664,7 @@ export const AppProvider = ({ children }) => {
               const userSnap = await getDoc(userDocRef);
               let finalUserData = null;
 
-              if (['knutsenthomas@gmail.com', 'thomas@tk-design.no'].includes(userEmail)) {
+              if (['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'].includes(userEmail)) {
                 // Absolute Super-Admin override: Guarantee Thomas always loads with absolute permissions and profile details
                 const existingData = userSnap.exists() ? userSnap.data() : {};
                 finalUserData = {
