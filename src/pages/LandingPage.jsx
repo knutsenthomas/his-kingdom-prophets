@@ -332,17 +332,17 @@ export default function LandingPage() {
               variants={staggerContainer}
             >
               <motion.div variants={fadeInUp} whileHover={{ y: -3, transition: { duration: 0.2 } }}>
-                <span>01</span>
+                <span className="format-num">01</span>
                 <h4><CmsText slug="landing-format-1-title" fallback={language === 'no' ? 'Fleksibelt i hverdagen' : 'Flexible in everyday life'} /></h4>
                 <p><CmsText slug="landing-format-1-desc" fallback={language === 'no' ? 'Videoer og oppgaver i ditt eget tempo.' : 'Video lectures and assignments at your own pace.'} /></p>
               </motion.div>
               <motion.div variants={fadeInUp} whileHover={{ y: -3, transition: { duration: 0.2 } }}>
-                <span>02</span>
+                <span className="format-num">02</span>
                 <h4><CmsText slug="landing-format-2-title" fallback={language === 'no' ? 'Sammen hver uke' : 'Together every week'} /></h4>
                 <p><CmsText slug="landing-format-2-desc" fallback={language === 'no' ? 'Zoom-kvelder med bønn og fagdrøfting.' : 'Live Zoom gatherings with prayer and curriculum discussions.'} /></p>
               </motion.div>
               <motion.div variants={fadeInUp} whileHover={{ y: -3, transition: { duration: 0.2 } }}>
-                <span>03</span>
+                <span className="format-num">03</span>
                 <h4><CmsText slug="landing-format-3-title" fallback={language === 'no' ? 'Fra ord til praksis' : 'From word to practice'} /></h4>
                 <p><CmsText slug="landing-format-3-desc" fallback={language === 'no' ? 'Profetisk trening i et trygt fellesskap.' : 'Prophetic activation in a supportive environment.'} /></p>
               </motion.div>
@@ -389,22 +389,22 @@ export default function LandingPage() {
             variants={staggerContainer}
           >
             <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
-              <span>01</span>
+              <span className="topic-num">01</span>
               <h3><CmsText slug="landing-topic-1-title" fallback={language === 'no' ? 'Fundament & relasjon' : 'Foundation & Intimacy'} /></h3>
               <p><CmsText slug="landing-topic-1-desc" fallback={language === 'no' ? 'Bønn, identitet i Kristus og å høre Guds røst.' : 'Prayer, identity in Christ, and hearing God’s voice.'} /></p>
             </motion.article>
             <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
-              <span>02</span>
+              <span className="topic-num">02</span>
               <h3><CmsText slug="landing-topic-2-title" fallback={language === 'no' ? 'Profetisk utrustning & gaver' : 'Prophetic Equipping & Gifts'} /></h3>
               <p><CmsText slug="landing-topic-2-desc" fallback={language === 'no' ? 'Åndens gaver, personlig profeti og sunn praksis.' : 'Gifts of the Spirit, personal prophecy, and sound biblical practice.'} /></p>
             </motion.article>
             <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
-              <span>03</span>
+              <span className="topic-num">03</span>
               <h3><CmsText slug="landing-topic-3-title" fallback={language === 'no' ? 'Indre helbredelse & utfrielse' : 'Inner Healing & Deliverance'} /></h3>
               <p><CmsText slug="landing-topic-3-desc" fallback={language === 'no' ? 'Undervisning om frihet, omvendelse og helbredelse.' : 'Teaching on freedom, repentance, and emotional healing.'} /></p>
             </motion.article>
             <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
-              <span>04</span>
+              <span className="topic-num">04</span>
               <h3><CmsText slug="landing-topic-4-title" fallback={language === 'no' ? 'Kristenliv & tjeneste' : 'Christian Living & Ministry'} /></h3>
               <p><CmsText slug="landing-topic-4-desc" fallback={language === 'no' ? 'Tro i hverdagen, forvaltning, smågrupper og misjon.' : 'Faith in daily life, stewardship, small groups, and mission.'} /></p>
             </motion.article>
@@ -584,7 +584,7 @@ export default function LandingPage() {
             <motion.div className="admission-box" variants={fadeInUp}>
               <div>
                 <b><CmsText slug="landing-adm-box-title" fallback={language === 'no' ? 'Opptak til skoleåret 2027' : 'Admissions for Academic Year 2027'} /></b>
-                <span>
+                <span className="admission-box-meta">
                   <CmsText 
                     slug="landing-adm-box-meta" 
                     fallback={language === 'no'
