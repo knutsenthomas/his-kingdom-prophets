@@ -33,7 +33,12 @@ export default function LoginPage() {
   const params = new URLSearchParams(location.search);
   const redirectTarget = params.get('redirect') || '/teacher/dashboard';
 
-  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
+  const ADMIN_EMAILS = [
+    'knutsenthomas@gmail.com', 
+    'thomas@tk-design.no', 
+    'thomas@hiskingdomministry.no',
+    'hildekarin@hiskingdomministry.no'
+  ];
   const cleanEmail = user?.email?.toLowerCase();
   const isAdmin = Boolean(user && (user.role === 'admin' || user.role === 'superadmin' || ADMIN_EMAILS.includes(cleanEmail)));
 

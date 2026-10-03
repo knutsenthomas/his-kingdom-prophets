@@ -21,7 +21,12 @@ export default function TeacherLayout() {
   useEffect(() => {
     const allowedRoles = ['teacher', 'admin', 'superadmin'];
     const email = user?.email?.toLowerCase();
-    const isSpecialAdmin = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'].includes(email);
+    const isSpecialAdmin = [
+      'knutsenthomas@gmail.com', 
+      'thomas@tk-design.no', 
+      'thomas@hiskingdomministry.no',
+      'hildekarin@hiskingdomministry.no'
+    ].includes(email);
     const hasAccess = Boolean(user && (allowedRoles.includes(user?.role) || isSpecialAdmin));
 
     if (!user) {
@@ -96,55 +101,57 @@ export default function TeacherLayout() {
                 <img 
                   src="/hkp-logo.png" 
                   alt="HKP Admin Logo" 
-                  className="w-10 h-10 rounded-full object-contain shadow-xs shrink-0 select-none group-hover:scale-105 transition-transform" 
+                  className="w-10 h-10 rounded-full object-contain shadow-xs shrink-0 select-none group-hover:scale-105 transition-transform duration-200" 
                 />
                 <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
               </div>
               <div className="min-w-0 flex-1">
-                <span className="block text-base font-extrabold text-primary tracking-tight leading-none group-hover:text-primary/90 transition-colors">
+                <span className="block text-xl font-extrabold text-primary tracking-tight leading-none group-hover:opacity-90 transition-opacity">
                   HKP Admin
                 </span>
-                <span className="block text-[11px] font-medium text-slate-500 mt-1 truncate">
+                <span className="block text-xs font-medium text-slate-500 mt-1 truncate">
                   hkpc.no kontrollpanel
                 </span>
               </div>
             </button>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="p-3.5 space-y-6">
+          {/* Navigation Links (exact match with Community App DesktopSidebar) */}
+          <nav className="flex-1 px-3 py-3 space-y-4">
             {adminNavGroups.map((grp, gIdx) => (
-              <div key={gIdx} className="space-y-1.5">
-                <p className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest select-none">
+              <div key={gIdx} className="space-y-1">
+                <p className="px-3.5 text-xs font-bold text-slate-600 uppercase tracking-wider pt-2 pb-0.5 select-none">
                   {grp.group}
                 </p>
-                <div className="space-y-0.5">
-                  {grp.items.map((item) => {
-                    const Icon = item.icon;
-                    const active = checkActive(item.path);
+                {grp.items.map((item) => {
+                  const Icon = item.icon;
+                  const active = checkActive(item.path);
 
-                    return (
-                      <button
-                        key={item.id}
-                        type="button"
-                        onClick={() => handleItemClick(item)}
-                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer text-left ${
-                          active
-                            ? 'bg-primary text-white shadow-sm font-bold'
-                            : 'text-on-surface hover:bg-primary/5 hover:text-primary'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <Icon size={17} className={active ? 'text-white' : 'text-slate-400'} />
-                          <span>{item.label}</span>
-                        </div>
-                        {item.isExternal && (
-                          <ExternalLink size={12} className={active ? 'text-white/80' : 'text-slate-400'} />
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => handleItemClick(item)}
+                      className={`w-full flex items-center text-left gap-3.5 px-3.5 py-2.5 rounded-xl transition-all text-[15px] font-semibold cursor-pointer group ${
+                        active
+                          ? 'bg-primary text-white shadow-xs'
+                          : 'text-slate-800 hover:bg-slate-100 hover:text-purple-950'
+                      }`}
+                    >
+                      <Icon 
+                        size={21} 
+                        className={`shrink-0 ${active ? 'text-white' : 'text-slate-600 group-hover:text-purple-900'}`} 
+                      />
+                      <span className="text-left flex-1 text-[15px] font-semibold">{item.label}</span>
+                      {item.isExternal && (
+                        <ExternalLink 
+                          size={15} 
+                          className={`shrink-0 ${active ? 'text-white/80' : 'text-slate-400 group-hover:text-purple-900'}`} 
+                        />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             ))}
           </nav>
@@ -261,10 +268,10 @@ export default function TeacherLayout() {
               </button>
             </div>
 
-            <nav className="p-3 space-y-5 overflow-y-auto max-h-[calc(100vh-220px)]">
+            <nav className="p-3 space-y-4 overflow-y-auto max-h-[calc(100vh-220px)]">
               {adminNavGroups.map((grp, gIdx) => (
                 <div key={gIdx} className="space-y-1">
-                  <p className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest select-none">
+                  <p className="px-3.5 text-xs font-bold text-slate-600 uppercase tracking-wider pt-2 pb-0.5 select-none">
                     {grp.group}
                   </p>
                   <div className="space-y-0.5">
@@ -277,18 +284,19 @@ export default function TeacherLayout() {
                           key={item.id}
                           type="button"
                           onClick={() => handleItemClick(item)}
-                          className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer text-left min-h-[44px] ${
+                          className={`w-full flex items-center text-left gap-3.5 px-3.5 py-3 rounded-xl text-[15px] font-semibold transition-all cursor-pointer min-h-[44px] ${
                             active
-                              ? 'bg-primary text-white shadow-sm font-bold'
-                              : 'text-on-surface hover:bg-primary/5 hover:text-primary'
+                              ? 'bg-primary text-white shadow-xs font-semibold'
+                              : 'text-slate-800 hover:bg-slate-100 hover:text-purple-950'
                           }`}
                         >
-                          <div className="flex items-center gap-3">
-                            <Icon size={18} className={active ? 'text-white' : 'text-slate-400'} />
-                            <span>{item.label}</span>
-                          </div>
+                          <Icon 
+                            size={21} 
+                            className={`shrink-0 ${active ? 'text-white' : 'text-slate-600'}`} 
+                          />
+                          <span className="flex-1">{item.label}</span>
                           {item.isExternal && (
-                            <ExternalLink size={14} className={active ? 'text-white/80' : 'text-slate-400'} />
+                            <ExternalLink size={15} className={active ? 'text-white/80' : 'text-slate-400'} />
                           )}
                         </button>
                       );

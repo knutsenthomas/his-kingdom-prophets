@@ -221,12 +221,16 @@ export const AppProvider = ({ children }) => {
             console.warn("Could not read local cache for merge:", e);
           }
 
-          const fallbackRole = (userEmail === 'knutsenthomas@gmail.com' || userEmail === 'thomas@tk-design.no' || userEmail === 'thomas@hiskingdomministry.no') ? 'superadmin' : 'member';
+          const isLeader = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no', 'hildekarin@hiskingdomministry.no'].includes(userEmail);
+          const fallbackRole = isLeader ? 'superadmin' : 'member';
           
+          const isHilde = userEmail === 'hildekarin@hiskingdomministry.no';
+          const defaultName = isHilde ? 'Hilde Karin Knutsen' : ((userEmail === 'knutsenthomas@gmail.com' || userEmail === 'thomas@hiskingdomministry.no' || userEmail === 'thomas@tk-design.no') ? 'Thomas Knutsen' : 'Ny Bruker');
+
           const optimisticUserData = {
             uid: firebaseUser.uid,
             email: userEmail,
-            name: firebaseUser.displayName || ((userEmail === 'knutsenthomas@gmail.com' || userEmail === 'thomas@hiskingdomministry.no' || userEmail === 'thomas@tk-design.no') ? 'Thomas Knutsen' : 'Ny Bruker'),
+            name: firebaseUser.displayName || defaultName,
             role: fallbackRole,
             onboardingCompleted: true,
             avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
@@ -234,17 +238,26 @@ export const AppProvider = ({ children }) => {
           };
 
           // Strict Super-Admin override with robust default profile fallbacks
-          if (['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'].includes(userEmail)) {
+          if (isLeader) {
             optimisticUserData.role = 'superadmin';
-            optimisticUserData.name = 'Thomas Knutsen';
-            optimisticUserData.title = optimisticUserData.title || 'Systemeier & Utvikler';
-            optimisticUserData.department = optimisticUserData.department || 'Administrasjon';
-            optimisticUserData.location = optimisticUserData.location || 'Kristiansand, Norge';
-            optimisticUserData.phone = optimisticUserData.phone || '+47 900 00 000';
-            optimisticUserData.bio = optimisticUserData.bio || 'Systemeier, Fullstack-utvikler og Super-Admin for His Kingdom Prophets.';
-            optimisticUserData.expertise = optimisticUserData.expertise || 'Systemarkitektur, Fullstack-utvikling, UI/UX-design';
-            optimisticUserData.officeHours = optimisticUserData.officeHours || 'Mandag - Fredag 09:00 - 17:00';
-            optimisticUserData.zoomLink = optimisticUserData.zoomLink || 'https://zoom.us/j/9270778606';
+            if (isHilde) {
+              optimisticUserData.name = 'Hilde Karin Knutsen';
+              optimisticUserData.title = optimisticUserData.title || 'Hovedpastor & Leder';
+              optimisticUserData.department = optimisticUserData.department || 'Lederskap & Skole';
+              optimisticUserData.location = optimisticUserData.location || 'Sperrebotn, Norge';
+              optimisticUserData.phone = optimisticUserData.phone || '+47 40 60 33 29';
+              optimisticUserData.bio = optimisticUserData.bio || 'Hovedpastor og leder for His Kingdom Ministry og His Kingdom Prophets.';
+            } else {
+              optimisticUserData.name = 'Thomas Knutsen';
+              optimisticUserData.title = optimisticUserData.title || 'Systemeier & Utvikler';
+              optimisticUserData.department = optimisticUserData.department || 'Administrasjon';
+              optimisticUserData.location = optimisticUserData.location || 'Kristiansand, Norge';
+              optimisticUserData.phone = optimisticUserData.phone || '+47 900 00 000';
+              optimisticUserData.bio = optimisticUserData.bio || 'Systemeier, Fullstack-utvikler og Super-Admin for His Kingdom Prophets.';
+              optimisticUserData.expertise = optimisticUserData.expertise || 'Systemarkitektur, Fullstack-utvikling, UI/UX-design';
+              optimisticUserData.officeHours = optimisticUserData.officeHours || 'Mandag - Fredag 09:00 - 17:00';
+              optimisticUserData.zoomLink = optimisticUserData.zoomLink || 'https://zoom.us/j/9270778606';
+            }
           }
 
           // 2. Set State IMMEDIATELY (0ms latency!)
@@ -259,15 +272,15 @@ export const AppProvider = ({ children }) => {
               const userSnap = await getDoc(userDocRef);
               let finalUserData = null;
 
-              if (['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'].includes(userEmail)) {
-                // Absolute Super-Admin override: Guarantee Thomas always loads with absolute permissions and profile details
+              if (isLeader) {
+                // Absolute Super-Admin override: Guarantee leadership always loads with absolute permissions and profile details
                 const existingData = userSnap.exists() ? userSnap.data() : {};
                 finalUserData = {
                   ...optimisticUserData,
                   ...existingData
                 };
                 finalUserData.role = 'superadmin';
-                finalUserData.name = 'Thomas Knutsen';
+                finalUserData.name = isHilde ? 'Hilde Karin Knutsen' : 'Thomas Knutsen';
 
                 // Heal the Firestore doc in the background (Non-blocking!)
                 setDoc(userDocRef, finalUserData, { merge: true }).catch(healErr => {

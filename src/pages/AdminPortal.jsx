@@ -21,7 +21,12 @@ export default function AdminPortal() {
   });
   
   // Guard Check - Allow admin, superadmin, teacher, and verified admin emails
-  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
+  const ADMIN_EMAILS = [
+    'knutsenthomas@gmail.com', 
+    'thomas@tk-design.no', 
+    'thomas@hiskingdomministry.no',
+    'hildekarin@hiskingdomministry.no'
+  ];
   const userEmail = currentUser?.email?.toLowerCase();
   const isAuthorized = Boolean(
     currentUser && (
@@ -31,6 +36,37 @@ export default function AdminPortal() {
       ADMIN_EMAILS.includes(userEmail)
     )
   );
+
+  // Default system leaders always guaranteed
+  const DEFAULT_LEADERS = [
+    {
+      uid: 'mU0ch6f8TAOrEWkDn2u3OzvVwzI2',
+      name: 'Hilde Karin Knutsen',
+      email: 'hildekarin@hiskingdomministry.no',
+      role: 'admin',
+      created: '30. sep 2026',
+      status: 'AKTIV',
+      avatar: ''
+    },
+    {
+      uid: '52cjTDuwjgalVNKiwoslx2uJJ4t1',
+      name: 'Thomas Knutsen',
+      email: 'knutsenthomas@gmail.com',
+      role: 'superadmin',
+      created: '01. okt 2026',
+      status: 'AKTIV',
+      avatar: ''
+    },
+    {
+      uid: 'tk-design-elev',
+      name: 'TK-design',
+      email: 'thomas@tk-design.no',
+      role: 'student',
+      created: 'Skoleregistrering',
+      status: 'VENTER',
+      avatar: ''
+    }
+  ];
 
   // --- TAB 1: USERS STATE ---
   const [usersList, setUsersList] = useState(() => {
@@ -46,13 +82,20 @@ export default function AdminPortal() {
             'ingrid.olsen@student.uio.no', 
             'anders.l@videregaende.no'
           ];
-          return parsed.filter(u => u && !u.uid?.startsWith('seed-user-') && !MOCK_EMAILS.includes(u.email));
+          const filtered = parsed.filter(u => u && !u.uid?.startsWith('seed-user-') && !MOCK_EMAILS.includes(u.email));
+          // Ensure leadership is always merged in
+          DEFAULT_LEADERS.forEach(leader => {
+            if (!filtered.some(u => u.email?.toLowerCase() === leader.email.toLowerCase())) {
+              filtered.unshift(leader);
+            }
+          });
+          return filtered;
         }
       }
     } catch (e) {
       console.warn("Could not load cached users for AdminPortal:", e);
     }
-    return [];
+    return DEFAULT_LEADERS;
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('ALL'); // 'ALL' | 'student' | 'teacher' | 'admin' | 'superadmin'
@@ -201,64 +244,111 @@ export default function AdminPortal() {
 
     const fetchRealUsers = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "users"));
         const realUsers = [];
 
-        for (const docSnap of querySnapshot.docs) {
-          const data = docSnap.data();
-          const docId = docSnap.id;
-          const isMock = docId.startsWith('seed-user-') || MOCK_EMAILS.includes(data.email);
-
-          if (isMock) {
-            // Asynchronously delete legacy seed user from Firestore
-            try {
-              await deleteDoc(doc(db, "users", docId));
-            } catch (err) {
-              console.warn("Could not purge mock user:", docId, err);
-            }
-          } else {
-            realUsers.push({ uid: docId, ...data });
-          }
-        }
-
-        // Also check if any registered students in 'students' collection need to be listed
+        // 1. Attempt to fetch live from authoritative communitySso admin endpoint
+        let ssoLoaded = false;
         try {
-          const studentSnap = await getDocs(collection(db, "students"));
-          for (const sDoc of studentSnap.docs) {
-            const sData = sDoc.data();
-            if (sDoc.id !== 's1' && sDoc.id !== 's2' && sDoc.id !== 's3' && !realUsers.some(u => u.email?.toLowerCase() === sData.email?.toLowerCase())) {
-              realUsers.push({
-                uid: sDoc.id,
-                name: sData.name || 'Elev',
-                email: sData.email || '',
-                role: 'student',
-                created: sData.created || 'Aktiv',
-                status: 'AKTIV',
-                avatar: sData.avatar || ''
-              });
+          const { auth } = await import('@/firebase');
+          if (auth.currentUser) {
+            const token = await auth.currentUser.getIdToken();
+            const resp = await fetch('https://europe-west1-his-kingdom-ministry.cloudfunctions.net/communitySso/admin/list', {
+              method: 'POST',
+              headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({})
+            });
+            if (resp.ok) {
+              const ssoData = await resp.json();
+              if (ssoData && Array.isArray(ssoData.users)) {
+                ssoLoaded = true;
+                const mapped = ssoData.users.map(u => ({
+                  uid: u.uid || `usr-${u.email}`,
+                  name: u.name || (u.email?.toLowerCase().includes('hildekarin') ? 'Hilde Karin Knutsen' : u.email),
+                  email: u.email,
+                  role: u.role || 'student',
+                  created: u.lastSignInAt ? new Date(u.lastSignInAt).toLocaleDateString('no-NO', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Registrert',
+                  status: u.status === 'active' ? 'AKTIV' : u.status === 'pending' ? 'VENTER' : 'INAKTIV',
+                  cohortClassId: u.cohortClassId || '',
+                  avatar: ''
+                }));
+                if (Array.isArray(ssoData.registrations)) {
+                  ssoData.registrations.forEach(r => {
+                    if (!mapped.some(m => m.email?.toLowerCase() === r.email?.toLowerCase())) {
+                      mapped.push({
+                        uid: r.uid || `reg-${r.email}`,
+                        name: r.name || 'Skoleregistrering',
+                        email: r.email,
+                        role: r.role || 'student',
+                        created: 'Registrert',
+                        status: r.status === 'disabled' ? 'INAKTIV' : 'VENTER',
+                        cohortClassId: r.cohortClassId || '',
+                        avatar: ''
+                      });
+                    }
+                  });
+                }
+                realUsers.push(...mapped);
+              }
             }
           }
-        } catch (sErr) {
-          console.warn("Could not load students collection:", sErr);
+        } catch (ssoErr) {
+          console.warn("communitySso fetch notice:", ssoErr);
         }
 
-        // Ensure current logged-in superadmin (Thomas Knutsen) is always in the list as superadmin
-        if (currentUser && !realUsers.some(u => u.email?.toLowerCase() === currentUser.email?.toLowerCase())) {
-          realUsers.unshift({
-            uid: currentUser.uid || 'current-admin',
-            name: currentUser.name || 'Thomas Knutsen',
-            email: currentUser.email,
-            role: currentUser.role || 'superadmin',
-            created: '23. May 2026',
-            status: 'AKTIV',
-            avatar: currentUser.avatar || ''
-          });
+        // 2. If SSO query did not populate, query Firestore fallback
+        if (!ssoLoaded) {
+          try {
+            const querySnapshot = await getDocs(collection(db, "users"));
+            for (const docSnap of querySnapshot.docs) {
+              const data = docSnap.data();
+              const docId = docSnap.id;
+              const isMock = docId.startsWith('seed-user-') || MOCK_EMAILS.includes(data.email);
+
+              if (isMock) {
+                try {
+                  await deleteDoc(doc(db, "users", docId));
+                } catch (err) {}
+              } else {
+                realUsers.push({ uid: docId, ...data });
+              }
+            }
+          } catch (uErr) {
+            console.warn("Firestore users query notice:", uErr);
+          }
+
+          // Check students collection
+          try {
+            const studentSnap = await getDocs(collection(db, "students"));
+            for (const sDoc of studentSnap.docs) {
+              const sData = sDoc.data();
+              if (sDoc.id !== 's1' && sDoc.id !== 's2' && sDoc.id !== 's3' && !realUsers.some(u => u.email?.toLowerCase() === sData.email?.toLowerCase())) {
+                realUsers.push({
+                  uid: sDoc.id,
+                  name: sData.name || 'Elev',
+                  email: sData.email || '',
+                  role: 'student',
+                  created: sData.created || 'Aktiv',
+                  status: 'AKTIV',
+                  avatar: sData.avatar || ''
+                });
+              }
+            }
+          } catch (sErr) {
+            console.warn("Could not load students collection:", sErr);
+          }
         }
+
+        // 3. Always guarantee default leadership (Hilde Karin, Thomas, TK-design)
+        DEFAULT_LEADERS.forEach(leader => {
+          if (!realUsers.some(u => u.email?.toLowerCase() === leader.email.toLowerCase())) {
+            realUsers.unshift(leader);
+          }
+        });
 
         setUsersList(realUsers);
         localStorage.setItem('hkm-admin-portal-users', JSON.stringify(realUsers));
       } catch (err) {
-        console.warn("Firestore fetch failed, loading local/offline state:", err);
+        console.warn("Fetch failed, keeping cached state:", err);
       }
     };
 
@@ -339,8 +429,8 @@ export default function AdminPortal() {
 
   const handleUpdateUserRole = async (uid, role) => {
     const targetUser = usersList.find(u => u.uid === uid);
-    if (targetUser?.email?.toLowerCase() === 'knutsenthomas@gmail.com') {
-      showToast("Super-Admin-rollen til Thomas Knutsen kan ikke endres!");
+    if (['knutsenthomas@gmail.com', 'hildekarin@hiskingdomministry.no'].includes(targetUser?.email?.toLowerCase())) {
+      showToast("Hovedadministrator-roller kan ikke endres!");
       return;
     }
 
@@ -358,8 +448,8 @@ export default function AdminPortal() {
 
   const handleUpdateUserStatus = async (uid, status) => {
     const targetUser = usersList.find(u => u.uid === uid);
-    if (targetUser?.email?.toLowerCase() === 'knutsenthomas@gmail.com') {
-      showToast("Statusen til Thomas Knutsen kan ikke settes til inaktiv!");
+    if (['knutsenthomas@gmail.com', 'hildekarin@hiskingdomministry.no'].includes(targetUser?.email?.toLowerCase())) {
+      showToast("Statusen til hovedadministrator kan ikke endres!");
       return;
     }
 
@@ -377,8 +467,8 @@ export default function AdminPortal() {
 
   const handleDeleteUser = async (uid, name) => {
     const targetUser = usersList.find(u => u.uid === uid);
-    if (targetUser?.email?.toLowerCase() === 'knutsenthomas@gmail.com') {
-      showToast("Super-Admin Thomas Knutsen kan ikke slettes!");
+    if (['knutsenthomas@gmail.com', 'hildekarin@hiskingdomministry.no'].includes(targetUser?.email?.toLowerCase())) {
+      showToast("Hovedadministratorer kan ikke slettes!");
       return;
     }
 
@@ -628,6 +718,10 @@ export default function AdminPortal() {
                               <span className="text-xs font-bold text-[#ba1a1a] bg-red-50 border border-red-200 rounded-lg px-2.5 py-1">
                                 Super Admin (Låst)
                               </span>
+                            ) : userItem.email?.toLowerCase() === 'hildekarin@hiskingdomministry.no' ? (
+                              <span className="text-xs font-bold text-[#561291] bg-purple-50 border border-purple-200 rounded-lg px-2.5 py-1">
+                                Hovedleder / Admin (Låst)
+                              </span>
                             ) : (
                               <select
                                 value={userItem.role}
@@ -649,7 +743,7 @@ export default function AdminPortal() {
 
                           {/* Status */}
                           <td className="px-6 py-4">
-                            {userItem.email?.toLowerCase() === 'knutsenthomas@gmail.com' ? (
+                            {['knutsenthomas@gmail.com', 'hildekarin@hiskingdomministry.no'].includes(userItem.email?.toLowerCase()) ? (
                               <span className="text-[10px] font-bold rounded-full px-3 py-1 bg-green-100 text-green-800 border border-green-200">
                                 AKTIV
                               </span>
@@ -684,7 +778,7 @@ export default function AdminPortal() {
                                 <Mail className="w-4 h-4" />
                               </button>
                               
-                              {userItem.email?.toLowerCase() !== 'knutsenthomas@gmail.com' && (
+                              {!['knutsenthomas@gmail.com', 'hildekarin@hiskingdomministry.no'].includes(userItem.email?.toLowerCase()) && (
                                 <button
                                   onClick={() => handleDeleteUser(userItem.uid, userItem.name)}
                                   className="p-1.5 hover:text-[#ba1a1a] text-[#72787e] transition-colors hover:bg-red-50 rounded-lg"
@@ -788,115 +882,79 @@ export default function AdminPortal() {
             transition={{ duration: 0.3 }}
             className="space-y-6"
           >
-            {/* 1. MASTER TOGGLE & CONTROL CARD */}
-            <div className="bg-white border border-outline-variant/40 rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-[#561291]/5 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#D7B978]/10 rounded-full blur-3xl pointer-events-none" />
-
-              <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                <div className="space-y-3 max-w-2xl">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs uppercase font-extrabold tracking-wider text-[#561291] bg-[#561291]/10 px-3 py-1 rounded-full">
-                      Hovedbryter for opptak
-                    </span>
-                    <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full border ${
-                      admissionFormOpen 
-                        ? 'bg-green-50 text-green-700 border-green-200' 
-                        : 'bg-amber-50 text-amber-800 border-amber-200'
-                    }`}>
-                      <span className={`w-2 h-2 rounded-full ${admissionFormOpen ? 'bg-green-500 animate-pulse' : 'bg-amber-500'}`} />
-                      {admissionFormOpen ? 'Søknadsskjema er ÅPENT' : 'Søknadsskjema er LÅST (1. jan 2027)'}
-                    </span>
-                  </div>
-
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                    {admissionFormOpen 
-                      ? 'Skjemaet er åpent for alle søkere' 
-                      : 'Skjemaet er låst for vanlige besøkende'}
-                  </h3>
-
-                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                    {admissionFormOpen ? (
-                      <>
-                        Søknadsportalen på <span className="font-bold text-[#561291]">/admission</span> er nå fullstendig åpen for publikum. Alle besøkende kan fylle ut de 4 stegene og sende inn sin søknad. Slå av bryteren for å sette skjemaet tilbake til planlagt modus (1. januar 2027).
-                      </>
-                    ) : (
-                      <>
-                        Vanlige besøkende ser informasjonssiden og inviteres til å registrere e-post for påminnelse. Søknadsskjemaet åpner automatisk <span className="font-bold text-[#561291]">1. januar 2027</span>. Du kan når som helst åpne skjemaet for alle ved å slå på toggle-bryteren her.
-                      </>
-                    )}
-                  </p>
-
-                  <div className="flex flex-wrap items-center gap-3 pt-1">
-                    <a
-                      href="/admission"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-[#561291] text-xs font-bold rounded-xl transition-all active:scale-[0.98]"
-                    >
-                      <ExternalLink size={14} />
-                      <span>Åpne søknadssiden</span>
-                    </a>
-                    <a
-                      href="/admission?preview=true"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all active:scale-[0.98]"
-                    >
-                      <Eye size={14} />
-                      <span>Forhåndsvis som søker</span>
-                    </a>
-                    <button
-                      type="button"
-                      onClick={fetchAdmissionsData}
-                      disabled={isLoadingAdmissions}
-                      className="inline-flex items-center gap-1.5 px-3 py-2 text-slate-500 hover:text-[#561291] text-xs font-medium rounded-xl hover:bg-slate-50 transition-all"
-                    >
-                      <RefreshCw size={13} className={isLoadingAdmissions ? "animate-spin" : ""} />
-                      <span>Oppdater data</span>
-                    </button>
-                  </div>
+            {/* 1. MINIMALIST ADMISSION STATUS CARD */}
+            <div className="bg-white border border-outline-variant/30 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-5 transition-all">
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2.5">
+                  <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${admissionFormOpen ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+                  <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+                    {admissionFormOpen ? 'Søknadsskjema er åpent' : 'Søknadsskjema er låst (åpner 1. jan 2027)'}
+                  </h2>
                 </div>
-
-                {/* THE TOGGLE SWITCH */}
-                <div className="bg-slate-50 border border-slate-200/80 p-5 sm:p-6 rounded-2xl flex flex-col items-center justify-center gap-3 shrink-0 min-w-[260px] text-center">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Manuell Åpningsbryter
-                  </span>
-
+                <p className="text-xs sm:text-sm text-slate-500 font-normal leading-relaxed max-w-xl">
+                  {admissionFormOpen 
+                    ? 'Besøkende kan fylle ut og sende inn søknad på hkpc.no/opptak.' 
+                    : 'Vanlige besøkende ser interesselisten. Du kan når som helst åpne skjemaet for alle med bryteren.'}
+                </p>
+                <div className="flex flex-wrap items-center gap-4 pt-1 text-xs font-semibold text-slate-500">
+                  <a
+                    href="/admission"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-slate-600 hover:text-primary transition-colors cursor-pointer"
+                  >
+                    <span>Åpne søknadssiden</span>
+                    <ExternalLink size={13} />
+                  </a>
+                  <a
+                    href="/admission?preview=true"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-slate-600 hover:text-primary transition-colors cursor-pointer"
+                  >
+                    <Eye size={13} />
+                    <span>Forhåndsvis som søker</span>
+                  </a>
                   <button
                     type="button"
-                    role="switch"
-                    aria-checked={admissionFormOpen}
-                    disabled={isTogglingAdmission}
-                    onClick={handleToggleAdmissionForm}
-                    className={`w-20 h-11 flex items-center rounded-full p-1.5 cursor-pointer transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-[#561291]/20 shadow-inner ${
-                      admissionFormOpen ? 'bg-green-500 justify-end' : 'bg-slate-300 justify-start'
-                    }`}
-                    title={admissionFormOpen ? "Klikk for å låse/stenge skjemaet" : "Klikk for å åpne skjemaet for alle"}
+                    onClick={fetchAdmissionsData}
+                    disabled={isLoadingAdmissions}
+                    className="inline-flex items-center gap-1.5 text-slate-500 hover:text-primary transition-colors cursor-pointer"
                   >
-                    <motion.div
-                      layout
-                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                      className="bg-white w-8 h-8 rounded-full shadow-lg flex items-center justify-center text-[#561291]"
-                    >
-                      {admissionFormOpen ? (
-                        <Check size={18} className="text-green-600 stroke-[3]" />
-                      ) : (
-                        <Lock size={15} className="text-slate-500" />
-                      )}
-                    </motion.div>
+                    <RefreshCw size={12} className={isLoadingAdmissions ? "animate-spin" : ""} />
+                    <span>Oppdater data</span>
                   </button>
-
-                  <div className="space-y-0.5">
-                    <span className={`text-sm font-extrabold block ${admissionFormOpen ? 'text-green-700' : 'text-slate-700'}`}>
-                      {admissionFormOpen ? 'PÅ (Skjema er ÅPENT)' : 'AV (Skjema er LÅST)'}
-                    </span>
-                    <span className="text-[11px] text-slate-500 font-normal block">
-                      {admissionFormOpen ? 'Klikk for å låse' : 'Klikk for å åpne for alle nå'}
-                    </span>
-                  </div>
                 </div>
+              </div>
+
+              {/* Minimalist Switch */}
+              <div className="flex items-center gap-3.5 shrink-0 self-start md:self-center pt-2 md:pt-0 border-t md:border-t-0 border-slate-100 w-full md:w-auto justify-between md:justify-end">
+                <div className="text-left md:text-right">
+                  <span className={`block text-xs font-bold ${admissionFormOpen ? 'text-emerald-700' : 'text-slate-700'}`}>
+                    {admissionFormOpen ? 'Åpent for alle' : 'Låst for besøkende'}
+                  </span>
+                  <span className="block text-[11px] text-slate-400">
+                    {admissionFormOpen ? 'Klikk for å låse' : 'Klikk for å åpne'}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={admissionFormOpen}
+                  disabled={isTogglingAdmission}
+                  onClick={handleToggleAdmissionForm}
+                  className={`w-12 h-7 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                    admissionFormOpen ? 'bg-emerald-600 justify-end' : 'bg-slate-300 justify-start'
+                  }`}
+                  title={admissionFormOpen ? "Lås søknadsskjema" : "Åpne søknadsskjema for alle nå"}
+                >
+                  <motion.div
+                    layout
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    className="bg-white w-5 h-5 rounded-full shadow-sm"
+                  />
+                </button>
               </div>
             </div>
 
