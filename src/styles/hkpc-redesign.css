@@ -1275,10 +1275,15 @@
   border-radius: 6px 6px 0 0;
 }
 
-.hkpc-landing .hero-base span {
+.hkpc-landing .hero-base .hero-base-item,
+.hkpc-landing .hero-base > span {
   flex: 1;
   position: relative;
-  padding-left: 19px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.4;
+  color: #E5DDED;
 }
 
 .hkpc-landing .intake>div {
@@ -1341,18 +1346,15 @@
   margin-bottom: 22px;
 }
 
-.hkpc-landing .hero-base span:before {
+.hkpc-landing .hero-base .hero-base-item::before,
+.hkpc-landing .hero-base > span::before {
   content: '';
-  position: absolute;
-  left: 0;
-  color: var(--gold);
-  font-size: 18px;
-  line-height: 1.1;
+  display: inline-block;
   width: 6px;
   height: 6px;
   background: var(--gold);
-  top: 9px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .hkpc-landing .school .section-head {
@@ -2185,9 +2187,6 @@
   }
   .hkpc-landing .topics article:hover {
     transform: none;
-  }
-  .hkpc-landing .hero-base span:before {
-    top: 8px;
   }
   .hkpc-landing .image-caption span {
     font-size: 10px;
