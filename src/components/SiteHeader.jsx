@@ -264,7 +264,7 @@ export default function SiteHeader() {
                       <div className="choice-badge-row">
                         <span className="choice-priority-badge">
                           <Sparkles size={11} />
-                          <span>{language === 'no' ? '1. Prioritet · Elever & Fellesskap' : '1st Priority · Students & Community'}</span>
+                          <span>{language === 'no' ? 'Elever og lærere' : 'Students & Teachers'}</span>
                         </span>
                         <ExternalLink size={13} className="choice-arrow" />
                       </div>
