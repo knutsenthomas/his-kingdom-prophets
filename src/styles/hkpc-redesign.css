@@ -2837,6 +2837,11 @@
   color: var(--violet);
 }
 
+.hkpc-landing .faq-trigger-text {
+  flex: 1;
+  text-align: left;
+}
+
 .hkpc-landing .faq-icon-wrapper {
   display: flex;
   align-items: center;

@@ -114,6 +114,27 @@ const assetDefinitions = [
   { slug: 'landing-testimonial2-role', title: 'Vitnesbyrd 2 Rolle/Tittel', section: 'Hjemmeside', type: 'text', description: 'Stilling/rolle for den andre personen.' },
   { slug: 'landing-testimonial2-quote', title: 'Vitnesbyrd 2 Sitat', section: 'Hjemmeside', type: 'textarea', description: 'Det fullstendige sitatet / vitnesbyrdet til person 2.' },
   
+  // Hjemmeside FAQ (Spørsmål & Svar)
+  { slug: 'landing-faq-eyebrow', title: 'FAQ Eyebrow', section: 'Hjemmeside', type: 'text', description: 'Liten tittel over FAQ-overskriften (f.eks. SPØRSMÅL & SVAR).' },
+  { slug: 'landing-faq-title', title: 'FAQ Hovedtittel', section: 'Hjemmeside', type: 'text', description: 'Hovedoverskrift for FAQ-seksjonen.' },
+  { slug: 'landing-faq-desc', title: 'FAQ Beskrivelse', section: 'Hjemmeside', type: 'textarea', description: 'Undertekst / ingress for FAQ-seksjonen.' },
+  { slug: 'landing-faq-q-0', title: 'FAQ Spørsmål 1', section: 'Hjemmeside', type: 'text', description: 'Hva er His Kingdom Prophetic Community (HKPC)?' },
+  { slug: 'landing-faq-a-0', title: 'FAQ Svar 1', section: 'Hjemmeside', type: 'textarea', description: 'Svar på spørsmål 1.' },
+  { slug: 'landing-faq-q-1', title: 'FAQ Spørsmål 2', section: 'Hjemmeside', type: 'text', description: 'Hva koster skoleåret på HKPC?' },
+  { slug: 'landing-faq-a-1', title: 'FAQ Svar 2', section: 'Hjemmeside', type: 'textarea', description: 'Svar på spørsmål 2.' },
+  { slug: 'landing-faq-q-2', title: 'FAQ Spørsmål 3', section: 'Hjemmeside', type: 'text', description: 'Når åpner søknaden, og hva er fristen for skoleåret 2027?' },
+  { slug: 'landing-faq-a-2', title: 'FAQ Svar 3', section: 'Hjemmeside', type: 'textarea', description: 'Svar på spørsmål 3.' },
+  { slug: 'landing-faq-q-3', title: 'FAQ Spørsmål 4', section: 'Hjemmeside', type: 'text', description: 'Må man ha en profetisk tjenestegave eller kall for å søke?' },
+  { slug: 'landing-faq-a-3', title: 'FAQ Svar 4', section: 'Hjemmeside', type: 'textarea', description: 'Svar på spørsmål 4.' },
+  { slug: 'landing-faq-q-4', title: 'FAQ Spørsmål 5', section: 'Hjemmeside', type: 'text', description: 'Hvilket språk foregår undervisningen på?' },
+  { slug: 'landing-faq-a-4', title: 'FAQ Svar 5', section: 'Hjemmeside', type: 'textarea', description: 'Svar på spørsmål 5.' },
+  { slug: 'landing-faq-q-5', title: 'FAQ Spørsmål 6', section: 'Hjemmeside', type: 'text', description: 'Hvordan er studiehverdagen lagt opp i praksis?' },
+  { slug: 'landing-faq-a-5', title: 'FAQ Svar 6', section: 'Hjemmeside', type: 'textarea', description: 'Svar på spørsmål 6.' },
+  { slug: 'landing-faq-q-6', title: 'FAQ Spørsmål 7', section: 'Hjemmeside', type: 'text', description: 'Hvem står bak og leder skolen?' },
+  { slug: 'landing-faq-a-6', title: 'FAQ Svar 7', section: 'Hjemmeside', type: 'textarea', description: 'Svar på spørsmål 7.' },
+  { slug: 'landing-faq-q-7', title: 'FAQ Spørsmål 8', section: 'Hjemmeside', type: 'text', description: 'Hva er opptakskravene til HKPC?' },
+  { slug: 'landing-faq-a-7', title: 'FAQ Svar 8', section: 'Hjemmeside', type: 'textarea', description: 'Svar på spørsmål 8.' },
+
   // Hjemmeside Siste CTA
   { slug: 'landing-cta-tagline', title: 'CTA Seksjon Tagline', section: 'Hjemmeside', type: 'text', description: 'Liten tekst øverst i siste handlingsseksjon (f.eks. Opptak Åpent...).' },
   { slug: 'landing-cta-title', title: 'CTA Seksjon Tittel', section: 'Hjemmeside', type: 'text', description: 'Hovedoverskrift for den avsluttende handlingsseksjonen.' },

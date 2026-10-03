@@ -91,12 +91,22 @@ const faqItems = [
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const { user, language, toggleLanguage } = useApp();
+  const { user, language, toggleLanguage, isAdminEditing } = useApp();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const [openFaqIndexes, setOpenFaqIndexes] = useState([]);
 
   const toggleFaq = (index) => {
-    setOpenFaqIndex(openFaqIndex === index ? null : index);
+    setOpenFaqIndexes(prev => 
+      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
+    );
+  };
+
+  const openAllFaqs = () => {
+    setOpenFaqIndexes(faqItems.map((_, i) => i));
+  };
+
+  const closeAllFaqs = () => {
+    setOpenFaqIndexes([]);
   };
 
   const logoClicksRef = useRef(0);
@@ -665,26 +675,57 @@ export default function LandingPage() {
             </motion.p>
           </motion.div>
 
+          {isAdminEditing && (
+            <div className="flex items-center justify-end gap-2 mb-3 max-w-[860px] mx-auto px-2">
+              <button 
+                type="button" 
+                onClick={openAllFaqs} 
+                className="text-xs px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 font-medium transition cursor-pointer border border-purple-200"
+              >
+                📂 {language === 'no' ? 'Åpne alle spørsmål for redigering' : 'Open all questions for editing'}
+              </button>
+              <button 
+                type="button" 
+                onClick={closeAllFaqs} 
+                className="text-xs px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 font-medium transition cursor-pointer border border-gray-200"
+              >
+                📁 {language === 'no' ? 'Lukk alle' : 'Close all'}
+              </button>
+            </div>
+          )}
+
           <div className="faq-container">
             {faqItems.map((item, idx) => {
-              const isOpen = openFaqIndex === idx;
-              const question = language === 'no' ? item.q_no : item.q_en;
-              const answer = language === 'no' ? item.a_no : item.a_en;
+              const isOpen = openFaqIndexes.includes(idx);
+              const qFallback = language === 'no' ? item.q_no : item.q_en;
+              const aFallback = language === 'no' ? item.a_no : item.a_en;
 
               return (
                 <div key={idx} className={`faq-item ${isOpen ? 'is-open' : ''}`}>
-                  <button
-                    type="button"
+                  <div
+                    role="button"
+                    tabIndex={0}
                     className="faq-trigger"
                     onClick={() => toggleFaq(idx)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleFaq(idx);
+                      }
+                    }}
                     aria-expanded={isOpen}
                     aria-controls={`faq-answer-${idx}`}
                   >
-                    <span>{question}</span>
+                    <span className="faq-trigger-text">
+                      <CmsText 
+                        slug={`landing-faq-q-${idx}`} 
+                        fallback={qFallback} 
+                      />
+                    </span>
                     <span className="faq-icon-wrapper" aria-hidden="true">
                       <ChevronDown size={18} />
                     </span>
-                  </button>
+                  </div>
                   <AnimatePresence initial={false}>
                     {isOpen && (
                       <motion.div
@@ -698,7 +739,12 @@ export default function LandingPage() {
                         }}
                         className="faq-answer"
                       >
-                        <p>{answer}</p>
+                        <p>
+                          <CmsText 
+                            slug={`landing-faq-a-${idx}`} 
+                            fallback={aFallback} 
+                          />
+                        </p>
                       </motion.div>
                     )}
                   </AnimatePresence>
