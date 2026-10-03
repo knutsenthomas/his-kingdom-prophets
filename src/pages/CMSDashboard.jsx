@@ -14,6 +14,7 @@ import { storage } from '@/firebase';
 import CmsText from '@/components/CmsText';
 import { generateFastingPdf, generateIntercessionPdf } from '@/utils/pdfGenerator';
 import { translateText } from '@/utils/translator';
+import { DEFAULT_CMS_CONTENT } from '@/data/defaultCms';
 
 // Definition of all CMS strings with labels, categories, and explanatory descriptions
 const assetDefinitions = [
@@ -437,18 +438,25 @@ export default function CMSDashboard() {
 
   // Core Editor States
   const [draftContent, setDraftContent] = useState({});
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('search') || '';
+  });
   const [selectedCategory, setSelectedCategory] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     return params.get('category') || 'all';
   });
 
-  // Synchronize category state when URL search parameters change
+  // Synchronize category and search state when URL search parameters change
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const cat = params.get('category');
     if (cat) {
       setSelectedCategory(cat);
+    }
+    const q = params.get('search');
+    if (q !== null) {
+      setSearchQuery(q);
     }
   }, [location.search]);
   const [filterStatus, setFilterStatus] = useState('All Statuses');
@@ -465,23 +473,10 @@ export default function CMSDashboard() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [activeMenuRow, setActiveMenuRow] = useState(null);
 
-  // Initialize draftContent as a clean local copy of global cmsContent state
+  // Initialize draftContent as a clean local copy of global cmsContent state merged with defaults
   useEffect(() => {
-    if (cmsContent) {
-      const copy = { ...cmsContent };
-      // Pre-fill mockup keys in local drafts if not already present
-      if (!copy['nav.dashboard.title']) copy['nav.dashboard.title'] = 'Oversikt';
-      if (!copy['nav.dashboard.title-en']) copy['nav.dashboard.title-en'] = 'Dashboard';
-      if (!copy['btn.submit.primary']) copy['btn.submit.primary'] = 'Send inn endringer';
-      if (!copy['btn.submit.primary-en']) copy['btn.submit.primary-en'] = 'Submit Changes';
-      if (!copy['msg.welcome.student']) copy['msg.welcome.student'] = 'Velkommen tilbake, {{name}}! Klar for å lære i dag?';
-      if (!copy['msg.welcome.student-en']) copy['msg.welcome.student-en'] = 'Welcome back, {{name}}! Ready to learn today?';
-      if (!copy['error.auth.forbidden-en']) copy['error.auth.forbidden-en'] = 'You do not have permission to view this resource.';
-      if (!copy['nav.settings.account']) copy['nav.settings.account'] = 'Kontoinnstillinger';
-      if (!copy['nav.settings.account-en']) copy['nav.settings.account-en'] = 'Account Settings';
-      
-      setDraftContent(copy);
-    }
+    const copy = { ...DEFAULT_CMS_CONTENT, ...(cmsContent || {}) };
+    setDraftContent(copy);
   }, [cmsContent]);
 
   // Global hotkey listener: ⌘K or Ctrl+K focuses the search input
@@ -576,17 +571,9 @@ export default function CMSDashboard() {
       const savedNo = String(cmsContent?.[slug] ?? '');
       const savedEn = String(cmsContent?.[slug + '-en'] ?? '');
       
-      // Fallback prefilled keys for mockup consistency
-      const defaultNo = slug === 'nav.dashboard.title' ? 'Oversikt' :
-                        slug === 'btn.submit.primary' ? 'Send inn endringer' :
-                        slug === 'msg.welcome.student' ? 'Velkommen tilbake, {{name}}! Klar for å lære i dag?' :
-                        slug === 'nav.settings.account' ? 'Kontoinnstillinger' : '';
-      
-      const defaultEn = slug === 'nav.dashboard.title' ? 'Dashboard' :
-                        slug === 'btn.submit.primary' ? 'Submit Changes' :
-                        slug === 'msg.welcome.student' ? 'Welcome back, {{name}}! Ready to learn today?' :
-                        slug === 'error.auth.forbidden' ? 'You do not have permission to view this resource.' :
-                        slug === 'nav.settings.account' ? 'Account Settings' : '';
+      // Fallback prefilled keys from DEFAULT_CMS_CONTENT
+      const defaultNo = DEFAULT_CMS_CONTENT[slug] || '';
+      const defaultEn = DEFAULT_CMS_CONTENT[slug + '-en'] || '';
 
       const baseNo = savedNo || defaultNo;
       const baseEn = savedEn || defaultEn;
@@ -644,6 +631,7 @@ export default function CMSDashboard() {
     return [
       { id: 'all', title: 'Alle nøkler', icon: Globe, count: allAssets.length },
       { id: 'landing', title: 'Landingsside', icon: Layout, count: allAssets.filter(d => d.section === 'Hjemmeside').length },
+      { id: 'faq', title: 'FAQ (Spørsmål & Svar)', icon: HelpCircle, count: allAssets.filter(d => d.slug.startsWith('landing-faq')).length },
       { id: 'admission', title: 'Opptaksside', icon: Award, count: allAssets.filter(d => d.section === 'Opptaksside').length },
       { id: 'support', title: 'Kundestøtte', icon: HelpCircle, count: allAssets.filter(d => d.section === 'Kundestøtte').length },
       { id: 'resources', title: 'Bibelressurser', icon: BookOpen, count: allAssets.filter(d => d.section === 'Bibelressurser').length },
@@ -662,21 +650,25 @@ export default function CMSDashboard() {
     return allAssets.filter(asset => {
       // 1. Filter by category
       if (selectedCategory !== 'all') {
-        const mapping = {
-          landing: 'Hjemmeside',
-          admission: 'Opptaksside',
-          support: 'Kundestøtte',
-          resources: 'Bibelressurser',
-          student: 'Studentportal',
-          teacher: 'Mentorportal',
-          auth: 'Innlogging',
-          onboarding: 'Onboarding',
-          profile: 'Profil',
-          system: 'System',
-          documents: 'Dokumenter'
-        };
-        if (asset.section !== mapping[selectedCategory]) {
-          return false;
+        if (selectedCategory === 'faq') {
+          if (!asset.slug.startsWith('landing-faq')) return false;
+        } else {
+          const mapping = {
+            landing: 'Hjemmeside',
+            admission: 'Opptaksside',
+            support: 'Kundestøtte',
+            resources: 'Bibelressurser',
+            student: 'Studentportal',
+            teacher: 'Mentorportal',
+            auth: 'Innlogging',
+            onboarding: 'Onboarding',
+            profile: 'Profil',
+            system: 'System',
+            documents: 'Dokumenter'
+          };
+          if (asset.section !== mapping[selectedCategory]) {
+            return false;
+          }
         }
       }
 
@@ -703,16 +695,8 @@ export default function CMSDashboard() {
       const savedEn = String(cmsContent?.[asset.slug + '-en'] ?? '');
       
       // Prefilled fallbacks checking
-      const defaultNo = asset.slug === 'nav.dashboard.title' ? 'Oversikt' :
-                        asset.slug === 'btn.submit.primary' ? 'Send inn endringer' :
-                        asset.slug === 'msg.welcome.student' ? 'Velkommen tilbake, {{name}}! Klar for å lære i dag?' :
-                        asset.slug === 'nav.settings.account' ? 'Kontoinnstillinger' : '';
-      
-      const defaultEn = asset.slug === 'nav.dashboard.title' ? 'Dashboard' :
-                        asset.slug === 'btn.submit.primary' ? 'Submit Changes' :
-                        asset.slug === 'msg.welcome.student' ? 'Welcome back, {{name}}! Ready to learn today?' :
-                        asset.slug === 'error.auth.forbidden' ? 'You do not have permission to view this resource.' :
-                        asset.slug === 'nav.settings.account' ? 'Account Settings' : '';
+      const defaultNo = DEFAULT_CMS_CONTENT[asset.slug] || '';
+      const defaultEn = DEFAULT_CMS_CONTENT[asset.slug + '-en'] || '';
 
       const baseNo = savedNo || defaultNo;
       const baseEn = savedEn || defaultEn;
@@ -1615,13 +1599,16 @@ export default function CMSDashboard() {
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   className="bg-slate-50 border border-outline-variant/30 rounded-lg text-xs py-1.5 pl-3 pr-8 focus:ring-primary focus:border-primary font-medium"
                 >
-                  <option value="all">Systemnøkler</option>
+                  <option value="all">Alle nøkler</option>
                   <option value="landing">Landingsside</option>
-                  <option value="auth">Innloggingsflyt</option>
+                  <option value="faq">FAQ (Spørsmål & Svar)</option>
+                  <option value="admission">Opptaksside</option>
+                  <option value="support">Kundestøtte</option>
+                  <option value="resources">Bibelressurser</option>
                   <option value="student">Studentportal</option>
                   <option value="teacher">Mentorportal</option>
+                  <option value="auth">Innloggingsflyt</option>
                   <option value="onboarding">Onboardingflyt</option>
-                  <option value="resources">Bibelressurser</option>
                   <option value="documents">Dokumenter (PDF)</option>
                 </select>
               </div>
@@ -1698,16 +1685,8 @@ export default function CMSDashboard() {
               const savedEn = String(cmsContent?.[slug + '-en'] ?? '');
               
               // Prefilled fallbacks checking
-              const defaultNo = slug === 'nav.dashboard.title' ? 'Oversikt' :
-                                slug === 'btn.submit.primary' ? 'Send inn endringer' :
-                                slug === 'msg.welcome.student' ? 'Velkommen tilbake, {{name}}! Klar for å lære i dag?' :
-                                slug === 'nav.settings.account' ? 'Kontoinnstillinger' : '';
-              
-              const defaultEn = slug === 'nav.dashboard.title' ? 'Dashboard' :
-                                slug === 'btn.submit.primary' ? 'Submit Changes' :
-                                slug === 'msg.welcome.student' ? 'Welcome back, {{name}}! Ready to learn today?' :
-                                slug === 'error.auth.forbidden' ? 'You do not have permission to view this resource.' :
-                                slug === 'nav.settings.account' ? 'Account Settings' : '';
+              const defaultNo = DEFAULT_CMS_CONTENT[slug] || '';
+              const defaultEn = DEFAULT_CMS_CONTENT[slug + '-en'] || '';
 
               const baseNo = savedNo || defaultNo;
               const baseEn = savedEn || defaultEn;

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, HelpCircle } from 'lucide-react';
+import { ChevronDown, HelpCircle, Edit3, Check, ExternalLink, Sparkles } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import CmsText from '@/components/CmsText';
 import { faqItems } from '@/data/landingFaq';
@@ -9,8 +9,18 @@ import { fadeInUp, staggerContainer } from './animations';
 
 export default function LandingFaq() {
   const navigate = useNavigate();
-  const { language, isAdminEditing } = useApp();
+  const { user, language, isAdminEditing, setIsAdminEditing } = useApp();
   const [openFaqIndexes, setOpenFaqIndexes] = useState([]);
+
+  // Check if current user is an authorized admin or teacher
+  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
+  const userEmail = user?.email?.toLowerCase();
+  const isAdminUser = Boolean(
+    user?.role === 'admin' || 
+    user?.role === 'superadmin' || 
+    user?.role === 'teacher' || 
+    ADMIN_EMAILS.includes(userEmail)
+  );
 
   const toggleFaq = (index) => {
     setOpenFaqIndexes(prev => 
@@ -25,6 +35,13 @@ export default function LandingFaq() {
   const closeAllFaqs = () => {
     setOpenFaqIndexes([]);
   };
+
+  // When admin editing mode is enabled, auto-expand all FAQs so questions and answers are visible and directly editable
+  useEffect(() => {
+    if (isAdminEditing) {
+      setOpenFaqIndexes(faqItems.map((_, i) => i));
+    }
+  }, [isAdminEditing]);
 
   return (
     <section className="section wrap faq-section" id="faq" aria-labelledby="faq-heading">
@@ -51,22 +68,78 @@ export default function LandingFaq() {
         </motion.p>
       </motion.div>
 
-      {isAdminEditing && (
-        <div className="flex items-center justify-end gap-2 mb-3 max-w-[860px] mx-auto px-2">
-          <button 
-            type="button" 
-            onClick={openAllFaqs} 
-            className="text-xs px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 font-medium transition cursor-pointer border border-purple-200"
-          >
-            📂 {language === 'no' ? 'Åpne alle spørsmål for redigering' : 'Open all questions for editing'}
-          </button>
-          <button 
-            type="button" 
-            onClick={closeAllFaqs} 
-            className="text-xs px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 font-medium transition cursor-pointer border border-gray-200"
-          >
-            📁 {language === 'no' ? 'Lukk alle' : 'Close all'}
-          </button>
+      {/* Prominent FAQ Admin Toolbar for authorized teachers/admins */}
+      {isAdminUser && (
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 p-3.5 bg-purple-50/90 border border-purple-200/90 rounded-2xl shadow-sm max-w-[860px] mx-auto">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-[#561291] text-white flex items-center justify-center font-bold text-xs shadow-sm">
+              <Sparkles size={16} />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-slate-800">Spørsmål & Svar (FAQ) Administrasjon</p>
+              <p className="text-[11px] text-slate-500">
+                {isAdminEditing 
+                  ? 'Visuell redigering er aktiv: Klikk direkte på et spørsmål eller svar under for å skrive.' 
+                  : 'Du kan redigere spørsmål og svar direkte på siden, eller administrere i CMS-panelet.'}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              type="button"
+              onClick={() => {
+                const next = !isAdminEditing;
+                setIsAdminEditing(next);
+                if (next) openAllFaqs();
+              }}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm ${
+                isAdminEditing 
+                  ? 'bg-emerald-600 text-white hover:bg-emerald-700' 
+                  : 'bg-[#561291] text-white hover:bg-[#561291]/90'
+              }`}
+            >
+              {isAdminEditing ? (
+                <>
+                  <Check size={14} />
+                  <span>Fullfør redigering</span>
+                </>
+              ) : (
+                <>
+                  <Edit3 size={14} />
+                  <span>Rediger FAQ direkte</span>
+                </>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('/admin/cms?category=faq')}
+              className="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+              title="Åpne CMS-styring for FAQ"
+            >
+              <ExternalLink size={13} />
+              <span>Åpne i CMS</span>
+            </button>
+            {isAdminEditing && (
+              <>
+                <button
+                  type="button"
+                  onClick={openAllFaqs}
+                  className="px-2.5 py-1.5 rounded-xl text-xs font-medium text-purple-700 bg-purple-100/70 hover:bg-purple-100 transition cursor-pointer"
+                  title="Åpne alle spørsmål"
+                >
+                  Åpne alle
+                </button>
+                <button
+                  type="button"
+                  onClick={closeAllFaqs}
+                  className="px-2.5 py-1.5 rounded-xl text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition cursor-pointer"
+                  title="Lukk alle spørsmål"
+                >
+                  Lukk alle
+                </button>
+              </>
+            )}
+          </div>
         </div>
       )}
 
@@ -82,7 +155,13 @@ export default function LandingFaq() {
                 role="button"
                 tabIndex={0}
                 className="faq-trigger"
-                onClick={() => toggleFaq(idx)}
+                onClick={() => {
+                  if (!isAdminEditing) {
+                    toggleFaq(idx);
+                  } else if (!isOpen) {
+                    toggleFaq(idx);
+                  }
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
@@ -98,7 +177,16 @@ export default function LandingFaq() {
                     fallback={qFallback} 
                   />
                 </span>
-                <span className="faq-icon-wrapper" aria-hidden="true">
+                <span 
+                  className="faq-icon-wrapper" 
+                  aria-hidden="true"
+                  onClick={(e) => {
+                    if (isAdminEditing) {
+                      e.stopPropagation();
+                      toggleFaq(idx);
+                    }
+                  }}
+                >
                   <ChevronDown size={18} />
                 </span>
               </div>
@@ -115,12 +203,13 @@ export default function LandingFaq() {
                     }}
                     className="faq-answer"
                   >
-                    <p>
+                    <div className="faq-answer-inner text-[#4b4353] text-[15px] leading-relaxed">
                       <CmsText 
+                        as="div"
                         slug={`landing-faq-a-${idx}`} 
                         fallback={aFallback} 
                       />
-                    </p>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>

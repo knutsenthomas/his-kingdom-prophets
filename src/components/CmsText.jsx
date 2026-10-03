@@ -86,8 +86,11 @@ export default function CmsText({
 
   const handleClick = (e) => {
     if (isAdminEditing) {
-      e.preventDefault();
+      if (Component === 'a' || Component === 'button') {
+        e.preventDefault();
+      }
       e.stopPropagation();
+      elementRef.current?.focus();
     }
   };
 

@@ -32,8 +32,8 @@ export default function CmsVisualToggle() {
 
   // Strict admin check: Only authorized admin accounts can see or use the visual toggle
   const isAdminUser = Boolean(
-    (user && (user.role === 'admin' || user.role === 'superadmin' || ADMIN_EMAILS.includes(cleanEmail))) ||
-    (localStorageUser && (localRole === 'admin' || localRole === 'superadmin' || ADMIN_EMAILS.includes(localEmail)))
+    (user && (user.role === 'admin' || user.role === 'superadmin' || user.role === 'teacher' || ADMIN_EMAILS.includes(cleanEmail))) ||
+    (localStorageUser && (localRole === 'admin' || localRole === 'superadmin' || localRole === 'teacher' || ADMIN_EMAILS.includes(localEmail)))
   );
 
   // Check URL params (?edit=1, ?cms=1, ?admin=1)
