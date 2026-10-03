@@ -13,6 +13,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/firebase';
 import CmsText from '@/components/CmsText';
 import { generateFastingPdf, generateIntercessionPdf } from '@/utils/pdfGenerator';
+import { translateText } from '@/utils/translator';
 
 // Definition of all CMS strings with labels, categories, and explanatory descriptions
 const assetDefinitions = [
@@ -1269,7 +1270,30 @@ export default function CMSDashboard() {
                                 {/* Engelsk (EN) */}
                                 <div className="space-y-1 block">
                                   <div className="flex justify-between items-center text-[10px] font-bold text-outline select-none">
-                                    <span>Engelsk (EN)</span>
+                                    <div className="flex items-center gap-2">
+                                      <span>Engelsk (EN)</span>
+                                      <button
+                                        type="button"
+                                        onClick={async (e) => {
+                                          e.preventDefault();
+                                          const srcText = draftContent[field.key] !== undefined ? draftContent[field.key] : (cmsContent?.[field.key] || field.fallbackNo || '');
+                                          if (!srcText) return;
+                                          setToastMessage({ title: 'Oversetter...', desc: 'Genererer oversettelse til engelsk' });
+                                          setShowToast(true);
+                                          const translated = await translateText(srcText, 'no', 'en');
+                                          if (translated) {
+                                            setDraftContent(prev => ({ ...prev, [field.key + '-en']: translated }));
+                                            setToastMessage({ title: 'Oversatt! ✨', desc: 'Engelsk tekst ble automatisk generert. Husk å publisere.' });
+                                            setTimeout(() => setShowToast(false), 3000);
+                                          }
+                                        }}
+                                        className="inline-flex items-center gap-1 text-[10px] text-purple-700 hover:text-purple-900 bg-purple-50 hover:bg-purple-100 border border-purple-200/60 px-1.5 py-0.5 rounded cursor-pointer transition font-medium"
+                                        title="Oversett automatisk fra norsk"
+                                      >
+                                        <Sparkles size={10} />
+                                        <span>Auto-oversett</span>
+                                      </button>
+                                    </div>
                                     {isDraftEn && <span className="text-primary font-bold text-[9px] uppercase tracking-wider">Utkast</span>}
                                   </div>
                                   {field.type === 'textarea' ? (

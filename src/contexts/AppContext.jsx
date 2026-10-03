@@ -38,6 +38,7 @@ import {
   SYSTEM_REVIEWERS
 } from '@/data/initialCourses';
 import { DEFAULT_CMS_CONTENT } from '@/data/defaultCms';
+import { translateText } from '@/utils/translator';
 
 export { SYSTEM_REVIEWERS, DEFAULT_CMS_CONTENT };
 
@@ -461,7 +462,16 @@ export const AppProvider = ({ children }) => {
     syncAssignmentActivity();
   }, [user?.email]);
 
-  const updateCmsContent = async (slug, value) => {
+  // Trigger Toast Notification Helper
+  const showToast = (message) => {
+    setToastMessage(message);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 4000);
+  };
+
+  const updateCmsContent = async (slug, value, options = { autoTranslate: true }) => {
+    // 1. Immediately apply the update in the active language
     setCmsContent(prev => {
       const updated = { ...prev, [slug]: value };
       try {
@@ -477,6 +487,44 @@ export const AppProvider = ({ children }) => {
       await setDoc(cmsDocRef, { [slug]: value }, { merge: true });
     } catch (err) {
       console.error("Feil ved oppdatering av CMS-innhold i Firestore:", err);
+    }
+
+    // 2. Automatically translate and synchronize counterpart language (NO <-> EN)
+    if (options?.autoTranslate !== false && typeof value === 'string' && value.trim()) {
+      const isEnglish = slug.endsWith('-en');
+      const targetSlug = isEnglish ? slug.slice(0, -3) : `${slug}-en`;
+      const fromLang = isEnglish ? 'en' : 'no';
+      const toLang = isEnglish ? 'no' : 'en';
+
+      try {
+        const translated = await translateText(value, fromLang, toLang);
+        if (translated && translated !== value) {
+          setCmsContent(prev => {
+            const updated = { ...prev, [targetSlug]: translated };
+            try {
+              localStorage.setItem('hkm-cms-content', JSON.stringify(updated));
+            } catch (e) {
+              console.error('Klarte ikke lagre cms content i localStorage:', e);
+            }
+            return updated;
+          });
+
+          try {
+            const cmsDocRef = doc(db, "cms_configs", "default");
+            await setDoc(cmsDocRef, { [targetSlug]: translated }, { merge: true });
+          } catch (fireErr) {
+            console.warn('Kunne ikke lagre oversettelse til Firestore:', fireErr);
+          }
+
+          showToast(
+            isEnglish 
+              ? `Lagret! Automatisk oversatt til norsk ✨`
+              : `Lagret! Automatisk oversatt til engelsk ✨`
+          );
+        }
+      } catch (transErr) {
+        console.warn('Automatisk oversettelse feilet:', transErr);
+      }
     }
   };
 
@@ -518,14 +566,6 @@ export const AppProvider = ({ children }) => {
       )
       .map(assignment => mergeAssignmentActivity(assignment, assignmentActivity[assignment.id]));
   }, [courses, assignmentActivity]);
-
-  // Trigger Toast Notification Helper
-  const showToast = (message) => {
-    setToastMessage(message);
-    setTimeout(() => {
-      setToastMessage(null);
-    }, 4000);
-  };
 
   // Change active user persona (only works if logged in with the authorized account)
   const changePersona = async (role) => {

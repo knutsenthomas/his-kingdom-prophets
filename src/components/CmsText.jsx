@@ -60,8 +60,9 @@ export default function CmsText({
     }
 
     if (newText !== rawText) {
-      updateCmsContent(language === 'en' ? slug + '-en' : slug, newText);
-      showToast(`Oppdatert felt "${slug}"!`);
+      const activeSlug = language === 'en' ? slug + '-en' : slug;
+      showToast(language === 'en' ? "Oppdaterer og oversetter til norsk..." : "Oppdaterer og oversetter til engelsk...");
+      updateCmsContent(activeSlug, newText);
     }
   };
 
