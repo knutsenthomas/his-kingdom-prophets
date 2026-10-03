@@ -1563,35 +1563,27 @@
   }
 }
 
-@media (max-width:700px) {
-  .hkpc-landing {
-    font-size: 16px;
-  }
-  .hkpc-landing .wrap {
-    width: calc(100% - 40px);
-  }
-  .hkpc-landing .concept {
-    font-size: 10px;
-  }
+@media (max-width: 920px) {
   .hkpc-landing header {
     height: 84px;
     position: relative;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-  .hkpc-landing .brand span {
-    font-size: 23px;
-  }
-  .hkpc-landing .brand small {
-    font-size: 10px;
-    max-width: none;
-  }
-  .hkpc-landing .brand img {
-    width: 36px;
-    height: 36px;
+    padding-left: 24px;
+    padding-right: 24px;
   }
   .hkpc-landing .headerlink {
     display: none;
+  }
+  .hkpc-landing .header-actions {
+    display: none;
+  }
+  .hkpc-landing .header-controls {
+    gap: 8px;
+  }
+  .hkpc-landing .lang-globe-btn {
+    height: 42px;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0 10px;
   }
   .hkpc-landing .menu {
     display: inline-flex;
@@ -1631,6 +1623,41 @@
     min-height: 44px;
     display: flex;
     align-items: center;
+  }
+  .hkpc-landing .mobile-nav-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 15px;
+    border-top: 1px solid #eee9f2;
+    margin-top: 5px;
+  }
+}
+
+@media (max-width:700px) {
+  .hkpc-landing {
+    font-size: 16px;
+  }
+  .hkpc-landing .wrap {
+    width: calc(100% - 40px);
+  }
+  .hkpc-landing .concept {
+    font-size: 10px;
+  }
+  .hkpc-landing header {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .hkpc-landing .brand span {
+    font-size: 23px;
+  }
+  .hkpc-landing .brand small {
+    font-size: 10px;
+    max-width: none;
+  }
+  .hkpc-landing .brand img {
+    width: 36px;
+    height: 36px;
   }
   .hkpc-landing .hero-inner {
     grid-template-columns: 1fr;
@@ -2089,13 +2116,187 @@
 
 
 
-/* Header actions & mobile additions */
+/* Header controls wrapper */
+.hkpc-landing .header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Header actions & desktop buttons */
 .hkpc-landing .header-actions {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
+/* Globe Language Selector - Matches media_1791038711517.png */
+.hkpc-landing .lang-dropdown-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.hkpc-landing .lang-globe-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 42px;
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(86, 18, 145, 0.18);
+  background: #f7f4fa;
+  color: #561291;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(86, 18, 145, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hkpc-landing .lang-globe-btn:hover {
+  background: #ffffff;
+  border-color: #561291;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(86, 18, 145, 0.12);
+}
+
+.hkpc-landing .lang-globe-btn:active {
+  transform: scale(0.98);
+}
+
+.hkpc-landing .lang-globe-btn.open {
+  background: #ffffff;
+  border-color: #561291;
+  box-shadow: 0 0 0 3px rgba(86, 18, 145, 0.12);
+}
+
+.hkpc-landing .lang-globe-icon {
+  color: #561291;
+  flex-shrink: 0;
+}
+
+.hkpc-landing .lang-code-text {
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  color: #561291;
+}
+
+.hkpc-landing .lang-chevron {
+  color: rgba(86, 18, 145, 0.6);
+  transition: transform 0.2s ease;
+  margin-left: -1px;
+}
+
+.hkpc-landing .lang-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown popover */
+.hkpc-landing .lang-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 200px;
+  background: #ffffff;
+  border: 1px solid rgba(86, 18, 145, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 16px 36px rgba(36, 0, 70, 0.14), 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 8px;
+  z-index: 1000;
+}
+
+.hkpc-landing .lang-dropdown-header {
+  padding: 6px 10px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8c7f99;
+  border-bottom: 1px solid #f2edf7;
+  margin-bottom: 4px;
+}
+
+.hkpc-landing .lang-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hkpc-landing .lang-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.hkpc-landing .lang-item:hover {
+  background: #f7f4fa;
+}
+
+.hkpc-landing .lang-item:active {
+  transform: scale(0.98);
+}
+
+.hkpc-landing .lang-item.active {
+  background: #f3ebf9;
+}
+
+.hkpc-landing .lang-item-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hkpc-landing .lang-flag {
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hkpc-landing .lang-item-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.hkpc-landing .lang-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #271f30;
+}
+
+.hkpc-landing .lang-item.active .lang-title {
+  font-weight: 700;
+  color: #561291;
+}
+
+.hkpc-landing .lang-detail {
+  font-size: 11px;
+  color: #7b6f88;
+}
+
+.hkpc-landing .lang-check-icon {
+  color: #561291;
+  flex-shrink: 0;
+}
+
+/* Fallback toggle button if used elsewhere */
 .hkpc-landing .lang-toggle-btn {
   display: inline-flex;
   align-items: center;
@@ -2114,6 +2315,7 @@
   background: white;
   border-color: var(--violet);
 }
+
 
 .hkpc-landing .admin-badge-btn {
   display: inline-flex;
@@ -2167,7 +2369,16 @@
   display: none;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 920px) {
+  .hkpc-landing .header-controls {
+    gap: 8px;
+  }
+  .hkpc-landing .lang-globe-btn {
+    height: 42px;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0 10px;
+  }
   .hkpc-landing .header-actions {
     display: none;
   }

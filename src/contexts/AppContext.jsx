@@ -1509,6 +1509,16 @@ export const AppProvider = ({ children }) => {
     });
   };
 
+  const selectLanguage = (code) => {
+    if (code !== 'no' && code !== 'en') return;
+    setLanguage(code);
+    try {
+      localStorage.setItem('hkm-language', code);
+    } catch (e) {
+      console.error('Klarte ikke lagre språk i localStorage:', e);
+    }
+  };
+
   useEffect(() => {
     document.documentElement.lang = language === 'en' ? 'en' : 'no';
   }, [language]);
@@ -3018,6 +3028,8 @@ export const AppProvider = ({ children }) => {
       isAdminEditing,
       setIsAdminEditing,
       language,
+      setLanguage,
+      selectLanguage,
       toggleLanguage,
       assistantContext,
       setAssistantContext,
