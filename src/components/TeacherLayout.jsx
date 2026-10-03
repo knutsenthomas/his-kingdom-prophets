@@ -23,9 +23,9 @@ export default function TeacherLayout() {
     const email = user?.email?.toLowerCase();
     const isSpecialAdmin = [
       'knutsenthomas@gmail.com', 
-      'thomas@tk-design.no', 
       'thomas@hiskingdomministry.no',
-      'hildekarin@hiskingdomministry.no'
+      'hildekarin@hiskingdomministry.no',
+      'hilde.karin.knutsen@gmail.com'
     ].includes(email);
     const hasAccess = Boolean(user && (allowedRoles.includes(user?.role) || isSpecialAdmin));
 

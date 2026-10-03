@@ -221,8 +221,8 @@ export const AppProvider = ({ children }) => {
             console.warn("Could not read local cache for merge:", e);
           }
 
-          const isLeader = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no', 'hildekarin@hiskingdomministry.no'].includes(userEmail);
-          const fallbackRole = isLeader ? 'superadmin' : 'member';
+          const isLeader = ['knutsenthomas@gmail.com', 'thomas@hiskingdomministry.no', 'hildekarin@hiskingdomministry.no', 'hilde.karin.knutsen@gmail.com'].includes(userEmail);
+          const fallbackRole = isLeader ? 'superadmin' : (userEmail === 'thomas@tk-design.no' ? 'student' : 'member');
           
           const isHilde = userEmail === 'hildekarin@hiskingdomministry.no';
           const defaultName = isHilde ? 'Hilde Karin Knutsen' : ((userEmail === 'knutsenthomas@gmail.com' || userEmail === 'thomas@hiskingdomministry.no' || userEmail === 'thomas@tk-design.no') ? 'Thomas Knutsen' : 'Ny Bruker');

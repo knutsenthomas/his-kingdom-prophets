@@ -23,9 +23,9 @@ export default function AdminPortal() {
   // Guard Check - Allow admin, superadmin, teacher, and verified admin emails
   const ADMIN_EMAILS = [
     'knutsenthomas@gmail.com', 
-    'thomas@tk-design.no', 
     'thomas@hiskingdomministry.no',
-    'hildekarin@hiskingdomministry.no'
+    'hildekarin@hiskingdomministry.no',
+    'hilde.karin.knutsen@gmail.com'
   ];
   const userEmail = currentUser?.email?.toLowerCase();
   const isAuthorized = Boolean(
@@ -58,12 +58,12 @@ export default function AdminPortal() {
       avatar: ''
     },
     {
-      uid: 'tk-design-elev',
-      name: 'TK-design',
+      uid: 'vlZ4gqBKCYNt7soLadtNoTSNhbC3',
+      name: 'Thomas Knutsen (Elev)',
       email: 'thomas@tk-design.no',
       role: 'student',
-      created: 'Skoleregistrering',
-      status: 'VENTER',
+      created: '03. okt 2026',
+      status: 'AKTIV',
       avatar: ''
     }
   ];

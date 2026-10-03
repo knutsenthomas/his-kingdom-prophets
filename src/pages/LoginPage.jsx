@@ -15,7 +15,8 @@ import {
   ArrowRight, 
   ExternalLink, 
   Sparkles, 
-  LogOut 
+  LogOut,
+  GraduationCap
 } from 'lucide-react';
 import logo from '@/assets/logo.png';
 
@@ -35,9 +36,9 @@ export default function LoginPage() {
 
   const ADMIN_EMAILS = [
     'knutsenthomas@gmail.com', 
-    'thomas@tk-design.no', 
     'thomas@hiskingdomministry.no',
-    'hildekarin@hiskingdomministry.no'
+    'hildekarin@hiskingdomministry.no',
+    'hilde.karin.knutsen@gmail.com'
   ];
   const cleanEmail = user?.email?.toLowerCase();
   const isAdmin = Boolean(user && (user.role === 'admin' || user.role === 'superadmin' || ADMIN_EMAILS.includes(cleanEmail)));
@@ -50,7 +51,7 @@ export default function LoginPage() {
       case 'auth/user-not-found':
       case 'auth/wrong-password':
       case 'auth/invalid-credential':
-        return 'Feil e-postadresse eller passord.';
+        return 'Feil e-postadresse eller passord. Dersom kontoen din ble registrert via Google (f.eks. for thomas@tk-design.no), trykk på «Google»-knappen ovenfor.';
       case 'auth/email-already-in-use':
         return 'Denne e-postadressen er allerede i bruk.';
       case 'auth/weak-password':
@@ -61,6 +62,17 @@ export default function LoginPage() {
         return 'Uautorisert domene for pålogging. Kontroller Firebase-innstillinger.';
       default:
         return err?.message || 'Det oppstod en feil under innlogging. Prøv igjen.';
+    }
+  };
+
+  const handlePostLoginRedirect = (authedEmail) => {
+    const emailToCheck = authedEmail?.toLowerCase() || '';
+    const hasAdminPerms = ADMIN_EMAILS.includes(emailToCheck);
+    if (hasAdminPerms) {
+      navigate(redirectTarget);
+    } else {
+      // Students go directly to HKP Community App!
+      window.location.href = 'https://app.hkpc.no';
     }
   };
 
@@ -77,7 +89,7 @@ export default function LoginPage() {
       await login(email.trim(), password);
       localStorage.setItem('hkm-cms-authorized', 'true');
       showToast('Innlogging vellykket!');
-      navigate(redirectTarget);
+      handlePostLoginRedirect(email.trim());
     } catch (err) {
       console.error('Innloggingsfeil:', err);
       setErrorMessage(formatAuthError(err));
@@ -92,10 +104,10 @@ export default function LoginPage() {
     try {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
-      await signInWithPopup(auth, provider);
+      const cred = await signInWithPopup(auth, provider);
       localStorage.setItem('hkm-cms-authorized', 'true');
       showToast('Innlogget med Google!');
-      navigate(redirectTarget);
+      handlePostLoginRedirect(cred.user?.email);
     } catch (err) {
       console.error('Google innloggingsfeil:', err);
       if (err?.code !== 'auth/popup-closed-by-user') {
@@ -113,10 +125,10 @@ export default function LoginPage() {
       const provider = new OAuthProvider('apple.com');
       provider.addScope('email');
       provider.addScope('name');
-      await signInWithPopup(auth, provider);
+      const cred = await signInWithPopup(auth, provider);
       localStorage.setItem('hkm-cms-authorized', 'true');
       showToast('Innlogget med Apple!');
-      navigate(redirectTarget);
+      handlePostLoginRedirect(cred.user?.email);
     } catch (err) {
       console.error('Apple innloggingsfeil:', err);
       if (err?.code !== 'auth/popup-closed-by-user') {
@@ -124,6 +136,21 @@ export default function LoginPage() {
       }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email.trim()) {
+      setErrorMessage('Skriv inn e-postadressen din i feltet ovenfor først, og klikk deretter på «Glemt passord?».');
+      return;
+    }
+    try {
+      const { sendPasswordResetEmail } = await import('firebase/auth');
+      await sendPasswordResetEmail(auth, email.trim());
+      showToast('E-post for passordtilbakestilling er sendt til ' + email.trim() + '!');
+      setErrorMessage('');
+    } catch (err) {
+      setErrorMessage(formatAuthError(err));
     }
   };
 
@@ -154,12 +181,57 @@ export default function LoginPage() {
           <p className="text-xs sm:text-[13px] text-slate-500 max-w-sm mx-auto leading-relaxed">
             {isAdmin 
               ? 'Du er innlogget med administratorrettigheter på hkpc.no.' 
-              : 'Logg inn for å få tilgang til administrative verktøy og redigering av nettsiden.'}
+              : user
+                ? 'Du er innlogget som elev ved His Kingdom Prophetic Community.'
+                : 'Logg inn for å få tilgang til elevportalen eller administrasjon.'}
           </p>
         </div>
 
-        {/* If already logged in as Admin */}
-        {isAdmin ? (
+        {/* If already logged in as Student */}
+        {user && !isAdmin ? (
+          <div className="space-y-4 pt-2">
+            <div className="bg-emerald-50 border border-emerald-200/80 rounded-2xl p-4 flex items-center gap-3.5">
+              <div className="p-2.5 bg-emerald-600 text-white rounded-xl shadow-sm">
+                <GraduationCap size={22} />
+              </div>
+              <div className="text-left">
+                <p className="text-sm font-bold text-[#271f30]">{user?.name || user?.email}</p>
+                <p className="text-xs text-slate-500">{user?.email}</p>
+                <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                  Registrert Elev · 1. Studieår
+                </span>
+              </div>
+            </div>
+
+            <a
+              href="https://app.hkpc.no"
+              className="w-full h-12 rounded-xl bg-gradient-to-r from-[#3c096c] to-[#561291] hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-purple-950/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>Åpne Elevportalen (app.hkpc.no)</span>
+              <ExternalLink size={15} />
+            </a>
+
+            <button
+              onClick={() => navigate('/')}
+              className="w-full h-12 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-[0.98] shadow-xs cursor-pointer"
+            >
+              <ArrowLeft size={15} />
+              <span>Gå til Forsiden</span>
+            </button>
+
+            <button
+              onClick={() => {
+                logout();
+                localStorage.removeItem('hkm-cms-authorized');
+                showToast('Du er nå logget ut.');
+              }}
+              className="w-full text-slate-400 hover:text-rose-600 text-xs font-semibold py-2 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <LogOut size={13} />
+              <span>Logg ut</span>
+            </button>
+          </div>
+        ) : isAdmin ? (
           <div className="space-y-4 pt-2">
             <div className="bg-[#561291]/5 border border-[#561291]/20 rounded-2xl p-4 flex items-center gap-3.5">
               <div className="p-2.5 bg-[#561291] text-white rounded-xl shadow-sm">
@@ -274,6 +346,13 @@ export default function LoginPage() {
                   <label className="block text-[10px] font-bold text-slate-700 uppercase tracking-wider">
                     Passord
                   </label>
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    className="text-[10px] font-semibold text-[#561291] hover:underline cursor-pointer"
+                  >
+                    Glemt passord?
+                  </button>
                 </div>
                 <div className="relative">
                   <input
@@ -300,7 +379,7 @@ export default function LoginPage() {
                 className="w-full h-12 rounded-xl bg-[#3c096c] hover:bg-[#240046] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-purple-900/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 mt-2"
               >
                 <KeyRound size={16} />
-                <span>{isLoading ? 'Logger inn …' : 'Logg inn som Admin'}</span>
+                <span>{isLoading ? 'Logger inn …' : 'Logg inn'}</span>
               </button>
             </form>
           </div>
