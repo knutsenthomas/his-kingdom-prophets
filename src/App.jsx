@@ -5,74 +5,44 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ExternalLink } from 'lucide-react';
 import CmsVisualToggle from '@/components/CmsVisualToggle';
 
-// Components & Shells
-import ShowcaseShell from '@/components/ShowcaseShell';
-import StudentLayout from '@/components/StudentLayout';
+// Layouts & Helpers
 import TeacherLayout from '@/components/TeacherLayout';
+import OnboardingHelper from '@/components/OnboardingHelper';
 
-// Onboarding Pages
+// Public & Onboarding Pages
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
 import InterestsPage from '@/pages/InterestsPage';
 import CompleteProfilePage from '@/pages/CompleteProfilePage';
 import WelcomePage from '@/pages/WelcomePage';
+import AdmissionPage from '@/pages/AdmissionPage';
+import AboutPage from '@/pages/AboutPage';
+import HkmAboutPage from '@/pages/HkmAboutPage';
 
-// Student Pages
-import StudentDashboard from '@/pages/StudentDashboard';
-import LessonView from '@/pages/LessonView';
-import VideoView from '@/pages/VideoView';
-import LibraryView from '@/pages/LibraryView';
-import AssignmentsPage from '@/pages/AssignmentsPage';
-import CommunityChatView from '@/pages/CommunityChatView';
-import StudentProfile from '@/pages/StudentProfile';
-import BibleView from '@/pages/BibleView';
-import NotesPage from '@/pages/NotesPage';
-
-// Teacher Pages
+// Teacher & Admin Pages
 import TeacherDashboard from '@/pages/TeacherDashboard';
-import StudentFollowUp from '@/pages/StudentFollowUp';
-import CourseBuilder from '@/pages/CourseBuilder';
-import MediaLibrary from '@/pages/MediaLibrary';
-import GradesCalculator from '@/pages/GradesCalculator';
-import NotificationCenter from '@/pages/NotificationCenter';
-import TeacherProfile from '@/pages/TeacherProfile';
-import MarketingGrowth from '@/pages/MarketingGrowth';
-import QuizBuilder from '@/pages/QuizBuilder';
-import OnboardingHelper from '@/components/OnboardingHelper';
-
-// Admin Pages
 import CMSDashboard from '@/pages/CMSDashboard';
 import AnalyticsDashboard from '@/pages/AnalyticsDashboard';
 import AdminPortal from '@/pages/AdminPortal';
+import SupportArticleCMS from '@/pages/SupportArticleCMS';
 
 // Legal & Support Pages
 import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
 import TermsOfServicePage from '@/pages/TermsOfServicePage';
 import AccessibilityPage from '@/pages/AccessibilityPage';
 import ContactSupportPage from '@/pages/ContactSupportPage';
-import BibleResourcesPage from '@/pages/BibleResourcesPage';
-import AdmissionPage from '@/pages/AdmissionPage';
-import AboutPage from '@/pages/AboutPage';
-import HkmAboutPage from '@/pages/HkmAboutPage';
-
-// Email Previews
 import EmailPreviews from '@/pages/EmailPreviews';
 
-// Premium Additions (Support Center, Affiliate Portal, Course Insights)
-import SupportCenter from '@/pages/SupportCenter';
-import AffiliatePortal from '@/pages/AffiliatePortal';
-import CourseInsights from '@/pages/CourseInsights';
+// Support Articles
 import ArtikkelLoggInn from '@/pages/support-articles/ArtikkelLoggInn';
 import ArtikkelChat from '@/pages/support-articles/ArtikkelChat';
 import ArtikkelBibelkalkulator from '@/pages/support-articles/ArtikkelBibelkalkulator';
 import ArtikkelZoom from '@/pages/support-articles/ArtikkelZoom';
 import ArtikkelVeiledning from '@/pages/support-articles/ArtikkelVeiledning';
 import ArtikkelTjenestegaver from '@/pages/support-articles/ArtikkelTjenestegaver';
-import SupportArticleCMS from '@/pages/SupportArticleCMS';
 
 export default function App() {
   const { toastMessage } = useApp();
-  const [viewportSize, setViewportSize] = useState('desktop'); // desktop, tablet, mobile
   const location = useLocation();
   const navigate = useNavigate();
   const [isEmbedded, setIsEmbedded] = useState(false);
@@ -112,15 +82,6 @@ export default function App() {
     }
   }, [isEmbedded, navigate]);
 
-  // Reset viewport size or adjust based on specific paths if necessary
-  useEffect(() => {
-    if (location.pathname === '/landing/tablet') {
-      setViewportSize('tablet');
-    } else if (location.pathname === '/landing/mobile') {
-      setViewportSize('mobile');
-    }
-  }, [location.pathname]);
-
   if (isEmbedded) {
     return (
       <div className="min-h-screen bg-background text-on-background w-full">
@@ -132,7 +93,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background text-on-background w-full font-sans relative">
-      
       <AppRoutes />
       <CmsVisualToggle />
 
@@ -155,7 +115,6 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-
     </div>
   );
 }
@@ -191,7 +150,7 @@ function StudentRedirect() {
   );
 }
 
-// Router wiring for all 42 views / sub-paths
+// Router wiring
 function AppRoutes() {
   return (
     <>
