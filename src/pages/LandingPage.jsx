@@ -224,26 +224,23 @@ export default function LandingPage() {
             >
               <motion.div variants={fadeInUp}>
                 <p className="eyebrow purple">
-                  {language === 'no' ? 'SKOLE & STUDIEFORLØP' : 'SCHOOL & STUDY TRACKS'}
+                  <CmsText slug="landing-school-eyebrow" fallback={language === 'no' ? 'SKOLE & STUDIEFORLØP' : 'SCHOOL & STUDY TRACKS'} />
                 </p>
                 <h2>
-                  {language === 'no' ? (
-                    <>
-                      Rom for å vokse.<br />
-                      Retning for ditt kall.
-                    </>
-                  ) : (
-                    <>
-                      Room to grow.<br />
-                      Direction for your calling.
-                    </>
-                  )}
+                  <CmsText 
+                    slug="landing-school-title" 
+                    multiline 
+                    fallback={language === 'no' ? 'Rom for å vokse.\nRetning for ditt kall.' : 'Room to grow.\nDirection for your calling.'} 
+                  />
                 </h2>
               </motion.div>
               <motion.p variants={fadeInUp}>
-                {language === 'no'
-                  ? 'Studer i eget tempo, og bli en del av et fellesskap med ukentlige Zoom-kvelder og personlig veiledning.'
-                  : 'Study at your own pace, and become part of a community with weekly live Zoom gatherings and personal mentoring.'}
+                <CmsText 
+                  slug="landing-school-desc" 
+                  fallback={language === 'no'
+                    ? 'Studer i eget tempo, og bli en del av et fellesskap med ukentlige Zoom-kvelder og personlig veiledning.'
+                    : 'Study at your own pace, and become part of a community with weekly live Zoom gatherings and personal mentoring.'} 
+                />
               </motion.p>
             </motion.div>
 
@@ -260,30 +257,32 @@ export default function LandingPage() {
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
                 <div className="program-top">
-                  <span>{language === 'no' ? '01 / FØRSTE ÅR' : '01 / FIRST YEAR'}</span>
-                  <span className="pill">{language === 'no' ? 'Oppstart 2027' : 'Starts 2027'}</span>
+                  <span><CmsText slug="landing-p1-tag" fallback={language === 'no' ? '01 / FØRSTE ÅR' : '01 / FIRST YEAR'} /></span>
+                  <span className="pill"><CmsText slug="landing-p1-pill" fallback={language === 'no' ? 'Oppstart 2027' : 'Starts 2027'} /></span>
                 </div>
                 <h3>
-                  His Kingdom<br />
-                  Prophetic Community
+                  <CmsText slug="landing-p1-title" multiline fallback={"His Kingdom\nProphetic Community"} />
                 </h3>
                 <p>
-                  {language === 'no'
-                    ? 'Et bibelsk fundament og praktisk utrustning i Åndens gaver. For alle som ønsker å vokse med Jesus.'
-                    : 'A biblical foundation and practical equipping in the gifts of the Spirit. For anyone desiring to grow with Jesus.'}
+                  <CmsText 
+                    slug="landing-p1-desc" 
+                    fallback={language === 'no'
+                      ? 'Et bibelsk fundament og praktisk utrustning i Åndens gaver. For alle som ønsker å vokse med Jesus.'
+                      : 'A biblical foundation and practical equipping in the gifts of the Spirit. For anyone desiring to grow with Jesus.'} 
+                  />
                 </p>
                 <ul>
-                  <li>{language === 'no' ? 'Hør Guds stemme og modnes i de profetiske gavene' : 'Hear God’s voice and mature in the prophetic gifts'}</li>
-                  <li>{language === 'no' ? 'Fellesskap, bønn og praktisk trening' : 'Fellowship, prayer, and practical activation'}</li>
-                  <li>{language === 'no' ? 'Nye temaer hvert år — kan tas flere ganger' : 'New themes every year — can be taken multiple times'}</li>
+                  <li><CmsText slug="landing-p1-b1" fallback={language === 'no' ? 'Hør Guds stemme og modnes i de profetiske gavene' : 'Hear God’s voice and mature in the prophetic gifts'} /></li>
+                  <li><CmsText slug="landing-p1-b2" fallback={language === 'no' ? 'Fellesskap, bønn og praktisk trening' : 'Fellowship, prayer, and practical activation'} /></li>
+                  <li><CmsText slug="landing-p1-b3" fallback={language === 'no' ? 'Nye temaer hvert år — kan tas flere ganger' : 'New themes every year — can be taken multiple times'} /></li>
                 </ul>
                 <div className="program-bottom">
                   <span>
-                    <b>5 000 kr</b> {language === 'no' ? '/ semester' : '/ semester'}
-                    <small>{language === 'no' ? '+ oppstart og kickoff' : '+ registration & kickoff'}</small>
+                    <b><CmsText slug="landing-p1-price" fallback="5 000 kr" /></b> <CmsText slug="landing-p1-period" fallback={language === 'no' ? '/ semester' : '/ semester'} />
+                    <small><CmsText slug="landing-p1-note" fallback={language === 'no' ? '+ oppstart og kickoff' : '+ registration & kickoff'} /></small>
                   </span>
                   <a href="#curriculum" onClick={(e) => handleNavClick(e, 'curriculum')}>
-                    {language === 'no' ? 'Utforsk førsteåret' : 'Explore Year 1'}
+                    <CmsText slug="landing-p1-cta" fallback={language === 'no' ? 'Utforsk førsteåret' : 'Explore Year 1'} />
                   </a>
                 </div>
               </motion.article>
@@ -294,30 +293,32 @@ export default function LandingPage() {
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
                 <div className="program-top">
-                  <span>{language === 'no' ? '02 / ANDRE ÅR' : '02 / SECOND YEAR'}</span>
-                  <span className="pill">{language === 'no' ? 'Oppstart 2028' : 'Starts 2028'}</span>
+                  <span><CmsText slug="landing-p2-tag" fallback={language === 'no' ? '02 / ANDRE ÅR' : '02 / SECOND YEAR'} /></span>
+                  <span className="pill"><CmsText slug="landing-p2-pill" fallback={language === 'no' ? 'Oppstart 2028' : 'Starts 2028'} /></span>
                 </div>
                 <h3>
-                  His Kingdom<br />
-                  Prophets
+                  <CmsText slug="landing-p2-title" multiline fallback={"His Kingdom\nProphets"} />
                 </h3>
                 <p>
-                  {language === 'no'
-                    ? 'Videre utrustning for deg som vet at du er kalt til tjenesten som profet.'
-                    : 'Advanced equipping for those who know they are called to the office of the prophet.'}
+                  <CmsText 
+                    slug="landing-p2-desc" 
+                    fallback={language === 'no'
+                      ? 'Videre utrustning for deg som vet at du er kalt til tjenesten som profet.'
+                      : 'Advanced equipping for those who know they are called to the office of the prophet.'} 
+                  />
                 </p>
                 <ul>
-                  <li>{language === 'no' ? 'Bygger videre på fullført førsteår' : 'Builds upon completed first year'}</li>
-                  <li>{language === 'no' ? 'Ny søknad, pensum og skriftlig oppgave' : 'New application, curriculum, and written assignment'}</li>
-                  <li>{language === 'no' ? 'Fysisk samling på 1–2 uker' : 'In-person intensive gathering for 1–2 weeks'}</li>
+                  <li><CmsText slug="landing-p2-b1" fallback={language === 'no' ? 'Bygger videre på fullført førsteår' : 'Builds upon completed first year'} /></li>
+                  <li><CmsText slug="landing-p2-b2" fallback={language === 'no' ? 'Ny søknad, pensum og skriftlig oppgave' : 'New application, curriculum, and written assignment'} /></li>
+                  <li><CmsText slug="landing-p2-b3" fallback={language === 'no' ? 'Fysisk samling på 1–2 uker' : 'In-person intensive gathering for 1–2 weeks'} /></li>
                 </ul>
                 <div className="program-bottom">
                   <span>
-                    {language === 'no' ? 'Et videre steg' : 'A further step'}
-                    <small>{language === 'no' ? 'Forankret i fellesskap og tjeneste' : 'Rooted in community and ministry'}</small>
+                    <CmsText slug="landing-p2-step" fallback={language === 'no' ? 'Et videre steg' : 'A further step'} />
+                    <small><CmsText slug="landing-p2-note" fallback={language === 'no' ? 'Forankret i fellesskap og tjeneste' : 'Rooted in community and ministry'} /></small>
                   </span>
                   <a href="#requirements" onClick={(e) => handleNavClick(e, 'requirements')}>
-                    {language === 'no' ? 'Se opptakskrav' : 'View requirements'}
+                    <CmsText slug="landing-p2-cta" fallback={language === 'no' ? 'Se opptakskrav' : 'View requirements'} />
                   </a>
                 </div>
               </motion.article>
@@ -332,18 +333,18 @@ export default function LandingPage() {
             >
               <motion.div variants={fadeInUp} whileHover={{ y: -3, transition: { duration: 0.2 } }}>
                 <span>01</span>
-                <h4>{language === 'no' ? 'Fleksibelt i hverdagen' : 'Flexible in everyday life'}</h4>
-                <p>{language === 'no' ? 'Videoer og oppgaver i ditt eget tempo.' : 'Video lectures and assignments at your own pace.'}</p>
+                <h4><CmsText slug="landing-format-1-title" fallback={language === 'no' ? 'Fleksibelt i hverdagen' : 'Flexible in everyday life'} /></h4>
+                <p><CmsText slug="landing-format-1-desc" fallback={language === 'no' ? 'Videoer og oppgaver i ditt eget tempo.' : 'Video lectures and assignments at your own pace.'} /></p>
               </motion.div>
               <motion.div variants={fadeInUp} whileHover={{ y: -3, transition: { duration: 0.2 } }}>
                 <span>02</span>
-                <h4>{language === 'no' ? 'Sammen hver uke' : 'Together every week'}</h4>
-                <p>{language === 'no' ? 'Zoom-kvelder med bønn og fagdrøfting.' : 'Live Zoom gatherings with prayer and curriculum discussions.'}</p>
+                <h4><CmsText slug="landing-format-2-title" fallback={language === 'no' ? 'Sammen hver uke' : 'Together every week'} /></h4>
+                <p><CmsText slug="landing-format-2-desc" fallback={language === 'no' ? 'Zoom-kvelder med bønn og fagdrøfting.' : 'Live Zoom gatherings with prayer and curriculum discussions.'} /></p>
               </motion.div>
               <motion.div variants={fadeInUp} whileHover={{ y: -3, transition: { duration: 0.2 } }}>
                 <span>03</span>
-                <h4>{language === 'no' ? 'Fra ord til praksis' : 'From word to practice'}</h4>
-                <p>{language === 'no' ? 'Profetisk trening i et trygt fellesskap.' : 'Prophetic activation in a supportive environment.'}</p>
+                <h4><CmsText slug="landing-format-3-title" fallback={language === 'no' ? 'Fra ord til praksis' : 'From word to practice'} /></h4>
+                <p><CmsText slug="landing-format-3-desc" fallback={language === 'no' ? 'Profetisk trening i et trygt fellesskap.' : 'Prophetic activation in a supportive environment.'} /></p>
               </motion.div>
             </motion.div>
           </div>
@@ -360,26 +361,23 @@ export default function LandingPage() {
           >
             <motion.div variants={fadeInUp}>
               <p className="eyebrow purple">
-                {language === 'no' ? 'FAGPLAN · FØRSTE ÅR' : 'CURRICULUM · FIRST YEAR'}
+                <CmsText slug="landing-curriculum-eyebrow" fallback={language === 'no' ? 'FAGPLAN · FØRSTE ÅR' : 'CURRICULUM · FIRST YEAR'} />
               </p>
               <h2>
-                {language === 'no' ? (
-                  <>
-                    Tro som får røtter.<br />
-                    Gaver som får vokse.
-                  </>
-                ) : (
-                  <>
-                    Faith that takes root.<br />
-                    Gifts that flourish.
-                  </>
-                )}
+                <CmsText 
+                  slug="landing-curriculum-title" 
+                  multiline 
+                  fallback={language === 'no' ? 'Tro som får røtter.\nGaver som får vokse.' : 'Faith that takes root.\nGifts that flourish.'} 
+                />
               </h2>
             </motion.div>
             <motion.p variants={fadeInUp}>
-              {language === 'no'
-                ? 'Sunn teologi, personlig relasjon til Jesus og praktisk åpenbaring. Fire områder som henger sammen.'
-                : 'Sound theology, personal intimacy with Jesus, and practical revelation. Four connected core areas.'}
+              <CmsText 
+                slug="landing-curriculum-desc" 
+                fallback={language === 'no'
+                  ? 'Sunn teologi, personlig relasjon til Jesus og praktisk åpenbaring. Fire områder som henger sammen.'
+                  : 'Sound theology, personal intimacy with Jesus, and practical revelation. Four connected core areas.'} 
+              />
             </motion.p>
           </motion.div>
 
@@ -392,32 +390,35 @@ export default function LandingPage() {
           >
             <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
               <span>01</span>
-              <h3>{language === 'no' ? 'Fundament & relasjon' : 'Foundation & Intimacy'}</h3>
-              <p>{language === 'no' ? 'Bønn, identitet i Kristus og å høre Guds røst.' : 'Prayer, identity in Christ, and hearing God’s voice.'}</p>
+              <h3><CmsText slug="landing-topic-1-title" fallback={language === 'no' ? 'Fundament & relasjon' : 'Foundation & Intimacy'} /></h3>
+              <p><CmsText slug="landing-topic-1-desc" fallback={language === 'no' ? 'Bønn, identitet i Kristus og å høre Guds røst.' : 'Prayer, identity in Christ, and hearing God’s voice.'} /></p>
             </motion.article>
             <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
               <span>02</span>
-              <h3>{language === 'no' ? 'Profetisk utrustning & gaver' : 'Prophetic Equipping & Gifts'}</h3>
-              <p>{language === 'no' ? 'Åndens gaver, personlig profeti og sunn praksis.' : 'Gifts of the Spirit, personal prophecy, and sound biblical practice.'}</p>
+              <h3><CmsText slug="landing-topic-2-title" fallback={language === 'no' ? 'Profetisk utrustning & gaver' : 'Prophetic Equipping & Gifts'} /></h3>
+              <p><CmsText slug="landing-topic-2-desc" fallback={language === 'no' ? 'Åndens gaver, personlig profeti og sunn praksis.' : 'Gifts of the Spirit, personal prophecy, and sound biblical practice.'} /></p>
             </motion.article>
             <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
               <span>03</span>
-              <h3>{language === 'no' ? 'Indre helbredelse & utfrielse' : 'Inner Healing & Deliverance'}</h3>
-              <p>{language === 'no' ? 'Undervisning om frihet, omvendelse og helbredelse.' : 'Teaching on freedom, repentance, and emotional healing.'}</p>
+              <h3><CmsText slug="landing-topic-3-title" fallback={language === 'no' ? 'Indre helbredelse & utfrielse' : 'Inner Healing & Deliverance'} /></h3>
+              <p><CmsText slug="landing-topic-3-desc" fallback={language === 'no' ? 'Undervisning om frihet, omvendelse og helbredelse.' : 'Teaching on freedom, repentance, and emotional healing.'} /></p>
             </motion.article>
             <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
               <span>04</span>
-              <h3>{language === 'no' ? 'Kristenliv & tjeneste' : 'Christian Living & Ministry'}</h3>
-              <p>{language === 'no' ? 'Tro i hverdagen, forvaltning, smågrupper og misjon.' : 'Faith in daily life, stewardship, small groups, and mission.'}</p>
+              <h3><CmsText slug="landing-topic-4-title" fallback={language === 'no' ? 'Kristenliv & tjeneste' : 'Christian Living & Ministry'} /></h3>
+              <p><CmsText slug="landing-topic-4-desc" fallback={language === 'no' ? 'Tro i hverdagen, forvaltning, smågrupper og misjon.' : 'Faith in daily life, stewardship, small groups, and mission.'} /></p>
             </motion.article>
           </motion.div>
 
           <details>
-            <summary>{language === 'no' ? 'Se mer om fagene' : 'Read more about the courses'}</summary>
+            <summary><CmsText slug="landing-curriculum-summary" fallback={language === 'no' ? 'Se mer om fagene' : 'Read more about the courses'} /></summary>
             <p>
-              {language === 'no'
-                ? 'Førsteåret omfatter blant annet Profeti 101, å høre Guds stemme, gave versus tjeneste, bønn og faste, gudsfrykt, nådegaver og praktisk kristenliv. Fagområdene er hentet fra dagens HKPC-side.'
-                : 'The first year covers Prophecy 101, hearing God’s voice, spiritual gift versus office, prayer and fasting, the fear of the Lord, spiritual gifts, and practical Christian discipleship.'}
+              <CmsText 
+                slug="landing-curriculum-detail" 
+                fallback={language === 'no'
+                  ? 'Førsteåret omfatter blant annet Profeti 101, å høre Guds stemme, gave versus tjeneste, bønn og faste, gudsfrykt, nådegaver og praktisk kristenliv. Fagområdene er hentet fra dagens HKPC-side.'
+                  : 'The first year covers Prophecy 101, hearing God’s voice, spiritual gift versus office, prayer and fasting, the fear of the Lord, spiritual gifts, and practical Christian discipleship.'} 
+              />
             </p>
           </details>
         </section>
@@ -439,7 +440,7 @@ export default function LandingPage() {
                 />
                 <figcaption>
                   Hilde Karin Knutsen
-                  <small>{language === 'no' ? 'Rektor og underviser' : 'Principal & Teacher'}</small>
+                  <small><CmsText slug="landing-about-role-hilde" fallback={language === 'no' ? 'Rektor og underviser' : 'Principal & Teacher'} /></small>
                 </figcaption>
               </motion.figure>
               <motion.figure variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
@@ -449,7 +450,7 @@ export default function LandingPage() {
                 />
                 <figcaption>
                   Thomas Knutsen
-                  <small>{language === 'no' ? 'Administrator og faglærer' : 'Administrator & Teacher'}</small>
+                  <small><CmsText slug="landing-about-role-thomas" fallback={language === 'no' ? 'Administrator og faglærer' : 'Administrator & Teacher'} /></small>
                 </figcaption>
               </motion.figure>
             </motion.div>
@@ -461,38 +462,39 @@ export default function LandingPage() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
-              <p className="eyebrow">{language === 'no' ? 'HJERTENE BAK HKPC' : 'THE HEARTS BEHIND HKPC'}</p>
+              <p className="eyebrow"><CmsText slug="landing-about-eyebrow" fallback={language === 'no' ? 'HJERTENE BAK HKPC' : 'THE HEARTS BEHIND HKPC'} /></p>
               <h2>
-                {language === 'no' ? (
-                  <>
-                    Et liv overgitt.<br />
-                    Et hjerte for<br />
-                    <em>Guds folk.</em>
-                  </>
-                ) : (
-                  <>
-                    A life surrendered.<br />
-                    A heart for<br />
-                    <em>God’s people.</em>
-                  </>
-                )}
+                <CmsText 
+                  slug="landing-about-title" 
+                  multiline 
+                  fallback={language === 'no' ? 'Et liv overgitt.\nEt hjerte for Guds folk.' : 'A life surrendered.\nA heart for God’s people.'} 
+                />
               </h2>
               <p>
-                {language === 'no'
-                  ? 'Hilde Karin og Thomas Knutsen leder His Kingdom Ministry med et hjerte for misjon, disippelskap og utrustning.'
-                  : 'Hilde Karin and Thomas Knutsen lead His Kingdom Ministry with a heart for mission, discipleship, and equipping believers.'}
+                <CmsText 
+                  slug="landing-about-p1" 
+                  fallback={language === 'no'
+                    ? 'Hilde Karin og Thomas Knutsen leder His Kingdom Ministry med et hjerte for misjon, disippelskap og utrustning.'
+                    : 'Hilde Karin and Thomas Knutsen lead His Kingdom Ministry with a heart for mission, discipleship, and equipping believers.'} 
+                />
               </p>
               <p>
-                {language === 'no'
-                  ? 'Gjennom bønn, bibelundervisning og tjeneste ønsker de å hjelpe mennesker til å vokse i fortrolighet med Gud og virksom tro i hverdagen.'
-                  : 'Through prayer, Bible teaching, and ministry, they desire to help people grow in intimacy with God and active faith in everyday life.'}
+                <CmsText 
+                  slug="landing-about-p2" 
+                  fallback={language === 'no'
+                    ? 'Gjennom bønn, bibelundervisning og tjeneste ønsker de å hjelpe mennesker til å vokse i fortrolighet med Gud og virksom tro i hverdagen.'
+                    : 'Through prayer, Bible teaching, and ministry, they desire to help people grow in intimacy with God and active faith in everyday life.'} 
+                />
               </p>
               <details>
-                <summary>{language === 'no' ? 'Les historien bak' : 'Read the story behind'}</summary>
+                <summary><CmsText slug="landing-about-history-summary" fallback={language === 'no' ? 'Les historien bak' : 'Read the story behind'} /></summary>
                 <p>
-                  {language === 'no'
-                    ? 'Arbeidet har røtter i His Kingdom Foundation, grunnlagt i 2008. Etter at Hilde Karin og Thomas giftet seg i 2023, ble tjenesten videreført og utvidet som His Kingdom Ministry.'
-                    : 'The ministry has roots in His Kingdom Foundation, established in 2008. After Hilde Karin and Thomas married in 2023, the work was continued and expanded as His Kingdom Ministry.'}
+                  <CmsText 
+                    slug="landing-about-history-detail" 
+                    fallback={language === 'no'
+                      ? 'Arbeidet har røtter i His Kingdom Foundation, grunnlagt i 2008. Etter at Hilde Karin og Thomas giftet seg i 2023, ble tjenesten videreført og utvidet som His Kingdom Ministry.'
+                      : 'The ministry has roots in His Kingdom Foundation, established in 2008. After Hilde Karin and Thomas married in 2023, the work was continued and expanded as His Kingdom Ministry.'} 
+                  />
                 </p>
               </details>
             </motion.div>
@@ -508,14 +510,17 @@ export default function LandingPage() {
             variants={staggerContainer}
           >
             <motion.p className="eyebrow purple" variants={fadeInUp}>
-              {language === 'no' ? 'RESSURSER FOR REISEN' : 'RESOURCES FOR THE JOURNEY'}
+              <CmsText slug="landing-resources-eyebrow" fallback={language === 'no' ? 'RESSURSER FOR REISEN' : 'RESOURCES FOR THE JOURNEY'} />
             </motion.p>
             <motion.div className="section-head" variants={fadeInUp}>
-              <h2>{language === 'no' ? 'Ta læringen med deg.' : 'Take your learning further.'}</h2>
+              <h2><CmsText slug="landing-resources-title" fallback={language === 'no' ? 'Ta læringen med deg.' : 'Take your learning further.'} /></h2>
               <p>
-                {language === 'no'
-                  ? 'Fordyp deg videre med undervisning, bøker og læremidler fra His Kingdom.'
-                  : 'Deepen your walk with teachings, books, and study materials from His Kingdom.'}
+                <CmsText 
+                  slug="landing-resources-desc" 
+                  fallback={language === 'no'
+                    ? 'Fordyp deg videre med undervisning, bøker og læremidler fra His Kingdom.'
+                    : 'Deepen your walk with teachings, books, and study materials from His Kingdom.'} 
+                />
               </p>
             </motion.div>
           </motion.div>
@@ -528,27 +533,27 @@ export default function LandingPage() {
             variants={staggerContainer}
           >
             <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
-              <small>{language === 'no' ? 'UNDERVISNING & INSPIRASJON' : 'TEACHING & INSPIRATION'}</small>
-              <h3>His Kingdom Ministry</h3>
-              <p>{language === 'no' ? 'Blogg, YouTube, podcast og bibelverktøy.' : 'Blog, YouTube, podcast, and biblical study tools.'}</p>
+              <small><CmsText slug="landing-res-ministry-tag" fallback={language === 'no' ? 'UNDERVISNING & INSPIRASJON' : 'TEACHING & INSPIRATION'} /></small>
+              <h3><CmsText slug="landing-res-ministry-title" fallback="His Kingdom Ministry" /></h3>
+              <p><CmsText slug="landing-res-ministry-desc" fallback={language === 'no' ? 'Blogg, YouTube, podcast og bibelverktøy.' : 'Blog, YouTube, podcast, and biblical study tools.'} /></p>
               <a 
                 href="https://hiskingdomministry.no/" 
                 target="_blank" 
                 rel="noopener noreferrer"
               >
-                {language === 'no' ? 'Besøk hovedsiden' : 'Visit ministry site'}
+                <CmsText slug="landing-res-ministry-cta" fallback={language === 'no' ? 'Besøk hovedsiden' : 'Visit ministry site'} />
               </a>
             </motion.article>
             <motion.article variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
-              <small>{language === 'no' ? 'BØKER & STUDIEMATERIELL' : 'BOOKS & STUDY MATERIALS'}</small>
-              <h3>His Kingdom Designs</h3>
-              <p>{language === 'no' ? 'Fysiske og digitale læremidler. En butikk som også støtter misjonsprosjekter.' : 'Physical and digital educational products. A store that also directly supports mission work.'}</p>
+              <small><CmsText slug="landing-res-designs-tag" fallback={language === 'no' ? 'BØKER & STUDIEMATERIELL' : 'BOOKS & STUDY MATERIALS'} /></small>
+              <h3><CmsText slug="landing-res-designs-title" fallback="His Kingdom Designs" /></h3>
+              <p><CmsText slug="landing-res-designs-desc" fallback={language === 'no' ? 'Fysiske og digitale læremidler. En butikk som også støtter misjonsprosjekter.' : 'Physical and digital educational products. A store that also directly supports mission work.'} /></p>
               <a 
                 href="https://hiskingdomdesigns.no/" 
                 target="_blank" 
                 rel="noopener noreferrer"
               >
-                {language === 'no' ? 'Utforsk nettbutikken' : 'Explore online store'}
+                <CmsText slug="landing-res-designs-cta" fallback={language === 'no' ? 'Utforsk nettbutikken' : 'Explore online store'} />
               </a>
             </motion.article>
           </motion.div>
@@ -564,29 +569,28 @@ export default function LandingPage() {
           variants={staggerContainer}
         >
           <div className="wrap">
-            <motion.p className="eyebrow purple" variants={fadeInUp}>{language === 'no' ? 'DITT NESTE STEG' : 'YOUR NEXT STEP'}</motion.p>
-            <motion.h2 variants={fadeInUp}>{language === 'no' ? 'Begynn din reise.' : 'Begin your journey.'}</motion.h2>
+            <motion.p className="eyebrow purple" variants={fadeInUp}><CmsText slug="landing-adm-eyebrow" fallback={language === 'no' ? 'DITT NESTE STEG' : 'YOUR NEXT STEP'} /></motion.p>
+            <motion.h2 variants={fadeInUp}><CmsText slug="landing-adm-title" fallback={language === 'no' ? 'Begynn din reise.' : 'Begin your journey.'} /></motion.h2>
             <motion.p variants={fadeInUp}>
-              {language === 'no' ? (
-                <>
-                  Et nærere forhold til Jesus. Et fellesskap å vokse i.<br />
-                  En tro du kan leve ut.
-                </>
-              ) : (
-                <>
-                  A closer walk with Jesus. A community to grow in.<br />
-                  A faith you can live out.
-                </>
-              )}
+              <CmsText 
+                slug="landing-adm-subtitle" 
+                multiline 
+                fallback={language === 'no' 
+                  ? 'Et nærere forhold til Jesus. Et fellesskap å vokse i.\nEn tro du kan leve ut.' 
+                  : 'A closer walk with Jesus. A community to grow in.\nA faith you can live out.'} 
+              />
             </motion.p>
 
             <motion.div className="admission-box" variants={fadeInUp}>
               <div>
-                <b>{language === 'no' ? 'Opptak til skoleåret 2027' : 'Admissions for Academic Year 2027'}</b>
+                <b><CmsText slug="landing-adm-box-title" fallback={language === 'no' ? 'Opptak til skoleåret 2027' : 'Admissions for Academic Year 2027'} /></b>
                 <span>
-                  {language === 'no'
-                    ? 'Søknadsperiode 1. januar – 30. juni · Kickoff 20.–22. august · Min. 18 år'
-                    : 'Application period Jan 1 – June 30 · Kickoff August 20–22 · Min. 18 yrs'}
+                  <CmsText 
+                    slug="landing-adm-box-meta" 
+                    fallback={language === 'no'
+                      ? 'Søknadsperiode 1. januar – 30. juni · Kickoff 20.–22. august · Min. 18 år'
+                      : 'Application period Jan 1 – June 30 · Kickoff August 20–22 · Min. 18 yrs'} 
+                  />
                 </span>
               </div>
               <motion.button 
@@ -595,18 +599,21 @@ export default function LandingPage() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                {language === 'no' ? 'Søk nå' : 'Apply now'}
+                <CmsText slug="landing-adm-cta-btn" fallback={language === 'no' ? 'Søk nå' : 'Apply now'} />
               </motion.button>
             </motion.div>
 
             <details id="requirements">
               <summary>
-                {language === 'no' ? 'Praktisk informasjon og opptakskrav' : 'Practical info & admission criteria'}
+                <CmsText slug="landing-adm-req-summary" fallback={language === 'no' ? 'Praktisk informasjon og opptakskrav' : 'Practical info & admission criteria'} />
               </summary>
               <p>
-                {language === 'no'
-                  ? 'Opptakskrav: Du må være fylt 18 år. Førsteår: 10 000 kr for fullt år, pluss 500 kr i oppstart/administrasjon og 500 kr for kickoff kost/losji. Andreår starter i 2028 og krever fullført førsteår og ny søknad. Undervisningen foregår på engelsk.'
-                  : 'Admission requirement: You must be at least 18 years old. First year: 10,000 NOK for full academic year, plus 500 NOK in administration/registration and 500 NOK for kickoff meals and lodging. Second year begins in 2028 and requires completed first year and separate application. All instruction is in English.'}
+                <CmsText 
+                  slug="landing-adm-req-desc" 
+                  fallback={language === 'no'
+                    ? 'Opptakskrav: Du må være fylt 18 år. Førsteår: 10 000 kr for fullt år, pluss 500 kr i oppstart/administrasjon og 500 kr for kickoff kost/losji. Andreår starter i 2028 og krever fullført førsteår og ny søknad. Undervisningen foregår på engelsk.'
+                    : 'Admission requirement: You must be at least 18 years old. First year: 10,000 NOK for full academic year, plus 500 NOK in administration/registration and 500 NOK for kickoff meals and lodging. Second year begins in 2028 and requires completed first year and separate application. All instruction is in English.'} 
+                />
               </p>
             </details>
           </div>

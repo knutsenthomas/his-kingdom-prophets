@@ -29,7 +29,12 @@ export default function CmsVisualToggle() {
   })();
   const localEmail = localStorageUser?.email?.toLowerCase();
   const localRole = localStorageUser?.role;
-  const isAuthorizedStorage = localStorage.getItem('hkm-cms-authorized') === 'true';
+
+  // Strict admin check: Only authorized admin accounts can see or use the visual toggle
+  const isAdminUser = Boolean(
+    (user && (user.role === 'admin' || user.role === 'superadmin' || ADMIN_EMAILS.includes(cleanEmail))) ||
+    (localStorageUser && (localRole === 'admin' || localRole === 'superadmin' || ADMIN_EMAILS.includes(localEmail)))
+  );
 
   // Check URL params (?edit=1, ?cms=1, ?admin=1)
   const isUrlAdmin = React.useMemo(() => {
@@ -43,27 +48,19 @@ export default function CmsVisualToggle() {
     }
   }, [location.search]);
 
-  // If opened with ?edit=1 or ?cms=1, save authorized flag permanently
+  // If opened with ?edit=1 or ?cms=1 by an authorized admin, activate editing mode
   React.useEffect(() => {
-    if (isUrlAdmin) {
+    if (isAdminUser && isUrlAdmin) {
       localStorage.setItem('hkm-cms-authorized', 'true');
       setIsAdminEditing(true);
-      showToast("Visuell redigeringsmodus aktivert via URL!");
+      showToast("Visuell redigeringsmodus aktivert!");
     }
-  }, [isUrlAdmin, setIsAdminEditing, showToast]);
+  }, [isAdminUser, isUrlAdmin, setIsAdminEditing, showToast]);
 
-  const isAdminUser = 
-    isUrlAdmin ||
-    isAuthorizedStorage ||
-    user?.role === 'admin' || 
-    user?.role === 'superadmin' || 
-    ADMIN_EMAILS.includes(cleanEmail) ||
-    localRole === 'admin' ||
-    localRole === 'superadmin' ||
-    ADMIN_EMAILS.includes(localEmail);
-
-  // Keyboard shortcut (Cmd/Ctrl + Shift + E) & custom event listener
+  // Keyboard shortcut (Cmd/Ctrl + Shift + E) & custom event listener - ONLY for verified admins
   React.useEffect(() => {
+    if (!isAdminUser) return;
+
     const handleKeyDown = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'E' || e.key === 'e')) {
         e.preventDefault();
@@ -87,7 +84,7 @@ export default function CmsVisualToggle() {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('hkm-toggle-cms', handleCustomToggle);
     };
-  }, [setIsAdminEditing, showToast]);
+  }, [isAdminUser, setIsAdminEditing, showToast]);
 
   // Dynamically count editable fields on current page
   React.useEffect(() => {
