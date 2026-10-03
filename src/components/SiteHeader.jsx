@@ -118,26 +118,21 @@ export default function SiteHeader() {
             <button onClick={toggleLanguage} className="mobile-action-btn">
               {language === 'no' ? '🌐 Switch to English' : '🌐 Bytt til Norsk'}
             </button>
-            {isAdmin && (
-              <button 
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  localStorage.setItem('hkm-cms-authorized', 'true');
-                  navigate('/admin/cms');
-                }} 
-                className="mobile-action-btn"
-                style={{ fontWeight: 700, color: 'var(--violet)' }}
-              >
-                ⚙️ Admin
-              </button>
-            )}
-
             {user ? (
               <button 
-                onClick={() => { setIsMobileMenuOpen(false); handlePortalNavigation(); }} 
+                onClick={() => { 
+                  setIsMobileMenuOpen(false); 
+                  if (isAdmin) {
+                    localStorage.setItem('hkm-cms-authorized', 'true');
+                    navigate('/teacher/dashboard');
+                  } else {
+                    handlePortalNavigation(); 
+                  }
+                }} 
                 className="mobile-action-btn"
+                style={isAdmin ? { fontWeight: 700, color: 'var(--violet)' } : {}}
               >
-                {language === 'no' ? 'Min side (Portal)' : 'My Portal'}
+                {isAdmin ? '⚙️ Admin Dashbord' : (language === 'no' ? 'Min side (Portal)' : 'My Portal')}
               </button>
             ) : (
               /* 2 Choices for Mobile */
@@ -281,35 +276,38 @@ export default function SiteHeader() {
 
           {/* Desktop actions */}
           <div className="header-actions">
-            {isAdmin && (
-              <button 
-                onClick={() => {
-                  localStorage.setItem('hkm-cms-authorized', 'true');
-                  navigate('/admin/cms');
-                }} 
-                className="admin-badge-btn"
-                title="Åpne Admin & CMS"
-              >
-                Admin
-              </button>
-            )}
-
-            {/* 2-Choice Login Container for Desktop */}
-            <div className="login-dropdown-container" ref={loginMenuRef}>
-              <button 
-                onClick={() => {
-                  if (user) {
-                    handlePortalNavigation();
-                  } else {
-                    setIsLoginMenuOpen(prev => !prev);
-                  }
-                }} 
-                className={`login-btn ${isLoginMenuOpen ? 'active' : ''}`}
-                aria-expanded={isLoginMenuOpen}
-                aria-haspopup="true"
-              >
-                <span>{user ? (language === 'no' ? 'Min side' : 'Portal') : (language === 'no' ? 'Logg inn' : 'Log in')}</span>
-                {!user && (
+            {user ? (
+              isAdmin ? (
+                <button 
+                  onClick={() => {
+                    localStorage.setItem('hkm-cms-authorized', 'true');
+                    navigate('/teacher/dashboard');
+                  }} 
+                  className="admin-badge-btn"
+                  title="Åpne Admin Dashbord"
+                >
+                  <ShieldCheck size={14} />
+                  <span>Admin</span>
+                </button>
+              ) : (
+                <button 
+                  onClick={handlePortalNavigation} 
+                  className="login-btn"
+                  title={language === 'no' ? 'Min side' : 'Portal'}
+                >
+                  <span>{language === 'no' ? 'Min side' : 'Portal'}</span>
+                </button>
+              )
+            ) : (
+              /* 2-Choice Login Container for Desktop */
+              <div className="login-dropdown-container" ref={loginMenuRef}>
+                <button 
+                  onClick={() => setIsLoginMenuOpen(prev => !prev)} 
+                  className={`login-btn ${isLoginMenuOpen ? 'active' : ''}`}
+                  aria-expanded={isLoginMenuOpen}
+                  aria-haspopup="true"
+                >
+                  <span>{language === 'no' ? 'Logg inn' : 'Log in'}</span>
                   <ChevronDown 
                     size={14} 
                     style={{ 
@@ -318,12 +316,11 @@ export default function SiteHeader() {
                       transform: isLoginMenuOpen ? 'rotate(180deg)' : 'none' 
                     }} 
                   />
-                )}
-              </button>
+                </button>
 
-              <AnimatePresence>
-                {isLoginMenuOpen && !user && (
-                  <motion.div
+                <AnimatePresence>
+                  {isLoginMenuOpen && (
+                    <motion.div
                     initial={{ opacity: 0, y: 8, scale: 0.96 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
@@ -414,6 +411,7 @@ export default function SiteHeader() {
                 )}
               </AnimatePresence>
             </div>
+            )}
 
             <button className="headerlink" onClick={() => navigate('/admission')}>
               {language === 'no' ? 'Opptak 2027' : 'Admissions 2027'}
