@@ -692,7 +692,10 @@ export default function LandingPage() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                        transition={{ 
+                          height: { duration: 0.18, ease: [0.04, 0.62, 0.23, 0.98] },
+                          opacity: { duration: 0.14, ease: "easeOut" }
+                        }}
                         className="faq-answer"
                       >
                         <p>{answer}</p>
