@@ -1,60 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { 
-  Compass, Users, AlertTriangle, ClipboardList, BookOpen, 
-  Award, Bell, Power, Menu, ChevronLeft, Sliders, Video, User,
-  Languages, BarChart3, TrendingUp, Gift, HelpCircle, X, GraduationCap, Globe,
-  Book, CheckSquare, FileText
+  LayoutDashboard, Edit3, GraduationCap, Search, BarChart3, 
+  FileText, Users, ExternalLink, Globe, Power, Menu, X, Smartphone
 } from 'lucide-react';
 import HkmChatWidget from '@/components/HkmChatWidget';
-import CmsText from '@/components/CmsText';
-import logo from '@/assets/logo.png';
 
 export default function TeacherLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, setUser, logout, showToast, students, changePersona, language, toggleLanguage, cmsContent } = useApp();
-
+  const { user, logout, showToast, language } = useApp();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Attention status filters for KPI tracking in sidebar
-  const atRiskCount = students?.filter(s => s.status === 'Kritisk' || s.status === 'Forsinket').length || 0;
-  
-  // Collapse state initialized from localStorage for persistence
-  const [isCollapsed, setIsCollapsed] = useState(() => {
-    const saved = localStorage.getItem('hkm-teacher-sidebar-collapsed');
-    return saved === 'true';
-  });
-
-  useEffect(() => {
-    localStorage.setItem('hkm-teacher-sidebar-collapsed', isCollapsed);
-  }, [isCollapsed]);
-
-  useEffect(() => {
-    const handleToggle = (e) => {
-      if (e.detail !== undefined) {
-        setIsCollapsed(e.detail);
-      } else {
-        setIsCollapsed(prev => !prev);
-      }
-    };
-    window.addEventListener('hkm-toggle-teacher-sidebar', handleToggle);
-    return () => window.removeEventListener('hkm-toggle-teacher-sidebar', handleToggle);
-  }, []);
-
+  // Close mobile drawer on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
-  }, [location.pathname]);
+  }, [location.pathname, location.search]);
 
-  const toggleMenu = () => {
-    if (window.innerWidth < 768) {
-      setIsMobileMenuOpen(!isMobileMenuOpen);
-    } else {
-      setIsCollapsed(!isCollapsed);
-    }
-  };
-
+  // Authorization check for admin views
   useEffect(() => {
     const allowedRoles = ['teacher', 'admin', 'superadmin'];
     const email = user?.email?.toLowerCase();
@@ -70,283 +34,250 @@ export default function TeacherLayout() {
     }
   }, [user, navigate, language, showToast, location.pathname, location.search]);
 
-
-
   const handleLogOut = () => {
     logout();
     navigate('/');
   };
 
-  const navItems = [
-    { isHeader: true, slug: 'sidebar-mentor-tools', fallback: 'Mentorverktøy' },
-    { slug: 'nav.dashboard.title', fallback: 'Lærer Dashboard', path: '/teacher/dashboard', icon: Compass },
-    { slug: 'sidebar-followup', fallback: 'Tjenesteoppfølging', path: '/teacher/follow-up', icon: AlertTriangle, badge: atRiskCount },
-    { slug: 'sidebar-course-builder', fallback: 'Kursbygger', path: '/teacher/course-builder', icon: Sliders },
-    { slug: 'sidebar-quiz-builder', fallback: 'Prøvebygger', path: '/teacher/quiz-builder', icon: ClipboardList },
-    { slug: 'sidebar-insights', fallback: 'Kursinnsikt', path: '/teacher/insights', icon: BarChart3 },
-    { slug: 'sidebar-marketing', fallback: 'Markedsføring', path: '/teacher/marketing', icon: TrendingUp },
-    
-    // Elev- og studieressurser (Studieportal)
-    { isHeader: true, slug: 'sidebar-student-portal', fallback: 'Studieportal' },
-    { slug: 'sidebar-bible', fallback: 'Bibelen', path: '/student/bible', icon: Book },
-    { slug: 'sidebar-curriculum', fallback: 'Studieplan & kurs', path: '/student/library', icon: BookOpen },
-    { slug: 'sidebar-lesson', fallback: 'Leksjon', path: '/student/lesson', icon: GraduationCap },
-    { slug: 'sidebar-video', fallback: 'Klasserom / Video', path: '/student/video', icon: Video },
-    { slug: 'sidebar-assignments', fallback: 'Oppgaver', path: '/student/assignments', icon: CheckSquare },
-    { slug: 'sidebar-notes', fallback: 'Mine notater', path: '/student/notes', icon: FileText },
-    { slug: 'sidebar-community', fallback: 'Bønnefellesskap', path: '/student/chat', icon: Users },
-    
-    // Fakultetsverktøy
-    { isHeader: true, slug: 'sidebar-faculty-tools', fallback: 'Fakultetsverktøy' },
-    { slug: 'sidebar-media-library', fallback: 'Mediebibliotek', path: '/teacher/media-library', icon: Video },
-    { slug: 'sidebar-grading', fallback: 'Bibelkalkulator', path: '/teacher/grading', icon: Award },
-    { slug: 'sidebar-partner', fallback: 'Partnerportal', path: '/teacher/partner', icon: Gift },
-    { slug: 'sidebar-support', fallback: 'Hjelp & support', path: '/teacher/support', icon: HelpCircle },
-    { slug: 'sidebar-notifications', fallback: 'Varslingssenter', path: '/teacher/notifications', icon: Bell },
-    { slug: 'sidebar-teacher-profile', fallback: 'Min lærerprofil', path: '/teacher/profile', icon: User }
+  // Structured navigation groups mirroring the HKP Community App layout
+  const adminNavGroups = [
+    {
+      group: 'HOVEDSTYRING',
+      items: [
+        { id: 'dashboard', label: 'Oversikt (Synk & Status)', path: '/teacher/dashboard', icon: LayoutDashboard },
+      ]
+    },
+    {
+      group: 'LANDINGSSIDE (HKPC.NO)',
+      items: [
+        { id: 'cms', label: 'Innhold & Tekster', path: '/admin/cms', icon: Edit3 },
+        { id: 'admissions', label: 'Opptak & Søknader', path: '/admin/portal?tab=admissions', icon: GraduationCap },
+        { id: 'seo', label: 'SEO & Søkemotorer', path: '/admin/cms?category=seo', icon: Search },
+        { id: 'analytics', label: 'Besøksstatistikk', path: '/admin/analytics', icon: BarChart3 },
+        { id: 'documents', label: 'PDF & Dokumenter', path: '/admin/cms?category=documents', icon: FileText },
+      ]
+    },
+    {
+      group: 'APP-SYNKRONISERING',
+      items: [
+        { id: 'users', label: 'Elever & Tilgangssynk', path: '/admin/portal?tab=users', icon: Users },
+        { id: 'communityApp', label: 'Åpne Community App', path: 'https://app.hkpc.no', icon: ExternalLink, isExternal: true },
+      ]
+    }
   ];
 
-  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
-  const cleanEmail = user?.email?.toLowerCase();
-  const isCmsAuthorized = localStorage.getItem('hkm-cms-authorized') === 'true';
-  const isAdminOrAuthorized = user?.role === 'admin' || user?.role === 'superadmin' || isCmsAuthorized || ADMIN_EMAILS.includes(cleanEmail) || location.pathname.startsWith('/admin');
+  const checkActive = (itemPath) => {
+    if (!itemPath || itemPath.startsWith('http')) return false;
+    if (itemPath.includes('?')) {
+      return (location.pathname + location.search) === itemPath;
+    }
+    return location.pathname === itemPath;
+  };
 
-  if (isAdminOrAuthorized) {
-    navItems.push({ isHeader: true, slug: 'sidebar-administration', fallback: 'Administrasjon' });
-    navItems.push({ slug: 'sidebar-cms-editor', fallback: 'Global CMS Styring', path: '/admin/cms', icon: Languages });
-    navItems.push({ slug: 'sidebar-admissions-admin', fallback: 'Opptak & Søknader', path: '/admin/portal?tab=admissions', icon: GraduationCap });
-    navItems.push({ slug: 'sidebar-document-admin', fallback: 'Dokumentbehandling', path: '/admin/cms?category=documents', icon: FileText });
-    navItems.push({ slug: 'sidebar-analytics', fallback: 'Analytics Dashboard', path: '/admin/analytics', icon: BarChart3 });
-    navItems.push({ slug: 'sidebar-user-admin', fallback: 'Brukerhåndtering', path: '/admin/portal', icon: Users });
-  } else if (user?.role === 'teacher') {
-    navItems.push({ isHeader: true, slug: 'sidebar-administration', fallback: 'Administrasjon' });
-    navItems.push({ slug: 'sidebar-cms-editor', fallback: 'Global CMS Styring', path: '/admin/cms', icon: Languages });
-    navItems.push({ slug: 'sidebar-document-admin', fallback: 'Dokumentbehandling', path: '/admin/cms?category=documents', icon: FileText });
-  }
-  
-  navItems.push({ isHeader: true, slug: 'sidebar-exit', fallback: 'Avslutt' });
-  navItems.push({ slug: 'profile-btn-logout', fallback: 'Logg ut', path: '', icon: Power, isLogout: true });
+  const handleItemClick = (item) => {
+    if (item.isExternal) {
+      window.open(item.path, '_blank', 'noopener,noreferrer');
+    } else {
+      navigate(item.path);
+    }
+    setIsMobileMenuOpen(false);
+  };
 
   return (
-    <div className="bg-background min-h-screen flex flex-col font-sans text-on-surface pt-20">
-      {/* Dynamic Mentor Header */}
-      <header className="bg-white border-b border-outline-variant/30 fixed top-0 left-0 right-0 z-40 shadow-sm">
-        <div className="flex justify-between items-center w-full px-4 sm:px-6 md:px-12 h-20">
-          
-          {/* Logo & Toggle Trigger */}
-          <div className="flex items-center gap-3 mr-2 truncate">
+    <div className="relative font-sans antialiased text-on-surface bg-background min-h-screen lg:pl-72 overflow-x-clip">
+      
+      {/* ========================================================
+          1. DESKTOP SIDEBAR (Identical to HKP Community App DesktopSidebar)
+         ======================================================== */}
+      <aside className="hidden lg:flex flex-col w-72 h-screen fixed left-0 top-0 border-r border-outline-variant/20 bg-surface/95 backdrop-blur-lg z-50 overflow-y-auto justify-between">
+        <div>
+          {/* Brand Header */}
+          <div className="p-5 border-b border-outline-variant/15">
             <button 
-              onClick={toggleMenu}
-              className="p-2 hover:bg-surface-container rounded-lg transition-colors active:scale-[0.97] text-primary shrink-0"
-              title={isCollapsed ? "Åpne mentormeny" : "Lukk mentormeny"}
-            >
-              <Menu size={22} />
-            </button>
-            <div 
-              className="font-serif text-lg sm:text-2xl font-bold text-primary flex items-center gap-2 cursor-pointer truncate" 
+              type="button"
               onClick={() => navigate('/teacher/dashboard')}
+              title="Gå til oversikt"
+              aria-label="HKP Admin - Gå til oversikt"
+              className="flex items-center gap-3 text-left group cursor-pointer transition-all active:scale-[0.98] w-full"
             >
               <img 
-                src={logo} 
-                alt="His Kingdom Prophets Logo" 
-                className="w-8 h-8 object-contain shrink-0" 
+                src="/hkp-logo.png" 
+                alt="HKP Admin Logo" 
+                className="w-10 h-10 rounded-full object-contain shadow-xs shrink-0 select-none group-hover:scale-105 transition-transform duration-200" 
               />
-              <span className="hidden sm:inline truncate"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophetic Community" /></span>
-              <span className="inline sm:hidden truncate"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
-              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 sm:px-3 py-1 rounded-full shrink-0">
-                {user?.role === 'admin' || user?.role === 'superadmin' || isAdminOrAuthorized ? 'Admin' : (user ? 'Mentor' : 'Gjest')}
-              </span>
-            </div>
+              <div className="min-w-0 flex-1">
+                <span className="text-xl font-extrabold text-primary tracking-tight block truncate">
+                  HKP Admin
+                </span>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block truncate">
+                  Landingsside & Synk
+                </span>
+              </div>
+            </button>
           </div>
 
-          {/* User profile, badges and logout */}
-          <div className="flex items-center gap-4 text-primary shrink-0">
-            
-            {/* Superadmin System View Switcher */}
-            {(['thomas@tk-design.no', 'knutsenthomas@gmail.com', 'thomas@hiskingdomministry.no'].includes(user?.email?.toLowerCase()) || user?.email?.includes('superadmin') || isCmsAuthorized) && (
-              <div className="hidden md:flex items-center gap-1 bg-[#561291]/5 p-1 rounded-xl border border-[#561291]/20 shrink-0">
-                <span className="text-[9px] font-bold uppercase tracking-wider text-[#561291] px-2">Visning:</span>
-                {[
-                  { role: 'student', label: 'Elev', path: '/student/dashboard' },
-                  { role: 'teacher', label: 'Mentor', path: '/teacher/dashboard' },
-                  { role: 'superadmin', label: 'Superadmin', path: '/admin/portal' }
-                ].map(opt => {
-                  const isCurrent = user?.role === opt.role;
+          {/* Grouped Nav Items */}
+          <nav className="px-3 py-2 space-y-3">
+            {adminNavGroups.map((section, sIdx) => (
+              <div key={sIdx} className="space-y-0.5">
+                <p className="px-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider pt-1.5 pb-0.5">
+                  {section.group}
+                </p>
+                {section.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = checkActive(item.path);
                   return (
                     <button
-                      key={opt.role}
-                      onClick={() => {
-                        setUser(prev => ({ ...prev, role: opt.role }));
-                        navigate(opt.path);
-                        showToast(`Visning endret til ${opt.label}`);
-                      }}
-                      className={`px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all ${
-                        isCurrent 
-                          ? 'bg-[#561291] text-white shadow-sm font-bold' 
-                          : 'text-[#46617b] hover:bg-[#561291]/10 hover:text-[#561291]'
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
-            <div className="flex items-center gap-3 sm:gap-4 text-primary pl-2 border-l border-outline-variant/30">
-              <button 
-                onClick={toggleLanguage}
-                className="p-1.5 hover:bg-surface-container rounded-full shrink-0 text-primary transition-all active:scale-95 flex items-center justify-center"
-                title={language === 'no' ? 'Bytt til engelsk (Switch to English)' : 'Bytt til norsk (Switch to Norwegian)'}
-              >
-                <Globe size={20} />
-              </button>
-
-              <button 
-                onClick={() => navigate('/student/chat')}
-                className="relative hover:opacity-80 transition-all p-1.5 hover:bg-surface-container rounded-full shrink-0 flex items-center justify-center text-primary"
-                title={language === 'en' ? "Messages / Prayer Community" : "Meldinger / Bønnefellesskap"}
-              >
-                <Bell size={20} />
-              </button>
-              
-              <Link
-                to="/teacher/profile"
-                className="group flex items-center gap-2.5 rounded-xl px-1.5 py-1 hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all active:scale-[0.98]"
-                title={language === 'en' ? "Open my mentor profile" : "Åpne min lærerprofil"}
-                aria-label={language === 'en' ? "Open my mentor profile" : "Åpne min lærerprofil"}
-              >
-                <span className="text-right hidden sm:block min-w-0">
-                  <span className="block text-xs font-bold text-primary group-hover:underline whitespace-nowrap md:max-w-none">
-                    {user?.name || (isAdminOrAuthorized ? 'Thomas Knutsen' : 'Gjest')}
-                  </span>
-                  <span className="block text-[9px] text-outline font-semibold uppercase tracking-wide whitespace-nowrap md:max-w-none">
-                    {user?.email || (isAdminOrAuthorized ? 'thomas@hiskingdomministry.no' : '')}
-                  </span>
-                </span>
-                <span className="relative shrink-0">
-                  <img
-                    src={user?.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120"}
-                    alt={user?.name || "Bruker"}
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary/20 shadow object-cover cursor-pointer transition-all group-hover:ring-2 group-hover:ring-primary/30 group-hover:ring-offset-2"
-                  />
-                  <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-primary text-white border-2 border-white flex items-center justify-center shadow-sm">
-                    <User size={9} />
-                  </span>
-                </span>
-              </Link>
-            </div>
-          </div>
-
-        </div>
-      </header>
-
-      {/* Main Content Layout with Sidebar */}
-      <div className="flex flex-1 w-full relative min-h-[calc(100vh-80px)]">
-        
-        {/* Collapsible Left Sidebar for Mentor portal */}
-        <aside 
-          className="bg-white border-r border-outline-variant/20 sticky top-20 hidden md:flex flex-col shrink-0 transition-all duration-300 ease-in-out overflow-hidden z-30 h-[calc(100vh-80px)] self-start"
-          style={{ 
-            width: isCollapsed ? '0px' : '288px',
-            opacity: isCollapsed ? 0 : 1,
-            transform: 'translateZ(0)',
-            backfaceVisibility: 'hidden'
-          }}
-        >
-          <div className="py-8 px-6 flex flex-col justify-between h-full w-72 shrink-0 overflow-y-auto">
-            <div className="space-y-6">
-              {/* Mentor status details */}
-              <button
-                onClick={() => navigate('/teacher/profile')}
-                className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20"
-                title="Åpne min lærerprofil"
-              >
-                <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Mentorveiledning</p>
-                <div className="bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/30 space-y-2">
-                  <div className="flex justify-between items-center text-[11px] font-bold text-on-surface-variant">
-                    <span>Studentoppfølging</span>
-                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${atRiskCount > 0 ? 'bg-amber-100 text-amber-700 animate-pulse' : 'bg-green-100 text-green-700'}`}>
-                      {atRiskCount} kritiske
-                    </span>
-                  </div>
-                  <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-amber-500 h-full w-[65%]"></div>
-                  </div>
-                </div>
-              </button>
-
-              {/* Side Navigation Menu */}
-              <nav className="space-y-1.5">
-                {navItems.map((item, idx) => {
-                  if (item.isHeader) {
-                    return (
-                      <div 
-                        key={item.slug + '-' + idx} 
-                        className="text-[10px] font-bold text-primary uppercase tracking-wider pt-4 pb-1 px-4 select-none"
-                      >
-                        <CmsText slug={item.slug} fallback={item.fallback} />
-                      </div>
-                    );
-                  }
-                  const isActive = !item.isLogout && (item.path.includes('?') 
-                    ? (location.pathname + location.search) === item.path
-                    : location.pathname === item.path);
-                  const IconComponent = item.icon;
-                  const onClickAction = item.isLogout 
-                    ? handleLogOut 
-                    : () => navigate(item.path);
-                  return (
-                    <button 
-                      key={item.isLogout ? 'logout' : item.path}
-                      onClick={onClickAction} 
-                      className={`relative flex items-center justify-between w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
+                      key={item.id}
+                      onClick={() => handleItemClick(item)}
+                      className={`w-full flex items-center text-left gap-3 px-3 py-2 rounded-xl transition-all text-sm font-semibold cursor-pointer group ${
                         isActive 
-                          ? 'text-primary bg-primary/5 font-bold shadow-sm' 
-                          : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
+                          ? 'bg-primary text-on-primary shadow-xs' 
+                          : 'text-slate-800 hover:bg-slate-100 hover:text-purple-950'
                       }`}
                     >
-                      {isActive && (
-                        <div className="absolute left-0 top-2.5 bottom-2.5 w-1 bg-primary rounded-r-full" />
-                      )}
-                      <div className="flex items-center gap-3">
-                        <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
-                        <span><CmsText slug={item.slug} fallback={item.fallback} /></span>
-                      </div>
-                      {item.badge !== undefined && item.badge > 0 && (
-                        <span className="bg-amber-500 text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0">
-                          {item.badge}
+                      <Icon size={18} className={`shrink-0 ${isActive ? 'text-on-primary' : 'text-slate-600 group-hover:text-purple-900'}`} />
+                      <span className="text-left flex-1 text-[13.5px] font-semibold">{item.label}</span>
+                      {item.isExternal && (
+                        <span className="text-[10px] bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white px-2 py-0.5 rounded-full font-mono font-bold transition-colors">
+                          app.hkpc.no
                         </span>
                       )}
                     </button>
                   );
                 })}
-              </nav>
-            </div>
+              </div>
+            ))}
+          </nav>
 
-            <button
-              onClick={() => setIsCollapsed(true)}
-              className="flex items-center justify-center gap-1.5 w-full py-2 border-t border-slate-100 text-[10px] uppercase font-bold tracking-widest text-on-surface-variant hover:text-primary transition-all mt-6"
+          {/* System Status in Sidebar */}
+          <div className="mx-3 my-2 p-2.5 bg-surface-container-low rounded-xl border border-outline-variant/30 space-y-1.5">
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Systemstatus</p>
+            <div className="flex justify-between items-center text-[11px] font-semibold">
+              <span className="text-on-surface-variant">Landingsside (hkpc.no)</span>
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Live
+              </span>
+            </div>
+            <div className="flex justify-between items-center text-[11px] font-semibold pt-1 border-t border-outline-variant/20">
+              <span className="text-on-surface-variant">App-synk (app.hkpc.no)</span>
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                Tilkoblet
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer User & Teacher Authentication Status */}
+        <div className="p-3 border-t border-outline-variant/20 bg-surface-container-lowest/60 space-y-1.5">
+          {/* User Profile Info */}
+          <div className="flex items-center gap-2.5 px-1 py-1 rounded-xl">
+            {user?.avatar ? (
+              <img 
+                src={user.avatar} 
+                alt="Profilbilde" 
+                className="w-9 h-9 rounded-full object-cover ring-1 ring-outline-variant/30 shrink-0" 
+              />
+            ) : (
+              <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs shrink-0 bg-primary text-on-primary">
+                {user?.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'TK'}
+              </div>
+            )}
+            <div className="text-left flex-1 min-w-0">
+              <p className="text-sm font-bold text-on-surface truncate">
+                {user?.name || 'Thomas Knutsen'}
+              </p>
+              <p className="text-[11px] text-slate-500 font-medium truncate">
+                Administrator · hkpc.no
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Action: Open Community App */}
+          <a
+            href="https://app.hkpc.no"
+            target="_blank"
+            rel="noreferrer"
+            className="w-full py-1.5 px-3 bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200/60 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 shadow-xs"
+          >
+            <Smartphone size={13} />
+            <span>Åpne Community App</span>
+            <ExternalLink size={11} className="opacity-70" />
+          </a>
+
+          {/* Quick Action: View Public Website */}
+          <a
+            href="/"
+            target="_blank"
+            rel="noreferrer"
+            className="w-full py-1.5 px-3 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+          >
+            <Globe size={13} />
+            <span>Se nettsiden (hkpc.no)</span>
+          </a>
+
+          {/* Log out */}
+          <button 
+            onClick={handleLogOut} 
+            className="w-full py-1.5 px-3 text-on-surface-variant hover:bg-surface-container rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-colors active:scale-[0.98]"
+          >
+            <Power size={13} />
+            <span>Logg ut</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* ========================================================
+          2. MOBILE HEADER (Identical to HKP Community App MobileHeader)
+         ======================================================== */}
+      <header 
+        className="lg:hidden sticky top-0 z-40 bg-surface/95 backdrop-blur-xl border-b border-outline-variant/20 px-4 py-3 transition-colors shadow-xs"
+        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 8px)' }}
+      >
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
+          {/* Logo & Brand */}
+          <button 
+            type="button"
+            onClick={() => navigate('/teacher/dashboard')}
+            className="flex items-center gap-2.5 text-left cursor-pointer group active:scale-[0.98] transition-transform min-h-[44px]"
+            aria-label="HKP Admin - Gå til oversikt"
+          >
+            <img 
+              src="/hkp-logo.png" 
+              alt="HKP Admin Logo" 
+              className="w-9 h-9 rounded-full object-contain shadow-xs shrink-0 select-none group-hover:scale-105 transition-transform" 
+            />
+            <span className="text-[17px] sm:text-lg font-extrabold text-primary tracking-tight leading-none select-none">
+              HKP Admin
+            </span>
+          </button>
+
+          {/* Right actions: Role pill & menu trigger button */}
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-2.5 py-1 text-[11px] font-semibold text-primary select-none whitespace-nowrap">
+              Admin
+            </span>
+            
+            <button 
+              type="button"
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Åpne administratormeny"
+              title="Meny"
+              className="w-11 h-11 rounded-xl border border-outline-variant/25 bg-surface-container-low/60 hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-all flex items-center justify-center cursor-pointer active:scale-95"
             >
-              <ChevronLeft size={14} />
-              <span>Skjul mentormeny</span>
+              <Menu size={20} />
             </button>
           </div>
-        </aside>
+        </div>
+      </header>
 
-        {/* Main Content View Container */}
-        <main className="flex-grow flex flex-col min-w-0 transition-all duration-300 relative">
-          
-          <div className="flex-grow">
-            <Outlet />
-          </div>
-        </main>
-
-      </div>
-
-      {/* Mobile Navigation Drawer */}
+      {/* ========================================================
+          3. MOBILE SLIDING DRAWER MENU
+         ======================================================== */}
       <div 
-        className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ease-in-out ${
+        className={`fixed inset-0 z-50 lg:hidden transition-all duration-300 ease-in-out ${
           isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
@@ -364,131 +295,151 @@ export default function TeacherLayout() {
             isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
-          <div className="py-6 px-6 space-y-6">
-            {/* Header in Drawer */}
-            <div className="flex items-center justify-between pb-4 border-b border-outline-variant/30">
-              <div className="font-serif text-lg font-bold text-primary flex items-center gap-2 cursor-pointer" onClick={() => { navigate('/teacher/dashboard'); setIsMobileMenuOpen(false); }}>
-                <GraduationCap className="text-primary shrink-0 animate-pulse" size={20} />
-                <span className="hidden sm:inline"><CmsText slug="layout-logo-title" fallback="His Kingdom Prophetic Community" /></span>
-                <span className="inline sm:hidden"><CmsText slug="layout-logo-mobile-title" fallback="HKP" /></span>
-              </div>
-              <button 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="p-1.5 hover:bg-surface-container rounded-lg text-primary"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Superadmin System View Switcher for Mobile Drawer */}
-            {(['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(user?.email?.toLowerCase()) || user?.email?.includes('superadmin')) && (
-              <div className="flex flex-col gap-2 p-3 bg-[#561291]/5 rounded-xl border border-[#561291]/20">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#561291] px-1">Endre Visningsrolle</span>
-                <div className="grid grid-cols-3 gap-1.5">
-                  {[
-                    { role: 'student', label: 'Elev', path: '/student/dashboard' },
-                    { role: 'teacher', label: 'Mentor', path: '/teacher/dashboard' },
-                    { role: 'superadmin', label: 'Superadmin', path: '/admin/portal' }
-                  ].map(opt => {
-                    const isCurrent = user?.role === opt.role;
-                    return (
-                      <button
-                        key={opt.role}
-                        onClick={() => {
-                          setUser(prev => ({ ...prev, role: opt.role }));
-                          navigate(opt.path);
-                          setIsMobileMenuOpen(false);
-                          showToast(`Visning endret til ${opt.label}`);
-                        }}
-                        className={`py-2 px-1 rounded-lg text-[8px] sm:text-[9px] font-bold uppercase tracking-normal text-center transition-all ${
-                          isCurrent 
-                            ? 'bg-[#561291] text-white shadow-sm font-bold' 
-                            : 'bg-white/60 text-[#46617b] hover:bg-[#561291]/10 hover:text-[#561291]'
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    );
-                  })}
+          <div className="flex flex-col justify-between h-full">
+            <div>
+              {/* Header in Drawer */}
+              <div className="p-4 border-b border-outline-variant/15 flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <img 
+                    src="/hkp-logo.png" 
+                    alt="HKP Admin Logo" 
+                    className="w-8 h-8 rounded-full object-contain shadow-xs shrink-0 select-none" 
+                  />
+                  <div>
+                    <span className="text-base font-extrabold text-primary tracking-tight block leading-tight">
+                      HKP Admin
+                    </span>
+                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">
+                      Landingsside & Synk
+                    </span>
+                  </div>
                 </div>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-10 h-10 flex items-center justify-center hover:bg-surface-container rounded-lg text-primary"
+                  aria-label="Lukk meny"
+                >
+                  <X size={20} />
+                </button>
               </div>
-            )}
 
-            {/* Mentor status details */}
-            <button
-              onClick={() => {
-                navigate('/teacher/profile');
-                setIsMobileMenuOpen(false);
-              }}
-              className="px-2 text-left w-full rounded-xl hover:bg-surface-container-low transition-colors active:scale-[0.99]"
-              title="Åpne min lærerprofil"
-            >
-              <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Mentorveiledning</p>
-              <div className="bg-surface-container-low rounded-xl p-3 border border-outline-variant/30 space-y-1.5">
-                <div className="flex justify-between items-center text-[10px] font-bold text-on-surface-variant">
-                  <span>Studentoppfølging</span>
-                  <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${atRiskCount > 0 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
-                    {atRiskCount} kritiske
+              {/* Grouped Nav Items */}
+              <nav className="px-3 py-3 space-y-4">
+                {adminNavGroups.map((section, sIdx) => (
+                  <div key={sIdx} className="space-y-1">
+                    <p className="px-3.5 text-xs font-bold text-slate-600 uppercase tracking-wider pt-2 pb-0.5">
+                      {section.group}
+                    </p>
+                    {section.items.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = checkActive(item.path);
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => handleItemClick(item)}
+                          className={`w-full flex items-center text-left gap-3.5 px-3.5 py-2.5 rounded-xl transition-all text-[15px] font-semibold cursor-pointer group ${
+                            isActive 
+                              ? 'bg-primary text-on-primary shadow-xs' 
+                              : 'text-slate-800 hover:bg-slate-100 hover:text-purple-950'
+                          }`}
+                        >
+                          <Icon size={20} className={`shrink-0 ${isActive ? 'text-on-primary' : 'text-slate-600 group-hover:text-purple-900'}`} />
+                          <span className="text-left flex-1 text-[14px] font-semibold">{item.label}</span>
+                          {item.isExternal && (
+                            <span className="text-[10px] bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white px-2 py-0.5 rounded-full font-mono font-bold transition-colors">
+                              app.hkpc.no
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ))}
+              </nav>
+
+              {/* System status */}
+              <div className="mx-3.5 my-2 p-3 bg-surface-container-low rounded-xl border border-outline-variant/30 space-y-2">
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Systemstatus</p>
+                <div className="flex justify-between items-center text-[11px] font-semibold">
+                  <span className="text-on-surface-variant">Landingsside (hkpc.no)</span>
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Live
                   </span>
                 </div>
-                <div className="w-full bg-slate-100 h-1 rounded-full overflow-hidden">
-                  <div className="bg-amber-500 h-full w-[65%]"></div>
+                <div className="flex justify-between items-center text-[11px] font-semibold pt-1 border-t border-outline-variant/20">
+                  <span className="text-on-surface-variant">App-synk (app.hkpc.no)</span>
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                    Tilkoblet
+                  </span>
                 </div>
               </div>
-            </button>
+            </div>
 
-            {/* Nav Items */}
-            <nav className="space-y-1">
-              {navItems.map((item, idx) => {
-                if (item.isHeader) {
-                  return (
-                    <div 
-                      key={item.slug + '-' + idx} 
-                      className="text-[10px] font-bold text-primary uppercase tracking-wider pt-4 pb-1 px-4 select-none"
-                    >
-                      <CmsText slug={item.slug} fallback={item.fallback} />
-                    </div>
-                  );
-                }
-                const isActive = !item.isLogout && (item.path.includes('?') 
-                  ? (location.pathname + location.search) === item.path
-                  : location.pathname === item.path);
-                const IconComponent = item.icon;
-                const onClickAction = item.isLogout 
-                  ? handleLogOut 
-                  : () => {
-                      navigate(item.path);
-                      setIsMobileMenuOpen(false);
-                    };
-                return (
-                  <button 
-                    key={item.isLogout ? 'logout' : item.path}
-                    onClick={onClickAction} 
-                    className={`relative flex items-center justify-between w-full px-4 py-3 text-sm transition-all rounded-lg font-medium text-left ${
-                      isActive 
-                        ? 'text-primary bg-primary/5 font-bold shadow-sm' 
-                        : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary'
-                    }`}
-                  >
-                    {isActive && (
-                      <div className="absolute left-0 top-2.5 bottom-2.5 w-1 bg-primary rounded-r-full" />
-                    )}
-                    <div className="flex items-center gap-3">
-                      <IconComponent size={18} className={isActive ? 'text-primary' : 'text-on-surface-variant'} />
-                      <span><CmsText slug={item.slug} fallback={item.fallback} /></span>
-                    </div>
-                    {item.badge !== undefined && item.badge > 0 && (
-                      <span className="bg-amber-500 text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded-full shrink-0">
-                        {item.badge}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </nav>
+            {/* Mobile Drawer Footer */}
+            <div className="p-3.5 border-t border-outline-variant/20 bg-surface-container-lowest/60 space-y-2">
+              <div className="flex items-center gap-3 px-2 py-1.5 rounded-xl">
+                {user?.avatar ? (
+                  <img 
+                    src={user.avatar} 
+                    alt="Profilbilde" 
+                    className="w-10 h-10 rounded-full object-cover ring-1 ring-outline-variant/30 shrink-0" 
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs shrink-0 bg-primary text-on-primary">
+                    {user?.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'TK'}
+                  </div>
+                )}
+                <div className="text-left flex-1 min-w-0">
+                  <p className="text-sm font-bold text-on-surface truncate">
+                    {user?.name || 'Thomas Knutsen'}
+                  </p>
+                  <p className="text-xs text-slate-600 font-medium truncate">
+                    Administrator · hkpc.no
+                  </p>
+                </div>
+              </div>
+
+              <a
+                href="https://app.hkpc.no"
+                target="_blank"
+                rel="noreferrer"
+                className="w-full py-2 px-3 bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200/60 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 shadow-xs"
+              >
+                <Smartphone size={14} />
+                <span>Åpne Community App</span>
+                <ExternalLink size={12} className="opacity-70" />
+              </a>
+
+              <a
+                href="/"
+                target="_blank"
+                rel="noreferrer"
+                className="w-full py-1.5 px-3 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+              >
+                <Globe size={13} />
+                <span>Se nettsiden (hkpc.no)</span>
+              </a>
+
+              <button 
+                onClick={handleLogOut} 
+                className="w-full py-2 px-3 text-on-surface-variant hover:bg-surface-container rounded-xl text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-colors active:scale-[0.98]"
+              >
+                <Power size={14} />
+                <span>Logg ut</span>
+              </button>
+            </div>
           </div>
         </aside>
       </div>
+
+      {/* ========================================================
+          4. MAIN CONTENT CONTAINER
+         ======================================================== */}
+      <main className="flex-grow min-w-0 transition-all duration-300 relative">
+        <Outlet />
+      </main>
 
       {/* Global HKM Assistent Chat Widget rendered once at layout level */}
       <HkmChatWidget />

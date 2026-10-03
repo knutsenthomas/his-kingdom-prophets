@@ -1,4 +1,39 @@
 User-agent: *
 Allow: /
+Disallow: /student/
+Disallow: /teacher/
+Disallow: /admin/
+Disallow: /email/
+Disallow: /login
+Disallow: /register
+Disallow: /interests
+Disallow: /complete-profile
+Disallow: /onboarding-welcome
 
+# Dedicated Generative Engine Optimization (GEO) Bot Directives
+User-agent: GPTBot
+Allow: /
+Disallow: /student/
+Disallow: /teacher/
+Disallow: /admin/
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /student/
+Disallow: /teacher/
+Disallow: /admin/
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Canonical Sitemap & LLM Knowledge Index
 Sitemap: https://hkpc.no/sitemap.xml

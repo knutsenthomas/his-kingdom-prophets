@@ -10,6 +10,7 @@ import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import SeoHead from '@/components/SeoHead';
 
 export default function AboutPage() {
   const navigate = useNavigate();
@@ -26,6 +27,47 @@ export default function AboutPage() {
 
   return (
     <div className="bg-[#F6F4F8] text-[#271f30] font-sans min-h-screen flex flex-col justify-between">
+      <SeoHead
+        title={isEn ? "About HKPC & Our Theological Foundation" : "Om HKPC & Teologisk Fundament"}
+        description={isEn 
+          ? "Learn about His Kingdom Prophetic Community, our biblical foundation, and founders Hilde Karin and Thomas Knutsen. Equipping the body of Christ."
+          : "Lær mer om His Kingdom Prophetic Community, vårt bibelske fundament og lederne Hilde Karin og Thomas Knutsen under His Kingdom Ministry."}
+        canonicalPath="/about"
+        keywords="om HKPC, bibelskole, Hilde Karin Knutsen, Thomas Knutsen, paktsteologi, åndelige gaver, His Kingdom Ministry, kristen utdanning"
+        schema={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "AboutPage",
+              "@id": "https://hkpc.no/about#webpage",
+              "url": "https://hkpc.no/about",
+              "name": isEn ? "About His Kingdom Prophetic Community" : "Om His Kingdom Prophetic Community",
+              "description": "Bakgrunn, teologisk fundament og lederskap for HKPC.",
+              "mainEntity": {
+                "@id": "https://hkpc.no/#organization"
+              }
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://hkpc.no/about#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Hjem",
+                  "item": "https://hkpc.no/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": isEn ? "About" : "Om oss",
+                  "item": "https://hkpc.no/about"
+                }
+              ]
+            }
+          ]
+        }}
+      />
       
       {/* Site Header */}
       <SiteHeader />

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, ExternalLink } from 'lucide-react';
 import CmsVisualToggle from '@/components/CmsVisualToggle';
 
 // Components & Shells
@@ -160,6 +160,37 @@ export default function App() {
   );
 }
 
+function StudentRedirect() {
+  useEffect(() => {
+    window.location.replace('https://app.hkpc.no');
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center font-sans">
+      <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border border-outline-variant/30 space-y-5">
+        <img 
+          src="/hkp-logo.png" 
+          alt="HKP Community Logo" 
+          className="w-16 h-16 rounded-full mx-auto object-contain shadow-xs animate-pulse" 
+        />
+        <div className="space-y-1">
+          <h2 className="text-xl font-bold text-primary font-serif">Videresender til HKP Community App...</h2>
+          <p className="text-xs text-on-surface-variant leading-relaxed">
+            Studieportalen, leksjoner, oppgaver og bønnefellesskapet er samlet i vår offisielle app på <strong>app.hkpc.no</strong>.
+          </p>
+        </div>
+        <a 
+          href="https://app.hkpc.no"
+          className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-gold hover:bg-[#c9ab68] text-primary font-bold text-sm shadow-sm transition-all"
+        >
+          <span>Åpne Community App nå</span>
+          <ExternalLink size={16} />
+        </a>
+      </div>
+    </div>
+  );
+}
+
 // Router wiring for all 42 views / sub-paths
 function AppRoutes() {
   return (
@@ -177,26 +208,14 @@ function AppRoutes() {
         <Route path="/complete-profile" element={<CompleteProfilePage />} />
         <Route path="/onboarding-welcome" element={<WelcomePage />} />
 
-        {/* Student Portal */}
-        <Route element={<StudentLayout />}>
-          <Route path="/student/dashboard" element={<StudentDashboard />} />
-          <Route path="/student/lesson" element={<LessonView />} />
-          <Route path="/student/video" element={<VideoView />} />
-          <Route path="/student/library" element={<LibraryView />} />
-          <Route path="/student/bible" element={<BibleView />} />
-          <Route path="/student/assignments" element={<AssignmentsPage />} />
-          <Route path="/student/notes" element={<NotesPage />} />
-          <Route path="/student/chat" element={<CommunityChatView />} />
-          <Route path="/student/profile" element={<StudentProfile />} />
-          <Route path="/student/partner" element={<AffiliatePortal />} />
-          <Route path="/student/support" element={<SupportCenter />} />
-          <Route path="/support/artikkel-logginn" element={<ArtikkelLoggInn />} />
-          <Route path="/support/artikkel-chat" element={<ArtikkelChat />} />
-          <Route path="/support/artikkel-bibelkalkulator" element={<ArtikkelBibelkalkulator />} />
-          <Route path="/support/artikkel-zoom" element={<ArtikkelZoom />} />
-          <Route path="/support/artikkel-veiledning" element={<ArtikkelVeiledning />} />
-          <Route path="/support/artikkel-tjenestegaver" element={<ArtikkelTjenestegaver />} />
-        </Route>
+        {/* Student Portal - Routed directly to HKP Community App */}
+        <Route path="/student/*" element={<StudentRedirect />} />
+        <Route path="/support/artikkel-logginn" element={<ArtikkelLoggInn />} />
+        <Route path="/support/artikkel-chat" element={<ArtikkelChat />} />
+        <Route path="/support/artikkel-bibelkalkulator" element={<ArtikkelBibelkalkulator />} />
+        <Route path="/support/artikkel-zoom" element={<ArtikkelZoom />} />
+        <Route path="/support/artikkel-veiledning" element={<ArtikkelVeiledning />} />
+        <Route path="/support/artikkel-tjenestegaver" element={<ArtikkelTjenestegaver />} />
 
         {/* Teacher / Faculty Portal */}
         <Route element={<TeacherLayout />}>

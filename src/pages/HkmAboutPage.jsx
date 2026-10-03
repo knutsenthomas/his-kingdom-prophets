@@ -11,6 +11,7 @@ import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import SeoHead from '@/components/SeoHead';
 
 export default function HkmAboutPage() {
   const navigate = useNavigate();
@@ -70,6 +71,49 @@ export default function HkmAboutPage() {
 
   return (
     <div className="bg-[#F6F4F8] text-[#271f30] font-sans min-h-screen flex flex-col justify-between">
+      <SeoHead
+        title={isEn ? "His Kingdom Ministry | Global Missions & Prophetic Teaching" : "His Kingdom Ministry | Misjon, Bønn & Forkynnelse"}
+        description={isEn 
+          ? "Discover His Kingdom Ministry founded by Hilde Karin and Thomas Knutsen. Equipping believers through media, missions, prayer gatherings, and Bible schools."
+          : "Bli kjent med His Kingdom Ministry ledet av Hilde Karin og Thomas Knutsen. Vi utruster kristne gjennom forkynnelse, podcast, bønnesamlinger og HKPC."}
+        canonicalPath="/hkm"
+        keywords="His Kingdom Ministry, HKM, Hilde Karin Knutsen, Thomas Knutsen, kristen misjon, podcast, YouTube forkynnelse, HKPC"
+        schema={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://hiskingdomministry.no/#organization",
+              "name": "His Kingdom Ministry",
+              "url": "https://hiskingdomministry.no",
+              "logo": "https://hkpc.no/logo.png",
+              "sameAs": [
+                "https://hkpc.no",
+                "https://hiskingdomdesigns.no",
+                "https://www.youtube.com/@hiskingdomministry"
+              ]
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://hkpc.no/hkm#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Hjem",
+                  "item": "https://hkpc.no/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "His Kingdom Ministry",
+                  "item": "https://hkpc.no/hkm"
+                }
+              ]
+            }
+          ]
+        }}
+      />
       
       {/* Site Header */}
       <SiteHeader />

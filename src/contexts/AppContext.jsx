@@ -2987,12 +2987,32 @@ export const AppProvider = ({ children }) => {
     }, 1200);
   };
 
+  const isStaffOrAdmin = useMemo(() => {
+    const email = user?.email?.toLowerCase();
+    const role = user?.role;
+    const isSpecialAdmin = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'].includes(email);
+    return Boolean(user && (role === 'teacher' || role === 'admin' || role === 'superadmin' || role === 'staff' || role === 'employee' || isSpecialAdmin));
+  }, [user]);
+
+  // Privacy-enforcing class list: for students, ONLY name is available. For staff/teachers/admins, full details are available.
+  const classList = useMemo(() => {
+    if (isStaffOrAdmin) {
+      return students;
+    }
+    return students.map(s => ({
+      id: s.id,
+      name: s.name
+    }));
+  }, [students, isStaffOrAdmin]);
+
   return (
     <AppContext.Provider value={{
       user,
       setUser,
       role: user?.role || 'student',
       isLoggedIn,
+      isStaffOrAdmin,
+      classList,
       selectedInterests,
       setSelectedInterests,
       courses,

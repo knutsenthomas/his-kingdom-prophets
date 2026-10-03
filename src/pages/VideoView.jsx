@@ -4,12 +4,12 @@ import { useApp } from '@/contexts/AppContext';
 import { 
   Play, Pause, SkipForward, Volume2, MessageSquare, Download, 
   Send, Calendar, Clock, FileText, ClipboardList, BookOpen, ExternalLink,
-  Maximize, Minimize, ChevronLeft, Users
+  Maximize, Minimize, ChevronLeft, Users, Shield, Lock, ArrowRight
 } from 'lucide-react';
 
 export default function VideoView() {
   const navigate = useNavigate();
-  const { user, showToast, courses } = useApp();
+  const { user, showToast, courses, students, classList, isStaffOrAdmin } = useApp();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState("15:20");
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -175,6 +175,7 @@ export default function VideoView() {
     { id: 'transcript', label: 'Transkript & notater', Icon: FileText, count: transcript.length },
     { id: 'guides', label: 'Studieguider', Icon: BookOpen, count: studyGuides.length },
     { id: 'assignments', label: 'Oppgaver', Icon: ClipboardList, count: assignments.length },
+    { id: 'klasseliste', label: 'Klasseliste', Icon: Users, count: (classList || students || []).length },
   ];
 
   return (
@@ -409,6 +410,108 @@ export default function VideoView() {
                   )}
                 </div>
               )}
+
+              {/* Klasseliste Tab: Kun navn tilgjengelig for studenter. Utvidet info kun for ansatte, lærere og admin. */}
+              {activeClassroomTab === 'klasseliste' && (
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-outline-variant/20">
+                    <div>
+                      <h3 className="font-serif font-bold text-primary text-lg flex items-center gap-2">
+                        <span>Klasseliste</span>
+                        <span className="text-xs font-sans px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
+                          {(classList || students || []).length} studenter
+                        </span>
+                      </h3>
+                      <p className="text-xs text-on-surface-variant font-medium mt-1">
+                        Oversikt over studenter i dette kullet.
+                      </p>
+                    </div>
+
+                    {!isStaffOrAdmin ? (
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 text-[11px] font-semibold">
+                        <Shield size={13} className="text-primary" />
+                        <span>Skjermet visning (kun navn)</span>
+                      </div>
+                    ) : (
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-bold">
+                        <Lock size={13} className="text-amber-600" />
+                        <span>Lærer-/Admin-tilgang (utvidet info)</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {!isStaffOrAdmin ? (
+                    /* Regular student view: ONLY NAME IS ACCESSIBLE AND VISIBLE */
+                    <div className="space-y-3">
+                      <div className="p-3 bg-surface-container-lowest border border-outline-variant/30 rounded-xl text-xs text-on-surface-variant flex items-center gap-2">
+                        <Shield size={16} className="text-primary shrink-0" />
+                        <span>I henhold til skolens personvernregler er kun medstudenters navn tilgjengelig i klasselistene.</span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 pt-1">
+                        {(classList || students || []).map((student) => (
+                          <div
+                            key={student.id}
+                            className="p-3 rounded-xl border border-outline-variant/30 bg-surface-container-lowest flex items-center gap-3 transition-all hover:border-primary/30"
+                          >
+                            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center shrink-0">
+                              {student.name?.charAt(0) || 'S'}
+                            </div>
+                            <span className="font-semibold text-xs text-primary truncate">
+                              {student.name}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    /* Staff / Teacher / Admin view: Extended info */
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                        {(students || []).map((student) => (
+                          <div
+                            key={student.id}
+                            className="p-4 rounded-xl border border-outline-variant/30 bg-surface-container-lowest flex flex-col justify-between gap-3 hover:shadow-sm transition-all"
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex items-center gap-3 min-w-0">
+                                <div className="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold text-sm flex items-center justify-center shrink-0">
+                                  {student.avatar || student.name?.charAt(0) || 'S'}
+                                </div>
+                                <div className="min-w-0">
+                                  <h4 className="font-bold text-sm text-primary truncate">{student.name}</h4>
+                                  <p className="text-xs text-on-surface-variant truncate">{student.email || 'Ingen registrert e-post'}</p>
+                                </div>
+                              </div>
+                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                                student.status === 'Fullført' ? 'bg-green-100 text-green-700' :
+                                student.status === 'Tilsyn trengs' ? 'bg-amber-100 text-amber-700' :
+                                'bg-blue-100 text-blue-700'
+                              }`}>
+                                {student.status || 'Aktiv'}
+                              </span>
+                            </div>
+
+                            <div className="space-y-1.5 pt-2 border-t border-outline-variant/20 text-xs">
+                              <div className="flex justify-between text-on-surface-variant text-[11px]">
+                                <span>Fremgang ({student.currentCourse || 'Profetisk Grunnkurs'})</span>
+                                <span className="font-bold text-primary">{student.progress ?? 0}%</span>
+                              </div>
+                              <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                <div className="bg-primary h-full rounded-full" style={{ width: `${student.progress || 0}%` }} />
+                              </div>
+                              <div className="flex justify-between items-center text-[10px] text-on-surface-variant pt-1">
+                                <span>Sist aktiv: {student.lastActive || 'Nylig'}</span>
+                                {student.phone && <span>Tlf: {student.phone}</span>}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -548,7 +651,22 @@ export default function VideoView() {
                 ) : (
                   /* Classmates chat list for DM */
                   <div className="space-y-3">
-                    <p className="text-[10px] text-outline font-bold uppercase tracking-wider mb-2">Velg en faglærer eller student:</p>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-[10px] text-outline font-bold uppercase tracking-wider">
+                        Velg mottaker:
+                      </p>
+                      {!isStaffOrAdmin ? (
+                        <span className="inline-flex items-center gap-1 text-[9px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                          <Shield size={10} className="text-primary" />
+                          <span>Kun navn</span>
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                          <Lock size={10} className="text-amber-600" />
+                          <span>Utvidet</span>
+                        </span>
+                      )}
+                    </div>
                     <div className="space-y-2">
                       {participants.map((p) => (
                         <button
@@ -557,21 +675,32 @@ export default function VideoView() {
                           onClick={() => setActiveDmUser(p)}
                           className="w-full p-2.5 text-left border border-outline-variant/30 hover:border-primary/45 bg-[#F6F4F8] hover:bg-[#f3e8ff]/20 rounded-xl transition-all flex gap-3 items-center group active:scale-[0.98]"
                         >
-                          <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 relative border border-primary/5">
-                            {p.initials}
-                            <span className={`absolute -right-0.5 -bottom-0.5 w-2.5 h-2.5 rounded-full border border-white ${
-                              p.status === 'Borte' ? 'bg-amber-400' : 'bg-green-500'
-                            }`} />
-                          </div>
-                          <div className="min-w-0 flex-grow">
-                            <div className="flex items-center justify-between gap-2">
-                              <h4 className="text-xs font-bold text-primary truncate leading-tight group-hover:text-primary transition-colors">{p.name}</h4>
-                              <span className="text-[8px] bg-primary/5 text-primary border border-primary/10 rounded px-1.5 py-0.5 font-bold uppercase tracking-wider shrink-0">{p.role === 'teacher' ? 'Lærer' : 'Student'}</span>
+                          {isStaffOrAdmin ? (
+                            <>
+                              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 relative border border-primary/5">
+                                {p.initials}
+                                <span className={`absolute -right-0.5 -bottom-0.5 w-2.5 h-2.5 rounded-full border border-white ${
+                                  p.status === 'Borte' ? 'bg-amber-400' : 'bg-green-500'
+                                }`} />
+                              </div>
+                              <div className="min-w-0 flex-grow">
+                                <div className="flex items-center justify-between gap-2">
+                                  <h4 className="text-xs font-bold text-primary truncate leading-tight group-hover:text-primary transition-colors">{p.name}</h4>
+                                  <span className="text-[8px] bg-primary/5 text-primary border border-primary/10 rounded px-1.5 py-0.5 font-bold uppercase tracking-wider shrink-0">{p.role === 'teacher' ? 'Lærer' : 'Student'}</span>
+                                </div>
+                                <p className="text-[9px] text-[#72787e] font-semibold mt-0.5 truncate flex items-center gap-1">
+                                  {p.status}
+                                </p>
+                              </div>
+                            </>
+                          ) : (
+                            /* Regular student: ONLY NAME IS VISIBLE AND ACCESSIBLE */
+                            <div className="min-w-0 flex-grow py-0.5">
+                              <h4 className="text-xs font-bold text-primary truncate leading-tight group-hover:text-primary transition-colors">
+                                {p.name}
+                              </h4>
                             </div>
-                            <p className="text-[9px] text-[#72787e] font-semibold mt-0.5 truncate flex items-center gap-1">
-                              {p.status}
-                            </p>
-                          </div>
+                          )}
                           <ChevronLeft size={14} className="rotate-180 text-outline group-hover:text-primary transition-colors shrink-0" />
                         </button>
                       ))}

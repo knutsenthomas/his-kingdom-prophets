@@ -7,6 +7,7 @@ import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import SeoHead from '@/components/SeoHead';
 
 export default function AccessibilityPage() {
   const navigate = useNavigate();
@@ -16,6 +17,43 @@ export default function AccessibilityPage() {
 
   return (
     <div className="bg-[#F6F4F8] min-h-screen flex flex-col font-sans text-slate-800">
+      <SeoHead
+        title={isEn ? "Accessibility Statement (WCAG 2.1) | HKPC" : "Tilgjengelighetserklæring (WCAG 2.1) | HKPC"}
+        description={isEn 
+          ? "Accessibility statement for His Kingdom Prophetic Community (HKPC). We strive to ensure universal accessibility according to WCAG 2.1 AA."
+          : "Tilgjengelighetserklæring for His Kingdom Prophetic Community (HKPC). Vi etterlever standarder for universell utforming iht. WCAG 2.1 AA."}
+        canonicalPath="/accessibility"
+        keywords="tilgjengelighet, universell utforming, WCAG, UU, accessibility HKPC"
+        schema={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "https://hkpc.no/accessibility#webpage",
+              "url": "https://hkpc.no/accessibility",
+              "name": isEn ? "Accessibility Statement" : "Tilgjengelighetserklæring"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://hkpc.no/accessibility#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Hjem",
+                  "item": "https://hkpc.no/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": isEn ? "Accessibility" : "Tilgjengelighet",
+                  "item": "https://hkpc.no/accessibility"
+                }
+              ]
+            }
+          ]
+        }}
+      />
       {/* Header */}
       <SiteHeader />
 

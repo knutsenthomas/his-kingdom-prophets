@@ -17,10 +17,15 @@ export default function SiteHeader() {
   const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
   const cleanEmail = user?.email?.toLowerCase();
   const isAdmin = Boolean(user && (user.role === 'admin' || user.role === 'superadmin' || ADMIN_EMAILS.includes(cleanEmail)));
+  const isTeacherOrAdmin = Boolean(user && (user.role === 'teacher' || user.role === 'admin' || user.role === 'superadmin' || ADMIN_EMAILS.includes(cleanEmail)));
 
-  const portalPath = user?.role === 'teacher' || user?.role === 'admin' 
-    ? '/teacher/dashboard' 
-    : '/student/dashboard';
+  const handlePortalNavigation = () => {
+    if (isTeacherOrAdmin) {
+      navigate('/teacher/dashboard');
+    } else {
+      window.open('https://app.hkpc.no', '_blank', 'noopener,noreferrer');
+    }
+  };
 
   // Close dropdown on click outside or escape key
   useEffect(() => {
@@ -123,7 +128,7 @@ export default function SiteHeader() {
 
             {user ? (
               <button 
-                onClick={() => { setIsMobileMenuOpen(false); navigate(portalPath); }} 
+                onClick={() => { setIsMobileMenuOpen(false); handlePortalNavigation(); }} 
                 className="mobile-action-btn"
               >
                 {language === 'no' ? 'Min side (Portal)' : 'My Portal'}
@@ -207,7 +212,7 @@ export default function SiteHeader() {
             <button 
               onClick={() => {
                 if (user) {
-                  navigate(portalPath);
+                  handlePortalNavigation();
                 } else {
                   setIsLoginMenuOpen(prev => !prev);
                 }

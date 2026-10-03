@@ -7,6 +7,7 @@ import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import SeoHead from '@/components/SeoHead';
 
 export default function TermsOfServicePage() {
   const navigate = useNavigate();
@@ -16,6 +17,43 @@ export default function TermsOfServicePage() {
 
   return (
     <div className="bg-[#F6F4F8] min-h-screen flex flex-col font-sans text-slate-800">
+      <SeoHead
+        title={isEn ? "Terms of Service | HKPC" : "Brukervilkår & Betingelser | HKPC"}
+        description={isEn 
+          ? "Terms of Service and conditions of enrollment for His Kingdom Prophetic Community (HKPC)."
+          : "Brukervilkår og avtalevilkår for studenter og brukere av His Kingdom Prophetic Community (HKPC)."}
+        canonicalPath="/terms"
+        keywords="vilkår HKPC, terms of service bibelskole, betingelser, studieavtale"
+        schema={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "https://hkpc.no/terms#webpage",
+              "url": "https://hkpc.no/terms",
+              "name": isEn ? "Terms of Service" : "Brukervilkår"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://hkpc.no/terms#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Hjem",
+                  "item": "https://hkpc.no/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": isEn ? "Terms of Service" : "Brukervilkår",
+                  "item": "https://hkpc.no/terms"
+                }
+              ]
+            }
+          ]
+        }}
+      />
       {/* Header */}
       <SiteHeader />
 

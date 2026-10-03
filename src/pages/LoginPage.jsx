@@ -31,7 +31,7 @@ export default function LoginPage() {
   const [errorMessage, setErrorMessage] = useState('');
 
   const params = new URLSearchParams(location.search);
-  const redirectTarget = params.get('redirect') || '/admin/cms';
+  const redirectTarget = params.get('redirect') || '/teacher/dashboard';
 
   const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
   const cleanEmail = user?.email?.toLowerCase();
@@ -134,10 +134,10 @@ export default function LoginPage() {
             </div>
 
             <button
-              onClick={() => navigate('/admin/cms')}
+              onClick={() => navigate('/teacher/dashboard')}
               className="w-full h-12 rounded-xl bg-[#3c096c] hover:bg-[#240046] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-purple-950/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>Gå til Admin CMS</span>
+              <span>Gå til Admin Dashbord</span>
               <ArrowRight size={15} />
             </button>
 

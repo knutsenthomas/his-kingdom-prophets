@@ -7,6 +7,7 @@ import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import SeoHead from '@/components/SeoHead';
 
 export default function PrivacyPolicyPage() {
   const navigate = useNavigate();
@@ -16,6 +17,43 @@ export default function PrivacyPolicyPage() {
 
   return (
     <div className="bg-[#F6F4F8] min-h-screen flex flex-col font-sans text-slate-800">
+      <SeoHead
+        title={isEn ? "Privacy Policy (GDPR) | HKPC" : "Personvernerklæring (GDPR) | HKPC"}
+        description={isEn 
+          ? "Privacy Policy for His Kingdom Prophetic Community (HKPC). Read how we protect and process personal data in compliance with GDPR."
+          : "Personvernerklæring for His Kingdom Prophetic Community (HKPC). Les hvordan vi behandler og sikrer personopplysninger i tråd med GDPR."}
+        canonicalPath="/personvern"
+        keywords="personvern HKPC, GDPR, personopplysninger, personvernerklæring bibelskole"
+        schema={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "https://hkpc.no/personvern#webpage",
+              "url": "https://hkpc.no/personvern",
+              "name": isEn ? "Privacy Policy" : "Personvernerklæring"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://hkpc.no/personvern#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Hjem",
+                  "item": "https://hkpc.no/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": isEn ? "Privacy Policy" : "Personvernerklæring",
+                  "item": "https://hkpc.no/personvern"
+                }
+              ]
+            }
+          ]
+        }}
+      />
       {/* Header */}
       <SiteHeader />
 

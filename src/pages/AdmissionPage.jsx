@@ -10,6 +10,7 @@ import {
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import SeoHead from '@/components/SeoHead';
 
 const DRAFT_KEY = 'hkpc_application_draft_v1';
 const DRAFT_STEP_KEY = 'hkpc_application_draft_step';
@@ -793,6 +794,61 @@ export default function AdmissionPage() {
 
   return (
     <div className="bg-[#F6F4F8] text-[#271f30] font-sans min-h-screen">
+      <SeoHead
+        title={language === 'en' ? "Admissions & Tuition 2027 | His Kingdom Prophetic Community" : "Opptak & Priser 2027 | His Kingdom Prophetic Community"}
+        description={language === 'en' 
+          ? "Apply for His Kingdom Prophetic Community 2027. Application period Jan 1 – June 30. Tuition $1,000 USD (10,000 NOK). On-site kickoff in Norway August 20–22, 2027."
+          : "Søk opptak ved His Kingdom Prophetic Community for skoleåret 2027. Søkeperiode 1. jan – 30. juni. Studieavgift 10 000 NOK. Kickoff i Norge 20.–22. august 2027."}
+        canonicalPath="/admission"
+        keywords="HKPC opptak, bibelskole opptak, søknad bibelskole, profetisk utrustning, studieavgift, priser bibelskole 2027, His Kingdom Ministry"
+        schema={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Course",
+              "@id": "https://hkpc.no/#course-year1",
+              "name": "His Kingdom Prophetic Community - 1. Studieår (Track 1)",
+              "courseCode": "HKPC-Y1",
+              "description": "1-årig nettbasert studie for bibelsk fundament, personlig relasjon til Jesus og praktisk utrustning i Åndens profetiske gaver. Inkluderer kickoff i Norge 20.–22. august 2027.",
+              "provider": {
+                "@type": "EducationalOrganization",
+                "name": "His Kingdom Prophetic Community",
+                "url": "https://hkpc.no"
+              },
+              "educationalLevel": "Bibelskole & Disippeltrening",
+              "educationalCredentialAwarded": "Kursbevis i Profetisk Utrustning",
+              "coursePrerequisites": "Minst 18 år ved studiestart. Søknadsskjema.",
+              "offers": {
+                "@type": "Offer",
+                "price": "10000",
+                "priceCurrency": "NOK",
+                "category": "Tuition",
+                "availability": "https://schema.org/InStock",
+                "validFrom": "2027-01-01",
+                "url": "https://hkpc.no/admission"
+              }
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://hkpc.no/admission#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Hjem",
+                  "item": "https://hkpc.no/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Opptak & Priser",
+                  "item": "https://hkpc.no/admission"
+                }
+              ]
+            }
+          ]
+        }}
+      />
       
       {/* Site Header */}
       <SiteHeader />

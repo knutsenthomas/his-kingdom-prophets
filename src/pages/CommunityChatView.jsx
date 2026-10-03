@@ -5,13 +5,13 @@ import {
   Hash, Send, Pin, Users, MessageSquare, Smile, Paperclip, 
   ChevronLeft, ChevronRight, User, Bell, Search, ShieldAlert,
   GraduationCap, BookOpen, Volume2, Globe, Heart, Award, FileText, CheckCircle,
-  Trash2, Plus, Circle, ClipboardList
+  Trash2, Plus, Circle, ClipboardList, Shield, Lock
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function CommunityChatView() {
   const navigate = useNavigate();
-  const { user, showToast, courses, language } = useApp();
+  const { user, showToast, courses, language, isStaffOrAdmin } = useApp();
   
   // Responsive sidebar toggles for mobile view
   const [showSidebar, setShowSidebar] = useState(true);
@@ -829,14 +829,27 @@ export default function CommunityChatView() {
                 <div className="space-y-6">
                   
                   {/* Section Title */}
-                  <div>
-                    <h3 className="font-serif text-sm font-extrabold text-primary flex items-center gap-2">
-                      <Users size={16} />
-                      <span>Gruppe-deltakere</span>
-                    </h3>
-                    <p className="text-[10px] text-outline font-semibold uppercase mt-0.5 tracking-wider">
-                      Studiegruppens medlemmer ({participants.length})
-                    </p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-serif text-sm font-extrabold text-primary flex items-center gap-2">
+                        <Users size={16} />
+                        <span>Gruppe-deltakere</span>
+                      </h3>
+                      <p className="text-[10px] text-outline font-semibold uppercase mt-0.5 tracking-wider">
+                        Studiegruppens medlemmer ({participants.length})
+                      </p>
+                    </div>
+                    {!isStaffOrAdmin ? (
+                      <span className="inline-flex items-center gap-1 text-[9px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full" title="Personvern: Kun navn er synlig for medstudenter">
+                        <Shield size={10} className="text-primary" />
+                        <span>Kun navn</span>
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                        <Lock size={10} className="text-amber-600" />
+                        <span>Utvidet</span>
+                      </span>
+                    )}
                   </div>
 
                   {/* Active channels summary */}
@@ -855,36 +868,48 @@ export default function CommunityChatView() {
                     <p className="text-[10px] text-outline font-bold uppercase tracking-wider">
                       Klikk for å sende direktemelding:
                     </p>
-                    <div className="space-y-2.5">
+                    <div className="space-y-2">
                       {participants.map((p) => (
                         <button
                           key={p.id}
                           onClick={() => handleSelectDm(p)}
-                          className="w-full text-left p-2 border border-slate-100 hover:border-[#561291]/35 hover:bg-[#f3e8ff]/10 rounded-xl transition-all flex gap-3.5 items-center group active:scale-[0.98]"
+                          className="w-full text-left p-2.5 border border-slate-100 hover:border-[#561291]/35 hover:bg-[#f3e8ff]/10 rounded-xl transition-all flex gap-3.5 items-center group active:scale-[0.98]"
                         >
-                          <div className="relative shrink-0">
-                            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-extrabold text-[11px]">
-                              {p.initials}
-                            </div>
-                            <span className={`absolute -right-0.5 -bottom-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${p.statusColor}`} />
-                          </div>
-                          <div className="min-w-0 flex-grow">
-                            <div className="flex items-center justify-between gap-1.5">
+                          {isStaffOrAdmin ? (
+                            <>
+                              <div className="relative shrink-0">
+                                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-extrabold text-[11px]">
+                                  {p.initials}
+                                </div>
+                                <span className={`absolute -right-0.5 -bottom-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${p.statusColor}`} />
+                              </div>
+                              <div className="min-w-0 flex-grow">
+                                <div className="flex items-center justify-between gap-1.5">
+                                  <h4 className="text-xs font-bold text-slate-800 truncate leading-tight group-hover:text-primary transition-colors">
+                                    {p.name}
+                                  </h4>
+                                </div>
+                                <div className="flex items-center gap-1.5 mt-0.5">
+                                  <span className={`text-[8px] font-bold px-1 rounded uppercase tracking-wider ${
+                                    p.role === 'Mentor' ? 'bg-primary/5 text-primary border border-primary/10' : 'bg-slate-100 text-slate-600'
+                                  }`}>
+                                    {p.role === 'Mentor' ? 'Lærer' : 'Student'}
+                                  </span>
+                                  <span className="text-[9px] text-[#72787e] font-semibold truncate">
+                                    {p.status}
+                                  </span>
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            /* Regular student view: ONLY NAME IS ACCESSIBLE AND VISIBLE */
+                            <div className="min-w-0 flex-grow py-0.5">
                               <h4 className="text-xs font-bold text-slate-800 truncate leading-tight group-hover:text-primary transition-colors">
                                 {p.name}
                               </h4>
                             </div>
-                            <div className="flex items-center gap-1.5 mt-0.5">
-                              <span className={`text-[8px] font-bold px-1 rounded uppercase tracking-wider ${
-                                p.role === 'Mentor' ? 'bg-primary/5 text-primary border border-primary/10' : 'bg-slate-100 text-slate-600'
-                              }`}>
-                                {p.role === 'Mentor' ? 'Lærer' : 'Student'}
-                              </span>
-                              <span className="text-[9px] text-[#72787e] font-semibold truncate">
-                                {p.status}
-                              </span>
-                            </div>
-                          </div>
+                          )}
+                          <ChevronRight size={14} className="text-slate-400 group-hover:text-primary transition-colors shrink-0 ml-auto" />
                         </button>
                       ))}
                     </div>

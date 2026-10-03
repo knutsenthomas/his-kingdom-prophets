@@ -7,6 +7,7 @@ import logo from '@/assets/logo.png';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import SeoHead from '@/components/SeoHead';
 
 export default function ContactSupportPage() {
   const navigate = useNavigate();
@@ -52,6 +53,45 @@ export default function ContactSupportPage() {
 
   return (
     <div className="bg-[#F6F4F8] min-h-screen flex flex-col font-sans text-slate-800">
+      <SeoHead
+        title={isEn ? "Contact & Support | His Kingdom Prophetic Community" : "Kontakt & Støtte | His Kingdom Prophetic Community"}
+        description={isEn 
+          ? "Get in touch with the team at His Kingdom Prophetic Community (HKPC). We are here to answer questions about admissions, studies, and programs."
+          : "Ta kontakt med oss i His Kingdom Prophetic Community (HKPC). Vi svarer gjerne på spørsmål om opptak, studieløp og undervisning."}
+        canonicalPath="/support"
+        keywords="kontakt HKPC, support bibelskole, henvendelser, His Kingdom Ministry, spørsmål opptak"
+        schema={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "ContactPage",
+              "@id": "https://hkpc.no/support#webpage",
+              "url": "https://hkpc.no/support",
+              "name": isEn ? "Contact HKPC" : "Kontakt HKPC",
+              "description": "Kontaktinformasjon og kontaktskjema for His Kingdom Prophetic Community."
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://hkpc.no/support#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Hjem",
+                  "item": "https://hkpc.no/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": isEn ? "Contact & Support" : "Kontakt & Støtte",
+                  "item": "https://hkpc.no/support"
+                }
+              ]
+            }
+          ]
+        }}
+      />
+      
       {/* Site Header */}
       <SiteHeader />
 
