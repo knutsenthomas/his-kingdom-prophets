@@ -86,8 +86,8 @@
   object-fit: contain;
 }
 
-.hkpc-landing .brand .brand-name,
-.hkpc-landing .brand span {
+.hkpc-landing header .brand .brand-name,
+.hkpc-landing header .brand > span {
   font-weight: 700;
   font-size: 20px;
   line-height: 1.2;
@@ -984,25 +984,33 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 12px;
-  max-width: 380px;
+  max-width: 480px;
 }
 
 .hkpc-landing .footer-brand-col .brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   text-decoration: none;
   color: var(--ink, #1f1d2b);
 }
 
 .hkpc-landing .footer-brand-col .brand img {
-  height: 38px;
+  height: 42px;
   width: auto;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
-.hkpc-landing .footer-brand-col .brand .brand-name,
-.hkpc-landing .footer-brand-col .brand span {
+.hkpc-landing .footer-brand-col .brand-text-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  text-align: left;
+}
+
+.hkpc-landing .footer-brand-col .brand .brand-name {
   font-family: Georgia, serif;
   font-size: clamp(14px, 4vw, 19px);
   font-weight: 700;
@@ -1012,12 +1020,18 @@
   display: block;
 }
 
-.hkpc-landing .footer-tagline {
-  font-family: 'DM Sans', Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--muted, #696871);
+.hkpc-landing .footer-tagline,
+.hkpc-landing .footer-tagline span {
+  font-family: 'DM Sans', Arial, sans-serif !important;
+  font-size: clamp(11.5px, 3.2vw, 13.5px) !important;
+  font-weight: 400 !important;
+  line-height: 1.35 !important;
+  letter-spacing: normal !important;
+  color: #64748b !important;
   margin: 0;
+  white-space: nowrap;
+  display: block;
+  text-align: left;
 }
 
 /* Links & Nav */
@@ -1135,6 +1149,7 @@
   }
   .hkpc-landing .footer-brand-col {
     align-items: center;
+    justify-content: center;
     text-align: center;
     gap: 12px;
     max-width: 100%;
@@ -1148,15 +1163,17 @@
   .hkpc-landing .footer-brand-col .brand img {
     height: 38px;
   }
-  .hkpc-landing .footer-brand-col .brand span {
+  .hkpc-landing .footer-brand-col .brand-text-col {
     text-align: left;
+    align-items: flex-start;
   }
   .hkpc-landing .footer-tagline {
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: clamp(11.5px, 3.2vw, 13px);
+    line-height: 1.35;
     color: #64748b;
-    max-width: 300px;
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
+    text-align: left;
   }
   .hkpc-landing .footer-links-col {
     width: 100%;

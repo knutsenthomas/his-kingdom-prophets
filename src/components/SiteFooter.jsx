@@ -35,16 +35,18 @@ export default function SiteFooter() {
             <div className="footer-brand-col">
               <a className="brand" href="/" onClick={handleLogoClick}>
                 <img src="/assets/logo.png" alt="His Kingdom Prophetic Community" />
-                <span className="brand-name">
-                  <CmsText slug="landing-footer-title" fallback="His Kingdom Prophetic Community" />
-                </span>
+                <div className="brand-text-col">
+                  <span className="brand-name">
+                    <CmsText slug="landing-footer-title" fallback="His Kingdom Prophetic Community" />
+                  </span>
+                  <p className="footer-tagline">
+                    <CmsText 
+                      slug="landing-footer-tagline" 
+                      fallback={language === 'no' ? 'Forankret i Skriften. Utrustet til tjeneste.' : 'Grounded in Scripture. Equipped for ministry.'} 
+                    />
+                  </p>
+                </div>
               </a>
-              <p className="footer-tagline">
-                <CmsText 
-                  slug="landing-footer-tagline" 
-                  fallback={language === 'no' ? 'Forankret i Skriften. Utrustet til tjeneste.' : 'Grounded in Scripture. Equipped for ministry.'} 
-                />
-              </p>
             </div>
 
             <div className="footer-links-col">
