@@ -9,17 +9,6 @@ import {
   Mail, MapPin, Phone, Save, ShieldCheck, Sparkles, User, Video, XCircle
 } from 'lucide-react';
 
-const AVATAR_OPTIONS = [
-  'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=200',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
-  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200',
-  'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=200',
-  'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200',
-  'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=200',
-  'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200',
-  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200',
-];
-
 const SECTION_TABS = [
   { id: 'profile', label: 'Lærerprofil', Icon: User },
   { id: 'account', label: 'Konto', Icon: ShieldCheck },
@@ -42,6 +31,8 @@ export default function TeacherProfile() {
   const [emailDraft, setEmailDraft] = useState(user?.email || '');
   const [pwDraft, setPwDraft] = useState({ current: '', next: '', confirm: '' });
   const [showPw, setShowPw] = useState({ current: false, next: false, confirm: false });
+  const fileInputRef = useRef(null);
+
   const [draft, setDraft] = useState({
     name: user?.name || '',
     title: user?.title || '',
@@ -54,8 +45,25 @@ export default function TeacherProfile() {
     address: user?.address || '',
     birthDate: user?.birthDate || '',
     bio: user?.bio || '',
-    avatar: user?.avatar || '',
+    avatar: (user?.avatar && !user.avatar.includes('unsplash')) ? user.avatar : '',
   });
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        showToast("Bildet må være under 2 MB.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setDraft(prev => ({ ...prev, avatar: reader.result }));
+        setShowAvatarPicker(false);
+        showToast("Profilbilde oppdatert! Husk å lagre profilen.");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const [addressSuggestions, setAddressSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -185,7 +193,7 @@ export default function TeacherProfile() {
       address: user?.address || '',
       birthDate: user?.birthDate || '',
       bio: user?.bio || '',
-      avatar: user?.avatar || '',
+      avatar: (user?.avatar && !user.avatar.includes('unsplash')) ? user.avatar : '',
     });
     setEmailDraft(user?.email || '');
   }, [user]);
@@ -240,7 +248,7 @@ export default function TeacherProfile() {
       address: user?.address || '',
       birthDate: user?.birthDate || '',
       bio: user?.bio || '',
-      avatar: user?.avatar || '',
+      avatar: (user?.avatar && !user.avatar.includes('unsplash')) ? user.avatar : '',
     });
   };
 
@@ -264,7 +272,7 @@ export default function TeacherProfile() {
             <div className="flex flex-col md:flex-row md:items-center gap-6 min-w-0">
               {/* Circular Avatar with minimal white border & drop shadow */}
               <div className="relative w-24 h-24 md:w-32 md:h-32 shrink-0 -mt-12 md:-mt-16 z-10" data-purpose="image-wrapper">
-                {draft.avatar ? (
+                {draft.avatar && !draft.avatar.includes('unsplash') ? (
                   <img
                     src={draft.avatar}
                     alt={draft.name || 'Min lærerprofil'}
@@ -274,10 +282,10 @@ export default function TeacherProfile() {
                   />
                 ) : (
                   <div
-                    className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-xl bg-primary/10 text-primary flex items-center justify-center cursor-pointer hover:opacity-95 transition-all"
+                    className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-xl bg-purple-100 text-purple-900 font-bold font-serif text-3xl md:text-4xl flex items-center justify-center cursor-pointer hover:opacity-95 transition-all"
                     onClick={() => setShowAvatarPicker(true)}
                   >
-                    <User size={40} />
+                    {(draft.name || user?.name || 'HK').trim().split(/\s+/).map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'HK'}
                   </div>
                 )}
                 <button
@@ -516,11 +524,11 @@ export default function TeacherProfile() {
                 <h2 className="font-serif text-base font-bold text-primary mb-4"><CmsText slug="profile-section-preview" fallback="Forhåndsvisning" /></h2>
                 <div className="border border-outline-variant/40 rounded-xl p-4 bg-surface-container-lowest">
                   <div className="flex items-center gap-3">
-                    {draft.avatar ? (
+                    {draft.avatar && !draft.avatar.includes('unsplash') ? (
                       <img src={draft.avatar} alt={draft.name} className="w-14 h-14 rounded-xl object-cover border border-outline-variant/40 animate-fade-in" />
                     ) : (
-                      <div className="w-14 h-14 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-outline-variant/40">
-                        <User size={24} />
+                      <div className="w-14 h-14 rounded-xl bg-purple-100 text-purple-900 border border-purple-200 font-bold text-base flex items-center justify-center">
+                        {(draft.name || user?.name || 'HK').trim().split(/\s+/).map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'HK'}
                       </div>
                     )}
                     <div className="min-w-0">
@@ -623,25 +631,55 @@ export default function TeacherProfile() {
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowAvatarPicker(false)} />
             <motion.div initial={{ scale: 0.95, opacity: 0, y: 16 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0 }} className="bg-white rounded-2xl shadow-2xl w-full max-w-sm z-10 overflow-hidden">
-              <div className="bg-primary text-white px-6 py-5 flex items-center justify-between">
+              <div className="bg-[#561291] text-white px-6 py-5 flex items-center justify-between">
                 <div>
-                  <h3 className="font-serif text-lg font-bold"><CmsText slug="profile-avatar-modal-title" fallback="Velg profilbilde" /></h3>
-                  <p className="text-[11px] text-white/65 font-medium mt-0.5"><CmsText slug="profile-avatar-modal-desc" fallback="Klikk på et bilde for å velge det" /></p>
+                  <h3 className="font-serif text-lg font-bold"><CmsText slug="profile-avatar-modal-title" fallback="Profilbilde" /></h3>
+                  <p className="text-[11px] text-white/65 font-medium mt-0.5"><CmsText slug="profile-avatar-modal-desc" fallback="Last opp eget bilde eller bruk rene monogram-initialer" /></p>
                 </div>
                 <button onClick={() => setShowAvatarPicker(false)} className="p-2 hover:bg-white/10 rounded-lg transition-colors"><XCircle size={18} /></button>
               </div>
-              <div className="p-5 grid grid-cols-4 gap-3">
-                {AVATAR_OPTIONS.map(url => (
-                  <button key={url} onClick={() => { set('avatar', url); setShowAvatarPicker(false); }} className={`relative rounded-xl overflow-hidden border-4 transition-all hover:scale-105 ${draft.avatar === url ? 'border-primary shadow-md' : 'border-transparent'}`}>
-                    <img src={url} alt="avatar option" className="w-full h-full aspect-square object-cover" />
-                    {draft.avatar === url && <div className="absolute inset-0 bg-primary/20 flex items-center justify-center"><CheckCircle2 size={20} className="text-white drop-shadow" /></div>}
+
+              <div className="p-6 flex flex-col items-center gap-5">
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  className="hidden" 
+                  accept="image/*" 
+                  onChange={handleImageUpload} 
+                />
+
+                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-purple-100 shadow-md flex items-center justify-center bg-purple-50">
+                  {draft.avatar && !draft.avatar.includes('unsplash') ? (
+                    <img src={draft.avatar} alt="Valgt bilde" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-purple-100 text-purple-900 font-bold font-serif text-3xl flex items-center justify-center">
+                      {(draft.name || user?.name || 'HK').trim().split(/\s+/).map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'HK'}
+                    </div>
+                  )}
+                </div>
+
+                <div className="w-full space-y-2.5">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full py-3 px-4 bg-primary text-white text-xs font-bold uppercase rounded-xl shadow-sm hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Camera size={15} />
+                    <span>Last opp eget bilde</span>
                   </button>
-                ))}
-              </div>
-              <div className="px-5 pb-5">
-                <p className="text-[10px] text-outline font-semibold text-center">
-                  <CmsText slug="profile-avatar-modal-soon" fallback="Snart: Last opp eget bilde via Supabase Storage" />
-                </p>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDraft(prev => ({ ...prev, avatar: '' }));
+                      setShowAvatarPicker(false);
+                      showToast("Profil satt til monogram-initialer!");
+                    }}
+                    className="w-full py-2.5 px-4 border border-outline-variant rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all"
+                  >
+                    Bruk monogram initialer
+                  </button>
+                </div>
               </div>
             </motion.div>
           </div>

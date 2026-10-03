@@ -235,11 +235,9 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
             {/* Mentor 1 */}
             <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex gap-4 items-center sm:items-start flex-col sm:flex-row text-center sm:text-left">
-              <img 
-                src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=150"
-                alt="Apostel David Hansen" 
-                className="w-20 h-20 rounded-full object-cover border border-primary shrink-0"
-              />
+              <div className="w-20 h-20 rounded-full bg-purple-100 text-purple-900 border border-purple-200 shrink-0 flex items-center justify-center font-bold text-2xl font-serif shadow-xs">
+                DH
+              </div>
               <div className="space-y-2">
                 <div>
                   <h4 className="font-sans text-lg font-bold text-primary">
@@ -259,11 +257,9 @@ export default function AboutPage() {
 
             {/* Mentor 2 */}
             <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex gap-4 items-center sm:items-start flex-col sm:flex-row text-center sm:text-left">
-              <img 
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150"
-                alt="Pastor Siri Knutsen" 
-                className="w-20 h-20 rounded-full object-cover border border-primary shrink-0"
-              />
+              <div className="w-20 h-20 rounded-full bg-purple-100 text-purple-900 border border-purple-200 shrink-0 flex items-center justify-center font-bold text-2xl font-serif shadow-xs">
+                SK
+              </div>
               <div className="space-y-2">
                 <div>
                   <h4 className="font-sans text-lg font-bold text-primary">

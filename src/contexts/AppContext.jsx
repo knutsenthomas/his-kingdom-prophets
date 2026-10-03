@@ -233,7 +233,7 @@ export const AppProvider = ({ children }) => {
             name: firebaseUser.displayName || defaultName,
             role: fallbackRole,
             onboardingCompleted: true,
-            avatar: firebaseUser.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120",
+            avatar: (cachedData?.avatar && !cachedData.avatar.includes('unsplash')) ? cachedData.avatar : (firebaseUser.photoURL || ""),
             ...cachedData
           };
 
@@ -325,18 +325,15 @@ export const AppProvider = ({ children }) => {
               }
 
               if (finalUserData) {
-                // Reset mock avatar if needed
-                const mockAvatars = [
-                  "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120"
-                ];
+                // Permanently clean out any unsplash / mockup avatars
                 let needsUpdate = false;
-                if (mockAvatars.includes(finalUserData.avatar)) {
-                  finalUserData.avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
+                if (finalUserData.avatar && (finalUserData.avatar.includes('unsplash') || finalUserData.avatar.includes('photo-1535713875002'))) {
+                  finalUserData.avatar = firebaseUser.photoURL || "";
                   needsUpdate = true;
                 }
 
                 if (needsUpdate) {
-                  updateDoc(userDocRef, { avatar: finalUserData.avatar }).catch(err => console.warn(err));
+                  updateDoc(userDocRef, { avatar: finalUserData.avatar }).catch(err => console.warn("Failed to clear mockup avatar in Firestore:", err));
                 }
 
                 setUser(finalUserData);
@@ -696,14 +693,12 @@ export const AppProvider = ({ children }) => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
       
-      const avatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120";
-
       const defaultProfile = {
         uid: firebaseUser.uid,
         name: invitedProfile?.name || name || 'Ny Bruker',
         email,
         role: assignedRole,
-        avatar: invitedProfile?.avatar || avatar,
+        avatar: (invitedProfile?.avatar && !invitedProfile.avatar.includes('unsplash')) ? invitedProfile.avatar : (firebaseUser.photoURL || ""),
         phone: invitedProfile?.phone || "+47 900 00 000",
         location: invitedProfile?.location || "Kristiansand, Norge",
         birthYear: invitedProfile?.birthYear || "1995",

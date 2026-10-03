@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
-import { School, Briefcase, Users, CheckCircle, ArrowRight } from 'lucide-react';
+import { School, Briefcase, Users, CheckCircle, ArrowRight, Camera } from 'lucide-react';
 
 export default function CompleteProfilePage() {
   const navigate = useNavigate();
   const { user, updateUserProfile, showToast } = useApp();
   const [institution, setInstitution] = useState('');
   const [headline, setHeadline] = useState('');
-  const [avatar, setAvatar] = useState(user?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120');
+  const [avatar, setAvatar] = useState(user?.avatar && !user.avatar.includes('unsplash') ? user.avatar : (user?.photoURL || ''));
+  const fileInputRef = useRef(null);
+
+  const userInitials = (user?.name || 'HK').trim().split(/\s+/).map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'HK';
 
   // Navigation Guard: Redirect administrators, teachers or already onboarded students
   useEffect(() => {
@@ -27,6 +30,21 @@ export default function CompleteProfilePage() {
     }
   }, [user, navigate]);
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        showToast("Bildet må være under 2 MB.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatar(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleContinue = async (e) => {
     e.preventDefault();
     if (!institution || !headline) {
@@ -38,6 +56,7 @@ export default function CompleteProfilePage() {
         await updateUserProfile({
           institution,
           headline,
+          avatar: avatar && !avatar.includes('unsplash') ? avatar : '',
           onboardingCompleted: true
         });
       }
@@ -60,13 +79,6 @@ export default function CompleteProfilePage() {
     }
     navigate('/onboarding-welcome');
   };
-
-  const avatars = [
-    'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120', // Student Male
-    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120', // Student Female
-    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120', // Student Male 2
-    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120', // Teacher Female
-  ];
 
   return (
     <div className="bg-background min-h-screen flex flex-col font-sans text-on-background">
@@ -130,33 +142,59 @@ export default function CompleteProfilePage() {
             <form onSubmit={handleContinue} className="space-y-8">
               
               {/* Photo Upload Section */}
-              <div className="flex flex-col items-center gap-6 mb-8">
-                <div className="relative group">
-                  <div className="w-28 h-28 rounded-full bg-surface-container-low border-2 border-dashed border-outline-variant flex items-center justify-center overflow-hidden transition-all group-hover:border-primary">
-                    <img 
-                      src={avatar} 
-                      alt="Profilbilde" 
-                      className="w-full h-full object-cover"
-                    />
+              <div className="flex flex-col items-center gap-4 mb-8">
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  className="hidden" 
+                  accept="image/*" 
+                  onChange={handleImageUpload} 
+                />
+                <div 
+                  className="relative group cursor-pointer"
+                  onClick={() => fileInputRef.current?.click()}
+                  title="Klikk for å laste opp eget bilde"
+                >
+                  <div className="w-28 h-28 rounded-full bg-purple-50 border-2 border-dashed border-purple-200 flex items-center justify-center overflow-hidden transition-all group-hover:border-purple-600 shadow-sm">
+                    {avatar && !avatar.includes('unsplash') ? (
+                      <img 
+                        src={avatar} 
+                        alt="Profilbilde" 
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-purple-100 text-purple-900 flex items-center justify-center font-bold text-3xl font-serif">
+                        {userInitials}
+                      </div>
+                    )}
                   </div>
-                  <div className="absolute bottom-0 right-0 bg-primary text-white rounded-full p-2 shadow hover:bg-primary-container transition-colors cursor-pointer">
-                    <CheckCircle size={14} />
+                  <div className="absolute bottom-0 right-0 bg-primary text-white rounded-full p-2 shadow hover:bg-primary-container transition-colors">
+                    <Camera size={14} />
                   </div>
                 </div>
 
-                <div className="text-center w-full">
-                  <label className="text-xs font-bold text-on-surface-variant tracking-wider uppercase block mb-2">Velg profilbilde</label>
-                  <div className="flex justify-center gap-3">
-                    {avatars.map((av, idx) => (
+                <div className="text-center w-full space-y-2">
+                  <p className="text-xs text-on-surface-variant">
+                    {avatar && !avatar.includes('unsplash') ? 'Eget bilde valgt' : 'Bruker initialer som standard profilbilde'}
+                  </p>
+                  <div className="flex justify-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all flex items-center gap-1.5"
+                    >
+                      <Camera size={13} />
+                      <span>Last opp bilde</span>
+                    </button>
+                    {avatar && (
                       <button
-                        key={idx}
                         type="button"
-                        onClick={() => setAvatar(av)}
-                        className={`w-12 h-12 rounded-full overflow-hidden border-2 transition-all hover:scale-105 active:scale-95 ${avatar === av ? 'border-primary shadow' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                        onClick={() => setAvatar('')}
+                        className="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-500 hover:text-red-600 hover:bg-red-50 transition-all"
                       >
-                        <img src={av} alt={`Avatar option ${idx + 1}`} className="w-full h-full object-cover" />
+                        Bruk monogram
                       </button>
-                    ))}
+                    )}
                   </div>
                 </div>
               </div>

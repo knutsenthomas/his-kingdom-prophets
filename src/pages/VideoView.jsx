@@ -55,10 +55,10 @@ export default function VideoView() {
   const [newChatMessage, setNewChatMessage] = useState("");
 
   const participants = [
-    { id: 'u_ja', name: 'Profet Jon Arild', role: 'teacher', initials: 'JA', status: 'Aktiv nå', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100' },
-    { id: 'u_ab', name: 'Anders Berg', role: 'student', initials: 'AB', status: 'Pålogget', avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=100' },
-    { id: 'u_in', name: 'Ingrid Nilsen', role: 'student', initials: 'IN', status: 'Aktiv nå', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100' },
-    { id: 'u_sj', name: 'Sarah J.', role: 'student', initials: 'SJ', status: 'Borte', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=100' }
+    { id: 'u_ja', name: 'Profet Jon Arild', role: 'teacher', initials: 'JA', status: 'Aktiv nå', avatar: '' },
+    { id: 'u_ab', name: 'Anders Berg', role: 'student', initials: 'AB', status: 'Pålogget', avatar: '' },
+    { id: 'u_in', name: 'Ingrid Nilsen', role: 'student', initials: 'IN', status: 'Aktiv nå', avatar: '' },
+    { id: 'u_sj', name: 'Sarah J.', role: 'student', initials: 'SJ', status: 'Borte', avatar: '' }
   ];
 
   const [groupMessages, setGroupMessages] = useState([

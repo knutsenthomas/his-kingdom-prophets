@@ -169,7 +169,13 @@ function ApprovalModal({ mod, courseId, onClose }) {
                       : 'border-outline-variant/20 hover:border-outline-variant/50 hover:bg-slate-50'
                   }`}
                 >
-                  <img src={rev.avatar} alt={rev.name} className="w-9 h-9 rounded-full object-cover border border-outline-variant/20 shrink-0" />
+                  {rev.avatar && !rev.avatar.includes('unsplash') ? (
+                    <img src={rev.avatar} alt={rev.name} className="w-9 h-9 rounded-full object-cover border border-outline-variant/20 shrink-0" />
+                  ) : (
+                    <div className="w-9 h-9 rounded-full bg-purple-100 text-purple-900 border border-purple-200 font-bold text-xs flex items-center justify-center shrink-0">
+                      {rev.initials || rev.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                    </div>
+                  )}
                   <div className="min-w-0">
                     <p className="text-xs font-bold text-primary truncate">{rev.name}</p>
                     <p className="text-[10px] text-on-surface-variant font-medium truncate">{rev.role}</p>

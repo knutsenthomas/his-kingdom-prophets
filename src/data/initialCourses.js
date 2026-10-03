@@ -227,24 +227,28 @@ export const SYSTEM_REVIEWERS = [
     id: 'rev-1',
     name: 'Apostel David Hansen',
     role: 'Faglig leder – Profetisk linje',
-    avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120'
+    initials: 'DH',
+    avatar: ''
   },
   {
     id: 'rev-2',
     name: 'Profet Jon Arild',
     role: 'Faglærer – Bibeltolkning',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120'
+    initials: 'JA',
+    avatar: ''
   },
   {
     id: 'rev-3',
     name: 'Pastor Siri Knutsen',
     role: 'Administrasjon & Sjelesorg',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120'
+    initials: 'SK',
+    avatar: ''
   },
   {
     id: 'rev-4',
     name: 'Thomas Knutsen',
     role: 'Innholdsansvarlig & Koordinator',
-    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120'
+    initials: 'TK',
+    avatar: ''
   }
 ];
