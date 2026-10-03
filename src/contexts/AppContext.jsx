@@ -102,47 +102,7 @@ const INITIAL_COURSES = [
 ];
 
 
-const INITIAL_STUDENTS = [
-  {
-    id: "s1",
-    name: "Anders Berg",
-    courseId: "prop101",
-    courseName: "Profetisk Tjeneste 101",
-    status: "Kritisk",
-    statusColor: "text-error bg-error-container/10",
-    progress: 25,
-    modulesCompleted: 2,
-    totalModules: 8,
-    lastActivity: "12 dager siden",
-    avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120"
-  },
-  {
-    id: "s2",
-    name: "Ingrid Nilsen",
-    courseId: "min201",
-    courseName: "Sjelesorg & Ledelse",
-    status: "Forsinket",
-    statusColor: "text-on-secondary-container bg-secondary-container/20",
-    progress: 50,
-    modulesCompleted: 4,
-    totalModules: 8,
-    lastActivity: "4 dager siden",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120"
-  },
-  {
-    id: "s3",
-    name: "Marius Holm",
-    courseId: "prop101",
-    courseName: "Innføring i den Profetiske Tjeneste",
-    status: "Forsinket",
-    statusColor: "text-on-secondary-container bg-secondary-container/20",
-    progress: 12,
-    modulesCompleted: 1,
-    totalModules: 8,
-    lastActivity: "6 dager siden",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120"
-  }
-];
+const INITIAL_STUDENTS = [];
 
 const INITIAL_ASSISTANT_MESSAGES = [
   {
@@ -1806,22 +1766,30 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     if (!isAuthReady || !user) return;
-    // Sync students from Firestore or seed if empty
+    // Sync real students from Firestore without seeding mock data
     const syncStudents = async () => {
       try {
         const studentsColRef = collection(db, "students");
         const snapshot = await getDocs(studentsColRef);
-        if (snapshot.empty) {
-          for (const student of INITIAL_STUDENTS) {
-            await setDoc(doc(db, "students", student.id), student);
+        const MOCK_STUDENT_NAMES = ["Anders Berg", "Ingrid Nilsen", "Marius Holm"];
+        const loadedStudents = [];
+
+        for (const d of snapshot.docs) {
+          const data = d.data();
+          if (d.id === 's1' || d.id === 's2' || d.id === 's3' || MOCK_STUDENT_NAMES.includes(data.name)) {
+            // Delete old mock student from Firestore in the background
+            try {
+              await deleteDoc(doc(db, "students", d.id));
+            } catch (delErr) {
+              console.warn("Could not delete legacy mock student:", d.id, delErr);
+            }
+          } else {
+            loadedStudents.push({ id: d.id, ...data });
           }
-          setStudents(INITIAL_STUDENTS);
-        } else {
-          const loadedStudents = snapshot.docs.map(d => d.data());
-          setStudents(loadedStudents);
         }
+        setStudents(loadedStudents);
       } catch (err) {
-        console.warn("Klarte ikke synkronisere studenter fra Firestore, bruker standard:", err);
+        console.warn("Klarte ikke synkronisere studenter fra Firestore:", err);
       }
     };
     syncStudents();

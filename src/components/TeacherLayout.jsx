@@ -53,7 +53,6 @@ export default function TeacherLayout() {
         { id: 'cms', label: 'Innhold & Tekster', path: '/admin/cms', icon: Edit3 },
         { id: 'admissions', label: 'Opptak & Søknader', path: '/admin/portal?tab=admissions', icon: GraduationCap },
         { id: 'seo', label: 'SEO & Søkemotorer', path: '/admin/cms?category=seo', icon: Search },
-        { id: 'analytics', label: 'Besøksstatistikk', path: '/admin/analytics', icon: BarChart3 },
         { id: 'documents', label: 'PDF & Dokumenter', path: '/admin/cms?category=documents', icon: FileText },
       ]
     },

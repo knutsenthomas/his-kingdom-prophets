@@ -217,22 +217,10 @@ function AppRoutes() {
         <Route path="/support/artikkel-veiledning" element={<ArtikkelVeiledning />} />
         <Route path="/support/artikkel-tjenestegaver" element={<ArtikkelTjenestegaver />} />
 
-        {/* Teacher / Faculty Portal */}
+        {/* Teacher / Admin Portal */}
         <Route element={<TeacherLayout />}>
           <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
-          <Route path="/teacher/follow-up" element={<StudentFollowUp />} />
-          <Route path="/teacher/handle-requests" element={<StudentFollowUp />} />
-          <Route path="/teacher/course-builder" element={<CourseBuilder />} />
-          <Route path="/teacher/quiz-builder" element={<QuizBuilder />} />
-          <Route path="/teacher/marketing" element={<MarketingGrowth />} />
-          <Route path="/teacher/media-library" element={<MediaLibrary />} />
-          <Route path="/teacher/grading" element={<GradesCalculator />} />
-          <Route path="/teacher/grades-calc" element={<GradesCalculator />} />
-          <Route path="/teacher/notifications" element={<NotificationCenter />} />
-          <Route path="/teacher/profile" element={<TeacherProfile />} />
-          <Route path="/teacher/insights" element={<CourseInsights />} />
-          <Route path="/teacher/partner" element={<AffiliatePortal />} />
-          <Route path="/teacher/support" element={<SupportCenter />} />
+          <Route path="/teacher/*" element={<Navigate to="/teacher/dashboard" replace />} />
           
           {/* Admin Portal */}
           <Route path="/admin/cms" element={<CMSDashboard />} />

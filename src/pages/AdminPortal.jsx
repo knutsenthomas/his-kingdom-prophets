@@ -1,112 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '@/contexts/AppContext';
 import { db } from '@/firebase';
-import { collection, getDocs, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Users, Shield, ShieldAlert, Check, Search, Download, Plus, 
-  Trash2, Edit3, Filter, Lock, BookOpen, Video, BarChart3, 
-  Database, Save, Undo, Mail, Calendar, Info, HelpCircle, 
+  Users, Shield, Check, Search, Download, Plus, 
+  Trash2, Edit3, Filter, Lock, Mail, Calendar, Info, 
   AlertTriangle, Key, ChevronLeft, ChevronRight, X,
   Unlock, ToggleLeft, ToggleRight, ExternalLink, RefreshCw,
-  CheckCircle2, Clock, Sparkles, GraduationCap, Eye, FileText, Phone
+  CheckCircle2, Clock, Sparkles, GraduationCap, Eye, FileText, Phone,
+  Database
 } from 'lucide-react';
-
-const DEFAULT_USERS = [
-  {
-    uid: "seed-user-1",
-    name: "Dr. Maria Berg",
-    email: "maria.berg@scholastic.edu",
-    role: "teacher",
-    created: "05. Sep 2023",
-    status: "AKTIV",
-    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBVh7_cVKbWkuK2rOM9qy0R48TzHRB1yOAUujl5tSQ2fP1TyptmN4fAUIjTCe0NsFCoKZSDFr7GPTgFmY52DS6dgXtEf6jVpS2r9TRvhEc7CT2mtIu1PnI4Da-ou3AQQAuxCiIEAHXhBrvjdRs9lmi7zZnYmXWC5ubturfesSLzH7ku2Q-_NQsAPezX4Xj8MNcl1K9LSShP1qgC7UHYO3_qnhpxieU3r3JWIyck925KUHiiCwU9fCK_lG3vEU84uWmwgEoewaWn0zw"
-  },
-  {
-    uid: "seed-user-2",
-    name: "Erik Johansen",
-    email: "erik.johansen@university.no",
-    role: "student",
-    created: "12. Aug 2023",
-    status: "AKTIV",
-    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBBRvzPRTuKq3Ib_fe3fMYp7HfeT4EikCQCkudPyTvBKl_kj8SQGtZpneq9TB8oCljhLaMskiAJKaIYGK9V_vLYunJjVJpfVJeWQ-U_FAGxzFRGrxaLN46DQJdvyIKoHVMThbGx51FEJel6HxCEBcRzSTm-amRmJ9VQLkOXMq23YAxnwmEm1e10Kho3bX32QnbwGzoHd_voj63WYPk0CaXTMFzZF5nSvX5WEUpGlIwidRdP78AypfPq1tE89kHETPg4SyOxctW4MGQ"
-  },
-  {
-    uid: "seed-user-3",
-    name: "Thomas Hansen",
-    email: "t.hansen@admin.no",
-    role: "admin",
-    created: "22. Okt 2023",
-    status: "VENTER",
-    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuD8bPh_VbHs2yNF1zTycEcpN_GDyR3OMEg2xfPZ7wgE1aCzwuyCUnoZ4gDO9kzpPPM4aMQ1hiJnJJ921ugnSXPFhrBnl2STp1nUdK5ibik3-gZR4F-OagQZNApVMgqJsWdcYFg6JVLSnLwRSlhD7uBrQ6CZadaFiTn37f-JY78sKX5M4NCIywS4UHpF-n9z_s3xTNmbFCQQtvHmZS85JbLH5JM1sUrU8VbxdhJmHS3SEv4Y-kQbxxW8b9t3Gisr35xvS3WQe790Lvo"
-  },
-  {
-    uid: "seed-user-4",
-    name: "Ingrid Olsen",
-    email: "ingrid.olsen@student.uio.no",
-    role: "student",
-    created: "15. Jan 2024",
-    status: "INAKTIV",
-    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuB60YSM54GcVLs-xh6T9rSx7izdFzZGT_Lafzag7P7JhIQnAkmpzgUpHwhZdOEsxnNNdJGAWAeD1ph49TQLvMGpHyuszHgjtBTh2g5y2ZHfCLfhLRPFDjTKeT7tc7L7w08S0l8joV7xrA9zQJEMPeRZFzIWBqPY2t6ticmMXnWOkfcDq5mZ_J0PW03J6x84OVmZSmHb7h-9ir9h39HV3zdKTUNgjk8dibLa4gKIrriSNgvDi7mCOduYkBKRaA7jnSDB4Zaco7RAkAM"
-  },
-  {
-    uid: "seed-user-5",
-    name: "Anders Larsen",
-    email: "anders.l@videregaende.no",
-    role: "teacher",
-    created: "02. Feb 2024",
-    status: "AKTIV",
-    avatar: ""
-  },
-  {
-    uid: "seed-user-6",
-    name: "Thomas Knutsen",
-    email: "thomas@tk-design.no",
-    role: "superadmin",
-    created: "23. May 2026",
-    status: "AKTIV",
-    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120"
-  }
-];
-
-const DEFAULT_PERMISSIONS = {
-  student: {
-    course: { create: false, publish: false, delete: false },
-    user: { invite: false, changeRole: false, deactivate: false },
-    media: { upload: true, editMeta: false, delete: false },
-    analytics: { viewReports: false, exportFinancials: false, resetStats: false },
-    security: { manageDb: false, viewLogs: false, clearCache: false }
-  },
-  teacher: {
-    course: { create: true, publish: true, delete: false },
-    user: { invite: false, changeRole: false, deactivate: false },
-    media: { upload: true, editMeta: true, delete: false },
-    analytics: { viewReports: true, exportFinancials: false, resetStats: false },
-    security: { manageDb: false, viewLogs: false, clearCache: false }
-  },
-  admin: {
-    course: { create: true, publish: true, delete: true },
-    user: { invite: true, changeRole: true, deactivate: true },
-    media: { upload: true, editMeta: true, delete: true },
-    analytics: { viewReports: true, exportFinancials: true, resetStats: false },
-    security: { manageDb: false, viewLogs: true, clearCache: false }
-  },
-  superadmin: {
-    course: { create: true, publish: true, delete: true },
-    user: { invite: true, changeRole: true, deactivate: true },
-    media: { upload: true, editMeta: true, delete: true },
-    analytics: { viewReports: true, exportFinancials: true, resetStats: true },
-    security: { manageDb: true, viewLogs: true, fillCache: true }
-  }
-};
 
 export default function AdminPortal() {
   const { user: currentUser, showToast, admissionFormOpen, setAdmissionFormOpenState, language } = useApp();
   const [activeTab, setActiveTab] = useState(() => {
     const tabParam = new URLSearchParams(window.location.search).get('tab');
-    if (tabParam === 'admissions' || tabParam === 'opptak') return 'admissions';
-    if (tabParam === 'permissions') return 'permissions';
-    return 'users';
+    if (tabParam === 'users' || tabParam === 'elever' || tabParam === 'brukere') return 'users';
+    return 'admissions';
   });
   
   // Guard Check
@@ -119,13 +30,20 @@ export default function AdminPortal() {
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          const MOCK_EMAILS = [
+            'maria.berg@scholastic.edu', 
+            'erik.johansen@university.no', 
+            't.hansen@admin.no', 
+            'ingrid.olsen@student.uio.no', 
+            'anders.l@videregaende.no'
+          ];
+          return parsed.filter(u => u && !u.uid?.startsWith('seed-user-') && !MOCK_EMAILS.includes(u.email));
         }
       }
     } catch (e) {
       console.warn("Could not load cached users for AdminPortal:", e);
     }
-    return DEFAULT_USERS;
+    return [];
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('ALL'); // 'ALL' | 'student' | 'teacher' | 'admin' | 'superadmin'
@@ -264,92 +182,64 @@ export default function AdminPortal() {
     showToast("Interesseliste eksportert til CSV (UTF-8 BOM).");
   };
 
-  // Sync users database
+  // Sync users database (real users only)
   useEffect(() => {
     if (!isAuthorized) return;
 
-    // Immediately inject the logged-in superadmin and ensure local state has defaults so the table is never empty/frozen!
-    setUsersList(prev => {
-      let list = [...prev];
-      if (list.length === 0) {
-        list = [...DEFAULT_USERS];
-      }
-      if (currentUser && !list.some(u => u.email?.toLowerCase() === currentUser.email?.toLowerCase())) {
-        list.push({
-          uid: currentUser.uid || 'current-admin',
-          name: currentUser.name || 'Thomas Knutsen',
-          email: currentUser.email,
-          role: currentUser.role || 'superadmin',
-          created: '23. May 2026',
-          status: 'AKTIV',
-          avatar: currentUser.avatar || ''
-        });
-      }
-      localStorage.setItem('hkm-admin-portal-users', JSON.stringify(list));
-      return list;
-    });
+    const MOCK_EMAILS = [
+      'maria.berg@scholastic.edu', 
+      'erik.johansen@university.no', 
+      't.hansen@admin.no', 
+      'ingrid.olsen@student.uio.no', 
+      'anders.l@videregaende.no'
+    ];
 
-    const fetchUsers = async () => {
+    const fetchRealUsers = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "users"));
-        if (querySnapshot.empty) {
-          // Seed initial demo users to Firestore
-          const list = [...DEFAULT_USERS];
-          if (currentUser && !list.some(u => u.email?.toLowerCase() === currentUser.email?.toLowerCase())) {
-            list.push({
-              uid: currentUser.uid || 'current-admin',
-              name: currentUser.name || 'Thomas Knutsen',
-              email: currentUser.email,
-              role: currentUser.role || 'superadmin',
-              created: '23. May 2026',
-              status: 'AKTIV',
-              avatar: currentUser.avatar || ''
-            });
-          }
-          // Set state and cache instantly so UI is never blank/frozen!
-          setUsersList(list);
-          localStorage.setItem('hkm-admin-portal-users', JSON.stringify(list));
+        const realUsers = [];
 
-          // Seed Firestore in the background without blocking the UI
-          list.forEach(async (u) => {
+        for (const docSnap of querySnapshot.docs) {
+          const data = docSnap.data();
+          const docId = docSnap.id;
+          const isMock = docId.startsWith('seed-user-') || MOCK_EMAILS.includes(data.email);
+
+          if (isMock) {
+            // Asynchronously delete legacy seed user from Firestore
             try {
-              await setDoc(doc(db, "users", u.uid), u);
-            } catch (wErr) {
-              console.warn("Could not seed user in background:", u.email, wErr);
+              await deleteDoc(doc(db, "users", docId));
+            } catch (err) {
+              console.warn("Could not purge mock user:", docId, err);
             }
-          });
-        } else {
-          const loaded = querySnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
-          // Ensure current user is in the list
-          if (currentUser && !loaded.some(u => u.email?.toLowerCase() === currentUser.email?.toLowerCase())) {
-            loaded.push({
-              uid: currentUser.uid || 'current-admin',
-              name: currentUser.name || 'Thomas Knutsen',
-              email: currentUser.email,
-              role: currentUser.role || 'superadmin',
-              created: '23. May 2026',
-              status: 'AKTIV',
-              avatar: currentUser.avatar || ''
-            });
+          } else {
+            realUsers.push({ uid: docId, ...data });
           }
-          setUsersList(loaded);
-          localStorage.setItem('hkm-admin-portal-users', JSON.stringify(loaded));
         }
-      } catch (err) {
-        console.warn("Firestore fetch failed, loading local/offline state:", err);
-        const cached = localStorage.getItem('hkm-admin-portal-users');
-        let list = [];
+
+        // Also check if any registered students in 'students' collection need to be listed
         try {
-          list = cached ? JSON.parse(cached) : [];
-        } catch {
-          list = [];
+          const studentSnap = await getDocs(collection(db, "students"));
+          for (const sDoc of studentSnap.docs) {
+            const sData = sDoc.data();
+            if (sDoc.id !== 's1' && sDoc.id !== 's2' && sDoc.id !== 's3' && !realUsers.some(u => u.email?.toLowerCase() === sData.email?.toLowerCase())) {
+              realUsers.push({
+                uid: sDoc.id,
+                name: sData.name || 'Elev',
+                email: sData.email || '',
+                role: 'student',
+                created: sData.created || 'Aktiv',
+                status: 'AKTIV',
+                avatar: sData.avatar || ''
+              });
+            }
+          }
+        } catch (sErr) {
+          console.warn("Could not load students collection:", sErr);
         }
-        if (!Array.isArray(list) || list.length === 0) {
-          list = [...DEFAULT_USERS];
-        }
-        // Ensure current user is in the list
-        if (currentUser && !list.some(u => u.email?.toLowerCase() === currentUser.email?.toLowerCase())) {
-          list.push({
+
+        // Ensure current logged-in superadmin (Thomas Knutsen) is always in the list as superadmin
+        if (currentUser && !realUsers.some(u => u.email?.toLowerCase() === currentUser.email?.toLowerCase())) {
+          realUsers.unshift({
             uid: currentUser.uid || 'current-admin',
             name: currentUser.name || 'Thomas Knutsen',
             email: currentUser.email,
@@ -359,45 +249,16 @@ export default function AdminPortal() {
             avatar: currentUser.avatar || ''
           });
         }
-        setUsersList(list);
-      }
-    };
-    fetchUsers();
-  }, [isAuthorized, currentUser]);
 
-  // Sync permissions
-  useEffect(() => {
-    if (!isAuthorized) return;
-    const fetchPermissions = async () => {
-      try {
-        const snapshot = await getDocs(collection(db, "system_configs"));
-        const permDoc = snapshot.docs.find(d => d.id === 'permissions');
-        if (permDoc) {
-          const data = permDoc.data();
-          const merged = { ...DEFAULT_PERMISSIONS };
-          Object.keys(DEFAULT_PERMISSIONS).forEach(role => {
-            merged[role] = {
-              ...DEFAULT_PERMISSIONS[role],
-              ...(data[role] || {})
-            };
-            Object.keys(DEFAULT_PERMISSIONS[role]).forEach(group => {
-              merged[role][group] = {
-                ...DEFAULT_PERMISSIONS[role][group],
-                ...(data[role]?.[group] || {})
-              };
-            });
-          });
-          setPermissionsMatrix(merged);
-        } else {
-          await setDoc(doc(db, "system_configs", "permissions"), DEFAULT_PERMISSIONS);
-          setPermissionsMatrix(DEFAULT_PERMISSIONS);
-        }
+        setUsersList(realUsers);
+        localStorage.setItem('hkm-admin-portal-users', JSON.stringify(realUsers));
       } catch (err) {
-        console.warn("Could not sync permissions config, utilizing defaults:", err);
+        console.warn("Firestore fetch failed, loading local/offline state:", err);
       }
     };
-    fetchPermissions();
-  }, [isAuthorized]);
+
+    fetchRealUsers();
+  }, [isAuthorized, currentUser]);
 
   if (!isAuthorized) {
     return (
@@ -546,33 +407,6 @@ export default function AdminPortal() {
     showToast("CSV-fil eksportert!");
   };
 
-  const handleSavePermissions = async () => {
-    try {
-      await setDoc(doc(db, "system_configs", "permissions"), permissionsMatrix);
-      showToast("Rettighetsmatrisen ble lagret ✓");
-    } catch (err) {
-      console.error(err);
-      showToast("Klarte ikke lagre konfigurasjon til Firestore.");
-    }
-  };
-
-  const togglePermission = (role, group, action) => {
-    setPermissionsMatrix(prev => {
-      const prevRole = prev?.[role] || DEFAULT_PERMISSIONS[role] || {};
-      const prevGroup = prevRole?.[group] || DEFAULT_PERMISSIONS[role]?.[group] || {};
-      return {
-        ...prev,
-        [role]: {
-          ...prevRole,
-          [group]: {
-            ...prevGroup,
-            [action]: !prevGroup[action]
-          }
-        }
-      };
-    });
-  };
-
   // --- FILTERS & PAGINATION LOGIC ---
   const filteredUsers = (usersList || []).filter(u => {
     if (!u) return false;
@@ -594,9 +428,6 @@ export default function AdminPortal() {
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.max(1, Math.ceil(filteredUsers.length / usersPerPage));
 
-  const rolePermissions = permissionsMatrix?.[selectedRole] || DEFAULT_PERMISSIONS[selectedRole] || {};
-  const groupPermissions = rolePermissions?.[activePermissionGroup] || DEFAULT_PERMISSIONS[selectedRole]?.[activePermissionGroup] || {};
-
   return (
     <div className="min-h-screen bg-background p-4 sm:p-8 max-w-[1440px] mx-auto text-on-background">
       
@@ -605,23 +436,15 @@ export default function AdminPortal() {
         <div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-2 tracking-tight">Admin Portal</h1>
           <p className="text-sm text-on-surface-variant">
-            Overordnet system- og brukerhåndtering for His Kingdom Prophets.
+            Overordnet administrasjon av opptak på hkpc.no og tilgangssynk mot HKP Community App.
           </p>
         </div>
         
-        {/* Tab Selection */}
+        {/* Tab Selection (2 Tabs: Opptak & Skjema, Elever & Tilgangssynk) */}
         <div className="flex bg-[#eaeef2] p-1 rounded-full relative overflow-x-auto max-w-full">
           <button
-            onClick={() => setActiveTab('users')}
-            className={`px-4 sm:px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all relative z-10 whitespace-nowrap ${
-              activeTab === 'users' ? 'text-[#561291] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
-            }`}
-          >
-            Brukerhåndtering
-          </button>
-          <button
             onClick={() => setActiveTab('admissions')}
-            className={`px-4 sm:px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all relative z-10 flex items-center gap-1.5 whitespace-nowrap ${
+            className={`px-4 sm:px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all relative z-10 flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
               activeTab === 'admissions' ? 'text-[#561291] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
             }`}
           >
@@ -629,20 +452,20 @@ export default function AdminPortal() {
             <span className={`w-2 h-2 rounded-full shrink-0 ${admissionFormOpen ? 'bg-green-500 animate-pulse' : 'bg-amber-500'}`} />
           </button>
           <button
-            onClick={() => setActiveTab('permissions')}
-            className={`px-4 sm:px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all relative z-10 whitespace-nowrap ${
-              activeTab === 'permissions' ? 'text-[#561291] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
+            onClick={() => setActiveTab('users')}
+            className={`px-4 sm:px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold transition-all relative z-10 whitespace-nowrap cursor-pointer ${
+              activeTab === 'users' ? 'text-[#561291] font-bold' : 'text-[#41474d] hover:text-[#171c1f]'
             }`}
           >
-            Rettighetsstyring
+            Elever & Tilgangssynk
           </button>
           
           <motion.div
             className="absolute top-1 bottom-1 left-1 bg-white rounded-full shadow-sm"
             layoutId="portalTabIndicator"
-            style={{ width: 'calc(33.333% - 2px)' }}
+            style={{ width: 'calc(50% - 2px)' }}
             animate={{ 
-              x: activeTab === 'users' ? '0%' : activeTab === 'admissions' ? '100%' : '200%' 
+              x: activeTab === 'admissions' ? '0%' : '100%' 
             }}
             transition={{ type: 'spring', stiffness: 350, damping: 32 }}
           />
@@ -917,39 +740,41 @@ export default function AdminPortal() {
               </div>
             </div>
 
-            {/* Academic Widgets Alerts */}
+            {/* Real System & Sync Status Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
               <div className="bg-white border-l-4 border-[#561291] p-6 rounded-r-2xl border border-[#c1c7ce]/40 shadow-sm space-y-2">
                 <div className="flex items-center gap-3 text-[#561291]">
-                  <Info className="w-5 h-5 shrink-0" />
-                  <h3 className="font-bold text-sm">Lisensstatus</h3>
+                  <Database className="w-5 h-5 shrink-0" />
+                  <h3 className="font-bold text-sm">App-Synkronisering (SSO)</h3>
                 </div>
                 <p className="text-xs text-[#41474d] leading-relaxed">
-                  Du bruker for øyeblikket 84% av dine tilgjengelige studentlisenser. Vurder å oppgradere før neste semester.
+                  Skyfunksjonen <span className="font-mono font-semibold text-[#561291]">communitySso</span> sikrer at godkjente elever og lærere automatisk får tilgang til klasserommet i Community-appen på <span className="font-semibold text-slate-800">app.hkpc.no</span>.
                 </p>
               </div>
-              <div className="bg-white border-l-4 border-[#561291] p-6 rounded-r-2xl border border-[#c1c7ce]/40 shadow-sm space-y-2">
+
+              <div className="bg-white border-l-4 border-emerald-600 p-6 rounded-r-2xl border border-[#c1c7ce]/40 shadow-sm space-y-2">
+                <div className="flex items-center gap-3 text-emerald-700">
+                  <Shield className="w-5 h-5 shrink-0" />
+                  <h3 className="font-bold text-sm">Personvern & Klasselister</h3>
+                </div>
+                <p className="text-xs text-[#41474d] leading-relaxed">
+                  Elever ser utelukkende navn i klasselistene. Kun autoriserte lærere og administratorer har tilgang til kontaktinformasjon, studieprogresjon og roller.
+                </p>
+              </div>
+
+              <div className="bg-white border-l-4 border-[#D7B978] p-6 rounded-r-2xl border border-[#c1c7ce]/40 shadow-sm space-y-2">
                 <div className="flex items-center gap-3 text-[#561291]">
-                  <Key className="w-5 h-5 shrink-0" />
-                  <h3 className="font-bold text-sm">Pro-tips for administratorer</h3>
+                  <Sparkles className="w-5 h-5 shrink-0" />
+                  <h3 className="font-bold text-sm">Sanntids Firestore-kobling</h3>
                 </div>
                 <p className="text-xs text-[#41474d] leading-relaxed">
-                  Du kan importere brukere i bulk ved å laste opp en CSV-fil formatert etter malen i hjelpesenteret.
-                </p>
-              </div>
-              <div className="bg-white border-l-4 border-[#ba1a1a] p-6 rounded-r-2xl border border-[#c1c7ce]/40 shadow-sm space-y-2">
-                <div className="flex items-center gap-3 text-[#ba1a1a]">
-                  <AlertTriangle className="w-5 h-5 shrink-0" />
-                  <h3 className="font-bold text-sm">Sikkerhetslogg varsel</h3>
-                </div>
-                <p className="text-xs text-[#41474d] leading-relaxed">
-                  Det har vært 3 mislykkede innloggingsforsøk fra ukjente IP-adresser det siste døgnet.
+                  Nye brukere som opprettes her eller godkjennes via opptaksskjemaet lagres umiddelbart i skyen og blir tilgjengelige på tvers av hele økosystemet.
                 </p>
               </div>
             </div>
 
           </motion.div>
-        ) : activeTab === 'admissions' ? (
+        ) : (
           <motion.div
             key="admissions-tab"
             initial={{ opacity: 0, y: 15 }}
@@ -1297,304 +1122,6 @@ export default function AdminPortal() {
                   )}
                 </div>
               )}
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="permissions-tab"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.3 }}
-            className="space-y-6"
-          >
-            {/* Global Role Selection Slider */}
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <p className="text-xs text-[#72787e] font-bold uppercase tracking-widest">Velg rolle for rettighetsstyring</p>
-                <button
-                  onClick={() => showToast("Vennligst opprett rollen i Firestore før du konfigurerer rettigheter.")}
-                  className="flex items-center gap-1.5 text-xs text-[#561291] hover:underline font-bold"
-                >
-                  <Plus className="w-4 h-4" />
-                  Lag tilpasset rolle
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                
-                {/* Student role card */}
-                <div 
-                  onClick={() => setSelectedRole('student')}
-                  className={`bg-white border-2 rounded-2xl p-5 hover:bg-[#f6fafe]/50 cursor-pointer shadow-sm relative overflow-hidden transition-all group ${
-                    selectedRole === 'student' ? 'border-[#561291] ring-2 ring-[#561291]/10 bg-[#f3e8ff]/10' : 'border-[#c1c7ce]/40'
-                  }`}
-                >
-                  <div className="flex items-center gap-3.5 mb-2">
-                    <div className="p-2 rounded-lg bg-[#eaeef2] text-[#41474d]">
-                      <Users className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-bold text-base text-[#561291]">Student</h3>
-                  </div>
-                  <p className="text-[11px] text-[#72787e] leading-relaxed">
-                    Utrustningsgrensesnitt. Har tilgang til kurs, leksjoner og studiegrupper.
-                  </p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-[9px] font-bold uppercase bg-slate-100 text-[#46617b] px-2.5 py-0.5 rounded-full">Begrenset rolle</span>
-                    <span className="text-[10px] text-[#72787e] font-bold">2,450 Brukere</span>
-                  </div>
-                </div>
-
-                {/* Teacher role card */}
-                <div 
-                  onClick={() => setSelectedRole('teacher')}
-                  className={`bg-white border-2 rounded-2xl p-5 hover:bg-[#f6fafe]/50 cursor-pointer shadow-sm relative overflow-hidden transition-all group ${
-                    selectedRole === 'teacher' ? 'border-[#561291] ring-2 ring-[#561291]/10 bg-[#f3e8ff]/10' : 'border-[#c1c7ce]/40'
-                  }`}
-                >
-                  <div className="flex items-center gap-3.5 mb-2">
-                    <div className="p-2 rounded-lg bg-[#eaeef2] text-[#41474d]">
-                      <BookOpen className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-bold text-base text-[#561291]">Lærer / Mentor</h3>
-                  </div>
-                  <p className="text-[11px] text-[#72787e] leading-relaxed">
-                    Undervisning og evaluering. Kan rette oppgaver og administrere klasser.
-                  </p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-[9px] font-bold uppercase bg-[#f3e8ff] text-[#561291] px-2.5 py-0.5 rounded-full">Akademisk</span>
-                    <span className="text-[10px] text-[#72787e] font-bold">148 Brukere</span>
-                  </div>
-                </div>
-
-                {/* Admin role card */}
-                <div 
-                  onClick={() => setSelectedRole('admin')}
-                  className={`bg-white border-2 rounded-2xl p-5 hover:bg-[#f6fafe]/50 cursor-pointer shadow-sm relative overflow-hidden transition-all group ${
-                    selectedRole === 'admin' ? 'border-[#561291] ring-2 ring-[#561291]/10 bg-[#f3e8ff]/10' : 'border-[#c1c7ce]/40'
-                  }`}
-                >
-                  <div className="flex items-center gap-3.5 mb-2">
-                    <div className="p-2 rounded-lg bg-[#eaeef2] text-[#41474d]">
-                      <Shield className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-bold text-base text-[#561291]">Administrator</h3>
-                  </div>
-                  <p className="text-[11px] text-[#72787e] leading-relaxed">
-                    Plattformledelse. Har full tilgang til CMS, videoer og analyse.
-                  </p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-[9px] font-bold uppercase bg-amber-100 text-amber-700 px-2.5 py-0.5 rounded-full">Sikkerhetsrolle</span>
-                    <span className="text-[10px] text-[#72787e] font-bold">12 Brukere</span>
-                  </div>
-                </div>
-
-                {/* Super Admin role card */}
-                <div 
-                  onClick={() => setSelectedRole('superadmin')}
-                  className={`bg-white border-2 rounded-2xl p-5 hover:bg-[#f6fafe]/50 cursor-pointer shadow-sm relative overflow-hidden transition-all group ${
-                    selectedRole === 'superadmin' ? 'border-[#561291] ring-2 ring-[#561291]/10 bg-[#f3e8ff]/10' : 'border-[#c1c7ce]/40'
-                  }`}
-                >
-                  <div className="flex items-center gap-3.5 mb-2">
-                    <div className="p-2 rounded-lg bg-[#eaeef2] text-[#41474d]">
-                      <ShieldAlert className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-bold text-base text-[#561291]">Super Administrator</h3>
-                  </div>
-                  <p className="text-[11px] text-[#72787e] leading-relaxed">
-                    Eierkonto. Kan endre systeminnstillinger, API-nøkler og slette data.
-                  </p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-[9px] font-bold uppercase bg-red-100 text-red-700 px-2.5 py-0.5 rounded-full">Eier</span>
-                    <span className="text-[10px] text-[#72787e] font-bold">3 Brukere</span>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            {/* Config detailed matrix layout */}
-            <div className="bg-white border border-[#c1c7ce]/40 rounded-3xl overflow-hidden shadow-sm">
-              <div className="border-b border-[#c1c7ce]/30 bg-[#eaeef2]/40 px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div className="flex gap-6 text-xs uppercase tracking-wider font-bold text-[#72787e]">
-                  <button className="text-[#561291] border-b-2 border-[#561291] pb-4 -mb-[18px]">Rettighetsmatrise</button>
-                  <button onClick={() => showToast("Visning av tildelte brukere er utilgjengelig offline.")} className="hover:text-[#561291] pb-4 -mb-[18px]">Tildelte Brukere</button>
-                  <button onClick={() => showToast("Sikkerhetsloggen laster inn...")} className="hover:text-[#561291] pb-4 -mb-[18px]">Endringslogg</button>
-                </div>
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#46617b]">
-                  <Info className="w-4 h-4 text-[#561291]" />
-                  <span>Modifisering av '{selectedRole.toUpperCase()}' påvirker alle brukere i denne gruppen.</span>
-                </div>
-              </div>
-
-              {/* Grid content inside detailed matrix */}
-              <div className="p-6 md:p-8 grid grid-cols-12 gap-8">
-                
-                {/* Left Rail */}
-                <div className="col-span-12 md:col-span-3 space-y-2">
-                  <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#72787e] mb-4">Rettighetsgrupper</h4>
-                  {[
-                    { id: 'course', name: 'Kursutvikling', icon: BookOpen },
-                    { id: 'user', name: 'Brukerhåndtering', icon: Users },
-                    { id: 'media', name: 'Mediebibliotek', icon: Video },
-                    { id: 'analytics', name: 'Analyse & Rapporter', icon: BarChart3 },
-                    { id: 'security', name: 'Sikkerhet & API', icon: Database }
-                  ].map(cat => {
-                    const CatIcon = cat.icon;
-                    return (
-                      <button
-                        key={cat.id}
-                        onClick={() => setActivePermissionGroup(cat.id)}
-                        className={`w-full flex items-center justify-between p-3.5 rounded-xl text-xs font-bold transition-all text-left ${
-                          activePermissionGroup === cat.id
-                            ? 'bg-[#561291] text-white shadow-md'
-                            : 'text-[#41474d] hover:bg-[#f0f4f8] hover:text-[#561291]'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <CatIcon className="w-4 h-4" />
-                          <span>{cat.name}</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 opacity-55" />
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Right checklist toggles */}
-                <div className="col-span-12 md:col-span-9 space-y-6">
-                  <div className="flex justify-between items-center border-b border-[#c1c7ce]/30 pb-3">
-                    <h3 className="text-lg font-bold text-slate-900">
-                      {activePermissionGroup === 'course' ? 'Rettigheter for Kursutvikling' :
-                       activePermissionGroup === 'user' ? 'Rettigheter for Brukerhåndtering' :
-                       activePermissionGroup === 'media' ? 'Rettigheter for Mediebibliotek' :
-                       activePermissionGroup === 'analytics' ? 'Rettigheter for Analyse & Rapporter' :
-                       'Rettigheter for Sikkerhet & Database API'}
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-[#72787e] font-semibold">Tillat alle</span>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input 
-                          type="checkbox" 
-                          checked={Object.values(groupPermissions).every(v=>v)}
-                          onChange={() => {
-                            const currentVal = Object.values(groupPermissions).every(v=>v);
-                            const updatedGroup = {};
-                            Object.keys(groupPermissions).forEach(k => {
-                              updatedGroup[k] = !currentVal;
-                            });
-                            setPermissionsMatrix(prev => {
-                              const prevRole = prev?.[selectedRole] || DEFAULT_PERMISSIONS[selectedRole] || {};
-                              return {
-                                ...prev,
-                                [selectedRole]: {
-                                  ...prevRole,
-                                  [activePermissionGroup]: updatedGroup
-                                }
-                              };
-                            });
-                          }}
-                          className="sr-only peer"
-                        />
-                        <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#561291]" />
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Checklist */}
-                  <div className="space-y-4">
-                    {Object.keys(groupPermissions).map(capKey => {
-                      let title = "";
-                      let description = "";
-                      let isHighRisk = false;
-
-                      if (activePermissionGroup === 'course') {
-                        if (capKey === 'create') { title = "Opprette nye kurs og moduler"; description = "Tillater brukeren å initiere nye studieplaner og definere innholdsrammer."; }
-                        else if (capKey === 'publish') { title = "Publisere og avpublisere moduler"; description = "Kontrollerer synlighet for publiserte lærehefter og videoforelesninger overfor elever."; }
-                        else { title = "Permanent sletting av kursdata"; description = "Sletting av kursinnhold, leksjonsfiler og arkiver fra systemets primære database."; isHighRisk = true; }
-                      } else if (activePermissionGroup === 'user') {
-                        if (capKey === 'invite') { title = "Invitere nye administratorer"; description = "Opprette og sende invitasjoner to nye systemadministratorer."; }
-                        else if (capKey === 'changeRole') { title = "Endre brukerroller direkte"; description = "Oppgradere eller nedgradere brukerrettigheter mellom Student, Mentor og Admin."; }
-                        else { title = "Deaktivere eller slette kontoer"; description = "Midlertidig frysing eller fullstendig fjerning av brukerprofiler og lisenser."; isHighRisk = true; }
-                      } else if (activePermissionGroup === 'media') {
-                        if (capKey === 'upload') { title = "Laste opp videoer og mediefiler"; description = "Tillater opplasting av tunge filer direkte til Google Cloud Storage bøtter."; }
-                        else if (capKey === 'editMeta') { title = "Redigere bildetekster og metadata"; description = "Justere beskrivelser, søkeord og kategorisering for lagret medieinnhold."; }
-                        else { title = "Fjerne filer permanent fra lagring"; description = "Slette opplastede mediefiler og frigjøre lagringsplass i nettskyen."; isHighRisk = true; }
-                      } else if (activePermissionGroup === 'analytics') {
-                        if (capKey === 'viewReports') { title = "Se globale progresjonsrapporte"; description = "Tilgang til statistikk og grafiske analyser over alle kursdeltakernes fremgang."; }
-                        else if (capKey === 'exportFinancials') { title = "Eksportere økonomiske revisjoner"; description = "Generere og laste ned CSV- og PDF-filer med lisenshistorikk og betalinger."; }
-                        else { title = "Nullstille studentstatistikk globalt"; description = "Fjerne fremgangsdata og restarte studiestatistikk for nye semestre."; isHighRisk = true; }
-                      } else {
-                        if (capKey === 'manageDb') { title = "Administrere database og skjemaer"; description = "Gjøre direkte endringer på Firestore-samlinger, relasjoner og regelsett."; isHighRisk = true; }
-                        else if (capKey === 'viewLogs') { title = "Se sikkerhetslogger i sanntid"; description = "Overvåke IP-adresser, systeminnlogginger og sensitive handlinger foretatt av admins."; }
-                        else { title = "Tømme og fylle systemcache"; description = "Gjennomføre manuell oppdatering av cachen for å tvinge innhenting av nye data."; }
-                      }
-
-                      return (
-                        <div 
-                          key={capKey} 
-                          className="flex items-start justify-between p-5 bg-[#f6fafe] border border-[#c1c7ce]/30 rounded-2xl hover:border-[#561291]/40 transition-all gap-4"
-                        >
-                          <div className="flex gap-4">
-                            <div className="mt-1 flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-[#c1c7ce]/30 text-[#561291]">
-                              <Check className="w-4 h-4" />
-                            </div>
-                            <div>
-                              <h5 className="font-bold text-sm text-[#561291]">{title}</h5>
-                              <p className="text-xs text-[#72787e] mt-1 leading-relaxed">{description}</p>
-                              
-                              <div className="flex gap-2 mt-2">
-                                <span className="text-[9px] font-bold uppercase tracking-wider bg-slate-200 text-[#46617b] px-2 py-0.5 rounded-md">
-                                  {activePermissionGroup.toUpperCase()}
-                                </span>
-                                {isHighRisk && (
-                                  <span className="text-[9px] font-bold uppercase tracking-wider bg-red-100 text-[#ba1a1a] px-2 py-0.5 rounded-md">
-                                    Høy Risiko
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-
-                          <label className="relative inline-flex items-center cursor-pointer mt-1 shrink-0">
-                            <input 
-                              type="checkbox"
-                              checked={groupPermissions[capKey] || false}
-                              onChange={() => togglePermission(selectedRole, activePermissionGroup, capKey)}
-                              className="sr-only peer"
-                            />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#561291]" />
-                          </label>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Save footer */}
-              <div className="bg-[#eaeef2]/40 px-6 py-4 border-t border-[#c1c7ce]/30 flex justify-end gap-3">
-                <button
-                  onClick={() => {
-                    setPermissionsMatrix(DEFAULT_PERMISSIONS);
-                    showToast("Gjenopprettet standard rettighetsmatrise!");
-                  }}
-                  className="flex items-center gap-2 px-5 py-2.5 border border-[#c1c7ce] rounded-xl text-xs font-bold text-[#46617b] hover:bg-slate-100 transition-all active:scale-[0.98]"
-                >
-                  <Undo className="w-4 h-4" />
-                  Nullstill Standard
-                </button>
-                <button
-                  onClick={handleSavePermissions}
-                  className="flex items-center gap-2 px-6 py-2.5 bg-[#561291] text-white hover:opacity-95 rounded-xl text-xs font-bold transition-all active:scale-[0.98] shadow-md"
-                >
-                  <Save className="w-4 h-4" />
-                  Lagre Endringer
-                </button>
-              </div>
-
             </div>
           </motion.div>
         )}

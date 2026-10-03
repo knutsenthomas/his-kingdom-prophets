@@ -256,7 +256,7 @@ export default function TeacherDashboard() {
               { title: "Forside Hero & Tittel", desc: "Hovedoverskrift, ingress og CTA-knapp", section: "Forside Hero" },
               { title: "Studielinjer (PROP/BIBLE/MIN)", desc: "Beskrivelser, emner og kursstruktur", section: "Studieprogram" },
               { title: "Priser & Finansiering", desc: "Studieavgift, delbetaling og vilkår", section: "Opptaksside" },
-              { title: "Lærere & Fakultet", desc: "Apostel David, Profet Jon Arild, Pastor Siri", section: "Fakultet" },
+              { title: "Lærere & Fakultet", desc: "Hilde Karin Knutsen & Thomas Knutsen", section: "Fakultet" },
               { title: "Ofte Stilte Spørsmål (FAQ)", desc: "GEO-optimaliserte svar og veiledning", section: "Kundestøtte" },
               { title: "Dokumenter & Studieplan", desc: "Last opp pensumhefter og studieguider", section: "documents" }
             ].map((item, idx) => (
@@ -309,7 +309,7 @@ export default function TeacherDashboard() {
                 { title: 'Åpne Community App', action: () => window.open('https://app.hkpc.no', '_blank'), isExternal: true },
                 { title: 'Elever & Tilgangssynk', action: () => navigate('/admin/portal?tab=users') },
                 { title: 'Opptakssøknader', action: () => navigate('/admin/portal?tab=admissions') },
-                { title: 'Besøksstatistikk', action: () => navigate('/admin/analytics') },
+                { title: 'SEO & GEO Status', action: () => navigate('/admin/cms?category=seo') },
                 { title: 'Eksporter søknader (CSV)', action: exportApplicationsCsv },
                 { title: 'Verifiser synkronisering', action: handleSyncCheck },
               ].map((act, idx) => (
