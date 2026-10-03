@@ -32,7 +32,9 @@ export default function CmsText({
   let displayText = rawText;
   if (replaceObj && !isAdminEditing) {
     Object.entries(replaceObj).forEach(([key, val]) => {
-      displayText = displayText.replace(key, val);
+      if (typeof displayText === 'string') {
+        displayText = displayText.split(key).join(val);
+      }
     });
   }
 

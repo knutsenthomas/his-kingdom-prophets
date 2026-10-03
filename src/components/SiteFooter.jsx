@@ -9,6 +9,7 @@ export default function SiteFooter() {
   const navigate = useNavigate();
   const { language, user } = useApp();
   const [logoClicks, setLogoClicks] = useState(0);
+  const currentYear = new Date().getFullYear();
 
   const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
   const cleanEmail = user?.email?.toLowerCase();
@@ -82,9 +83,14 @@ export default function SiteFooter() {
             <p className="copyright-text">
               <CmsText 
                 slug="landing-footer-copyright" 
+                replaceObj={{ 
+                  '{year}': currentYear.toString(),
+                  '2026': currentYear.toString(),
+                  '2027': currentYear.toString()
+                }}
                 fallback={language === 'no' 
-                  ? '© 2027 His Kingdom Prophetic Community. Alle rettigheter reservert.' 
-                  : '© 2027 His Kingdom Prophetic Community. All rights reserved.'} 
+                  ? `© ${currentYear} His Kingdom Prophetic Community. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten.` 
+                  : `© ${currentYear} His Kingdom Prophetic Community. All rights reserved. Equipping prophetic ministries for the church.`} 
               />
             </p>
           </div>
