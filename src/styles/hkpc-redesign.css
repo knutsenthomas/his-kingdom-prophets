@@ -81,15 +81,15 @@
 }
 
 .hkpc-landing .brand img {
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
 }
 
 .hkpc-landing header .brand .brand-name,
 .hkpc-landing header .brand > span {
   font-weight: 700;
-  font-size: 20px;
+  font-size: 17.5px;
   line-height: 1.2;
   letter-spacing: -0.01em;
   color: var(--violet);
@@ -1703,7 +1703,7 @@
   }
   .hkpc-landing .brand .brand-name,
   .hkpc-landing .brand span {
-    font-size: 18px;
+    font-size: 16px;
   }
   .hkpc-landing h1 {
     font-size: 52px;
@@ -1903,17 +1903,22 @@
     font-size: 10px;
   }
   .hkpc-landing header {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 16px;
+    padding-right: 16px;
+    gap: 12px;
+  }
+  .hkpc-landing .brand {
+    gap: 9px;
   }
   .hkpc-landing .brand .brand-name,
   .hkpc-landing .brand span {
-    font-size: 17px;
+    font-size: 14.5px;
+    letter-spacing: -0.01em;
     white-space: nowrap;
   }
   .hkpc-landing .brand img {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
   }
   .hkpc-landing .hero-inner {
     grid-template-columns: 1fr;
@@ -2664,6 +2669,48 @@
   }
   .hkpc-landing .mobile-cta-btn:active {
     transform: scale(0.98);
+  }
+}
+
+@media (max-width: 480px) {
+  .hkpc-landing header {
+    padding-left: 14px;
+    padding-right: 14px;
+    height: 78px;
+    gap: 10px;
+  }
+  .hkpc-landing .brand {
+    gap: 8px;
+  }
+  .hkpc-landing .brand .brand-name,
+  .hkpc-landing header .brand .brand-name,
+  .hkpc-landing header .brand > span {
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+  .hkpc-landing .brand img {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 375px) {
+  .hkpc-landing header {
+    padding-left: 10px;
+    padding-right: 10px;
+    gap: 8px;
+  }
+  .hkpc-landing .brand {
+    gap: 6px;
+  }
+  .hkpc-landing .brand .brand-name,
+  .hkpc-landing header .brand .brand-name,
+  .hkpc-landing header .brand > span {
+    font-size: 13px;
+  }
+  .hkpc-landing .brand img {
+    width: 28px;
+    height: 28px;
   }
 }
 
