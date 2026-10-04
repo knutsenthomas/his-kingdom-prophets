@@ -429,9 +429,8 @@
   flex-direction: column;
   position: relative;
   overflow: visible;
-  border-top-width: 1px;
   border: 1px solid #e2dce7;
-  border-top: 0;
+  border-top: none;
   box-shadow: 0 6px 20px rgba(86, 18, 145, 0.04);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -443,15 +442,14 @@
 .hkpc-landing .primary {
   background: white;
   color: var(--ink);
-  border-top: 4px solid var(--gold);
-  border-color: #561291;
   border: 1px solid #e2dce7;
+  border-top: none;
 }
 
 .hkpc-landing .secondary {
   background: white;
   border: 1px solid #e2dce7;
-  border-top: 4px solid var(--violet);
+  border-top: none;
 }
 
 .hkpc-landing .program-top {
@@ -472,7 +470,7 @@
   background: var(--purple);
   color: white;
   border: 0;
-  border-radius: 18px 18px 0 0;
+  border-radius: 17px 17px 0 0;
   position: relative;
 }
 
@@ -2024,7 +2022,7 @@
   }
   .hkpc-landing .program {
     padding: 25px;
-    border-top-width: 3px;
+    border-top: none;
   }
   .hkpc-landing .program h3 {
     font-size: 25px;
@@ -2037,7 +2035,7 @@
     min-height: 68px;
     margin: -25px -25px 25px;
     padding: 19px 25px;
-    border-radius: 18px 18px 0 0;
+    border-radius: 17px 17px 0 0;
   }
   .hkpc-landing .program-bottom {
     gap: 18px;
@@ -2180,12 +2178,7 @@
     padding-top: 0;
   }
   .hkpc-landing .programs:before {
-    width: 2px;
-    height: auto;
-    left: 10px;
-    right: auto;
-    top: 36px;
-    bottom: calc(50% - 25px);
+    display: none;
   }
   .hkpc-landing .program:before {
     top: 26px;
@@ -2193,12 +2186,31 @@
     width: 20px;
     height: 20px;
     box-shadow: 0 0 0 3px var(--soft);
+    z-index: 2;
   }
-  .hkpc-landing .program:after {
+  .hkpc-landing .program.primary:after {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 35px;
+    width: 20px;
+    height: calc(100% + 26px);
+    border-left: 2px solid var(--gold);
+    border-top: 2px solid var(--gold);
+    background: transparent;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .hkpc-landing .program.secondary:after {
+    content: '';
+    position: absolute;
     height: 2px;
     width: 10px;
     left: -10px;
     top: 35px;
+    background: var(--gold);
+    border: none;
+    z-index: 1;
   }
   .hkpc-landing .admissions .wrap {
     padding-left: 0;
