@@ -9,6 +9,7 @@ import {
   Clock, FileText, CheckCircle2, RefreshCw, Mail, Globe,
   Shield, Check, ExternalLink, GraduationCap
 } from 'lucide-react';
+import { serializeToCsv, downloadCsvFile } from '@/utils/csvExport';
 
 export default function AnalyticsDashboard() {
   const navigate = useNavigate();
@@ -60,27 +61,20 @@ export default function AnalyticsDashboard() {
     }
     const headers = ["Navn", "E-post", "Telefon", "Adresse", "Kjønn", "Sivilstatus", "Studielinje", "Betalingsplan", "Status", "Innsendt dato"];
     const rows = applications.map(a => [
-      `"${(a.name || '').replace(/"/g, '""')}"`,
-      `"${(a.email || '').replace(/"/g, '""')}"`,
-      `"${(a.phone || '').replace(/"/g, '""')}"`,
-      `"${(a.address || '').replace(/"/g, '""')}"`,
-      `"${(a.gender || '').replace(/"/g, '""')}"`,
-      `"${(a.maritalStatus || '').replace(/"/g, '""')}"`,
-      `"${(a.program || '').replace(/"/g, '""')}"`,
-      `"${(a.paymentPlan || '').replace(/"/g, '""')}"`,
-      `"${(a.status || 'Mottatt').replace(/"/g, '""')}"`,
-      `"${(a.submittedAt?.toDate?.() ? a.submittedAt.toDate().toLocaleDateString('no-NO') : a.date || '').replace(/"/g, '""')}"`
+      a.name || '',
+      a.email || '',
+      a.phone || '',
+      a.address || '',
+      a.gender || '',
+      a.maritalStatus || '',
+      a.program || '',
+      a.paymentPlan || '',
+      a.status || 'Mottatt',
+      a.submittedAt?.toDate?.() ? a.submittedAt.toDate().toLocaleDateString('no-NO') : a.date || ''
     ]);
-    const csvContent = "\uFEFF" + [headers.join(";"), ...rows.map(r => r.join(";"))].join("\r\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `HKPC_Soknader_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showToast("Søknader eksportert til CSV (UTF-8 BOM).");
+    const csvContent = serializeToCsv(headers, rows);
+    downloadCsvFile(`HKPC_Soknader_${new Date().toISOString().slice(0, 10)}.csv`, csvContent);
+    showToast("Søknader eksportert til CSV (sikker UTF-8 BOM).");
   };
 
   const exportLeadsCsv = () => {
@@ -90,21 +84,14 @@ export default function AnalyticsDashboard() {
     }
     const headers = ["Navn", "E-post", "Kilde", "Registrert dato"];
     const rows = leads.map(l => [
-      `"${(l.name || '').replace(/"/g, '""')}"`,
-      `"${(l.email || '').replace(/"/g, '""')}"`,
-      `"${(l.source || 'admission_portal_reminder_2027').replace(/"/g, '""')}"`,
-      `"${(l.createdAt?.toDate?.() ? l.createdAt.toDate().toLocaleDateString('no-NO') : '').replace(/"/g, '""')}"`
+      l.name || '',
+      l.email || '',
+      l.source || 'admission_portal_reminder_2027',
+      l.createdAt?.toDate?.() ? l.createdAt.toDate().toLocaleDateString('no-NO') : ''
     ]);
-    const csvContent = "\uFEFF" + [headers.join(";"), ...rows.map(r => r.join(";"))].join("\r\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `HKPC_Interesseliste_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showToast("Interesseliste eksportert til CSV (UTF-8 BOM).");
+    const csvContent = serializeToCsv(headers, rows);
+    downloadCsvFile(`HKPC_Interesseliste_${new Date().toISOString().slice(0, 10)}.csv`, csvContent);
+    showToast("Interesseliste eksportert til CSV (sikker UTF-8 BOM).");
   };
 
   return (

@@ -11,6 +11,7 @@ import {
   CheckCircle2, Clock, Sparkles, GraduationCap, Eye, FileText, Phone,
   Database
 } from 'lucide-react';
+import { serializeToCsv, downloadCsvFile } from '@/utils/csvExport';
 
 export default function AdminPortal() {
   const { user: currentUser, showToast, admissionFormOpen, setAdmissionFormOpenState, language } = useApp();
@@ -183,27 +184,20 @@ export default function AdminPortal() {
     }
     const headers = ["Navn", "E-post", "Telefon", "Adresse", "Kjønn", "Sivilstatus", "Studielinje", "Betalingsplan", "Status", "Innsendt dato"];
     const rows = applicationsList.map(a => [
-      `"${(a.name || '').replace(/"/g, '""')}"`,
-      `"${(a.email || '').replace(/"/g, '""')}"`,
-      `"${(a.phone || '').replace(/"/g, '""')}"`,
-      `"${(a.address || '').replace(/"/g, '""')}"`,
-      `"${(a.gender || '').replace(/"/g, '""')}"`,
-      `"${(a.maritalStatus || '').replace(/"/g, '""')}"`,
-      `"${(a.program || '').replace(/"/g, '""')}"`,
-      `"${(a.paymentPlan || '').replace(/"/g, '""')}"`,
-      `"${(a.status || 'Mottatt').replace(/"/g, '""')}"`,
-      `"${(a.submittedAt?.toDate?.() ? a.submittedAt.toDate().toLocaleDateString('no-NO') : a.date || '').replace(/"/g, '""')}"`
+      a.name || '',
+      a.email || '',
+      a.phone || '',
+      a.address || '',
+      a.gender || '',
+      a.maritalStatus || '',
+      a.program || '',
+      a.paymentPlan || '',
+      a.status || 'Mottatt',
+      a.submittedAt?.toDate?.() ? a.submittedAt.toDate().toLocaleDateString('no-NO') : a.date || ''
     ]);
-    const csvContent = "\uFEFF" + [headers.join(";"), ...rows.map(r => r.join(";"))].join("\r\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `HKPC_Soknader_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showToast("Søknader eksportert til CSV (UTF-8 BOM).");
+    const csvContent = serializeToCsv(headers, rows);
+    downloadCsvFile(`HKPC_Soknader_${new Date().toISOString().slice(0, 10)}.csv`, csvContent);
+    showToast("Søknader eksportert til CSV (sikker UTF-8 BOM).");
   };
 
   const exportLeadsCsv = () => {
@@ -213,21 +207,14 @@ export default function AdminPortal() {
     }
     const headers = ["Navn", "E-post", "Kilde", "Registrert dato"];
     const rows = leadsList.map(l => [
-      `"${(l.name || '').replace(/"/g, '""')}"`,
-      `"${(l.email || '').replace(/"/g, '""')}"`,
-      `"${(l.source || 'admission_portal_reminder_2027').replace(/"/g, '""')}"`,
-      `"${(l.createdAt?.toDate?.() ? l.createdAt.toDate().toLocaleDateString('no-NO') : '').replace(/"/g, '""')}"`
+      l.name || '',
+      l.email || '',
+      l.source || 'admission_portal_reminder_2027',
+      l.createdAt?.toDate?.() ? l.createdAt.toDate().toLocaleDateString('no-NO') : ''
     ]);
-    const csvContent = "\uFEFF" + [headers.join(";"), ...rows.map(r => r.join(";"))].join("\r\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `HKPC_Interesseliste_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showToast("Interesseliste eksportert til CSV (UTF-8 BOM).");
+    const csvContent = serializeToCsv(headers, rows);
+    downloadCsvFile(`HKPC_Interesseliste_${new Date().toISOString().slice(0, 10)}.csv`, csvContent);
+    showToast("Interesseliste eksportert til CSV (sikker UTF-8 BOM).");
   };
 
   // Sync users database (real users only)
@@ -482,24 +469,16 @@ export default function AdminPortal() {
   const handleExportCSV = () => {
     const headers = ['Navn', 'E-post', 'Rolle', 'Opprettet', 'Status'];
     const rows = filteredUsers.map(u => [
-      u.name,
-      u.email,
-      u.role.toUpperCase(),
-      u.created,
-      u.status
+      u.name || '',
+      u.email || '',
+      (u.role || '').toUpperCase(),
+      u.created || '',
+      u.status || ''
     ]);
 
-    const csvContent = "data:text/csv;charset=utf-8," 
-      + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-    
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `hkm_brukerliste_${Date.now()}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showToast("CSV-fil eksportert!");
+    const csvContent = serializeToCsv(headers, rows);
+    downloadCsvFile(`hkm_brukerliste_${Date.now()}.csv`, csvContent);
+    showToast("CSV-fil eksportert (sikker UTF-8 BOM)!");
   };
 
   // --- FILTERS & PAGINATION LOGIC ---

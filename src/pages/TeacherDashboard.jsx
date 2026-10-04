@@ -8,6 +8,7 @@ import {
   Download, ArrowRight, Sparkles, ToggleLeft, ToggleRight,
   Clock, CheckCircle2, ChevronRight
 } from 'lucide-react';
+import { serializeToCsv, downloadCsvFile } from '@/utils/csvExport';
 
 export default function TeacherDashboard() {
   const navigate = useNavigate();
@@ -74,24 +75,17 @@ export default function TeacherDashboard() {
     }
     const headers = ["Navn", "E-post", "Telefon", "Studielinje", "Betalingsplan", "Status", "Dato"];
     const rows = applications.map(a => [
-      `"${(a.name || '').replace(/"/g, '""')}"`,
-      `"${(a.email || '').replace(/"/g, '""')}"`,
-      `"${(a.phone || '').replace(/"/g, '""')}"`,
-      `"${(a.program || '').replace(/"/g, '""')}"`,
-      `"${(a.paymentPlan || '').replace(/"/g, '""')}"`,
-      `"${(a.status || 'Mottatt').replace(/"/g, '""')}"`,
-      `"${(a.submittedAt?.toDate?.() ? a.submittedAt.toDate().toLocaleDateString('no-NO') : a.date || '').replace(/"/g, '""')}"`
+      a.name || '',
+      a.email || '',
+      a.phone || '',
+      a.program || '',
+      a.paymentPlan || '',
+      a.status || 'Mottatt',
+      a.submittedAt?.toDate?.() ? a.submittedAt.toDate().toLocaleDateString('no-NO') : a.date || ''
     ]);
-    const csvContent = "\uFEFF" + [headers.join(";"), ...rows.map(r => r.join(";"))].join("\r\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `HKPC_Soknader_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showToast("Søknader eksportert til CSV (UTF-8 BOM).");
+    const csvContent = serializeToCsv(headers, rows);
+    downloadCsvFile(`HKPC_Soknader_${new Date().toISOString().slice(0, 10)}.csv`, csvContent);
+    showToast("Søknader eksportert til CSV (sikker UTF-8 BOM).");
   };
 
   return (

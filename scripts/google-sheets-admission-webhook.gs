@@ -3,46 +3,241 @@
  * HIS KINGDOM PROPHETIC COMMUNITY (HKPC) - OPPTAKSWEBHOOK & E-POSTVARSLER
  * ============================================================================
  * 
- * Dette skriptet settes inn i Google Apps Script tilknyttet skolens Google Regneark:
- * 1. Åpne Google Regneark for opptak
- * 2. Gå til "Utvidelser" (Extensions) -> "Apps Script"
- * 3. Erstatt koden i Code.gs med koden i denne filen
- * 4. Klikk "Distribuer" (Deploy) -> "Administrer distribusjoner" -> Rediger -> "Ny versjon" -> Distribuer
+ * SIKKERHETSHERDET GOOGLE APPS SCRIPT WEBHOOK:
+ * 1. Formelinjeksjonsbeskyttelse (CWE-1236 / CSV Injection):
+ *    Alle brukerstyrte verdier som begynner med '=', '+', '-', '@', tab (\t)
+ *    eller carriage return (\r) – inkludert etter innledende mellomrom eller
+ *    ASCII-kontrolltegn – prefikses med enkelt apostrof (') før appendRow.
+ * 2. Validering av påkrevde felt, datatyper og feltlengder på serversiden.
+ * 3. Duplikat- og gjeninnleveringsbeskyttelse som fungerer under samtidige
+ *    forespørsler via LockService og CacheService (idempotent for legitime søkere).
+ * 4. Rate limiting per e-postadresse og global e-postkvotebeskyttelse (MailApp).
  * 
- * Skriptet utfører:
- * - Sikker mottak av søknadsdata fra nettsiden (hkpc.no/admission)
- * - Automatisk opprettelse av overskrifter i regnearket hvis tomt
- * - Logging av hver søker på en ny rad
- * - Utsendelse av lekker HTML-epost til school@hiskingdomministry.no i nøyaktig
- *   samme designstil som HKPC-nettsiden (#561291 lilla, #D7B978 gull, bento-kort og logo)
- * - Direkte lenke tilbake til regnearket fra e-posten
+ * ----------------------------------------------------------------------------
+ * UTRULLINGSTRINN I GOOGLE REGNEARK:
+ * 1. Åpne skolens Google Regneark for opptak.
+ * 2. Klikk "Utvidelser" (Extensions) -> "Apps Script".
+ * 3. Erstatt kildekoden i Code.gs med koden i denne filen.
+ * 4. Klikk "Distribuer" (Deploy) -> "Administrer distribusjoner" (Manage deployments).
+ * 5. Rediger gjeldende distribusjon:
+ *    - Versjon: Velg "Ny versjon" (New version).
+ *    - Utfør som: "Meg" (skolens Google-konto med tilgang til regneark og e-post).
+ *    - Hvem har tilgang: "Alle" (Anyone - nødvendig for at offentlige søkere kan sende).
+ * 6. Klikk "Distribuer" og godkjenn nødvendige Google-tillatelser.
+ * 7. Bekreft at Webhook URL stemmer overens med VITE_GOOGLE_SHEETS_WEBHOOK_URL i .env.
+ * ============================================================================
  */
 
+// Konfigurasjon
 const RECIPIENT_EMAIL = "school@hiskingdomministry.no";
 const SENDER_NAME = "His Kingdom Prophetic Community";
+
+// Hastighetsbegrensning og kvotebeskyttelse
+const MAX_PAYLOAD_SIZE = 60000;              // Maks 60 KB JSON-innhold
+const RATE_LIMIT_EMAIL_MAX_SUBMISSIONS = 2;   // Maks 2 søknader per e-post innenfor tidsvinduet
+const RATE_LIMIT_EMAIL_WINDOW_SEC = 600;      // Tidsvindu for e-post rate limit: 10 minutter
+const RATE_LIMIT_GLOBAL_EMAILS_PER_HOUR = 40; // Maks varslings-eposter per time for å beskytte MailApp-kvote
+const DUPLICATE_CACHE_TTL_SEC = 1800;         // Duplikatminne: 30 minutter
+
+/**
+ * Nøytraliserer formelinjeksjon (Google Sheets / CSV Formula Injection).
+ * Hvis en streng starter med =, +, -, @, \t eller \r (også etter mellomrom eller
+ * kontrolltegn 0x00-0x1F), prefikses den med et enkelt apostrof-tegn (').
+ * Google Sheets lagrer og viser da feltet som ren tekst og eksekverer aldri formler.
+ */
+function sanitizeSheetCell(value) {
+  if (value === null || value === undefined) return "";
+  var str = String(value);
+  if (/^[\s\x00-\x1f]*[=+\-@\t\r]/.test(str)) {
+    return "'" + str;
+  }
+  return str;
+}
+
+/**
+ * Validerer og renser søknadsdata på serversiden før lagring og e-postsending.
+ * Returnerer et objekt: { valid: boolean, error?: string, data?: object }
+ */
+function validateAndSanitizePayload(raw) {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    return { valid: false, error: "Ugyldig dataformat: JSON-objekt forventet." };
+  }
+
+  // Påkrevd felt: Navn
+  var name = typeof raw.name === "string" ? raw.name.trim() : "";
+  if (name.length < 2 || name.length > 120) {
+    return { valid: false, error: "Ugyldig navn: må være mellom 2 og 120 tegn." };
+  }
+
+  // Påkrevd felt: E-postadresse
+  var email = typeof raw.email === "string" ? raw.email.trim().toLowerCase() : "";
+  var emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+  if (email.length < 5 || email.length > 254 || !emailRegex.test(email)) {
+    return { valid: false, error: "Ugyldig e-postadresse." };
+  }
+
+  // Påkrevd felt: Telefon
+  var phone = typeof raw.phone === "string" ? raw.phone.trim() : "";
+  if (phone.length < 5 || phone.length > 35) {
+    return { valid: false, error: "Ugyldig telefonnummer: må være mellom 5 og 35 tegn." };
+  }
+
+  // Hjelper for å begrense lengde på valgfrie tekstfelter
+  function cleanField(val, maxLen, fallback) {
+    if (typeof val !== "string") return fallback || "";
+    var s = val.trim();
+    return s.length > maxLen ? s.substring(0, maxLen) : s;
+  }
+
+  var cleaned = {
+    id: cleanField(raw.id, 64, ""),
+    name: name,
+    email: email,
+    phone: phone,
+    birthDate: cleanField(raw.birthDate, 20, ""),
+    gender: cleanField(raw.gender, 50, ""),
+    maritalStatus: cleanField(raw.maritalStatus, 50, ""),
+    address: cleanField(raw.address, 250, ""),
+    occupation: cleanField(raw.occupation, 150, ""),
+    programTitle: cleanField(raw.programTitle, 150, "His Kingdom Prophetic Community (1. År)"),
+    programCode: cleanField(raw.programCode, 30, "1. ÅR"),
+    paymentPlan: raw.paymentPlan === "year" ? "year" : "semester",
+    churchCommunity: cleanField(raw.churchCommunity, 200, ""),
+    currentMinistry: cleanField(raw.currentMinistry, 250, ""),
+    ministryCalling: cleanField(raw.ministryCalling, 250, ""),
+    whySeeking: cleanField(raw.whySeeking, 3000, ""),
+    expectations: cleanField(raw.expectations, 3000, ""),
+    testimony: cleanField(raw.testimony, 5000, ""),
+    dreamsVision: cleanField(raw.dreamsVision, 3000, ""),
+    hobbies: cleanField(raw.hobbies, 1000, ""),
+    howHeard: cleanField(raw.howHeard, 250, ""),
+    reference: cleanField(raw.reference, 250, ""),
+    additionalNotes: cleanField(raw.additionalNotes, 2000, ""),
+    status: cleanField(raw.status, 50, "pending_review")
+  };
+
+  return { valid: true, data: cleaned };
+}
+
+/**
+ * Hjelper for JSON-respons
+ */
+function createJsonResponse(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
 
 /**
  * Hovedfunksjon for HTTP POST (Web App Webhook)
  */
 function doPost(e) {
+  // 1. Forhåndsvalidering av forespørselsstørrelse
+  if (!e || !e.postData || !e.postData.contents) {
+    return createJsonResponse({ 
+      result: "error", 
+      code: "NO_DATA",
+      message: "Ingen data mottatt i postData" 
+    });
+  }
+
+  if (e.postData.contents.length > MAX_PAYLOAD_SIZE) {
+    return createJsonResponse({ 
+      result: "error", 
+      code: "PAYLOAD_TOO_LARGE",
+      message: "Forespørselen overskrider maksimal tillatt størrelse." 
+    });
+  }
+
+  // 2. Pars JSON
+  var rawData;
+  try {
+    rawData = JSON.parse(e.postData.contents);
+  } catch (err) {
+    return createJsonResponse({ 
+      result: "error", 
+      code: "INVALID_JSON",
+      message: "Ugyldig JSON-format i forespørselen." 
+    });
+  }
+
+  // 3. Valider påkrevde felt og feltlengder
+  var validation = validateAndSanitizePayload(rawData);
+  if (!validation.valid) {
+    return createJsonResponse({
+      result: "error",
+      code: "VALIDATION_FAILED",
+      message: validation.error
+    });
+  }
+
+  var data = validation.data;
+
+  // 4. Etabler atomisk lås for samtidighetsbeskyttelse
   var lock = LockService.getScriptLock();
-  // Vent i opptil 10 sekunder på lås for å unngå samtidige kollisjoner
-  lock.tryLock(10000);
+  var acquiredLock = lock.tryLock(15000);
+  if (!acquiredLock) {
+    return createJsonResponse({
+      result: "error",
+      code: "LOCK_TIMEOUT",
+      message: "Tjenesten behandler for øyeblikket en annen forespørsel. Prøv igjen om et øyeblikk."
+    });
+  }
 
   try {
-    if (!e || !e.postData || !e.postData.contents) {
-      return ContentService.createTextOutput(JSON.stringify({ 
-        result: "error", 
-        message: "Ingen data mottatt i postData" 
-      })).setMimeType(ContentService.MimeType.JSON);
+    var cache = CacheService.getScriptCache();
+
+    // 5. Duplikatbeskyttelse: sjekk ID og innholdsfingeravtrykk
+    var submissionId = data.id;
+    if (submissionId) {
+      var cachedId = cache.get("sub_id_" + submissionId);
+      if (cachedId) {
+        return createJsonResponse({
+          result: "success",
+          duplicate: true,
+          id: submissionId,
+          message: "Søknaden er allerede mottatt og registrert."
+        });
+      }
     }
 
-    var data = JSON.parse(e.postData.contents);
+    // Fingeravtrykk basert på e-post, navn, telefon og linje
+    var fingerprintInput = data.email + "|" + data.name + "|" + data.phone + "|" + data.programCode;
+    var rawDigest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, fingerprintInput, Utilities.Charset.UTF_8);
+    var contentHash = Utilities.base64Encode(rawDigest).substring(0, 32);
+
+    var cachedContent = cache.get("sub_hash_" + contentHash);
+    if (cachedContent) {
+      return createJsonResponse({
+        result: "success",
+        duplicate: true,
+        id: submissionId || "duplicate",
+        message: "En identisk søknad er allerede mottatt for denne søkeren."
+      });
+    }
+
+    // 6. Rate limiting per e-postadresse
+    var emailDigest = Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, data.email, Utilities.Charset.UTF_8);
+    var emailRateKey = "rate_em_" + Utilities.base64Encode(emailDigest).substring(0, 20);
+    var emailSubmissions = parseInt(cache.get(emailRateKey) || "0", 10);
+    if (emailSubmissions >= RATE_LIMIT_EMAIL_MAX_SUBMISSIONS) {
+      return createJsonResponse({
+        result: "error",
+        code: "RATE_LIMIT_EMAIL",
+        message: "For mange innsendinger på kort tid for denne e-postadressen. Vennligst vent litt."
+      });
+    }
+
+    // 7. Global timekvotebeskyttelse for e-post (beskytter skolens daglige MailApp-kvote)
+    var hourKey = "email_q_hr_" + Utilities.formatDate(new Date(), "GMT", "yyyyMMdd_HH");
+    var emailsSentThisHour = parseInt(cache.get(hourKey) || "0", 10);
+    var canSendEmail = (emailsSentThisHour < RATE_LIMIT_GLOBAL_EMAILS_PER_HOUR);
+
+    // 8. Tilgang til Google Regneark
     var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     var sheet = spreadsheet.getActiveSheet();
     var sheetUrl = spreadsheet.getUrl();
 
-    // 1. Initialiser overskrifter dersom regnearket er helt tomt
+    // Initialiser overskrifter dersom regnearket er helt tomt
     if (sheet.getLastRow() === 0) {
       sheet.appendRow([
         "Tidspunkt",
@@ -72,7 +267,6 @@ function doPost(e) {
         "Status"
       ]);
 
-      // Formater overskriftsraden med lilla bakgrunn og hvit tekst
       var headerRange = sheet.getRange(1, 1, 1, 25);
       headerRange.setBackground("#561291");
       headerRange.setFontColor("#FFFFFF");
@@ -80,53 +274,69 @@ function doPost(e) {
       sheet.setFrozenRows(1);
     }
 
-    // 2. Formater tidsstempel for Norge/Oslo
     var nowOslo = Utilities.formatDate(new Date(), "Europe/Oslo", "dd.MM.yyyy HH:mm:ss");
 
-    // 3. Legg til søknadsraden
+    // 9. Skriv rad til regnearket – HVER CELLE sanitiseres mot formelinjeksjon
     sheet.appendRow([
-      nowOslo,
-      data.id || "",
-      data.name || "",
-      data.email || "",
-      data.phone || "",
-      data.birthDate || "",
-      data.gender || "",
-      data.maritalStatus || "",
-      data.address || "",
-      data.occupation || "",
-      data.programTitle || "His Kingdom Prophetic Community (1. År)",
-      data.programCode || "1. ÅR",
-      data.paymentPlan === "year" ? "Fullt studieår" : "Semesterfaktura",
-      data.churchCommunity || "",
-      data.currentMinistry || "",
-      data.ministryCalling || "",
-      data.whySeeking || "",
-      data.expectations || "",
-      data.testimony || "",
-      data.dreamsVision || "",
-      data.hobbies || "",
-      data.howHeard || "",
-      data.reference || "",
-      data.additionalNotes || "",
-      data.status || "pending_review"
+      sanitizeSheetCell(nowOslo),
+      sanitizeSheetCell(data.id),
+      sanitizeSheetCell(data.name),
+      sanitizeSheetCell(data.email),
+      sanitizeSheetCell(data.phone),
+      sanitizeSheetCell(data.birthDate),
+      sanitizeSheetCell(data.gender),
+      sanitizeSheetCell(data.maritalStatus),
+      sanitizeSheetCell(data.address),
+      sanitizeSheetCell(data.occupation),
+      sanitizeSheetCell(data.programTitle),
+      sanitizeSheetCell(data.programCode),
+      sanitizeSheetCell(data.paymentPlan === "year" ? "Fullt studieår" : "Semesterfaktura"),
+      sanitizeSheetCell(data.churchCommunity),
+      sanitizeSheetCell(data.currentMinistry),
+      sanitizeSheetCell(data.ministryCalling),
+      sanitizeSheetCell(data.whySeeking),
+      sanitizeSheetCell(data.expectations),
+      sanitizeSheetCell(data.testimony),
+      sanitizeSheetCell(data.dreamsVision),
+      sanitizeSheetCell(data.hobbies),
+      sanitizeSheetCell(data.howHeard),
+      sanitizeSheetCell(data.reference),
+      sanitizeSheetCell(data.additionalNotes),
+      sanitizeSheetCell(data.status)
     ]);
 
-    // 4. Send designet e-post til administrasjonen
-    sendBrandedNotificationEmail(data, sheetUrl, nowOslo);
+    // 10. Send e-postvarsel dersom timekvote tillater det
+    if (canSendEmail) {
+      try {
+        sendBrandedNotificationEmail(data, sheetUrl, nowOslo);
+        cache.put(hourKey, String(emailsSentThisHour + 1), 3600);
+      } catch (mailError) {
+        Logger.log("Kunne ikke sende e-postvarsel: " + mailError.toString());
+      }
+    } else {
+      Logger.log("Advarsel: Global e-postkvote nådd for denne timen. Søknad er registrert i regnearket uten e-postvarsel.");
+    }
 
-    return ContentService.createTextOutput(JSON.stringify({ 
+    // 11. Oppdater duplikat- og hastighetsminne i CacheService
+    if (submissionId) {
+      cache.put("sub_id_" + submissionId, "1", DUPLICATE_CACHE_TTL_SEC);
+    }
+    cache.put("sub_hash_" + contentHash, "1", DUPLICATE_CACHE_TTL_SEC);
+    cache.put(emailRateKey, String(emailSubmissions + 1), RATE_LIMIT_EMAIL_WINDOW_SEC);
+
+    return createJsonResponse({ 
       result: "success", 
       id: data.id || "ok",
       timestamp: nowOslo
-    })).setMimeType(ContentService.MimeType.JSON);
+    });
 
   } catch (error) {
-    Logger.log("Feil i doPost: " + error.toString());
-    return ContentService.createTextOutput(JSON.stringify({ 
+    Logger.log("Uventet feil i doPost: " + error.toString());
+    return createJsonResponse({ 
       result: "error", 
-      message: error.toString() 
-    })).setMimeType(ContentService.MimeType.JSON);
+      code: "INTERNAL_ERROR",
+      message: "En intern feil oppstod under behandling av søknaden." 
+    });
 
   } finally {
     lock.releaseLock();
@@ -137,7 +347,7 @@ function doPost(e) {
  * Sender lekker HTML-epost til skolen
  */
 function sendBrandedNotificationEmail(data, sheetUrl, nowFormatted) {
-  var applicantName = (data.name || "Ny søker").trim();
+  var applicantName = (data.name || "Ny søker").replace(/[\r\n\x00-\x1f]+/g, ' ').trim();
   var subject = "[HKPC Opptak] Ny søknad fra " + applicantName;
   var htmlContent = buildEmailTemplateHtml(data, sheetUrl, nowFormatted);
   var plainTextContent = buildPlainTextSummary(data, sheetUrl, nowFormatted);
@@ -153,16 +363,23 @@ function sendBrandedNotificationEmail(data, sheetUrl, nowFormatted) {
 }
 
 /**
- * Hjelpefunksjon for å unnslippe HTML-spesialtegn (XSS-sikkerhet)
+ * Hjelpefunksjon for å unnslippe HTML-spesialtegn (XSS- og HTML-injeksjonssikring)
  */
 function escapeHtml(text) {
-  if (!text) return "";
+  if (text === null || text === undefined) return "";
   return String(text)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+/**
+ * Hjelpefunksjon for å bevare linjeskift i HTML-innhold
+ */
+function escapeHtmlWithLineBreaks(text) {
+  return escapeHtml(text).replace(/\r?\n/g, "<br />");
 }
 
 /**
@@ -185,12 +402,14 @@ function buildEmailTemplateHtml(data, sheetUrl, nowFormatted) {
   var churchCommunity = escapeHtml(data.churchCommunity || "-");
   var currentMinistry = escapeHtml(data.currentMinistry || "-");
   var ministryCalling = escapeHtml(data.ministryCalling || "-");
-  var whySeeking = escapeHtml(data.whySeeking || "");
-  var expectations = escapeHtml(data.expectations || "");
-  var testimony = escapeHtml(data.testimony || "");
+  var whySeeking = escapeHtmlWithLineBreaks(data.whySeeking || "");
+  var expectations = escapeHtmlWithLineBreaks(data.expectations || "");
+  var testimony = escapeHtmlWithLineBreaks(data.testimony || "");
   var reference = escapeHtml(data.reference || "-");
   var regnearkUrl = sheetUrl || "https://docs.google.com/spreadsheets";
   var timeText = nowFormatted || Utilities.formatDate(new Date(), "Europe/Oslo", "dd.MM.yyyy HH:mm:ss");
+
+  var quoteSnippet = testimony || whySeeking;
 
   return `<!DOCTYPE html>
 <html lang="no" xmlns="http://www.w3.org/1999/xhtml">
@@ -385,9 +604,9 @@ function buildEmailTemplateHtml(data, sheetUrl, nowFormatted) {
                       </tr>
                     </table>
 
-                    ${testimony || whySeeking ? `
-                    <div style="margin-top: 14px; padding: 12px 16px; background-color: #FFFFFF; border-left: 3px solid #561291; border-radius: 0 10px 10px 0; font-size: 13px; line-height: 20px; color: #464554; font-style: italic;">
-                      &ldquo;${testimony || whySeeking}&rdquo;
+                    ${quoteSnippet ? `
+                    <div style="margin-top: 14px; padding: 12px 16px; background-color: #FFFFFF; border-left: 3px solid #561291; border-radius: 0 10px 10px 0; font-size: 13px; line-height: 20px; color: #464554; font-style: italic; word-break: break-word;">
+                      &ldquo;${quoteSnippet}&rdquo;
                     </div>` : ''}
                   </td>
                 </tr>

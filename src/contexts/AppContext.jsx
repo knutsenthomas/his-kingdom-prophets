@@ -22,6 +22,7 @@ import {
   query,
   where
 } from 'firebase/firestore';
+import { escapeHtml, escapeHtmlWithLineBreaks, sanitizeEmail, sanitizeEmailSubject } from '@/utils/security';
 
 // Context API Sikkerhetsnett: Initialiser med tom brakett for å unngå "White screen of death"
 export const AppContext = createContext({});
@@ -1121,21 +1122,28 @@ export const AppProvider = ({ children }) => {
 
       // 2. Lagre i "support_emails" for automatisk e-postutsending via Firebase Extension
       const emailRef = doc(collection(db, "support_emails"));
+      const safeName = escapeHtml(ticketData.name || 'Ukjent avsender');
+      const safeEmail = escapeHtml(sanitizeEmail(ticketData.email || ''));
+      const safeSubject = escapeHtml(sanitizeEmailSubject(ticketData.subject || 'Generell forespørsel'));
+      const safeMessage = escapeHtmlWithLineBreaks(ticketData.message || '');
+      const sourceLabel = ticketData.source === 'support_center' ? 'Studentportal / Hjelpesenter' : 'Offentlig kontaktside';
+      const cleanReplyTo = sanitizeEmail(ticketData.email) || 'school@hiskingdomministry.no';
+
       const newEmail = {
         to: 'school@hiskingdomministry.no',
-        replyTo: ticketData.email,
+        replyTo: cleanReplyTo,
         message: {
-          subject: `[HKM Support] ${ticketData.subject || 'Ny henvendelse'}`,
-          text: `Ny henvendelse fra ${ticketData.name} (${ticketData.email}):\n\n${ticketData.message}`,
+          subject: `[HKM Support] ${sanitizeEmailSubject(ticketData.subject || 'Ny henvendelse')}`,
+          text: `Ny henvendelse fra ${ticketData.name || 'Ukjent'} (${ticketData.email || 'Ingen e-post'}):\n\n${ticketData.message || ''}`,
           html: `
             <div style="font-family: sans-serif; padding: 20px; color: #333; max-width: 600px; border: 1px solid #eee; border-radius: 8px;">
               <h2 style="color: #561291; border-bottom: 2px solid #561291; padding-bottom: 10px; margin-top: 0;">Ny support-henvendelse</h2>
-              <p><strong>Navn:</strong> ${ticketData.name}</p>
-              <p><strong>E-post:</strong> <a href="mailto:${ticketData.email}">${ticketData.email}</a></p>
-              <p><strong>Kilde:</strong> ${ticketData.source === 'support_center' ? 'Studentportal / Hjelpesenter' : 'Offentlig kontaktside'}</p>
-              <p><strong>Emne:</strong> ${ticketData.subject || 'Generell forespørsel'}</p>
+              <p><strong>Navn:</strong> ${safeName}</p>
+              <p><strong>E-post:</strong> <a href="mailto:${safeEmail}">${safeEmail}</a></p>
+              <p><strong>Kilde:</strong> ${sourceLabel}</p>
+              <p><strong>Emne:</strong> ${safeSubject}</p>
               <div style="background-color: #F6F4F8; padding: 15px; border-left: 4px solid #D7B978; margin-top: 20px; border-radius: 4px;">
-                <p style="margin: 0; white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${ticketData.message}</p>
+                <div style="margin: 0; font-size: 14px; line-height: 1.6; word-break: break-word;">${safeMessage}</div>
               </div>
               <p style="font-size: 11px; color: #666; margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px;">
                 Dette er en automatisk generert e-post sendt fra His Kingdom Prophets plattformen.

@@ -11,6 +11,7 @@ import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SeoHead from '@/components/SeoHead';
+import { escapeHtml, escapeHtmlWithLineBreaks, sanitizeEmail, sanitizeEmailSubject } from '@/utils/security';
 
 const DRAFT_KEY = 'hkpc_application_draft_v1';
 const DRAFT_STEP_KEY = 'hkpc_application_draft_step';
@@ -89,9 +90,9 @@ export default function AdmissionPage() {
         const emailRef = doc(collection(db, "support_emails"));
         await setDoc(emailRef, {
           to: 'school@hiskingdomministry.no',
-          replyTo: interestEmail.trim(),
+          replyTo: sanitizeEmail(interestEmail) || 'school@hiskingdomministry.no',
           message: {
-            subject: `[HKPC Opptak 2027] Ny interessert student: ${interestName.trim() || interestEmail.trim()}`,
+            subject: `[HKPC Opptak 2027] Ny interessert student: ${sanitizeEmailSubject(interestName.trim() || interestEmail.trim())}`,
             text: `En potensiell søker har registrert seg for påminnelse når søknadsportalen åpner 1. januar 2027:\n\nNavn: ${interestName.trim() || 'Ikke oppgitt'}\nE-post: ${interestEmail.trim()}`
           }
         });
@@ -475,12 +476,35 @@ export default function AdmissionPage() {
 
       // 2. Send e-postvarsel til administrasjonen via 'support_emails'
       try {
+        const safeName = escapeHtml(formData.name.trim());
+        const rawEmail = sanitizeEmail(formData.email);
+        const safeEmail = escapeHtml(rawEmail);
+        const safePhone = escapeHtml(formData.phone.trim());
+        const safeBirthDate = escapeHtml(formData.birthDate || '-');
+        const safeGender = escapeHtml(formData.gender || '-');
+        const safeMaritalStatus = escapeHtml(formData.maritalStatus || '-');
+        const safeAddress = escapeHtml(formData.address.trim() || '-');
+        const safeOccupation = escapeHtml(formData.occupation.trim() || '-');
+        const safeProgTitle = escapeHtml(prog.title);
+        const safeProgCode = escapeHtml(prog.code);
+        const safePaymentPlan = formData.paymentPlan === 'year'
+          ? 'Fullt studieår (10 000,- / $1,000 USD)'
+          : 'Semesterfaktura (5 000,- / $500 USD per sem)';
+        const safeChurchCommunity = escapeHtml(formData.churchCommunity.trim() || '-');
+        const safeCurrentMinistry = escapeHtml(formData.currentMinistry.trim() || '-');
+        const safeMinistryCalling = escapeHtml(formData.ministryCalling.trim() || '-');
+        const safeReference = escapeHtml(formData.reference.trim() || '-');
+        const safeTestimony = escapeHtmlWithLineBreaks(formData.testimony.trim() || '');
+        const safeWhySeeking = escapeHtmlWithLineBreaks(formData.whySeeking.trim() || '');
+        const quoteText = safeTestimony || safeWhySeeking;
+        const safeDocId = escapeHtml(docRef.id);
+
         const emailRef = doc(collection(db, "support_emails"));
         await setDoc(emailRef, {
           to: 'school@hiskingdomministry.no',
-          replyTo: formData.email.trim(),
+          replyTo: rawEmail || 'school@hiskingdomministry.no',
           message: {
-            subject: `[HKPC Opptak] Ny søknad fra ${formData.name.trim()}`,
+            subject: `[HKPC Opptak] Ny søknad fra ${sanitizeEmailSubject(formData.name)}`,
             text: `Det har kommet inn en ny søknad om opptak ved HKPC!\n\nNavn: ${formData.name.trim()}\nE-post: ${formData.email.trim()}\nTelefon: ${formData.phone.trim()}\nStudielinje: ${prog.title} (${prog.code})\nBetalingsordning: ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}\n\nÅpne Google Regneark eller administrasjonsportalen for å se hele søknaden med vitnesbyrd og referanser.`,
             html: `
               <!DOCTYPE html>
@@ -532,7 +556,7 @@ export default function AdmissionPage() {
                               </tr>
                             </table>
                             <h1 style="margin: 0 0 10px 0; font-family: 'Playfair Display', Georgia, serif; font-size: 24px; line-height: 32px; font-weight: 700; color: #271F30;">
-                              Ny søknad fra ${formData.name.trim()}
+                              Ny søknad fra ${safeName}
                             </h1>
                             <p style="margin: 0 0 22px 0; font-size: 15px; line-height: 24px; color: #6D6575;">
                               Det har kommet inn en ny søknad om opptak ved <strong>HKPC</strong>! Nedenfor finner du en oversikt over søkerens personalia og opptaksdetaljer:
@@ -548,35 +572,35 @@ export default function AdmissionPage() {
                                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size: 14px; line-height: 22px;">
                                     <tr>
                                       <td width="130" valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Fullt navn:</td>
-                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30; font-weight: 700;">${formData.name.trim()}</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30; font-weight: 700;">${safeName}</td>
                                     </tr>
                                     <tr>
                                       <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">E-postadresse:</td>
                                       <td valign="top" class="mobile-field-val" style="padding: 4px 0;">
-                                        <a href="mailto:${formData.email.trim()}" style="color: #561291; font-weight: 600; text-decoration: underline;">${formData.email.trim()}</a>
+                                        <a href="mailto:${safeEmail}" style="color: #561291; font-weight: 600; text-decoration: underline;">${safeEmail}</a>
                                       </td>
                                     </tr>
                                     <tr>
                                       <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Telefon:</td>
                                       <td valign="top" class="mobile-field-val" style="padding: 4px 0;">
-                                        <a href="tel:${formData.phone.trim()}" style="color: #561291; font-weight: 600; text-decoration: none;">${formData.phone.trim()}</a>
+                                        <a href="tel:${safePhone}" style="color: #561291; font-weight: 600; text-decoration: none;">${safePhone}</a>
                                       </td>
                                     </tr>
                                     <tr>
                                       <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Fødselsdato:</td>
-                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.birthDate}</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${safeBirthDate}</td>
                                     </tr>
                                     <tr>
                                       <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Kjønn / Sivil:</td>
-                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.gender} • ${formData.maritalStatus}</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${safeGender} • ${safeMaritalStatus}</td>
                                     </tr>
                                     <tr>
                                       <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Adresse / Sted:</td>
-                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.address.trim()}</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${safeAddress}</td>
                                     </tr>
                                     <tr>
                                       <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Yrke / Utdanning:</td>
-                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.occupation.trim()}</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${safeOccupation}</td>
                                     </tr>
                                   </table>
                                 </td>
@@ -594,13 +618,13 @@ export default function AdmissionPage() {
                                     <tr>
                                       <td width="130" valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Studielinje:</td>
                                       <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30; font-weight: 700;">
-                                        ${prog.title} 
-                                        <span style="display: inline-block; background-color: #561291; color: #FFFFFF; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 4px; margin-left: 4px; text-transform: uppercase; letter-spacing: 0.04em;">${prog.code}</span>
+                                        ${safeProgTitle} 
+                                        <span style="display: inline-block; background-color: #561291; color: #FFFFFF; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 4px; margin-left: 4px; text-transform: uppercase; letter-spacing: 0.04em;">${safeProgCode}</span>
                                       </td>
                                     </tr>
                                     <tr>
                                       <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Betalingsordning:</td>
-                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30; font-weight: 600;">${formData.paymentPlan === 'year' ? 'Fullt studieår (10 000,- / $1,000 USD)' : 'Semesterfaktura (5 000,- / $500 USD per sem)'}</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30; font-weight: 600;">${safePaymentPlan}</td>
                                     </tr>
                                     <tr>
                                       <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Språk &amp; Kickoff:</td>
@@ -621,25 +645,25 @@ export default function AdmissionPage() {
                                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size: 14px; line-height: 22px;">
                                     <tr>
                                       <td width="130" valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Menighet:</td>
-                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.churchCommunity.trim()}</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${safeChurchCommunity}</td>
                                     </tr>
                                     <tr>
                                       <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Nåværende tjeneste:</td>
-                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.currentMinistry.trim()}</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${safeCurrentMinistry}</td>
                                     </tr>
                                     <tr>
                                       <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Kall / nådegave:</td>
-                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${formData.ministryCalling.trim()}</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30;">${safeMinistryCalling}</td>
                                     </tr>
                                     <tr>
                                       <td valign="top" class="mobile-field-label" style="padding: 4px 0; color: #6D6575; font-weight: 500;">Oppgitt referanse:</td>
-                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30; font-weight: 700;">${formData.reference.trim()}</td>
+                                      <td valign="top" class="mobile-field-val" style="padding: 4px 0; color: #271F30; font-weight: 700;">${safeReference}</td>
                                     </tr>
                                   </table>
 
-                                  ${formData.testimony || formData.whySeeking ? `
-                                  <div style="margin-top: 14px; padding: 12px 16px; background-color: #FFFFFF; border-left: 3px solid #561291; border-radius: 0 10px 10px 0; font-size: 13px; line-height: 20px; color: #464554; font-style: italic;">
-                                    &ldquo;${(formData.testimony || formData.whySeeking).trim()}&rdquo;
+                                  ${quoteText ? `
+                                  <div style="margin-top: 14px; padding: 12px 16px; background-color: #FFFFFF; border-left: 3px solid #561291; border-radius: 0 10px 10px 0; font-size: 13px; line-height: 20px; color: #464554; font-style: italic; word-break: break-word;">
+                                    &ldquo;${quoteText}&rdquo;
                                   </div>` : ''}
                                 </td>
                               </tr>
@@ -679,7 +703,7 @@ export default function AdmissionPage() {
                               Offisiell søknadsportal: <a href="https://hkpc.no" target="_blank" style="color: #561291; text-decoration: underline;">hkpc.no</a> • Kontakt: <a href="mailto:school@hiskingdomministry.no" style="color: #561291; text-decoration: underline;">school@hiskingdomministry.no</a>
                             </div>
                             <div style="font-size: 10px; color: #8F8B99;">
-                              Søknads-ID: ${docRef.id} • Registrert via www.hkpc.no/admission
+                              Søknads-ID: ${safeDocId} • Registrert via www.hkpc.no/admission
                             </div>
                           </td>
                         </tr>
@@ -697,7 +721,7 @@ export default function AdmissionPage() {
       }
 
       // 3. Webhook til Google Sheets (miljøvariabel med fallback til aktiv implementering)
-      const sheetsWebhook = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL || 'https://script.google.com/macros/s/AKfycbxs_INRqjhn5X8KffHyUsoY33L3QAV8uVOwvAwoKp9NqrmaQT_BU53CrYR0HUzaQJyFjA/exec';
+      const sheetsWebhook = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL || 'https://script.google.com/macros/s/AKfycbydGBIQJZY76iGUA623g4qkoTyihKauzcLPCHZ8u8zWqxyO1hUkxKtb3UJBSkbgEEY51A/exec';
       if (sheetsWebhook) {
         try {
           await fetch(sheetsWebhook, {
