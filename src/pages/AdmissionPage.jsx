@@ -1350,11 +1350,6 @@ export default function AdmissionPage() {
               <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-[#D7B978]/10 blur-3xl pointer-events-none" />
 
               <div className="relative z-10 space-y-3">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#561291]/10 text-[#561291] font-bold text-xs sm:text-sm uppercase tracking-wider border border-[#561291]/20">
-                  <Lock size={15} className="text-[#561291]" />
-                  <span><CmsText slug="admission-locked-badge" fallback={language === 'en' ? "Application Opens January 1, 2027" : "Søknadsportalen åpner 1. januar 2027"} /></span>
-                </div>
-
                 <h3 className="font-sans text-2xl sm:text-4xl font-extrabold text-[#561291]">
                   <CmsText slug="admission-locked-title" fallback={language === 'en' ? "Applications Open January 1, 2027" : "Søknadsportalen åpner 1. januar 2027"} />
                 </h3>
