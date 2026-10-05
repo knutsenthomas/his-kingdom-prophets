@@ -768,7 +768,7 @@ export default function AdmissionPage() {
   const programs = [
     {
       id: "prophetic_community",
-      code: "TRACK 1",
+      code: language === 'en' ? "Year 1" : "1. år",
       title: "His Kingdom Prophetic Community",
       duration: language === 'en' ? "1 Year • English • On-site Kickoff Aug 20–22" : "1 År • Engelsk • Kickoff i Norge 20.–22. aug",
       priceYear: language === 'en' ? "$1,000 USD" : "10 000,-",
@@ -799,9 +799,9 @@ export default function AdmissionPage() {
     },
     {
       id: "prophets_advanced",
-      code: "TRACK 2",
+      code: language === 'en' ? "Year 2" : "2. år",
       title: "His Kingdom Prophets (oppstart 2028)",
-      duration: language === 'en' ? "Starts in 2028 (Requires Track 1)" : "Starter i 2028 (Krever 1. År)",
+      duration: language === 'en' ? "Starts in 2028 (Requires Year 1)" : "Starter i 2028 (Krever 1. År)",
       priceYear: language === 'en' ? "$1,000 USD" : "10 000,-",
       priceMonthly: language === 'en' ? "$100 USD / mo" : "1 000,- / mnd",
       priceBiannual: language === 'en' ? "$500 USD x 2" : "5 000,- x 2",
@@ -811,13 +811,13 @@ export default function AdmissionPage() {
         "Tuition: $1,000 USD full year (monthly, semi-annually, or in full)",
         "Requires separate reapplication & prayer evaluation",
         "Reading list, paper writing & physical SUPER CHARGE",
-        "PREREQUISITE: Must complete Track 1 (1st Year) first"
+        "PREREQUISITE: Must complete Year 1 first"
       ] : [
         "Spesifikt for de kalt til embetet som profet (oppstart 2028)",
         "Studieavgift: 10 000,- (betal mnd, halvår eller hele prisen samlet)",
         "Krever ny søknad, pensumliste og skriftlig oppgave",
         "Krav om deltakelse på 1-2 ukers fysisk samling",
-        "FORKUNNSKAP: Må ha fullført 1. år (Track 1) først"
+        "FORKUNNSKAP: Må ha fullført 1. år først"
       ]
     }
   ];
@@ -1987,8 +1987,8 @@ export default function AdmissionPage() {
                             <Lock size={16} className="shrink-0 mt-0.5" />
                             <p className="font-medium leading-relaxed">
                               {language === 'en'
-                                ? "This program (Track 2) launches in 2028. To apply, you must confirm that you plan to complete or have completed Track 1 (His Kingdom Prophetic Community) first."
-                                : "Dette studieløpet (Track 2) starter ikke før i 2028. For å søke opptak, må du bekrefte at du har fullført eller planlegger å fullføre 1. år (Track 1) først."}
+                                ? "This program (Year 2) launches in 2028. To apply, you must confirm that you plan to complete or have completed Year 1 (His Kingdom Prophetic Community) first."
+                                : "Dette studieløpet (2. år) starter ikke før i 2028. For å søke opptak, må du bekrefte at du har fullført eller planlegger å fullføre 1. år (His Kingdom Prophetic Community) først."}
                             </p>
                           </div>
                           <label className="flex items-start gap-3 cursor-pointer select-none pt-1">
@@ -2002,7 +2002,7 @@ export default function AdmissionPage() {
                             />
                             <span className="text-sm sm:text-base text-amber-950 font-bold leading-normal">
                               {language === 'en'
-                                ? "I confirm that I plan to complete or have completed Track 1 first *"
+                                ? "I confirm that I plan to complete or have completed Year 1 first *"
                                 : "Jeg bekrefter at jeg har fullført eller planlegger å fullføre 1. år først *"}
                             </span>
                           </label>
