@@ -1084,8 +1084,8 @@ export default function AdminPortal() {
                                    app.program === 'fivefold_ministry' ? 'MIN 201' : (app.program || 'Ikke spesifisert')}
                                 </span>
                               </td>
-                              <td className="py-3 px-3 text-slate-600 capitalize">
-                                {app.paymentPlan === 'semester' ? 'Semestervis' : app.paymentPlan === 'yearly' ? 'Fullt år' : (app.paymentPlan || '–')}
+                              <td className="py-3 px-3 text-slate-600">
+                                {app.paymentPlan === 'monthly' ? 'Månedlig' : (app.paymentPlan === 'biannual' || app.paymentPlan === 'semester') ? 'Halvårlig' : (app.paymentPlan === 'full' || app.paymentPlan === 'year' || app.paymentPlan === 'yearly') ? 'Hele prisen' : (app.paymentPlan || '–')}
                               </td>
                               <td className="py-3 px-3 text-slate-500 whitespace-nowrap">
                                 {app.submittedAt?.toDate?.() ? app.submittedAt.toDate().toLocaleDateString('no-NO') : (app.date || '–')}
@@ -1336,7 +1336,12 @@ export default function AdminPortal() {
                     </div>
                     <div>
                       <span className="text-slate-400 block">Betalingsplan:</span>
-                      <span className="font-semibold text-slate-800 capitalize">{selectedApplication.paymentPlan || '–'}</span>
+                      <span className="font-semibold text-slate-800">
+                        {selectedApplication.paymentPlan === 'monthly' ? 'Månedlig delbetaling (1 000,- / mnd)' :
+                         (selectedApplication.paymentPlan === 'biannual' || selectedApplication.paymentPlan === 'semester') ? 'Halvårlig betaling (5 000,- x 2)' :
+                         (selectedApplication.paymentPlan === 'full' || selectedApplication.paymentPlan === 'year' || selectedApplication.paymentPlan === 'yearly') ? 'Hele prisen på en gang (10 000,-)' :
+                         (selectedApplication.paymentPlan || '–')}
+                      </span>
                     </div>
                   </div>
                 </div>

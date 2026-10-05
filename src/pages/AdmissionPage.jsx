@@ -125,7 +125,7 @@ export default function AdmissionPage() {
 
     // Del 2: Studielinje & praktiske rammer
     program: 'prophetic_community',
-    paymentPlan: 'semester',
+    paymentPlan: 'monthly', // 'monthly', 'biannual', 'full'
     languageAgreement: false,
     confirmYear1: false,
 
@@ -146,7 +146,7 @@ export default function AdmissionPage() {
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activePlan, setActivePlan] = useState('semester'); // semester, year
+  const [activePlan, setActivePlan] = useState('full'); // 'full', 'biannual', 'monthly'
   
   const [stripeElements, setStripeElements] = useState(null);
   const [stripeInstance, setStripeInstance] = useState(null);
@@ -209,7 +209,7 @@ export default function AdmissionPage() {
         maritalStatus: '',
         occupation: '',
         program: 'prophetic_community',
-        paymentPlan: 'semester',
+        paymentPlan: 'monthly',
         languageAgreement: false,
         confirmYear1: false,
         whySeeking: '',
@@ -487,9 +487,11 @@ export default function AdmissionPage() {
         const safeOccupation = escapeHtml(formData.occupation.trim() || '-');
         const safeProgTitle = escapeHtml(prog.title);
         const safeProgCode = escapeHtml(prog.code);
-        const safePaymentPlan = formData.paymentPlan === 'year'
-          ? 'Fullt studieår (10 000,- / $1,000 USD)'
-          : 'Semesterfaktura (5 000,- / $500 USD per sem)';
+        const safePaymentPlan = formData.paymentPlan === 'monthly'
+          ? 'Månedlig delbetaling (1 000,- / $100 USD per mnd i 10 mnd)'
+          : (formData.paymentPlan === 'biannual' || formData.paymentPlan === 'semester')
+          ? 'Halvårlig betaling (5 000,- / $500 USD to ganger i året)'
+          : 'Hele prisen på en gang (10 000,- / $1,000 USD fullt studieår)';
         const safeChurchCommunity = escapeHtml(formData.churchCommunity.trim() || '-');
         const safeCurrentMinistry = escapeHtml(formData.currentMinistry.trim() || '-');
         const safeMinistryCalling = escapeHtml(formData.ministryCalling.trim() || '-');
@@ -499,13 +501,19 @@ export default function AdmissionPage() {
         const quoteText = safeTestimony || safeWhySeeking;
         const safeDocId = escapeHtml(docRef.id);
 
+        const emailPlanText = formData.paymentPlan === 'monthly'
+          ? 'Månedlig (1 000,- per mnd)'
+          : (formData.paymentPlan === 'biannual' || formData.paymentPlan === 'semester')
+          ? 'Halvårlig (5 000,- x 2)'
+          : 'Hele prisen på en gang (10 000,-)';
+
         const emailRef = doc(collection(db, "support_emails"));
         await setDoc(emailRef, {
           to: 'school@hiskingdomministry.no',
           replyTo: rawEmail || 'school@hiskingdomministry.no',
           message: {
             subject: `[HKPC Opptak] Ny søknad fra ${sanitizeEmailSubject(formData.name)}`,
-            text: `Det har kommet inn en ny søknad om opptak ved HKPC!\n\nNavn: ${formData.name.trim()}\nE-post: ${formData.email.trim()}\nTelefon: ${formData.phone.trim()}\nStudielinje: ${prog.title} (${prog.code})\nBetalingsordning: ${formData.paymentPlan === 'year' ? 'Fullt studieår' : 'Semesterfaktura'}\n\nÅpne Google Regneark eller administrasjonsportalen for å se hele søknaden med vitnesbyrd og referanser.`,
+            text: `Det har kommet inn en ny søknad om opptak ved HKPC!\n\nNavn: ${formData.name.trim()}\nE-post: ${formData.email.trim()}\nTelefon: ${formData.phone.trim()}\nStudielinje: ${prog.title} (${prog.code})\nBetalingsordning: ${emailPlanText}\n\nÅpne Google Regneark eller administrasjonsportalen for å se hele søknaden med vitnesbyrd og referanser.`,
             html: `
               <!DOCTYPE html>
               <html lang="no">
@@ -764,14 +772,15 @@ export default function AdmissionPage() {
       title: "His Kingdom Prophetic Community",
       duration: language === 'en' ? "1 Year • English • On-site Kickoff Aug 20–22" : "1 År • Engelsk • Kickoff i Norge 20.–22. aug",
       credits: "1. År / Year 1",
-      priceSemester: language === 'en' ? "$500 USD" : "5 000,-",
       priceYear: language === 'en' ? "$1,000 USD" : "10 000,-",
+      priceMonthly: language === 'en' ? "$100 USD / mo" : "1 000,- / mnd",
+      priceBiannual: language === 'en' ? "$500 USD x 2" : "5 000,- x 2",
       isLocked: false,
       features: language === 'en' ? [
         "Age requirement: Minimum 18 years old",
         "All instruction & teaching conducted in English",
         "On-site kickoff gathering in Norway August 20–22, 2027",
-        "Tuition: $500 USD / semester ($1,000 USD full year)",
+        "Tuition: $1,000 USD full year (monthly, semi-annually, or in full)",
         "Admin startup fee: $50 USD",
         "Kickoff room & board: $50 USD (own hotel not covered)",
         "Grow in relationship with Jesus & gifts of the Spirit",
@@ -781,7 +790,7 @@ export default function AdmissionPage() {
         "Opptakskrav: Du må være fylt 18 år",
         "All undervisning og veiledning foregår på engelsk",
         "On-site kickoff-samling i Norge 20.–22. august 2027",
-        "Studieavgift: 5 000,- per semester (10 000,- fullt år)",
+        "Studieavgift: 10 000,- (betal mnd, halvår eller hele prisen samlet)",
         "Admin oppstartsgebyr: 500,-",
         "Kost og losji for kickoff-helgen: 500,- (egenvalgt hotell dekkes ikke)",
         "Vokse i relasjon med Jesus og Åndens gaver",
@@ -795,18 +804,19 @@ export default function AdmissionPage() {
       title: "His Kingdom Prophets (oppstart 2028)",
       duration: language === 'en' ? "Starts in 2028 (Requires Track 1)" : "Starter i 2028 (Krever 1. År)",
       credits: "2. År / Year 2",
-      priceSemester: language === 'en' ? "$500 USD" : "5 000,-",
       priceYear: language === 'en' ? "$1,000 USD" : "10 000,-",
+      priceMonthly: language === 'en' ? "$100 USD / mo" : "1 000,- / mnd",
+      priceBiannual: language === 'en' ? "$500 USD x 2" : "5 000,- x 2",
       isLocked: true,
       features: language === 'en' ? [
         "Specifically for those called to the office of a prophet (Launches 2028)",
-        "Tuition: $500 USD / semester ($1,000 USD full year)",
+        "Tuition: $1,000 USD full year (monthly, semi-annually, or in full)",
         "Requires separate reapplication & prayer evaluation",
         "Reading list, paper writing & physical SUPER CHARGE",
         "PREREQUISITE: Must complete Track 1 (1st Year) first"
       ] : [
         "Spesifikt for de kalt til embetet som profet (oppstart 2028)",
-        "Studieavgift: 5 000,- per semester (10 000,- fullt år)",
+        "Studieavgift: 10 000,- (betal mnd, halvår eller hele prisen samlet)",
         "Krever ny søknad, pensumliste og skriftlig oppgave",
         "Krav om deltakelse på 1-2 ukers fysisk samling",
         "FORKUNNSKAP: Må ha fullført 1. år (Track 1) først"
@@ -998,10 +1008,13 @@ export default function AdmissionPage() {
                 <div className="pt-6 mt-6 border-t border-slate-100 flex justify-between items-end">
                   <div className="space-y-0.5">
                     <span className="text-xs uppercase font-bold text-slate-500 block">
-                      <CmsText slug="admission-tuition-fee-label" fallback={language === 'en' ? "Tuition Fee" : "Semesteravgift"} />
+                      <CmsText slug="admission-tuition-fee-label" fallback={language === 'en' ? "Total Tuition (Full Year)" : "Studieavgift (skoleår)"} />
                     </span>
                     <span className="font-sans text-xl font-extrabold text-[#561291]">
-                      <CmsText slug={`admission-${prog.id}-price`} fallback={prog.priceSemester} />
+                      <CmsText slug={`admission-${prog.id}-price`} fallback={prog.priceYear} />
+                    </span>
+                    <span className="text-[11px] text-slate-500 block">
+                      {language === 'en' ? "Pay monthly, semi-annually, or full" : "Mnd, halvår eller samlet betaling"}
                     </span>
                   </div>
                   
@@ -1043,7 +1056,7 @@ export default function AdmissionPage() {
 
               <CmsText 
                 slug="admission-payments-desc" 
-                fallback={language === 'en' ? "At His Kingdom Prophets, we want prophetic education to be accessible to all. We offer transparent and predictable payment arrangements tailored to your situation. You can pay the full semester fee at once or distribute it over interest-free monthly installments." : "Hos His Kingdom Prophets ønsker vi at den profetiske utdanningen skal være tilgjengelig for alle. Vi tilbyr ryddige og forutsigbare betalingsordninger tilpasset din situasjon. Du kan betale hele semesteravgiften under ett, eller fordele den over rentefrie månedlige rater."} 
+                fallback={language === 'en' ? "At His Kingdom Prophets, we want prophetic education to be accessible to all. We offer flexible and predictable payment options tailored to your situation: pay once a month, semi-annually (twice a year), or the entire fee at once." : "Hos His Kingdom Prophets ønsker vi at den profetiske utdanningen skal være tilgjengelig for alle. Vi tilbyr ryddige og forutsigbare betalingsordninger tilpasset din situasjon: betal en gang i måneden, en gang i halvåret, eller hele prisen på en gang."} 
                 as="p"
                 className="text-base text-slate-700 font-normal leading-relaxed"
               />
@@ -1054,8 +1067,8 @@ export default function AdmissionPage() {
                     <Check size={16} className="stroke-[3]" />
                   </div>
                   <div>
-                    <CmsText slug="admission-payments-bullet1-title" fallback={language === 'en' ? "100% Interest-Free Installments" : "100 % rentefri delbetaling"} as="h4" className="text-base font-bold text-[#561291]" />
-                    <CmsText slug="admission-payments-bullet1-desc" fallback={language === 'en' ? "The semester fee can be distributed over 5 monthly installments throughout the semester." : "Semesteravgiften kan fordeles over 5 månedlige rater gjennom semesteret."} as="p" className="text-base text-slate-600 mt-1 leading-relaxed font-normal" />
+                    <CmsText slug="admission-payments-bullet1-title" fallback={language === 'en' ? "Flexible Payment Options" : "Fleksibel betaling"} as="h4" className="text-base font-bold text-[#561291]" />
+                    <CmsText slug="admission-payments-bullet1-desc" fallback={language === 'en' ? "Tuition can be paid monthly (10 installments), semi-annually (twice a year), or as a single payment for the entire academic year." : "Studieavgiften kan betales en gang i måneden (10 terminer), en gang i halvåret (2 terminer), eller som et engangsbeløp for hele året."} as="p" className="text-base text-slate-600 mt-1 leading-relaxed font-normal" />
                   </div>
                 </div>
 
@@ -1065,7 +1078,7 @@ export default function AdmissionPage() {
                   </div>
                   <div>
                     <CmsText slug="admission-payments-bullet2-title" fallback={language === 'en' ? "All-Inclusive Tuition Fee" : "Alt inkludert i avgiften"} as="h4" className="text-base font-bold text-[#561291]" />
-                    <CmsText slug="admission-payments-bullet2-desc" fallback={language === 'en' ? "The fee covers study workbooks, 1-on-1 mentoring, Zoom gatherings, full access to the student portal and the video archives." : "Semesteravgiften dekker studiehefter, 1-til-1 samtaler, Zoom-møter, full tilgang til studentportalen og videoarkivet."} as="p" className="text-base text-slate-600 mt-1 leading-relaxed font-normal" />
+                    <CmsText slug="admission-payments-bullet2-desc" fallback={language === 'en' ? "The fee covers study workbooks, 1-on-1 mentoring, Zoom gatherings, full access to the student portal and the video archives." : "Studieavgiften dekker studiehefter, 1-til-1 samtaler, Zoom-møter, full tilgang til studentportalen og videoarkivet."} as="p" className="text-base text-slate-600 mt-1 leading-relaxed font-normal" />
                   </div>
                 </div>
 
@@ -1086,47 +1099,64 @@ export default function AdmissionPage() {
               <div className="flex bg-white/90 p-1 sm:p-1.5 rounded-xl border border-slate-200/70 shadow-xs gap-1 sm:gap-1.5 select-none">
                 <button
                   type="button"
-                  onClick={() => setActivePlan('semester')}
+                  onClick={() => setActivePlan('monthly')}
                   className={`flex-1 min-h-[44px] py-2 sm:py-2.5 px-2 text-xs sm:text-sm font-bold normal-case sm:uppercase tracking-normal sm:tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center text-center ${
-                    activePlan === 'semester'
+                    activePlan === 'monthly'
                       ? 'bg-[#561291] text-white shadow-sm shadow-[#561291]/25 font-extrabold'
                       : 'text-slate-600 hover:text-[#561291] hover:bg-slate-50'
                   }`}
                 >
-                  <CmsText slug="admission-price-plan-semester" fallback={language === 'en' ? "Semester Fee" : "Semesteravgift"} />
+                  <CmsText slug="admission-price-plan-monthly" fallback={language === 'en' ? "Monthly" : "1 gang i mnd"} />
                 </button>
                 <button
                   type="button"
-                  onClick={() => setActivePlan('year')}
+                  onClick={() => setActivePlan('biannual')}
                   className={`flex-1 min-h-[44px] py-2 sm:py-2.5 px-2 text-xs sm:text-sm font-bold normal-case sm:uppercase tracking-normal sm:tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center text-center ${
-                    activePlan === 'year'
+                    activePlan === 'biannual'
                       ? 'bg-[#561291] text-white shadow-sm shadow-[#561291]/25 font-extrabold'
                       : 'text-slate-600 hover:text-[#561291] hover:bg-slate-50'
                   }`}
                 >
-                  <CmsText slug="admission-price-plan-year" fallback={language === 'en' ? "Full Academic Year" : "Fullt studieår"} />
+                  <CmsText slug="admission-price-plan-biannual" fallback={language === 'en' ? "Semi-Annual" : "1 gang i halvåret"} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActivePlan('full')}
+                  className={`flex-1 min-h-[44px] py-2 sm:py-2.5 px-2 text-xs sm:text-sm font-bold normal-case sm:uppercase tracking-normal sm:tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center text-center ${
+                    activePlan === 'full'
+                      ? 'bg-[#561291] text-white shadow-sm shadow-[#561291]/25 font-extrabold'
+                      : 'text-slate-600 hover:text-[#561291] hover:bg-slate-50'
+                  }`}
+                >
+                  <CmsText slug="admission-price-plan-full" fallback={language === 'en' ? "Full Price" : "Hele prisen"} />
                 </button>
               </div>
 
               <div className="text-center space-y-2 sm:space-y-3 pt-1">
                 <span className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-widest block">
-                  {activePlan === 'semester' ? (
-                    <CmsText slug="admission-price-subhead-semester" fallback={language === 'en' ? "Tuition per semester" : "Studieavgift per semester"} />
+                  {activePlan === 'monthly' ? (
+                    language === 'en' ? "Monthly installments (10 payments)" : "Månedlig delbetaling (10 terminer)"
+                  ) : activePlan === 'biannual' ? (
+                    language === 'en' ? "Semi-annual payment (2 installments)" : "Halvårlig betaling (2 terminer)"
                   ) : (
-                    <CmsText slug="admission-price-subhead-year" fallback={language === 'en' ? "Full academic year (2 semesters)" : "Fullt studieår (2 semestre)"} />
+                    language === 'en' ? "Full academic year (single payment)" : "Fullt studieår (engangsbetaling)"
                   )}
                 </span>
                 
                 <div className="font-sans text-3xl sm:text-5xl font-extrabold text-[#561291] tracking-tight">
                   {language === 'en' ? (
-                    activePlan === 'semester' ? "$500 USD" : "$1,000 USD"
+                    activePlan === 'monthly' ? "$100 USD / mo" : activePlan === 'biannual' ? "$500 USD x 2" : "$1,000 USD"
                   ) : (
-                    activePlan === 'semester' ? (
-                      <CmsText slug="admission-price-amount-semester" fallback="5 000,- NOK" />
-                    ) : (
-                      <CmsText slug="admission-price-amount-year" fallback="10 000,- NOK" />
-                    )
+                    activePlan === 'monthly' ? "1 000,- / mnd" : activePlan === 'biannual' ? "5 000,- x 2" : "10 000,- NOK"
                   )}
+                </div>
+
+                <div className="text-xs text-slate-500 font-medium">
+                  {activePlan === 'monthly'
+                    ? (language === 'en' ? "10 installments of $100 USD (Total $1,000 USD)" : "10 månedlige innbetalinger à 1 000 kr (Totalt 10 000 kr)")
+                    : activePlan === 'biannual'
+                    ? (language === 'en' ? "2 installments of $500 USD (Total $1,000 USD)" : "2 innbetalinger à 5 000 kr (Totalt 10 000 kr)")
+                    : (language === 'en' ? "Single upfront payment for entire year" : "Ett samlet oppgjør for hele skoleåret")}
                 </div>
                 
                 <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed max-w-sm mx-auto">
@@ -1232,7 +1262,7 @@ export default function AdmissionPage() {
                 slugTitle: 'admission-step3-title',
                 fallbackTitle: language === 'en' ? "Tuition Setup" : "Betaling & Faktura",
                 slugDesc: 'admission-step3-desc',
-                fallbackDesc: language === 'en' ? "Select your standard billing plan. Spouses enjoy automatic 25% off." : "Velg din foretrukne betalingsordning (semester eller månedlig delbetaling)."
+                fallbackDesc: language === 'en' ? "Select your preferred payment plan: monthly, semi-annually, or full. Spouses enjoy 25% off." : "Velg din foretrukne betalingsordning: månedlig, halvårlig eller engangsbetaling. Ektepar får 25 % rabatt."
               },
               {
                 slugNum: 'admission-step4-num',
@@ -1842,8 +1872,8 @@ export default function AdmissionPage() {
                                 />
                               </div>
                               <div className="pt-4 border-t border-slate-100 mt-4 flex justify-between items-center text-xs">
-                                <span className="text-slate-500 font-semibold">{language === 'en' ? "Semester Tuition:" : "Semesteravgift:"}</span>
-                                <span className="font-bold text-[#561291] text-sm">{p.priceSemester}</span>
+                                <span className="text-slate-500 font-semibold">{language === 'en' ? "Total Tuition (Year):" : "Studieavgift (skoleår):"}</span>
+                                <span className="font-bold text-[#561291] text-sm">{p.priceYear || '10 000,-'}</span>
                               </div>
                             </label>
                           ))}
@@ -1853,53 +1883,94 @@ export default function AdmissionPage() {
                       {/* Billing Plan */}
                       <div className="space-y-3">
                         <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
-                          {language === 'en' ? "Preferred Billing Plan *" : "Foretrukket betalingsplan *"}
+                          {language === 'en' ? "Preferred Payment Arrangement *" : "Foretrukket betalingsordning *"}
                         </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <label className={`border rounded-xl p-4 flex items-center justify-between cursor-pointer transition-all ${
-                            formData.paymentPlan === 'semester'
-                              ? 'border-[#561291] bg-[#561291]/5 text-[#561291]'
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          {/* 1. Månedlig */}
+                          <label className={`border rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all ${
+                            formData.paymentPlan === 'monthly'
+                              ? 'border-[#561291] bg-[#561291]/5 text-[#561291] shadow-xs'
                               : 'border-slate-200 hover:border-slate-300 text-slate-700'
                           }`}>
-                            <div className="space-y-0.5">
-                              <span className="text-base font-bold block">
-                                {language === 'en' ? "Semester Invoice" : "Semesterfaktura"}
-                              </span>
-                              <span className="text-xs text-slate-500">
-                                {selectedProg.priceSemester} per semester
-                              </span>
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="space-y-1">
+                                <span className="text-base font-bold block">
+                                  {language === 'en' ? "Monthly Payment" : "Månedlig"}
+                                </span>
+                                <span className="text-xs text-slate-600 block">
+                                  {language === 'en' ? "$100 USD / month (10 months)" : "1 000,- per mnd (10 terminer)"}
+                                </span>
+                              </div>
+                              <input
+                                type="radio"
+                                name="paymentPlan"
+                                value="monthly"
+                                checked={formData.paymentPlan === 'monthly'}
+                                onChange={handleInputChange}
+                                className="accent-[#561291] w-4 h-4 mt-1 shrink-0"
+                              />
                             </div>
-                            <input
-                              type="radio"
-                              name="paymentPlan"
-                              value="semester"
-                              checked={formData.paymentPlan === 'semester'}
-                              onChange={handleInputChange}
-                              className="accent-[#561291] w-4 h-4"
-                            />
+                            <div className="mt-3 pt-2 border-t border-slate-200/50 text-[11px] text-slate-500 font-medium">
+                              {language === 'en' ? "Total tuition $1,000 USD" : "Total studieavgift: 10 000,-"}
+                            </div>
                           </label>
 
-                          <label className={`border rounded-xl p-4 flex items-center justify-between cursor-pointer transition-all ${
-                            formData.paymentPlan === 'year'
-                              ? 'border-[#561291] bg-[#561291]/5 text-[#561291]'
+                          {/* 2. Halvårlig */}
+                          <label className={`border rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all ${
+                            formData.paymentPlan === 'biannual' || formData.paymentPlan === 'semester'
+                              ? 'border-[#561291] bg-[#561291]/5 text-[#561291] shadow-xs'
                               : 'border-slate-200 hover:border-slate-300 text-slate-700'
                           }`}>
-                            <div className="space-y-0.5">
-                              <span className="text-base font-bold block">
-                                {language === 'en' ? "Full Academic Year" : "Fullt studieår"}
-                              </span>
-                              <span className="text-xs text-slate-500">
-                                {selectedProg.priceYear || '10 000,- NOK'} for hele året
-                              </span>
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="space-y-1">
+                                <span className="text-base font-bold block">
+                                  {language === 'en' ? "Semi-Annual" : "En gang i halvåret"}
+                                </span>
+                                <span className="text-xs text-slate-600 block">
+                                  {language === 'en' ? "$500 USD twice a year (2 installments)" : "5 000,- per halvår (2 terminer)"}
+                                </span>
+                              </div>
+                              <input
+                                type="radio"
+                                name="paymentPlan"
+                                value="biannual"
+                                checked={formData.paymentPlan === 'biannual' || formData.paymentPlan === 'semester'}
+                                onChange={handleInputChange}
+                                className="accent-[#561291] w-4 h-4 mt-1 shrink-0"
+                              />
                             </div>
-                            <input
-                              type="radio"
-                              name="paymentPlan"
-                              value="year"
-                              checked={formData.paymentPlan === 'year'}
-                              onChange={handleInputChange}
-                              className="accent-[#561291] w-4 h-4"
-                            />
+                            <div className="mt-3 pt-2 border-t border-slate-200/50 text-[11px] text-slate-500 font-medium">
+                              {language === 'en' ? "Total tuition $1,000 USD" : "Total studieavgift: 10 000,-"}
+                            </div>
+                          </label>
+
+                          {/* 3. Hele prisen på en gang */}
+                          <label className={`border rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all ${
+                            formData.paymentPlan === 'full' || formData.paymentPlan === 'year'
+                              ? 'border-[#561291] bg-[#561291]/5 text-[#561291] shadow-xs'
+                              : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                          }`}>
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="space-y-1">
+                                <span className="text-base font-bold block">
+                                  {language === 'en' ? "Full Price at Once" : "Hele prisen på en gang"}
+                                </span>
+                                <span className="text-xs text-slate-600 block">
+                                  {language === 'en' ? "$1,000 USD (one-time payment)" : "10 000,- NOK (engangsbetaling)"}
+                                </span>
+                              </div>
+                              <input
+                                type="radio"
+                                name="paymentPlan"
+                                value="full"
+                                checked={formData.paymentPlan === 'full' || formData.paymentPlan === 'year'}
+                                onChange={handleInputChange}
+                                className="accent-[#561291] w-4 h-4 mt-1 shrink-0"
+                              />
+                            </div>
+                            <div className="mt-3 pt-2 border-t border-slate-200/50 text-[11px] text-slate-500 font-medium">
+                              {language === 'en' ? "Settled upon enrollment" : "Oppgjøres ved studiestart"}
+                            </div>
                           </label>
                         </div>
                       </div>
@@ -2278,7 +2349,11 @@ export default function AdmissionPage() {
                           <div>
                             <span className="text-slate-500 block text-xs uppercase font-semibold">{language === 'en' ? "Billing Plan" : "Betalingsordning"}</span>
                             <span className="font-bold text-[#561291]">
-                              {formData.paymentPlan === 'year' ? "Fullt studieår" : "Semesterfaktura"}
+                              {formData.paymentPlan === 'monthly'
+                                ? (language === 'en' ? "Monthly installment (10 payments)" : "Månedlig delbetaling (10 terminer)")
+                                : (formData.paymentPlan === 'biannual' || formData.paymentPlan === 'semester')
+                                ? (language === 'en' ? "Semi-annual (2 installments)" : "Halvårlig betaling (2 terminer)")
+                                : (language === 'en' ? "Full price at once" : "Hele prisen på en gang")}
                             </span>
                           </div>
                         </div>

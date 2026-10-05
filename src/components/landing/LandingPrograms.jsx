@@ -81,8 +81,8 @@ export default function LandingPrograms() {
             </ul>
             <div className="program-bottom">
               <span>
-                <b><CmsText slug="landing-p1-price" fallback="5 000 kr" /></b> <CmsText slug="landing-p1-period" fallback={language === 'no' ? '/ semester' : '/ semester'} />
-                <small><CmsText slug="landing-p1-note" fallback={language === 'no' ? '+ oppstart og kickoff' : '+ registration & kickoff'} /></small>
+                <b><CmsText slug="landing-p1-price" fallback="10 000 kr" /></b> <CmsText slug="landing-p1-period" fallback={language === 'no' ? '/ skoleår' : '/ school year'} />
+                <small><CmsText slug="landing-p1-note" fallback={language === 'no' ? 'Mnd, halvår eller samlet betaling' : 'Monthly, semi-annual, or full payment'} /></small>
               </span>
               <a href="#curriculum" onClick={(e) => handleNavClick(e, 'curriculum')}>
                 <CmsText slug="landing-p1-cta" fallback={language === 'no' ? 'Utforsk førsteåret' : 'Explore Year 1'} />

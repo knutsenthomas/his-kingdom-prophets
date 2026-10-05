@@ -59,7 +59,7 @@ function validateAndSanitizePayload(raw) {
     occupation: cleanField(raw.occupation, 150, ""),
     programTitle: cleanField(raw.programTitle, 150, "His Kingdom Prophetic Community (1. År)"),
     programCode: cleanField(raw.programCode, 30, "1. ÅR"),
-    paymentPlan: raw.paymentPlan === "year" ? "year" : "semester",
+    paymentPlan: cleanField(raw.paymentPlan, 50, "monthly"),
     churchCommunity: cleanField(raw.churchCommunity, 200, ""),
     currentMinistry: cleanField(raw.currentMinistry, 250, ""),
     ministryCalling: cleanField(raw.ministryCalling, 250, ""),
@@ -165,7 +165,11 @@ class MockGasEnvironment {
         sanitizeSheetCell(data.occupation),
         sanitizeSheetCell(data.programTitle),
         sanitizeSheetCell(data.programCode),
-        sanitizeSheetCell(data.paymentPlan === "year" ? "Fullt studieår" : "Semesterfaktura"),
+        sanitizeSheetCell(
+          data.paymentPlan === "monthly" ? "Månedlig (1 000,- / mnd)" :
+          (data.paymentPlan === "biannual" || data.paymentPlan === "semester") ? "Halvårlig (5 000,- x 2)" :
+          "Hele prisen på en gang (10 000,-)"
+        ),
         sanitizeSheetCell(data.churchCommunity),
         sanitizeSheetCell(data.currentMinistry),
         sanitizeSheetCell(data.ministryCalling),
@@ -394,5 +398,27 @@ test('Google Sheets Webhook - Samtidighet, duplikatbeskyttelse og kvotekontroll'
     assert.equal(res.result, 'success');
     assert.equal(env.sheetRows.length, 1, 'Skal fortsatt lagres i Google Regneark');
     assert.equal(env.sentEmails.length, 0, 'Skal ikke sende e-post når kvoten er nådd');
+  });
+
+  await t.test('støtter og formaterer betalingsplaner (månedlig, halvårlig, hele prisen)', () => {
+    const env = new MockGasEnvironment();
+    
+    // 1. Månedlig
+    env.processWebhook({
+      postData: { contents: JSON.stringify({ id: 'app_m', name: 'Måned Søker', email: 'm@example.com', phone: '+47 91000001', paymentPlan: 'monthly' }) }
+    });
+    // 2. Halvårlig
+    env.processWebhook({
+      postData: { contents: JSON.stringify({ id: 'app_b', name: 'Halvår Søker', email: 'b@example.com', phone: '+47 91000002', paymentPlan: 'biannual' }) }
+    });
+    // 3. Hele prisen
+    env.processWebhook({
+      postData: { contents: JSON.stringify({ id: 'app_f', name: 'Full Søker', email: 'f@example.com', phone: '+47 91000003', paymentPlan: 'full' }) }
+    });
+
+    assert.equal(env.sheetRows.length, 3);
+    assert.equal(env.sheetRows[0][12], 'Månedlig (1 000,- / mnd)');
+    assert.equal(env.sheetRows[1][12], 'Halvårlig (5 000,- x 2)');
+    assert.equal(env.sheetRows[2][12], 'Hele prisen på en gang (10 000,-)');
   });
 });

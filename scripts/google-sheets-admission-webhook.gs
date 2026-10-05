@@ -101,7 +101,7 @@ function validateAndSanitizePayload(raw) {
     occupation: cleanField(raw.occupation, 150, ""),
     programTitle: cleanField(raw.programTitle, 150, "His Kingdom Prophetic Community (1. År)"),
     programCode: cleanField(raw.programCode, 30, "1. ÅR"),
-    paymentPlan: raw.paymentPlan === "year" ? "year" : "semester",
+    paymentPlan: cleanField(raw.paymentPlan, 50, "monthly"),
     churchCommunity: cleanField(raw.churchCommunity, 200, ""),
     currentMinistry: cleanField(raw.currentMinistry, 250, ""),
     ministryCalling: cleanField(raw.ministryCalling, 250, ""),
@@ -290,7 +290,11 @@ function doPost(e) {
       sanitizeSheetCell(data.occupation),
       sanitizeSheetCell(data.programTitle),
       sanitizeSheetCell(data.programCode),
-      sanitizeSheetCell(data.paymentPlan === "year" ? "Fullt studieår" : "Semesterfaktura"),
+      sanitizeSheetCell(
+        data.paymentPlan === "monthly" ? "Månedlig (1 000,- / mnd)" :
+        (data.paymentPlan === "biannual" || data.paymentPlan === "semester") ? "Halvårlig (5 000,- x 2)" :
+        "Hele prisen på en gang (10 000,-)"
+      ),
       sanitizeSheetCell(data.churchCommunity),
       sanitizeSheetCell(data.currentMinistry),
       sanitizeSheetCell(data.ministryCalling),
@@ -395,10 +399,11 @@ function buildEmailTemplateHtml(data, sheetUrl, nowFormatted) {
   var address = escapeHtml(data.address || "-");
   var occupation = escapeHtml(data.occupation || "-");
   var programTitle = escapeHtml(data.programTitle || "His Kingdom Prophetic Community (1. År)");
-  var programCode = escapeHtml(data.programCode || "1. ÅR");
-  var paymentPlan = data.paymentPlan === "year" 
-    ? "Fullt studieår (10 000,- / $1,000 USD)" 
-    : "Semesterfaktura (5 000,- / $500 USD per sem)";
+  var paymentPlan = data.paymentPlan === "monthly" 
+    ? "Månedlig delbetaling (1 000,- / $100 USD per mnd)" 
+    : (data.paymentPlan === "biannual" || data.paymentPlan === "semester")
+    ? "Halvårlig betaling (5 000,- / $500 USD to ganger i året)"
+    : "Hele prisen på en gang (10 000,- / $1,000 USD fullt studieår)";
   var churchCommunity = escapeHtml(data.churchCommunity || "-");
   var currentMinistry = escapeHtml(data.currentMinistry || "-");
   var ministryCalling = escapeHtml(data.ministryCalling || "-");
@@ -674,7 +679,11 @@ function buildPlainTextSummary(data, sheetUrl, nowFormatted) {
   var phone = data.phone || "-";
   var programTitle = data.programTitle || "His Kingdom Prophetic Community (1. År)";
   var programCode = data.programCode || "1. ÅR";
-  var paymentPlan = data.paymentPlan === "year" ? "Fullt studieår" : "Semesterfaktura";
+  var paymentPlan = data.paymentPlan === "monthly" 
+    ? "Månedlig delbetaling (1 000,- / mnd)" 
+    : (data.paymentPlan === "biannual" || data.paymentPlan === "semester") 
+    ? "Halvårlig (5 000,- x 2)" 
+    : "Hele prisen på en gang (10 000,-)";
   var regnearkUrl = sheetUrl || "https://docs.google.com/spreadsheets";
 
   return "Det har kommet inn en ny søknad om opptak ved HKPC!\n\n" +
@@ -707,7 +716,7 @@ function testSendBrandedEmail() {
     occupation: "Utvikler & Veileder",
     programTitle: "His Kingdom Prophetic Community (1. År)",
     programCode: "1. ÅR",
-    paymentPlan: "semester",
+    paymentPlan: "monthly",
     churchCommunity: "Menighetsfellesskap",
     currentMinistry: "Lovsang og forbønn",
     ministryCalling: "Profetisk formidling",

@@ -8,8 +8,8 @@ export const faqItems = [
   {
     q_no: "Hva koster skoleåret på HKPC?",
     q_en: "How much does tuition cost at HKPC?",
-    a_no: "Første studieår koster 10 000 NOK for et fullt år, pluss et engangsbeløp på 500 NOK for oppstart/administrasjon og 500 NOK for kost og losji under den fysiske kickoff-helgen i Norge.",
-    a_en: "First year tuition is 10,000 NOK for the full academic year, plus a one-time 500 NOK administration/registration fee and 500 NOK for meals/lodging during the kickoff weekend in Norway."
+    a_no: "Første studieår koster 10 000 NOK for et fullt år, pluss et engangsbeløp på 500 NOK for oppstart/administrasjon og 500 NOK for kost og losji under den fysiske kickoff-helgen i Norge. Du kan velge å betale månedlig (10 terminer), en gang i halvåret (2 terminer) eller hele beløpet samlet.",
+    a_en: "First year tuition is 10,000 NOK for the full academic year, plus a one-time 500 NOK administration/registration fee and 500 NOK for meals/lodging during the kickoff weekend in Norway. You can choose to pay monthly (10 installments), semi-annually (2 installments), or the full amount at once."
   },
   {
     q_no: "Når åpner søknaden, og hva er fristen for skoleåret 2027?",
