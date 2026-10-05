@@ -768,10 +768,9 @@ export default function AdmissionPage() {
   const programs = [
     {
       id: "prophetic_community",
-      code: "TRACK 1 (YEAR 1)",
+      code: "TRACK 1",
       title: "His Kingdom Prophetic Community",
       duration: language === 'en' ? "1 Year • English • On-site Kickoff Aug 20–22" : "1 År • Engelsk • Kickoff i Norge 20.–22. aug",
-      credits: "1. År / Year 1",
       priceYear: language === 'en' ? "$1,000 USD" : "10 000,-",
       priceMonthly: language === 'en' ? "$100 USD / mo" : "1 000,- / mnd",
       priceBiannual: language === 'en' ? "$500 USD x 2" : "5 000,- x 2",
@@ -800,10 +799,9 @@ export default function AdmissionPage() {
     },
     {
       id: "prophets_advanced",
-      code: "TRACK 2 (YEAR 2)",
+      code: "TRACK 2",
       title: "His Kingdom Prophets (oppstart 2028)",
       duration: language === 'en' ? "Starts in 2028 (Requires Track 1)" : "Starter i 2028 (Krever 1. År)",
-      credits: "2. År / Year 2",
       priceYear: language === 'en' ? "$1,000 USD" : "10 000,-",
       priceMonthly: language === 'en' ? "$100 USD / mo" : "1 000,- / mnd",
       priceBiannual: language === 'en' ? "$500 USD x 2" : "5 000,- x 2",
@@ -971,9 +969,6 @@ export default function AdmissionPage() {
                         : 'bg-[#561291]/10 text-[#561291] border border-[#561291]/15'
                     }`}>
                       <CmsText slug={`admission-${prog.id}-code`} fallback={prog.code} />
-                    </span>
-                    <span className="text-xs font-bold text-[#b58c38] uppercase tracking-wider">
-                      <CmsText slug={`admission-${prog.id}-credits`} fallback={prog.credits} />
                     </span>
                   </div>
 
