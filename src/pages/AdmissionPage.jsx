@@ -4,7 +4,7 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, BookOpen, CreditCard, ChevronRight, Check, 
-  HelpCircle, ArrowLeft, ArrowRight, Send, Award, Calendar, FileText, CheckCircle2, Globe, Lock, GraduationCap,
+  HelpCircle, ArrowLeft, ArrowRight, Send, Calendar, FileText, CheckCircle2, Globe, Lock, GraduationCap,
   User, Mail, Phone, MapPin, Heart, Church, Save, RotateCcw, Clock, Bell, AlertTriangle
 } from 'lucide-react';
 import CmsText from '@/components/CmsText';
@@ -894,13 +894,6 @@ export default function AdmissionPage() {
         <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-[#D7B978]/10 blur-3xl pointer-events-none" />
 
         <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6 sm:space-y-8">
-          <div className="inline-block">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 text-white font-semibold text-xs sm:text-sm uppercase tracking-widest border border-white/20 shadow-sm">
-              <Award size={15} className="text-[#D7B978]" />
-              <CmsText slug="admission-hero-tagline" fallback={language === 'en' ? "Application Period: January 1 – June 30, 2027" : "Søkeperiode: 1. januar – 30. juni 2027"} />
-            </span>
-          </div>
-
           <CmsText 
             slug="admission-hero-title" 
             fallback={language === 'en' ? "Be Equipped for Your God-Given Ministry" : "Bli utrustet til din gudgitte tjeneste"} 

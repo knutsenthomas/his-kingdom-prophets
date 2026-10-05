@@ -102,9 +102,6 @@ export default function ContactSupportPage() {
           {/* Left Column - Contact Details */}
           <div className="lg:col-span-5 space-y-6 sm:space-y-8 flex flex-col justify-center">
             <div className="space-y-4">
-              <span className="px-3.5 py-1 rounded-full bg-[#561291]/10 text-primary text-[10px] font-bold uppercase tracking-wider border border-[#561291]/20">
-                <CmsText slug="support-hero-tag" fallback={isEn ? 'Direct Support' : 'Brukerstøtte'} />
-              </span>
               <h1 className="font-sans text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#561291] leading-tight break-words">
                 <CmsText slug="support-hero-title" fallback={isEn ? 'Get in Touch with Us' : 'Kontakt Kundestøtte'} />
               </h1>

@@ -650,12 +650,6 @@ export default function BibleResourcesPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(224,170,255,0.15),transparent)] pointer-events-none"></div>
         <div className="max-w-[1440px] mx-auto space-y-4 relative z-10 text-center sm:text-left">
           <CmsText 
-            slug="resources-hero-tagline" 
-            fallback="Offentlig studieportal" 
-            as="span" 
-            className="px-3.5 py-1 rounded-full bg-white/10 text-purple-200 text-xs font-bold uppercase tracking-wider border border-white/15 inline-block" 
-          />
-          <CmsText 
             slug="resources-hero-title" 
             fallback="Bibelressurser og studieportal" 
             as="h1" 
