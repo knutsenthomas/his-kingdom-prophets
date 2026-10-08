@@ -970,8 +970,9 @@
 /* Main Row: Brand Column (Left) & Nav Column (Right) */
 .hkpc-landing .footer-main-row {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   gap: 32px;
   flex-wrap: wrap;
 }
@@ -979,9 +980,9 @@
 .hkpc-landing .footer-brand-col {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  max-width: 480px;
+  max-width: 100%;
 }
 
 .hkpc-landing .footer-brand-col .brand {
@@ -1002,9 +1003,9 @@
 .hkpc-landing .footer-brand-col .brand-text-col {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 3px;
-  text-align: left;
+  text-align: center;
 }
 
 .hkpc-landing .footer-brand-col .brand .brand-name {
@@ -1028,16 +1029,19 @@
   margin: 0;
   white-space: nowrap;
   display: block;
-  text-align: left;
+  text-align: center;
 }
 
 /* Links & Nav */
 .hkpc-landing .footer-links-col {
   display: flex;
+  width: 100%;
+  justify-content: center;
   align-items: center;
 }
 
 .hkpc-landing .footer-nav {
+  justify-content: center;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1111,7 +1115,7 @@
   }
   .hkpc-landing .footer-main-row {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 24px;
   }
   .hkpc-landing .footer-brand-col {
@@ -3448,3 +3452,26 @@
 .payment-consent input { flex: 0 0 auto; width: 20px; height: 20px; margin-top: 4px; accent-color: #561291; }
 .payment-methods label:has(input:disabled) { opacity: .5; cursor: not-allowed; }
 .payment-field select { width: 100%; padding: 12px; border: 1px solid #ded5e8; border-radius: 10px; background: white; color: #271f30; font: inherit; }
+
+/* Shared HKPC footer: grouped navigation and contact panel. */
+.hkpc-landing .footer-layout { display:grid; grid-template-columns:minmax(0, 1.7fr) minmax(280px, 1fr); gap:clamp(32px,5vw,72px); align-items:start; }
+.hkpc-landing .footer-content { min-width:0; }
+.hkpc-landing .footer-layout .footer-brand-col { align-items:flex-start; }
+.hkpc-landing .footer-layout .brand-text-col { align-items:flex-start; text-align:left; }
+.hkpc-landing .footer-layout .footer-tagline { text-align:left; }
+.hkpc-landing .footer-description { color:var(--muted); line-height:1.7; max-width:600px; margin:20px 0 32px; }
+.hkpc-landing .footer-link-groups { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+.hkpc-landing .footer-link-groups nav { display:flex; flex-direction:column; align-items:flex-start; gap:8px; }
+.hkpc-landing .footer-layout h2 { font:700 15px 'DM Sans',Arial,sans-serif; color:var(--ink); margin:0 0 16px; }
+.hkpc-landing .footer-link-groups h2 { text-transform:uppercase; letter-spacing:.06em; }
+.hkpc-landing .footer-link-groups a { font:500 14px/1.5 'DM Sans',Arial,sans-serif; color:var(--muted); text-decoration:none; min-height:36px; display:inline-flex; align-items:center; gap:8px; }
+.hkpc-landing .footer-layout a:hover { color:var(--purple,#561291); }
+.hkpc-landing .footer-layout a:focus-visible { outline:2px solid #561291; outline-offset:4px; }
+.hkpc-landing .footer-contact-card { background:#f6f2fa; border:1px solid #e4d8ee; border-radius:20px; padding:28px; }
+.hkpc-landing .footer-contact-card p { color:var(--muted); line-height:1.6; margin:0 0 24px; }
+.hkpc-landing .footer-contact-card h3 { font-size:14px; margin:24px 0 8px; color:var(--ink); }
+.hkpc-landing .footer-contact-card a { overflow-wrap:anywhere; color:#561291; text-decoration:none; font-size:14px; }
+.hkpc-landing .footer-contact-card .footer-contact-button { display:flex; justify-content:center; align-items:center; min-height:48px; padding:12px 20px; border-radius:12px; background:#561291; color:white; font-weight:700; }
+.hkpc-landing .footer-contact-card .footer-contact-button:hover { background:#451074; color:white; }
+@media(max-width:960px) { .hkpc-landing .footer-layout { grid-template-columns:1fr; } }
+@media(max-width:640px) { .hkpc-landing .footer-link-groups { grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; } .hkpc-landing .footer-layout .brand { align-items:flex-start; } .hkpc-landing .footer-layout .brand-name,.hkpc-landing .footer-layout .footer-tagline { white-space:normal; } .hkpc-landing .footer-contact-card { padding:24px; } }

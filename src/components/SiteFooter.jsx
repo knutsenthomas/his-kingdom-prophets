@@ -31,8 +31,8 @@ export default function SiteFooter() {
     <div className="hkpc-landing site-footer-wrapper">
       <footer className="site-footer">
         <div className="wrap">
-          {/* Main Row: Brand & Tagline on Left, Navigation on Right */}
-          <div className="footer-main-row">
+          <div className="footer-layout">
+            <div className="footer-content">
             <div className="footer-brand-col">
               <a className="brand" href="/" onClick={handleLogoClick}>
                 <img width="40" height="40" src="/assets/logo.png" alt="His Kingdom Prophetic Community" />
@@ -50,34 +50,14 @@ export default function SiteFooter() {
               </a>
             </div>
 
-            <div className="footer-links-col">
-              <nav className="footer-nav" aria-label="Bunnmeny">
-                <Link to="/betaling" className="footer-link">{language === 'no' ? 'Betal skoleavgift' : 'Pay school fees'}</Link>
-                <Link to="/gi-gave" className="footer-link">{language === 'no' ? 'Gi en gave' : 'Give a gift'}</Link>
-                <Link to="/privacy" className="footer-link">
-                  <CmsText slug="landing-footer-link-privacy" fallback={language === 'no' ? 'Personvern' : 'Privacy Policy'} />
-                </Link>
-                <Link to="/terms" className="footer-link">
-                  <CmsText slug="landing-footer-link-terms" fallback={language === 'no' ? 'Brukervilkår' : 'Terms of Service'} />
-                </Link>
-                <Link to="/accessibility" className="footer-link">
-                  <CmsText slug="landing-footer-link-accessibility" fallback={language === 'no' ? 'Tilgjengelighet' : 'Accessibility'} />
-                </Link>
-                <Link to="/support" className="footer-link">
-                  <CmsText slug="landing-footer-contact-support" fallback={language === 'no' ? 'Kontakt support' : 'Support'} />
-                </Link>
-                {isAdmin && (
-                  <a
-                    href="https://app.hkpc.no/admin"
-                    className="footer-admin-link"
-                    title={language === 'no' ? 'Åpne administrasjon' : 'Open administration'}
-                  >
-                    <ShieldCheck size={13} />
-                    <span>Administrasjon</span>
-                  </a>
-                )}
-              </nav>
+              <div className="footer-description">{language === 'no' ? 'En åpenbaringsskole for profetisk utrustning, bibelundervisning og åndelig vekst.' : 'A school for prophetic equipping, Bible teaching and spiritual growth.'}</div>
+              <div className="footer-link-groups">
+                <nav aria-label={language === 'no' ? 'Om skolen' : 'About the school'}><h2>{language === 'no' ? 'Om skolen' : 'About the school'}</h2><Link to="/">{language === 'no' ? 'Forsiden' : 'Home'}</Link><Link to="/about">{language === 'no' ? 'Om oss' : 'About us'}</Link><Link to="/hkm">His Kingdom Ministry</Link></nav>
+                <nav aria-label={language === 'no' ? 'Studier' : 'Studies'}><h2>{language === 'no' ? 'Studier' : 'Studies'}</h2><Link to="/admission">{language === 'no' ? 'Opptak og søknad' : 'Admissions'}</Link><a href="https://app.hkpc.no">{language === 'no' ? 'Elev- og lærerportal' : 'Student and teacher portal'}</a><Link to="/betaling">{language === 'no' ? 'Betal skoleavgift' : 'Pay school fees'}</Link><Link to="/gi-gave">{language === 'no' ? 'Gi en gave' : 'Give a gift'}</Link></nav>
+                <nav aria-label={language === 'no' ? 'Informasjon' : 'Information'}><h2>{language === 'no' ? 'Informasjon' : 'Information'}</h2><Link to="/personvern"><CmsText slug="landing-footer-link-privacy" fallback={language === 'no' ? 'Personvern' : 'Privacy Policy'}/></Link><Link to="/terms"><CmsText slug="landing-footer-link-terms" fallback={language === 'no' ? 'Brukervilkår' : 'Terms of Service'}/></Link><Link to="/accessibility"><CmsText slug="landing-footer-link-accessibility" fallback={language === 'no' ? 'Tilgjengelighet' : 'Accessibility'}/></Link>{isAdmin && <a href="https://app.hkpc.no/admin" className="footer-admin-link"><ShieldCheck size={15}/>{language === 'no' ? 'Administrasjon' : 'Administration'}</a>}</nav>
+              </div>
             </div>
+            <aside className="footer-contact-card"><h2>{language === 'no' ? 'Kontakt skolen' : 'Contact the school'}</h2><p>{language === 'no' ? 'Har du spørsmål om skolen, opptak eller betaling? Vi hjelper deg gjerne.' : 'Questions about the school, admissions or payments? We are happy to help.'}</p><Link className="footer-contact-button" to="/support"><CmsText slug="landing-footer-contact-support" fallback={language === 'no' ? 'Kontakt support' : 'Contact support'}/></Link><h3>{language === 'no' ? 'E-post' : 'Email'}</h3><a href="mailto:school@hiskingdomministry.no">school@hiskingdomministry.no</a></aside>
           </div>
 
           {/* Bottom Bar: Copyright */}
