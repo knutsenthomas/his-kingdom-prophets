@@ -3475,3 +3475,7 @@
 .hkpc-landing .footer-contact-card .footer-contact-button:hover { background:#451074; color:white; }
 @media(max-width:960px) { .hkpc-landing .footer-layout { grid-template-columns:1fr; } }
 @media(max-width:640px) { .hkpc-landing .footer-link-groups { grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; } .hkpc-landing .footer-layout .brand { align-items:flex-start; } .hkpc-landing .footer-layout .brand-name,.hkpc-landing .footer-layout .footer-tagline { white-space:normal; } .hkpc-landing .footer-contact-card { padding:24px; } }
+
+.hkpc-landing .footer-back-top { display:flex; align-items:center; justify-content:center; gap:8px; margin:0 auto 20px; padding:10px 16px; min-height:44px; color:#561291; background:#f6f2fa; border:1px solid #e4d8ee; border-radius:12px; font:600 14px 'DM Sans',Arial,sans-serif; cursor:pointer; }
+.hkpc-landing .footer-back-top:hover { background:#eee4f6; }
+.hkpc-landing .footer-back-top:focus-visible { outline:2px solid #561291; outline-offset:4px; }
