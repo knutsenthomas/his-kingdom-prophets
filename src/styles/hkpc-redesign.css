@@ -3032,7 +3032,7 @@
 .hkpc-landing .mobile-choice-btn.primary {
   background: var(--violet);
   color: #ffffff;
-  border: 0;
+  border: 1px solid transparent;
   box-shadow: 0 4px 12px rgba(86, 18, 145, 0.2);
 }
 
@@ -3336,3 +3336,41 @@
 @media (max-width: 480px) { .hkpc-landing .hero-inner { padding-top: 36px; } }
 
 .hkpc-landing .image-caption > span { font-weight: 900; }
+
+/* Keep the mobile login labels aligned and readable on narrow screens. */
+.hkpc-landing .mobile-choice-btn { width: 100%; gap: 12px; text-align: left; }
+.hkpc-landing .mobile-choice-label { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.hkpc-landing .mobile-choice-label svg { width: 18px; height: 18px; flex-shrink: 0; }
+.hkpc-landing .mobile-choice-destination { display: flex; align-items: center; gap: 4px; font-size: 11px; white-space: nowrap; opacity: .9; }
+.hkpc-landing .mobile-choice-btn.secondary .mobile-choice-destination { color: #64748b; }
+@media (max-width: 480px) {
+  .hkpc-landing .mobile-choice-btn { flex-direction: column; align-items: flex-start; gap: 4px; font-size: 12px; padding: 12px 10px; }
+  .hkpc-landing .mobile-choice-destination { margin-left: 26px; }
+}
+
+.hkpc-landing .mobile-login-box .mobile-choice-btn {
+  box-sizing: border-box;
+  padding-inline: 12px;
+  margin: 0;
+}
+.hkpc-landing .mobile-choice-label { display: grid; grid-template-columns: 18px auto; column-gap: 8px; }
+/* Shield artwork has wider internal whitespace than the graduation cap. */
+.hkpc-landing .mobile-choice-label .lucide-shield-check { width: 22px; height: 22px; margin-left: -2px; }
+.hkpc-landing .mobile-login-box a.mobile-choice-btn,
+.hkpc-landing .mobile-login-box button.mobile-choice-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  font-size: 14px;
+  line-height: 1.65;
+  font-weight: 700;
+}
+@media (max-width: 480px) {
+  .hkpc-landing .mobile-login-box a.mobile-choice-btn,
+  .hkpc-landing .mobile-login-box button.mobile-choice-btn {
+    align-items: flex-start;
+    flex-direction: column;
+    font-size: 12px;
+  }
+}

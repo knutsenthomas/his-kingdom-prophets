@@ -146,11 +146,11 @@ export default function SiteHeader() {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="mobile-choice-btn primary"
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="mobile-choice-label">
                     <GraduationCap size={18} />
                     <span>{language === 'no' ? 'Elev- og lærerportal' : 'Student and teacher portal'}</span>
                   </span>
-                  <span className="text-[11px] opacity-90 flex items-center gap-1">
+                  <span className="mobile-choice-destination">
                     app.hkpc.no <ExternalLink size={12} />
                   </span>
                 </a>
@@ -163,11 +163,11 @@ export default function SiteHeader() {
                   }}
                   className="mobile-choice-btn secondary"
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="mobile-choice-label">
                     <ShieldCheck size={18} />
                     <span>{language === 'no' ? 'Administrasjon av nettsiden' : 'Website administration'}</span>
                   </span>
-                  <span className="text-[11px] text-slate-500">
+                  <span className="mobile-choice-destination">
                     hkpc.no/admin &rarr;
                   </span>
                 </button>
