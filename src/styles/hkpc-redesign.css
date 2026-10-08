@@ -3272,7 +3272,7 @@
 .hkpc-landing .about-contact a { display: inline-flex; align-items: center; gap: 8px; background: var(--violet); color: #fff; border-radius: 12px; padding: 12px 20px; margin-top: 10px; font-weight: 600; }
 @media (max-width: 760px) {
   .hkpc-landing .about-values-grid, .hkpc-landing .about-team-grid, .hkpc-landing .about-history-section { grid-template-columns: 1fr; gap: 20px; }
-  .hkpc-landing .about-page-hero { padding: 24px 0 38px; }
+  .hkpc-landing .about-page-hero { padding: 36px 0 38px; }
 }
 
 .hkpc-landing .about-additional-team { margin-top: 32px; }
