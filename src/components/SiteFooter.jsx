@@ -52,6 +52,8 @@ export default function SiteFooter() {
 
             <div className="footer-links-col">
               <nav className="footer-nav" aria-label="Bunnmeny">
+                <Link to="/betaling" className="footer-link">{language === 'no' ? 'Betal skoleavgift' : 'Pay school fees'}</Link>
+                <Link to="/gi-gave" className="footer-link">{language === 'no' ? 'Gi en gave' : 'Give a gift'}</Link>
                 <Link to="/privacy" className="footer-link">
                   <CmsText slug="landing-footer-link-privacy" fallback={language === 'no' ? 'Personvern' : 'Privacy Policy'} />
                 </Link>

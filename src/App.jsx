@@ -17,6 +17,7 @@ import CompleteProfilePage from '@/pages/CompleteProfilePage';
 import WelcomePage from '@/pages/WelcomePage';
 import AdmissionPage from '@/pages/AdmissionPage';
 import AboutPage from '@/pages/AboutPage';
+import SchoolPaymentPage from '@/pages/SchoolPaymentPage';
 import HkmAboutPage from '@/pages/HkmAboutPage';
 
 // Teacher & Admin Pages
@@ -203,6 +204,8 @@ function AppRoutes() {
         <Route path="/admission" element={<AdmissionPage />} />
         <Route path="/opptak" element={<AdmissionPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/betaling" element={<SchoolPaymentPage key="school" />} />
+        <Route path="/gi-gave" element={<SchoolPaymentPage key="gift" gift />} />
         <Route path="/hkm" element={<HkmAboutPage />} />
       </Routes>
     </>

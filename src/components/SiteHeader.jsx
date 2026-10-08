@@ -110,6 +110,8 @@ export default function SiteHeader() {
             {language === 'no' ? 'Ressurser' : 'Resources'}
           </a>
 
+          <a href="/betaling" onClick={e => { e.preventDefault(); setIsMobileMenuOpen(false); navigate('/betaling'); }} aria-current={['/betaling', '/gi-gave'].includes(location.pathname) ? 'page' : undefined}>{language === 'no' ? 'Betaling og gaver' : 'Payments & giving'}</a>
+
           {/* Mobile only action items */}
           <div className="mobile-nav-actions">
             <button onClick={toggleLanguage} className="mobile-action-btn">
