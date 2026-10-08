@@ -92,7 +92,7 @@ export default function SiteHeader() {
     <div className="hkpc-landing site-header-wrapper">
       <header className="wrap">
         <a className="brand" href="/" onClick={handleLogoClick}>
-          <img src="/assets/logo.png" alt="HKP Community" />
+          <img width="40" height="40" src="/assets/logo.png" alt="HKP Community" />
           <span className="brand-name">HKP Community</span>
         </a>
 
