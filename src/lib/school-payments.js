@@ -1,6 +1,8 @@
 // Uses the same public payment endpoints and publishable key as knutsenthomas/hkm.
 export const STRIPE_PUBLIC_KEY = 'pk_live_51Pab8rAL393JGrO9bTUitYflDKlHGpLiqZCCBp0dCzBEV3ZFxARFfK6MgWraehq7i79tJHPIEzlpMwPiT2K3HsiZ00gJ1TQ71Y';
 const endpoints = {
+  recurring: 'https://us-central1-his-kingdom-ministry.cloudfunctions.net/createRecurringPayment',
+  recurringStatus: 'https://us-central1-his-kingdom-ministry.cloudfunctions.net/verifyRecurringPayment',
   card: 'https://createpaymentintent-42bhgdjkcq-uc.a.run.app',
   vipps: 'https://createvippspayment-42bhgdjkcq-uc.a.run.app',
   paypal: 'https://createpaypalorder-42bhgdjkcq-uc.a.run.app',
@@ -8,7 +10,8 @@ const endpoints = {
   vippsStatus: 'https://finalizevippspayment-42bhgdjkcq-uc.a.run.app',
 };
 export const SCHOOL_PAYMENTS = [
-  { id: 'monthly', amount: 1000, no: 'Én månedlig termin', en: 'One monthly instalment' },
+  { id: 'monthly', amount: 1000, no: 'Månedlig avtale · 10 trekk', en: 'Monthly plan · 10 payments' },
+  { id: 'instalment', amount: 1000, no: 'Betal én enkelttermin', en: 'Pay one instalment' },
   { id: 'semester', amount: 5000, no: 'Ett halvår', en: 'One semester' },
   { id: 'annual', amount: 10000, no: 'Hele studieåret', en: 'Full school year' },
   { id: 'registration', amount: 1000, no: 'Engangsavgift', en: 'One-time fee' },
@@ -36,7 +39,7 @@ export async function paymentRequest(method, payload) {
     signal: AbortSignal.timeout(30000),
   });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error('payment-service-unavailable');
+  if (!response.ok) throw new Error(response.status === 409 ? 'agreement-already-started' : 'payment-service-unavailable');
   return data;
 }
 let stripeLoader;
@@ -70,4 +73,14 @@ export function loadSchoolPayPal() {
     document.head.appendChild(script);
   });
   return paypalLoader;
+}
+
+// Only a hash and random request identifier are kept in browser session storage.
+export async function recurringRequestId(payload, provider) {
+  const identity = JSON.stringify([provider, payload.gift, payload.schoolYear, payload.customerDetails.email.trim().toLowerCase(), payload.studentName?.trim().toLowerCase(), payload.amount, payload.customerDetails.name, payload.reference]);
+  const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(identity));
+  const key = `hkpc-recurring-v1-${Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, '0')).join('')}`;
+  const existing = sessionStorage.getItem(key);
+  if (existing) return existing;
+  const id = crypto.randomUUID(); sessionStorage.setItem(key, id); return id;
 }

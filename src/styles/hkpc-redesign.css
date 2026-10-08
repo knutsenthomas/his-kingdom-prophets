@@ -3443,3 +3443,8 @@
 .hkpc-landing .payment-bank summary { cursor: pointer; font-weight: 600; color: #561291; font-size: 14px; }
 @media(max-width:480px) { .hkpc-landing .payment-bank { padding: 16px; } }
 .hkpc-landing .payment-methods label:has(input[value="bank"]) { flex-basis: 100%; }
+
+.payment-consent { display: flex; align-items: flex-start; gap: 12px; margin: 22px 0; line-height: 1.6; }
+.payment-consent input { flex: 0 0 auto; width: 20px; height: 20px; margin-top: 4px; accent-color: #561291; }
+.payment-methods label:has(input:disabled) { opacity: .5; cursor: not-allowed; }
+.payment-field select { width: 100%; padding: 12px; border: 1px solid #ded5e8; border-radius: 10px; background: white; color: #271f30; font: inherit; }

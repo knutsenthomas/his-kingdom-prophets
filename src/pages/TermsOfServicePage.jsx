@@ -108,6 +108,13 @@ export default function TermsOfServicePage() {
             </div>
           </div>
 
+          <section className="space-y-3 text-sm leading-relaxed" id="payments">
+            <h2 className="text-xl font-bold text-primary">{isEn ? 'School payments and monthly gifts' : 'Skolebetaling og faste gaver'}</h2>
+            <p>{isEn ? 'School fees are NOK 10,000 per year. The monthly agreement consists of 10 payments of NOK 1,000, starting on setup, and ends automatically after 10 instalments. The NOK 1,000 one-time fee is paid separately.' : 'Studieavgiften er 10 000 kr per år. Den månedlige avtalen består av 10 trekk à 1 000 kr, med første betaling ved oppstart. Avtalen avsluttes automatisk etter 10 terminer. Engangsavgiften på 1 000 kr betales separat.'}</p>
+            <p>{isEn ? 'Monthly gifts continue until you cancel. Contact school@hiskingdomministry.no to change or cancel your agreement. PayPal agreements can also be cancelled in PayPal. Cancelling payments does not itself cancel the study agreement; outstanding tuition must be resolved with the school.' : 'Faste månedlige gaver fortsetter til du avslutter avtalen. Kontakt school@hiskingdomministry.no for å endre eller avslutte avtalen. PayPal-avtaler kan også avsluttes i PayPal. Avslutning av trekk endrer ikke i seg selv studieavtalen; ubetalte skoleterminer avklares med skolen.'}</p>
+            <p>{isEn ? 'Payments are processed by His Kingdom Ministry through Stripe or PayPal. Vipps recurring payments become available when the relevant agreement is activated. Each payment is registered after confirmation from the payment provider. Bank transfers are registered when received.' : 'Betalingene behandles av His Kingdom Ministry via Stripe eller PayPal. Faste Vipps-betalinger blir tilgjengelig når den aktuelle avtalen er aktivert. Hver betaling registreres etter bekreftelse fra betalingstjenesten. Bankoverføringer registreres når de er mottatt.'}</p>
+          </section>
+
           {/* Terms content */}
           <div className="space-y-6 pt-4 text-slate-700 leading-relaxed text-xs sm:text-sm font-medium">
             <section className="space-y-3">

@@ -43,3 +43,19 @@ test('HKM requests preserve school earmarking and fail safely on service errors'
     await assert.rejects(paymentRequest('card', payload), /payment-service-unavailable/);
   } finally { globalThis.fetch = original; }
 });
+
+test('monthly plan is distinct from a one-time instalment', async () => {
+  const { SCHOOL_PAYMENTS } = await import('../src/lib/school-payments.js');
+  assert.equal(SCHOOL_PAYMENTS.find(plan => plan.id === 'monthly').amount, 1000);
+  assert.equal(SCHOOL_PAYMENTS.find(plan => plan.id === 'instalment').amount, 1000);
+  const payload = paymentPayload({ ...details, gift: false, plan: 'instalment' });
+  assert.equal(payload.customerDetails.courseId, 'hkpc-instalment');
+});
+test('a duplicate agreement response is not treated as a new payment attempt', async () => {
+  const { paymentRequest } = await import('../src/lib/school-payments.js');
+  const original = globalThis.fetch;
+  try {
+    globalThis.fetch = async () => ({ ok: false, status: 409, json: async () => ({ error: 'school-plan-exists' }) });
+    await assert.rejects(paymentRequest('recurring', {}), /agreement-already-started/);
+  } finally { globalThis.fetch = original; }
+});
