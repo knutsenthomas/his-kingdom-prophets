@@ -12,7 +12,9 @@ import {
 } from 'firebase/auth';
 import { 
   doc, 
-  getDoc, 
+  getDoc,
+  getDocFromServer,
+  writeBatch,
   setDoc, 
   updateDoc, 
   collection, 
@@ -1110,6 +1112,16 @@ export const AppProvider = ({ children }) => {
   // Submit support ticket to Firestore and trigger email dispatch
   const submitSupportTicket = async (ticketData) => {
     try {
+      // Check connectivity before queuing writes, so offline failures cannot
+      // silently leave an email waiting to send after a user retries.
+      let connectionTimer;
+      try {
+        await Promise.race([
+          getDocFromServer(doc(db, 'cms_configs', 'public')),
+          new Promise((_, reject) => { connectionTimer = setTimeout(() => reject(new Error('contact-service-unavailable')), 12000); })
+        ]);
+      } finally { clearTimeout(connectionTimer); }
+      const batch = writeBatch(db);
       // 1. Lagre henvendelsen i "support_tickets" for databaselogg
       const ticketRef = doc(collection(db, "support_tickets"));
       const newTicket = {
@@ -1118,7 +1130,7 @@ export const AppProvider = ({ children }) => {
         status: 'open',
         ...ticketData
       };
-      await setDoc(ticketRef, newTicket);
+      batch.set(ticketRef, newTicket);
 
       // 2. Lagre i "support_emails" for automatisk e-postutsending via Firebase-funksjonen
       const emailRef = doc(collection(db, "support_emails"));
@@ -1152,7 +1164,8 @@ export const AppProvider = ({ children }) => {
           `
         }
       };
-      await setDoc(emailRef, newEmail);
+      batch.set(emailRef, newEmail);
+      await batch.commit();
 
       return true;
     } catch (e) {

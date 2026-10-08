@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Mail, ArrowLeft, Globe, Send, User, HelpCircle, Phone, MapPin, Sparkles } from 'lucide-react';
-import logo from '@/assets/logo.png';
+import '@/styles/hkpc-redesign.css';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SeoHead from '@/components/SeoHead';
 
 export default function ContactSupportPage() {
-  const navigate = useNavigate();
-  const { user, showToast, language, toggleLanguage, submitSupportTicket } = useApp();
+  const reducedMotion = useReducedMotion();
+  const { user, showToast, language, submitSupportTicket } = useApp();
 
   const isEn = language === 'en';
 
@@ -24,14 +24,17 @@ export default function ContactSupportPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setSubmitError('');
     if (!form.message.trim() || !form.subject.trim()) {
       showToast(isEn ? 'Please fill out all fields.' : 'Vennligst fyll ut alle feltene.');
       return;
     }
-    
+
     setIsSubmitting(true);
     try {
       await submitSupportTicket({
@@ -44,7 +47,7 @@ export default function ContactSupportPage() {
       showToast(isEn ? 'Support ticket created successfully!' : 'Støttehenvendelse opprettet!');
       setSuccess(true);
     } catch (err) {
-      showToast(isEn ? 'Failed to submit ticket. Please try again.' : 'Klarte ikke å sende henvendelse. Vennligst prøv igjen.');
+      setSubmitError(isEn ? 'We could not send your message. Please try again, or email school@hiskingdomministry.no.' : 'Vi kunne ikke sende henvendelsen. Prøv igjen, eller send e-post til school@hiskingdomministry.no.');
       console.error(err);
     } finally {
       setIsSubmitting(false);
@@ -52,10 +55,10 @@ export default function ContactSupportPage() {
   };
 
   return (
-    <div className="bg-[#F6F4F8] min-h-screen flex flex-col font-sans text-slate-800">
+    <div className="hkpc-landing support-page min-h-screen flex flex-col">
       <SeoHead
         title={isEn ? "Contact & Support | His Kingdom Prophetic Community" : "Kontakt & Støtte | His Kingdom Prophetic Community"}
-        description={isEn 
+        description={isEn
           ? "Get in touch with the team at His Kingdom Prophetic Community (HKPC). We are here to answer questions about admissions, studies, and programs."
           : "Ta kontakt med oss i His Kingdom Prophetic Community (HKPC). Vi svarer gjerne på spørsmål om opptak, studieløp og undervisning."}
         canonicalPath="/support"
@@ -91,25 +94,24 @@ export default function ContactSupportPage() {
           ]
         }}
       />
-      
+
       {/* Site Header */}
       <SiteHeader />
 
-      {/* Main Container */}
-      <main className="flex-1 w-full max-w-[1100px] mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
-          
-          {/* Left Column - Contact Details */}
-          <div className="lg:col-span-5 space-y-6 sm:space-y-8 flex flex-col justify-center">
-            <div className="space-y-4">
-              <h1 className="font-sans text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#561291] leading-tight break-words">
+      <section className="about-page-hero support-hero"><div className="wrap"><Link to="/" className="about-back"><ArrowLeft size={18}/>{isEn ? 'Back to home' : 'Tilbake til forsiden'}</Link><p className="eyebrow">{isEn ? 'CONTACT THE SCHOOL' : 'KONTAKT SKOLEN'}</p>
+              <h1 >
                 <CmsText slug="support-hero-title" fallback={isEn ? 'Get in Touch with Us' : 'Kontakt Kundestøtte'} />
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-medium">
+              <p className="about-page-intro">
                 <CmsText slug="support-hero-desc" fallback={isEn ? 'Have theological questions, need help with assignments, or experiencing technical glitches? We are here to support your prophetic journey.' : 'Har du teologiske spørsmål, trenger hjelp med oppgaver eller opplever tekniske problemer? Vi er klare til å hjelpe deg videre i din tjeneste.'} />
               </p>
-            </div>
+      </div></section>
+      {/* Main Container */}
+      <main className="section wrap support-content">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
 
+          {/* Left Column - Contact Details */}
+          <div className="lg:col-span-5 space-y-6 sm:space-y-8 flex flex-col justify-start">
             {/* Quick Contact Details */}
             <div className="space-y-4">
               <div className="flex items-start gap-4 p-4 bg-white rounded-xl border border-slate-200/50 shadow-sm">
@@ -152,27 +154,28 @@ export default function ContactSupportPage() {
           <div className="lg:col-span-7">
             <AnimatePresence mode="wait">
               {!success ? (
-                <motion.div 
+                <motion.div
                   key="contact-form"
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={reducedMotion ? false : { opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="bg-white border border-slate-200/60 rounded-2xl p-5 sm:p-8 md:p-10 shadow-md space-y-6"
+                  className="bg-white border border-slate-200/60 rounded-2xl p-5 sm:p-8 md:p-10 support-form-card space-y-6"
                 >
-                  <h3 className="font-sans text-xl sm:text-2xl font-bold text-primary border-b border-slate-100 pb-4 flex items-center gap-2">
-                    <Mail size={20} className="text-[#D7B978]" /> 
+                  <h2 className="font-sans text-xl sm:text-2xl font-bold text-primary border-b border-slate-100 pb-4 flex items-center gap-2">
+                    <Mail size={20} className="text-[#D7B978]" />
                     <CmsText slug="support-form-title" fallback={isEn ? 'Send us a Message' : 'Send oss en henvendelse'} />
-                  </h3>
+                  </h2>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">
+                        <label htmlFor="support-name" className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">
                           <CmsText slug="support-form-label-name" fallback={isEn ? 'Your Name' : 'Ditt navn'} />
                         </label>
                         <div className="relative flex items-center">
                           <input
                             type="text"
+                            id="support-name"
                             value={form.name}
                             onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
                             placeholder={isEn ? 'Your name...' : 'Ditt navn...'}
@@ -183,12 +186,13 @@ export default function ContactSupportPage() {
                       </div>
 
                       <div>
-                        <label className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">
+                        <label htmlFor="support-email" className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">
                           <CmsText slug="support-form-label-email" fallback={isEn ? 'Email Address' : 'E-postadresse'} />
                         </label>
                         <div className="relative flex items-center">
                           <input
                             type="email"
+                            id="support-email"
                             value={form.email}
                             onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))}
                             placeholder={isEn ? 'Email address...' : 'E-postadresse...'}
@@ -200,13 +204,14 @@ export default function ContactSupportPage() {
                     </div>
 
                     <div>
-                      <label className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">
+                      <label htmlFor="support-subject" className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">
                         <CmsText slug="support-form-label-subject" fallback={isEn ? 'Subject' : 'Hva gjelder henvendelsen?'} />
                       </label>
                       <div className="relative flex items-center">
                         <input
                           type="text"
-                          value={form.subject}
+                          id="support-subject"
+                            value={form.subject}
                           onChange={(e) => setForm(prev => ({ ...prev, subject: e.target.value }))}
                           placeholder={isEn ? 'Subject...' : 'Hva gjelder henvendelsen?...'}
                           className="w-full min-h-[44px] px-4 py-3 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-base sm:text-sm font-semibold outline-none transition-all"
@@ -216,12 +221,13 @@ export default function ContactSupportPage() {
                     </div>
 
                     <div>
-                      <label className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">
+                      <label htmlFor="support-message" className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-1">
                         <CmsText slug="support-form-label-message" fallback={isEn ? 'Detailed Message' : 'Utdypende beskrivelse'} />
                       </label>
                       <textarea
                         rows={5}
-                        value={form.message}
+                        id="support-message"
+                            value={form.message}
                         onChange={(e) => setForm(prev => ({ ...prev, message: e.target.value }))}
                         placeholder={isEn ? 'Describe your request here...' : 'Skriv din henvendelse her...'}
                         className="w-full p-4 bg-slate-50 border border-outline-variant/35 focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-xl text-base sm:text-sm font-medium outline-none transition-all resize-none leading-relaxed"
@@ -229,10 +235,11 @@ export default function ContactSupportPage() {
                       />
                     </div>
 
+                    {submitError && <p role="alert" className="text-red-700">{submitError}</p>}
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full min-h-[44px] py-3.5 bg-primary hover:bg-[#0f344c] text-white text-sm font-bold uppercase tracking-wider rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="w-full min-h-[44px] py-3.5 bg-primary hover:bg-[#451074] text-white text-sm font-bold uppercase tracking-wider rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       {isSubmitting ? (
                         <span><CmsText slug="support-form-submitting" fallback={isEn ? 'Submitting...' : 'Sender henvendelse...'} /></span>
@@ -246,17 +253,17 @@ export default function ContactSupportPage() {
                   </form>
                 </motion.div>
               ) : (
-                <motion.div 
+                <motion.div
                   key="contact-success"
-                  initial={{ opacity: 0, scale: 0.95 }}
+                  initial={reducedMotion ? false : { opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  className="bg-white border border-slate-200/60 rounded-2xl p-8 sm:p-12 shadow-md text-center space-y-6"
+                  className="bg-white border border-slate-200/60 rounded-2xl p-8 sm:p-12 support-form-card text-center space-y-6"
                 >
                   <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-500 border border-emerald-100 flex items-center justify-center mx-auto text-xl shadow-inner">
-                    <Sparkles size={28} className="animate-spin" style={{ animationDuration: '3s' }} />
+                    <Sparkles size={28}  style={{ animationDuration: '3s' }} />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <h3 className="font-sans text-2xl font-bold text-primary">
                       <CmsText slug="support-success-title" fallback={isEn ? 'Thank you!' : 'Tusen takk!'} />
