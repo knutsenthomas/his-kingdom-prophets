@@ -1120,7 +1120,7 @@ export const AppProvider = ({ children }) => {
       };
       await setDoc(ticketRef, newTicket);
 
-      // 2. Lagre i "support_emails" for automatisk e-postutsending via Firebase Extension
+      // 2. Lagre i "support_emails" for automatisk e-postutsending via Firebase-funksjonen
       const emailRef = doc(collection(db, "support_emails"));
       const safeName = escapeHtml(ticketData.name || 'Ukjent avsender');
       const safeEmail = escapeHtml(sanitizeEmail(ticketData.email || ''));
