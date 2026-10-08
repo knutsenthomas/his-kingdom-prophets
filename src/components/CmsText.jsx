@@ -23,6 +23,12 @@ export default function CmsText({
       text = text.replace(/^[📖📚🎙️📜\s]+/gu, '').trim();
     }
 
+    if (slug.startsWith('landing-') && typeof text === 'string') {
+      text = text.replace(/kickoff-samlingen/gi, 'oppstartssamlingen')
+        .replace(/kickoff-helgen/gi, 'oppstartssamlingen')
+        .replace(/kickoff i Norge/gi, 'oppstartssamlingen i Norge')
+        .replace(/kickoff kost\/losji/gi, 'kost og losji på oppstartssamlingen');
+    }
     return text;
   };
   

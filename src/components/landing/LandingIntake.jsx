@@ -21,10 +21,10 @@ export default function LandingIntake() {
       </motion.div>
       <motion.div variants={fadeInUp}>
         <small>{language === 'no' ? 'Søknadsperiode' : 'Application period'}</small>
-        <strong>{language === 'no' ? '1. jan – 30. juni 2027' : 'Jan 1 – June 30, 2027'}</strong>
+        <strong>{language === 'no' ? '1. januar – 30. juni 2027' : '1 January – 30 June 2027'}</strong>
       </motion.div>
       <motion.div variants={fadeInUp}>
-        <small>{language === 'no' ? 'Kickoff i Norge' : 'Kickoff in Norway'}</small>
+        <small>{language === 'no' ? 'Oppstartssamling i Norge' : 'Opening gathering in Norway'}</small>
         <strong>{language === 'no' ? '20.–22. august 2027' : 'August 20–22, 2027'}</strong>
       </motion.div>
       <motion.div variants={fadeInUp}>

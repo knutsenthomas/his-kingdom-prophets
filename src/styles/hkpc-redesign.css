@@ -1,6 +1,6 @@
 /* HKPC Clean Design Stylesheet */
 
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;900&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap");
 
 .hkpc-landing {
   --purple: #561291;
@@ -2877,6 +2877,10 @@
 }
 
 .hkpc-landing .login-choice-card.secondary-choice {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
   background: #ffffff;
   border: 1px solid #ded7e4;
 }
@@ -3225,3 +3229,110 @@
 }
 
 
+
+.hkpc-landing .portal-action {
+  background: var(--violet);
+  color: #fff;
+  padding: 9px 14px;
+  border-radius: 9px;
+  margin-top: 10px;
+}
+.hkpc-landing .admin-choice-icon { color: var(--violet); flex-shrink: 0; }
+.hkpc-landing .admin-choice-title { display: block; font-size: 12px; font-weight: 600; color: #271f30; }
+.hkpc-landing .admin-choice-caption { display: block; margin-top: 3px; font-size: 10px; color: #6d6575; }
+.hkpc-landing .login-choice-card:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+
+/* About page follows the public site's colours and typography. */
+.hkpc-landing.about-page section[id] { scroll-margin-top: 110px; }
+.hkpc-landing .about-page-hero { background: var(--violet); color: #fff; padding: 36px 0 54px; }
+.hkpc-landing .about-back { display: inline-flex; align-items: center; gap: 8px; color: #fff; margin-bottom: 32px; font-size: 14px; }
+.hkpc-landing .about-page-hero .eyebrow { color: var(--gold); }
+.hkpc-landing .about-page-hero h1 { max-width: 850px; font-size: clamp(34px, 5vw, 60px); line-height: 1.15; color: #fff; margin: 12px 0 22px; }
+.hkpc-landing .about-page-intro { max-width: 780px; color: #e6dced; }
+.hkpc-landing .about-section-nav { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 28px; }
+.hkpc-landing .about-section-nav a { color: #fff; text-decoration: underline; text-underline-offset: 5px; font-size: 14px; }
+.hkpc-landing .about-values-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 30px; }
+.hkpc-landing .about-value-card { background: #fff; border: 1px solid #e2dbe8; border-radius: var(--radius); padding: 26px; }
+.hkpc-landing .about-value-card svg { color: var(--violet); }
+.hkpc-landing .about-value-card h3 { font-size: 21px; margin: 16px 0 10px; }
+.hkpc-landing .about-value-card p { font-size: 16px; color: var(--muted); margin: 0; }
+.hkpc-landing .about-team-section { background: #fff; }
+.hkpc-landing .about-section-intro { max-width: 760px; color: var(--muted); }
+.hkpc-landing .about-team-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 40px; }
+.hkpc-landing .about-team-card { text-align: center; padding: 28px 20px; border: 1px solid #e2dbe8; border-radius: var(--radius); background: var(--soft); }
+.hkpc-landing .about-team-card img, .hkpc-landing .about-profile-initials { width: 168px; height: 168px; min-height: 0; border-radius: 50%; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; border: 4px solid #fff; box-shadow: 0 0 0 1px #ded4e7; }
+.hkpc-landing .about-team-card img { object-fit: cover; object-position: center 30%; }
+.hkpc-landing .about-profile-initials { background: #e9dff2; color: var(--violet); font-size: 40px; font-weight: 600; }
+.hkpc-landing .about-team-card > div { padding: 0; }
+.hkpc-landing .about-team-card h3 { margin: 0; font-size: 22px; line-height: 1.3; }
+.hkpc-landing .about-team-card p { font-size: 14px; line-height: 1.7; color: var(--muted); }
+.hkpc-landing .about-team-card .about-team-role { color: var(--violet); font-weight: 600; font-size: 13px; margin: 8px 0 14px; }
+.hkpc-landing .about-history-section { display: grid; grid-template-columns: 1fr 1.3fr; gap: 48px; }
+.hkpc-landing .about-history-section a, .hkpc-landing .about-page-link { display: inline-flex; align-items: center; gap: 8px; color: var(--violet); font-weight: 600; margin-top: 12px; }
+.hkpc-landing .about-contact { background: #eee6f4; }
+.hkpc-landing .about-contact a { display: inline-flex; align-items: center; gap: 8px; background: var(--violet); color: #fff; border-radius: 12px; padding: 12px 20px; margin-top: 10px; font-weight: 600; }
+@media (max-width: 760px) {
+  .hkpc-landing .about-values-grid, .hkpc-landing .about-team-grid, .hkpc-landing .about-history-section { grid-template-columns: 1fr; gap: 20px; }
+  .hkpc-landing .about-page-hero { padding: 24px 0 38px; }
+}
+
+.hkpc-landing .about-additional-team { margin-top: 32px; }
+.hkpc-landing .about-additional-team h3 { font-size: 26px; margin: 0; }
+.hkpc-landing .about-prayer-panel { padding: 32px; background: var(--soft); border: 1px solid #e2dbe8; border-radius: var(--radius); }
+.hkpc-landing .about-prayer-heading { display: flex; gap: 18px; align-items: center; margin-bottom: 26px; }
+.hkpc-landing .about-prayer-heading .eyebrow { margin: 0 0 6px; color: var(--violet); }
+.hkpc-landing .about-team-symbol { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--violet); background: #e9dff2; flex-shrink: 0; }
+.hkpc-landing .about-name-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px 24px; }
+.hkpc-landing .about-name-grid li { display: flex; flex-direction: column; align-items: center; text-align: center; font-size: 15px; }
+.hkpc-landing .about-member-initials { width: 168px; height: 168px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; border-radius: 50%; background: #e9dff2; color: var(--violet); border: 4px solid #fff; box-shadow: 0 0 0 1px #ded4e7; font-size: 40px; font-weight: 600; flex-shrink: 0; }
+.hkpc-landing .about-member-name { overflow-wrap: anywhere; font-weight: 600; }
+.hkpc-landing .about-member-role { margin-top: 4px; font-size: 13px; color: var(--muted); }
+@media (max-width: 1050px) { .hkpc-landing .about-name-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 760px) {
+  .hkpc-landing .about-team-grid { grid-template-columns: 1fr; }
+  .hkpc-landing .about-prayer-panel { padding: 24px 16px; }
+  .hkpc-landing .about-name-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; }
+}
+@media (max-width: 480px) {
+  .hkpc-landing .about-member-initials, .hkpc-landing .about-team-card img, .hkpc-landing .about-profile-initials { width: 120px; height: 120px; font-size: 30px; }
+}
+
+.hkpc-landing .about-prayer-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.hkpc-landing .about-prayer-header .about-prayer-heading { margin-bottom: 0; }
+.hkpc-landing .about-team-count { margin: 5px 0 0; font-size: 14px; color: var(--muted); }
+.hkpc-landing .about-team-toggle { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 10px 16px; border-radius: 12px; border: 1px solid #ded4e7; background: #fff; color: var(--violet); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+.hkpc-landing .about-team-toggle:hover { background: #e9dff2; }
+.hkpc-landing .about-team-toggle:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+.hkpc-landing .about-team-toggle svg { transition: transform .2s; }
+.hkpc-landing .about-team-toggle svg.is-open { transform: rotate(180deg); }
+.hkpc-landing .about-name-grid[hidden] { display: none; }
+.hkpc-landing .about-prayer-header + .about-name-grid:not([hidden]) { margin-top: 32px; }
+@media (max-width: 480px) { .hkpc-landing .about-prayer-header { align-items: flex-start; flex-direction: column; } }
+
+.hkpc-landing .about-copy .about-page-link { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 22px; padding: 12px 20px; border-radius: 12px; background: var(--gold); color: var(--violet); text-decoration: none; font-size: 15px; font-weight: 700; transition: background .2s, transform .2s; }
+.hkpc-landing .about-copy .about-page-link:hover { background: #e1c58b; transform: translateY(-1px); }
+.hkpc-landing .about-copy .about-page-link:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+
+.hkpc-landing .about-copy .about-page-link { align-self: flex-start; width: auto; }
+.hkpc-landing .landing-portrait-frame { height: 365px; overflow: hidden; border-radius: 16px; border: 1px solid #e2dce7; }
+.hkpc-landing .landing-portrait-frame img { height: 100%; border: 0; border-radius: 0; object-position: center 30%; }
+.hkpc-landing .landing-portrait-frame.portrait-hilde img { transform: scale(1.18); transform-origin: center 42%; }
+@media (max-width: 760px) { .hkpc-landing .landing-portrait-frame { height: 280px; } }
+@media (max-width: 480px) { .hkpc-landing .landing-portrait-frame { height: 230px; } }
+
+.hkpc-landing .admission-facts { display: flex; flex-wrap: wrap; gap: 18px 30px; margin: 18px 0 0; text-align: left; }
+.hkpc-landing .admission-facts dt { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+.hkpc-landing .admission-facts dd { margin: 0; font-size: 15px; color: var(--ink); }
+.hkpc-landing .admission-box > .button { flex-shrink: 0; white-space: nowrap; }
+@media (max-width: 480px) { .hkpc-landing .admission-facts { flex-direction: column; gap: 12px; } }
+
+.hkpc-landing .admission-box > div > b { display: block; padding-bottom: 16px; border-bottom: 1px solid #e2dbe8; }
+
+.hkpc-landing .hero-opening-note { font-size: 13px; margin: 14px 0 0; color: #e6dced; }
+.hkpc-landing .admissions .admission-opening-note { font-size: 14px; color: var(--gold); margin: 24px 0 0; }
+.hkpc-landing .program-bottom .program-fees { color: var(--violet); font-weight: 600; }
+
+@media (max-width: 700px) { .hkpc-landing .hero-inner { padding-top: 48px; } }
+@media (max-width: 480px) { .hkpc-landing .hero-inner { padding-top: 36px; } }
+
+.hkpc-landing .image-caption > span { font-weight: 900; }

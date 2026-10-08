@@ -151,7 +151,7 @@ export const DEFAULT_CMS_CONTENT = {
   'landing-footer-link-terms-en': 'Terms of Service',
   'landing-footer-link-accessibility': 'Tilgjengelighet',
   'landing-footer-link-accessibility-en': 'Accessibility',
-  'landing-footer-link-support': 'Kontakt Support',
+  'landing-footer-link-support': 'Kontakt support',
   'landing-footer-link-support-en': 'Contact Support',
   'resources-hero-tagline': 'Offentlig studieportal',
   'resources-hero-tagline-en': 'Public Study Portal',

@@ -9,7 +9,7 @@ export default function LandingCurriculum() {
 
   return (
     <section className="section wrap curriculum" id="curriculum">
-      <motion.div 
+      <motion.div
         className="section-head"
         initial="hidden"
         whileInView="visible"
@@ -21,24 +21,24 @@ export default function LandingCurriculum() {
             <CmsText slug="landing-curriculum-eyebrow" fallback={language === 'no' ? 'FAGPLAN · FØRSTE ÅR' : 'CURRICULUM · FIRST YEAR'} />
           </p>
           <h2>
-            <CmsText 
-              slug="landing-curriculum-title" 
-              multiline 
-              fallback={language === 'no' ? 'Tro som får røtter.\nGaver som får vokse.' : 'Faith that takes root.\nGifts that flourish.'} 
+            <CmsText
+              slug="landing-curriculum-title"
+              multiline
+              fallback={language === 'no' ? 'Tro som får røtter.\nGaver som får vokse.' : 'Faith that takes root.\nGifts that flourish.'}
             />
           </h2>
         </motion.div>
         <motion.p variants={fadeInUp}>
-          <CmsText 
-            slug="landing-curriculum-desc" 
+          <CmsText
+            slug="landing-curriculum-desc"
             fallback={language === 'no'
               ? 'Sunn teologi, personlig relasjon til Jesus og praktisk åpenbaring. Fire områder som henger sammen.'
-              : 'Sound theology, personal intimacy with Jesus, and practical revelation. Four connected core areas.'} 
+              : 'Sound theology, personal intimacy with Jesus, and practical revelation. Four connected core areas.'}
           />
         </motion.p>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         className="topics"
         initial="hidden"
         whileInView="visible"
@@ -70,11 +70,11 @@ export default function LandingCurriculum() {
       <details>
         <summary><CmsText slug="landing-curriculum-summary" fallback={language === 'no' ? 'Se mer om fagene' : 'Read more about the courses'} /></summary>
         <p>
-          <CmsText 
-            slug="landing-curriculum-detail" 
+          <CmsText
+            slug="landing-curriculum-course-overview"
             fallback={language === 'no'
-              ? 'Førsteåret omfatter blant annet Profeti 101, å høre Guds stemme, gave versus tjeneste, bønn og faste, gudsfrykt, nådegaver og praktisk kristenliv. Fagområdene er hentet fra dagens HKPC-side.'
-              : 'The first year covers Prophecy 101, hearing God’s voice, spiritual gift versus office, prayer and fasting, the fear of the Lord, spiritual gifts, and practical Christian discipleship.'} 
+              ? 'Førsteåret gir undervisning i blant annet Profeti 101, å høre Guds stemme, gaver og tjeneste, bønn og faste, gudsfrykt, nådegaver og praktisk kristenliv.'
+              : 'The first year includes teaching on Prophecy 101, hearing God’s voice, gifts and ministry, prayer and fasting, the fear of the Lord, spiritual gifts and everyday Christian life.'}
           />
         </p>
       </details>

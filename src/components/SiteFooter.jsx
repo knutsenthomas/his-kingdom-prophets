@@ -62,7 +62,7 @@ export default function SiteFooter() {
                   <CmsText slug="landing-footer-link-accessibility" fallback={language === 'no' ? 'Tilgjengelighet' : 'Accessibility'} />
                 </Link>
                 <Link to="/support" className="footer-link">
-                  <CmsText slug="landing-footer-link-support" fallback={language === 'no' ? 'Kontakt support' : 'Support'} />
+                  <CmsText slug="landing-footer-contact-support" fallback={language === 'no' ? 'Kontakt support' : 'Support'} />
                 </Link>
                 {isAdmin && (
                   <Link 

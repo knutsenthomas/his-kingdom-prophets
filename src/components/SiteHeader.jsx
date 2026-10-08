@@ -103,7 +103,7 @@ export default function SiteHeader() {
           <a href="/#curriculum" onClick={(e) => handleNavClick(e, 'curriculum')}>
             {language === 'no' ? 'Fagplan' : 'Curriculum'}
           </a>
-          <a href="/#about" onClick={(e) => handleNavClick(e, 'about')}>
+          <a href="/about" aria-current={location.pathname === '/about' ? 'page' : undefined} onClick={e => { e.preventDefault(); setIsMobileMenuOpen(false); setIsLoginMenuOpen(false); navigate('/about'); }}>
             {language === 'no' ? 'Om oss' : 'About'}
           </a>
           <a href="/#resources" onClick={(e) => handleNavClick(e, 'resources')}>
@@ -148,7 +148,7 @@ export default function SiteHeader() {
                 >
                   <span className="flex items-center gap-2">
                     <GraduationCap size={18} />
-                    <span>HKP Community App</span>
+                    <span>{language === 'no' ? 'Elev- og lærerportal' : 'Student and teacher portal'}</span>
                   </span>
                   <span className="text-[11px] opacity-90 flex items-center gap-1">
                     app.hkpc.no <ExternalLink size={12} />
@@ -165,7 +165,7 @@ export default function SiteHeader() {
                 >
                   <span className="flex items-center gap-2">
                     <ShieldCheck size={18} />
-                    <span>{language === 'no' ? 'Nettside Admin' : 'Website Admin'}</span>
+                    <span>{language === 'no' ? 'Administrasjon av nettsiden' : 'Website administration'}</span>
                   </span>
                   <span className="text-[11px] text-slate-500">
                     hkpc.no/admin &rarr;
@@ -347,27 +347,19 @@ export default function SiteHeader() {
                         onClick={() => setIsLoginMenuOpen(false)}
                         className="login-choice-card primary-choice"
                       >
-                        <div className="choice-badge-row">
-                          <span className="choice-priority-badge">
-                            <Sparkles size={11} />
-                            <span>{language === 'no' ? 'Elever og lærere' : 'Students & Teachers'}</span>
-                          </span>
-                          <ExternalLink size={13} className="choice-arrow" />
-                        </div>
-
                         <div className="choice-body">
                           <div className="choice-icon-wrap primary-icon">
                             <GraduationCap size={20} />
                           </div>
                           <div className="choice-text">
-                            <h4>HKP Community App</h4>
+                            <h4>{language === 'no' ? 'Elev- og lærerportal' : 'Student and teacher portal'}</h4>
                             <p>
                               {language === 'no' 
-                                ? 'For studenter og elever. Se kurs, oppgaver, profetisk trening og fellesskap.' 
-                                : 'For students and community. Access courses, assignments, and prophetic equipping.'}
+                                ? 'Kurs, oppgaver og fellesskap.'
+                                : 'Courses, assignments and community.'}
                             </p>
-                            <span className="choice-action-link">
-                              {language === 'no' ? 'Gå til app.hkpc.no →' : 'Go to app.hkpc.no →'}
+                            <span className="choice-action-link portal-action">
+                              {language === 'no' ? 'Åpne portalen' : 'Open portal'}
                             </span>
                           </div>
                         </div>
@@ -382,26 +374,12 @@ export default function SiteHeader() {
                         }}
                         className="login-choice-card secondary-choice"
                       >
-                        <div className="choice-badge-row">
-                          <span className="choice-admin-badge">
-                            {language === 'no' ? 'Kun Administrator' : 'Admin Only'}
-                          </span>
-                          <ArrowRight size={13} className="choice-arrow" />
-                        </div>
-
-                        <div className="choice-body">
-                          <div className="choice-icon-wrap secondary-icon">
-                            <ShieldCheck size={20} />
-                          </div>
-                          <div className="choice-text">
-                            <h4>{language === 'no' ? 'Nettside Admin' : 'Website Admin'}</h4>
-                            <span className="choice-action-link secondary-link">
-                              {isAdmin 
-                                ? (language === 'no' ? 'Åpne CMS Dashboard →' : 'Open CMS Dashboard →') 
-                                : (language === 'no' ? 'Logg inn som Admin →' : 'Log in as Admin →')}
-                            </span>
-                          </div>
-                        </div>
+                        <ShieldCheck size={18} className="admin-choice-icon" />
+                        <span className="choice-text">
+                          <span className="admin-choice-title">{language === 'no' ? 'Administrasjon av nettsiden' : 'Website administration'}</span>
+                          <span className="admin-choice-caption">{language === 'no' ? 'Kun administrator' : 'Administrators only'}</span>
+                        </span>
+                        <ArrowRight size={16} className="choice-arrow" />
                       </button>
                     </div>
                   </motion.div>

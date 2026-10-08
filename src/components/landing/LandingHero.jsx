@@ -48,7 +48,7 @@ export default function LandingHero() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <CmsText slug="landing-hero-cta-primary" fallback={language === 'no' ? 'Begynn din reise' : 'Begin your journey'} />
+              <CmsText slug="landing-hero-apply-place" fallback={language === 'no' ? 'Søk skoleplass' : 'Apply for a place'} />
             </motion.button>
             <motion.a 
               className="intro" 
@@ -65,6 +65,7 @@ export default function LandingHero() {
               <span><CmsText slug="landing-hero-cta-secondary" fallback={language === 'no' ? 'Se introduksjon' : 'See introduction'} /></span>
             </motion.a>
           </motion.div>
+          {Date.now() < Date.parse('2027-01-01T00:00:00+01:00') && <p className="hero-opening-note">{language === 'no' ? 'Søknadsperioden åpner 1. januar 2027.' : 'Applications open on 1 January 2027.'}</p>}
         </motion.div>
 
         <motion.div 
