@@ -11,12 +11,14 @@ import {
   CheckCircle2, Clock, Sparkles, GraduationCap, Eye, FileText, Phone,
   Database
 } from 'lucide-react';
+import SchoolPaymentsAdmin from '@/components/SchoolPaymentsAdmin';
 import { serializeToCsv, downloadCsvFile } from '@/utils/csvExport';
 
 export default function AdminPortal() {
   const { user: currentUser, showToast, admissionFormOpen, setAdmissionFormOpenState, language } = useApp();
   const [activeTab, setActiveTab] = useState(() => {
     const tabParam = new URLSearchParams(window.location.search).get('tab');
+    if (tabParam === 'payments') return 'payments';
     if (tabParam === 'users' || tabParam === 'elever' || tabParam === 'brukere') return 'users';
     return 'admissions';
   });
@@ -534,12 +536,13 @@ export default function AdminPortal() {
             Elever & Tilgangssynk
           </button>
           
+          <button type="button" onClick={() => setActiveTab('payments')} className={`px-4 sm:px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold relative z-10 whitespace-nowrap ${activeTab === 'payments' ? 'text-[#561291]' : 'text-[#41474d]'}`}>Skolebetalinger</button>
           <motion.div
             className="absolute top-1 bottom-1 left-1 bg-white rounded-full shadow-sm"
             layoutId="portalTabIndicator"
-            style={{ width: 'calc(50% - 2px)' }}
+            style={{ width: 'calc(33.333% - 2px)' }}
             animate={{ 
-              x: activeTab === 'admissions' ? '0%' : '100%' 
+              x: activeTab === 'admissions' ? '0%' : activeTab === 'users' ? '100%' : '200%'
             }}
             transition={{ type: 'spring', stiffness: 350, damping: 32 }}
           />
@@ -547,7 +550,7 @@ export default function AdminPortal() {
       </div>
 
       <AnimatePresence mode="wait">
-        {activeTab === 'users' ? (
+        {activeTab === 'payments' ? <SchoolPaymentsAdmin /> : activeTab === 'users' ? (
           <motion.div
             key="users-tab"
             initial={{ opacity: 0, y: 15 }}

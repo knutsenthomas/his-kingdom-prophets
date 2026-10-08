@@ -1,6 +1,7 @@
 // Uses the same public payment endpoints and publishable key as knutsenthomas/hkm.
 export const STRIPE_PUBLIC_KEY = 'pk_live_51Pab8rAL393JGrO9bTUitYflDKlHGpLiqZCCBp0dCzBEV3ZFxARFfK6MgWraehq7i79tJHPIEzlpMwPiT2K3HsiZ00gJ1TQ71Y';
 const endpoints = {
+  schoolQuote: 'https://us-central1-his-kingdom-ministry.cloudfunctions.net/schoolCheckoutDetails',
   recurring: 'https://us-central1-his-kingdom-ministry.cloudfunctions.net/createRecurringPayment',
   recurringStatus: 'https://us-central1-his-kingdom-ministry.cloudfunctions.net/verifyRecurringPayment',
   card: 'https://createpaymentintent-42bhgdjkcq-uc.a.run.app',
@@ -14,7 +15,7 @@ export const SCHOOL_PAYMENTS = [
   { id: 'instalment', amount: 1000, no: 'Betal én enkelttermin', en: 'Pay one instalment' },
   { id: 'semester', amount: 5000, no: 'Ett halvår', en: 'One semester' },
   { id: 'annual', amount: 10000, no: 'Hele studieåret', en: 'Full school year' },
-  { id: 'registration', amount: 1000, no: 'Engangsavgift', en: 'One-time fee' },
+  { id: 'registration', amount: 1000, no: 'Registreringsavgift', en: 'Registration fee' },
 ];
 export function paymentPayload({ gift, plan, amount, name, email, studentName, reference, message }) {
   const selected = SCHOOL_PAYMENTS.find(item => item.id === plan);
