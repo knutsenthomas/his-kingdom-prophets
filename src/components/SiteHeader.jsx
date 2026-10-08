@@ -23,7 +23,7 @@ export default function SiteHeader() {
 
   const handlePortalNavigation = () => {
     if (isTeacherOrAdmin) {
-      navigate('/teacher/dashboard');
+      window.location.assign('https://app.hkpc.no/admin');
     } else {
       window.open('https://app.hkpc.no', '_blank', 'noopener,noreferrer');
     }
@@ -123,7 +123,7 @@ export default function SiteHeader() {
                   setIsMobileMenuOpen(false); 
                   if (isAdmin) {
                     localStorage.setItem('hkm-cms-authorized', 'true');
-                    navigate('/teacher/dashboard');
+                    window.location.assign('https://app.hkpc.no/admin');
                   } else {
                     handlePortalNavigation(); 
                   }
@@ -161,16 +161,16 @@ export default function SiteHeader() {
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    navigate(isAdmin ? '/admin/cms' : '/admin/login');
+                    window.location.assign('https://app.hkpc.no/admin');
                   }}
                   className="mobile-choice-btn secondary"
                 >
                   <span className="mobile-choice-label">
                     <ShieldCheck size={18} />
-                    <span>{language === 'no' ? 'Administrasjon av nettsiden' : 'Website administration'}</span>
+                    <span>{language === 'no' ? 'Administrasjon' : 'Administration'}</span>
                   </span>
                   <span className="mobile-choice-destination">
-                    hkpc.no/admin &rarr;
+                    app.hkpc.no/admin &rarr;
                   </span>
                 </button>
               </div>
@@ -280,7 +280,7 @@ export default function SiteHeader() {
                 <button 
                   onClick={() => {
                     localStorage.setItem('hkm-cms-authorized', 'true');
-                    navigate('/teacher/dashboard');
+                    window.location.assign('https://app.hkpc.no/admin');
                   }} 
                   className="admin-badge-btn"
                   title="Åpne Admin Dashbord"
@@ -372,13 +372,13 @@ export default function SiteHeader() {
                         type="button"
                         onClick={() => {
                           setIsLoginMenuOpen(false);
-                          navigate(isAdmin ? '/admin/cms' : '/admin/login');
+                          window.location.assign('https://app.hkpc.no/admin');
                         }}
                         className="login-choice-card secondary-choice"
                       >
                         <ShieldCheck size={18} className="admin-choice-icon" />
                         <span className="choice-text">
-                          <span className="admin-choice-title">{language === 'no' ? 'Administrasjon av nettsiden' : 'Website administration'}</span>
+                          <span className="admin-choice-title">{language === 'no' ? 'Administrasjon' : 'Administration'}</span>
                           <span className="admin-choice-caption">{language === 'no' ? 'Kun administrator' : 'Administrators only'}</span>
                         </span>
                         <ArrowRight size={16} className="choice-arrow" />

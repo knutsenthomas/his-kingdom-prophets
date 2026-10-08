@@ -3,15 +3,12 @@ import { Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ExternalLink } from 'lucide-react';
-import CmsVisualToggle from '@/components/CmsVisualToggle';
 
 // Layouts & Helpers
-import TeacherLayout from '@/components/TeacherLayout';
 import OnboardingHelper from '@/components/OnboardingHelper';
 
 // Public & Onboarding Pages
 import LandingPage from '@/pages/LandingPage';
-import LoginPage from '@/pages/LoginPage';
 import InterestsPage from '@/pages/InterestsPage';
 import CompleteProfilePage from '@/pages/CompleteProfilePage';
 import WelcomePage from '@/pages/WelcomePage';
@@ -21,11 +18,6 @@ import SchoolPaymentPage from '@/pages/SchoolPaymentPage';
 import HkmAboutPage from '@/pages/HkmAboutPage';
 
 // Teacher & Admin Pages
-import TeacherDashboard from '@/pages/TeacherDashboard';
-import CMSDashboard from '@/pages/CMSDashboard';
-import AnalyticsDashboard from '@/pages/AnalyticsDashboard';
-import AdminPortal from '@/pages/AdminPortal';
-import SupportArticleCMS from '@/pages/SupportArticleCMS';
 
 // Legal & Support Pages
 import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
@@ -87,7 +79,6 @@ export default function App() {
     return (
       <div className="min-h-screen bg-background text-on-background w-full">
         <AppRoutes />
-        <CmsVisualToggle />
       </div>
     );
   }
@@ -95,7 +86,6 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background text-on-background w-full font-sans relative">
       <AppRoutes />
-      <CmsVisualToggle />
 
       {/* Global Branded Toast Manager */}
       <AnimatePresence>
@@ -161,9 +151,8 @@ function AppRoutes() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/landing/tablet" element={<LandingPage />} />
         <Route path="/landing/mobile" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin/login" element={<LoginPage />} />
-        <Route path="/register" element={<LoginPage />} />
+        <Route path="/login" element={<StudentRedirect />} />
+        <Route path="/register" element={<StudentRedirect />} />
         <Route path="/interests" element={<InterestsPage />} />
         <Route path="/complete-profile" element={<CompleteProfilePage />} />
         <Route path="/onboarding-welcome" element={<WelcomePage />} />
@@ -177,22 +166,8 @@ function AppRoutes() {
         <Route path="/support/artikkel-veiledning" element={<ArtikkelVeiledning />} />
         <Route path="/support/artikkel-tjenestegaver" element={<ArtikkelTjenestegaver />} />
 
-        {/* Teacher / Admin Portal */}
-        <Route element={<TeacherLayout />}>
-          <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
-          <Route path="/teacher/*" element={<Navigate to="/teacher/dashboard" replace />} />
-          
-          {/* Admin Portal */}
-          <Route path="/admin/cms" element={<CMSDashboard />} />
-          <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
-          <Route path="/admin/portal" element={<AdminPortal />} />
-        </Route>
-
         {/* Email Previews */}
         <Route path="/email/previews" element={<EmailPreviews />} />
-
-        {/* Support Article CMS */}
-        <Route path="/admin/support-cms" element={<SupportArticleCMS />} />
 
         {/* Legal & Public Support Pages */}
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
@@ -207,7 +182,12 @@ function AppRoutes() {
         <Route path="/betaling" element={<SchoolPaymentPage key="school" />} />
         <Route path="/gi-gave" element={<SchoolPaymentPage key="gift" gift />} />
         <Route path="/hkm" element={<HkmAboutPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
+}
+
+function NotFound() {
+  return <main className="min-h-screen bg-background flex items-center justify-center p-6"><div className="rounded-2xl bg-white border border-outline-variant/30 p-8 max-w-lg space-y-4"><p className="font-bold text-primary">404</p><h1 className="text-3xl font-bold">Siden finnes ikke</h1><a className="inline-block rounded-xl bg-primary text-white px-5 py-3 font-semibold" href="/">Tilbake til forsiden</a></div></main>;
 }

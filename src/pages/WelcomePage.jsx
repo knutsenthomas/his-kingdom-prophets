@@ -12,15 +12,8 @@ export default function WelcomePage() {
 
   // Navigation Guard: Redirect administrators, teachers or superadmins
   useEffect(() => {
-    if (user && user.email) {
-      const email = user.email.toLowerCase();
-      if (['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(email) || user.role === 'superadmin') {
-        navigate('/admin/portal');
-      } else if (user.role === 'teacher' || email.includes('teacher') || email.includes('david')) {
-        navigate('/teacher/dashboard');
-      } else if (user.role === 'admin' || email.includes('admin') || email.includes('siri')) {
-        navigate('/admin/cms');
-      }
+    if (['teacher', 'admin', 'superadmin'].includes(user?.role)) {
+      window.location.assign('https://app.hkpc.no/admin');
     }
   }, [user, navigate]);
 

@@ -690,7 +690,7 @@ export default function AdmissionPage() {
                                   <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
                                     <tr>
                                       <td align="center" style="border-radius: 12px; background-color: #561291;">
-                                        <a href="https://hkpc.no/admin" target="_blank" style="display: inline-block; padding: 14px 28px; font-size: 14px; font-weight: 700; color: #FFFFFF; text-decoration: none; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em; min-height: 44px; line-height: 20px; box-sizing: border-box;">
+                                        <a href="https://app.hkpc.no/admin?section=admissions" target="_blank" style="display: inline-block; padding: 14px 28px; font-size: 14px; font-weight: 700; color: #FFFFFF; text-decoration: none; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em; min-height: 44px; line-height: 20px; box-sizing: border-box;">
                                           Åpne Adminportalen &rarr;
                                         </a>
                                       </td>

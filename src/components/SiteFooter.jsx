@@ -41,9 +41,9 @@ export default function SiteFooter() {
                     <CmsText slug="landing-footer-title" fallback="His Kingdom Prophetic Community" />
                   </span>
                   <p className="footer-tagline">
-                    <CmsText 
-                      slug="landing-footer-tagline" 
-                      fallback={language === 'no' ? 'Forankret i Skriften. Utrustet til tjeneste.' : 'Grounded in Scripture. Equipped for ministry.'} 
+                    <CmsText
+                      slug="landing-footer-tagline"
+                      fallback={language === 'no' ? 'Forankret i Skriften. Utrustet til tjeneste.' : 'Grounded in Scripture. Equipped for ministry.'}
                     />
                   </p>
                 </div>
@@ -67,14 +67,14 @@ export default function SiteFooter() {
                   <CmsText slug="landing-footer-contact-support" fallback={language === 'no' ? 'Kontakt support' : 'Support'} />
                 </Link>
                 {isAdmin && (
-                  <Link 
-                    to="/admin/cms" 
+                  <a
+                    href="https://app.hkpc.no/admin"
                     className="footer-admin-link"
-                    title={language === 'no' ? 'Åpne CMS Dashboard' : 'Open CMS Dashboard'}
+                    title={language === 'no' ? 'Åpne administrasjon' : 'Open administration'}
                   >
                     <ShieldCheck size={13} />
-                    <span>Admin CMS</span>
-                  </Link>
+                    <span>Administrasjon</span>
+                  </a>
                 )}
               </nav>
             </div>
@@ -83,16 +83,16 @@ export default function SiteFooter() {
           {/* Bottom Bar: Copyright */}
           <div className="footer-bottom-bar">
             <p className="copyright-text">
-              <CmsText 
-                slug="landing-footer-copyright" 
-                replaceObj={{ 
+              <CmsText
+                slug="landing-footer-copyright"
+                replaceObj={{
                   '{year}': currentYear.toString(),
                   '2026': currentYear.toString(),
                   '2027': currentYear.toString()
                 }}
-                fallback={language === 'no' 
-                  ? `© ${currentYear} His Kingdom Prophetic Community. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten.` 
-                  : `© ${currentYear} His Kingdom Prophetic Community. All rights reserved. Equipping prophetic ministries for the church.`} 
+                fallback={language === 'no'
+                  ? `© ${currentYear} His Kingdom Prophetic Community. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten.`
+                  : `© ${currentYear} His Kingdom Prophetic Community. All rights reserved. Equipping prophetic ministries for the church.`}
               />
             </p>
           </div>
