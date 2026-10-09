@@ -3495,3 +3495,19 @@
 .hkpc-landing .support-content h4 { font-size:14px; }
 .hkpc-landing .support-content .text-xs { font-size:15px; }
 .hkpc-landing .support-content .text-\[10px\] { font-size:13px; }
+
+/* Keep longer navigation labels on one line in both languages. */
+.hkpc-landing .site-header-wrapper header { gap: 16px; }
+.hkpc-landing .site-header-wrapper .brand,
+.hkpc-landing .site-header-wrapper .header-controls { flex-shrink: 0; }
+.hkpc-landing .site-header-wrapper .header-nav { align-items: center; gap: 0; }
+.hkpc-landing .site-header-wrapper .header-nav a { white-space: nowrap; padding-inline: 8px; }
+.hkpc-landing .site-header-wrapper .header-actions button { white-space: nowrap; flex-shrink: 0; }
+@media (min-width: 921px) and (max-width: 1200px) {
+  .hkpc-landing .site-header-wrapper header { position: relative; }
+  .hkpc-landing .site-header-wrapper .header-actions { display: none; }
+  .hkpc-landing .site-header-wrapper .menu { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; border: 1px solid #ded7e4; border-radius: 10px; background: white; }
+  .hkpc-landing .site-header-wrapper .header-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 9; padding: 24px; background: white; box-shadow: 0 20px 30px #0002; }
+  .hkpc-landing .site-header-wrapper .header-nav.open { display: grid; gap: 12px; }
+  .hkpc-landing .site-header-wrapper .mobile-nav-actions { display: flex; flex-direction: column; gap: 10px; padding-top: 15px; border-top: 1px solid #eee9f2; }
+}

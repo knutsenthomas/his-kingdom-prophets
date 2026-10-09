@@ -56,6 +56,8 @@ export default function AdmissionPage() {
   const stripePublicKey = "pk_live_51Pab8rAL393JGrO9bTUitYflDKlHGpLiqZCCBp0dCzBEV3ZFxARFfK6MgWraehq7i79tJHPIEzlpMwPiT2K3HsiZ00gJ1TQ71Y";
 
   const isAdmin = user?.role === 'admin' || user?.role === 'superadmin';
+  const [fillRealApplication, setFillRealApplication] = useState(false);
+  const adminPreview = isAdmin && !fillRealApplication;
   const isPreviewMode = new URLSearchParams(window.location.search).get('preview') === 'true';
   const isFormManuallyOpen = Boolean(admissionFormOpen);
 
@@ -180,6 +182,7 @@ export default function AdmissionPage() {
 
   // Helper to persist draft
   const saveDraft = (dataToSave, step = currentStep) => {
+    if (adminPreview) return;
     try {
       localStorage.setItem(DRAFT_KEY, JSON.stringify(dataToSave));
       localStorage.setItem(DRAFT_STEP_KEY, String(step));
@@ -400,9 +403,9 @@ export default function AdmissionPage() {
   };
 
   const handleNextStep = () => {
-    if (currentStep === 1 && !validateStep1()) return;
-    if (currentStep === 2 && !validateStep2()) return;
-    if (currentStep === 3 && !validateStep3()) return;
+    if (!adminPreview && currentStep === 1 && !validateStep1()) return;
+    if (!adminPreview && currentStep === 2 && !validateStep2()) return;
+    if (!adminPreview && currentStep === 3 && !validateStep3()) return;
     
     const nextStep = Math.min(currentStep + 1, 4);
     setCurrentStep(nextStep);
@@ -425,6 +428,7 @@ export default function AdmissionPage() {
 
   const handleFormSubmit = async (e) => {
     if (e) e.preventDefault();
+    if (adminPreview) return;
     if (!isAdmissionOpen) {
       showToast(language === 'en' ? "The application portal opens January 1, 2027." : "Søknadsportalen åpner offisielt 1. januar 2027.", "error");
       return;
@@ -1536,7 +1540,7 @@ export default function AdmissionPage() {
                         key={item.step}
                         type="button"
                         onClick={() => {
-                          if (item.step < currentStep) {
+                          if (adminPreview || item.step < currentStep) {
                             setCurrentStep(item.step);
                           } else if (item.step === 2 && validateStep1()) {
                             setCurrentStep(2);
@@ -1589,7 +1593,8 @@ export default function AdmissionPage() {
                 </div>
 
                 {/* FORM CONTENT PER STEP */}
-                <form onSubmit={handleFormSubmit} className="space-y-6 pt-4">
+                {isAdmin && <div className="rounded-xl border border-purple-200 bg-purple-50 p-4 flex flex-wrap items-center justify-between gap-3"><p className="text-sm text-purple-900">{adminPreview ? (language === 'en' ? 'Admin preview: browse all steps without filling in or submitting an application.' : 'Forhåndsvisning: Bla gjennom alle steg uten å fylle ut eller sende inn en søknad.') : (language === 'en' ? 'You are filling in a real application.' : 'Du fyller nå ut en reell søknad.')}</p><button type="button" className="min-h-11 text-sm font-semibold text-purple-900 underline" onClick={() => { setFillRealApplication(value => !value); }}>{adminPreview ? (language === 'en' ? 'Fill in a real application' : 'Fyll ut en reell søknad') : (language === 'en' ? 'Back to preview' : 'Tilbake til forhåndsvisning')}</button></div>}
+                <form onSubmit={handleFormSubmit} noValidate={adminPreview} className="space-y-6 pt-4">
 
                   {/* STEP 1: PERSONAL DETAILS */}
                   {currentStep === 1 && (
@@ -1783,6 +1788,7 @@ export default function AdmissionPage() {
                       <div className="pt-4 flex flex-col sm:flex-row justify-between items-center gap-3">
                         <button
                           type="button"
+                          disabled={adminPreview}
                           onClick={() => {
                             saveDraft(formData, currentStep);
                             showToast(language === 'en' ? "Draft saved! You can resume anytime." : "Kladd lagret! Du kan lukke siden og fortsette senere.");
@@ -2021,6 +2027,7 @@ export default function AdmissionPage() {
                           </button>
                           <button
                             type="button"
+                            disabled={adminPreview}
                             onClick={() => {
                               saveDraft(formData, currentStep);
                               showToast(language === 'en' ? "Draft saved! You can resume anytime." : "Kladd lagret! Du kan lukke siden og fortsette senere.");
@@ -2228,6 +2235,7 @@ export default function AdmissionPage() {
                           </button>
                           <button
                             type="button"
+                            disabled={adminPreview}
                             onClick={() => {
                               saveDraft(formData, currentStep);
                               showToast(language === 'en' ? "Draft saved! You can resume anytime." : "Kladd lagret! Du kan lukke siden og fortsette senere.");
@@ -2354,6 +2362,7 @@ export default function AdmissionPage() {
                           </button>
                           <button
                             type="button"
+                            disabled={adminPreview}
                             onClick={() => {
                               saveDraft(formData, currentStep);
                               showToast(language === 'en' ? "Draft saved! You can resume anytime." : "Kladd lagret! Du kan lukke siden og fortsette senere.");
@@ -2367,7 +2376,7 @@ export default function AdmissionPage() {
                         
                         <button
                           type="submit"
-                          disabled={isSubmitting}
+                          disabled={isSubmitting || adminPreview}
                           className="w-full sm:w-auto min-h-[48px] px-10 py-4 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base font-sans uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2.5 disabled:opacity-50"
                         >
                           {isSubmitting ? (
