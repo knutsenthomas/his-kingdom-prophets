@@ -1,3 +1,4 @@
+import SiteText from '@/components/SiteText';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import SupportArticleLayout from '@/pages/support-articles/SupportArticleLayout';
@@ -20,46 +21,44 @@ export default function ArtikkelChat() {
       ]}
       cta={
         <div className="mt-20 p-10 bg-surface-container rounded-xl border border-outline-variant text-center">
-          <h4 className="font-headline-md text-headline-md text-primary mb-4">Trenger du mer hjelp?</h4>
-          <p className="font-body-md text-body-md text-on-surface-variant mb-8 max-w-md mx-auto">Kontakt vårt support-team for spørsmål om chat og fellesskap.</p>
+          <h4 className="font-headline-md text-headline-md text-primary mb-4"><SiteText fallback={"Trenger du mer hjelp?"} /></h4>
+          <p className="font-body-md text-body-md text-on-surface-variant mb-8 max-w-md mx-auto"><SiteText fallback={"Kontakt vårt support-team for spørsmål om chat og fellesskap."} /></p>
           <button 
             onClick={() => navigate('/student/support')}
             className="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md text-label-md font-bold hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 flex items-center gap-2 mx-auto"
           >
-            <span className="material-symbols-outlined">support_agent</span>
-            Kontakt support
-          </button>
+            <span className="material-symbols-outlined"><SiteText fallback={"support_agent"} /></span><SiteText fallback={"Kontakt support"} /></button>
         </div>
       }
     >
       <div className="font-serif-editor text-body-lg text-on-surface-variant leading-relaxed mb-10">
-        <p>Hvordan bruke det integrerte samtalerommet til å dele åpenbaringer, bønnebegjær og chatte med andre.</p>
+        <p><SiteText fallback={"Hvordan bruke det integrerte samtalerommet til å dele åpenbaringer, bønnebegjær og chatte med andre."} /></p>
       </div>
       <div className="space-y-12">
         <section className="flex gap-6 group">
           <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-sm text-headline-sm">1</div>
           <div>
-            <h3 className="font-headline-md text-headline-md text-primary mb-3">Åpne chatten</h3>
+            <h3 className="font-headline-md text-headline-md text-primary mb-3"><SiteText fallback={"Åpne chatten"} /></h3>
             <div className="font-body-md text-body-md text-on-surface-variant article-content">
-              <p>Åpne chatten fra hovedmenyen. Her finner du alle tilgjengelige samtalerom og fellesskap.</p>
+              <p><SiteText fallback={"Åpne chatten fra hovedmenyen. Her finner du alle tilgjengelige samtalerom og fellesskap."} /></p>
             </div>
           </div>
         </section>
         <section className="flex gap-6">
           <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-sm text-headline-sm">2</div>
           <div>
-            <h3 className="font-headline-md text-headline-md text-primary mb-3">Velg samtalerom</h3>
+            <h3 className="font-headline-md text-headline-md text-primary mb-3"><SiteText fallback={"Velg samtalerom"} /></h3>
             <div className="font-body-md text-body-md text-on-surface-variant article-content">
-              <p>Velg ønsket samtalerom eller fellesskap for å delta i diskusjoner, dele bønneemner eller åpenbaringer.</p>
+              <p><SiteText fallback={"Velg ønsket samtalerom eller fellesskap for å delta i diskusjoner, dele bønneemner eller åpenbaringer."} /></p>
             </div>
           </div>
         </section>
         <section className="flex gap-6">
           <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-sm text-headline-sm">3</div>
           <div>
-            <h3 className="font-headline-md text-headline-md text-primary mb-3">Del og diskuter</h3>
+            <h3 className="font-headline-md text-headline-md text-primary mb-3"><SiteText fallback={"Del og diskuter"} /></h3>
             <div className="font-body-md text-body-md text-on-surface-variant article-content">
-              <p>Del meldinger, bønneemner eller åpenbaringer med gruppen. Bruk <b>@</b>-funksjonen for å nevne andre brukere.</p>
+              <p><SiteText fallback={"Del meldinger, bønneemner eller åpenbaringer med gruppen. Bruk "} /><b>@</b><SiteText fallback={"-funksjonen for å nevne andre brukere."} /></p>
             </div>
           </div>
         </section>

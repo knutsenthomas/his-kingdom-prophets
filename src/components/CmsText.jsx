@@ -8,14 +8,14 @@ export default function CmsText({
   as: Component = 'span', 
   replaceObj = null 
 }) {
-  const { cmsContent, language } = useApp();
+  const { cmsContent, language, isAdminEditing } = useApp();
   
   const getCmsText = () => {
     let text = "";
     if (language === 'en') {
-      text = cmsContent?.[slug + '-en'] || fallback;
+      text = cmsContent?.[slug + '-en'] ?? fallback;
     } else {
-      text = cmsContent?.[slug] || fallback;
+      text = cmsContent?.[slug] ?? fallback;
     }
 
     // Defensiv sjekk: fjern ledende emojier fra faner for å unngå doble symboler
@@ -45,7 +45,11 @@ export default function CmsText({
   }
 
   return (
-    <Component className={className} data-cms-slug={slug}>
+    <Component className={className} data-cms-slug={slug} data-cms-fallback={typeof rawText === 'string' ? rawText : undefined}
+      tabIndex={isAdminEditing ? 0 : undefined}
+      role={isAdminEditing ? 'button' : undefined}
+      aria-label={isAdminEditing ? `Rediger: ${displayText}` : undefined}
+      onKeyDown={isAdminEditing ? event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); event.currentTarget.click(); } } : undefined}>
       {displayText}
     </Component>
   );

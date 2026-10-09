@@ -1,3 +1,4 @@
+import SiteText from '@/components/SiteText';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -119,20 +120,20 @@ export default function SupportArticleLayout({
           {breadcrumbs.map((bc, idx) => (
             <React.Fragment key={idx}>
               {idx > 0 && (
-                <span className="material-symbols-outlined text-[16px] align-middle">chevron_right</span>
+                <span className="material-symbols-outlined text-[16px] align-middle"><SiteText fallback={"chevron_right"} /></span>
               )}
               {bc.to ? (
-                <Link to={bc.to} className="hover:text-primary transition-colors">{bc.label}</Link>
+                <Link to={bc.to} className="hover:text-primary transition-colors"><SiteText fallback={bc.label} /></Link>
               ) : bc.href ? (
-                <a href={bc.href} className="hover:text-primary transition-colors">{bc.label}</a>
+                <a href={bc.href} className="hover:text-primary transition-colors"><SiteText fallback={bc.label} /></a>
               ) : (
-                <span className={bc.active ? 'font-bold text-primary' : ''}>{bc.label}</span>
+                <span className={bc.active ? 'font-bold text-primary' : ''}><SiteText fallback={bc.label} /></span>
               )}
             </React.Fragment>
           ))}
         </nav>
         <article>
-          <h2 className="font-headline-lg text-headline-lg text-primary mb-6 font-headline-md">{title}</h2>
+          <h2 className="font-headline-lg text-headline-lg text-primary mb-6 font-headline-md"><SiteText fallback={title} /></h2>
           {featuredImage && (
             <div className="mb-12 rounded-xl overflow-hidden border border-outline-variant bg-surface-container">
               <img src={featuredImage.src} alt={featuredImage.alt} className="w-full h-[400px] object-cover" />
@@ -150,12 +151,12 @@ export default function SupportArticleLayout({
       <aside className="w-full lg:w-[320px] space-y-8 lg:pt-24 pb-20 px-8 lg:sticky lg:top-24 lg:self-start">
         {relatedArticles.length > 0 && (
           <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm">
-            <h4 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4 border-b border-outline-variant pb-2">Relaterte artikler</h4>
+            <h4 className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4 border-b border-outline-variant pb-2"><SiteText fallback={"Relaterte artikler"} /></h4>
             <ul className="space-y-4">
               {relatedArticles.map((ra, idx) => (
                 <li key={idx}>
                   <a className="group block" href={ra.href}>
-                    <span className="font-body-md text-body-md text-primary group-hover:underline block leading-tight mb-1">{ra.title}</span>
+                    <span className="font-body-md text-body-md text-primary group-hover:underline block leading-tight mb-1"><SiteText fallback={ra.title} /></span>
                     <span className="font-label-md text-label-md text-on-surface-variant">{ra.meta}</span>
                   </a>
                 </li>
@@ -180,37 +181,31 @@ export default function SupportArticleLayout({
                 {hasVoted ? (
                   <div className="space-y-3 text-left">
                     <div className="flex items-center gap-2 text-green-600 font-bold text-xs uppercase tracking-wider">
-                      <Check size={14} className="stroke-[3]" />
-                      Takk for tilbakemeldingen!
-                    </div>
+                      <Check size={14} className="stroke-[3]" /><SiteText fallback={"Takk for tilbakemeldingen!"} /></div>
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs font-bold text-[#561291]">
-                        <span>Leser-tilfredshet</span>
+                        <span><SiteText fallback={"Leser-tilfredshet"} /></span>
                         <span>{satisfactionRate}%</span>
                       </div>
                       <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden flex">
                         <div className="bg-green-500 h-full" style={{ width: `${satisfactionRate}%` }}></div>
                         <div className="bg-red-400 h-full flex-grow"></div>
                       </div>
-                      <p className="text-[10px] text-outline font-semibold">Målt over {totalVotes} anonymiserte leservurderinger</p>
+                      <p className="text-[10px] text-outline font-semibold"><SiteText fallback={"Målt over "} />{totalVotes}<SiteText fallback={" anonymiserte leservurderinger"} /></p>
                     </div>
                   </div>
                 ) : (
                   <div className="text-left space-y-3">
-                    <p className="font-serif font-bold text-sm text-[#561291] leading-tight">Var denne artikkelen nyttig?</p>
+                    <p className="font-serif font-bold text-sm text-[#561291] leading-tight"><SiteText fallback={"Var denne artikkelen nyttig?"} /></p>
                     <div className="flex gap-2">
                       <button 
                         onClick={() => handleVote('yes')}
                         className="flex-1 py-2 bg-[#561291]/5 hover:bg-green-50 border border-[#561291]/10 hover:border-green-300 text-primary hover:text-green-700 rounded-xl text-xs font-bold transition-all active:scale-[0.97]"
-                      >
-                        Ja
-                      </button>
+                      ><SiteText fallback={"Ja"} /></button>
                       <button 
                         onClick={() => handleVote('no')}
                         className="flex-1 py-2 bg-[#561291]/5 hover:bg-red-50 border border-[#561291]/10 hover:border-red-300 text-primary hover:text-red-700 rounded-xl text-xs font-bold transition-all active:scale-[0.97]"
-                      >
-                        Nei
-                      </button>
+                      ><SiteText fallback={"Nei"} /></button>
                     </div>
                   </div>
                 )}

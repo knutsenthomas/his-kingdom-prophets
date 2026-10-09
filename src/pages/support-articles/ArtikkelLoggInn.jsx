@@ -1,3 +1,4 @@
+import SiteText from '@/components/SiteText';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import SupportArticleLayout from '@/pages/support-articles/SupportArticleLayout';
@@ -24,47 +25,45 @@ export default function ArtikkelLoggInn() {
       ]}
       cta={
         <div className="mt-20 p-10 bg-surface-container rounded-xl border border-outline-variant text-center">
-          <h4 className="font-headline-md text-headline-md text-primary mb-4">Fant du ikke det du lette etter?</h4>
-          <p className="font-body-md text-body-md text-on-surface-variant mb-8 max-w-md mx-auto">Vårt support-team er tilgjengelig 24/7 for å hjelpe deg med tekniske spørsmål eller veiledning.</p>
+          <h4 className="font-headline-md text-headline-md text-primary mb-4"><SiteText fallback={"Fant du ikke det du lette etter?"} /></h4>
+          <p className="font-body-md text-body-md text-on-surface-variant mb-8 max-w-md mx-auto"><SiteText fallback={"Vårt support-team er tilgjengelig 24/7 for å hjelpe deg med tekniske spørsmål eller veiledning."} /></p>
           <button 
             onClick={() => navigate('/student/support')}
             className="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md text-label-md font-bold hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 flex items-center gap-2 mx-auto"
           >
-            <span className="material-symbols-outlined">support_agent</span>
-            Kontakt support
-          </button>
+            <span className="material-symbols-outlined"><SiteText fallback={"support_agent"} /></span><SiteText fallback={"Kontakt support"} /></button>
         </div>
       }
 
     >
       <div className="font-serif-editor text-body-lg text-on-surface-variant leading-relaxed mb-10">
-        <p>Velkommen til Scholastic Premium! Vi er glade for at du har valgt å starte din læringsreise hos oss. Denne guiden vil ta deg gjennom de grunnleggende stegene for å finne, melde deg på og starte din første leksjon i plattformen vår.</p>
+        <p><SiteText fallback={"Velkommen til Scholastic Premium! Vi er glade for at du har valgt å starte din læringsreise hos oss. Denne guiden vil ta deg gjennom de grunnleggende stegene for å finne, melde deg på og starte din første leksjon i plattformen vår."} /></p>
       </div>
       <div className="space-y-12">
         <section className="flex gap-6 group">
           <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-sm text-headline-sm">1</div>
           <div>
-            <h3 className="font-headline-md text-headline-md text-primary mb-3">Logg inn på din konto</h3>
+            <h3 className="font-headline-md text-headline-md text-primary mb-3"><SiteText fallback={"Logg inn på din konto"} /></h3>
             <div className="font-body-md text-body-md text-on-surface-variant article-content">
-              <p>Start med å navigere til vår innloggingsside. Bruk e-postadressen og passordet som ble opprettet under registreringen. Hvis du har glemt passordet ditt, kan du bruke "Glemt passord"-lenken for å tilbakestille det via e-post.</p>
+              <p><SiteText fallback={"Start med å navigere til vår innloggingsside. Bruk e-postadressen og passordet som ble opprettet under registreringen. Hvis du har glemt passordet ditt, kan du bruke \"Glemt passord\"-lenken for å tilbakestille det via e-post."} /></p>
             </div>
           </div>
         </section>
         <section className="flex gap-6">
           <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-sm text-headline-sm">2</div>
           <div>
-            <h3 className="font-headline-md text-headline-md text-primary mb-3">Velg ditt kurs</h3>
+            <h3 className="font-headline-md text-headline-md text-primary mb-3"><SiteText fallback={"Velg ditt kurs"} /></h3>
             <div className="font-body-md text-body-md text-on-surface-variant article-content">
-              <p>Gå til <strong>Biblioteket</strong> via navigasjonsmenyen til venstre. Her kan du utforske vårt brede utvalg av kurs. Bruk søkefeltet eller filtrer etter kategori for å finne emnet som interesserer deg mest. Klikk på et kurskort for å se detaljer, pensum og læringsmål.</p>
+              <p><SiteText fallback={"Gå til "} /><strong><SiteText fallback={"Biblioteket"} /></strong><SiteText fallback={" via navigasjonsmenyen til venstre. Her kan du utforske vårt brede utvalg av kurs. Bruk søkefeltet eller filtrer etter kategori for å finne emnet som interesserer deg mest. Klikk på et kurskort for å se detaljer, pensum og læringsmål."} /></p>
             </div>
           </div>
         </section>
         <section className="flex gap-6">
           <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-sm text-headline-sm">3</div>
           <div>
-            <h3 className="font-headline-md text-headline-md text-primary mb-3">Start din første leksjon</h3>
+            <h3 className="font-headline-md text-headline-md text-primary mb-3"><SiteText fallback={"Start din første leksjon"} /></h3>
             <div className="font-body-md text-body-md text-on-surface-variant article-content">
-              <p>Når du har valgt et kurs, klikker du på knappen <strong>"Start kurs"</strong>. Du vil da bli ført til kursbyggeren hvor den første modulen automatisk åpnes. Klikk på den første videoen eller tekstmodulen for å begynne. Lykke til med studiene!</p>
+              <p><SiteText fallback={"Når du har valgt et kurs, klikker du på knappen "} /><strong><SiteText fallback={"\"Start kurs\""} /></strong><SiteText fallback={". Du vil da bli ført til kursbyggeren hvor den første modulen automatisk åpnes. Klikk på den første videoen eller tekstmodulen for å begynne. Lykke til med studiene!"} /></p>
             </div>
           </div>
         </section>

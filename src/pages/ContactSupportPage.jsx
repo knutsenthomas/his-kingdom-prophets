@@ -1,3 +1,4 @@
+import SiteText from '@/components/SiteText';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -98,7 +99,7 @@ export default function ContactSupportPage() {
       {/* Site Header */}
       <SiteHeader />
 
-      <section className="about-page-hero support-hero"><div className="wrap"><Link to="/" className="about-back"><ArrowLeft size={18}/>{isEn ? 'Back to home' : 'Tilbake til forsiden'}</Link><p className="eyebrow">{isEn ? 'CONTACT THE SCHOOL' : 'KONTAKT SKOLEN'}</p>
+      <section className="about-page-hero support-hero"><div className="wrap"><Link to="/" className="about-back"><ArrowLeft size={18}/><SiteText fallback={isEn ? 'Back to home' : 'Tilbake til forsiden'} /></Link><p className="eyebrow"><SiteText fallback={isEn ? 'CONTACT THE SCHOOL' : 'KONTAKT SKOLEN'} /></p>
               <h1 >
                 <CmsText slug="support-hero-title" fallback={isEn ? 'Get in Touch with Us' : 'Kontakt Kundestøtte'} />
               </h1>

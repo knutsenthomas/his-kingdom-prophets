@@ -1,3 +1,4 @@
+import SiteText from '@/components/SiteText';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -1002,7 +1003,7 @@ export default function AdmissionPage() {
                       <CmsText slug={`admission-${prog.id}-price`} fallback={prog.priceYear} />
                     </span>
                     <span className="text-[11px] text-slate-500 block">
-                      {language === 'en' ? "Pay monthly, semi-annually, or full" : "Mnd, halvår eller samlet betaling"}
+                      <SiteText fallback={language === 'en' ? "Pay monthly, semi-annually, or full" : "Mnd, halvår eller samlet betaling"} />
                     </span>
                   </div>
                   
@@ -1122,35 +1123,35 @@ export default function AdmissionPage() {
 
               <div className="text-center space-y-2 sm:space-y-3 pt-1">
                 <span className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-widest block">
-                  {activePlan === 'monthly' ? (
+                  <SiteText fallback={activePlan === 'monthly' ? (
                     language === 'en' ? "Monthly installments (10 payments)" : "Månedlig delbetaling (10 terminer)"
                   ) : activePlan === 'biannual' ? (
                     language === 'en' ? "Semi-annual payment (2 installments)" : "Halvårlig betaling (2 terminer)"
                   ) : (
                     language === 'en' ? "Full academic year (single payment)" : "Fullt studieår (engangsbetaling)"
-                  )}
+                  )} />
                 </span>
                 
                 <div className="font-sans text-3xl sm:text-5xl font-extrabold text-[#561291] tracking-tight">
-                  {language === 'en' ? (
+                  <SiteText fallback={language === 'en' ? (
                     activePlan === 'monthly' ? "$100 USD / mo" : activePlan === 'biannual' ? "$500 USD x 2" : "$1,000 USD"
                   ) : (
                     activePlan === 'monthly' ? "1 000,- / mnd" : activePlan === 'biannual' ? "5 000,- x 2" : "10 000,- NOK"
-                  )}
+                  )} />
                 </div>
 
                 <div className="text-xs text-slate-500 font-medium">
-                  {activePlan === 'monthly'
+                  <SiteText fallback={activePlan === 'monthly'
                     ? (language === 'en' ? "10 installments of $100 USD (Total $1,000 USD)" : "10 månedlige innbetalinger à 1 000 kr (Totalt 10 000 kr)")
                     : activePlan === 'biannual'
                     ? (language === 'en' ? "2 installments of $500 USD (Total $1,000 USD)" : "2 innbetalinger à 5 000 kr (Totalt 10 000 kr)")
-                    : (language === 'en' ? "Single upfront payment for entire year" : "Ett samlet oppgjør for hele skoleåret")}
+                    : (language === 'en' ? "Single upfront payment for entire year" : "Ett samlet oppgjør for hele skoleåret")} />
                 </div>
                 
                 <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed max-w-sm mx-auto">
-                  {language === 'en'
+                  <SiteText fallback={language === 'en'
                     ? "*In addition: $50 USD admin/startup fee and $50 USD room & board for the kickoff weekend. (Self-chosen hotel during kickoff weekend is not covered by the school)."
-                    : "*I tillegg: 500 kr i admin oppstart og 500 kr for kost og losji for kickoff-helgen. (Hvis man skal bo på egenvalgt hotell i kickoff-helgen dekker skolen ikke dette)."}
+                    : "*I tillegg: 500 kr i admin oppstart og 500 kr for kost og losji for kickoff-helgen. (Hvis man skal bo på egenvalgt hotell i kickoff-helgen dekker skolen ikke dette)."} />
                 </p>
               </div>
 
@@ -1287,15 +1288,15 @@ export default function AdmissionPage() {
                 <div className={`w-3.5 h-3.5 rounded-full ${isFormManuallyOpen ? 'bg-green-400 shadow-sm shadow-green-400/80 animate-pulse' : 'bg-amber-400'}`} />
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs uppercase font-extrabold tracking-wider text-[#D7B978]">Admin Styring</span>
+                    <span className="text-xs uppercase font-extrabold tracking-wider text-[#D7B978]"><SiteText fallback={"Admin Styring"} /></span>
                     <span className="text-[11px] px-2 py-0.5 rounded-md bg-white/10 font-medium">
-                      {isFormManuallyOpen ? 'Offentlig status: ÅPENT' : 'Offentlig status: LÅST (Planlagt 1. jan 2027)'}
+                      <SiteText fallback={isFormManuallyOpen ? 'Offentlig status: ÅPENT' : 'Offentlig status: LÅST (Planlagt 1. jan 2027)'} />
                     </span>
                   </div>
                   <p className="text-xs sm:text-sm text-slate-200 mt-0.5">
-                    {isFormManuallyOpen 
+                    <SiteText fallback={isFormManuallyOpen
                       ? 'Søknadsskjemaet er nå direkte tilgjengelig for alle besøkende på nettsiden.'
-                      : 'Skjemaet er låst for publikum fram til 1. januar 2027. Du ser det fordi du er logget inn som administrator.'}
+                      : 'Skjemaet er låst for publikum fram til 1. januar 2027. Du ser det fordi du er logget inn som administrator.'} />
                   </p>
                 </div>
               </div>
@@ -1303,7 +1304,7 @@ export default function AdmissionPage() {
               {/* Toggle Switch */}
               <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
                 <span className="text-xs font-bold text-white/90">
-                  {isFormManuallyOpen ? 'Skjema er ÅPENT' : 'Skjema er LÅST'}
+                  <SiteText fallback={isFormManuallyOpen ? 'Skjema er ÅPENT' : 'Skjema er LÅST'} />
                 </span>
                 <button
                   type="button"
@@ -1358,28 +1359,28 @@ export default function AdmissionPage() {
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
                   <div className="flex items-center gap-1.5 text-[#561291] text-xs font-bold uppercase tracking-wider">
                     <Calendar size={14} />
-                    <span>{language === 'en' ? "Opening" : "Søknad åpner"}</span>
+                    <span><SiteText fallback={language === 'en' ? "Opening" : "Søknad åpner"} /></span>
                   </div>
-                  <div className="font-bold text-slate-800 text-base">1. januar 2027</div>
-                  <p className="text-xs text-slate-500 font-normal">{language === 'en' ? "Digital form available" : "Digitalt skjema åpner"}</p>
+                  <div className="font-bold text-slate-800 text-base"><SiteText fallback={"1. januar 2027"} /></div>
+                  <p className="text-xs text-slate-500 font-normal"><SiteText fallback={language === 'en' ? "Digital form available" : "Digitalt skjema åpner"} /></p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
                   <div className="flex items-center gap-1.5 text-[#561291] text-xs font-bold uppercase tracking-wider">
                     <Clock size={14} />
-                    <span>{language === 'en' ? "Deadline" : "Søknadsfrist"}</span>
+                    <span><SiteText fallback={language === 'en' ? "Deadline" : "Søknadsfrist"} /></span>
                   </div>
-                  <div className="font-bold text-slate-800 text-base">30. juni 2027</div>
-                  <p className="text-xs text-slate-500 font-normal">{language === 'en' ? "Continuous evaluation" : "Fortløpende opptak"}</p>
+                  <div className="font-bold text-slate-800 text-base"><SiteText fallback={"30. juni 2027"} /></div>
+                  <p className="text-xs text-slate-500 font-normal"><SiteText fallback={language === 'en' ? "Continuous evaluation" : "Fortløpende opptak"} /></p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-[#561291]/5 border border-[#561291]/20 space-y-1">
                   <div className="flex items-center gap-1.5 text-[#561291] text-xs font-bold uppercase tracking-wider">
                     <Sparkles size={14} className="text-[#D7B978]" />
-                    <span>{language === 'en' ? "Kickoff" : "Kickoff i Norge"}</span>
+                    <span><SiteText fallback={language === 'en' ? "Kickoff" : "Kickoff i Norge"} /></span>
                   </div>
-                  <div className="font-bold text-[#561291] text-base">{language === 'en' ? "August 20–22, 2027" : "20.–22. august 2027"}</div>
-                  <p className="text-xs text-slate-600 font-normal">{language === 'en' ? "On-site weekend gathering" : "Fysisk helgesamling"}</p>
+                  <div className="font-bold text-[#561291] text-base"><SiteText fallback={language === 'en' ? "August 20–22, 2027" : "20.–22. august 2027"} /></div>
+                  <p className="text-xs text-slate-600 font-normal"><SiteText fallback={language === 'en' ? "On-site weekend gathering" : "Fysisk helgesamling"} /></p>
                 </div>
               </div>
 
@@ -1390,19 +1391,19 @@ export default function AdmissionPage() {
                     <Bell size={20} />
                   </div>
                   <h4 className="font-bold text-lg text-[#561291]">
-                    {language === 'en' ? "Get Notified When Applications Open" : "Få påminnelse når søknaden åpner"}
+                    <SiteText fallback={language === 'en' ? "Get Notified When Applications Open" : "Få påminnelse når søknaden åpner"} />
                   </h4>
                   <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed">
-                    {language === 'en'
+                    <SiteText fallback={language === 'en'
                       ? "Leave your name and email to receive an instant reminder the moment the portal opens on January 1, 2027."
-                      : "Legg igjen navn og e-post, så sender vi deg en påminnelse så snart søknadsskjemaet åpner 1. januar 2027."}
+                      : "Legg igjen navn og e-post, så sender vi deg en påminnelse så snart søknadsskjemaet åpner 1. januar 2027."} />
                   </p>
                 </div>
 
                 {interestSubmitted ? (
                   <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-800 text-sm font-semibold flex items-center justify-center gap-2">
                     <CheckCircle2 size={18} className="text-green-600 shrink-0" />
-                    <span>{language === 'en' ? "Thank you! We will notify you on January 1, 2027." : "Takk! Vi sender deg en påminnelse 1. januar 2027."}</span>
+                    <span><SiteText fallback={language === 'en' ? "Thank you! We will notify you on January 1, 2027." : "Takk! Vi sender deg en påminnelse 1. januar 2027."} /></span>
                   </div>
                 ) : (
                   <form onSubmit={handleInterestSubmit} className="space-y-3 pt-1">
@@ -1429,7 +1430,7 @@ export default function AdmissionPage() {
                       className="w-full min-h-[44px] py-3 bg-[#561291] hover:bg-[#430d72] text-white font-bold text-sm uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                       <Bell size={16} />
-                      <span>{isSubmittingInterest ? (language === 'en' ? "Saving..." : "Lagrer...") : (language === 'en' ? "Notify Me" : "Send meg påminnelse")}</span>
+                      <span><SiteText fallback={isSubmittingInterest ? (language === 'en' ? "Saving..." : "Lagrer...") : (language === 'en' ? "Notify Me" : "Send meg påminnelse")} /></span>
                     </button>
                   </form>
                 )}
@@ -1446,7 +1447,7 @@ export default function AdmissionPage() {
                   }}
                   className="text-xs text-slate-400 hover:text-[#561291] underline decoration-slate-300 transition-colors"
                 >
-                  {language === 'en' ? "Admin / Developer: Preview & test application form" : "Admin / Utvikler: Forhåndsvis og test søknadsskjema"}
+                  <SiteText fallback={language === 'en' ? "Admin / Developer: Preview & test application form" : "Admin / Utvikler: Forhåndsvis og test søknadsskjema"} />
                 </button>
               </div>
             </div>
@@ -1456,8 +1457,8 @@ export default function AdmissionPage() {
               {isPreviewMode && !isAdmin && (
                 <div className="mb-6 p-3 px-4 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold">⚠️ Forhåndsvisningsmodus aktiv (?preview=true):</span>
-                    <span>Søknadsskjemaet er synlig for deg, men åpner offisielt for publikum 1. januar 2027.</span>
+                    <span className="font-bold"><SiteText fallback={"⚠️ Forhåndsvisningsmodus aktiv (?preview=true):"} /></span>
+                    <span><SiteText fallback={"Søknadsskjemaet er synlig for deg, men åpner offisielt for publikum 1. januar 2027."} /></span>
                   </div>
                   <button
                     type="button"
@@ -1467,9 +1468,7 @@ export default function AdmissionPage() {
                       window.location.href = url.toString();
                     }}
                     className="font-bold underline text-amber-800 hover:text-amber-950"
-                  >
-                    Avslutt forhåndsvisning
-                  </button>
+                  ><SiteText fallback={"Avslutt forhåndsvisning"} /></button>
                 </div>
               )}
               <AnimatePresence mode="wait">
@@ -1496,9 +1495,9 @@ export default function AdmissionPage() {
                   <div className="pt-1">
                     <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#561291]/5 text-[#561291] font-semibold text-xs sm:text-sm tracking-wide border border-[#561291]/15">
                       <GraduationCap size={15} className="text-[#561291]" />
-                      {language === 'en' 
+                      <SiteText fallback={language === 'en'
                         ? "No account required to apply – Login credentials are issued upon approved admission" 
-                        : "Ingen forhåndskonto kreves – Brukerkonto tildeles av administrasjonen etter godkjent opptak"}
+                        : "Ingen forhåndskonto kreves – Brukerkonto tildeles av administrasjonen etter godkjent opptak"} />
                     </span>
                   </div>
                 </div>
@@ -1555,7 +1554,7 @@ export default function AdmissionPage() {
                             : 'bg-slate-50 text-slate-400 hover:text-slate-600'
                         }`}
                       >
-                        <span className="hidden sm:inline">{item.title}</span>
+                        <span className="hidden sm:inline"><SiteText fallback={item.title} /></span>
                         <span className="sm:hidden">{item.short}</span>
                       </button>
                     ))}
@@ -1567,13 +1566,13 @@ export default function AdmissionPage() {
                       <div className="flex items-center gap-2 font-medium">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         <span>
-                          {language === 'en' 
+                          <SiteText fallback={language === 'en'
                             ? "Draft auto-saved on this device" 
-                            : "Søknaden lagres automatisk på denne enheten"}
+                            : "Søknaden lagres automatisk på denne enheten"} />
                         </span>
                         {draftSavedAt && (
                           <span className="text-emerald-700/70 hidden sm:inline">
-                            • {language === 'en' ? "Last saved" : "Sist lagret"} {draftSavedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            • <SiteText fallback={language === 'en' ? "Last saved" : "Sist lagret"} /> {draftSavedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
                         )}
                       </div>
@@ -1583,7 +1582,7 @@ export default function AdmissionPage() {
                         className="inline-flex items-center gap-1.5 text-slate-500 hover:text-red-600 font-semibold transition-colors underline decoration-slate-300 underline-offset-2 hover:decoration-red-400"
                       >
                         <RotateCcw size={13} />
-                        <span>{language === 'en' ? "Clear & start over" : "Nullstill skjema"}</span>
+                        <span><SiteText fallback={language === 'en' ? "Clear & start over" : "Nullstill skjema"} /></span>
                       </button>
                     </div>
                   )}
@@ -1604,7 +1603,7 @@ export default function AdmissionPage() {
                       <div className="border-b border-slate-100 pb-3 flex items-center gap-2">
                         <User className="text-[#561291]" size={20} />
                         <h4 className="font-bold text-lg text-[#561291]">
-                          {language === 'en' ? "1. Personal Information & Contact" : "1. Personalia & Kontaktinformasjon"}
+                          <SiteText fallback={language === 'en' ? "1. Personal Information & Contact" : "1. Personalia & Kontaktinformasjon"} />
                         </h4>
                       </div>
 
@@ -1612,7 +1611,7 @@ export default function AdmissionPage() {
                         {/* Full Name */}
                         <div className="space-y-1.5">
                           <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
-                            {language === 'en' ? "Full Name *" : "Fullt navn *"}
+                            <SiteText fallback={language === 'en' ? "Full Name *" : "Fullt navn *"} />
                           </label>
                           <input
                             type="text"
@@ -1628,7 +1627,7 @@ export default function AdmissionPage() {
                         {/* Gender */}
                         <div className="space-y-1.5">
                           <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
-                            {language === 'en' ? "Gender *" : "Kjønn *"}
+                            <SiteText fallback={language === 'en' ? "Gender *" : "Kjønn *"} />
                           </label>
                           <div className="grid grid-cols-2 gap-2">
                             {['Mann', 'Kvinne'].map((g) => (
@@ -1653,9 +1652,9 @@ export default function AdmissionPage() {
                         {/* Birth Date */}
                         <div className="space-y-1.5">
                           <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 flex items-center justify-between">
-                            <span>{language === 'en' ? "Date of Birth *" : "Fødselsdato *"}</span>
+                            <span><SiteText fallback={language === 'en' ? "Date of Birth *" : "Fødselsdato *"} /></span>
                             <span className="text-[11px] font-semibold text-[#561291] bg-[#561291]/10 px-2 py-0.5 rounded-md normal-case">
-                              {language === 'en' ? "Min. 18 years old" : "Min. 18 år"}
+                              <SiteText fallback={language === 'en' ? "Min. 18 years old" : "Min. 18 år"} />
                             </span>
                           </label>
                           <input
@@ -1683,7 +1682,7 @@ export default function AdmissionPage() {
                             </div>
                           ) : (
                             <p className="text-[11px] text-slate-500 font-normal">
-                              {language === 'en' ? "Format: MM/DD/YYYY (or pick from calendar)" : "Format: DD.MM.ÅÅÅÅ (eller velg i kalenderen)"}
+                              <SiteText fallback={language === 'en' ? "Format: MM/DD/YYYY (or pick from calendar)" : "Format: DD.MM.ÅÅÅÅ (eller velg i kalenderen)"} />
                             </p>
                           )}
                         </div>
@@ -1691,7 +1690,7 @@ export default function AdmissionPage() {
                         {/* Email */}
                         <div className="space-y-1.5">
                           <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
-                            {language === 'en' ? "Email Address *" : "E-postadresse *"}
+                            <SiteText fallback={language === 'en' ? "Email Address *" : "E-postadresse *"} />
                           </label>
                           <input
                             type="email"
@@ -1709,7 +1708,7 @@ export default function AdmissionPage() {
                         {/* Phone */}
                         <div className="space-y-1.5">
                           <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
-                            {language === 'en' ? "Phone Number *" : "Mobiltelefon *"}
+                            <SiteText fallback={language === 'en' ? "Phone Number *" : "Mobiltelefon *"} />
                           </label>
                           <input
                             type="tel"
@@ -1725,7 +1724,7 @@ export default function AdmissionPage() {
                         {/* Occupation */}
                         <div className="space-y-1.5">
                           <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
-                            {language === 'en' ? "Occupation / Education *" : "Yrke / utdannelse *"}
+                            <SiteText fallback={language === 'en' ? "Occupation / Education *" : "Yrke / utdannelse *"} />
                           </label>
                           <input
                             type="text"
@@ -1742,7 +1741,7 @@ export default function AdmissionPage() {
                       {/* Residential Address */}
                       <div className="space-y-1.5">
                         <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
-                          {language === 'en' ? "Residential Address *" : "Bostedsadresse *"}
+                          <SiteText fallback={language === 'en' ? "Residential Address *" : "Bostedsadresse *"} />
                         </label>
                         <input
                           type="text"
@@ -1758,7 +1757,7 @@ export default function AdmissionPage() {
                       {/* Marital Status */}
                       <div className="space-y-2">
                         <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
-                          {language === 'en' ? "Marital Status *" : "Sivilstatus *"}
+                          <SiteText fallback={language === 'en' ? "Marital Status *" : "Sivilstatus *"} />
                         </label>
                         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                           {['Gift', 'Ugift', 'Forlovet', 'Separert / skilt', 'Enke / enkemann'].map((ms, idx) => (
@@ -1791,7 +1790,7 @@ export default function AdmissionPage() {
                           className="w-full sm:w-auto min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
                         >
                           <Save size={16} />
-                          <span>{language === 'en' ? "Save Draft & Continue Later" : "Lagre kladd & fortsett senere"}</span>
+                          <span><SiteText fallback={language === 'en' ? "Save Draft & Continue Later" : "Lagre kladd & fortsett senere"} /></span>
                         </button>
 
                         <button
@@ -1799,7 +1798,7 @@ export default function AdmissionPage() {
                           onClick={handleNextStep}
                           className="w-full sm:w-auto min-h-[44px] px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
                         >
-                          <span>{language === 'en' ? "Next: Study Line & Payment" : "Neste: Studielinje & betaling"}</span>
+                          <span><SiteText fallback={language === 'en' ? "Next: Study Line & Payment" : "Neste: Studielinje & betaling"} /></span>
                           <ArrowRight size={18} />
                         </button>
                       </div>
@@ -1818,14 +1817,14 @@ export default function AdmissionPage() {
                       <div className="border-b border-slate-100 pb-3 flex items-center gap-2">
                         <BookOpen className="text-[#561291]" size={20} />
                         <h4 className="font-bold text-lg text-[#561291]">
-                          {language === 'en' ? "2. Program Track & Tuition Agreement" : "2. Studielinje & Betalingsordning"}
+                          <SiteText fallback={language === 'en' ? "2. Program Track & Tuition Agreement" : "2. Studielinje & Betalingsordning"} />
                         </h4>
                       </div>
 
                       {/* Program Choice */}
                       <div className="space-y-3">
                         <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
-                          {language === 'en' ? "Select Study Line *" : "Velg studielinje *"}
+                          <SiteText fallback={language === 'en' ? "Select Study Line *" : "Velg studielinje *"} />
                         </label>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {programs.map(p => (
@@ -1842,7 +1841,7 @@ export default function AdmissionPage() {
                                   <span className="text-xs font-bold px-2 py-0.5 rounded bg-[#561291]/10 text-[#561291] uppercase tracking-wider">
                                     {p.code}
                                   </span>
-                                  <h5 className="font-bold text-base text-[#561291] pt-1">{p.title}</h5>
+                                  <h5 className="font-bold text-base text-[#561291] pt-1"><SiteText fallback={p.title} /></h5>
                                   <p className="text-xs text-slate-500">{p.duration}</p>
                                 </div>
                                 <input
@@ -1855,7 +1854,7 @@ export default function AdmissionPage() {
                                 />
                               </div>
                               <div className="pt-4 border-t border-slate-100 mt-4 flex justify-between items-center text-xs">
-                                <span className="text-slate-500 font-semibold">{language === 'en' ? "Total Tuition (Year):" : "Studieavgift (skoleår):"}</span>
+                                <span className="text-slate-500 font-semibold"><SiteText fallback={language === 'en' ? "Total Tuition (Year):" : "Studieavgift (skoleår):"} /></span>
                                 <span className="font-bold text-[#561291] text-sm">{p.priceYear || '10 000,-'}</span>
                               </div>
                             </label>
@@ -1866,7 +1865,7 @@ export default function AdmissionPage() {
                       {/* Billing Plan */}
                       <div className="space-y-3">
                         <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 block">
-                          {language === 'en' ? "Preferred Payment Arrangement *" : "Foretrukket betalingsordning *"}
+                          <SiteText fallback={language === 'en' ? "Preferred Payment Arrangement *" : "Foretrukket betalingsordning *"} />
                         </label>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                           {/* 1. Månedlig */}
@@ -1878,10 +1877,10 @@ export default function AdmissionPage() {
                             <div className="flex items-start justify-between gap-2">
                               <div className="space-y-1">
                                 <span className="text-base font-bold block">
-                                  {language === 'en' ? "Monthly Payment" : "Månedlig"}
+                                  <SiteText fallback={language === 'en' ? "Monthly Payment" : "Månedlig"} />
                                 </span>
                                 <span className="text-xs text-slate-600 block">
-                                  {language === 'en' ? "$100 USD / month (10 months)" : "1 000,- per mnd (10 terminer)"}
+                                  <SiteText fallback={language === 'en' ? "$100 USD / month (10 months)" : "1 000,- per mnd (10 terminer)"} />
                                 </span>
                               </div>
                               <input
@@ -1894,7 +1893,7 @@ export default function AdmissionPage() {
                               />
                             </div>
                             <div className="mt-3 pt-2 border-t border-slate-200/50 text-[11px] text-slate-500 font-medium">
-                              {language === 'en' ? "Total tuition $1,000 USD" : "Total studieavgift: 10 000,-"}
+                              <SiteText fallback={language === 'en' ? "Total tuition $1,000 USD" : "Total studieavgift: 10 000,-"} />
                             </div>
                           </label>
 
@@ -1907,10 +1906,10 @@ export default function AdmissionPage() {
                             <div className="flex items-start justify-between gap-2">
                               <div className="space-y-1">
                                 <span className="text-base font-bold block">
-                                  {language === 'en' ? "Semi-Annual" : "En gang i halvåret"}
+                                  <SiteText fallback={language === 'en' ? "Semi-Annual" : "En gang i halvåret"} />
                                 </span>
                                 <span className="text-xs text-slate-600 block">
-                                  {language === 'en' ? "$500 USD twice a year (2 installments)" : "5 000,- per halvår (2 terminer)"}
+                                  <SiteText fallback={language === 'en' ? "$500 USD twice a year (2 installments)" : "5 000,- per halvår (2 terminer)"} />
                                 </span>
                               </div>
                               <input
@@ -1923,7 +1922,7 @@ export default function AdmissionPage() {
                               />
                             </div>
                             <div className="mt-3 pt-2 border-t border-slate-200/50 text-[11px] text-slate-500 font-medium">
-                              {language === 'en' ? "Total tuition $1,000 USD" : "Total studieavgift: 10 000,-"}
+                              <SiteText fallback={language === 'en' ? "Total tuition $1,000 USD" : "Total studieavgift: 10 000,-"} />
                             </div>
                           </label>
 
@@ -1936,10 +1935,10 @@ export default function AdmissionPage() {
                             <div className="flex items-start justify-between gap-2">
                               <div className="space-y-1">
                                 <span className="text-base font-bold block">
-                                  {language === 'en' ? "Full Price at Once" : "Hele prisen på en gang"}
+                                  <SiteText fallback={language === 'en' ? "Full Price at Once" : "Hele prisen på en gang"} />
                                 </span>
                                 <span className="text-xs text-slate-600 block">
-                                  {language === 'en' ? "$1,000 USD (one-time payment)" : "10 000,- NOK (engangsbetaling)"}
+                                  <SiteText fallback={language === 'en' ? "$1,000 USD (one-time payment)" : "10 000,- NOK (engangsbetaling)"} />
                                 </span>
                               </div>
                               <input
@@ -1952,7 +1951,7 @@ export default function AdmissionPage() {
                               />
                             </div>
                             <div className="mt-3 pt-2 border-t border-slate-200/50 text-[11px] text-slate-500 font-medium">
-                              {language === 'en' ? "Settled upon enrollment" : "Oppgjøres ved studiestart"}
+                              <SiteText fallback={language === 'en' ? "Settled upon enrollment" : "Oppgjøres ved studiestart"} />
                             </div>
                           </label>
                         </div>
@@ -1971,11 +1970,11 @@ export default function AdmissionPage() {
                           />
                           <div className="text-sm sm:text-base text-slate-800 font-medium leading-relaxed">
                             <span className="font-bold text-[#561291] block">
-                              {language === 'en' ? "Instruction Language & Kickoff Gathering Agreement *" : "Bekreftelse på undervisningsspråk & kickoff-samling *"}
+                              <SiteText fallback={language === 'en' ? "Instruction Language & Kickoff Gathering Agreement *" : "Bekreftelse på undervisningsspråk & kickoff-samling *"} />
                             </span>
-                            {language === 'en'
+                            <SiteText fallback={language === 'en'
                               ? "I confirm that I understand all instruction and materials are conducted in English, with an on-site kickoff gathering in Norway on August 20–22, 2027."
-                              : "Jeg bekrefter at jeg er innforstått med at all undervisning foregår på engelsk via nett, med en obligatorisk/anbefalt kickoff-samling i Norge 20.–22. august 2027."}
+                              : "Jeg bekrefter at jeg er innforstått med at all undervisning foregår på engelsk via nett, med en obligatorisk/anbefalt kickoff-samling i Norge 20.–22. august 2027."} />
                           </div>
                         </label>
                       </div>
@@ -1986,9 +1985,9 @@ export default function AdmissionPage() {
                           <div className="flex gap-2.5 text-amber-900 text-sm">
                             <Lock size={16} className="shrink-0 mt-0.5" />
                             <p className="font-medium leading-relaxed">
-                              {language === 'en'
+                              <SiteText fallback={language === 'en'
                                 ? "This program (Year 2) launches in 2028. To apply, you must confirm that you plan to complete or have completed Year 1 (His Kingdom Prophetic Community) first."
-                                : "Dette studieløpet (2. år) starter ikke før i 2028. For å søke opptak, må du bekrefte at du har fullført eller planlegger å fullføre 1. år (His Kingdom Prophetic Community) først."}
+                                : "Dette studieløpet (2. år) starter ikke før i 2028. For å søke opptak, må du bekrefte at du har fullført eller planlegger å fullføre 1. år (His Kingdom Prophetic Community) først."} />
                             </p>
                           </div>
                           <label className="flex items-start gap-3 cursor-pointer select-none pt-1">
@@ -2001,9 +2000,9 @@ export default function AdmissionPage() {
                               className="mt-1 accent-amber-600 rounded border-amber-300 text-amber-600 w-5 h-5 shrink-0"
                             />
                             <span className="text-sm sm:text-base text-amber-950 font-bold leading-normal">
-                              {language === 'en'
+                              <SiteText fallback={language === 'en'
                                 ? "I confirm that I plan to complete or have completed Year 1 first *"
-                                : "Jeg bekrefter at jeg har fullført eller planlegger å fullføre 1. år først *"}
+                                : "Jeg bekrefter at jeg har fullført eller planlegger å fullføre 1. år først *"} />
                             </span>
                           </label>
                         </div>
@@ -2018,7 +2017,7 @@ export default function AdmissionPage() {
                             className="flex-1 sm:flex-initial min-h-[44px] px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
                           >
                             <ArrowLeft size={18} />
-                            <span>{language === 'en' ? "Back" : "Tilbake"}</span>
+                            <span><SiteText fallback={language === 'en' ? "Back" : "Tilbake"} /></span>
                           </button>
                           <button
                             type="button"
@@ -2029,7 +2028,7 @@ export default function AdmissionPage() {
                             className="flex-1 sm:flex-initial min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
                           >
                             <Save size={16} />
-                            <span>{language === 'en' ? "Save Draft" : "Lagre kladd"}</span>
+                            <span><SiteText fallback={language === 'en' ? "Save Draft" : "Lagre kladd"} /></span>
                           </button>
                         </div>
                         <button
@@ -2037,7 +2036,7 @@ export default function AdmissionPage() {
                           onClick={handleNextStep}
                           className="w-full sm:w-auto min-h-[44px] px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
                         >
-                          <span>{language === 'en' ? "Next: Spiritual Background" : "Neste: Åndelig bakgrunn"}</span>
+                          <span><SiteText fallback={language === 'en' ? "Next: Spiritual Background" : "Neste: Åndelig bakgrunn"} /></span>
                           <ArrowRight size={18} />
                         </button>
                       </div>
@@ -2056,17 +2055,17 @@ export default function AdmissionPage() {
                       <div className="border-b border-slate-100 pb-3 flex items-center gap-2">
                         <Heart className="text-[#561291]" size={20} />
                         <h4 className="font-bold text-lg text-[#561291]">
-                          {language === 'en' ? "3. Spiritual Walk, Calling & Motivation" : "3. Åndelig Bakgrunn, Vandring & Motivasjon"}
+                          <SiteText fallback={language === 'en' ? "3. Spiritual Walk, Calling & Motivation" : "3. Åndelig Bakgrunn, Vandring & Motivasjon"} />
                         </h4>
                       </div>
 
                       {/* Q1: whySeeking */}
                       <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
                         <label className="text-sm font-bold text-[#561291] block">
-                          {language === 'en' ? "Why are you applying to Bible school? *" : "Hvorfor søker du bibelskole? *"}
+                          <SiteText fallback={language === 'en' ? "Why are you applying to Bible school? *" : "Hvorfor søker du bibelskole? *"} />
                         </label>
                         <p className="text-xs text-slate-500 font-normal">
-                          {language === 'en' ? "What inspires you to set aside this year to grow?" : "Hva motiverer deg til å sette av dette året til å vokse?"}
+                          <SiteText fallback={language === 'en' ? "What inspires you to set aside this year to grow?" : "Hva motiverer deg til å sette av dette året til å vokse?"} />
                         </p>
                         <textarea
                           name="whySeeking"
@@ -2082,7 +2081,7 @@ export default function AdmissionPage() {
                       {/* Q2: expectations */}
                       <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
                         <label className="text-sm font-bold text-[#561291] block">
-                          {language === 'en' ? "What do you expect from the school year and community? *" : "Hva forventer du deg av skoleåret og fellesskapet? *"}
+                          <SiteText fallback={language === 'en' ? "What do you expect from the school year and community? *" : "Hva forventer du deg av skoleåret og fellesskapet? *"} />
                         </label>
                         <textarea
                           name="expectations"
@@ -2098,7 +2097,7 @@ export default function AdmissionPage() {
                       {/* Q3: howHeard */}
                       <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
                         <label className="text-sm font-bold text-[#561291] block">
-                          {language === 'en' ? "How did you hear about HKPC, and why are you applying here? *" : "Hvordan hørte du om His Kingdom Prophetic Community, og hvorfor søker du her? *"}
+                          <SiteText fallback={language === 'en' ? "How did you hear about HKPC, and why are you applying here? *" : "Hvordan hørte du om His Kingdom Prophetic Community, og hvorfor søker du her? *"} />
                         </label>
                         <textarea
                           name="howHeard"
@@ -2114,10 +2113,10 @@ export default function AdmissionPage() {
                       {/* Q4: testimony */}
                       <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
                         <label className="text-sm font-bold text-[#561291] block">
-                          {language === 'en' ? "Share a bit about your experience with Jesus *" : "Skriv litt om din erfaring og vandring med Jesus *"}
+                          <SiteText fallback={language === 'en' ? "Share a bit about your experience with Jesus *" : "Skriv litt om din erfaring og vandring med Jesus *"} />
                         </label>
                         <p className="text-xs text-slate-500 font-normal">
-                          {language === 'en' ? "Your salvation testimony and how your daily relationship with God looks like." : "Din frelsesopplevelse og hvordan hverdagen din med Jesus ser ut."}
+                          <SiteText fallback={language === 'en' ? "Your salvation testimony and how your daily relationship with God looks like." : "Din frelsesopplevelse og hvordan hverdagen din med Jesus ser ut."} />
                         </p>
                         <textarea
                           name="testimony"
@@ -2133,10 +2132,10 @@ export default function AdmissionPage() {
                       {/* Q5: churchCommunity */}
                       <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
                         <label className="text-sm font-bold text-[#561291] block">
-                          {language === 'en' ? "Do you belong to a local church / community? If yes, which one? *" : "Tilhører du en menighet? Hvis ja, hvilken? *"}
+                          <SiteText fallback={language === 'en' ? "Do you belong to a local church / community? If yes, which one? *" : "Tilhører du en menighet? Hvis ja, hvilken? *"} />
                         </label>
                         <p className="text-xs text-slate-500 font-normal">
-                          {language === 'en' ? "Church name, location, and optionally pastor/leader name." : "Navn på menighet/fellesskap, sted og eventuelt pastor/leder."}
+                          <SiteText fallback={language === 'en' ? "Church name, location, and optionally pastor/leader name." : "Navn på menighet/fellesskap, sted og eventuelt pastor/leder."} />
                         </p>
                         <input
                           type="text"
@@ -2152,7 +2151,7 @@ export default function AdmissionPage() {
                       {/* Q6: currentMinistry */}
                       <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
                         <label className="text-sm font-bold text-[#561291] block">
-                          {language === 'en' ? "Are you in any form of ministry or volunteer work? If yes, please describe *" : "Er du i en form for tjeneste eller frivillig arbeid? Hvis ja, skriv litt om det *"}
+                          <SiteText fallback={language === 'en' ? "Are you in any form of ministry or volunteer work? If yes, please describe *" : "Er du i en form for tjeneste eller frivillig arbeid? Hvis ja, skriv litt om det *"} />
                         </label>
                         <textarea
                           name="currentMinistry"
@@ -2168,7 +2167,7 @@ export default function AdmissionPage() {
                       {/* Q7: ministryCalling */}
                       <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
                         <label className="text-sm font-bold text-[#561291] block">
-                          {language === 'en' ? "What ministry or spiritual gift do you feel called to grow in? *" : "Hvilken tjeneste kunne du tenke deg å være i / nådegave å vokse i? *"}
+                          <SiteText fallback={language === 'en' ? "What ministry or spiritual gift do you feel called to grow in? *" : "Hvilken tjeneste kunne du tenke deg å være i / nådegave å vokse i? *"} />
                         </label>
                         <textarea
                           name="ministryCalling"
@@ -2184,10 +2183,10 @@ export default function AdmissionPage() {
                       {/* Q8: dreamsVision */}
                       <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
                         <label className="text-sm font-bold text-[#561291] block">
-                          {language === 'en' ? "Tell us a bit about your dreams and visions *" : "Si litt om dine drømmer og visjoner *"}
+                          <SiteText fallback={language === 'en' ? "Tell us a bit about your dreams and visions *" : "Si litt om dine drømmer og visjoner *"} />
                         </label>
                         <p className="text-xs text-slate-500 font-normal">
-                          {language === 'en' ? "What has God placed on your heart for His kingdom and people?" : "Hva har Gud lagt på hjertet ditt for Hans rike og mennesker rundt deg?"}
+                          <SiteText fallback={language === 'en' ? "What has God placed on your heart for His kingdom and people?" : "Hva har Gud lagt på hjertet ditt for Hans rike og mennesker rundt deg?"} />
                         </p>
                         <textarea
                           name="dreamsVision"
@@ -2203,7 +2202,7 @@ export default function AdmissionPage() {
                       {/* Q9: hobbies */}
                       <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
                         <label className="text-sm font-bold text-[#561291] block">
-                          {language === 'en' ? "What do you like to do? (Hobbies and leisure interests) *" : "Hva liker du å gjøre? (hobbyer / fritidsinteresser) *"}
+                          <SiteText fallback={language === 'en' ? "What do you like to do? (Hobbies and leisure interests) *" : "Hva liker du å gjøre? (hobbyer / fritidsinteresser) *"} />
                         </label>
                         <textarea
                           name="hobbies"
@@ -2225,7 +2224,7 @@ export default function AdmissionPage() {
                             className="flex-1 sm:flex-initial min-h-[44px] px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
                           >
                             <ArrowLeft size={18} />
-                            <span>{language === 'en' ? "Back" : "Tilbake"}</span>
+                            <span><SiteText fallback={language === 'en' ? "Back" : "Tilbake"} /></span>
                           </button>
                           <button
                             type="button"
@@ -2236,7 +2235,7 @@ export default function AdmissionPage() {
                             className="flex-1 sm:flex-initial min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
                           >
                             <Save size={16} />
-                            <span>{language === 'en' ? "Save Draft" : "Lagre kladd"}</span>
+                            <span><SiteText fallback={language === 'en' ? "Save Draft" : "Lagre kladd"} /></span>
                           </button>
                         </div>
                         <button
@@ -2244,7 +2243,7 @@ export default function AdmissionPage() {
                           onClick={handleNextStep}
                           className="w-full sm:w-auto min-h-[44px] px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
                         >
-                          <span>{language === 'en' ? "Next: Reference & Final Review" : "Neste: Referanse & fullfør"}</span>
+                          <span><SiteText fallback={language === 'en' ? "Next: Reference & Final Review" : "Neste: Referanse & fullfør"} /></span>
                           <ArrowRight size={18} />
                         </button>
                       </div>
@@ -2263,19 +2262,19 @@ export default function AdmissionPage() {
                       <div className="border-b border-slate-100 pb-3 flex items-center gap-2">
                         <GraduationCap className="text-[#561291]" size={20} />
                         <h4 className="font-bold text-lg text-[#561291]">
-                          {language === 'en' ? "4. Reference & Final Submission" : "4. Referanse & Innsending"}
+                          <SiteText fallback={language === 'en' ? "4. Reference & Final Submission" : "4. Referanse & Innsending"} />
                         </h4>
                       </div>
 
                       {/* Reference */}
                       <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
                         <label className="text-sm font-bold text-[#561291] block">
-                          {language === 'en' ? "Reference (Pastor, leader, or trusted mature Christian) *" : "Referanse (Pastor, leder eller annen betrodd person) *"}
+                          <SiteText fallback={language === 'en' ? "Reference (Pastor, leader, or trusted mature Christian) *" : "Referanse (Pastor, leder eller annen betrodd person) *"} />
                         </label>
                         <p className="text-xs text-slate-500 font-normal">
-                          {language === 'en' 
+                          <SiteText fallback={language === 'en'
                             ? "Please include: Full Name, Relationship/Title, Phone number, and Email address." 
-                            : "Vennligst oppgi: Fullt navn, relasjon/rolle, telefonnummer og e-postadresse."}
+                            : "Vennligst oppgi: Fullt navn, relasjon/rolle, telefonnummer og e-postadresse."} />
                         </p>
                         <textarea
                           name="reference"
@@ -2293,12 +2292,12 @@ export default function AdmissionPage() {
                       {/* Optional Notes */}
                       <div className="space-y-1.5 bg-slate-50/60 p-4 rounded-2xl border border-slate-200/60">
                         <label className="text-sm font-bold text-slate-700 block">
-                          {language === 'en' ? "Other notes or health considerations (Optional)" : "Annet du ønsker at vi skal vite om deg (Valgfritt)"}
+                          <SiteText fallback={language === 'en' ? "Other notes or health considerations (Optional)" : "Annet du ønsker at vi skal vite om deg (Valgfritt)"} />
                         </label>
                         <p className="text-xs text-slate-500 font-normal">
-                          {language === 'en' 
+                          <SiteText fallback={language === 'en'
                             ? "Health conditions, special needs, or any additional context you wish to share." 
-                            : "Eventuelle helsemessige hensyn, spesielle behov, eller andre opplysninger du vil dele med ledelsen."}
+                            : "Eventuelle helsemessige hensyn, spesielle behov, eller andre opplysninger du vil dele med ledelsen."} />
                         </p>
                         <textarea
                           name="additionalNotes"
@@ -2314,29 +2313,29 @@ export default function AdmissionPage() {
                       <div className="bg-[#561291]/5 border border-[#561291]/20 rounded-2xl p-5 space-y-3">
                         <h5 className="font-bold text-[#561291] text-sm uppercase tracking-wider flex items-center gap-1.5">
                           <CheckCircle2 size={16} className="text-[#561291]" />
-                          <span>{language === 'en' ? "Application Summary" : "Oppsummering av søknaden"}</span>
+                          <span><SiteText fallback={language === 'en' ? "Application Summary" : "Oppsummering av søknaden"} /></span>
                         </h5>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                           <div>
-                            <span className="text-slate-500 block text-xs uppercase font-semibold">{language === 'en' ? "Applicant" : "Søker"}</span>
+                            <span className="text-slate-500 block text-xs uppercase font-semibold"><SiteText fallback={language === 'en' ? "Applicant" : "Søker"} /></span>
                             <span className="font-bold text-slate-800">{formData.name || '-'} ({formData.gender || '-'})</span>
                           </div>
                           <div>
-                            <span className="text-slate-500 block text-xs uppercase font-semibold">{language === 'en' ? "Email / Phone" : "E-post & telefon"}</span>
+                            <span className="text-slate-500 block text-xs uppercase font-semibold"><SiteText fallback={language === 'en' ? "Email / Phone" : "E-post & telefon"} /></span>
                             <span className="font-bold text-slate-800">{formData.email} • {formData.phone}</span>
                           </div>
                           <div>
-                            <span className="text-slate-500 block text-xs uppercase font-semibold">{language === 'en' ? "Study Line" : "Studielinje"}</span>
-                            <span className="font-bold text-[#561291]">{selectedProg.title}</span>
+                            <span className="text-slate-500 block text-xs uppercase font-semibold"><SiteText fallback={language === 'en' ? "Study Line" : "Studielinje"} /></span>
+                            <span className="font-bold text-[#561291]"><SiteText fallback={selectedProg.title} /></span>
                           </div>
                           <div>
-                            <span className="text-slate-500 block text-xs uppercase font-semibold">{language === 'en' ? "Billing Plan" : "Betalingsordning"}</span>
+                            <span className="text-slate-500 block text-xs uppercase font-semibold"><SiteText fallback={language === 'en' ? "Billing Plan" : "Betalingsordning"} /></span>
                             <span className="font-bold text-[#561291]">
-                              {formData.paymentPlan === 'monthly'
+                              <SiteText fallback={formData.paymentPlan === 'monthly'
                                 ? (language === 'en' ? "Monthly installment (10 payments)" : "Månedlig delbetaling (10 terminer)")
                                 : (formData.paymentPlan === 'biannual' || formData.paymentPlan === 'semester')
                                 ? (language === 'en' ? "Semi-annual (2 installments)" : "Halvårlig betaling (2 terminer)")
-                                : (language === 'en' ? "Full price at once" : "Hele prisen på en gang")}
+                                : (language === 'en' ? "Full price at once" : "Hele prisen på en gang")} />
                             </span>
                           </div>
                         </div>
@@ -2351,7 +2350,7 @@ export default function AdmissionPage() {
                             className="flex-1 sm:flex-initial min-h-[44px] px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
                           >
                             <ArrowLeft size={18} />
-                            <span>{language === 'en' ? "Back" : "Tilbake"}</span>
+                            <span><SiteText fallback={language === 'en' ? "Back" : "Tilbake"} /></span>
                           </button>
                           <button
                             type="button"
@@ -2362,7 +2361,7 @@ export default function AdmissionPage() {
                             className="flex-1 sm:flex-initial min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
                           >
                             <Save size={16} />
-                            <span>{language === 'en' ? "Save Draft" : "Lagre kladd"}</span>
+                            <span><SiteText fallback={language === 'en' ? "Save Draft" : "Lagre kladd"} /></span>
                           </button>
                         </div>
                         
@@ -2374,12 +2373,12 @@ export default function AdmissionPage() {
                           {isSubmitting ? (
                             <>
                               <div className="w-5 h-5 rounded-full border-2 border-[#561291]/30 border-t-[#561291] animate-spin" />
-                              <span>{language === 'en' ? "Submitting Application..." : "Sender inn søknad..."}</span>
+                              <span><SiteText fallback={language === 'en' ? "Submitting Application..." : "Sender inn søknad..."} /></span>
                             </>
                           ) : (
                             <>
                               <Send size={18} />
-                              <span>{language === 'en' ? "Submit Application" : "Send Inn Min Søknad"}</span>
+                              <span><SiteText fallback={language === 'en' ? "Submit Application" : "Send Inn Min Søknad"} /></span>
                             </>
                           )}
                         </button>
@@ -2404,7 +2403,7 @@ export default function AdmissionPage() {
 
                 <div className="space-y-2">
                   <span className="inline-block px-3.5 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider border border-green-200">
-                    {language === 'en' ? "Application Received" : "Søknad registrert"}
+                    <SiteText fallback={language === 'en' ? "Application Received" : "Søknad registrert"} />
                   </span>
                   <CmsText 
                     slug="admission-success-title" 
@@ -2427,24 +2426,24 @@ export default function AdmissionPage() {
                     </div>
                     <div className="space-y-1">
                       <h4 className="text-base font-bold text-[#561291]">
-                        {language === 'en' ? "Next Steps: Review & Account Assignment" : "Veien videre: opptaksbehandling & tildeling av konto"}
+                        <SiteText fallback={language === 'en' ? "Next Steps: Review & Account Assignment" : "Veien videre: opptaksbehandling & tildeling av konto"} />
                       </h4>
                       <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-                        {language === 'en'
+                        <SiteText fallback={language === 'en'
                           ? "We review all applications continuously and will contact you for a brief conversation. Upon approved admission, your personal user account and portal login credentials will be issued directly by the school administration."
-                          : "Vi behandler søknader fortløpende og kontakter deg for en kort samtale. Når opptaket er godkjent, vil din personlige brukerkonto og innloggingsdetaljer til portalen bli opprettet og tildelt direkte av skolens administrasjon."}
+                          : "Vi behandler søknader fortløpende og kontakter deg for en kort samtale. Når opptaket er godkjent, vil din personlige brukerkonto og innloggingsdetaljer til portalen bli opprettet og tildelt direkte av skolens administrasjon."} />
                       </p>
                     </div>
                   </div>
 
                   <div className="border-t border-[#e2dce7]/40 pt-3.5 grid grid-cols-2 gap-3 text-sm">
                     <div>
-                      <span className="text-slate-500 text-xs uppercase font-bold block">{language === 'en' ? "Program" : "Studielinje"}</span>
+                      <span className="text-slate-500 text-xs uppercase font-bold block"><SiteText fallback={language === 'en' ? "Program" : "Studielinje"} /></span>
                       <span className="font-bold text-[#561291]">{programs.find(p => p.id === formData.program)?.code}</span>
                     </div>
                     <div>
-                      <span className="text-slate-500 text-xs uppercase font-bold block">{language === 'en' ? "Kickoff" : "Kickoff"}</span>
-                      <span className="font-bold text-[#561291]">{language === 'en' ? "Aug 20–22, 2027 (Norway)" : "20.–22. aug 2027 (Norge)"}</span>
+                      <span className="text-slate-500 text-xs uppercase font-bold block"><SiteText fallback={language === 'en' ? "Kickoff" : "Kickoff"} /></span>
+                      <span className="font-bold text-[#561291]"><SiteText fallback={language === 'en' ? "Aug 20–22, 2027 (Norway)" : "20.–22. aug 2027 (Norge)"} /></span>
                     </div>
                   </div>
                 </div>

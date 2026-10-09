@@ -1,3 +1,4 @@
+import SiteText from '@/components/SiteText';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -35,14 +36,14 @@ export default function LandingAdmissions() {
           />
         </motion.p>
 
-        {Date.now() < Date.parse('2027-01-01T00:00:00+01:00') && <p className="admission-opening-note">{language === 'no' ? 'Søknadsperioden åpner 1. januar 2027.' : 'Applications open on 1 January 2027.'}</p>}
+        {Date.now() < Date.parse('2027-01-01T00:00:00+01:00') && <p className="admission-opening-note"><SiteText fallback={language === 'no' ? 'Søknadsperioden åpner 1. januar 2027.' : 'Applications open on 1 January 2027.'} /></p>}
         <motion.div className="admission-box" variants={fadeInUp}>
           <div>
             <b><CmsText slug="landing-adm-box-title" fallback={language === 'no' ? 'Opptak til skoleåret 2027' : 'Admissions for Academic Year 2027'} /></b>
             <dl className="admission-facts">
-              <div><dt>{language === 'no' ? 'Søknadsperiode' : 'Application period'}</dt><dd><CmsText slug="landing-adm-application-dates" fallback={language === 'no' ? '1. januar – 30. juni 2027' : '1 January – 30 June 2027'} /></dd></div>
-              <div><dt>{language === 'no' ? 'Oppstartssamling i Norge' : 'Opening gathering in Norway'}</dt><dd><CmsText slug="landing-adm-kickoff-dates" fallback={language === 'no' ? '20.–22. august 2027' : '20–22 August 2027'} /></dd></div>
-              <div><dt>{language === 'no' ? 'Aldersgrense' : 'Minimum age'}</dt><dd>{language === 'no' ? '18 år' : '18 years'}</dd></div>
+              <div><dt><SiteText fallback={language === 'no' ? 'Søknadsperiode' : 'Application period'} /></dt><dd><CmsText slug="landing-adm-application-dates" fallback={language === 'no' ? '1. januar – 30. juni 2027' : '1 January – 30 June 2027'} /></dd></div>
+              <div><dt><SiteText fallback={language === 'no' ? 'Oppstartssamling i Norge' : 'Opening gathering in Norway'} /></dt><dd><CmsText slug="landing-adm-kickoff-dates" fallback={language === 'no' ? '20.–22. august 2027' : '20–22 August 2027'} /></dd></div>
+              <div><dt><SiteText fallback={language === 'no' ? 'Aldersgrense' : 'Minimum age'} /></dt><dd><SiteText fallback={language === 'no' ? '18 år' : '18 years'} /></dd></div>
             </dl>
           </div>
           <motion.button

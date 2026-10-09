@@ -1,3 +1,4 @@
+import SiteText from '@/components/SiteText';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -27,9 +28,7 @@ export default function LandingAbout() {
               loading="lazy"
               decoding="async"
             /></div>
-            <figcaption>
-              Hilde Karin Knutsen
-              <small><CmsText slug="landing-about-role-hilde" fallback={language === 'no' ? 'Rektor og underviser' : 'Principal & Teacher'} /></small>
+            <figcaption><SiteText fallback={"Hilde Karin Knutsen"} /><small><CmsText slug="landing-about-role-hilde" fallback={language === 'no' ? 'Rektor og underviser' : 'Principal & Teacher'} /></small>
             </figcaption>
           </motion.figure>
           <motion.figure variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
@@ -41,9 +40,7 @@ export default function LandingAbout() {
               loading="lazy"
               decoding="async"
             /></div>
-            <figcaption>
-              Thomas Knutsen
-              <small><CmsText slug="landing-about-role-thomas" fallback={language === 'no' ? 'Administrator og faglærer' : 'Administrator & Teacher'} /></small>
+            <figcaption><SiteText fallback={"Thomas Knutsen"} /><small><CmsText slug="landing-about-role-thomas" fallback={language === 'no' ? 'Administrator og faglærer' : 'Administrator & Teacher'} /></small>
             </figcaption>
           </motion.figure>
         </motion.div>
@@ -72,7 +69,7 @@ export default function LandingAbout() {
             />
           </p>
 
-          <Link to="/about" className="about-page-link">{language === 'no' ? 'Mer om oss' : 'More about us'}<span aria-hidden="true"> →</span></Link>
+          <Link to="/about" className="about-page-link"><SiteText fallback={language === 'no' ? 'Mer om oss' : 'More about us'} /><span aria-hidden="true"> →</span></Link>
 
         </motion.div>
       </div>

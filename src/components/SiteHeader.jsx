@@ -1,3 +1,4 @@
+import SiteText from '@/components/SiteText';
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -93,29 +94,29 @@ export default function SiteHeader() {
       <header className="wrap">
         <a className="brand" href="/" onClick={handleLogoClick}>
           <img width="40" height="40" src="/assets/logo.png" alt="HKP Community" />
-          <span className="brand-name">HKP Community</span>
+          <span className="brand-name"><SiteText fallback={"HKP Community"} /></span>
         </a>
 
         <nav aria-label="Hovedmeny" className={`header-nav ${isMobileMenuOpen ? 'open' : ''}`}>
           <a href="/#school" onClick={(e) => handleNavClick(e, 'school')}>
-            {language === 'no' ? 'Utdanning' : 'Programs'}
+            <SiteText fallback={language === 'no' ? 'Utdanning' : 'Programs'} />
           </a>
           <a href="/#curriculum" onClick={(e) => handleNavClick(e, 'curriculum')}>
-            {language === 'no' ? 'Fagplan' : 'Curriculum'}
+            <SiteText fallback={language === 'no' ? 'Fagplan' : 'Curriculum'} />
           </a>
           <a href="/about" aria-current={location.pathname === '/about' ? 'page' : undefined} onClick={e => { e.preventDefault(); setIsMobileMenuOpen(false); setIsLoginMenuOpen(false); navigate('/about'); }}>
-            {language === 'no' ? 'Om oss' : 'About'}
+            <SiteText fallback={language === 'no' ? 'Om oss' : 'About'} />
           </a>
           <a href="/#resources" onClick={(e) => handleNavClick(e, 'resources')}>
-            {language === 'no' ? 'Ressurser' : 'Resources'}
+            <SiteText fallback={language === 'no' ? 'Ressurser' : 'Resources'} />
           </a>
 
-          <a href="/betaling" onClick={e => { e.preventDefault(); setIsMobileMenuOpen(false); navigate('/betaling'); }} aria-current={['/betaling', '/gi-gave'].includes(location.pathname) ? 'page' : undefined}>{language === 'no' ? 'Betaling og gaver' : 'Payments & giving'}</a>
+          <a href="/betaling" onClick={e => { e.preventDefault(); setIsMobileMenuOpen(false); navigate('/betaling'); }} aria-current={['/betaling', '/gi-gave'].includes(location.pathname) ? 'page' : undefined}><SiteText fallback={language === 'no' ? 'Betaling og gaver' : 'Payments & giving'} /></a>
 
           {/* Mobile only action items */}
           <div className="mobile-nav-actions">
             <button onClick={toggleLanguage} className="mobile-action-btn">
-              {language === 'no' ? '🌐 Switch to English' : '🌐 Bytt til Norsk'}
+              <SiteText fallback={language === 'no' ? '🌐 Switch to English' : '🌐 Bytt til Norsk'} />
             </button>
             {user ? (
               <button 
@@ -131,13 +132,13 @@ export default function SiteHeader() {
                 className="mobile-action-btn"
                 style={isAdmin ? { fontWeight: 700, color: 'var(--violet)' } : {}}
               >
-                {isAdmin ? '⚙️ Admin Dashbord' : (language === 'no' ? 'Min side (Portal)' : 'My Portal')}
+                <SiteText fallback={isAdmin ? '⚙️ Admin Dashbord' : (language === 'no' ? 'Min side (Portal)' : 'My Portal')} />
               </button>
             ) : (
               /* 2 Choices for Mobile */
               <div className="mobile-login-box">
                 <span className="mobile-login-title">
-                  {language === 'no' ? 'Logg inn:' : 'Log in:'}
+                  <SiteText fallback={language === 'no' ? 'Logg inn:' : 'Log in:'} />
                 </span>
 
                 {/* Valg 1: Appen (1. Prioritet) */}
@@ -150,10 +151,9 @@ export default function SiteHeader() {
                 >
                   <span className="mobile-choice-label">
                     <GraduationCap size={18} />
-                    <span>{language === 'no' ? 'Elev- og lærerportal' : 'Student and teacher portal'}</span>
+                    <span><SiteText fallback={language === 'no' ? 'Elev- og lærerportal' : 'Student and teacher portal'} /></span>
                   </span>
-                  <span className="mobile-choice-destination">
-                    app.hkpc.no <ExternalLink size={12} />
+                  <span className="mobile-choice-destination"><SiteText fallback={"app.hkpc.no "} /><ExternalLink size={12} />
                   </span>
                 </a>
 
@@ -167,11 +167,9 @@ export default function SiteHeader() {
                 >
                   <span className="mobile-choice-label">
                     <ShieldCheck size={18} />
-                    <span>{language === 'no' ? 'Administrasjon' : 'Administration'}</span>
+                    <span><SiteText fallback={language === 'no' ? 'Administrasjon' : 'Administration'} /></span>
                   </span>
-                  <span className="mobile-choice-destination">
-                    app.hkpc.no/admin &rarr;
-                  </span>
+                  <span className="mobile-choice-destination"><SiteText fallback={"app.hkpc.no/admin →"} /></span>
                 </button>
               </div>
             )}
@@ -180,7 +178,7 @@ export default function SiteHeader() {
               onClick={() => { setIsMobileMenuOpen(false); navigate('/admission'); }} 
               className="mobile-cta-btn"
             >
-              {language === 'no' ? 'Opptak 2027' : 'Admissions 2027'}
+              <SiteText fallback={language === 'no' ? 'Opptak 2027' : 'Admissions 2027'} />
             </button>
           </div>
         </nav>
@@ -199,7 +197,7 @@ export default function SiteHeader() {
               title={language === 'no' ? 'Språk: Norsk (trykk for å endre)' : 'Language: English (click to change)'}
             >
               <Globe size={16} className="lang-globe-icon" />
-              <span className="lang-code-text">{language === 'no' ? 'NO' : 'EN'}</span>
+              <span className="lang-code-text"><SiteText fallback={language === 'no' ? 'NO' : 'EN'} /></span>
               <ChevronDown 
                 size={12} 
                 className={`lang-chevron ${isLangMenuOpen ? 'open' : ''}`} 
@@ -218,7 +216,7 @@ export default function SiteHeader() {
                   aria-label="Språkliste"
                 >
                   <div className="lang-dropdown-header">
-                    <span>{language === 'no' ? 'Velg språk' : 'Select language'}</span>
+                    <span><SiteText fallback={language === 'no' ? 'Velg språk' : 'Select language'} /></span>
                   </div>
 
                   <div className="lang-dropdown-list">
@@ -236,8 +234,8 @@ export default function SiteHeader() {
                       <div className="lang-item-content">
                         <span className="lang-flag" aria-hidden="true">🇳🇴</span>
                         <div className="lang-item-text">
-                          <span className="lang-title">Norsk</span>
-                          <span className="lang-detail">Bokmål</span>
+                          <span className="lang-title"><SiteText fallback={"Norsk"} /></span>
+                          <span className="lang-detail"><SiteText fallback={"Bokmål"} /></span>
                         </div>
                       </div>
                       {language === 'no' && (
@@ -259,8 +257,8 @@ export default function SiteHeader() {
                       <div className="lang-item-content">
                         <span className="lang-flag" aria-hidden="true">🇬🇧</span>
                         <div className="lang-item-text">
-                          <span className="lang-title">English</span>
-                          <span className="lang-detail">International</span>
+                          <span className="lang-title"><SiteText fallback={"English"} /></span>
+                          <span className="lang-detail"><SiteText fallback={"International"} /></span>
                         </div>
                       </div>
                       {language === 'en' && (
@@ -286,7 +284,7 @@ export default function SiteHeader() {
                   title="Åpne Admin Dashbord"
                 >
                   <ShieldCheck size={14} />
-                  <span>Admin</span>
+                  <span><SiteText fallback={"Admin"} /></span>
                 </button>
               ) : (
                 <button 
@@ -294,7 +292,7 @@ export default function SiteHeader() {
                   className="login-btn"
                   title={language === 'no' ? 'Min side' : 'Portal'}
                 >
-                  <span>{language === 'no' ? 'Min side' : 'Portal'}</span>
+                  <span><SiteText fallback={language === 'no' ? 'Min side' : 'Portal'} /></span>
                 </button>
               )
             ) : (
@@ -306,7 +304,7 @@ export default function SiteHeader() {
                   aria-expanded={isLoginMenuOpen}
                   aria-haspopup="true"
                 >
-                  <span>{language === 'no' ? 'Logg inn' : 'Log in'}</span>
+                  <span><SiteText fallback={language === 'no' ? 'Logg inn' : 'Log in'} /></span>
                   <ChevronDown 
                     size={14} 
                     style={{ 
@@ -328,7 +326,7 @@ export default function SiteHeader() {
                   >
                     <div className="login-dropdown-header">
                       <span className="login-dropdown-badge">
-                        {language === 'no' ? 'Velg innlogging' : 'Select login'}
+                        <SiteText fallback={language === 'no' ? 'Velg innlogging' : 'Select login'} />
                       </span>
                       <button 
                         type="button" 
@@ -354,14 +352,14 @@ export default function SiteHeader() {
                             <GraduationCap size={20} />
                           </div>
                           <div className="choice-text">
-                            <h4>{language === 'no' ? 'Elev- og lærerportal' : 'Student and teacher portal'}</h4>
+                            <h4><SiteText fallback={language === 'no' ? 'Elev- og lærerportal' : 'Student and teacher portal'} /></h4>
                             <p>
-                              {language === 'no' 
+                              <SiteText fallback={language === 'no'
                                 ? 'Kurs, oppgaver og fellesskap.'
-                                : 'Courses, assignments and community.'}
+                                : 'Courses, assignments and community.'} />
                             </p>
                             <span className="choice-action-link portal-action">
-                              {language === 'no' ? 'Åpne portalen' : 'Open portal'}
+                              <SiteText fallback={language === 'no' ? 'Åpne portalen' : 'Open portal'} />
                             </span>
                           </div>
                         </div>
@@ -378,8 +376,8 @@ export default function SiteHeader() {
                       >
                         <ShieldCheck size={18} className="admin-choice-icon" />
                         <span className="choice-text">
-                          <span className="admin-choice-title">{language === 'no' ? 'Administrasjon' : 'Administration'}</span>
-                          <span className="admin-choice-caption">{language === 'no' ? 'Kun administrator' : 'Administrators only'}</span>
+                          <span className="admin-choice-title"><SiteText fallback={language === 'no' ? 'Administrasjon' : 'Administration'} /></span>
+                          <span className="admin-choice-caption"><SiteText fallback={language === 'no' ? 'Kun administrator' : 'Administrators only'} /></span>
                         </span>
                         <ArrowRight size={16} className="choice-arrow" />
                       </button>
@@ -391,7 +389,7 @@ export default function SiteHeader() {
             )}
 
             <button className="headerlink" onClick={() => navigate('/admission')}>
-              {language === 'no' ? 'Opptak 2027' : 'Admissions 2027'}
+              <SiteText fallback={language === 'no' ? 'Opptak 2027' : 'Admissions 2027'} />
             </button>
           </div>
 

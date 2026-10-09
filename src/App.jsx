@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ExternalLink } from 'lucide-react';
 
 // Layouts & Helpers
+import WebsiteInlineEditor from '@/components/WebsiteInlineEditor';
 import OnboardingHelper from '@/components/OnboardingHelper';
 
 // Public & Onboarding Pages
@@ -79,6 +80,7 @@ export default function App() {
     return (
       <div className="min-h-screen bg-background text-on-background w-full">
         <AppRoutes />
+        <WebsiteInlineEditor />
       </div>
     );
   }
@@ -86,6 +88,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background text-on-background w-full font-sans relative">
       <AppRoutes />
+        <WebsiteInlineEditor />
 
       {/* Global Branded Toast Manager */}
       <AnimatePresence>

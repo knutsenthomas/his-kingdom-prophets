@@ -1,3 +1,4 @@
+import SiteText from '@/components/SiteText';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -65,7 +66,7 @@ export default function LandingHero() {
               <span><CmsText slug="landing-hero-cta-secondary" fallback={language === 'no' ? 'Se introduksjon' : 'See introduction'} /></span>
             </motion.a>
           </motion.div>
-          {Date.now() < Date.parse('2027-01-01T00:00:00+01:00') && <p className="hero-opening-note">{language === 'no' ? 'Søknadsperioden åpner 1. januar 2027.' : 'Applications open on 1 January 2027.'}</p>}
+          {Date.now() < Date.parse('2027-01-01T00:00:00+01:00') && <p className="hero-opening-note"><SiteText fallback={language === 'no' ? 'Søknadsperioden åpner 1. januar 2027.' : 'Applications open on 1 January 2027.'} /></p>}
         </motion.div>
 
         <motion.div 
@@ -83,8 +84,8 @@ export default function LandingHero() {
             loading="eager"
           />
           <div className="image-caption">
-            <span>{language === 'no' ? 'FELLESSKAP. TRO. UTRUSTNING.' : 'COMMUNITY. FAITH. EQUIPPING.'}</span>
-            <small>{language === 'no' ? 'Et sted å vokse sammen.' : 'A place to grow together.'}</small>
+            <span><SiteText fallback={language === 'no' ? 'FELLESSKAP. TRO. UTRUSTNING.' : 'COMMUNITY. FAITH. EQUIPPING.'} /></span>
+            <small><SiteText fallback={language === 'no' ? 'Et sted å vokse sammen.' : 'A place to grow together.'} /></small>
           </div>
         </motion.div>
       </div>
