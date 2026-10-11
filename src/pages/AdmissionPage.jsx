@@ -280,6 +280,7 @@ export default function AdmissionPage() {
   }, [user, language, showToast]);
 
   const updateFieldValue = (field, val) => {
+    if (field === 'program' && programs.find(program => program.id === val)?.isLocked) return;
     setFormData(prev => {
       const updated = { ...prev, [field]: val };
       saveDraft(updated, currentStep);
@@ -339,6 +340,10 @@ export default function AdmissionPage() {
   };
 
   const validateStep2 = () => {
+    if (!programs.some(program => program.id === formData.program && !program.isLocked)) {
+      showToast(language === 'en' ? 'Year 2 is not open for applications yet. Please select Year 1.' : 'Påmelding til andre året har ikke åpnet ennå. Velg første året.', 'error');
+      return false;
+    }
     if (!formData.languageAgreement) {
       showToast(language === 'en' 
         ? "Please confirm that you accept instruction in English and the kickoff in Norway." 
@@ -805,7 +810,7 @@ export default function AdmissionPage() {
     {
       id: "prophets_advanced",
       code: language === 'en' ? "Year 2" : "2. år",
-      title: "His Kingdom Prophets (oppstart 2028)",
+      title: language === 'en' ? "His Kingdom Prophets (starts in 2028)" : "His Kingdom Prophets (oppstart 2028)",
       duration: language === 'en' ? "Starts in 2028 (Requires Year 1)" : "Starter i 2028 (Krever 1. År)",
       priceYear: language === 'en' ? "$1,000 USD" : "10 000,-",
       priceMonthly: language === 'en' ? "$100 USD / mo" : "1 000,- / mnd",
@@ -1011,7 +1016,7 @@ export default function AdmissionPage() {
                     </span>
                   </div>
                   
-                  <a 
+                  {prog.isLocked ? <span className="text-sm font-semibold text-slate-500">{language === 'en' ? 'Applications open later' : 'Påmelding åpner senere'}</span> : <a
                     href="#apply-form"
                     onClick={() => {
                       updateFieldValue('program', prog.id);
@@ -1022,7 +1027,7 @@ export default function AdmissionPage() {
                   >
                     <span><CmsText slug="admission-select-btn" fallback={language === 'en' ? "Select" : "Velg linje"} /></span>
                     <ChevronRight size={16} />
-                  </a>
+                  </a>}
                 </div>
               </div>
             ))}
@@ -1836,7 +1841,7 @@ export default function AdmissionPage() {
                           {programs.map(p => (
                             <label
                               key={p.id}
-                              className={`border rounded-2xl p-5 cursor-pointer transition-all duration-200 flex flex-col justify-between ${
+                              className={`border rounded-2xl p-5 transition-all duration-200 flex flex-col justify-between ${p.isLocked ? 'cursor-not-allowed bg-slate-50 opacity-70' : 'cursor-pointer'} ${
                                 formData.program === p.id
                                   ? 'border-[#561291] bg-[#561291]/5 shadow-sm'
                                   : 'border-slate-200 hover:border-slate-300 bg-white'
@@ -1849,11 +1854,13 @@ export default function AdmissionPage() {
                                   </span>
                                   <h5 className="font-bold text-base text-[#561291] pt-1"><SiteText fallback={p.title} /></h5>
                                   <p className="text-xs text-slate-500">{p.duration}</p>
+                                  {p.isLocked && <p className="text-xs font-semibold text-[#561291]">{language === 'en' ? 'Applications open later' : 'Påmelding åpner senere'}</p>}
                                 </div>
                                 <input
                                   type="radio"
                                   name="program"
                                   value={p.id}
+                                  disabled={p.isLocked}
                                   checked={formData.program === p.id}
                                   onChange={handleInputChange}
                                   className="accent-[#561291] w-4 h-4 mt-1"
