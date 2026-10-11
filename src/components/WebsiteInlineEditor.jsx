@@ -3,12 +3,13 @@ import { useLocation } from 'react-router-dom';
 import { Pencil, X } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { auth } from '../firebase';
+import { signInWebsiteAdministrator } from '../utils/websiteSession';
 import { saveInlineContent } from '../utils/saveInlineContent';
 import '../styles/inline-editor.css';
 
 const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no', 'thomas@hiskingdomministry.no'];
 export default function WebsiteInlineEditor() {
-  const { user, cmsContent, language, loginWithGoogle, setIsAdminEditing } = useApp();
+  const { user, cmsContent, language, setIsAdminEditing } = useApp();
   const location = useLocation();
   const [editing, setEditing] = useState(false);
   const [field, setField] = useState(null);
@@ -71,13 +72,13 @@ export default function WebsiteInlineEditor() {
     try {
       await saveInlineContent(field.key, draft, field.previous);
       setField(null); toggle.current?.focus(); setNotice(language === 'en' ? 'Text saved.' : 'Teksten er lagret på nettsiden.');
-    } catch (failure) { setError(failure.message || 'Teksten kunne ikke lagres.'); }
+    } catch (failure) { setError(failure.code === 'permission-denied' ? 'Denne kontoen har ikke administratorrettigheter til nettsiden.' : failure.code === 'auth/popup-closed-by-user' ? 'Innloggingen ble avbrutt. Teksten er beholdt; trykk Lagre tekst for å prøve igjen.' : failure.message || 'Teksten kunne ikke lagres.'); }
     finally { setBusy(false); }
   }
   if (!publicPage || (!isAdmin && !requested)) return null;
   return <div data-site-editor>
     <div className="site-editor-toolbar">
-      {isAdmin ? <><button ref={toggle} onClick={() => { setEditing(!editing); setField(null); }} aria-pressed={editing}><Pencil size={18}/>{editing ? 'Avslutt redigering' : 'Rediger nettsiden'}</button>{editing && <span>Trykk på teksten du vil endre · {language === 'en' ? 'Engelsk' : 'Norsk'}</span>}</> : <><span>Logg inn som administrator for å redigere.</span><button onClick={() => loginWithGoogle()}>Logg inn med Google</button></>}
+      {isAdmin ? <><button ref={toggle} onClick={() => { setEditing(!editing); setField(null); }} aria-pressed={editing}><Pencil size={18}/>{editing ? 'Avslutt redigering' : 'Rediger nettsiden'}</button>{editing && <span>Trykk på teksten du vil endre · {language === 'en' ? 'Engelsk' : 'Norsk'}</span>}</> : <><span>Logg inn som administrator for å redigere.</span><button onClick={() => signInWebsiteAdministrator().catch(failure => setNotice(failure.message || 'Innloggingen kunne ikke fullføres.'))}>Logg inn med Google</button></>}
       {notice && <span role="status">{notice}</span>}
     </div>
     {field && isAdmin && <div className="site-editor-backdrop" onClick={() => { if (!busy) setField(null); }}>

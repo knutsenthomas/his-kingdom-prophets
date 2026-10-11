@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyD8MG3pJebYkckJxHejDSN7zda1aufAiQU",
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "auth.hkpc.no",
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "gen-lang-client-0659494185",
