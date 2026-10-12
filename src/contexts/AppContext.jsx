@@ -1,3 +1,4 @@
+import { languageFromUrl } from '../utils/languageLink.js';
 import React, { createContext, useState, useEffect, useContext, useMemo } from 'react';
 import { auth, db, storage } from '@/firebase';
 import { 
@@ -98,10 +99,13 @@ export const AppProvider = ({ children }) => {
   const [isAdminEditing, setIsAdminEditing] = useState(false);
 
   const [language, setLanguage] = useState(() => {
+    // An explicit app link takes priority over this browser's saved language.
+    const linkedLanguage = languageFromUrl(window.location.search);
+    if (linkedLanguage) return linkedLanguage;
     try {
       // Respect manual language choice first
       const saved = localStorage.getItem('hkm-language');
-      if (saved) return saved;
+      if (saved === 'no' || saved === 'en') return saved;
 
       // Smart auto-detect Scandinavia: check browser languages
       const browserLanguages = navigator.languages || [navigator.language || ''];
@@ -149,6 +153,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     document.documentElement.lang = language === 'en' ? 'en' : 'no';
+    try { localStorage.setItem('hkm-language', language); } catch { /* Keep the language even when storage is unavailable. */ }
   }, [language]);
 
   // Firestore Realtime / Seed subscriptions
