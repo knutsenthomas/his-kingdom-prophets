@@ -1,0 +1,26 @@
+[
+  {
+    "file": "ios-no.png",
+    "url": "https://hkpc.no/apper?lang=no#ios"
+  },
+  {
+    "file": "ios-en.png",
+    "url": "https://hkpc.no/apper?lang=en#ios"
+  },
+  {
+    "file": "android-no.png",
+    "url": "https://hkpc.no/apper?lang=no#android"
+  },
+  {
+    "file": "android-en.png",
+    "url": "https://hkpc.no/apper?lang=en#android"
+  },
+  {
+    "file": "mac-no.png",
+    "url": "https://hkpc.no/apper?lang=no#mac"
+  },
+  {
+    "file": "mac-en.png",
+    "url": "https://hkpc.no/apper?lang=en#mac"
+  }
+]
