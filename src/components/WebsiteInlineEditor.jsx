@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Pencil, X } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { auth } from '../firebase';
@@ -22,7 +22,7 @@ export default function WebsiteInlineEditor() {
   const toggle = useRef(null);
   const isAdmin = !!auth.currentUser && !!user && (['admin', 'superadmin'].includes(user.role) || ADMIN_EMAILS.includes(user.email?.toLowerCase()));
   const requested = new URLSearchParams(location.search).get('edit') === '1';
-  const publicPage = !/^\/(student|email|complete-profile|interests|onboarding-welcome|login|register)(\/|$)/.test(location.pathname);
+  const publicPage = !/^\/(admin|student|email|complete-profile|interests|onboarding-welcome|login|register)(\/|$)/.test(location.pathname);
 
   useEffect(() => { setField(null); setNotice(''); }, [location.pathname, language]);
   useEffect(() => {
@@ -78,7 +78,7 @@ export default function WebsiteInlineEditor() {
   if (!publicPage || (!isAdmin && !requested)) return null;
   return <div data-site-editor>
     <div className="site-editor-toolbar">
-      {isAdmin ? <><button ref={toggle} onClick={() => { setEditing(!editing); setField(null); }} aria-pressed={editing}><Pencil size={18}/>{editing ? 'Avslutt redigering' : 'Rediger nettsiden'}</button>{editing && <span>Trykk på teksten du vil endre · {language === 'en' ? 'Engelsk' : 'Norsk'}</span>}</> : <><span>Logg inn som administrator for å redigere.</span><button onClick={() => signInWebsiteAdministrator().catch(failure => setNotice(failure.message || 'Innloggingen kunne ikke fullføres.'))}>Logg inn med Google</button></>}
+      {isAdmin ? <><button ref={toggle} onClick={() => { setEditing(!editing); setField(null); }} aria-pressed={editing}><Pencil size={18}/>{editing ? 'Avslutt redigering' : 'Rediger nettsiden'}</button><Link to="/admin/team">Ansatte og frivillige</Link>{editing && <span>Trykk på teksten du vil endre · {language === 'en' ? 'Engelsk' : 'Norsk'}</span>}</> : <><span>Logg inn som administrator for å redigere.</span><button onClick={() => signInWebsiteAdministrator().catch(failure => setNotice(failure.message || 'Innloggingen kunne ikke fullføres.'))}>Logg inn med Google</button></>}
       {notice && <span role="status">{notice}</span>}
     </div>
     {field && isAdmin && <div className="site-editor-backdrop" onClick={() => { if (!busy) setField(null); }}>

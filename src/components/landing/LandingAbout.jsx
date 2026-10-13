@@ -1,4 +1,6 @@
 import SiteText from '@/components/SiteText';
+import useWebsiteTeam from '@/hooks/useWebsiteTeam';
+import {initials,safeImage} from '@/data/websiteTeam';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -8,6 +10,7 @@ import { fadeInUp, staggerContainer } from './animations';
 
 export default function LandingAbout() {
   const { language } = useApp();
+  const {people} = useWebsiteTeam();
 
   return (
     <section className="about section" id="about">
@@ -19,30 +22,7 @@ export default function LandingAbout() {
           viewport={{ once: true, margin: "-60px" }}
           variants={staggerContainer}
         >
-          <motion.figure variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
-            <div className="landing-portrait-frame portrait-hilde"><img
-              src="/assets/hilde.jpg"
-              alt="Hilde Karin Knutsen"
-              width="400"
-              height="400"
-              loading="lazy"
-              decoding="async"
-            /></div>
-            <figcaption><SiteText fallback={"Hilde Karin Knutsen"} /><small><CmsText slug="landing-about-role-hilde" fallback={language === 'no' ? 'Rektor og underviser' : 'Principal & Teacher'} /></small>
-            </figcaption>
-          </motion.figure>
-          <motion.figure variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}>
-            <div className="landing-portrait-frame portrait-thomas"><img
-              src="/assets/thomas.jpeg"
-              alt="Thomas Knutsen"
-              width="400"
-              height="400"
-              loading="lazy"
-              decoding="async"
-            /></div>
-            <figcaption><SiteText fallback={"Thomas Knutsen"} /><small><CmsText slug="landing-about-role-thomas" fallback={language === 'no' ? 'Administrator og faglærer' : 'Administrator & Teacher'} /></small>
-            </figcaption>
-          </motion.figure>
+          {people.filter(person => person.visible && person.showHome).map(person => <motion.figure key={person.id} variants={fadeInUp} whileHover={{ y: -4, transition: { duration: 0.2 } }}><div className={`landing-portrait-frame portrait-${person.id}`}>{safeImage(person.image) ? <img src={safeImage(person.image)} alt={person.name} width="400" height="400" loading="lazy" decoding="async"/> : <span className="about-profile-initials">{initials(person.name)}</span>}</div><figcaption>{person.name}<small>{language === 'en' ? person.roleEn || person.roleNo : person.roleNo || person.roleEn}</small></figcaption></motion.figure>)}
         </motion.div>
 
         <motion.div

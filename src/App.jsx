@@ -11,6 +11,7 @@ import OnboardingHelper from '@/components/OnboardingHelper';
 // Public & Onboarding Pages
 import LandingPage from '@/pages/LandingPage';
 import AppsPage from '@/pages/AppsPage';
+import TeamAdminPage from '@/pages/TeamAdminPage';
 import InterestsPage from '@/pages/InterestsPage';
 import CompleteProfilePage from '@/pages/CompleteProfilePage';
 import WelcomePage from '@/pages/WelcomePage';
@@ -154,6 +155,7 @@ function AppRoutes() {
         {/* Onboarding & Auth */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/apper" element={<AppsPage />} />
+        <Route path="/admin/team" element={<TeamAdminPage />} />
         <Route path="/landing/tablet" element={<LandingPage />} />
         <Route path="/landing/mobile" element={<LandingPage />} />
         <Route path="/login" element={<StudentRedirect />} />

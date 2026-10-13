@@ -1,0 +1,243 @@
+.team-admin {
+  min-height: 100vh;
+  padding: 32px 0 80px;
+}
+.team-back {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  color: var(--purple) !important;
+  margin-bottom: 28px;
+}
+.team-admin header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.team-admin h1 {
+  font-size: clamp(28px, 4vw, 42px);
+}
+.team-admin h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+.team-admin p {
+  color: var(--muted);
+}
+.team-panel {
+  background: white;
+  padding: 28px;
+  border: 1px solid #e2dce7;
+  border-radius: 24px;
+}
+.team-toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.team-toolbar p {
+  flex: 1;
+  min-width: 160px;
+}
+.team-admin button,
+.team-upload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--purple);
+  color: white;
+  border-radius: 12px;
+  padding: 12px 18px;
+  min-height: 44px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.team-admin button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.team-admin .team-secondary {
+  background: var(--soft);
+  color: var(--purple);
+  border-color: #e2dce7;
+}
+.team-admin-grid {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.team-list {
+  padding: 12px;
+  max-height: 75vh;
+  overflow: auto;
+}
+.team-list button {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+  background: white;
+  color: var(--ink);
+  padding: 12px;
+  margin-bottom: 4px;
+}
+.team-list button[aria-pressed="true"] {
+  background: #eee6f4;
+  border-color: var(--purple);
+}
+.team-list img,
+.team-list span {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.team-list span {
+  background: #e9dff2;
+  color: var(--purple);
+  display: grid;
+  place-items: center;
+}
+.team-list small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+.team-admin fieldset {
+  border: 0;
+  padding: 0;
+  margin-top: 24px;
+}
+.team-admin label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.team-admin input:not([type="checkbox"]):not([type="file"]),
+.team-admin textarea,
+.team-admin select {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ded7e4;
+  border-radius: 12px;
+  margin-top: 8px;
+  background: white;
+  font: inherit;
+  font-size: 16px;
+}
+.team-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 20px;
+}
+.team-photo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.team-photo > img,
+.team-photo > span {
+  width: 112px;
+  height: 112px;
+  object-fit: cover;
+  object-position: center 30%;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.team-photo > span {
+  display: grid;
+  place-items: center;
+  background: #e9dff2;
+  color: var(--purple);
+  font-size: 32px;
+}
+.team-photo small {
+  display: block;
+  margin: 10px 0 16px;
+  color: var(--muted);
+}
+.team-upload {
+  position: relative;
+  margin-bottom: 0 !important;
+}
+.team-upload input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  cursor: pointer;
+}
+.team-check {
+  display: flex !important;
+  gap: 12px;
+  align-items: center;
+}
+.team-check input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--purple);
+}
+.team-order {
+  display: flex;
+  gap: 12px;
+}
+.team-error,
+.team-notice {
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+.team-error {
+  background: #fff0f2;
+  color: #9b1c31 !important;
+}
+.team-notice {
+  background: #e8f5ed;
+  color: #17613b !important;
+}
+.team-admin :focus-visible {
+  outline: 3px solid #b599ce;
+  outline-offset: 3px;
+}
+@media (max-width: 800px) {
+  .team-admin-grid {
+    grid-template-columns: 1fr;
+  }
+  .team-list {
+    max-height: 280px;
+  }
+  .team-fields {
+    grid-template-columns: 1fr;
+  }
+  .team-panel {
+    padding: 20px;
+  }
+  .team-photo {
+    flex-wrap: wrap;
+  }
+  .team-toolbar button {
+    flex: 1;
+  }
+}
+.team-admin .eyebrow {
+  color: var(--purple);
+}
+.team-admin .team-toolbar {
+  position: sticky;
+  top: 12px;
+  z-index: 2;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid #e2dce7;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px #271f3008;
+}
