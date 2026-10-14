@@ -3513,3 +3513,9 @@
 }
 .hkpc-landing .about-person-contact{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:16px}.hkpc-landing .about-person-contact a{display:inline-flex;align-items:center;gap:8px;color:var(--purple);overflow-wrap:anywhere}.hkpc-landing #prayer-team-members[hidden]{display:none}
 .hkpc-landing .about-member-photo{width:168px;height:168px;object-fit:cover;object-position:center 30%;border-radius:50%;margin-bottom:16px;border:0;box-shadow:none}@media(max-width:600px){.hkpc-landing .about-member-photo{width:120px;height:120px}}
+
+.hkpc-landing .payment-currency { margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid #e4d8ee; }
+.hkpc-landing .payment-currency > label { display:block; font-weight:600; margin-bottom:8px; }
+.hkpc-landing .payment-currency select { width:100%; max-width:360px; min-height:48px; padding:10px 14px; border:1px solid #e4d8ee; border-radius:12px; background:white; font:inherit; }
+.hkpc-landing .payment-currency select:focus-visible { outline:2px solid #561291; outline-offset:2px; }
+.hkpc-landing .payment-converted { display:block; font-size:14px; font-weight:400; color:var(--muted); margin-top:4px; }
