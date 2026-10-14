@@ -125,16 +125,16 @@ export default function PrivacyPolicyPage() {
                 <CmsText slug="privacy-sec2-title" fallback={isEn ? '2. How We Use Your Information' : '2. Hvordan vi bruker opplysningene'} />
               </h2>
               <p>
-                <CmsText slug="privacy-sec2-desc" fallback={isEn ? 'Your data is solely used to customize your student portal, support mentorship discipling, calculate evaluations using the weighted grading system, deliver live session streaming, and manage community interactions in the prayer chat.' : 'Dine opplysninger brukes utelukkende til å tilpasse din studentportal, støtte mentorskap, beregne evalueringer ved hjelp av det vektede karaktersystemet, levere live-strømmer og administrere samtaler i bønnefellesskapet.'} />
+                <CmsText slug="privacy-sec2-desc" fallback={isEn ? 'Your data is used to customize your student portal, support mentorship discipling, calculate evaluations using the weighted grading system, deliver live session streaming, and manage community interactions in the prayer chat, and administer gifts and school payments.' : 'Dine opplysninger brukes til å tilpasse din studentportal, støtte mentorskap, beregne evalueringer ved hjelp av det vektede karaktersystemet, levere live-strømmer og administrere samtaler i bønnefellesskapet og behandle gaver og skolebetaling.'} />
               </p>
             </section>
 
             <section className="space-y-3">
               <h2 className="font-sans text-lg sm:text-xl font-bold text-primary">
-                <CmsText slug="privacy-sec3-title" fallback={isEn ? '3. Storage & Encryption' : '3. Dataselgersikkerhet og kryptering'} />
+                <CmsText slug="privacy-sec3-title" fallback={isEn ? '3. Storage & Encryption' : '3. Datasikkerhet og kryptering'} />
               </h2>
               <p>
-                <CmsText slug="privacy-sec3-desc" fallback={isEn ? 'We utilize enterprise-grade cloud architecture powered by Google Cloud Platform and Firebase with end-to-end TLS encryption and strict security rules. Authentication is handled seamlessly via Google, Apple ID, or passwordless email links. We never store passwords.' : 'Vi benytter sikker skyarkitektur levert av Google Cloud Platform og Firebase med ende-til-ende TLS-kryptering og strenge sikkerhetsregler. Autentisering håndteres sikkert via Google, Apple ID eller passordfrie e-postlenker. Vi lagrer aldri passord.'} />
+                <CmsText slug="privacy-sec3-desc" fallback={isEn ? 'We utilize enterprise-grade cloud architecture powered by Google Cloud Platform and Firebase with TLS encryption in transit and strict security rules. Authentication is handled seamlessly via Google, Apple ID, or passwordless email links. We never store passwords.' : 'Vi benytter sikker skyarkitektur levert av Google Cloud Platform og Firebase med kryptering under overføring (TLS) og strenge sikkerhetsregler. Autentisering håndteres sikkert via Google, Apple ID eller passordfrie e-postlenker. Vi lagrer aldri passord.'} />
               </p>
             </section>
 
