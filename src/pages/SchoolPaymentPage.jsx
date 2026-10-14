@@ -60,7 +60,7 @@ export default function SchoolPaymentPage({ gift = false }) {
         try {
           if (agreementKey) {
             const response = await paymentRequest('recurringStatus', { key: agreementKey, requestId: params.get('request_id') });
-            if (alive.current) setResult(response.status === 'ACTIVE' ? 'agreement-active' : response.status === 'APPROVED' || response.status === 'APPROVAL_PENDING' ? 'pending' : 'unverified');
+            if (alive.current) setResult(response.status === 'ACTIVE' ? 'agreement-active' : response.status === 'PENDING' || response.status === 'APPROVED' || response.status === 'APPROVAL_PENDING' ? 'pending' : 'unverified');
           } else if (secret) {
             const stripe = await loadSchoolStripe();
             const response = await stripe.retrievePaymentIntent(secret);
@@ -76,7 +76,7 @@ export default function SchoolPaymentPage({ gift = false }) {
             setBusy(false);
             if (agreementKey) {
             const response = await paymentRequest('recurringStatus', { key: agreementKey, requestId: params.get('request_id') });
-            if (alive.current) setResult(response.status === 'ACTIVE' ? 'agreement-active' : response.status === 'APPROVED' || response.status === 'APPROVAL_PENDING' ? 'pending' : 'unverified');
+            if (alive.current) setResult(response.status === 'ACTIVE' ? 'agreement-active' : response.status === 'PENDING' || response.status === 'APPROVED' || response.status === 'APPROVAL_PENDING' ? 'pending' : 'unverified');
           } else if (secret) {
               // Remove the Stripe client secret from browser history after verification.
               params.delete('payment_intent_client_secret'); params.delete('payment_intent'); params.delete('redirect_status');
@@ -133,13 +133,13 @@ export default function SchoolPaymentPage({ gift = false }) {
       const payload = paymentPayload({ gift, plan, amount, ...details });
       if (!gift && recurring) payload.amount=value;
       if (recurring && method !== 'bank') {
-        if (!consent || method === 'vipps') throw new Error('recurring-consent-required');
-        const agreement = { ...payload, schoolCheckout, gift, studentName: details.studentName, schoolYear, reference: details.reference, consent, returnUrl, provider: method === 'card' ? 'stripe' : 'paypal' };
+        if (!consent) throw new Error('recurring-consent-required');
+        const agreement = { ...payload, schoolCheckout, gift, language: no ? 'no' : 'en', studentName: details.studentName, schoolYear, reference: details.reference, consent, returnUrl, provider: method === 'card' ? 'stripe' : method };
         agreement.requestId = await recurringRequestId(agreement, agreement.provider);
         const response = await paymentRequest('recurring', agreement);
-        if (method === 'paypal') {
+        if (method === 'paypal' || method === 'vipps') {
           const target = new URL(response.redirectUrl);
-          if (target.protocol !== 'https:' || !/(^|\.)paypal\.com$/.test(target.hostname)) throw new Error('invalid-redirect');
+          if (target.protocol !== 'https:' || !(method === 'vipps' ? /(^|\.)vipps\.no$|(^|\.)vippsmobilepay\.com$/ : /(^|\.)paypal\.com$/).test(target.hostname)) throw new Error('invalid-redirect');
           window.location.assign(target.href); return;
         }
         if (!response.clientSecret) throw new Error('missing-secret');
@@ -216,11 +216,11 @@ export default function SchoolPaymentPage({ gift = false }) {
               {!gift && <><label className="payment-field"><SiteText fallback={text('Elevens fulle navn', 'Student’s full name')} /><input name="studentName" required maxLength="120" value={details.studentName} onChange={update}/></label><label className="payment-field"><SiteText fallback={text('Referanse fra skolen (valgfritt)', 'School reference (optional)')} /><input name="reference" maxLength="120" value={details.reference} onChange={update} /></label></>}
             </div>}
             {gift && method !== 'bank' && <label className="payment-field"><SiteText fallback={text('En hilsen (valgfritt)', 'A message (optional)')} /><textarea name="message" rows="3" maxLength="500" value={details.message} onChange={update}/></label>}
-            <fieldset className="payment-methods"><legend><SiteText fallback={text('Betalingsmåte', 'Payment method')} /></legend>{[['card', text('Kort', 'Card'), CreditCard], ['vipps', 'Vipps', Smartphone], ...((gift || recurring) ? [['paypal', 'PayPal', CreditCard]] : []), ['bank', text('Bankoverføring', 'Bank transfer'), Landmark]].map(([id, label, Icon]) => <label key={id} className={method === id ? 'selected' : ''}><input type="radio" name="method" value={id} checked={method === id} disabled={recurring && id === 'vipps'} onChange={() => { setMethod(id); setConsent(false); }}/><Icon size={20}/><SiteText fallback={label} /></label>)}</fieldset>
+            <fieldset className="payment-methods"><legend><SiteText fallback={text('Betalingsmåte', 'Payment method')} /></legend>{[['card', text('Kort', 'Card'), CreditCard], ['vipps', 'Vipps', Smartphone], ...((gift || recurring) ? [['paypal', 'PayPal', CreditCard]] : []), ['bank', text('Bankoverføring', 'Bank transfer'), Landmark]].map(([id, label, Icon]) => <label key={id} className={method === id ? 'selected' : ''}><input type="radio" name="method" value={id} checked={method === id}  onChange={() => { setMethod(id); setConsent(false); }}/><Icon size={20}/><SiteText fallback={label} /></label>)}</fieldset>
             {recurring && <>
-              <p className="payment-note"><SiteText fallback={text('Vi venter på aktivering av den nye Vipps-avtalen før vi kobler til faste trekk. Velg kort eller PayPal for månedlig betaling.', 'We are awaiting activation of the new Vipps agreement before connecting recurring payments. Choose card or PayPal for monthly payments.')} /></p>
+              <p className="payment-note"><SiteText fallback={text('Med Vipps skjer første trekk tidligst to dager etter godkjenning. Senere trekk skjer månedlig.', 'With Vipps, the first payment is due at least two days after approval. Subsequent payments are monthly.')} /></p>
               {!gift && method !== 'bank' && <label className="payment-field"><SiteText fallback={text('Skoleår', 'School year')} /><select disabled={!!schoolQuote} value={schoolYear} onChange={event => setSchoolYear(event.target.value)}><option value="2026">2026–2027</option><option value="2027">2027–2028</option></select></label>}
-              {method !== 'bank' && (gift || schoolQuote) && <label className="payment-consent"><input type="checkbox" required checked={consent} onChange={event => setConsent(event.target.checked)}/><span>{text(gift ? `Jeg godkjenner ${money(value)} i automatiske månedlige trekk frem til jeg avslutter avtalen.` : `Jeg godkjenner 10 månedlige trekk à ${money(value)}, totalt ${money(value*10)}. Første trekk skjer ved oppstart. Avtalen avsluttes automatisk etter de 10 terminene.`, gift ? `I authorise automatic monthly payments of ${money(value)} until I cancel.` : `I authorise 10 monthly payments of ${money(value)}, ${money(value*10)} in total. The first payment is due on setup. The plan ends automatically after 10 instalments.`)}</span></label>}
+              {method !== 'bank' && (gift || schoolQuote) && <label className="payment-consent"><input type="checkbox" required checked={consent} onChange={event => setConsent(event.target.checked)}/><span>{text(gift ? `Jeg godkjenner ${money(value)} i automatiske månedlige trekk frem til jeg avslutter avtalen.` : `Jeg godkjenner 10 månedlige trekk à ${money(value)}, totalt ${money(value*10)}. ${method === 'vipps' ? 'Første trekk skjer tidligst to dager etter godkjenning.' : 'Første trekk skjer ved oppstart.'} Avtalen avsluttes automatisk etter de 10 terminene.`, gift ? `I authorise automatic monthly payments of ${money(value)} until I cancel.` : `I authorise 10 monthly payments of ${money(value)}, ${money(value*10)} in total. ${method === 'vipps' ? 'The first payment is due at least two days after approval.' : 'The first payment is due on setup.'} The plan ends automatically after 10 instalments.`)}</span></label>}
               {method !== 'bank' && <p className="payment-note"><SiteText fallback={text(gift ? 'Avslutt eller endre avtalen ved å kontakte oss. PayPal-avtaler kan også avsluttes i PayPal.' : 'Avslutt eller endre avtalen ved å kontakte oss. PayPal-avtaler kan også avsluttes i PayPal. Ubetalte skoleterminer må avklares med skolen.', gift ? 'Contact us to cancel or change the agreement. PayPal agreements can also be cancelled in PayPal.' : 'Contact us to cancel or change the agreement. PayPal agreements can also be cancelled in PayPal. Outstanding tuition must be resolved with the school.')} /></p>}
             </>}
             {method === 'bank' && <div className="payment-bank">
