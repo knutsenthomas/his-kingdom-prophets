@@ -8,7 +8,7 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SeoHead from '@/components/SeoHead';
 import '@/styles/hkpc-redesign.css';
-import '@/styles/privacy-page.css';
+import '@/styles/legal-pages.css';
 
 export default function PrivacyPolicyPage() {
   const { language } = useApp();
@@ -16,7 +16,7 @@ export default function PrivacyPolicyPage() {
   const isEn = language === 'en';
 
   return (
-    <div className="hkpc-landing privacy-page min-h-screen flex flex-col">
+    <div className="hkpc-landing legal-page min-h-screen flex flex-col">
       <SeoHead
         title={isEn ? "Privacy Policy (GDPR) | HKPC" : "Personvernerklæring (GDPR) | HKPC"}
         description={isEn 
@@ -58,15 +58,15 @@ export default function PrivacyPolicyPage() {
       <SiteHeader />
 
       {/* Main Content */}
-      <main className="privacy-main flex-1">
+      <main className="legal-main flex-1">
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="privacy-content"
+          className="legal-content"
         >
           {/* Hero */}
-          <div className="privacy-hero">
-            <Link to="/" className="privacy-back"><ArrowLeft size={18} />{isEn ? 'Back to home' : 'Tilbake til forsiden'}</Link>
+          <div className="legal-hero">
+            <Link to="/" className="legal-back"><ArrowLeft size={18} />{isEn ? 'Back to home' : 'Tilbake til forsiden'}</Link>
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mx-auto sm:mx-0">
               <Shield size={24} />
             </div>
@@ -79,7 +79,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           {/* Quick Summary Cards */}
-          <div className="privacy-summary">
+          <div className="legal-summary">
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
               <div className="text-primary"><Lock size={18} /></div>
               <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
@@ -110,7 +110,7 @@ export default function PrivacyPolicyPage() {
           </div>
 
           {/* Detailed sections */}
-          <div className="privacy-details">
+          <div className="legal-details">
             <section className="space-y-3">
               <h2 className="font-sans text-lg sm:text-xl font-bold text-primary">
                 <CmsText slug="privacy-sec1-title" fallback={isEn ? '1. Overview of Data We Collect' : '1. Hvilke opplysninger vi samler inn'} />

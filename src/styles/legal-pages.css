@@ -1,0 +1,27 @@
+.legal-page .legal-main { width:min(1120px,calc(100% - 48px)); margin:0 auto; padding:56px 0 72px; }
+.legal-page .legal-hero { padding:0 0 36px; border-bottom:1px solid #ddd4e7; }
+.legal-page .legal-back { display:inline-flex; align-items:center; gap:8px; color:var(--purple); margin-bottom:28px; font-size:15px; font-weight:600; }
+.legal-page .legal-hero > div { margin:0 0 18px; background:#ebe3f2; color:var(--purple); border-radius:16px; }
+.legal-page .legal-hero h1 { color:var(--ink); font-size:clamp(30px,4.5vw,48px); line-height:1.15; letter-spacing:-.025em; font-weight:700; margin:0 0 18px; overflow-wrap:anywhere; }
+.legal-page .legal-hero p { font-size:17px; line-height:1.7; color:var(--muted); font-weight:400; max-width:760px; }
+.legal-page .legal-summary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; padding:32px 0; }
+.legal-page .legal-summary > div { border:1px solid #ddd4e7; border-radius:20px; background:var(--paper); padding:24px; }
+.legal-page .legal-summary h3 { font-size:15px; line-height:1.5; color:var(--purple); text-transform:none; letter-spacing:0; margin:12px 0 8px; }
+.legal-page .legal-summary p { font-size:15px; line-height:1.7; font-weight:400; color:var(--muted); }
+.legal-page .legal-details { color:var(--muted); font-size:17px; font-weight:400; line-height:1.8; }
+.legal-page .legal-details section { padding:28px 0; border-bottom:1px solid #ddd4e7; }
+.legal-page .legal-details h2 { color:var(--ink); font-size:23px; line-height:1.4; font-weight:700; margin:0 0 14px; }
+.legal-page .legal-details p { max-width:900px; margin:0; }
+.legal-page .legal-back:focus-visible { outline:2px solid var(--purple); outline-offset:5px; border-radius:4px; }
+@media(max-width:767px) {
+ .legal-page .legal-main { width:calc(100% - 32px); padding:32px 0 48px; }
+ .legal-page .legal-summary { grid-template-columns:1fr; gap:12px; padding:24px 0 8px; }
+ .legal-page .legal-summary > div { padding:20px; }
+ .legal-page .legal-details { font-size:16px; }
+ .legal-page .legal-details h2 { font-size:21px; }
+ .legal-page .legal-hero p { font-size:16px; }
+}
+
+.legal-page .legal-payments { padding:28px 0; border-bottom:1px solid #ddd4e7; font-size:17px; line-height:1.8; color:var(--muted); }
+.legal-page .legal-payments h2 { color:var(--ink); font-size:23px; line-height:1.4; margin:0 0 14px; }
+@media(max-width:767px) { .legal-page .legal-payments { font-size:16px; } .legal-page .legal-payments h2 { font-size:21px; } }

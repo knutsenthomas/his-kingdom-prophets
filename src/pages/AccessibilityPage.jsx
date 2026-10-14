@@ -1,22 +1,22 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
-import { Eye, ArrowLeft, Globe, Zap, CheckCircle, HeartHandshake } from 'lucide-react';
-import logo from '@/assets/logo.png';
+import { Eye, ArrowLeft, Zap, CheckCircle, HeartHandshake } from 'lucide-react';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SeoHead from '@/components/SeoHead';
+import '@/styles/hkpc-redesign.css';
+import '@/styles/legal-pages.css';
 
 export default function AccessibilityPage() {
-  const navigate = useNavigate();
-  const { language, toggleLanguage } = useApp();
+  const { language } = useApp();
 
   const isEn = language === 'en';
 
   return (
-    <div className="bg-[#F6F4F8] min-h-screen flex flex-col font-sans text-slate-800">
+    <div className="hkpc-landing legal-page min-h-screen flex flex-col">
       <SeoHead
         title={isEn ? "Accessibility Statement (WCAG 2.1) | HKPC" : "Tilgjengelighetserklæring (WCAG 2.1) | HKPC"}
         description={isEn 
@@ -58,14 +58,15 @@ export default function AccessibilityPage() {
       <SiteHeader />
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-[1000px] mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16">
+      <main className="legal-main flex-1">
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white border border-slate-200/60 rounded-2xl p-5 sm:p-8 md:p-12 shadow-sm space-y-8"
+          className="legal-content"
         >
           {/* Hero */}
-          <div className="space-y-4 border-b border-slate-100 pb-8 text-center sm:text-left">
+          <div className="legal-hero">
+            <Link to="/" className="legal-back"><ArrowLeft size={18} />{isEn ? 'Back to home' : 'Tilbake til forsiden'}</Link>
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mx-auto sm:mx-0">
               <Eye size={24} />
             </div>
@@ -78,7 +79,7 @@ export default function AccessibilityPage() {
           </div>
 
           {/* Core Commitments */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="legal-summary">
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
               <div className="text-primary"><Zap size={18} /></div>
               <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
@@ -109,7 +110,7 @@ export default function AccessibilityPage() {
           </div>
 
           {/* Details */}
-          <div className="space-y-6 pt-4 text-slate-700 leading-relaxed text-xs sm:text-sm font-medium">
+          <div className="legal-details">
             <section className="space-y-3">
               <h2 className="font-sans text-lg sm:text-xl font-bold text-primary">
                 <CmsText slug="accessibility-sec1-title" fallback={isEn ? '1. Our Commitment' : '1. Vår forpliktelse'} />

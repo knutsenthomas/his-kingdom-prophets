@@ -1,23 +1,23 @@
 import SiteText from '@/components/SiteText';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion } from 'framer-motion';
-import { Scale, ArrowLeft, Globe, HelpCircle, AlertOctagon, UserPlus } from 'lucide-react';
-import logo from '@/assets/logo.png';
+import { Scale, ArrowLeft, HelpCircle, AlertOctagon, UserPlus } from 'lucide-react';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import SeoHead from '@/components/SeoHead';
+import '@/styles/hkpc-redesign.css';
+import '@/styles/legal-pages.css';
 
 export default function TermsOfServicePage() {
-  const navigate = useNavigate();
-  const { language, toggleLanguage } = useApp();
+  const { language } = useApp();
 
   const isEn = language === 'en';
 
   return (
-    <div className="bg-[#F6F4F8] min-h-screen flex flex-col font-sans text-slate-800">
+    <div className="hkpc-landing legal-page min-h-screen flex flex-col">
       <SeoHead
         title={isEn ? "Terms of Service | HKPC" : "Brukervilkår & Betingelser | HKPC"}
         description={isEn 
@@ -59,14 +59,15 @@ export default function TermsOfServicePage() {
       <SiteHeader />
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-[1000px] mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16">
+      <main className="legal-main flex-1">
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white border border-slate-200/60 rounded-2xl p-5 sm:p-8 md:p-12 shadow-sm space-y-8"
+          className="legal-content"
         >
           {/* Hero */}
-          <div className="space-y-4 border-b border-slate-100 pb-8 text-center sm:text-left">
+          <div className="legal-hero">
+            <Link to="/" className="legal-back"><ArrowLeft size={18} />{isEn ? 'Back to home' : 'Tilbake til forsiden'}</Link>
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mx-auto sm:mx-0">
               <Scale size={24} />
             </div>
@@ -79,7 +80,7 @@ export default function TermsOfServicePage() {
           </div>
 
           {/* Key Terms Summarized */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="legal-summary">
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
               <div className="text-primary"><UserPlus size={18} /></div>
               <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
@@ -109,7 +110,7 @@ export default function TermsOfServicePage() {
             </div>
           </div>
 
-          <section className="space-y-3 text-sm leading-relaxed" id="payments">
+          <section className="legal-payments" id="payments">
             <h2 className="text-xl font-bold text-primary"><SiteText fallback={isEn ? 'School payments and monthly gifts' : 'Skolebetaling og faste gaver'} /></h2>
             <p><SiteText fallback={isEn ? 'School fees are NOK 10,000 per year. The monthly agreement consists of 10 payments of NOK 1,000, starting on setup, and ends automatically after 10 instalments. The NOK 1,000 registration fee covers NOK 500 for administration and NOK 500 for meals and accommodation at kickoff. It may be paid separately or included in the monthly plan, making 10 payments of NOK 1,100. Any registered payment of this fee is deducted before the plan is created.' : 'Studieavgiften er 10 000 kr per år. Den månedlige avtalen består av 10 trekk à 1 000 kr, med første betaling ved oppstart. Avtalen avsluttes automatisk etter 10 terminer. Registreringsavgiften på 1 000 kr dekker 500 kr for administrasjon og 500 kr for kost og losji på kickoff. Den kan betales separat eller inkluderes i den månedlige avtalen, slik at det blir 10 trekk à 1 100 kr. Registrert betaling av avgiften trekkes fra før avtalen opprettes.'} /></p>
             <p><SiteText fallback={isEn ? 'Monthly gifts continue until you cancel. Contact school@hiskingdomministry.no to change or cancel your agreement. PayPal agreements can also be cancelled in PayPal. Cancelling payments does not itself cancel the study agreement; outstanding tuition must be resolved with the school.' : 'Faste månedlige gaver fortsetter til du avslutter avtalen. Kontakt school@hiskingdomministry.no for å endre eller avslutte avtalen. PayPal-avtaler kan også avsluttes i PayPal. Avslutning av trekk endrer ikke i seg selv studieavtalen; ubetalte skoleterminer avklares med skolen.'} /></p>
@@ -117,7 +118,7 @@ export default function TermsOfServicePage() {
           </section>
 
           {/* Terms content */}
-          <div className="space-y-6 pt-4 text-slate-700 leading-relaxed text-xs sm:text-sm font-medium">
+          <div className="legal-details">
             <section className="space-y-3">
               <h2 className="font-sans text-lg sm:text-xl font-bold text-primary">
                 <CmsText slug="terms-sec1-title" fallback={isEn ? '1. Acceptable Use' : '1. Akseptabel bruk'} />
