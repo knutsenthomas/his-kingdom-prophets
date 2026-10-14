@@ -1,0 +1,36 @@
+/* Contact page follows the shared public site's restrained purple palette. */
+.hkpc-landing.support-page .support-container { width:min(1120px,calc(100% - 48px)); margin-inline:auto; }
+.hkpc-landing.support-page .support-hero { padding:48px 0 32px; background:var(--soft); color:var(--ink); }
+.hkpc-landing.support-page .support-hero .about-back { display:inline-flex; align-items:center; gap:8px; color:var(--purple); margin-bottom:24px; }
+.hkpc-landing.support-page .support-hero .eyebrow { color:var(--purple); font-size:13px; letter-spacing:.1em; font-weight:700; }
+.hkpc-landing.support-page .support-hero h1 { color:var(--ink); font-size:clamp(30px,4vw,48px); line-height:1.15; margin:12px 0 16px; }
+.hkpc-landing.support-page .support-intro { max-width:760px; color:var(--muted); font-size:18px; line-height:1.7; margin:0; }
+.hkpc-landing.support-page .support-content { padding:8px 0 72px; }
+.hkpc-landing.support-page .support-grid { display:grid; grid-template-columns:340px minmax(0,1fr); gap:28px; align-items:start; }
+.hkpc-landing.support-page .support-details,.hkpc-landing.support-page .support-form-column { min-width:0; }
+.hkpc-landing.support-page .support-contact-card { display:flex; align-items:flex-start; gap:16px; padding:24px; background:white; border:1px solid #e4d8ee; border-radius:20px; }
+.hkpc-landing.support-page .support-contact-card > div:last-child { min-width:0; }
+.hkpc-landing.support-page .support-contact-card h4 { margin:0 0 8px; font-size:14px; }
+.hkpc-landing.support-page .support-contact-card p { margin:0; overflow-wrap:anywhere; line-height:1.6; }
+.hkpc-landing.support-page .support-contact-card p:last-child { margin-top:12px; font-size:14px; color:var(--muted); }
+.hkpc-landing.support-page .support-content .support-form-card { padding:28px; border-radius:20px; box-shadow:none; }
+.hkpc-landing.support-page .support-content h2 { font-size:24px; margin:0; }
+.hkpc-landing.support-page .support-content form { margin-top:24px; }
+.hkpc-landing.support-page .support-content input { min-height:48px; padding:12px 14px; }
+.hkpc-landing.support-page .support-content textarea { padding:14px; resize:vertical; min-height:150px; }
+.hkpc-landing.support-page .support-content button[type=submit] { width:auto; padding:12px 22px; border-radius:12px; font-weight:600; }
+@media(max-width:800px) {
+ .hkpc-landing.support-page .support-grid { grid-template-columns:minmax(0,1fr); gap:24px; }
+ .hkpc-landing.support-page .support-details > div { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+ .hkpc-landing.support-page .support-details > div > * { margin-top:0; }
+}
+@media(max-width:540px) {
+ .hkpc-landing.support-page .support-container { width:calc(100% - 32px); }
+ .hkpc-landing.support-page .support-hero { padding:32px 0 24px; }
+ .hkpc-landing.support-page .support-intro { font-size:16px; }
+ .hkpc-landing.support-page .support-details > div { grid-template-columns:minmax(0,1fr); }
+ .hkpc-landing.support-page .support-contact-card { padding:20px; }
+ .hkpc-landing.support-page .support-content .support-form-card { padding:20px; }
+ .hkpc-landing.support-page .support-content h2 { font-size:22px; }
+ .hkpc-landing.support-page .support-content button[type=submit] { width:100%; }
+}

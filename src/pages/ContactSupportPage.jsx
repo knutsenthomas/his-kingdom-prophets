@@ -5,6 +5,7 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Mail, ArrowLeft, Globe, Send, User, HelpCircle, Phone, MapPin, Sparkles } from 'lucide-react';
 import '@/styles/hkpc-redesign.css';
+import '@/styles/support-page.css';
 import CmsText from '@/components/CmsText';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
@@ -99,23 +100,23 @@ export default function ContactSupportPage() {
       {/* Site Header */}
       <SiteHeader />
 
-      <section className="about-page-hero support-hero"><div className="wrap"><Link to="/" className="about-back"><ArrowLeft size={18}/><SiteText fallback={isEn ? 'Back to home' : 'Tilbake til forsiden'} /></Link><p className="eyebrow"><SiteText fallback={isEn ? 'CONTACT THE SCHOOL' : 'KONTAKT SKOLEN'} /></p>
+      <section className="support-hero"><div className="support-container"><Link to="/" className="about-back"><ArrowLeft size={18}/><SiteText fallback={isEn ? 'Back to home' : 'Tilbake til forsiden'} /></Link><p className="eyebrow"><SiteText fallback={isEn ? 'CONTACT THE SCHOOL' : 'KONTAKT SKOLEN'} /></p>
               <h1 >
                 <CmsText slug="support-hero-title" fallback={isEn ? 'Get in Touch with Us' : 'Kontakt Kundestøtte'} />
               </h1>
-              <p className="about-page-intro">
+              <p className="support-intro">
                 <CmsText slug="support-hero-desc" fallback={isEn ? 'Have theological questions, need help with assignments, or experiencing technical glitches? We are here to support your prophetic journey.' : 'Har du teologiske spørsmål, trenger hjelp med oppgaver eller opplever tekniske problemer? Vi er klare til å hjelpe deg videre i din tjeneste.'} />
               </p>
       </div></section>
       {/* Main Container */}
-      <main className="section wrap support-content">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
+      <main className="support-container support-content">
+        <div className="support-grid">
 
           {/* Left Column - Contact Details */}
-          <div className="lg:col-span-5 space-y-6 sm:space-y-8 flex flex-col justify-start">
+          <div className="support-details">
             {/* Quick Contact Details */}
             <div className="space-y-4">
-              <div className="flex items-start gap-4 p-4 bg-white rounded-xl border border-slate-200/50 shadow-sm">
+              <div className="support-contact-card">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
                   <Mail size={18} />
                 </div>
@@ -132,7 +133,7 @@ export default function ContactSupportPage() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 p-4 bg-white rounded-xl border border-slate-200/50 shadow-sm">
+              <div className="support-contact-card">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
                   <MapPin size={18} />
                 </div>
@@ -144,7 +145,7 @@ export default function ContactSupportPage() {
                     <CmsText slug="support-office-name" fallback="His Kingdom Ministry" />
                   </p>
                   <p className="text-[10px] font-medium text-slate-400 mt-0.5">
-                    <CmsText slug="support-office-location" fallback="Norge" />
+                    <CmsText slug="support-office-location" fallback={isEn ? 'Norway' : 'Norge'} />
                   </p>
                 </div>
               </div>
@@ -152,7 +153,7 @@ export default function ContactSupportPage() {
           </div>
 
           {/* Right Column - Interactive Form */}
-          <div className="lg:col-span-7">
+          <div className="support-form-column">
             <AnimatePresence mode="wait">
               {!success ? (
                 <motion.div
@@ -247,7 +248,7 @@ export default function ContactSupportPage() {
                       ) : (
                         <>
                           <Send size={14} />
-                          <span><CmsText slug="support-form-submit" fallback={isEn ? 'Send Message' : 'Send Henvendelse'} /></span>
+                          <span><CmsText slug="support-form-submit" fallback={isEn ? 'Send Message' : 'Send henvendelse'} /></span>
                         </>
                       )}
                     </button>
