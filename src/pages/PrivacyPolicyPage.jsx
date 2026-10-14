@@ -74,7 +74,7 @@ export default function PrivacyPolicyPage() {
               <CmsText slug="privacy-title" fallback={isEn ? 'Privacy Policy' : 'Personvernserklæring'} />
             </h1>
             <p className="text-sm text-slate-500 font-medium">
-              <CmsText slug="privacy-updated" fallback={isEn ? 'Last updated: October 2026. Your privacy and security are paramount to us.' : 'Sist oppdatert: Oktober 2026. Ditt personvern og din sikkerhet er av største betydning for oss.'} />
+              <CmsText slug="privacy-updated" fallback={isEn ? 'Last updated: October 14, 2026. Your privacy and security are paramount to us.' : 'Sist oppdatert: 14. oktober 2026. Ditt personvern og din sikkerhet er av største betydning for oss.'} />
             </p>
           </div>
 
@@ -92,10 +92,10 @@ export default function PrivacyPolicyPage() {
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
               <div className="text-primary"><Eye size={18} /></div>
               <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
-                <CmsText slug="privacy-sharing-title" fallback={isEn ? 'No Third-Party Sharing' : 'Ingen Tredjepartsdeling'} />
+                <CmsText slug="privacy-sharing-title" fallback={isEn ? 'Necessary sharing' : 'Nødvendig deling'} />
               </h3>
               <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                <CmsText slug="privacy-sharing-desc" fallback={isEn ? 'We never sell or distribute your personal or theological data to outside networks.' : 'Vi selger eller distribuerer aldri dine personlige eller teologiske data til eksterne.'} />
+                <CmsText slug="privacy-sharing-desc" fallback={isEn ? 'We do not sell your personal data. Necessary information is shared with His Kingdom Ministry and the service providers that operate the school and process payments.' : 'Vi selger ikke personopplysninger. Nødvendige opplysninger deles med His Kingdom Ministry og tjenesteleverandører som drifter skolen og behandler betalinger.'} />
               </p>
             </div>
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2">
@@ -145,6 +145,14 @@ export default function PrivacyPolicyPage() {
               <p>
                 <CmsText slug="privacy-sec4-desc" fallback={isEn ? 'Our site uses cookies to ensure stable logins and authenticate users. Analytics are gathered using Google Analytics 4 (GA4) under explicit consent rules, ensuring no personal identifiers are tracked without authorization.' : 'Vår plattform bruker informasjonskapsler for å sikre stabil innlogging. Analyse utføres via Google Analytics 4 (GA4) under eksplisitt samtykke, noe som garanterer at ingen personlige identifikatorer spores uten autorisasjon.'} />
               </p>
+            </section>
+
+            <section className="space-y-3" id="payments">
+              <h2><CmsText slug="privacy-payments-title" fallback={isEn ? 'Payments and recurring agreements' : 'Betalinger og faste avtaler'} /></h2>
+              <p><CmsText slug="privacy-payments-data" fallback={isEn ? 'For gifts and school payments, we process the name and email you provide, amount, currency, payment method, purpose, agreement and transaction references, payment status and dates. School payments may also be linked to the student account, school year and allocation between tuition and the registration fee. A message is stored if you choose to provide one.' : 'Ved gaver og skolebetaling behandler vi navn og e-post du oppgir, beløp, valuta, betalingsmåte, formål, avtale- og transaksjonsreferanser, betalingsstatus og datoer. Skolebetaling kan også knyttes til elevkonto, skoleår og fordeling mellom studieavgift og registreringsavgift. En hilsen lagres dersom du velger å oppgi den.'} /></p>
+              <p><CmsText slug="privacy-payments-purpose" fallback={isEn ? 'His Kingdom Ministry processes payments for HKPC. We use this information to establish and administer the agreement you request, schedule recurring payments, verify payments and refunds, update student balances, provide support and maintain accounting records. Only verified payments are registered as received.' : 'His Kingdom Ministry behandler betalinger for HKPC. Opplysningene brukes til å opprette og administrere avtalen du ber om, planlegge faste trekk, kontrollere betalinger og refusjoner, oppdatere elevens betalingsoversikt, gi kundestøtte og dokumentere regnskapet. Bare bekreftede betalinger registreres som mottatt.'} /></p>
+              <p><CmsText slug="privacy-payments-providers" fallback={isEn ? 'Depending on your chosen payment method, necessary payment information is exchanged with Vipps MobilePay, Stripe or PayPal. They process payment credentials under their own privacy notices. We store agreement and transaction references, not full card numbers or security codes. Agreement and payment records are stored in the payment backend on Google Cloud/Firebase.' : 'Avhengig av valgt betalingsmåte utveksles nødvendige betalingsopplysninger med Vipps MobilePay, Stripe eller PayPal. Betalingsleverandørene behandler betalingsmiddelet etter sine egne personvernerklæringer. Vi lagrer avtale- og transaksjonsreferanser, ikke fullstendige kortnumre eller sikkerhetskoder. Avtale- og betalingsopplysninger lagres i betalingssystemet på Google Cloud/Firebase.'} /></p>
+              <p><CmsText slug="privacy-payments-cancellation" fallback={isEn ? 'Recurring gifts continue until you cancel; school plans have at most ten instalments. You can cancel a Vipps agreement in Vipps or through its management link. Cancelling stops future payments, but does not automatically delete earlier transaction records or settle outstanding tuition. Information is retained for agreement administration and as required for accounting and legal claims. Contact us to request access, correction or deletion; accounting obligations may limit deletion.' : 'Faste gaver fortsetter til du sier opp; skoleavtaler har maksimalt ti terminer. Vipps-avtaler kan avsluttes i Vipps eller via avtalens administrasjonslenke. Oppsigelse stopper kommende trekk, men sletter ikke automatisk tidligere transaksjoner eller gjør opp ubetalt skoleavgift. Opplysningene oppbevares for administrasjon av avtalen og så lenge det er nødvendig for regnskap og rettslige krav. Kontakt oss for innsyn, retting eller sletting; regnskapsplikter kan begrense retten til sletting.'} /></p>
             </section>
 
             <section className="space-y-3">
