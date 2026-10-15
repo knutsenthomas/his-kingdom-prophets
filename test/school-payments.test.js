@@ -4,7 +4,7 @@ import { paymentPayload, paymentState } from '../src/lib/school-payments.js';
 const details = { name: 'Payer', email: 'payer@example.com', studentName: 'Student Example', reference: '2027-123' };
 test('school fees are fixed and separated from donations in HKM records', () => {
   const school = paymentPayload({ ...details, gift: false, plan: 'semester', amount: '1' });
-  assert.equal(school.amount, 5000);
+  assert.equal(school.amount, 5500);
   assert.equal(school.customerDetails.fund, 'hkpc');
   assert.equal(school.customerDetails.type, 'Course');
   assert.match(school.customerDetails.message, /Student Example/);
@@ -38,18 +38,21 @@ test('HKM requests preserve school earmarking and fail safely on service errors'
     assert.equal((await paymentRequest('card', payload)).clientSecret, 'test_secret');
     assert.equal(request.url, 'https://createpaymentintent-42bhgdjkcq-uc.a.run.app');
     assert.equal(JSON.parse(request.body).customerDetails.fund, 'hkpc');
-    assert.equal(JSON.parse(request.body).amount, 10000);
+    assert.equal(JSON.parse(request.body).amount, 11000);
     globalThis.fetch = async () => ({ ok: false, json: async () => ({ error: 'internal configuration' }) });
     await assert.rejects(paymentRequest('card', payload), /payment-service-unavailable/);
   } finally { globalThis.fetch = original; }
 });
 
-test('monthly plan is distinct from a one-time instalment', async () => {
+test('school choices include updated fees and remove the single instalment', async () => {
   const { SCHOOL_PAYMENTS } = await import('../src/lib/school-payments.js');
-  assert.equal(SCHOOL_PAYMENTS.find(plan => plan.id === 'monthly').amount, 1000);
-  assert.equal(SCHOOL_PAYMENTS.find(plan => plan.id === 'instalment').amount, 1000);
-  const payload = paymentPayload({ ...details, gift: false, plan: 'instalment' });
-  assert.equal(payload.customerDetails.courseId, 'hkpc-instalment');
+  assert.deepEqual(SCHOOL_PAYMENTS.map(plan => plan.id), ['monthly', 'semester', 'annual', 'kickoff']);
+  for (const [plan, amount] of [['semester', 5500], ['annual', 11000], ['kickoff', 500]]) {
+    const payload = paymentPayload({ ...details, gift: false, plan });
+    assert.equal(payload.amount, amount);
+    assert.equal(payload.customerDetails.courseId, `hkpc-${plan}`);
+  }
+  assert.throws(() => paymentPayload({ ...details, gift: false, plan: 'instalment' }));
 });
 test('a duplicate agreement response is not treated as a new payment attempt', async () => {
   const { paymentRequest } = await import('../src/lib/school-payments.js');

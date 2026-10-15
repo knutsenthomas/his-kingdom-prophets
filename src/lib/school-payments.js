@@ -12,10 +12,9 @@ const endpoints = {
 };
 export const SCHOOL_PAYMENTS = [
   { id: 'monthly', amount: 1000, no: 'Månedlig avtale · 10 trekk', en: 'Monthly plan · 10 payments' },
-  { id: 'instalment', amount: 1000, no: 'Betal én enkelttermin', en: 'Pay one instalment' },
-  { id: 'semester', amount: 5000, no: 'Ett halvår', en: 'One semester' },
-  { id: 'annual', amount: 10000, no: 'Hele studieåret', en: 'Full school year' },
-  { id: 'registration', amount: 1000, no: 'Registreringsavgift', en: 'Registration fee' },
+  { id: 'semester', amount: 5500, no: 'Ett halvår', en: 'One semester' },
+  { id: 'annual', amount: 11000, no: 'Hele studieåret', en: 'Full school year' },
+  { id: 'kickoff', amount: 500, no: 'Kickoff', en: 'Kickoff' },
 ];
 export function paymentPayload({ gift, plan, amount, name, email, studentName, reference, message }) {
   const selected = SCHOOL_PAYMENTS.find(item => item.id === plan);
