@@ -74,7 +74,7 @@ export default function PrivacyPolicyPage() {
               <CmsText slug="privacy-title" fallback={isEn ? 'Privacy Policy' : 'Personvernserklæring'} />
             </h1>
             <p className="text-sm text-slate-500 font-medium">
-              <CmsText slug="privacy-updated" fallback={isEn ? 'Last updated: October 14, 2026. Your privacy and security are paramount to us.' : 'Sist oppdatert: 14. oktober 2026. Ditt personvern og din sikkerhet er av største betydning for oss.'} />
+              <CmsText slug="privacy-updated" fallback={isEn ? 'Last updated: October 15, 2026. Your privacy and security are paramount to us.' : 'Sist oppdatert: 15. oktober 2026. Ditt personvern og din sikkerhet er av største betydning for oss.'} />
             </p>
           </div>
 
@@ -162,6 +162,11 @@ export default function PrivacyPolicyPage() {
               <p>
                 <CmsText slug="privacy-sec5-desc" fallback={isEn ? 'If you have questions, wish to access your stored data, or request permanent deletion of your profile under GDPR guidelines, please contact us at school@hiskingdomministry.no or post@hiskingdomministry.no.' : 'Dersom du har spørsmål, ønsker innsyn i dine lagrede data, eller ber om sletting av profilen din i henhold til GDPR, vennligst kontakt oss på school@hiskingdomministry.no eller post@hiskingdomministry.no.'} />
               </p>
+            </section>
+            <section id="video-progress" className="space-y-3">
+              <h2>{isEn ? 'Video viewing and learning progress' : 'Videovisning og studieprogresjon'}</h2>
+              <p>{isEn ? 'When you play a teaching recording in the updated HKP Community app, we store your user ID, name, recording ID, played sections, percentage watched and the time of your last recorded viewing. Your progress is visible to you and authorised school teachers and administrators for educational follow-up. Other students cannot see it. This is separate from website traffic analytics.' : 'Når du spiller av et undervisningsopptak i den oppdaterte HKP Community-appen, lagrer vi bruker-ID, navn, opptaks-ID, avspilte deler, sett prosent og tidspunkt for sist registrerte visning. Progresjonen er tilgjengelig for deg og skolens autoriserte lærere og administratorer for oppfølging av undervisningen. Andre elever kan ikke se den. Dette er adskilt fra besøksanalyse på nettsiden.'}</p>
+              <p>{isEn ? 'A recording is marked completed after at least 90% has been played. This does not confirm attention, learning outcomes or formal attendance. Playback outside the app is not recorded here. Previous viewing cannot be reconstructed. Progress is stored with your school account; contact us to request access, correction or deletion as described below.' : 'Et opptak markeres som fullført når minst 90 % er avspilt. Dette bekrefter ikke oppmerksomhet, læringsutbytte eller formelt oppmøte. Avspilling utenfor appen registreres ikke her. Tidligere visninger kan ikke rekonstrueres. Progresjonen lagres med skolekontoen din; kontakt oss for innsyn, retting eller sletting som beskrevet nedenfor.'}</p>
             </section>
             <section id="delete-account" className="space-y-3" style={{ scrollMarginTop: '110px' }}>
               <h2>{isEn ? 'Delete your HKP Community account and data' : 'Slett HKP Community-kontoen og dine data'}</h2>
