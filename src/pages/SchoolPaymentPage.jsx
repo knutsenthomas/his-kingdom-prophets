@@ -1,3 +1,4 @@
+import SchoolCampaignLink from '@/components/SchoolCampaignLink';
 import CmsText from '@/components/CmsText';
 import SiteText from '@/components/SiteText';
 import React, { useEffect, useRef, useState } from 'react';
@@ -223,6 +224,7 @@ export default function SchoolPaymentPage({ gift = false }) {
           <div className="payment-trust"><LockKeyhole size={20} /><p><SiteText fallback={text(gift ? 'Betal med kort, Vipps, PayPal eller bankoverføring. Betalingen behandles i His Kingdom Ministry sitt betalingssystem.' : 'Betal med kort, Vipps, PayPal eller bankoverføring. Betalingen behandles i His Kingdom Ministry sitt betalingssystem.', gift ? 'Pay by card, Vipps, PayPal or bank transfer through His Kingdom Ministry’s payment system.' : 'Pay by card, Vipps, PayPal or bank transfer through His Kingdom Ministry’s payment system.')} /></p></div>
           {gift && <a className="payment-help" href="https://buymeacoffee.com/Hiskingdomministry" target="_blank" rel="noopener noreferrer"><SiteText fallback={text('Støtt HKM via Buy Me a Coffee', 'Support HKM via Buy Me a Coffee')} /><ArrowRight size={17}/></a>}
           <Link to="/support" className="payment-help"><SiteText fallback={text('Spørsmål om betaling?', 'Questions about payment?')} /><ArrowRight size={17} /></Link>
+          {gift && <SchoolCampaignLink />}
         </aside>
         <div className="payment-card">
           {result ? <div className={`payment-result payment-result-${result}`} role="status"><CheckCircle2 size={38} /><h2><SiteText fallback={text(result === 'agreement-active' ? 'Avtalen er aktivert.' : result === 'success' ? 'Takk! Betalingen er fullført.' : result === 'pending' ? 'Betalingen behandles.' : result === 'unverified' ? 'Betalingsstatus er ikke bekreftet.' : 'Betalingen ble ikke fullført.', result === 'agreement-active' ? 'Your agreement is active.' : result === 'success' ? 'Thank you! Payment complete.' : result === 'pending' ? 'Your payment is processing.' : result === 'unverified' ? 'Payment status is unconfirmed.' : 'Payment was not completed.')} /></h2><p><SiteText fallback={text(result === 'agreement-active' ? (gift ? 'Takk for din faste støtte. Hver betaling registreres når den er bekreftet.' : 'Skoleavtalen er opprettet med 10 månedlige terminer. Hver termin registreres når betalingen er bekreftet.') : result === 'success' ? (gift ? 'Takk for at du støtter skolen.' : 'Skolen kan nå følge opp betalingen din.') : result === 'pending' ? 'Vent på bekreftelse før du forsøker å betale igjen.' : result === 'unverified' ? 'Kontakt oss før du betaler på nytt.' : 'Du kan forsøke igjen, eller kontakte oss hvis du er usikker.', result === 'agreement-active' ? 'Your monthly agreement is active. Each payment is recorded after confirmation.' : result === 'success' ? 'Thank you for supporting the school.' : result === 'pending' ? 'Wait for confirmation before trying to pay again.' : result === 'unverified' ? 'Contact us before paying again.' : 'Try again, or contact us if you are unsure.')} /></p><Link className="payment-help" to="/support"><SiteText fallback={text('Kontakt oss', 'Contact us')} /><ArrowRight size={17}/></Link>{result === 'failed' && <button className="payment-submit" onClick={() => { setResult(null); setCheckout(null); }}><SiteText fallback={text('Prøv igjen', 'Try again')} /></button>}</div> : checkout ?
@@ -268,6 +270,7 @@ export default function SchoolPaymentPage({ gift = false }) {
           {error && <p className="payment-error" role="alert">{error}</p>}
           {busy && !checkout && <p className="payment-note" role="status"><SiteText fallback={text('Vennligst vent …', 'Please wait …')} /></p>}
         </div>
+      {!gift && <p className="payment-campaign-note"><SiteText fallback={text('Vil du også bidra til oppstartssamlingen?', 'Would you also like to support the opening gathering?')} /> <SchoolCampaignLink compact /></p>}
       </div></section>
     </main><SiteFooter />
   </div>;

@@ -1,3 +1,4 @@
+import SchoolCampaignLink from '@/components/SchoolCampaignLink';
 import SiteText from '@/components/SiteText';
 import React from 'react';
 import { motion } from 'framer-motion';
@@ -27,6 +28,7 @@ export default function LandingIntake() {
       <motion.div variants={fadeInUp}>
         <small><SiteText fallback={language === 'no' ? 'Oppstartssamling i Norge' : 'Opening gathering in Norway'} /></small>
         <strong><SiteText fallback={language === 'no' ? '20.–22. august 2027' : 'August 20–22, 2027'} /></strong>
+        <SchoolCampaignLink compact />
       </motion.div>
       <motion.div variants={fadeInUp}>
         <small><SiteText fallback={language === 'no' ? 'Undervisning' : 'Instruction'} /></small>
