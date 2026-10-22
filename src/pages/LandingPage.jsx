@@ -1,3 +1,4 @@
+import SchoolCampaignLink from '@/components/SchoolCampaignLink';
 import React from 'react';
 import { useApp } from '@/contexts/AppContext';
 import SiteHeader from '@/components/SiteHeader';
@@ -38,6 +39,7 @@ export default function LandingPage() {
       <main>
         <LandingHero />
         <LandingIntake />
+        <div className="wrap"><SchoolCampaignLink /></div>
         <LandingWelcome />
         <LandingPrograms />
         <LandingCurriculum />
