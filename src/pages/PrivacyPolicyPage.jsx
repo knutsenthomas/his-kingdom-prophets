@@ -74,7 +74,7 @@ export default function PrivacyPolicyPage() {
               <CmsText slug="privacy-title" fallback={isEn ? 'Privacy Policy' : 'Personvernserklæring'} />
             </h1>
             <p className="text-sm text-slate-500 font-medium">
-              <CmsText slug="privacy-updated" fallback={isEn ? 'Last updated: October 15, 2026. Your privacy and security are paramount to us.' : 'Sist oppdatert: 15. oktober 2026. Ditt personvern og din sikkerhet er av største betydning for oss.'} />
+              {isEn ? 'Last updated: October 22, 2026.' : 'Sist oppdatert: 22. oktober 2026.'}
             </p>
           </div>
 
