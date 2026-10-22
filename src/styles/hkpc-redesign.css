@@ -3465,7 +3465,7 @@
 .hkpc-landing .footer-link-groups nav { display:flex; flex-direction:column; align-items:flex-start; gap:8px; }
 .hkpc-landing .footer-layout h2 { font:700 15px 'DM Sans',Arial,sans-serif; color:var(--ink); margin:0 0 16px; }
 .hkpc-landing .footer-link-groups h2 { text-transform:uppercase; letter-spacing:.06em; }
-.hkpc-landing .footer-link-groups a { font:500 14px/1.5 'DM Sans',Arial,sans-serif; color:var(--muted); text-decoration:none; min-height:36px; display:inline-flex; align-items:center; gap:8px; }
+.hkpc-landing .footer-link-groups a, .hkpc-landing .footer-cookie-settings { font:500 14px/1.5 'DM Sans',Arial,sans-serif; color:var(--muted); text-decoration:none; min-height:36px; display:inline-flex; align-items:center; gap:8px; }
 .hkpc-landing .footer-layout a:hover { color:var(--purple,#561291); }
 .hkpc-landing .footer-layout a:focus-visible { outline:2px solid #561291; outline-offset:4px; }
 .hkpc-landing .footer-contact-card { background:#f6f2fa; border:1px solid #e4d8ee; border-radius:20px; padding:28px; }
@@ -3519,3 +3519,6 @@
 .hkpc-landing .payment-currency select { width:100%; max-width:360px; min-height:48px; padding:10px 14px; border:1px solid #e4d8ee; border-radius:12px; background:white; font:inherit; }
 .hkpc-landing .payment-currency select:focus-visible { outline:2px solid #561291; outline-offset:2px; }
 .hkpc-landing .payment-converted { display:block; font-size:14px; font-weight:400; color:var(--muted); margin-top:4px; }
+
+.hkpc-landing .footer-cookie-settings { background:none; border:0; padding:0; text-align:left; cursor:pointer; }
+.hkpc-landing .footer-cookie-settings:hover { color:var(--primary, #561291); text-decoration:underline; }
