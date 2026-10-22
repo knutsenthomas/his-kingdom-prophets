@@ -19,3 +19,23 @@ export function cleanAnalyticsEvent(event) {
     return { ...event, url: url.origin + url.pathname };
   } catch { return null; }
 }
+
+export function googleConsentState(analytics) {
+  return { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: analytics ? 'granted' : 'denied' };
+}
+export function initializeConsentMode(target = window) {
+  if (target.hkpcConsentInitialized) return;
+  target.dataLayer = target.dataLayer || [];
+  target.gtag = target.gtag || function () { target.dataLayer.push(arguments); };
+  target.gtag('consent', 'default', googleConsentState(false));
+  target.gtag('set', 'ads_data_redaction', true);
+  target['ga-disable-G-03629NPBTY'] = true;
+  target.hkpcConsentInitialized = true;
+}
+export function updateConsentMode(analytics, target = window) {
+  initializeConsentMode(target);
+  target.gtag('consent', 'update', googleConsentState(analytics));
+}
+export function analyticsAllowed(consent, privacySignal = false) {
+  return consent?.analytics === true && privacySignal !== true;
+}

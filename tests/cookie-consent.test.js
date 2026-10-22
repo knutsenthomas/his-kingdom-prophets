@@ -14,3 +14,17 @@ test('sensitive and unknown routes are excluded and public URLs are sanitized', 
  assert.equal(cleanAnalyticsEvent({url:'https://www.hkpc.no/betaling?email=private@example.no'}),null);
  assert.deepEqual(cleanAnalyticsEvent({url:'https://www.hkpc.no/about?email=private@example.no#secret',type:'pageview'}),{url:'https://www.hkpc.no/about',type:'pageview'});
 });
+
+import { initializeConsentMode, updateConsentMode, analyticsAllowed } from '../src/utils/cookieConsent.js';
+test('Consent Mode v2 defaults denied before updates and ads always remain denied', () => {
+ const target={}; initializeConsentMode(target); initializeConsentMode(target);
+ assert.equal(target.dataLayer.length,2);
+ assert.deepEqual(Array.from(target.dataLayer[0]),['consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied'}]);
+ updateConsentMode(true,target); assert.equal(target.dataLayer[2][1],'update'); assert.equal(target.dataLayer[2][2].analytics_storage,'granted'); assert.equal(target.dataLayer[2][2].ad_user_data,'denied');
+ updateConsentMode(false,target); assert.equal(target.dataLayer[3][2].analytics_storage,'denied');
+});
+test('Global Privacy Control overrides previous and newly granted analytics consent',()=>{
+ assert.equal(analyticsAllowed({analytics:true},true),false);
+ assert.equal(analyticsAllowed({analytics:true},false),true);
+ assert.equal(analyticsAllowed(null,false),false);
+});
