@@ -1,35 +1,78 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useApp } from '@/contexts/AppContext';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  BookOpen, Search, ArrowLeft, ArrowRight, Copy, Check, RefreshCw, Sparkles, BookMarked, X,
-  Trash2, Save, Globe, Video, FileText, Calendar, Compass, UserCheck, Flame, BookText, Settings,
-  ChevronDown, Maximize2, Minimize2, Type, Edit3, Users, History
-} from 'lucide-react';
-import logo from '@/assets/logo.png';
-import CmsText from '@/components/CmsText';
-import SiteHeader from '@/components/SiteHeader';
-import SiteFooter from '@/components/SiteFooter';
-import { generateFastingPdf, generateIntercessionPdf } from '@/utils/pdfGenerator';
-import { 
-  BIBLE_BOOKS, TRANSLATIONS, STUDY_BIBLE_DATA, 
-  parseBibleReference, findBibleBook, generateDynamicCommentary 
-} from '@/lib/bibleData';
-import { biblicalCharacters } from '@/lib/bibelske-personer-data';
-import { timelineData, empiresData } from '@/lib/timelineData';
+import BibleStudyCenter from "../features/bible-resources/panels/BibleStudyCenter";
+import ResourcesTimeline from "../features/bible-resources/panels/ResourcesTimeline";
+import ResourcesSelector from "../features/bible-resources/panels/ResourcesSelector";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useApp } from "@/contexts/AppContext";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  BookOpen,
+  Search,
+  ArrowLeft,
+  ArrowRight,
+  Copy,
+  Check,
+  RefreshCw,
+  Sparkles,
+  BookMarked,
+  X,
+  Trash2,
+  Save,
+  Globe,
+  Video,
+  FileText,
+  Calendar,
+  Compass,
+  UserCheck,
+  Flame,
+  BookText,
+  Settings,
+  ChevronDown,
+  Maximize2,
+  Minimize2,
+  Type,
+  Edit3,
+  Users,
+  History,
+} from "lucide-react";
+import logo from "@/assets/logo.png";
+import CmsText from "@/components/CmsText";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
+import {
+  generateFastingPdf,
+  generateIntercessionPdf,
+} from "@/utils/pdfGenerator";
+import {
+  BIBLE_BOOKS,
+  TRANSLATIONS,
+  STUDY_BIBLE_DATA,
+  parseBibleReference,
+  findBibleBook,
+  generateDynamicCommentary,
+} from "@/lib/bibleData";
+import { biblicalCharacters } from "@/lib/bibelske-personer-data";
+import { timelineData, empiresData } from "@/lib/timelineData";
 
 export default function BibleResourcesPage() {
   const navigate = useNavigate();
-  const { language, toggleLanguage, user, cmsContent, isAdminEditing, setIsAdminEditing, showToast } = useApp();
-  const isEn = language === 'en';
+  const {
+    language,
+    toggleLanguage,
+    user,
+    cmsContent,
+    isAdminEditing,
+    setIsAdminEditing,
+    showToast,
+  } = useApp();
+  const isEn = language === "en";
 
   // Check admin status from both AppContext user AND localStorage (needed for public pages)
-  const ADMIN_EMAILS = ['knutsenthomas@gmail.com', 'thomas@tk-design.no'];
+  const ADMIN_EMAILS = ["knutsenthomas@gmail.com", "thomas@tk-design.no"];
   const cleanEmail = user?.email?.toLowerCase();
   const localStorageUser = (() => {
     try {
-      const raw = localStorage.getItem('hkm-current-user');
+      const raw = localStorage.getItem("hkm-current-user");
       return raw ? JSON.parse(raw) : null;
     } catch {
       return null;
@@ -38,34 +81,38 @@ export default function BibleResourcesPage() {
   const localEmail = localStorageUser?.email?.toLowerCase();
   const localRole = localStorageUser?.role;
 
-  const isAdminUser = 
-    user?.role === 'admin' || 
-    user?.role === 'superadmin' || 
+  const isAdminUser =
+    user?.role === "admin" ||
+    user?.role === "superadmin" ||
     ADMIN_EMAILS.includes(cleanEmail) ||
-    localRole === 'admin' ||
-    localRole === 'superadmin' ||
+    localRole === "admin" ||
+    localRole === "superadmin" ||
     ADMIN_EMAILS.includes(localEmail);
 
   // Navigation tab for the resource hub
-  const [activeTab, setActiveTab] = useState('bible'); // bible, curriculums, video, fasting, characters, timeline
+  const [activeTab, setActiveTab] = useState("bible"); // bible, curriculums, video, fasting, characters, timeline
 
   // Biblical Characters and Timeline States
-  const [characterSearch, setCharacterSearch] = useState('');
+  const [characterSearch, setCharacterSearch] = useState("");
   const [selectedCharacter, setSelectedCharacter] = useState(null);
-  const [timelineSubTab, setTimelineSubTab] = useState('history'); // history, empires
-  const [activeTimelineSection, setActiveTimelineSection] = useState('urhistorien');
+  const [timelineSubTab, setTimelineSubTab] = useState("history"); // history, empires
+  const [activeTimelineSection, setActiveTimelineSection] =
+    useState("urhistorien");
   const [returnOriginTab, setReturnOriginTab] = useState(null);
 
   // Interactive Bible States (Same as BibleView)
-  const [selectedBook, setSelectedBook] = useState(BIBLE_BOOKS.find(b => b.id === 'joh'));
+  const [selectedBook, setSelectedBook] = useState(
+    BIBLE_BOOKS.find((b) => b.id === "joh"),
+  );
   const [selectedChapter, setSelectedChapter] = useState(3);
-  const [selectedTranslation, setSelectedTranslation] = useState('bibelselskap');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTranslation, setSelectedTranslation] =
+    useState("bibelselskap");
+  const [searchQuery, setSearchQuery] = useState("");
   const [verses, setVerses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
   const [highlightedVerse, setHighlightedVerse] = useState(null);
-  const [testamentFilter, setTestamentFilter] = useState('all'); // all, GT, NT
+  const [testamentFilter, setTestamentFilter] = useState("all"); // all, GT, NT
   const topRef = useRef(null);
   const readerRef = useRef(null);
   const tabsRef = useRef(null);
@@ -73,12 +120,12 @@ export default function BibleResourcesPage() {
 
   // Fullscreen Mobile Selector States
   const [showMobileSelector, setShowMobileSelector] = useState(false);
-  const [selectorTab, setSelectorTab] = useState('book'); // book, chapter
-  const [selectorSearch, setSelectorSearch] = useState('');
+  const [selectorTab, setSelectorTab] = useState("book"); // book, chapter
+  const [selectorSearch, setSelectorSearch] = useState("");
 
   // Study Panel States
   const [showStudyPanel, setShowStudyPanel] = useState(false);
-  const [studyTab, setStudyTab] = useState('overview'); // overview, commentary, cross, notes
+  const [studyTab, setStudyTab] = useState("overview"); // overview, commentary, cross, notes
   const [isGeneratingCommentary, setIsGeneratingCommentary] = useState(false);
   const [generatedCommentaries, setGeneratedCommentaries] = useState({});
   const [generationStep, setGenerationStep] = useState(0);
@@ -88,25 +135,27 @@ export default function BibleResourcesPage() {
 
   // Fullscreen Reading & Text Sizing States
   const [isFullscreenReading, setIsFullscreenReading] = useState(false);
-  const [textSize, setTextSize] = useState(() => localStorage.getItem('hkm-bible-text-size') || 'md');
+  const [textSize, setTextSize] = useState(
+    () => localStorage.getItem("hkm-bible-text-size") || "md",
+  );
 
   // Text size persistence in localStorage
   useEffect(() => {
-    localStorage.setItem('hkm-bible-text-size', textSize);
+    localStorage.setItem("hkm-bible-text-size", textSize);
   }, [textSize]);
 
   // Lock body scroll in fullscreen mode and toggle body class
   useEffect(() => {
     if (isFullscreenReading) {
-      document.body.style.overflow = 'hidden';
-      document.body.classList.add('bible-reader-fullscreen');
+      document.body.style.overflow = "hidden";
+      document.body.classList.add("bible-reader-fullscreen");
     } else {
-      document.body.style.overflow = '';
-      document.body.classList.remove('bible-reader-fullscreen');
+      document.body.style.overflow = "";
+      document.body.classList.remove("bible-reader-fullscreen");
     }
     return () => {
-      document.body.style.overflow = '';
-      document.body.classList.remove('bible-reader-fullscreen');
+      document.body.style.overflow = "";
+      document.body.classList.remove("bible-reader-fullscreen");
     };
   }, [isFullscreenReading]);
 
@@ -133,16 +182,16 @@ export default function BibleResourcesPage() {
     observer.observe(cardContainerRef.current);
 
     // Also listen to window resize, scroll and sidebar animations
-    window.addEventListener('resize', updatePosition);
-    window.addEventListener('scroll', updatePosition);
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition);
 
     // Dynamic checks during transition animations
     const interval = setInterval(updatePosition, 100);
 
     return () => {
       observer.disconnect();
-      window.removeEventListener('resize', updatePosition);
-      window.removeEventListener('scroll', updatePosition);
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition);
       clearInterval(interval);
     };
   }, [isFullscreenReading]);
@@ -150,24 +199,24 @@ export default function BibleResourcesPage() {
   // Typography Scaling Helper
   const getTextSizeClass = () => {
     switch (textSize) {
-      case 'sm':
-        return 'text-[13px] sm:text-[14px] md:text-[15px] leading-relaxed';
-      case 'md':
-        return 'text-[15px] sm:text-[17px] md:text-lg leading-relaxed sm:leading-loose md:leading-loose';
-      case 'lg':
-        return 'text-[18px] sm:text-[20px] md:text-xl leading-relaxed sm:leading-loose md:leading-loose';
-      case 'xl':
-        return 'text-[21px] sm:text-[23px] md:text-2xl leading-relaxed sm:leading-loose md:leading-loose';
-      case '2xl':
-        return 'text-[24px] sm:text-[26px] md:text-3xl leading-relaxed sm:leading-loose md:leading-loose';
+      case "sm":
+        return "text-[13px] sm:text-[14px] md:text-[15px] leading-relaxed";
+      case "md":
+        return "text-[15px] sm:text-[17px] md:text-lg leading-relaxed sm:leading-loose md:leading-loose";
+      case "lg":
+        return "text-[18px] sm:text-[20px] md:text-xl leading-relaxed sm:leading-loose md:leading-loose";
+      case "xl":
+        return "text-[21px] sm:text-[23px] md:text-2xl leading-relaxed sm:leading-loose md:leading-loose";
+      case "2xl":
+        return "text-[24px] sm:text-[26px] md:text-3xl leading-relaxed sm:leading-loose md:leading-loose";
       default:
-        return 'text-[15px] sm:text-[17px] md:text-lg leading-relaxed sm:leading-loose md:leading-loose';
+        return "text-[15px] sm:text-[17px] md:text-lg leading-relaxed sm:leading-loose md:leading-loose";
     }
   };
 
   // Personal Study Notes States
-  const [noteText, setNoteText] = useState('');
-  const [noteSaveStatus, setNoteSaveStatus] = useState('idle'); // idle, loading, saving, saved, error
+  const [noteText, setNoteText] = useState("");
+  const [noteSaveStatus, setNoteSaveStatus] = useState("idle"); // idle, loading, saving, saved, error
   const saveTimeoutRef = useRef(null);
 
   // Load notes for current book and chapter
@@ -175,15 +224,15 @@ export default function BibleResourcesPage() {
     const loadNote = () => {
       if (!selectedBook) return;
       const refKey = `${selectedBook.id}_${selectedChapter}`;
-      const cacheKey = `hkm-bible-note-${user?.uid || 'guest'}-${refKey}`;
-      
+      const cacheKey = `hkm-bible-note-${user?.uid || "guest"}-${refKey}`;
+
       const cached = localStorage.getItem(cacheKey);
-      setNoteText(cached || '');
-      setNoteSaveStatus(cached ? 'saved' : 'idle');
+      setNoteText(cached || "");
+      setNoteSaveStatus(cached ? "saved" : "idle");
     };
 
     loadNote();
-    
+
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current);
     }
@@ -192,40 +241,47 @@ export default function BibleResourcesPage() {
   const handleSaveNote = (textToSave = noteText) => {
     if (!selectedBook) return;
     const refKey = `${selectedBook.id}_${selectedChapter}`;
-    const cacheKey = `hkm-bible-note-${user?.uid || 'guest'}-${refKey}`;
-    
+    const cacheKey = `hkm-bible-note-${user?.uid || "guest"}-${refKey}`;
+
     localStorage.setItem(cacheKey, textToSave);
-    setNoteSaveStatus('saving');
-    
+    setNoteSaveStatus("saving");
+
     setTimeout(() => {
-      setNoteSaveStatus('saved');
+      setNoteSaveStatus("saved");
     }, 400);
   };
 
   const handleNoteChange = (e) => {
     const text = e.target.value;
     setNoteText(text);
-    setNoteSaveStatus('idle');
-    
+    setNoteSaveStatus("idle");
+
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current);
     }
-    
+
     saveTimeoutRef.current = setTimeout(() => {
       handleSaveNote(text);
     }, 1500);
   };
 
   const handleClearNote = () => {
-    if (!window.confirm(isEn ? "Are you sure you want to delete this note?" : "Er du sikker på at du vil slette notatet?")) return;
+    if (
+      !window.confirm(
+        isEn
+          ? "Are you sure you want to delete this note?"
+          : "Er du sikker på at du vil slette notatet?",
+      )
+    )
+      return;
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current);
     }
     const refKey = `${selectedBook.id}_${selectedChapter}`;
-    const cacheKey = `hkm-bible-note-${user?.uid || 'guest'}-${refKey}`;
+    const cacheKey = `hkm-bible-note-${user?.uid || "guest"}-${refKey}`;
     localStorage.removeItem(cacheKey);
-    setNoteText('');
-    setNoteSaveStatus('idle');
+    setNoteText("");
+    setNoteSaveStatus("idle");
   };
 
   // Reset verse selection when book or chapter changes
@@ -235,9 +291,9 @@ export default function BibleResourcesPage() {
 
   const toggleVerseSelection = (verseNum) => {
     setHighlightedVerse(verseNum); // Sett denne som aktivt fokusvers for studier og kryssreferanser
-    setSelectedVerses(prev => {
+    setSelectedVerses((prev) => {
       if (prev.includes(verseNum)) {
-        return prev.filter(num => num !== verseNum);
+        return prev.filter((num) => num !== verseNum);
       } else {
         return [...prev, verseNum].sort((a, b) => a - b);
       }
@@ -247,14 +303,27 @@ export default function BibleResourcesPage() {
   const handleBulkCopy = () => {
     if (selectedVerses.length === 0) return;
     const sortedVerses = [...selectedVerses].sort((a, b) => a - b);
-    const targets = sortedVerses.map(num => verses.find(v => v.verse === num)).filter(Boolean);
-    const combinedText = targets.map(v => `[${v.verse}] ${v.text.trim()}`).join(' ');
-    const verseRange = sortedVerses.length === 1 ? `${sortedVerses[0]}` : `${sortedVerses[0]}-${sortedVerses[sortedVerses.length - 1]}`;
-    const translationName = TRANSLATIONS.find(t => t.id === selectedTranslation)?.name || selectedTranslation.toUpperCase();
-    
+    const targets = sortedVerses
+      .map((num) => verses.find((v) => v.verse === num))
+      .filter(Boolean);
+    const combinedText = targets
+      .map((v) => `[${v.verse}] ${v.text.trim()}`)
+      .join(" ");
+    const verseRange =
+      sortedVerses.length === 1
+        ? `${sortedVerses[0]}`
+        : `${sortedVerses[0]}-${sortedVerses[sortedVerses.length - 1]}`;
+    const translationName =
+      TRANSLATIONS.find((t) => t.id === selectedTranslation)?.name ||
+      selectedTranslation.toUpperCase();
+
     const textToCopy = `"${combinedText}" — ${selectedBook.nor} ${selectedChapter}:${verseRange} (${translationName})`;
     navigator.clipboard.writeText(textToCopy);
-    alert(isEn ? `${selectedVerses.length} verses copied!` : `${selectedVerses.length} vers kopiert!`);
+    alert(
+      isEn
+        ? `${selectedVerses.length} verses copied!`
+        : `${selectedVerses.length} vers kopiert!`,
+    );
     setSelectedVerses([]);
   };
 
@@ -268,21 +337,23 @@ export default function BibleResourcesPage() {
   const handleGenerateCommentary = () => {
     setIsGeneratingCommentary(true);
     setGenerationStep(0);
-    
-    const steps = isEn ? [
-      "Searching the holy scriptures...",
-      "Analyzing theological context...",
-      "Consulting Greek & Hebrew texts...",
-      "Drafting exegetical commentary...",
-      "Finalizing commentary study..."
-    ] : [
-      "Søker i de hellige skrifter...",
-      "Analyserer teologisk kontekst...",
-      "Slår opp gresk og hebraisk grunntekst...",
-      "Utarbeider eksegetisk kommentar...",
-      "Ferdigstiller studiekommentar..."
-    ];
-    
+
+    const steps = isEn
+      ? [
+          "Searching the holy scriptures...",
+          "Analyzing theological context...",
+          "Consulting Greek & Hebrew texts...",
+          "Drafting exegetical commentary...",
+          "Finalizing commentary study...",
+        ]
+      : [
+          "Søker i de hellige skrifter...",
+          "Analyserer teologisk kontekst...",
+          "Slår opp gresk og hebraisk grunntekst...",
+          "Utarbeider eksegetisk kommentar...",
+          "Ferdigstiller studiekommentar...",
+        ];
+
     let currentStep = 0;
     const interval = setInterval(() => {
       currentStep++;
@@ -291,13 +362,16 @@ export default function BibleResourcesPage() {
       } else {
         clearInterval(interval);
         const refKey = `${selectedBook.id}_${selectedChapter}`;
-        const computed = generateDynamicCommentary(selectedBook, selectedChapter);
-        setGeneratedCommentaries(prev => ({
+        const computed = generateDynamicCommentary(
+          selectedBook,
+          selectedChapter,
+        );
+        setGeneratedCommentaries((prev) => ({
           ...prev,
-          [refKey]: computed
+          [refKey]: computed,
         }));
         setIsGeneratingCommentary(false);
-        setStudyTab('overview');
+        setStudyTab("overview");
       }
     }, 600);
   };
@@ -306,35 +380,95 @@ export default function BibleResourcesPage() {
     setIsLoading(true);
     setVerses([]);
     try {
-      const bookIndex = BIBLE_BOOKS.findIndex(b => b.id === selectedBook.id);
+      const bookIndex = BIBLE_BOOKS.findIndex((b) => b.id === selectedBook.id);
       const bookNumber = bookIndex + 1;
 
       // 1. Open Translation Bible (Norsk) - fetches from GitHub
-      if (selectedTranslation === 'openbible_nb') {
+      if (selectedTranslation === "openbible_nb") {
         const OPENBIBLE_NB_FOLDERS = [
-          "01.1 Mosebok", "02.2 Mosebok", "03.3 Mosebok", "04.4 Mosebok", "05.5 Mosebok",
-          "06.Josva", "07.Dommerne", "08.Rut", "09.1 Samuelsbok", "10.2 Samuelsbok",
-          "11.1 Kongebok", "12.2 Kongebok", "13.1 Krønikebok", "14.2 Krønikebok",
-          "15.Esra", "16.Nehemja", "17.Ester", "18.Job", "19.Salmene", "20.Ordspråkene",
-          "21.Forkynneren", "22.Høysangen", "23.Jesaja", "24.Jeremia", "25.Klagesangene",
-          "26.Esekiel", "27.Daniel", "28.Hosea", "29.Joel", "30.Amos", "31.Obadja",
-          "32.Jona", "33.Mika", "34.Nahum", "35.Habakkuk", "36.Sefanja", "37.Haggai",
-          "38.Sakarja", "39.Malaki", "40.Matteus", "41.Markus", "42.Lukas", "43.Johannes",
-          "44.Apostlenes gjerninger", "45.Romerne", "46.1 Korinterne", "47.2 Korinterne",
-          "48.Galaterne", "49.Efeserne", "50.Filipperne", "51.Kolosserne", "52.1 Tessalonikerne",
-          "53.2 Tessalonikerne", "54.1 Timoteus", "55.2 Timoteus", "56.Titus", "57.Filemon",
-          "58.Hebreerne", "59.Jakob", "60.1 Peter", "61.2 Peter", "62.1 Johannes",
-          "63.2 Johannes", "64.3 Johannes", "65.Judas", "66.Åpenbaringen"
+          "01.1 Mosebok",
+          "02.2 Mosebok",
+          "03.3 Mosebok",
+          "04.4 Mosebok",
+          "05.5 Mosebok",
+          "06.Josva",
+          "07.Dommerne",
+          "08.Rut",
+          "09.1 Samuelsbok",
+          "10.2 Samuelsbok",
+          "11.1 Kongebok",
+          "12.2 Kongebok",
+          "13.1 Krønikebok",
+          "14.2 Krønikebok",
+          "15.Esra",
+          "16.Nehemja",
+          "17.Ester",
+          "18.Job",
+          "19.Salmene",
+          "20.Ordspråkene",
+          "21.Forkynneren",
+          "22.Høysangen",
+          "23.Jesaja",
+          "24.Jeremia",
+          "25.Klagesangene",
+          "26.Esekiel",
+          "27.Daniel",
+          "28.Hosea",
+          "29.Joel",
+          "30.Amos",
+          "31.Obadja",
+          "32.Jona",
+          "33.Mika",
+          "34.Nahum",
+          "35.Habakkuk",
+          "36.Sefanja",
+          "37.Haggai",
+          "38.Sakarja",
+          "39.Malaki",
+          "40.Matteus",
+          "41.Markus",
+          "42.Lukas",
+          "43.Johannes",
+          "44.Apostlenes gjerninger",
+          "45.Romerne",
+          "46.1 Korinterne",
+          "47.2 Korinterne",
+          "48.Galaterne",
+          "49.Efeserne",
+          "50.Filipperne",
+          "51.Kolosserne",
+          "52.1 Tessalonikerne",
+          "53.2 Tessalonikerne",
+          "54.1 Timoteus",
+          "55.2 Timoteus",
+          "56.Titus",
+          "57.Filemon",
+          "58.Hebreerne",
+          "59.Jakob",
+          "60.1 Peter",
+          "61.2 Peter",
+          "62.1 Johannes",
+          "63.2 Johannes",
+          "64.3 Johannes",
+          "65.Judas",
+          "66.Åpenbaringen",
         ];
 
         const folderName = OPENBIBLE_NB_FOLDERS[bookIndex];
         if (folderName) {
           const dotIndex = folderName.indexOf(".");
-          const displayName = dotIndex === -1 ? folderName : folderName.substring(dotIndex + 1);
-          const jsonPrefix = displayName.toLowerCase().replace(/\s+/g, "-").replace(/\./g, "");
+          const displayName =
+            dotIndex === -1 ? folderName : folderName.substring(dotIndex + 1);
+          const jsonPrefix = displayName
+            .toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/\./g, "");
           const padLength = bookNumber === 19 ? 3 : 2;
-          const chapterNumPadded = String(selectedChapter).padStart(padLength, "0");
-          
+          const chapterNumPadded = String(selectedChapter).padStart(
+            padLength,
+            "0",
+          );
+
           const githubUrl = `https://raw.githubusercontent.com/OpentranslationBible/open-bible/main/lang/nb-NO/${encodeURIComponent(folderName)}/json/${jsonPrefix}-${chapterNumPadded}.json`;
 
           try {
@@ -342,16 +476,18 @@ export default function BibleResourcesPage() {
             if (response.ok) {
               const data = await response.json();
               const mapped = (data.verses || [])
-                .filter(v => v.verse !== undefined && v.verse !== null)
-                .map(v => {
-                  const rawLines = Array.isArray(v.text) ? v.text : [String(v.text || "")];
+                .filter((v) => v.verse !== undefined && v.verse !== null)
+                .map((v) => {
+                  const rawLines = Array.isArray(v.text)
+                    ? v.text
+                    : [String(v.text || "")];
                   const cleaned = rawLines
-                    .map(line => line.trim().replace(/^>\s*/, ""))
-                    .filter(line => line !== "---" && line.length > 0)
+                    .map((line) => line.trim().replace(/^>\s*/, ""))
+                    .filter((line) => line !== "---" && line.length > 0)
                     .join(" ");
                   return {
                     verse: Number(v.verse),
-                    text: cleaned
+                    text: cleaned,
                   };
                 });
               if (mapped.length > 0) {
@@ -360,10 +496,13 @@ export default function BibleResourcesPage() {
               }
             }
           } catch (e) {
-            console.warn("OpenBible fetch failed, falling back to Bokmål 1930:", e);
+            console.warn(
+              "OpenBible fetch failed, falling back to Bokmål 1930:",
+              e,
+            );
           }
         }
-        
+
         // Fallback to Bokmål 1930 from getbible if OpenBible chapter is not available
         const fallbackUrl = `https://api.getbible.net/v2/bibelselskap/${bookNumber}/${selectedChapter}.json`;
         const res = await fetch(fallbackUrl);
@@ -375,16 +514,19 @@ export default function BibleResourcesPage() {
       }
 
       // 2. Spanish/Bolls.life Translations (rv1960, nvi)
-      if (selectedTranslation === 'rv1960' || selectedTranslation === 'nvi') {
+      if (selectedTranslation === "rv1960" || selectedTranslation === "nvi") {
         const targetBible = selectedTranslation.toUpperCase();
         const bollsUrl = `https://bolls.life/get-chapter/${targetBible}/${bookNumber}/${selectedChapter}/`;
         try {
           const response = await fetch(bollsUrl);
           if (response.ok) {
             const data = await response.json(); // returns array of { pk, text, verse }
-            const mapped = (data || []).map(v => ({
+            const mapped = (data || []).map((v) => ({
               verse: Number(v.verse),
-              text: v.text.replace(/<S>\d+<\/S>/g, "").replace(/<[^>]+>/g, "").trim()
+              text: v.text
+                .replace(/<S>\d+<\/S>/g, "")
+                .replace(/<[^>]+>/g, "")
+                .trim(),
             }));
             if (mapped.length > 0) {
               setVerses(mapped);
@@ -399,14 +541,14 @@ export default function BibleResourcesPage() {
       // 3. Standard Translations (Getbible.net primary)
       const url = `https://api.getbible.net/v2/${selectedTranslation}/${bookNumber}/${selectedChapter}.json`;
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         // Fallback to Bolls.life if getbible fails
         const bollsTranslationMap = {
-          'bibelselskap': 'DNB',
-          'norsmb': 'NOR1921',
-          'web': 'WEB',
-          'kjv': 'KJV'
+          bibelselskap: "DNB",
+          norsmb: "NOR1921",
+          web: "WEB",
+          kjv: "KJV",
         };
         const bollsCode = bollsTranslationMap[selectedTranslation];
         if (bollsCode) {
@@ -414,23 +556,28 @@ export default function BibleResourcesPage() {
           const bollsRes = await fetch(bollsFallbackUrl);
           if (bollsRes.ok) {
             const bollsData = await bollsRes.json();
-            const mapped = (bollsData || []).map(v => ({
+            const mapped = (bollsData || []).map((v) => ({
               verse: Number(v.verse),
-              text: v.text.replace(/<S>\d+<\/S>/g, "").replace(/<[^>]+>/g, "").trim()
+              text: v.text
+                .replace(/<S>\d+<\/S>/g, "")
+                .replace(/<[^>]+>/g, "")
+                .trim(),
             }));
             setVerses(mapped);
             return;
           }
         }
-        throw new Error('Kunne ikke hente bibeldata');
+        throw new Error("Kunne ikke hente bibeldata");
       }
 
       const data = await response.json();
       setVerses(data.verses || []);
     } catch (err) {
       console.error(err);
-      if (typeof showToast === 'function') {
-        showToast('Klarte ikke å laste bibelkapittelet. Sjekk internettforbindelsen.');
+      if (typeof showToast === "function") {
+        showToast(
+          "Klarte ikke å laste bibelkapittelet. Sjekk internettforbindelsen.",
+        );
       }
     } finally {
       setIsLoading(false);
@@ -444,27 +591,34 @@ export default function BibleResourcesPage() {
       const foundBook = findBibleBook(parsedRef.bookStr);
       if (foundBook) {
         // Lagre nåværende posisjon (inkludert aktivt vers) før vi navigerer
-        const sourceVerse = highlightedVerse || (selectedVerses.length > 0 ? selectedVerses[selectedVerses.length - 1] : null);
+        const sourceVerse =
+          highlightedVerse ||
+          (selectedVerses.length > 0
+            ? selectedVerses[selectedVerses.length - 1]
+            : null);
         setPreviousReference({
           book: selectedBook,
           chapter: selectedChapter,
-          verse: sourceVerse
+          verse: sourceVerse,
         });
 
         setSelectedBook(foundBook);
-        const clampedChapter = Math.max(1, Math.min(parsedRef.chapter, foundBook.chapters));
+        const clampedChapter = Math.max(
+          1,
+          Math.min(parsedRef.chapter, foundBook.chapters),
+        );
         setSelectedChapter(clampedChapter);
-        
+
         if (parsedRef.verse) {
           setHighlightedVerse(parsedRef.verse);
         } else {
           setHighlightedVerse(null);
         }
-        
+
         // Scroll leseren i fokus
         setTimeout(() => {
           if (readerRef.current) {
-            readerRef.current.scrollIntoView({ behavior: 'smooth' });
+            readerRef.current.scrollIntoView({ behavior: "smooth" });
           }
         }, 150);
         return true;
@@ -478,7 +632,7 @@ export default function BibleResourcesPage() {
     const success = loadBibleReference(refString);
     if (success) {
       setReturnOriginTab(originTab);
-      setActiveTab('bible');
+      setActiveTab("bible");
     }
   };
 
@@ -487,13 +641,13 @@ export default function BibleResourcesPage() {
     setSelectedBook(previousReference.book);
     setSelectedChapter(previousReference.chapter);
     setHighlightedVerse(previousReference.verse);
-    
+
     setTimeout(() => {
       if (readerRef.current) {
-        readerRef.current.scrollIntoView({ behavior: 'smooth' });
+        readerRef.current.scrollIntoView({ behavior: "smooth" });
       }
     }, 150);
-    
+
     setPreviousReference(null);
   };
 
@@ -504,7 +658,7 @@ export default function BibleResourcesPage() {
     // 1. Prøv å laste direkte som en spesifikk bibelreferanse
     const success = loadBibleReference(searchQuery);
     if (success) {
-      setSearchQuery('');
+      setSearchQuery("");
       return;
     }
 
@@ -512,18 +666,18 @@ export default function BibleResourcesPage() {
     setVerses([]);
     try {
       let cleanQuery = searchQuery.trim();
-      BIBLE_BOOKS.forEach(book => {
+      BIBLE_BOOKS.forEach((book) => {
         const norLower = book.nor.toLowerCase();
         if (cleanQuery.toLowerCase().startsWith(norLower)) {
-          cleanQuery = cleanQuery.replace(new RegExp(book.nor, 'i'), book.eng);
+          cleanQuery = cleanQuery.replace(new RegExp(book.nor, "i"), book.eng);
         }
       });
 
       const url = `https://query.getbible.net/v2/${selectedTranslation}/${encodeURIComponent(cleanQuery)}`;
       const response = await fetch(url);
-      
+
       if (!response.ok) {
-        throw new Error('Kunne ikke finne skriftstedet');
+        throw new Error("Kunne ikke finne skriftstedet");
       }
 
       const data = await response.json();
@@ -533,15 +687,16 @@ export default function BibleResourcesPage() {
         let detectedBook = null;
         let detectedChapter = 1;
 
-        keys.forEach(key => {
+        keys.forEach((key) => {
           const item = data[key];
           if (item.verses) {
             resultVerses.push(...item.verses);
           }
           if (!detectedBook && item.book_name) {
-            const found = BIBLE_BOOKS.find(b => 
-              b.eng.toLowerCase() === item.book_name.toLowerCase() || 
-              b.nor.toLowerCase() === item.book_name.toLowerCase()
+            const found = BIBLE_BOOKS.find(
+              (b) =>
+                b.eng.toLowerCase() === item.book_name.toLowerCase() ||
+                b.nor.toLowerCase() === item.book_name.toLowerCase(),
             );
             if (found) {
               detectedBook = found;
@@ -567,11 +722,13 @@ export default function BibleResourcesPage() {
 
   const navigateChapter = (direction) => {
     setHighlightedVerse(null);
-    if (direction === 'prev') {
+    if (direction === "prev") {
       if (selectedChapter > 1) {
-        setSelectedChapter(prev => prev - 1);
+        setSelectedChapter((prev) => prev - 1);
       } else {
-        const currentIndex = BIBLE_BOOKS.findIndex(b => b.id === selectedBook.id);
+        const currentIndex = BIBLE_BOOKS.findIndex(
+          (b) => b.id === selectedBook.id,
+        );
         if (currentIndex > 0) {
           const prevBook = BIBLE_BOOKS[currentIndex - 1];
           setSelectedBook(prevBook);
@@ -580,9 +737,11 @@ export default function BibleResourcesPage() {
       }
     } else {
       if (selectedChapter < selectedBook.chapters) {
-        setSelectedChapter(prev => prev + 1);
+        setSelectedChapter((prev) => prev + 1);
       } else {
-        const currentIndex = BIBLE_BOOKS.findIndex(b => b.id === selectedBook.id);
+        const currentIndex = BIBLE_BOOKS.findIndex(
+          (b) => b.id === selectedBook.id,
+        );
         if (currentIndex < BIBLE_BOOKS.length - 1) {
           const nextBook = BIBLE_BOOKS[currentIndex + 1];
           setSelectedBook(nextBook);
@@ -591,7 +750,7 @@ export default function BibleResourcesPage() {
       }
     }
     if (readerRef.current) {
-      readerRef.current.scrollIntoView({ behavior: 'smooth' });
+      readerRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -604,7 +763,7 @@ export default function BibleResourcesPage() {
       setTimeout(() => {
         const el = document.getElementById(`v-${highlightedVerse}`);
         if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }, 400);
     }
@@ -617,7 +776,7 @@ export default function BibleResourcesPage() {
       isFirstRender.current = false;
       return;
     }
-    
+
     if (tabsRef.current) {
       const offset = 80; // Height of the sticky public header
       const bodyRect = document.body.getBoundingClientRect().top;
@@ -627,21 +786,25 @@ export default function BibleResourcesPage() {
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     }
   }, [activeTab]);
 
-  const filteredBooks = BIBLE_BOOKS.filter(book => {
-    if (testamentFilter === 'all') return true;
+  const filteredBooks = BIBLE_BOOKS.filter((book) => {
+    if (testamentFilter === "all") return true;
     return book.testament === testamentFilter;
   });
 
   const refKey = `${selectedBook.id}_${selectedChapter}`;
-  const activeCommentary = generatedCommentaries[refKey] || STUDY_BIBLE_DATA[refKey];
+  const activeCommentary =
+    generatedCommentaries[refKey] || STUDY_BIBLE_DATA[refKey];
 
   return (
-    <div className="bg-[#F6F4F8] min-h-screen flex flex-col font-sans text-slate-800" ref={topRef}>
+    <div
+      className="bg-[#F6F4F8] min-h-screen flex flex-col font-sans text-slate-800"
+      ref={topRef}
+    >
       {/* Site Header */}
       <SiteHeader />
 
@@ -649,32 +812,43 @@ export default function BibleResourcesPage() {
       <section className="bg-gradient-to-br from-[#561291] to-[#561291] text-white py-16 md:py-20 px-4 sm:px-6 md:px-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(224,170,255,0.15),transparent)] pointer-events-none"></div>
         <div className="max-w-[1440px] mx-auto space-y-4 relative z-10 text-center sm:text-left">
-          <CmsText 
-            slug="resources-hero-title" 
-            fallback="Bibelressurser og studieportal" 
-            as="h1" 
-            className="font-sans text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight" 
+          <CmsText
+            slug="resources-hero-title"
+            fallback="Bibelressurser og studieportal"
+            as="h1"
+            className="font-sans text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight"
           />
-          <CmsText 
-            slug="resources-hero-desc" 
-            fallback="Dyp bibelundervisning, interaktiv studiebibel og verktøy som ruster deg til din tjeneste. Utforsk våre åpne bibelressurser under." 
-            as="p" 
-            className="text-sm sm:text-base text-purple-100 max-w-2xl leading-relaxed" 
+          <CmsText
+            slug="resources-hero-desc"
+            fallback="Dyp bibelundervisning, interaktiv studiebibel og verktøy som ruster deg til din tjeneste. Utforsk våre åpne bibelressurser under."
+            as="p"
+            className="text-sm sm:text-base text-purple-100 max-w-2xl leading-relaxed"
           />
         </div>
       </section>
 
       {/* Tabs Controller */}
-      <section ref={tabsRef} className="border-b border-slate-200 bg-white sticky top-20 z-30 shadow-sm">
+      <section
+        ref={tabsRef}
+        className="border-b border-slate-200 bg-white sticky top-20 z-30 shadow-sm"
+      >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 flex space-x-8 overflow-x-auto whitespace-nowrap scrollbar-none h-16 items-center">
           {[
-            { id: 'bible', fallback: 'Interaktiv studiebibel', icon: BookOpen },
-            { id: 'curriculums', fallback: 'Fagplaner og studiehefter', icon: BookText },
-            { id: 'video', fallback: 'Lyd- og videoundervisning', icon: Video },
-            { id: 'fasting', fallback: 'Fastemanualer og bønneguider', icon: Flame },
-            { id: 'characters', fallback: 'Bibelske personer', icon: Users },
-            { id: 'timeline', fallback: 'Bibelsk tidslinje', icon: History }
-          ].map(tab => {
+            { id: "bible", fallback: "Interaktiv studiebibel", icon: BookOpen },
+            {
+              id: "curriculums",
+              fallback: "Fagplaner og studiehefter",
+              icon: BookText,
+            },
+            { id: "video", fallback: "Lyd- og videoundervisning", icon: Video },
+            {
+              id: "fasting",
+              fallback: "Fastemanualer og bønneguider",
+              icon: Flame,
+            },
+            { id: "characters", fallback: "Bibelske personer", icon: Users },
+            { id: "timeline", fallback: "Bibelsk tidslinje", icon: History },
+          ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
@@ -682,14 +856,17 @@ export default function BibleResourcesPage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 h-full px-2 text-sm font-bold border-b-2 transition-all relative ${
-                  isActive 
-                    ? 'border-primary text-primary font-extrabold' 
-                    : 'border-transparent text-slate-500 hover:text-primary hover:border-primary/30'
+                  isActive
+                    ? "border-primary text-primary font-extrabold"
+                    : "border-transparent text-slate-500 hover:text-primary hover:border-primary/30"
                 }`}
               >
                 <Icon size={16} />
                 <span>
-                  <CmsText slug={`resources-tab-${tab.id}`} fallback={tab.fallback} />
+                  <CmsText
+                    slug={`resources-tab-${tab.id}`}
+                    fallback={tab.fallback}
+                  />
                 </span>
               </button>
             );
@@ -699,647 +876,244 @@ export default function BibleResourcesPage() {
 
       {/* Dynamic Tab Contents */}
       <main className="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 py-10">
-        
         {/* TAB 1: INTERACTIVE BIBLE & STUDY CENTER */}
-        {activeTab === 'bible' && (
-          <div className="space-y-8 animate-in fade-in duration-300">
-            {/* Header info */}
-            <div className="bg-white border border-slate-200/60 rounded-2xl p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div className="space-y-1">
-                <h3 className="font-sans text-xl font-bold text-primary flex items-center gap-2">
-                  <Sparkles size={20} className="text-amber-500" />
-                  <CmsText slug="resources-bible-title" fallback="Interaktiv studiebibel" />
-                </h3>
-                <CmsText 
-                  slug="resources-bible-desc" 
-                  fallback="Trykk på et hvilket som helst vers for å kopiere det. Åpne &quot;studiebibel&quot;-panelet for ferdige teologiske kommentarer, ordstudier og personlige notater." 
-                  as="p" 
-                  className="text-xs sm:text-sm text-slate-500 max-w-3xl leading-relaxed" 
-                />
-              </div>
-              
-              <form onSubmit={handleSearch} className="w-full md:w-80 shrink-0">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder={isEn ? "Search e.g. 'Genesis 1:1'..." : "Søk f.eks. '1. Mosebok 1:1'..."}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white transition-all shadow-inner"
-                  />
-                  <button type="submit" className="absolute left-3 top-0 bottom-0 my-auto text-primary cursor-pointer border-none bg-none p-0">
-                    <Search size={14} />
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            {/* Reading Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              
-              {/* Left Column: Book selection (Desktop only) */}
-              <div className={`hidden lg:block ${showStudyPanel ? 'lg:col-span-3' : 'lg:col-span-4'} space-y-6 lg:sticky lg:top-40`}>
-                <div className="bg-white border border-slate-200/60 rounded-2xl p-5 shadow-sm space-y-5">
-                  <h4 className="font-sans font-bold text-sm text-primary flex items-center gap-2 border-b border-slate-100 pb-3">
-                    <BookMarked size={16} />
-                    {isEn ? 'Book & Chapter' : 'Bok- og kapittelvelger'}
-                  </h4>
-
-                  {/* Translation Selection */}
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Oversettelse</label>
-                    <select
-                      value={selectedTranslation}
-                      onChange={(e) => setSelectedTranslation(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                    >
-                      {TRANSLATIONS.map(t => (
-                        <option key={t.id} value={t.id}>{t.name}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Testament Filter Toggles */}
-                  <div className="grid grid-cols-3 gap-2 bg-slate-50 p-1 rounded-xl">
-                    <button
-                      onClick={() => setTestamentFilter('all')}
-                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all ${
-                        testamentFilter === 'all' ? 'bg-primary text-white shadow-sm' : 'text-slate-500 hover:text-primary'
-                      }`}
-                    >
-                      {isEn ? 'All' : 'Alle'}
-                    </button>
-                    <button
-                      onClick={() => setTestamentFilter('GT')}
-                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all ${
-                        testamentFilter === 'GT' ? 'bg-primary text-white shadow-sm' : 'text-slate-500 hover:text-primary'
-                      }`}
-                    >
-                      GT
-                    </button>
-                    <button
-                      onClick={() => setTestamentFilter('NT')}
-                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all ${
-                        testamentFilter === 'NT' ? 'bg-primary text-white shadow-sm' : 'text-slate-500 hover:text-primary'
-                      }`}
-                    >
-                      NT
-                    </button>
-                  </div>
-
-                  {/* Books List (scrollable) */}
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Bibelbok</label>
-                    <div className="h-56 overflow-y-auto border border-slate-100 rounded-xl bg-slate-50/50 p-2 space-y-0.5 scrollbar-thin">
-                      {filteredBooks.map(book => (
-                        <button
-                          key={book.id}
-                          onClick={() => {
-                            setSelectedBook(book);
-                            setSelectedChapter(1);
-                          }}
-                          className={`w-full text-left px-3 py-2 rounded-lg text-[11px] font-semibold flex justify-between items-center transition-all ${
-                            selectedBook.id === book.id 
-                              ? 'bg-primary/5 text-primary border border-primary/20 shadow-sm font-bold' 
-                              : 'text-slate-600 hover:bg-slate-100 hover:text-primary'
-                          }`}
-                        >
-                          <span>{book.nor}</span>
-                          <span className="text-[9px] opacity-60 font-mono">{book.testament}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Chapters Grid */}
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                      {isEn ? `Select Chapter (1 - ${selectedBook.chapters})` : `Velg kapittel (1 - ${selectedBook.chapters})`}
-                    </label>
-                    <div className="grid grid-cols-5 gap-1.5 max-h-32 overflow-y-auto p-1 scrollbar-thin">
-                      {Array.from({ length: selectedBook.chapters }, (_, i) => i + 1).map(chap => (
-                        <button
-                          key={chap}
-                          onClick={() => setSelectedChapter(chap)}
-                          className={`h-8 w-full rounded-lg text-xs font-bold transition-all flex items-center justify-center ${
-                            selectedChapter === chap 
-                              ? 'bg-primary text-white shadow font-extrabold' 
-                              : 'bg-slate-50 text-slate-600 border border-slate-200/50 hover:bg-slate-100'
-                          }`}
-                        >
-                          {chap}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Middle Column: Reading Panel */}
-              <div className={`${showStudyPanel ? 'lg:col-span-5' : 'lg:col-span-8'} space-y-6 scroll-mt-40`} ref={readerRef}>
-                <div 
-                  ref={cardContainerRef}
-                  className={isFullscreenReading 
-                    ? "fixed inset-0 z-50 overflow-y-auto h-screen w-screen bg-white" 
-                    : "bg-white border border-slate-200/60 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col justify-between min-h-[500px]"}
-                >
-                  <div className={isFullscreenReading ? "max-w-4xl mx-auto w-full px-6 py-8 md:px-12 flex flex-col min-h-screen" : "flex flex-col justify-between h-full flex-grow"}>
-                    {/* Reading Header */}
-                    <div className={`flex items-center justify-between border-b border-slate-100 pb-3 mb-6 sticky bg-white z-20 ${
-                      isFullscreenReading 
-                        ? 'top-0 -mx-6 px-6 md:-mx-12 md:px-12 pt-4 shadow-sm' 
-                        : 'top-[160px] -mx-6 -mt-6 pt-6 md:-mx-8 md:-mt-8 md:pt-8 px-6 md:px-8 rounded-t-2xl'
-                    }`}>
-                    <button 
-                      onClick={() => navigateChapter('prev')}
-                      className="p-2 bg-slate-50 text-primary border border-slate-200/60 rounded-xl hover:bg-slate-100 active:scale-[0.97] transition-all cursor-pointer"
-                    >
-                      <ArrowLeft size={16} />
-                    </button>
-
-                    <div 
-                      onClick={() => {
-                        setSelectorTab('book');
-                        setSelectorSearch('');
-                        setShowMobileSelector(true);
-                      }}
-                      className={isFullscreenReading ? "text-center flex flex-col items-center select-none cursor-pointer group" : "hidden"}
-                      title={isEn ? "Select Book and Chapter" : "Velg bok og kapittel"}
-                    >
-                      <h2 className="font-sans font-extrabold text-base md:text-xl text-primary leading-tight flex items-center gap-1 sm:gap-2 justify-center">
-                        <span>{selectedBook.nor} {selectedChapter}</span>
-                        {!isFullscreenReading && (
-                          <ChevronDown size={14} className="hidden sm:inline-block text-slate-400 group-hover:text-primary transition-transform duration-200 shrink-0" />
-                        )}
-                      </h2>
-                      <span className="text-[9px] font-bold text-slate-400 tracking-wider uppercase font-mono mt-0.5 block">
-                        {TRANSLATIONS.find(t => t.id === selectedTranslation)?.name}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 sm:gap-2">
-                      {/* Text size adjuster */}
-                      <button
-                        onClick={() => {
-                          setTextSize(prev => {
-                            if (prev === 'sm') return 'md';
-                            if (prev === 'md') return 'lg';
-                            if (prev === 'lg') return 'xl';
-                            if (prev === 'xl') return '2xl';
-                            return 'sm';
-                          });
-                        }}
-                        className="p-2 bg-slate-50 text-primary border border-slate-200/60 rounded-xl hover:bg-slate-100 active:scale-[0.97] transition-all cursor-pointer flex items-center gap-1"
-                        title={isEn ? "Juster tekststørrelse" : "Juster tekststørrelse"}
-                      >
-                        <Type size={14} />
-                        <span className="text-[9px] font-bold uppercase">{textSize.toUpperCase()}</span>
-                      </button>
-
-                      {/* Admin CMS Edit Toggle */}
-                      {isAdminUser && !isFullscreenReading && (
-                        <button
-                          onClick={() => {
-                            const nextState = !isAdminEditing;
-                            setIsAdminEditing(nextState);
-                            if (nextState) {
-                              showToast(isEn ? "Visual CMS-redigering aktivert! Klikk på tekster for å endre dem." : "Visuell CMS-redigering aktivert! Klikk på tekster for å endre dem.");
-                            } else {
-                              showToast(isEn ? "Visuell redigering avsluttet. Endringer lagret." : "Visuell redigering avsluttet. Endringer lagret.");
-                            }
-                          }}
-                          className={`p-2 rounded-xl border active:scale-[0.97] transition-all cursor-pointer flex items-center justify-center ${
-                            isAdminEditing 
-                              ? 'bg-[#d17d39] text-white border-[#d17d39] hover:bg-[#bd4f2a] shadow-sm shadow-[#d17d39]/20' 
-                              : 'bg-slate-50 text-primary border-slate-200/60 hover:bg-slate-100'
-                          }`}
-                          title={isEn ? "Toggle Visual CMS Editing" : "Aktiver visuell CMS-redigering"}
-                        >
-                          <Edit3 size={14} className={isAdminEditing ? "animate-pulse" : ""} />
-                        </button>
-                      )}
-
-                      {/* Fullscreen toggle */}
-                      <button
-                        onClick={() => setIsFullscreenReading(!isFullscreenReading)}
-                        className={`p-2 rounded-xl border active:scale-[0.97] transition-all cursor-pointer ${
-                          isFullscreenReading 
-                            ? 'bg-amber-500 text-white border-amber-500 hover:bg-amber-600' 
-                            : 'bg-slate-50 text-primary border-slate-200/60 hover:bg-slate-100'
-                        }`}
-                        title={isFullscreenReading ? (isEn ? "Avslutt lesemodus" : "Avslutt lesemodus") : (isEn ? "Fullskjerm lesemodus" : "Fullskjerm lesemodus")}
-                      >
-                        {isFullscreenReading ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
-                      </button>
-
-                      {/* Hide Study Panel button in fullscreen mode */}
-                      {!isFullscreenReading && (
-                        <button 
-                          onClick={() => setShowStudyPanel(!showStudyPanel)}
-                          className={`flex items-center gap-1 px-2.5 py-2 rounded-xl border text-[11px] font-bold transition-all active:scale-[0.97] cursor-pointer ${
-                            showStudyPanel 
-                              ? 'bg-primary text-white border-primary shadow' 
-                              : 'bg-slate-50 text-primary border-slate-200/60 hover:bg-slate-100'
-                          }`}
-                        >
-                          <Sparkles size={12} className={showStudyPanel ? 'animate-pulse' : ''} />
-                          <span className="hidden sm:inline">{showStudyPanel ? (isEn ? "Lukk studie" : "Studiebibel") : (isEn ? "Studiebibel" : "Studiebibel")}</span>
-                        </button>
-                      )}
-
-                      <button 
-                        onClick={() => navigateChapter('next')}
-                        className="p-2 bg-slate-50 text-primary border border-slate-200/60 rounded-xl hover:bg-slate-100 active:scale-[0.97] transition-all cursor-pointer"
-                      >
-                        <ArrowRight size={16} />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Back to previous reference button */}
-                  {previousReference && (
-                    <div className="mb-4 flex animate-fade-in justify-start select-none">
-                      <button
-                        onClick={handleGoBackToReference}
-                        className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-primary to-[#2c6e91] hover:from-[#153b52] hover:to-[#225672] text-white shadow-md shadow-primary/10 rounded-full text-xs font-extrabold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] cursor-pointer"
-                      >
-                        <ArrowLeft size={12} className="stroke-[3]" />
-                        <span>
-                          Tilbake til {previousReference.book.nor} {previousReference.chapter}{previousReference.verse ? `:${previousReference.verse}` : ''}
-                        </span>
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Reading Body */}
-                  <div className="flex-grow relative mt-2">
-                    <AnimatePresence mode="wait">
-                      {isLoading ? (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4 min-h-[300px]">
-                          <RefreshCw className="text-primary animate-spin" size={28} />
-                          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Henter skriftsteder...</p>
-                        </div>
-                      ) : (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.2 }}
-                          className={`select-text text-slate-800 font-sans space-y-4 pr-1 ${getTextSizeClass()}`}
-                        >
-                          <p className="text-justify md:text-left">
-                            {verses.map((verse) => {
-                              const isSelected = selectedVerses.includes(verse.verse);
-                              const isHighlighted = highlightedVerse === verse.verse;
-                              return (
-                                <span
-                                  key={verse.verse}
-                                  id={`v-${verse.verse}`}
-                                  onClick={() => toggleVerseSelection(verse.verse)}
-                                  className={`inline cursor-pointer transition-all duration-200 rounded px-1.5 py-0.5 mx-0.5 select-text ${
-                                    isSelected 
-                                      ? 'bg-primary/10 text-primary border-b border-primary/40 font-semibold' 
-                                      : isHighlighted
-                                        ? 'bg-amber-100 text-amber-900 border-b border-amber-400 font-semibold'
-                                        : 'hover:bg-slate-100/70'
-                                  }`}
-                                >
-                                  <sup className={`text-[10px] sm:text-[11px] font-extrabold font-sans mr-1 select-none ${
-                                    isSelected ? 'text-primary' : isHighlighted ? 'text-amber-600' : 'text-slate-400'
-                                  }`}>
-                                    {verse.verse}
-                                  </sup>
-                                  {verse.text.trim()}{' '}
-                                </span>
-                              );
-                            })}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-              {/* Right Column: Study Panel (when open) */}
-              {showStudyPanel && (
-                <div 
-                  onClick={() => setShowStudyPanel(false)}
-                  className="fixed inset-0 z-50 bg-[#271f30]/45 backdrop-blur-sm flex items-end justify-center p-0 lg:static lg:bg-transparent lg:backdrop-blur-none lg:z-auto lg:block lg:col-span-4 lg:space-y-6 lg:sticky lg:top-40"
-                >
-                  <motion.div 
-                    initial={typeof window !== 'undefined' && window.innerWidth < 1024 ? { y: '100%' } : {}}
-                    animate={typeof window !== 'undefined' && window.innerWidth < 1024 ? { y: 0 } : {}}
-                    exit={typeof window !== 'undefined' && window.innerWidth < 1024 ? { y: '100%' } : {}}
-                    transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="bg-white border-t border-slate-200 lg:border lg:border-slate-200/60 rounded-t-3xl lg:rounded-2xl p-5 shadow-2xl lg:shadow-sm space-y-4 flex flex-col w-full max-w-xl lg:max-w-none h-[80vh] lg:h-auto lg:min-h-[500px]"
-                  >
-                    
-                    {/* Panel Header */}
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                      <h4 className="font-sans font-bold text-sm text-primary flex items-center gap-1.5">
-                        <Sparkles size={16} className="text-amber-500" />
-                        {isEn ? 'Theological Study Center' : 'Studie- og kommentarer'}
-                      </h4>
-                      <button 
-                        onClick={() => setShowStudyPanel(false)}
-                        className="p-1 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-primary transition-colors"
-                      >
-                        <X size={16} />
-                      </button>
-                    </div>
-
-                    {/* Tab Selection inside Study Panel */}
-                    <div className="grid grid-cols-4 gap-1 bg-slate-50 p-1 rounded-xl mb-4 shrink-0">
-                      {[
-                        { id: 'overview', name: isEn ? 'Overview' : 'Oversikt' },
-                        { id: 'commentary', name: isEn ? 'Themes' : 'Temaer' },
-                        { id: 'cross', name: isEn ? 'Cross-Ref' : 'Kryss-ref' },
-                        { id: 'notes', name: isEn ? 'My Notes' : 'Notater' }
-                      ].map(t => (
-                        <button
-                          key={t.id}
-                          onClick={() => setStudyTab(t.id)}
-                          className={`py-1.5 rounded-lg text-[9px] font-bold transition-all truncate ${
-                            studyTab === t.id ? 'bg-primary text-white shadow-sm' : 'text-slate-500 hover:text-primary'
-                          }`}
-                        >
-                          {t.name}
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Active study content */}
-                    <div className="flex-grow overflow-y-auto max-h-[420px] scrollbar-thin text-xs text-slate-600 leading-relaxed font-sans pr-1">
-                      
-                      {activeCommentary ? (
-                        <>
-                          {studyTab === 'overview' && (
-                            <div className="space-y-4 animate-in fade-in duration-200">
-                              <div className="bg-purple-50/50 border border-purple-100 p-4 rounded-xl space-y-2">
-                                <h5 className="font-bold text-primary text-[13px]">{activeCommentary.overview.title}</h5>
-                                <p className="text-slate-600 text-[11px] leading-relaxed italic">{activeCommentary.overview.context}</p>
-                              </div>
-                              <div className="space-y-2">
-                                <span className="font-bold text-slate-800 uppercase tracking-wider text-[9px] block">Sentrale Temaer</span>
-                                <ul className="space-y-1.5">
-                                  {activeCommentary.overview.themes.map((theme, idx) => (
-                                    <li key={idx} className="flex items-start gap-2">
-                                      <span className="mt-1 h-1.5 w-1.5 bg-[#561291] rounded-full shrink-0" />
-                                      <span className="text-[11px] text-slate-600">{theme}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </div>
-                          )}
-
-                          {studyTab === 'commentary' && (
-                            <div className="space-y-4 animate-in fade-in duration-200">
-                              {activeCommentary.commentary.map((comm, idx) => (
-                                <div key={idx} className="border-b border-slate-100 pb-3 last:border-0 space-y-1">
-                                  <div className="flex items-center justify-between">
-                                    <h5 className="font-sans font-bold text-primary text-[12px]">{comm.title}</h5>
-                                    <span className="text-[9px] font-bold font-mono px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded">{comm.verses}</span>
-                                  </div>
-                                  <p className="text-[11px] text-slate-600 leading-relaxed">{comm.text}</p>
-                                </div>
-                              ))}
-                              
-                              <div className="bg-amber-50/50 border border-amber-100 rounded-xl p-4 space-y-2">
-                                <h6 className="font-bold text-amber-800 text-[11px] uppercase tracking-wider">Gresk/Hebraisk ordstudie</h6>
-                                {activeCommentary.wordStudies?.map((word, idx) => (
-                                  <div key={idx} className="space-y-0.5 text-[11px]">
-                                    <p className="font-bold text-slate-800">{word.word} ({word.language})</p>
-                                    <p className="text-slate-600">{word.meaning}</p>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          {studyTab === 'cross' && (
-                            <div className="space-y-3 animate-in fade-in duration-200">
-                              <span className="font-bold text-slate-800 uppercase tracking-wider text-[9px] block">Tilknyttede skriftsteder</span>
-                              {activeCommentary.crossReferences.map((ref, idx) => (
-                                <div 
-                                  key={idx} 
-                                  className="p-3 bg-slate-50 border border-slate-200/50 rounded-xl space-y-1 hover:border-primary/20 transition-all cursor-pointer" 
-                                  onClick={() => {
-                                    loadBibleReference(ref.ref);
-                                    // Lukk studiepanelet på mobil slik at skriften er umiddelbart synlig
-                                    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-                                      setShowStudyPanel(false);
-                                    }
-                                  }}
-                                >
-                                  <p className="font-bold text-primary text-[11px] flex items-center gap-1.5">
-                                    <BookOpen size={11} /> {ref.ref}
-                                  </p>
-                                  <p className="text-slate-500 text-[10px] leading-relaxed">{ref.desc}</p>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          {(studyTab === 'overview' || studyTab === 'commentary' || studyTab === 'cross') && (
-                            <div className="flex flex-col items-center justify-center space-y-4 py-12 text-center">
-                              <BookOpen size={36} className="text-slate-300" />
-                              <div className="space-y-1">
-                                <p className="font-bold text-slate-700 text-xs">Kommentarer er uforberedt</p>
-                                <p className="text-[10px] text-slate-400 max-w-[200px] leading-relaxed">
-                                  {isEn
-                                    ? "We have no static teologisk study notes for this chapter. Click below to generate an AI teologisk outline."
-                                    : "Det er ingen forhåndslagrede kommentarer for dette kapittelet. Generer en ny kommentar under."}
-                                </p>
-                              </div>
-                              <button
-                                onClick={handleGenerateCommentary}
-                                disabled={isGeneratingCommentary}
-                                className="px-4 py-2 bg-primary text-white font-bold rounded-xl text-[10px] uppercase tracking-wider hover:bg-primary-container active:scale-[0.98] transition-all flex items-center gap-1 shadow-sm shrink-0"
-                              >
-                                <Sparkles size={11} />
-                                {isEn ? "Generate Study Notes" : "Generer studiekommentar"}
-                              </button>
-                            </div>
-                          )}
-                        </>
-                      )}
-
-                      {studyTab === 'notes' && (
-                        <div className="space-y-3 h-full flex flex-col animate-in fade-in duration-200">
-                          <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0">
-                            <span>{isEn ? "Notes for" : "Notater for"} {selectedBook.nor} {selectedChapter}</span>
-                            <span className="flex items-center gap-1 font-mono">
-                              {noteSaveStatus === 'saving' && <span className="text-amber-600 animate-pulse">Lagrer...</span>}
-                              {noteSaveStatus === 'saved' && <span className="text-green-600">✓ Lagret lokalt</span>}
-                              {noteSaveStatus === 'loading' && <span>Laster...</span>}
-                              {noteSaveStatus === 'idle' && <span>Ulagret</span>}
-                            </span>
-                          </div>
-
-                          <textarea
-                            value={noteText}
-                            onChange={handleNoteChange}
-                            placeholder={isEn ? "Write down your theological reflections here..." : "Skriv dine refleksjoner, tolkninger eller åpenbaringer her..."}
-                            className="w-full flex-grow h-40 bg-slate-50 border border-slate-200 rounded-xl p-3 text-[11px] focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white transition-all font-sans text-slate-700 leading-relaxed resize-none shadow-inner"
-                          />
-
-                          <div className="grid grid-cols-2 gap-2 shrink-0">
-                            <button
-                              onClick={() => handleSaveNote()}
-                              className="py-2 bg-primary text-white font-bold rounded-lg text-[10px] uppercase tracking-wider hover:bg-primary-container active:scale-[0.97] transition-all flex items-center justify-center gap-1 shadow-sm"
-                            >
-                              <Save size={10} />
-                              {isEn ? "Save now" : "Lagre nå"}
-                            </button>
-                            <button
-                              onClick={handleClearNote}
-                              disabled={!noteText}
-                              className="py-2 border border-red-200 hover:bg-red-50 hover:text-red-700 text-slate-500 font-bold rounded-lg text-[10px] uppercase tracking-wider transition-all flex items-center justify-center gap-1"
-                            >
-                              <Trash2 size={10} />
-                              {isEn ? "Delete" : "Slett"}
-                            </button>
-                          </div>
-
-                          {/* Cloud Sync Call to Action */}
-                          <div className="mt-2 p-3 bg-purple-50/50 border border-purple-100 rounded-xl space-y-1.5">
-                            <p className="font-bold text-primary text-[10px] flex items-center gap-1">
-                              <Flame size={12} className="text-amber-500 animate-pulse" />
-                              {isEn ? "Cloud Sync & Study Portal" : "Vil du synkronisere notatene dine?"}
-                            </p>
-                            <p className="text-[9px] text-slate-500 leading-relaxed">
-                              {isEn
-                                ? "Notes are currently stored safely in your browser cache. Apply for admission or log in to sync notes to your permanent disciple account in the cloud!"
-                                : "Notater lagres lokalt i nettleseren din. Søk opptak eller logg inn for å synkronisere dem permanent til din disippelkonto i skyen!"}
-                            </p>
-                            <button
-                              onClick={() => navigate('/login')}
-                              className="w-full py-1.5 bg-white border border-[#561291]/20 hover:border-primary text-primary font-bold rounded-lg text-[9px] uppercase tracking-wider transition-all shadow-sm"
-                            >
-                              {isEn ? "Log In / Register" : "Logg inn / søk opptak"}
-                            </button>
-                          </div>
-                        </div>
-                      )}
-
-                    </div>
-
-                    {/* Generating loader */}
-                    {isGeneratingCommentary && (
-                      <div className="absolute inset-0 bg-white/95 rounded-2xl flex flex-col items-center justify-center space-y-4 p-6 text-center animate-in fade-in duration-300">
-                        <RefreshCw className="text-primary animate-spin" size={28} />
-                        <div className="space-y-1">
-                          <p className="font-bold text-slate-700 text-xs">Forbereder teologisk forskning...</p>
-                          <p className="text-[10px] text-slate-400 font-mono italic animate-pulse">
-                            {isEn ? "Generating step: " : "Fase: "} {generationStep + 1}/5
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </motion.div>
-                </div>
-              )}
-
-            </div>
-          </div>
+        {activeTab === "bible" && (
+          <BibleStudyCenter
+            {...{
+              activeCommentary,
+              cardContainerRef,
+              filteredBooks,
+              generationStep,
+              getTextSizeClass,
+              handleClearNote,
+              handleGenerateCommentary,
+              handleGoBackToReference,
+              handleNoteChange,
+              handleSaveNote,
+              handleSearch,
+              highlightedVerse,
+              isAdminEditing,
+              isAdminUser,
+              isEn,
+              isFullscreenReading,
+              isGeneratingCommentary,
+              isLoading,
+              loadBibleReference,
+              navigate,
+              navigateChapter,
+              noteSaveStatus,
+              noteText,
+              previousReference,
+              readerRef,
+              searchQuery,
+              selectedBook,
+              selectedChapter,
+              selectedTranslation,
+              selectedVerses,
+              setIsAdminEditing,
+              setIsFullscreenReading,
+              setSearchQuery,
+              setSelectedBook,
+              setSelectedChapter,
+              setSelectedTranslation,
+              setSelectorSearch,
+              setSelectorTab,
+              setShowMobileSelector,
+              setShowStudyPanel,
+              setStudyTab,
+              setTestamentFilter,
+              setTextSize,
+              showStudyPanel,
+              showToast,
+              studyTab,
+              testamentFilter,
+              textSize,
+              toggleVerseSelection,
+              verses,
+            }}
+          />
         )}
 
         {/* TAB 2: CURRICULUMS & OUTLINES */}
-        {activeTab === 'curriculums' && (
+        {activeTab === "curriculums" && (
           <div className="space-y-10 animate-in fade-in duration-300">
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <CmsText 
-                slug="resources-curriculums-title" 
-                fallback="Studieplaner og teologiske fagplaner" 
-                as="h3" 
-                className="font-sans text-2xl font-bold text-primary" 
+              <CmsText
+                slug="resources-curriculums-title"
+                fallback="Studieplaner og teologiske fagplaner"
+                as="h3"
+                className="font-sans text-2xl font-bold text-primary"
               />
-              <CmsText 
-                slug="resources-curriculums-desc" 
-                fallback="Vi forener dyp akademisk eksegese med Den Hellige Ånds gaverolle. Her er en oversikt over studieheftene og modulene i våre tre hovedlinjer." 
-                as="p" 
-                className="text-sm text-slate-500 leading-relaxed" 
+              <CmsText
+                slug="resources-curriculums-desc"
+                fallback="Vi forener dyp akademisk eksegese med Den Hellige Ånds gaverolle. Her er en oversikt over studieheftene og modulene i våre tre hovedlinjer."
+                as="p"
+                className="text-sm text-slate-500 leading-relaxed"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
-                  code: 'PROP 101',
-                  titleSlug: 'resources-curr-prop101-title',
-                  titleFallback: isEn ? 'Prophetic Equipment & Character' : 'Innføring i den profetiske tjeneste',
-                  descSlug: 'resources-curr-prop101-desc',
-                  descFallback: isEn 
-                    ? 'Understand the ethics, spiritual maturity, and character required to carry revelation. Covers dreams, visions, and biblical prophets.' 
-                    : 'Forstå etikken, den åndelige karakteren og modenheten som kreves for å bære åpenbaringskunnskap. Moduler om drømmetydning og bibelsk profeti.',
+                  code: "PROP 101",
+                  titleSlug: "resources-curr-prop101-title",
+                  titleFallback: isEn
+                    ? "Prophetic Equipment & Character"
+                    : "Innføring i den profetiske tjeneste",
+                  descSlug: "resources-curr-prop101-desc",
+                  descFallback: isEn
+                    ? "Understand the ethics, spiritual maturity, and character required to carry revelation. Covers dreams, visions, and biblical prophets."
+                    : "Forstå etikken, den åndelige karakteren og modenheten som kreves for å bære åpenbaringskunnskap. Moduler om drømmetydning og bibelsk profeti.",
                   modules: [
-                    { slug: 'resources-curr-prop101-mod1', fallback: isEn ? 'Ethics of the Prophet' : 'Den profetiske etikk og karakter' },
-                    { slug: 'resources-curr-prop101-mod2', fallback: isEn ? 'Visions and Dreams' : 'Tyde syner og drømmer' },
-                    { slug: 'resources-curr-prop101-mod3', fallback: isEn ? 'Spiritual Discernment' : 'Åndelig skjelneevne og prøving' },
-                    { slug: 'resources-curr-prop101-mod4', fallback: isEn ? 'Prophecy in the Local Church' : 'Betjening i menigheten' }
+                    {
+                      slug: "resources-curr-prop101-mod1",
+                      fallback: isEn
+                        ? "Ethics of the Prophet"
+                        : "Den profetiske etikk og karakter",
+                    },
+                    {
+                      slug: "resources-curr-prop101-mod2",
+                      fallback: isEn
+                        ? "Visions and Dreams"
+                        : "Tyde syner og drømmer",
+                    },
+                    {
+                      slug: "resources-curr-prop101-mod3",
+                      fallback: isEn
+                        ? "Spiritual Discernment"
+                        : "Åndelig skjelneevne og prøving",
+                    },
+                    {
+                      slug: "resources-curr-prop101-mod4",
+                      fallback: isEn
+                        ? "Prophecy in the Local Church"
+                        : "Betjening i menigheten",
+                    },
                   ],
-                  color: 'from-purple-500 to-indigo-600'
+                  color: "from-purple-500 to-indigo-600",
                 },
                 {
-                  code: 'BIBLE 301',
-                  titleSlug: 'resources-curr-bible301-title',
-                  titleFallback: isEn ? 'Advanced Hermeneutics & Exegesis' : 'Avansert hermeneutikk og tolkning',
-                  descSlug: 'resources-curr-bible301-desc',
-                  descFallback: isEn 
-                    ? 'Deep-dive into historic covenant theology, typologies, and eschatological frameworks. Learn sound exegesis using original text principles.' 
-                    : 'Gå dypt inn i historisk paktsteologi, typologier og eskatologiske modeller. Lær sunn bibeltolkning og skriftgransking ut fra grunntekstens prinsipper.',
+                  code: "BIBLE 301",
+                  titleSlug: "resources-curr-bible301-title",
+                  titleFallback: isEn
+                    ? "Advanced Hermeneutics & Exegesis"
+                    : "Avansert hermeneutikk og tolkning",
+                  descSlug: "resources-curr-bible301-desc",
+                  descFallback: isEn
+                    ? "Deep-dive into historic covenant theology, typologies, and eschatological frameworks. Learn sound exegesis using original text principles."
+                    : "Gå dypt inn i historisk paktsteologi, typologier og eskatologiske modeller. Lær sunn bibeltolkning og skriftgransking ut fra grunntekstens prinsipper.",
                   modules: [
-                    { slug: 'resources-curr-bible301-mod1', fallback: isEn ? 'Historical-Grammatical Method' : 'Historisk-grammatisk metode' },
-                    { slug: 'resources-curr-bible301-mod2', fallback: isEn ? 'Covenant Theology Foundations' : 'Paktsteologiens røtter' },
-                    { slug: 'resources-curr-bible301-mod3', fallback: isEn ? 'Eschatology & Typologies' : 'Eskatologiske typologier' },
-                    { slug: 'resources-curr-bible301-mod4', fallback: isEn ? 'Old Testament Exegesis' : 'Gammeltestamentlig eksegese' }
+                    {
+                      slug: "resources-curr-bible301-mod1",
+                      fallback: isEn
+                        ? "Historical-Grammatical Method"
+                        : "Historisk-grammatisk metode",
+                    },
+                    {
+                      slug: "resources-curr-bible301-mod2",
+                      fallback: isEn
+                        ? "Covenant Theology Foundations"
+                        : "Paktsteologiens røtter",
+                    },
+                    {
+                      slug: "resources-curr-bible301-mod3",
+                      fallback: isEn
+                        ? "Eschatology & Typologies"
+                        : "Eskatologiske typologier",
+                    },
+                    {
+                      slug: "resources-curr-bible301-mod4",
+                      fallback: isEn
+                        ? "Old Testament Exegesis"
+                        : "Gammeltestamentlig eksegese",
+                    },
                   ],
-                  color: 'from-indigo-600 to-blue-600'
+                  color: "from-indigo-600 to-blue-600",
                 },
                 {
-                  code: 'MIN 201',
-                  titleSlug: 'resources-curr-min201-title',
-                  titleFallback: isEn ? 'Pastoral Care & Inner Healing' : 'Sjelesorg, bønn og indre helbredelse',
-                  descSlug: 'resources-curr-min201-desc',
-                  descFallback: isEn 
-                    ? 'Equipping disciples for inner restoration, spiritual warfare, and prophetic counseling. Walk in the power of the Spirit to heal broken hearts.' 
-                    : 'Utruster disipler til indre gjenopprettelse, sjelesorg under Åndens ledelse, og bønnetjeneste. Lær å vandre i Åndens kraft til å helbrede knuste hjerter.',
+                  code: "MIN 201",
+                  titleSlug: "resources-curr-min201-title",
+                  titleFallback: isEn
+                    ? "Pastoral Care & Inner Healing"
+                    : "Sjelesorg, bønn og indre helbredelse",
+                  descSlug: "resources-curr-min201-desc",
+                  descFallback: isEn
+                    ? "Equipping disciples for inner restoration, spiritual warfare, and prophetic counseling. Walk in the power of the Spirit to heal broken hearts."
+                    : "Utruster disipler til indre gjenopprettelse, sjelesorg under Åndens ledelse, og bønnetjeneste. Lær å vandre i Åndens kraft til å helbrede knuste hjerter.",
                   modules: [
-                    { slug: 'resources-curr-min201-mod1', fallback: isEn ? 'Biblical Soul Care' : 'Bibelsk sjelesorg og samtale' },
-                    { slug: 'resources-curr-min201-mod2', fallback: isEn ? 'Theology of Inner Healing' : 'Prinsipper for indre helbredelse' },
-                    { slug: 'resources-curr-min201-mod3', fallback: isEn ? 'Deliverance and Authority' : 'Åndelig autoritet og frihet' },
-                    { slug: 'resources-curr-min201-mod4', fallback: isEn ? 'Prophetic Counseling Ethics' : 'Etikk i bønnetjenesten' }
+                    {
+                      slug: "resources-curr-min201-mod1",
+                      fallback: isEn
+                        ? "Biblical Soul Care"
+                        : "Bibelsk sjelesorg og samtale",
+                    },
+                    {
+                      slug: "resources-curr-min201-mod2",
+                      fallback: isEn
+                        ? "Theology of Inner Healing"
+                        : "Prinsipper for indre helbredelse",
+                    },
+                    {
+                      slug: "resources-curr-min201-mod3",
+                      fallback: isEn
+                        ? "Deliverance and Authority"
+                        : "Åndelig autoritet og frihet",
+                    },
+                    {
+                      slug: "resources-curr-min201-mod4",
+                      fallback: isEn
+                        ? "Prophetic Counseling Ethics"
+                        : "Etikk i bønnetjenesten",
+                    },
                   ],
-                  color: 'from-purple-600 to-pink-600'
-                }
-              ].map(item => (
-                <div key={item.code} className="bg-white rounded-2xl border border-slate-200/60 shadow-sm p-6 flex flex-col justify-between hover:shadow-md hover:border-primary/20 transition-all duration-300 group">
+                  color: "from-purple-600 to-pink-600",
+                },
+              ].map((item) => (
+                <div
+                  key={item.code}
+                  className="bg-white rounded-2xl border border-slate-200/60 shadow-sm p-6 flex flex-col justify-between hover:shadow-md hover:border-primary/20 transition-all duration-300 group"
+                >
                   <div className="space-y-4">
-                    <span className={`inline-block px-3 py-1 bg-gradient-to-r ${item.color} text-white font-mono text-[10px] font-bold uppercase rounded-lg shadow-sm`}>
+                    <span
+                      className={`inline-block px-3 py-1 bg-gradient-to-r ${item.color} text-white font-mono text-[10px] font-bold uppercase rounded-lg shadow-sm`}
+                    >
                       {item.code}
                     </span>
                     <h4 className="font-sans text-lg font-bold text-primary group-hover:text-primary-container transition-colors">
-                      <CmsText slug={item.titleSlug} fallback={item.titleFallback} />
+                      <CmsText
+                        slug={item.titleSlug}
+                        fallback={item.titleFallback}
+                      />
                     </h4>
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      <CmsText slug={item.descSlug} fallback={item.descFallback} />
+                      <CmsText
+                        slug={item.descSlug}
+                        fallback={item.descFallback}
+                      />
                     </p>
-                    
+
                     <div className="space-y-2 border-t border-slate-100 pt-4">
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                        <CmsText slug="resources-curr-modules-label" fallback={isEn ? "Core Modules" : "Kjernemoduler"} />
+                        <CmsText
+                          slug="resources-curr-modules-label"
+                          fallback={isEn ? "Core Modules" : "Kjernemoduler"}
+                        />
                       </span>
                       <ul className="space-y-1.5">
                         {item.modules.map((mod, i) => (
-                          <li key={i} className="flex items-center gap-2 text-xs text-slate-600 font-medium">
-                            <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0"><Check size={10} /></span>
-                            <span><CmsText slug={mod.slug} fallback={mod.fallback} /></span>
+                          <li
+                            key={i}
+                            className="flex items-center gap-2 text-xs text-slate-600 font-medium"
+                          >
+                            <span className="p-0.5 bg-green-50 text-green-600 rounded-full shrink-0">
+                              <Check size={10} />
+                            </span>
+                            <span>
+                              <CmsText
+                                slug={mod.slug}
+                                fallback={mod.fallback}
+                              />
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -1347,11 +1121,18 @@ export default function BibleResourcesPage() {
                   </div>
 
                   <button
-                    onClick={() => navigate(isEn ? '/admission' : '/opptak')}
+                    onClick={() => navigate(isEn ? "/admission" : "/opptak")}
                     className="w-full mt-6 py-2.5 bg-slate-50 hover:bg-primary hover:text-white border border-slate-200 hover:border-primary text-primary font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5"
                   >
                     <Calendar size={13} />
-                    <span><CmsText slug="resources-curr-apply-btn" fallback={isEn ? 'Apply / Request Info' : 'Søk studieplass'} /></span>
+                    <span>
+                      <CmsText
+                        slug="resources-curr-apply-btn"
+                        fallback={
+                          isEn ? "Apply / Request Info" : "Søk studieplass"
+                        }
+                      />
+                    </span>
                   </button>
                 </div>
               ))}
@@ -1360,20 +1141,20 @@ export default function BibleResourcesPage() {
         )}
 
         {/* TAB 3: VIDEO & AUDIO LECTURES */}
-        {activeTab === 'video' && (
+        {activeTab === "video" && (
           <div className="space-y-10 animate-in fade-in duration-300">
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <CmsText 
-                slug="resources-video-title" 
-                fallback="Lyd- og videoundervisning" 
-                as="h3" 
-                className="font-sans text-2xl font-bold text-primary" 
+              <CmsText
+                slug="resources-video-title"
+                fallback="Lyd- og videoundervisning"
+                as="h3"
+                className="font-sans text-2xl font-bold text-primary"
               />
-              <CmsText 
-                slug="resources-video-desc" 
-                fallback="Få tilgang til åpne seminarer, live-strømmer av bønnesamlinger, og smakebiter av vår ukentlige video-undervisning." 
-                as="p" 
-                className="text-sm text-slate-500 leading-relaxed" 
+              <CmsText
+                slug="resources-video-desc"
+                fallback="Få tilgang til åpne seminarer, live-strømmer av bønnesamlinger, og smakebiter av vår ukentlige video-undervisning."
+                as="p"
+                className="text-sm text-slate-500 leading-relaxed"
               />
             </div>
 
@@ -1381,38 +1162,59 @@ export default function BibleResourcesPage() {
               {/* Feature Video 1 */}
               <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-all group">
                 <div className="relative aspect-video bg-slate-950 overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1519751138087-5bf79df62d5b?auto=format&fit=crop&q=80&w=800" 
-                    alt="Prophetic Lecture" 
+                  <img
+                    src="https://images.unsplash.com/photo-1519751138087-5bf79df62d5b?auto=format&fit=crop&q=80&w=800"
+                    alt="Prophetic Lecture"
                     className="w-full h-full object-cover opacity-60 group-hover:scale-102 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                     <div className="space-y-1">
                       <span className="px-2 py-0.5 bg-amber-500 text-white font-bold rounded text-[9px] uppercase tracking-wider">
-                        <CmsText slug="resources-video1-badge" fallback={isEn ? "Open Seminar" : "Åpent seminar"} />
+                        <CmsText
+                          slug="resources-video1-badge"
+                          fallback={isEn ? "Open Seminar" : "Åpent seminar"}
+                        />
                       </span>
                       <h4 className="font-sans font-bold text-white text-base leading-tight">
-                        <CmsText slug="resources-video1-title" fallback={isEn ? 'Understanding Prophetic Revelation & Ethics' : 'Å forstå profetisk åpenbaring og etikk'} />
+                        <CmsText
+                          slug="resources-video1-title"
+                          fallback={
+                            isEn
+                              ? "Understanding Prophetic Revelation & Ethics"
+                              : "Å forstå profetisk åpenbaring og etikk"
+                          }
+                        />
                       </h4>
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="p-6 space-y-4">
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    <CmsText 
-                      slug="resources-video1-desc" 
-                      fallback={isEn
-                        ? "A comprehensive 45-minute introductory lecture by Apostle David Hansen explaining the biblical foundation of the prophetic gift in the early church, and how it must operate under sound theological testing."
-                        : "En 45-minutters introduksjonsforelesning med Apostel David Hansen som tar for seg det bibelske fundamentet for den profetiske gave, og hvordan gaverollen må underlegges sunn teologisk testing og karakter."} 
+                    <CmsText
+                      slug="resources-video1-desc"
+                      fallback={
+                        isEn
+                          ? "A comprehensive 45-minute introductory lecture by Apostle David Hansen explaining the biblical foundation of the prophetic gift in the early church, and how it must operate under sound theological testing."
+                          : "En 45-minutters introduksjonsforelesning med Apostel David Hansen som tar for seg det bibelske fundamentet for den profetiske gave, og hvordan gaverollen må underlegges sunn teologisk testing og karakter."
+                      }
                     />
                   </p>
                   <button
-                    onClick={() => navigate(user ? '/student/video' : '/login')}
+                    onClick={() => navigate(user ? "/student/video" : "/login")}
                     className="w-full py-2.5 bg-primary text-white font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
                   >
                     <Video size={13} />
-                    <span><CmsText slug="resources-video1-btn" fallback={isEn ? 'Watch Lecture (45 min)' : 'Se forelesning (45 min)'} /></span>
+                    <span>
+                      <CmsText
+                        slug="resources-video1-btn"
+                        fallback={
+                          isEn
+                            ? "Watch Lecture (45 min)"
+                            : "Se forelesning (45 min)"
+                        }
+                      />
+                    </span>
                   </button>
                 </div>
               </div>
@@ -1420,38 +1222,61 @@ export default function BibleResourcesPage() {
               {/* Feature Video 2 */}
               <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-all group">
                 <div className="relative aspect-video bg-slate-950 overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&q=80&w=800" 
-                    alt="Covenant theology" 
+                  <img
+                    src="https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&q=80&w=800"
+                    alt="Covenant theology"
                     className="w-full h-full object-cover opacity-60 group-hover:scale-102 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
                     <div className="space-y-1">
                       <span className="px-2 py-0.5 bg-indigo-600 text-white font-bold rounded text-[9px] uppercase tracking-wider">
-                        <CmsText slug="resources-video2-badge" fallback={isEn ? "Theological Deep-Dive" : "Teologisk dypdykk"} />
+                        <CmsText
+                          slug="resources-video2-badge"
+                          fallback={
+                            isEn ? "Theological Deep-Dive" : "Teologisk dypdykk"
+                          }
+                        />
                       </span>
                       <h4 className="font-sans font-bold text-white text-base leading-tight">
-                        <CmsText slug="resources-video2-title" fallback={isEn ? 'Introduction to Covenant Theology & Typology' : 'Introduksjon til paktsteologi og typologi'} />
+                        <CmsText
+                          slug="resources-video2-title"
+                          fallback={
+                            isEn
+                              ? "Introduction to Covenant Theology & Typology"
+                              : "Introduksjon til paktsteologi og typologi"
+                          }
+                        />
                       </h4>
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="p-6 space-y-4">
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    <CmsText 
-                      slug="resources-video2-desc" 
-                      fallback={isEn
-                        ? "Learn how the Old Testament promises and shadows point seamlessly to Christ in the New Testament. An introductory exegesis class covering Abrahamic and New Covenant typologies."
-                        : "Lær hvordan det gamle testamentets skygger og løfter peker fram mot Kristus i det nye testamentet. En innføringsklasse i paktsteologi som dekker abrahamspakten og den nye pakt."} 
+                    <CmsText
+                      slug="resources-video2-desc"
+                      fallback={
+                        isEn
+                          ? "Learn how the Old Testament promises and shadows point seamlessly to Christ in the New Testament. An introductory exegesis class covering Abrahamic and New Covenant typologies."
+                          : "Lær hvordan det gamle testamentets skygger og løfter peker fram mot Kristus i det nye testamentet. En innføringsklasse i paktsteologi som dekker abrahamspakten og den nye pakt."
+                      }
                     />
                   </p>
                   <button
-                    onClick={() => navigate(user ? '/student/video' : '/login')}
+                    onClick={() => navigate(user ? "/student/video" : "/login")}
                     className="w-full py-2.5 bg-primary text-white font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm"
                   >
                     <Video size={13} />
-                    <span><CmsText slug="resources-video2-btn" fallback={isEn ? 'Watch Lecture (35 min)' : 'Se forelesning (35 min)'} /></span>
+                    <span>
+                      <CmsText
+                        slug="resources-video2-btn"
+                        fallback={
+                          isEn
+                            ? "Watch Lecture (35 min)"
+                            : "Se forelesning (35 min)"
+                        }
+                      />
+                    </span>
                   </button>
                 </div>
               </div>
@@ -1460,64 +1285,106 @@ export default function BibleResourcesPage() {
         )}
 
         {/* TAB 4: FASTING & PRAYER MANUALS */}
-        {activeTab === 'fasting' && (
+        {activeTab === "fasting" && (
           <div className="space-y-10 animate-in fade-in duration-300">
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <CmsText 
-                slug="resources-fasting-title" 
-                fallback="Fastemanualer og bønneguider" 
-                as="h3" 
-                className="font-sans text-2xl font-bold text-primary" 
+              <CmsText
+                slug="resources-fasting-title"
+                fallback="Fastemanualer og bønneguider"
+                as="h3"
+                className="font-sans text-2xl font-bold text-primary"
               />
-              <CmsText 
-                slug="resources-fasting-desc" 
-                fallback="Praktiske, bibelske verktøy som ruster deg til åndelig disiplin, bibelske fasteperioder, og profetisk forbønn under Åndens ledelse." 
-                as="p" 
-                className="text-sm text-slate-500 leading-relaxed" 
+              <CmsText
+                slug="resources-fasting-desc"
+                fallback="Praktiske, bibelske verktøy som ruster deg til åndelig disiplin, bibelske fasteperioder, og profetisk forbønn under Åndens ledelse."
+                as="p"
+                className="text-sm text-slate-500 leading-relaxed"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {[
                 {
-                  id: 'fasting',
-                  titleSlug: 'pdf-fasting-card-title',
-                  titleFallback: isEn ? 'The Biblical Fasting Manual (PDF)' : 'Bibelsk faste og åndelig disiplin (PDF)',
-                  descSlug: 'pdf-fasting-card-desc',
+                  id: "fasting",
+                  titleSlug: "pdf-fasting-card-title",
+                  titleFallback: isEn
+                    ? "The Biblical Fasting Manual (PDF)"
+                    : "Bibelsk faste og åndelig disiplin (PDF)",
+                  descSlug: "pdf-fasting-card-desc",
                   descFallback: isEn
-                    ? 'A detailed 14-page guide explaining the theology, health boundaries, and spiritual focus of Christian fasting. Includes daily scripture readings.'
-                    : 'En grundig 14-siders guide som forklarer teologien, de helsemessige rammene, og det åndelige fokuset ved kristen faste. Inkluderer faste-skriftsteder.',
+                    ? "A detailed 14-page guide explaining the theology, health boundaries, and spiritual focus of Christian fasting. Includes daily scripture readings."
+                    : "En grundig 14-siders guide som forklarer teologien, de helsemessige rammene, og det åndelige fokuset ved kristen faste. Inkluderer faste-skriftsteder.",
                   bullets: [
-                    { slug: 'pdf-fasting-card-bullet1', fallback: isEn ? 'Theology of Fasting (Matthew 6, Isaiah 58)' : 'Faste-teologi (Matteus 6 og Jesaja 58)' },
-                    { slug: 'pdf-fasting-card-bullet2', fallback: isEn ? 'Practical health and hydration guidelines' : 'Praktiske helse- og væskeråd' },
-                    { slug: 'pdf-fasting-card-bullet3', fallback: isEn ? 'Fasting for revelation and breakthrough' : 'Faste for åpenbaring og gjennombrudd' }
+                    {
+                      slug: "pdf-fasting-card-bullet1",
+                      fallback: isEn
+                        ? "Theology of Fasting (Matthew 6, Isaiah 58)"
+                        : "Faste-teologi (Matteus 6 og Jesaja 58)",
+                    },
+                    {
+                      slug: "pdf-fasting-card-bullet2",
+                      fallback: isEn
+                        ? "Practical health and hydration guidelines"
+                        : "Praktiske helse- og væskeråd",
+                    },
+                    {
+                      slug: "pdf-fasting-card-bullet3",
+                      fallback: isEn
+                        ? "Fasting for revelation and breakthrough"
+                        : "Faste for åpenbaring og gjennombrudd",
+                    },
                   ],
-                  icon: Flame
+                  icon: Flame,
                 },
                 {
-                  id: 'intercession',
-                  titleSlug: 'pdf-intercession-card-title',
-                  titleFallback: isEn ? 'Prophetic Intercession & Prayer Shield' : 'Profetisk forbønn og bønneskjold',
-                  descSlug: 'pdf-intercession-card-desc',
+                  id: "intercession",
+                  titleSlug: "pdf-intercession-card-title",
+                  titleFallback: isEn
+                    ? "Prophetic Intercession & Prayer Shield"
+                    : "Profetisk forbønn og bønneskjold",
+                  descSlug: "pdf-intercession-card-desc",
                   descFallback: isEn
-                    ? 'Learn how to pray under the leading of the Holy Spirit, establish prayer watches in your local church, and pray effectively for missions.'
-                    : 'Lær å be strategisk under Helligåndens ledelse, etablere bønnevakter i menigheten, og be målrettet for misjonsfeltet og profetiske tjenester.',
+                    ? "Learn how to pray under the leading of the Holy Spirit, establish prayer watches in your local church, and pray effectively for missions."
+                    : "Lær å be strategisk under Helligåndens ledelse, etablere bønnevakter i menigheten, og be målrettet for misjonsfeltet og profetiske tjenester.",
                   bullets: [
-                    { slug: 'pdf-intercession-card-bullet1', fallback: isEn ? 'Hearing God in prayer watches' : 'Høre Guds stemme under bønnevakten' },
-                    { slug: 'pdf-intercession-card-bullet2', fallback: isEn ? 'Developing spiritual authority' : 'Åndelig autoritet og posisjonering' },
-                    { slug: 'pdf-intercession-card-bullet3', fallback: isEn ? 'Establishing a prayer shield for your ministry' : 'Sette opp et bønneskjold for din tjeneste' }
+                    {
+                      slug: "pdf-intercession-card-bullet1",
+                      fallback: isEn
+                        ? "Hearing God in prayer watches"
+                        : "Høre Guds stemme under bønnevakten",
+                    },
+                    {
+                      slug: "pdf-intercession-card-bullet2",
+                      fallback: isEn
+                        ? "Developing spiritual authority"
+                        : "Åndelig autoritet og posisjonering",
+                    },
+                    {
+                      slug: "pdf-intercession-card-bullet3",
+                      fallback: isEn
+                        ? "Establishing a prayer shield for your ministry"
+                        : "Sette opp et bønneskjold for din tjeneste",
+                    },
                   ],
-                  icon: Compass
-                }
+                  icon: Compass,
+                },
               ].map((manual, index) => {
                 const Icon = manual.icon;
                 return (
-                  <div key={index} className="bg-white rounded-2xl border border-slate-200/60 shadow-sm p-6 sm:p-8 flex flex-col justify-between hover:shadow-md hover:border-primary/20 transition-all duration-300 group relative animate-in fade-in-50">
-                    
+                  <div
+                    key={index}
+                    className="bg-white rounded-2xl border border-slate-200/60 shadow-sm p-6 sm:p-8 flex flex-col justify-between hover:shadow-md hover:border-primary/20 transition-all duration-300 group relative animate-in fade-in-50"
+                  >
                     {/* Admin "Rediger PDF" Floating Shortcut Button */}
-                    {['admin', 'superadmin', 'teacher'].includes(user?.role) && (
+                    {["admin", "superadmin", "teacher"].includes(
+                      user?.role,
+                    ) && (
                       <button
-                        onClick={() => navigate(`/admin/cms?category=documents&expand=${manual.id}`)}
+                        onClick={() =>
+                          navigate(
+                            `/admin/cms?category=documents&expand=${manual.id}`,
+                          )
+                        }
                         className="absolute top-4 right-4 z-10 p-2 bg-gradient-to-r from-[#d17d39] to-[#bd4f2a] hover:from-[#bd4f2a] hover:to-[#a03e1e] text-white rounded-full transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5 text-[10px] font-bold px-3 py-1.5 uppercase font-sans tracking-wide"
                         title="Rediger hefteinnhold og filer i CMS"
                       >
@@ -1531,14 +1398,24 @@ export default function BibleResourcesPage() {
                         <Icon size={22} className="text-[#561291]" />
                       </div>
                       <h4 className="font-sans text-lg font-bold text-primary group-hover:text-[#561291] transition-colors">
-                        <CmsText slug={manual.titleSlug} fallback={manual.titleFallback} />
+                        <CmsText
+                          slug={manual.titleSlug}
+                          fallback={manual.titleFallback}
+                        />
                       </h4>
-                      <CmsText slug={manual.descSlug} fallback={manual.descFallback} as="p" className="text-xs text-slate-500 leading-relaxed" />
+                      <CmsText
+                        slug={manual.descSlug}
+                        fallback={manual.descFallback}
+                        as="p"
+                        className="text-xs text-slate-500 leading-relaxed"
+                      />
 
                       <ul className="space-y-2 border-t border-slate-100 pt-4 text-xs text-slate-600 font-medium">
                         {manual.bullets.map((b, i) => (
                           <li key={i} className="flex items-center gap-2">
-                            <span className="p-0.5 bg-purple-50 text-primary rounded-full shrink-0"><Check size={10} /></span>
+                            <span className="p-0.5 bg-purple-50 text-primary rounded-full shrink-0">
+                              <Check size={10} />
+                            </span>
                             <CmsText slug={b.slug} fallback={b.fallback} />
                           </li>
                         ))}
@@ -1546,47 +1423,85 @@ export default function BibleResourcesPage() {
                     </div>
 
                     {index === 0 ? (
-                      cmsContent?.['pdf_fasting_url'] ? (
+                      cmsContent?.["pdf_fasting_url"] ? (
                         <a
-                          href={cmsContent['pdf_fasting_url']}
+                          href={cmsContent["pdf_fasting_url"]}
                           download
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
                         >
                           <FileText size={13} />
-                          <span><CmsText slug="resources-fasting-download-btn" fallback={isEn ? 'Download Resources' : 'Last ned studiehefte'} /></span>
+                          <span>
+                            <CmsText
+                              slug="resources-fasting-download-btn"
+                              fallback={
+                                isEn
+                                  ? "Download Resources"
+                                  : "Last ned studiehefte"
+                              }
+                            />
+                          </span>
                         </a>
                       ) : (
                         <button
-                          onClick={() => generateFastingPdf(cmsContent, language)}
+                          onClick={() =>
+                            generateFastingPdf(cmsContent, language)
+                          }
                           className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
                         >
                           <FileText size={13} />
-                          <span><CmsText slug="resources-fasting-download-btn" fallback={isEn ? 'Download Resources' : 'Last ned studiehefte'} /></span>
+                          <span>
+                            <CmsText
+                              slug="resources-fasting-download-btn"
+                              fallback={
+                                isEn
+                                  ? "Download Resources"
+                                  : "Last ned studiehefte"
+                              }
+                            />
+                          </span>
                         </button>
                       )
+                    ) : cmsContent?.["pdf_intercession_url"] ? (
+                      <a
+                        href={cmsContent["pdf_intercession_url"]}
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
+                      >
+                        <FileText size={13} />
+                        <span>
+                          <CmsText
+                            slug="resources-fasting-download-btn"
+                            fallback={
+                              isEn
+                                ? "Download Resources"
+                                : "Last ned studiehefte"
+                            }
+                          />
+                        </span>
+                      </a>
                     ) : (
-                      cmsContent?.['pdf_intercession_url'] ? (
-                        <a
-                          href={cmsContent['pdf_intercession_url']}
-                          download
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
-                        >
-                          <FileText size={13} />
-                          <span><CmsText slug="resources-fasting-download-btn" fallback={isEn ? 'Download Resources' : 'Last ned studiehefte'} /></span>
-                        </a>
-                      ) : (
-                        <button
-                          onClick={() => generateIntercessionPdf(cmsContent, language)}
-                          className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
-                        >
-                          <FileText size={13} />
-                          <span><CmsText slug="resources-fasting-download-btn" fallback={isEn ? 'Download Resources' : 'Last ned studiehefte'} /></span>
-                        </button>
-                      )
+                      <button
+                        onClick={() =>
+                          generateIntercessionPdf(cmsContent, language)
+                        }
+                        className="w-full mt-6 py-2.5 bg-primary hover:bg-[#561291] text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 shadow-sm font-sans select-none text-center animate-in"
+                      >
+                        <FileText size={13} />
+                        <span>
+                          <CmsText
+                            slug="resources-fasting-download-btn"
+                            fallback={
+                              isEn
+                                ? "Download Resources"
+                                : "Last ned studiehefte"
+                            }
+                          />
+                        </span>
+                      </button>
                     )}
                   </div>
                 );
@@ -1596,20 +1511,24 @@ export default function BibleResourcesPage() {
         )}
 
         {/* TAB 5: BIBLICAL CHARACTERS */}
-        {activeTab === 'characters' && (
+        {activeTab === "characters" && (
           <div className="space-y-10 animate-in fade-in duration-300">
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <CmsText 
-                slug="resources-characters-title" 
-                fallback={isEn ? "Biblical Characters Catalog" : "Bibelske personer"} 
+              <CmsText
+                slug="resources-characters-title"
+                fallback={
+                  isEn ? "Biblical Characters Catalog" : "Bibelske personer"
+                }
                 as="h3"
                 className="font-sans text-2xl font-bold text-primary"
               />
-              <CmsText 
-                slug="resources-characters-desc" 
-                fallback={isEn 
-                  ? "Explore the biographies, key scripture passages, and theological significance of the central figures of the biblical narrative." 
-                  : "Utforsk biografiene, de sentrale bibelske skriftene, og den teologiske betydningen av Bibelens mest sentrale skikkelser."} 
+              <CmsText
+                slug="resources-characters-desc"
+                fallback={
+                  isEn
+                    ? "Explore the biographies, key scripture passages, and theological significance of the central figures of the biblical narrative."
+                    : "Utforsk biografiene, de sentrale bibelske skriftene, og den teologiske betydningen av Bibelens mest sentrale skikkelser."
+                }
                 as="p"
                 className="text-sm text-slate-500 leading-relaxed"
               />
@@ -1617,10 +1536,17 @@ export default function BibleResourcesPage() {
 
             {/* Search and Filters */}
             <div className="max-w-md mx-auto relative">
-              <Search className="absolute left-4 top-3.5 text-slate-400" size={18} />
+              <Search
+                className="absolute left-4 top-3.5 text-slate-400"
+                size={18}
+              />
               <input
                 type="text"
-                placeholder={isEn ? "Search characters by name, role, era..." : "Søk etter navn, rolle, historisk tid..."}
+                placeholder={
+                  isEn
+                    ? "Search characters by name, role, era..."
+                    : "Søk etter navn, rolle, historisk tid..."
+                }
                 value={characterSearch}
                 onChange={(e) => setCharacterSearch(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 focus:border-primary focus:bg-white rounded-xl text-sm focus:outline-none transition-all shadow-sm"
@@ -1630,50 +1556,77 @@ export default function BibleResourcesPage() {
             {/* Grid of Characters */}
             {(() => {
               const searchLower = characterSearch.toLowerCase();
-              const filtered = (biblicalCharacters || []).filter(char => {
-                const name = (char.name[language] || char.name.no || '').toLowerCase();
-                const role = (char.role[language] || char.role.no || '').toLowerCase();
-                const era = (char.era[language] || char.era.no || '').toLowerCase();
-                const summary = (char.summary[language] || char.summary.no || '').toLowerCase();
-                return name.includes(searchLower) || role.includes(searchLower) || era.includes(searchLower) || summary.includes(searchLower);
+              const filtered = (biblicalCharacters || []).filter((char) => {
+                const name = (
+                  char.name[language] ||
+                  char.name.no ||
+                  ""
+                ).toLowerCase();
+                const role = (
+                  char.role[language] ||
+                  char.role.no ||
+                  ""
+                ).toLowerCase();
+                const era = (
+                  char.era[language] ||
+                  char.era.no ||
+                  ""
+                ).toLowerCase();
+                const summary = (
+                  char.summary[language] ||
+                  char.summary.no ||
+                  ""
+                ).toLowerCase();
+                return (
+                  name.includes(searchLower) ||
+                  role.includes(searchLower) ||
+                  era.includes(searchLower) ||
+                  summary.includes(searchLower)
+                );
               });
 
               if (filtered.length === 0) {
                 return (
                   <div className="text-center py-12 text-slate-500">
-                    <CmsText slug="resources-characters-no-results" fallback={isEn ? "No characters match your search query." : "Ingen personer samsvarer med søket ditt."} />
+                    <CmsText
+                      slug="resources-characters-no-results"
+                      fallback={
+                        isEn
+                          ? "No characters match your search query."
+                          : "Ingen personer samsvarer med søket ditt."
+                      }
+                    />
                   </div>
                 );
               }
 
               return (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                  {filtered.map(char => {
+                  {filtered.map((char) => {
                     const charName = char.name[language] || char.name.no;
                     const charRole = char.role[language] || char.role.no;
                     const charEra = char.era[language] || char.era.no;
-                    const charSummary = char.summary[language] || char.summary.no;
-                    
+                    const charSummary =
+                      char.summary[language] || char.summary.no;
+
                     return (
-                      <div 
-                        key={char.id} 
+                      <div
+                        key={char.id}
                         className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md hover:border-primary/20 transition-all duration-300 group"
                       >
                         <div>
                           {/* Image Wrap */}
                           <div className="h-56 bg-slate-100 overflow-hidden relative">
-                            <img 
-                              src={char.image} 
-                              alt={charName} 
+                            <img
+                              src={char.image}
+                              alt={charName}
                               className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
                               onError={(e) => {
-                                e.target.style.display = 'none';
-                                e.target.nextSibling.style.display = 'flex';
+                                e.target.style.display = "none";
+                                e.target.nextSibling.style.display = "flex";
                               }}
                             />
-                            <div 
-                              className="hidden absolute inset-0 bg-gradient-to-br from-[#561291]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-4xl text-primary"
-                            >
+                            <div className="hidden absolute inset-0 bg-gradient-to-br from-[#561291]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-4xl text-primary">
                               {charName.substring(0, 1)}
                             </div>
                             <div className="absolute top-4 left-4 px-2.5 py-1 bg-white/90 backdrop-blur-sm rounded-lg text-[9px] font-bold text-slate-600 uppercase tracking-wide border border-slate-200/40">
@@ -1699,7 +1652,12 @@ export default function BibleResourcesPage() {
                             onClick={() => setSelectedCharacter(char)}
                             className="w-full py-2 bg-slate-50 hover:bg-primary hover:text-white border border-slate-200 hover:border-primary text-primary font-bold rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
                           >
-                            <span><CmsText slug="resources-characters-read-btn" fallback={isEn ? 'Read Biography' : 'Les mer'} /></span>
+                            <span>
+                              <CmsText
+                                slug="resources-characters-read-btn"
+                                fallback={isEn ? "Read Biography" : "Les mer"}
+                              />
+                            </span>
                             <ArrowRight size={12} />
                           </button>
                         </div>
@@ -1713,393 +1671,194 @@ export default function BibleResourcesPage() {
         )}
 
         {/* TAB 6: BIBLICAL TIMELINE */}
-        {activeTab === 'timeline' && (
-          <div className="space-y-10 animate-in fade-in duration-300">
-            <div className="text-center max-w-2xl mx-auto space-y-3">
-              <CmsText 
-                slug="resources-timeline-title" 
-                fallback={isEn ? "Biblical Timeline" : "Bibelsk tidslinje og historiske epoker"} 
-                as="h3"
-                className="font-sans text-2xl font-bold text-primary"
-              />
-              <CmsText 
-                slug="resources-timeline-desc" 
-                fallback={isEn 
-                  ? "Explore the chronological progression of biblical history and the world empires that impacted the scriptures." 
-                  : "Følg den røde tråden gjennom Bibelens historiske epoker og få oversikt over imperiene som formet den bibelske historien."} 
-                as="p"
-                className="text-sm text-slate-500 leading-relaxed"
-              />
-            </div>
-
-            {/* Sub Tabs Toggle (History vs. Empires) */}
-            <div className="flex justify-center shrink-0">
-              <div className="bg-slate-100 p-1.5 rounded-2xl flex max-w-md w-full border border-slate-200/50">
-                <button
-                  onClick={() => {
-                    setTimelineSubTab('history');
-                    setActiveTimelineSection('urhistorien');
-                  }}
-                  className={`flex-1 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer text-center ${
-                    timelineSubTab === 'history' 
-                      ? 'bg-white text-primary shadow-md font-extrabold' 
-                      : 'text-slate-500 hover:text-primary'
-                  }`}
-                >
-                  <CmsText slug="resources-timeline-subtab-history" fallback={isEn ? "Bible History" : "Bibelens historie"} />
-                </button>
-                <button
-                  onClick={() => {
-                    setTimelineSubTab('empires');
-                    setActiveTimelineSection('egypt');
-                  }}
-                  className={`flex-1 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer text-center ${
-                    timelineSubTab === 'empires' 
-                      ? 'bg-white text-primary shadow-md font-extrabold' 
-                      : 'text-slate-500 hover:text-primary'
-                  }`}
-                >
-                  <CmsText slug="resources-timeline-subtab-empires" fallback={isEn ? "World Empires" : "Store imperier"} />
-                </button>
-              </div>
-            </div>
-
-            {/* Timeline Content */}
-            <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6">
-              {/* Left Column: Sticky Sub-navigation list */}
-              <div className="lg:col-span-3 hidden lg:block sticky top-40 h-fit space-y-2.5 bg-slate-50/50 border border-slate-100 p-5 rounded-2xl">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2 font-mono">
-                  <CmsText slug="resources-timeline-jump-era" fallback={isEn ? "Jump to era" : "Hurtignavigering"} />
-                </span>
-                {(timelineSubTab === 'history' ? timelineData : empiresData).map(section => {
-                  const isActive = activeTimelineSection === section.id;
-                  const sectionTitle = section.title[language] || section.title.no;
-                  const dotColor = 
-                    section.color === 'emerald' ? 'bg-emerald-500' :
-                    section.color === 'amber' ? 'bg-amber-500' :
-                    section.color === 'yellow' ? 'bg-yellow-500' :
-                    section.color === 'red' ? 'bg-red-500' :
-                    section.color === 'purple' ? 'bg-purple-500' :
-                    section.color === 'orange' ? 'bg-orange-500' :
-                    section.color === 'cyan' ? 'bg-cyan-500' : 'bg-indigo-500';
-                  
-                  return (
-                    <button
-                      key={section.id}
-                      onClick={() => {
-                        setActiveTimelineSection(section.id);
-                        const el = document.getElementById(`timeline-section-${section.id}`);
-                        if (el) {
-                          const offset = 180;
-                          const bodyRect = document.body.getBoundingClientRect().top;
-                          const elementRect = el.getBoundingClientRect().top;
-                          window.scrollTo({
-                            top: elementRect - bodyRect - offset,
-                            behavior: 'smooth'
-                          });
-                        }
-                      }}
-                      className={`w-full text-left py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 border ${
-                        isActive 
-                          ? 'bg-white border-slate-200/80 text-primary shadow-sm font-extrabold' 
-                          : 'bg-transparent border-transparent text-slate-500 hover:text-primary hover:bg-slate-50'
-                      }`}
-                    >
-                      <span className={`w-2 h-2 rounded-full ${dotColor} ${isActive ? 'scale-125 animate-pulse' : ''}`} />
-                      <span className="truncate">{sectionTitle}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Right Column: The Vertical Timeline Graphic */}
-              <div className="lg:col-span-9 relative">
-                {/* Vertical Central/Left Line */}
-                <div 
-                  className="absolute top-4 bottom-4 left-6 lg:left-1/2 w-1 rounded bg-gradient-to-b from-[#d17d39] via-[#bd4f2a] to-primary -translate-x-1/2" 
-                />
-
-                <div className="space-y-16">
-                  {(timelineSubTab === 'history' ? timelineData : empiresData).map((section, idx) => {
-                    const sectionTitle = section.title[language] || section.title.no;
-                    const sectionEra = section.era[language] || section.era.no;
-                    const sectionItalic = section.italic[language] || section.italic.no;
-                    const sectionDesc = section.desc[language] || section.desc.no;
-                    const sectionScripTitle = section.scripTitle[language] || section.scripTitle.no;
-                    
-                    const isEven = idx % 2 === 0;
-
-                    const accentClass = 
-                      section.color === 'emerald' ? 'border-t-emerald-500 text-emerald-600 bg-emerald-50/50 text-emerald-800' :
-                      section.color === 'amber' ? 'border-t-amber-500 text-amber-600 bg-amber-50/50 text-amber-800' :
-                      section.color === 'yellow' ? 'border-t-yellow-500 text-yellow-600 bg-yellow-50/50 text-yellow-800' :
-                      section.color === 'red' ? 'border-t-red-500 text-red-600 bg-red-50/50 text-red-800' :
-                      section.color === 'purple' ? 'border-t-purple-500 text-purple-600 bg-purple-50/50 text-purple-800' :
-                      section.color === 'orange' ? 'border-t-orange-500 text-orange-600 bg-orange-50/50 text-orange-800' :
-                      section.color === 'cyan' ? 'border-t-cyan-500 text-cyan-600 bg-cyan-50/50 text-cyan-800' :
-                      'border-t-indigo-500 text-indigo-600 bg-indigo-50/50 text-indigo-800';
-
-                    const dotBorderColor = 
-                      section.color === 'emerald' ? 'border-emerald-500' :
-                      section.color === 'amber' ? 'border-amber-500' :
-                      section.color === 'yellow' ? 'border-yellow-500' :
-                      section.color === 'red' ? 'border-red-500' :
-                      section.color === 'purple' ? 'border-purple-500' :
-                      section.color === 'orange' ? 'border-orange-500' :
-                      section.color === 'cyan' ? 'border-cyan-500' : 'border-indigo-500';
-
-                    return (
-                      <div 
-                        id={`timeline-section-${section.id}`}
-                        key={section.id} 
-                        className="relative flex flex-col lg:flex-row w-full group"
-                      >
-                        {/* Timeline Node dot */}
-                        <div 
-                          className={`absolute left-6 lg:left-1/2 w-5 h-5 rounded-full bg-white border-4 ${dotBorderColor} -translate-x-1/2 top-8 z-10 shadow-sm transition-all duration-300 group-hover:scale-125 group-hover:bg-primary`} 
-                        />
-
-                        {/* Left Spacer / Card for even items on desktop */}
-                        <div className={`w-full lg:w-1/2 pl-16 lg:pl-0 lg:pr-12 flex justify-end order-2 ${isEven ? 'lg:order-1' : 'lg:order-2 hidden lg:flex'}`} />
-
-                        {/* Main Card */}
-                        <div className={`w-full lg:w-1/2 pl-16 lg:pl-12 lg:pr-0 flex justify-start order-2 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
-                          <div className={`bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 sm:p-8 w-full border-t-4 ${accentClass.split(' ')[0]} transition-all duration-300 hover:shadow-md`}>
-                            
-                            {/* Card Header */}
-                            <div className="space-y-1 mb-4">
-                              <span className={`text-[10px] font-bold uppercase tracking-wider font-sans ${accentClass.split(' ')[1]}`}>
-                                {sectionEra}
-                              </span>
-                              <h4 className="font-sans text-lg sm:text-xl font-bold text-primary">
-                                {sectionTitle}
-                              </h4>
-                              {sectionItalic && (
-                                <p className="text-xs font-semibold text-slate-400 italic">
-                                  {sectionItalic}
-                                </p>
-                              )}
-                            </div>
-
-                            {/* Summary Text */}
-                            <p className="text-xs text-slate-600 leading-relaxed font-sans font-medium mb-5">
-                              {sectionDesc}
-                            </p>
-
-                            {/* Events bullet list */}
-                            <div className="space-y-3.5 mb-6">
-                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block font-sans">
-                                {isEn ? "Key Events / Details" : "Viktige detaljer"}
-                              </span>
-                              <ul className="space-y-3">
-                                {section.events.map((evt, eidx) => {
-                                  const evtTitle = evt.title[language] || evt.title.no;
-                                  const evtDesc = evt.desc[language] || evt.desc.no;
-                                  return (
-                                    <li key={eidx} className="flex gap-2.5 text-xs text-slate-600 leading-relaxed font-medium align-top">
-                                      <span className={`shrink-0 w-1.5 h-1.5 rounded-full mt-2 ${accentClass.split(' ')[0].replace('border-t-', 'bg-')}`} />
-                                      <span>
-                                        <strong className="text-slate-800">{evtTitle} </strong>
-                                        {evtDesc}
-                                      </span>
-                                    </li>
-                                  );
-                                })}
-                              </ul>
-                            </div>
-
-                            {/* Citation Link */}
-                            <div className={`p-4 rounded-xl border border-slate-200/10 flex items-start gap-3 ${accentClass.split(' ').slice(2).join(' ')}`}>
-                              <BookOpen size={16} className="shrink-0 mt-0.5" />
-                              <div className="space-y-0.5">
-                                <span className="text-[9px] font-bold uppercase tracking-wider block font-sans">
-                                  {isEn ? "Key Scripture Passage" : "Sentrale skrifter"}
-                                </span>
-                                <button
-                                  onClick={() => handleScriptureRefLink(section.scripRef, 'timeline')}
-                                  className="text-xs font-bold hover:underline text-left block text-[#561291] transition-all cursor-pointer font-sans"
-                                >
-                                  {sectionScripTitle}
-                                </button>
-                              </div>
-                            </div>
-
-                          </div>
-                        </div>
-
-                        {/* Right Spacer for odd items on desktop */}
-                        <div className={`w-full lg:w-1/2 pl-16 lg:pl-0 lg:pr-12 flex justify-start order-2 ${!isEven ? 'lg:order-2' : 'lg:order-1 hidden lg:flex'}`} />
-
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-          </div>
+        {activeTab === "timeline" && (
+          <ResourcesTimeline
+            {...{
+              activeTimelineSection,
+              handleScriptureRefLink,
+              isEn,
+              language,
+              setActiveTimelineSection,
+              setTimelineSubTab,
+              timelineSubTab,
+            }}
+          />
         )}
-
       </main>
 
       {/* Selected Character Detail Modal */}
       <AnimatePresence>
-        {selectedCharacter && (() => {
-          const charName = selectedCharacter.name[language] || selectedCharacter.name.no;
-          const charRole = selectedCharacter.role[language] || selectedCharacter.role.no;
-          const charEra = selectedCharacter.era[language] || selectedCharacter.era.no;
-          const charMeaning = selectedCharacter.meaning[language] || selectedCharacter.meaning.no;
-          const charSummary = selectedCharacter.summary[language] || selectedCharacter.summary.no;
-          const charStory = selectedCharacter.story[language] || selectedCharacter.story.no;
-          const charTheology = selectedCharacter.theologicalSignificance[language] || selectedCharacter.theologicalSignificance.no;
-          
-          return (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedCharacter(null)}
-              className="fixed inset-0 z-[70] bg-[#561291]/40 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
-            >
+        {selectedCharacter &&
+          (() => {
+            const charName =
+              selectedCharacter.name[language] || selectedCharacter.name.no;
+            const charRole =
+              selectedCharacter.role[language] || selectedCharacter.role.no;
+            const charEra =
+              selectedCharacter.era[language] || selectedCharacter.era.no;
+            const charMeaning =
+              selectedCharacter.meaning[language] ||
+              selectedCharacter.meaning.no;
+            const charSummary =
+              selectedCharacter.summary[language] ||
+              selectedCharacter.summary.no;
+            const charStory =
+              selectedCharacter.story[language] || selectedCharacter.story.no;
+            const charTheology =
+              selectedCharacter.theologicalSignificance[language] ||
+              selectedCharacter.theologicalSignificance.no;
+
+            return (
               <motion.div
-                initial={{ scale: 0.95, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.95, y: 20 }}
-                onClick={(e) => e.stopPropagation()}
-                className="bg-white rounded-3xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl border border-slate-100"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setSelectedCharacter(null)}
+                className="fixed inset-0 z-[70] bg-[#561291]/40 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
               >
-                {/* Modal Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 shrink-0 bg-slate-50">
-                  <div className="space-y-0.5">
-                    <span className="text-[9px] font-bold text-burnt-orange uppercase tracking-wider block font-sans">
-                      {isEn ? "Biblical Character Profile" : "Profil av bibelsk person"}
-                    </span>
-                    <h3 className="font-sans font-extrabold text-lg text-primary leading-tight">
-                      {charName}
-                    </h3>
-                  </div>
-                  <button 
-                    onClick={() => setSelectedCharacter(null)}
-                    className="p-1.5 hover:bg-slate-200 rounded-lg text-slate-400 hover:text-primary transition-all cursor-pointer"
-                  >
-                    <X size={18} />
-                  </button>
-                </div>
-
-                {/* Modal Body */}
-                <div className="flex-grow overflow-y-auto p-6 md:p-8 space-y-6 md:space-y-0 md:grid md:grid-cols-12 md:gap-8 font-sans scrollbar-thin">
-                  
-                  {/* Left Column: Image and quick facts */}
-                  <div className="md:col-span-4 space-y-5">
-                    <div className="aspect-[4/5] bg-slate-100 rounded-2xl overflow-hidden shadow-sm border border-slate-200/40 relative">
-                      <img 
-                        src={selectedCharacter.image} 
-                        alt={charName}
-                        className="w-full h-full object-cover object-top"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="hidden absolute inset-0 bg-gradient-to-br from-[#561291]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-6xl text-primary"
-                      >
-                        {charName.substring(0, 1)}
-                      </div>
+                <motion.div
+                  initial={{ scale: 0.95, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.95, y: 20 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-white rounded-3xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl border border-slate-100"
+                >
+                  {/* Modal Header */}
+                  <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 shrink-0 bg-slate-50">
+                    <div className="space-y-0.5">
+                      <span className="text-[9px] font-bold text-burnt-orange uppercase tracking-wider block font-sans">
+                        {isEn
+                          ? "Biblical Character Profile"
+                          : "Profil av bibelsk person"}
+                      </span>
+                      <h3 className="font-sans font-extrabold text-lg text-primary leading-tight">
+                        {charName}
+                      </h3>
                     </div>
-
-                    <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4.5 space-y-4">
-                      <div>
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">
-                          {isEn ? "Name Meaning" : "Navnets betydning"}
-                        </span>
-                        <span className="text-xs font-bold text-primary mt-0.5 block leading-normal">
-                          {charMeaning}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">
-                          {isEn ? "Historical Era" : "Historisk tid"}
-                        </span>
-                        <span className="text-xs font-bold text-slate-700 mt-0.5 block">
-                          {charEra}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">
-                          {isEn ? "Biblical Role" : "Rolle / Tittel"}
-                        </span>
-                        <span className="text-xs font-bold text-slate-700 mt-0.5 block">
-                          {charRole}
-                        </span>
-                      </div>
-                    </div>
+                    <button
+                      onClick={() => setSelectedCharacter(null)}
+                      className="p-1.5 hover:bg-slate-200 rounded-lg text-slate-400 hover:text-primary transition-all cursor-pointer"
+                    >
+                      <X size={18} />
+                    </button>
                   </div>
 
-                  {/* Right Column: Biography & Significance */}
-                  <div className="md:col-span-8 space-y-6">
-                    {/* Excerpt */}
-                    <p className="text-sm font-bold text-primary leading-relaxed font-sans bg-primary/5 p-4 rounded-xl border border-primary/10">
-                      {charSummary}
-                    </p>
+                  {/* Modal Body */}
+                  <div className="flex-grow overflow-y-auto p-6 md:p-8 space-y-6 md:space-y-0 md:grid md:grid-cols-12 md:gap-8 font-sans scrollbar-thin">
+                    {/* Left Column: Image and quick facts */}
+                    <div className="md:col-span-4 space-y-5">
+                      <div className="aspect-[4/5] bg-slate-100 rounded-2xl overflow-hidden shadow-sm border border-slate-200/40 relative">
+                        <img
+                          src={selectedCharacter.image}
+                          alt={charName}
+                          className="w-full h-full object-cover object-top"
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                            e.target.nextSibling.style.display = "flex";
+                          }}
+                        />
+                        <div className="hidden absolute inset-0 bg-gradient-to-br from-[#561291]/10 to-[#bd4f2a]/10 items-center justify-center font-bold text-6xl text-primary">
+                          {charName.substring(0, 1)}
+                        </div>
+                      </div>
 
-                    {/* Biography */}
-                    <div className="space-y-2">
-                      <h4 className="font-sans font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
-                        {isEn ? "Biblical Biography & History" : "Biografi og bibelsk historie"}
-                      </h4>
-                      <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium text-justify whitespace-pre-line">
-                        {charStory}
+                      <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4.5 space-y-4">
+                        <div>
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">
+                            {isEn ? "Name Meaning" : "Navnets betydning"}
+                          </span>
+                          <span className="text-xs font-bold text-primary mt-0.5 block leading-normal">
+                            {charMeaning}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">
+                            {isEn ? "Historical Era" : "Historisk tid"}
+                          </span>
+                          <span className="text-xs font-bold text-slate-700 mt-0.5 block">
+                            {charEra}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">
+                            {isEn ? "Biblical Role" : "Rolle / Tittel"}
+                          </span>
+                          <span className="text-xs font-bold text-slate-700 mt-0.5 block">
+                            {charRole}
+                          </span>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Theological Significance */}
-                    <div className="space-y-2">
-                      <h4 className="font-sans font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
-                        {isEn ? "Theological Significance" : "Teologisk betydning"}
-                      </h4>
-                      <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium text-justify whitespace-pre-line">
-                        {charTheology}
-                      </div>
-                    </div>
+                    {/* Right Column: Biography & Significance */}
+                    <div className="md:col-span-8 space-y-6">
+                      {/* Excerpt */}
+                      <p className="text-sm font-bold text-primary leading-relaxed font-sans bg-primary/5 p-4 rounded-xl border border-primary/10">
+                        {charSummary}
+                      </p>
 
-                    {/* Key Verses Links */}
-                    <div className="space-y-2">
-                      <h4 className="font-sans font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
-                        {isEn ? "Key Bible Passages" : "Sentrale bibelske skrifter"}
-                      </h4>
-                      <div className="flex flex-wrap gap-2 pt-1">
-                        {selectedCharacter.verses.map((ref, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => {
-                              setSelectedCharacter(null);
-                              handleScriptureRefLink(ref, 'characters');
-                            }}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-50 hover:bg-[#561291] hover:text-white border border-slate-200 text-primary rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer active:scale-95"
-                          >
-                            <BookOpen size={11} />
-                            <span>{ref}</span>
-                          </button>
-                        ))}
+                      {/* Biography */}
+                      <div className="space-y-2">
+                        <h4 className="font-sans font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
+                          {isEn
+                            ? "Biblical Biography & History"
+                            : "Biografi og bibelsk historie"}
+                        </h4>
+                        <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium text-justify whitespace-pre-line">
+                          {charStory}
+                        </div>
+                      </div>
+
+                      {/* Theological Significance */}
+                      <div className="space-y-2">
+                        <h4 className="font-sans font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
+                          {isEn
+                            ? "Theological Significance"
+                            : "Teologisk betydning"}
+                        </h4>
+                        <div className="text-xs text-slate-600 leading-relaxed space-y-3 font-medium text-justify whitespace-pre-line">
+                          {charTheology}
+                        </div>
+                      </div>
+
+                      {/* Key Verses Links */}
+                      <div className="space-y-2">
+                        <h4 className="font-sans font-extrabold text-sm text-primary uppercase tracking-wide border-b pb-1.5">
+                          {isEn
+                            ? "Key Bible Passages"
+                            : "Sentrale bibelske skrifter"}
+                        </h4>
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {selectedCharacter.verses.map((ref, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => {
+                                setSelectedCharacter(null);
+                                handleScriptureRefLink(ref, "characters");
+                              }}
+                              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-50 hover:bg-[#561291] hover:text-white border border-slate-200 text-primary rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer active:scale-95"
+                            >
+                              <BookOpen size={11} />
+                              <span>{ref}</span>
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
-
-                </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          );
-        })()}
+            );
+          })()}
       </AnimatePresence>
 
       {/* Flytende gå-tilbake-knapp sentrert nederst på skjermen */}
       <AnimatePresence>
         {(returnOriginTab || previousReference) && (
           <motion.div
-            initial={{ opacity: 0, y: 50, x: '-50%' }}
-            animate={{ opacity: 1, y: 0, x: '-50%' }}
-            exit={{ opacity: 0, y: 50, x: '-50%' }}
+            initial={{ opacity: 0, y: 50, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: 50, x: "-50%" }}
             className="fixed bottom-6 left-1/2 z-50 select-none pointer-events-auto"
           >
             {returnOriginTab ? (
@@ -2112,9 +1871,13 @@ export default function BibleResourcesPage() {
               >
                 <ArrowLeft size={14} className="stroke-[3] animate-pulse" />
                 <span>
-                  {returnOriginTab === 'characters' 
-                    ? (isEn ? "Back to Characters" : "Tilbake til personer") 
-                    : (isEn ? "Back to Timeline" : "Tilbake til tidslinje")}
+                  {returnOriginTab === "characters"
+                    ? isEn
+                      ? "Back to Characters"
+                      : "Tilbake til personer"
+                    : isEn
+                      ? "Back to Timeline"
+                      : "Tilbake til tidslinje"}
                 </span>
               </button>
             ) : (
@@ -2124,7 +1887,9 @@ export default function BibleResourcesPage() {
               >
                 <ArrowLeft size={14} className="stroke-[3] animate-pulse" />
                 <span>
-                  Tilbake til {previousReference.book.nor} {previousReference.chapter}{previousReference.verse ? `:${previousReference.verse}` : ''}
+                  Tilbake til {previousReference.book.nor}{" "}
+                  {previousReference.chapter}
+                  {previousReference.verse ? `:${previousReference.verse}` : ""}
                 </span>
               </button>
             )}
@@ -2133,242 +1898,39 @@ export default function BibleResourcesPage() {
       </AnimatePresence>
 
       {/* Fullscreen Book/Chapter Selector Modal for Mobile & Desktop */}
-      <AnimatePresence>
-        {showMobileSelector && (
-          <motion.div
-            initial={{ opacity: 0, y: '100%' }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-            className="fixed inset-0 z-[60] bg-white flex flex-col h-screen w-screen overflow-hidden"
-          >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4.5 border-b border-slate-100 bg-white shrink-0">
-              <div className="flex items-center gap-3">
-                {selectorTab === 'chapter' && (
-                  <button
-                    onClick={() => setSelectorTab('book')}
-                    className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"
-                  >
-                    <ArrowLeft size={20} />
-                  </button>
-                )}
-                <h3 className="font-sans font-extrabold text-lg sm:text-xl text-primary">
-                  {selectorTab === 'book' ? (isEn ? 'Select Book' : 'Velg bibelbok') : (isEn ? 'Select Chapter' : 'Velg kapittel')}
-                </h3>
-              </div>
-              <button
-                onClick={() => setShowMobileSelector(false)}
-                className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            {/* Selector Sub-Tabs */}
-            <div className="grid grid-cols-2 border-b border-slate-100 bg-slate-50/50 shrink-0">
-              <button
-                onClick={() => setSelectorTab('book')}
-                className={`py-4 text-xs sm:text-sm font-bold border-b-2 uppercase tracking-wide transition-all ${
-                  selectorTab === 'book'
-                    ? 'border-primary text-primary font-extrabold'
-                    : 'border-transparent text-slate-400 hover:text-slate-600'
-                }`}
-              >
-                {selectedBook ? selectedBook.nor : (isEn ? 'Book' : 'Bibelbok')}
-              </button>
-              <button
-                onClick={() => setSelectorTab('chapter')}
-                className={`py-4 text-xs sm:text-sm font-bold border-b-2 uppercase tracking-wide transition-all ${
-                  selectorTab === 'chapter'
-                    ? 'border-primary text-primary font-extrabold'
-                    : 'border-transparent text-slate-400 hover:text-slate-600'
-                }`}
-              >
-                {isEn ? `Chapter ${selectedChapter}` : `Kapittel ${selectedChapter}`}
-              </button>
-            </div>
-
-            {/* Search Input (Only on 'book' tab) */}
-            {selectorTab === 'book' && (
-              <div className="p-4 sm:p-5 border-b border-slate-100 shrink-0">
-                <div className="relative max-w-4xl mx-auto">
-                  <input
-                    type="text"
-                    placeholder={isEn ? "Search bible books..." : "Søk etter bibelbok (f.eks. 'Mosebok', 'Joh')..."}
-                    value={selectorSearch}
-                    onChange={(e) => setSelectorSearch(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm sm:text-base font-semibold focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white transition-all shadow-inner"
-                  />
-                  <div className="absolute left-4 top-0 bottom-0 my-auto h-4 w-4 text-slate-400 pointer-events-none">
-                    <Search size={18} />
-                  </div>
-                  {selectorSearch && (
-                    <button
-                      onClick={() => setSelectorSearch('')}
-                      className="absolute right-3 top-0 bottom-0 my-auto p-1 text-slate-400 hover:text-slate-600"
-                    >
-                      <X size={16} />
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* List & Grids container (scrollable) */}
-            <div className="flex-grow overflow-y-auto p-6 sm:p-8 bg-slate-50/30">
-              {selectorTab === 'book' ? (
-                <div className="space-y-8 max-w-6xl mx-auto">
-                  {/* Filter books */}
-                  {(() => {
-                    const cleanQuery = selectorSearch.toLowerCase().trim();
-                    const matchingBooks = BIBLE_BOOKS.filter(b => 
-                      b.nor.toLowerCase().includes(cleanQuery) || 
-                      b.eng.toLowerCase().includes(cleanQuery)
-                    );
-
-                    if (matchingBooks.length === 0) {
-                      return (
-                        <div className="text-center py-16 space-y-3">
-                          <BookMarked className="mx-auto text-slate-300" size={48} />
-                          <p className="text-slate-500 font-bold text-base">Ingen bøker funnet for "{selectorSearch}"</p>
-                        </div>
-                      );
-                    }
-
-                    // Group by testament if no active search
-                    const showGrouped = !selectorSearch;
-                    if (showGrouped) {
-                      const gtBooks = matchingBooks.filter(b => b.testament === 'GT');
-                      const ntBooks = matchingBooks.filter(b => b.testament === 'NT');
-
-                      return (
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-                          {/* Gamle testamentet */}
-                          <div className="space-y-4">
-                            <h4 className="text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-wider pl-2.5 border-l-2 border-primary/40">Det gamle testamentet (GT)</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 bg-white p-3 sm:p-4.5 border border-slate-100 rounded-2xl shadow-sm">
-                              {gtBooks.map(book => (
-                                <button
-                                  key={book.id}
-                                  onClick={() => {
-                                    setSelectedBook(book);
-                                    setSelectorTab('chapter');
-                                  }}
-                                  className={`w-full text-left px-4 py-3.5 sm:py-4 rounded-xl text-sm sm:text-[15px] font-bold transition-all flex justify-between items-center ${
-                                    selectedBook.id === book.id
-                                      ? 'bg-primary/5 text-primary border border-primary/10 shadow-sm'
-                                      : 'text-slate-600 hover:bg-slate-50'
-                                  }`}
-                                >
-                                  <span>{book.nor}</span>
-                                  <span className="text-xs font-mono opacity-50 font-normal">{book.chapters} {isEn ? 'ch' : 'kap'}</span>
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Nye testamentet */}
-                          <div className="space-y-4">
-                            <h4 className="text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-wider pl-2.5 border-l-2 border-primary/40">Det nye testamentet (NT)</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 bg-white p-3 sm:p-4.5 border border-slate-100 rounded-2xl shadow-sm">
-                              {ntBooks.map(book => (
-                                <button
-                                  key={book.id}
-                                  onClick={() => {
-                                    setSelectedBook(book);
-                                    setSelectorTab('chapter');
-                                  }}
-                                  className={`w-full text-left px-4 py-3.5 sm:py-4 rounded-xl text-sm sm:text-[15px] font-bold transition-all flex justify-between items-center ${
-                                    selectedBook.id === book.id
-                                      ? 'bg-primary/5 text-primary border border-primary/10 shadow-sm'
-                                      : 'text-slate-600 hover:bg-slate-50'
-                                  }`}
-                                >
-                                  <span>{book.nor}</span>
-                                  <span className="text-xs font-mono opacity-50 font-normal">{book.chapters} {isEn ? 'ch' : 'kap'}</span>
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    }
-
-                    // Flat list of search results
-                    return (
-                      <div className="bg-white border border-slate-100 rounded-2xl p-4 sm:p-6 shadow-sm grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                        {matchingBooks.map(book => (
-                          <button
-                            key={book.id}
-                            onClick={() => {
-                              setSelectedBook(book);
-                              setSelectorTab('chapter');
-                            }}
-                            className={`w-full text-left px-4 py-3.5 sm:py-4 rounded-xl text-sm sm:text-[15px] font-bold transition-all flex justify-between items-center ${
-                              selectedBook.id === book.id
-                                ? 'bg-primary/5 text-primary border border-primary/10 shadow-sm'
-                                : 'text-slate-600 hover:bg-slate-50'
-                            }`}
-                          >
-                            <span>{book.nor}</span>
-                            <span className="text-xs font-mono opacity-50 font-normal">{book.chapters} kap</span>
-                          </button>
-                        ))}
-                      </div>
-                    );
-                  })()}
-                </div>
-              ) : (
-                <div className="max-w-5xl mx-auto space-y-6">
-                  <div className="text-center pb-2">
-                    <p className="text-slate-400 font-bold text-xs sm:text-sm uppercase tracking-wider">Velg kapittel i {selectedBook.nor}</p>
-                  </div>
-                  <div className="bg-white border border-slate-100 rounded-2xl p-6 sm:p-8 shadow-sm">
-                    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-3 sm:gap-4">
-                      {Array.from({ length: selectedBook.chapters }, (_, i) => i + 1).map(chap => (
-                        <button
-                          key={chap}
-                          onClick={() => {
-                            setSelectedChapter(chap);
-                            setShowMobileSelector(false);
-                            // Scroll reading card to view
-                            setTimeout(() => {
-                              if (readerRef.current) {
-                                readerRef.current.scrollIntoView({ behavior: 'smooth' });
-                              }
-                            }, 150);
-                          }}
-                          className={`h-12 sm:h-14 w-full rounded-xl text-sm sm:text-base font-extrabold transition-all flex items-center justify-center border ${
-                            selectedChapter === chap
-                              ? 'bg-primary text-white border-primary shadow font-black active:scale-[0.95]'
-                              : 'bg-slate-50 text-slate-700 border-slate-200/50 hover:bg-slate-100 hover:border-slate-300 active:scale-[0.97]'
-                          }`}
-                        >
-                          {chap}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <ResourcesSelector
+        {...{
+          isEn,
+          readerRef,
+          selectedBook,
+          selectedChapter,
+          selectorSearch,
+          selectorTab,
+          setSelectedBook,
+          setSelectedChapter,
+          setSelectorSearch,
+          setSelectorTab,
+          setShowMobileSelector,
+          showMobileSelector,
+        }}
+      />
 
       {/* Mobile Bottom Thumb-Navigation Pill (Ergonomisk) */}
       <AnimatePresence>
         {selectedVerses.length === 0 && !showMobileSelector && (
-          <div 
+          <div
             className="fixed bottom-6 z-[55] flex justify-center pointer-events-none select-none"
-            style={cardPosition.width > 0 ? {
-              left: `${cardPosition.left + cardPosition.width / 2}px`,
-              transform: 'translate3d(-50%, 0, 0)'
-            } : {
-              left: '50%',
-              transform: 'translate3d(-50%, 0, 0)'
-            }}
+            style={
+              cardPosition.width > 0
+                ? {
+                    left: `${cardPosition.left + cardPosition.width / 2}px`,
+                    transform: "translate3d(-50%, 0, 0)",
+                  }
+                : {
+                    left: "50%",
+                    transform: "translate3d(-50%, 0, 0)",
+                  }
+            }
           >
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -2376,28 +1938,30 @@ export default function BibleResourcesPage() {
               exit={{ opacity: 0, y: 40 }}
               className="bg-white/95 backdrop-blur-md text-slate-800 border border-slate-200/80 px-3 py-1 rounded-full flex items-center justify-between gap-2 shadow-lg w-[75vw] max-w-[260px] pointer-events-auto"
             >
-              <button 
-                onClick={() => navigateChapter('prev')}
+              <button
+                onClick={() => navigateChapter("prev")}
                 className="p-1.5 text-slate-500 hover:text-slate-800 active:scale-[0.9] transition-all cursor-pointer bg-transparent border-none outline-none flex items-center justify-center shrink-0"
                 title={isEn ? "Previous chapter" : "Forrige kapittel"}
               >
                 <ArrowLeft size={16} />
               </button>
 
-              <button 
+              <button
                 onClick={() => {
-                  setSelectorTab('book');
-                  setSelectorSearch('');
+                  setSelectorTab("book");
+                  setSelectorSearch("");
                   setShowMobileSelector(true);
                 }}
                 className="flex-grow text-center font-sans font-extrabold text-[13px] hover:text-slate-900 active:scale-[0.97] transition-all flex items-center gap-1 justify-center py-1 px-2 bg-transparent border-none outline-none text-slate-800 cursor-pointer select-none"
               >
-                <span>{selectedBook.nor} {selectedChapter}</span>
+                <span>
+                  {selectedBook.nor} {selectedChapter}
+                </span>
                 <ChevronDown size={10} className="text-slate-400" />
               </button>
 
-              <button 
-                onClick={() => navigateChapter('next')}
+              <button
+                onClick={() => navigateChapter("next")}
                 className="p-1.5 text-slate-500 hover:text-slate-800 active:scale-[0.9] transition-all cursor-pointer bg-transparent border-none outline-none flex items-center justify-center shrink-0"
                 title={isEn ? "Next chapter" : "Neste kapittel"}
               >
@@ -2412,30 +1976,34 @@ export default function BibleResourcesPage() {
       <AnimatePresence>
         {selectedVerses.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 50, x: '-50%', scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, x: '-50%', scale: 1 }}
-            exit={{ opacity: 0, y: 50, x: '-50%', scale: 0.95 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+            initial={{ opacity: 0, y: 50, x: "-50%", scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+            exit={{ opacity: 0, y: 50, x: "-50%", scale: 0.95 }}
+            transition={{ type: "spring", damping: 25, stiffness: 220 }}
             className="fixed bottom-8 z-[100] bg-white/95 backdrop-blur-md border border-slate-200/80 px-4 sm:px-6 py-3 rounded-2xl flex items-center justify-between gap-3 sm:gap-4 text-slate-800 shadow-2xl font-sans max-w-[92vw] sm:max-w-md w-max pointer-events-auto"
-            style={cardPosition.width > 0 ? {
-              left: `${cardPosition.left + cardPosition.width / 2}px`,
-              transform: 'translate3d(-50%, 0, 0)'
-            } : {
-              left: '50%',
-              transform: 'translate3d(-50%, 0, 0)'
-            }}
+            style={
+              cardPosition.width > 0
+                ? {
+                    left: `${cardPosition.left + cardPosition.width / 2}px`,
+                    transform: "translate3d(-50%, 0, 0)",
+                  }
+                : {
+                    left: "50%",
+                    transform: "translate3d(-50%, 0, 0)",
+                  }
+            }
           >
             <div className="flex items-center gap-2 border-r border-slate-200/80 pr-2.5 sm:pr-3 shrink-0">
               <span className="h-6 w-6 rounded-full bg-[#561291] text-white flex items-center justify-center text-xs font-bold font-mono">
                 {selectedVerses.length}
               </span>
               <span className="text-[11px] sm:text-xs font-extrabold text-slate-800 hidden min-[360px]:inline">
-                {selectedVerses.length === 1 ? 'vers' : 'vers'} valgt
+                {selectedVerses.length === 1 ? "vers" : "vers"} valgt
               </span>
             </div>
 
             <div className="flex items-center gap-1.5 sm:gap-2.5">
-              <button 
+              <button
                 onClick={handleBulkCopy}
                 className="px-2.5 sm:px-3 py-1.5 bg-[#561291] hover:bg-[#561291] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm cursor-pointer text-white text-[11px] sm:text-xs border-none"
               >
@@ -2443,15 +2011,15 @@ export default function BibleResourcesPage() {
                 <span>Kopier</span>
               </button>
 
-              <button 
-                onClick={() => navigate('/login')}
+              <button
+                onClick={() => navigate("/login")}
                 className="px-2.5 sm:px-3 py-1.5 bg-[#561291] hover:bg-[#561291] active:scale-[0.96] rounded-xl font-bold transition-all flex items-center gap-1 shadow-sm cursor-pointer text-white text-[11px] sm:text-xs border-none"
               >
                 <Sparkles size={13} />
                 <span>Logg inn</span>
               </button>
 
-              <button 
+              <button
                 onClick={() => {
                   setSelectedVerses([]);
                   setHighlightedVerse(null);
