@@ -1,3 +1,4 @@
+import PrivacyStorageInfo from '@/components/PrivacyStorageInfo';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -155,6 +156,8 @@ export default function PrivacyPolicyPage() {
               <p>{isEn ? 'US privacy choices: This integration does not enable advertising, remarketing or cross-site advertising personalisation. We honour Global Privacy Control (GPC) by disabling optional analytics, including when a previous choice allowed it. Use the consent settings to opt out, or contact school@hiskingdomministry.no to request access, correction or deletion. Which US state privacy rights apply depends on your state and the applicable law; this notice does not claim certification under every state law.' : 'Personvernvalg for USA: Denne integrasjonen aktiverer ikke reklame, remarketing eller persontilpasset annonsering på tvers av nettsteder. Vi respekterer Global Privacy Control (GPC) ved å slå av valgfri analyse, også når et tidligere valg tillot den. Bruk samtykkeinnstillingene for å velge bort analyse, eller kontakt school@hiskingdomministry.no for innsyn, retting eller sletting. Hvilke amerikanske delstatsrettigheter som gjelder, avhenger av delstat og gjeldende lov; denne teksten er ikke en sertifisering etter alle delstatslover.'}</p>
               <button type="button" onClick={() => window.dispatchEvent(new Event('hkpc-cookie-settings'))} className="min-h-11 px-4 py-2 border border-purple-800 rounded-xl text-purple-900 font-semibold">{isEn ? 'Change or withdraw consent' : 'Endre eller trekk tilbake samtykke'}</button>
             </section>
+
+            <PrivacyStorageInfo language={language} />
 
             <section className="space-y-3" id="payments">
               <h2><CmsText slug="privacy-payments-title" fallback={isEn ? 'Payments and recurring agreements' : 'Betalinger og faste avtaler'} /></h2>

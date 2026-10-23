@@ -1,3 +1,4 @@
+import { memoryCache } from '@/lib/memoryCache';
 import { languageFromUrl } from '../utils/languageLink.js';
 import React, { createContext, useState, useEffect, useContext, useMemo } from 'react';
 import { auth, db, storage } from '@/firebase';
@@ -72,7 +73,7 @@ export const AppProvider = ({ children }) => {
   // Centralized Headless CMS Content State
   const [cmsContent, setCmsContent] = useState(() => {
     try {
-      const saved = localStorage.getItem('hkm-cms-content');
+      const saved = memoryCache.getItem('hkm-cms-content');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (
@@ -85,7 +86,7 @@ export const AppProvider = ({ children }) => {
           !parsed['landing-nav-about'] ||
           !parsed['admission-hero-badge']
         ) {
-          localStorage.removeItem('hkm-cms-content');
+          memoryCache.removeItem('hkm-cms-content');
           return DEFAULT_CMS_CONTENT;
         }
         return { ...DEFAULT_CMS_CONTENT, ...parsed };
@@ -153,7 +154,6 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     document.documentElement.lang = language === 'en' ? 'en' : 'no';
-    try { localStorage.setItem('hkm-language', language); } catch { /* Keep the language even when storage is unavailable. */ }
   }, [language]);
 
   // Firestore Realtime / Seed subscriptions
@@ -166,13 +166,13 @@ export const AppProvider = ({ children }) => {
           const dbData = cmsSnap.data();
           setCmsContent(prev => {
             const merged = { ...prev, ...dbData };
-            localStorage.setItem('hkm-cms-content', JSON.stringify(merged));
+            memoryCache.setItem('hkm-cms-content', JSON.stringify(merged));
             return merged;
           });
         } else {
           // Document doesn't exist, use default cmsContent values locally without blocking (guests are unauthenticated!)
           setCmsContent(DEFAULT_CMS_CONTENT);
-          localStorage.setItem('hkm-cms-content', JSON.stringify(DEFAULT_CMS_CONTENT));
+          memoryCache.setItem('hkm-cms-content', JSON.stringify(DEFAULT_CMS_CONTENT));
 
           // Seed the Firestore record asynchronously in the background only if authenticated as superadmin/admin (Non-blocking!)
           if (auth.currentUser && ['thomas@tk-design.no', 'knutsenthomas@gmail.com'].includes(auth.currentUser.email?.toLowerCase())) {
@@ -196,7 +196,7 @@ export const AppProvider = ({ children }) => {
           setCmsContent(prev => {
             const merged = { ...prev, ...dbData };
             try {
-              localStorage.setItem('hkm-cms-content', JSON.stringify(merged));
+              memoryCache.setItem('hkm-cms-content', JSON.stringify(merged));
             } catch (e) {}
             return merged;
           });
@@ -493,7 +493,7 @@ export const AppProvider = ({ children }) => {
     setCmsContent(prev => {
       const updated = { ...prev, [slug]: value };
       try {
-        localStorage.setItem('hkm-cms-content', JSON.stringify(updated));
+        memoryCache.setItem('hkm-cms-content', JSON.stringify(updated));
       } catch (e) {
         console.error('Klarte ikke lagre cms content i localStorage:', e);
       }
@@ -520,7 +520,7 @@ export const AppProvider = ({ children }) => {
           setCmsContent(prev => {
             const updated = { ...prev, [targetSlug]: translated };
             try {
-              localStorage.setItem('hkm-cms-content', JSON.stringify(updated));
+              memoryCache.setItem('hkm-cms-content', JSON.stringify(updated));
             } catch (e) {
               console.error('Klarte ikke lagre cms content i localStorage:', e);
             }
