@@ -40,7 +40,7 @@ export default function CookieConsent() {
   }, [consent, pathname, privacySignal]);
   useEffect(() => {
     const sync = event => {
-      if (event.key !== KEY) return;
+      if (event.key !== KEY && event.key !== null) return;
       const next = savedConsent();
       window['ga-disable-G-03629NPBTY'] = !analyticsAllowed(next, navigator.globalPrivacyControl === true) || !analyticsPage(location.pathname);
       if (document.getElementById('hkpc-google-analytics') && !next?.analytics) { location.reload(); return; }
@@ -57,6 +57,7 @@ export default function CookieConsent() {
   }, [consent]);
   function save(requested) {
     const allowed = requested && !privacySignal;
+    window['ga-disable-G-03629NPBTY'] = !allowed;
     updateConsentMode(allowed);
     const next = { version: CONSENT_VERSION, analytics: allowed, savedAt: Date.now() };
     try { localStorage.setItem(KEY, JSON.stringify(next)); } catch { /* Keep the choice for this visit. */ }

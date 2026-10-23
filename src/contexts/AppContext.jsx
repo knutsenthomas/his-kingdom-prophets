@@ -572,7 +572,9 @@ export const AppProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    localStorage.setItem('hkm-assignment-activity', JSON.stringify(assignmentActivity));
+    // Persist only after the visitor has created actual assignment activity.
+    if (!Object.keys(assignmentActivity).length) return;
+    try { localStorage.setItem('hkm-assignment-activity', JSON.stringify(assignmentActivity)); } catch { /* Keep activity in memory when storage is unavailable. */ }
   }, [assignmentActivity]);
 
   const assignments = useMemo(() => {
