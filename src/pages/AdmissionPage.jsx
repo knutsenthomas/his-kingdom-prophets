@@ -635,7 +635,7 @@ export default function AdmissionPage() {
         additionalNotes: formData.additionalNotes
           ? formData.additionalNotes.trim()
           : "",
-        status: "pending_review",
+        status: "pending",
         submittedAt: new Date().toISOString(),
         createdAt: serverTimestamp(),
       };
