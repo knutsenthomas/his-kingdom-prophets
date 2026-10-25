@@ -1,4 +1,5 @@
 import React from 'react';
+import englishText from '@/utils/englishText.json';
 import { useApp } from '@/contexts/AppContext';
 
 export default function CmsText({ 
@@ -29,7 +30,7 @@ export default function CmsText({
         .replace(/kickoff i Norge/gi, 'oppstartssamlingen i Norge')
         .replace(/kickoff kost\/losji/gi, 'kost og losji på oppstartssamlingen');
     }
-    return text;
+    return language === 'en' && typeof text === 'string' ? (englishText[text] ?? text) : text;
   };
   
   const rawText = getCmsText();
