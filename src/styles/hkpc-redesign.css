@@ -296,6 +296,45 @@
   margin-top: 7px;
 }
 
+.hkpc-landing .hero-scripture {
+  max-width: 960px;
+  margin: 0 0 32px;
+  padding: 4px 0 4px 24px;
+  border-left: 2px solid var(--gold);
+  color: #E5DDED;
+}
+
+.hkpc-landing .hero-scripture blockquote {
+  margin: 0;
+}
+
+.hkpc-landing .hero-scripture p {
+  margin: 0;
+  color: #E5DDED;
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.8;
+}
+
+.hkpc-landing .hero-scripture figcaption {
+  margin-top: 14px;
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.hkpc-landing .hero-scripture figcaption span {
+  margin-left: 8px;
+  font-size: 12px;
+  letter-spacing: .08em;
+}
+
+@media (max-width: 640px) {
+  .hkpc-landing .hero-scripture {
+    padding-left: 16px;
+    margin-bottom: 24px;
+  }
+}
+
 .hkpc-landing .hero-base {
   border-top: 1px solid #ffffff26;
   padding: 20px 0 22px;
