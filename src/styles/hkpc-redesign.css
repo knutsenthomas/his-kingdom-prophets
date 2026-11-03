@@ -298,10 +298,9 @@
 
 .hkpc-landing .hero-scripture {
   max-width: 960px;
-  margin: 0 0 32px;
+  margin: clamp(28px, 4vw, 56px) 0;
   padding: 4px 0 4px 24px;
   border-left: 2px solid var(--gold);
-  color: #E5DDED;
 }
 
 .hkpc-landing .hero-scripture blockquote {
@@ -310,14 +309,13 @@
 
 .hkpc-landing .hero-scripture p {
   margin: 0;
-  color: #E5DDED;
   font-size: clamp(16px, 1.3vw, 19px);
   line-height: 1.8;
 }
 
 .hkpc-landing .hero-scripture figcaption {
   margin-top: 14px;
-  color: var(--gold);
+  color: var(--purple);
   font-size: 14px;
   font-weight: 600;
 }
@@ -331,7 +329,6 @@
 @media (max-width: 640px) {
   .hkpc-landing .hero-scripture {
     padding-left: 16px;
-    margin-bottom: 24px;
   }
 }
 

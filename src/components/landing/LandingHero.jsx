@@ -19,6 +19,7 @@ export default function LandingHero() {
   };
 
   return (
+    <>
     <section className="hero">
       <div className="hero-inner wrap">
         <motion.div 
@@ -90,17 +91,6 @@ export default function LandingHero() {
         </motion.div>
       </div>
 
-      <div className="wrap">
-        <figure className="hero-scripture" lang={language === 'no' ? 'nb' : 'en'}>
-          <blockquote>
-            <p>{language === 'no'
-              ? 'Da Du sa: «Søk Mitt ansikt», gjentok mitt hjerte for Deg: «Ditt ansikt, Herre, vil jeg søke.»'
-              : '“You have said, Seek My face [inquire for and require My presence as your vital need]. My heart says to You, Your face (Your presence), Lord, will I seek, inquire for, and require [of necessity and on the authority of Your Word].”'}</p>
-          </blockquote>
-          <figcaption>{language === 'no' ? 'Salme 27:8' : <>Psalm 27:8 <span>AMPC</span></>}</figcaption>
-        </figure>
-      </div>
-
       <motion.div 
         className="hero-base wrap"
         initial={{ opacity: 0, y: 12 }}
@@ -118,5 +108,16 @@ export default function LandingHero() {
         </div>
       </motion.div>
     </section>
+      <div className="wrap">
+        <figure className="hero-scripture" lang={language === 'no' ? 'nb' : 'en'}>
+          <blockquote>
+            <p>{language === 'no'
+              ? 'Da Du sa: «Søk Mitt ansikt», gjentok mitt hjerte for Deg: «Ditt ansikt, Herre, vil jeg søke.»'
+              : '“You have said, Seek My face [inquire for and require My presence as your vital need]. My heart says to You, Your face (Your presence), Lord, will I seek, inquire for, and require [of necessity and on the authority of Your Word].”'}</p>
+          </blockquote>
+          <figcaption>{language === 'no' ? 'Salme 27:8' : <>Psalm 27:8 <span>AMPC</span></>}</figcaption>
+        </figure>
+      </div>
+    </>
   );
 }
