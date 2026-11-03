@@ -297,10 +297,18 @@
 }
 
 .hkpc-landing .hero-scripture {
-  max-width: 960px;
-  margin: clamp(28px, 4vw, 56px) 0;
-  padding: 4px 0 4px 24px;
-  border-left: 2px solid var(--gold);
+  max-width: 65ch;
+  margin: clamp(28px, 4vw, 56px) auto;
+  text-align: left;
+}
+
+.hkpc-landing .hero-scripture::before {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 2px;
+  margin-bottom: 16px;
+  background: var(--gold);
 }
 
 .hkpc-landing .hero-scripture blockquote {
@@ -309,6 +317,7 @@
 
 .hkpc-landing .hero-scripture p {
   margin: 0;
+  color: var(--ink);
   font-size: clamp(16px, 1.3vw, 19px);
   line-height: 1.8;
 }
@@ -324,12 +333,6 @@
   margin-left: 8px;
   font-size: 12px;
   letter-spacing: .08em;
-}
-
-@media (max-width: 640px) {
-  .hkpc-landing .hero-scripture {
-    padding-left: 16px;
-  }
 }
 
 .hkpc-landing .hero-base {
