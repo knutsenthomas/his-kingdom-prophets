@@ -31,8 +31,8 @@ export default function AboutPage() {
     { icon: Heart, title: text('Tro i hverdagen', 'Faith in everyday life'), description: text('Bønn, karakter og disippelskap hører sammen. Det vi lærer, skal få vokse til virksom tro og tjeneste i hverdagen.', 'Prayer, character and discipleship belong together. What we learn should grow into active faith and ministry in everyday life.') },
     { icon: Users, title: text('Et fellesskap å vokse i', 'A community to grow in'), description: text('Gjennom undervisning, samtaler og praktisk trening gir vi rom for å lære, spørre og vokse sammen.', 'Through teaching, conversations and practical training, we make room to learn, ask questions and grow together.') },
   ];
-  const { people, published } = useWebsiteTeam();
-  const staff = people.filter(p => p.visible && p.group === 'staff');
+  const { people, published, leadershipPublished } = useWebsiteTeam();
+  const staff = people.filter(p => p.visible && p.group === 'staff' && (['hilde', 'thomas', 'anne'].includes(p.id) ? leadershipPublished : published));
   const volunteers = people.filter(p => p.visible && p.group === 'volunteer');
   const prayerTeam = people.filter(p => p.visible && p.group === 'prayer');
   return (
@@ -62,20 +62,19 @@ export default function AboutPage() {
         </section>
         <section className="about-team-section section" id="team">
           <div className="wrap">
-            {!published ? <><h2>{text('Team og lærere', 'Team and teachers')}</h2><p className="about-section-intro">{text('Informasjon om teamet og lærerne kommer...', 'Information about the team and teachers is coming soon...')}</p></> : <>
             <p className="eyebrow"><SiteText fallback={text('MENNESKENE BAK HIS KINGDOM PROPHETIC COMMUNITY', 'THE PEOPLE BEHIND HIS KINGDOM PROPHETIC COMMUNITY')} /></p>
             <h2><SiteText fallback={text('Mennesker med et felles hjerte.', 'People with a shared heart.')} /></h2>
             <p className="about-section-intro"><CmsText slug="about-page-team-intro" fallback={text('Hilde Karin og Thomas Knutsen leder His Kingdom Ministry med et hjerte for misjon, disippelskap og utrustning.', 'Hilde Karin and Thomas Knutsen lead His Kingdom Ministry with a heart for mission, discipleship and equipping believers.')} /></p>
             <div className="about-team-grid">{staff.map(person => <WebsiteTeamCard key={person.id} person={person} english={!no}/>)}</div>
-            {volunteers.length > 0 && <section className="about-additional-team"><h3>{text('Frivillige', 'Volunteers')}</h3><div className="about-team-grid">{volunteers.map(person => <WebsiteTeamCard key={person.id} person={person} english={!no}/>)}</div></section>}
-            {prayerTeam.length > 0 && <motion.section {...reveal()} className="about-additional-team about-prayer-panel" aria-labelledby="prayer-team-heading">
+            {published && volunteers.length > 0 && <section className="about-additional-team"><h3>{text('Frivillige', 'Volunteers')}</h3><div className="about-team-grid">{volunteers.map(person => <WebsiteTeamCard key={person.id} person={person} english={!no}/>)}</div></section>}
+            {published && prayerTeam.length > 0 && <motion.section {...reveal()} className="about-additional-team about-prayer-panel" aria-labelledby="prayer-team-heading">
               <div className="about-prayer-header">
                 <div className="about-prayer-heading"><span className="about-team-symbol" aria-hidden="true"><Heart size={26} /></span><div><p className="eyebrow"><SiteText fallback={text('SAMMEN I BØNN', 'TOGETHER IN PRAYER')} /></p><h3 id="prayer-team-heading"><SiteText fallback={text('HKM-bønneteam', 'HKM prayer team')} /></h3><p className="about-team-count">{prayerTeam.length} <SiteText fallback={text('medlemmer', 'members')} /></p></div></div>
                 <button type="button" className="about-team-toggle" aria-expanded={showPrayerTeam} aria-controls="prayer-team-members" onClick={() => setShowPrayerTeam(value => !value)}><SiteText fallback={text(showPrayerTeam ? 'Skjul teamet' : 'Vis teamet', showPrayerTeam ? 'Hide team' : 'Show team')} /><ChevronDown size={18} className={showPrayerTeam ? 'is-open' : ''} /></button>
               </div>
               <ul id="prayer-team-members" className="about-name-grid" hidden={!showPrayerTeam}>{prayerTeam.map(person => <li key={person.id}>{safeImage(person.image) ? <img className="about-member-photo" src={safeImage(person.image)} alt={person.name} loading="lazy"/> : <span className="about-member-initials" aria-hidden="true">{initials(person.name)}</span>}<span className="about-member-name">{person.name}</span><span className="about-member-role">{no ? person.roleNo || person.roleEn : person.roleEn || person.roleNo}</span>{(no ? person.bioNo || person.bioEn : person.bioEn || person.bioNo) && <p>{no ? person.bioNo || person.bioEn : person.bioEn || person.bioNo}</p>}<div className="about-person-contact">{person.email && <a href={`mailto:${encodeURIComponent(person.email)}`}>{person.email}</a>}{person.phone && <a href={`tel:${person.phone.replace(/[^+\d]/g, '')}`}>{person.phone}</a>}</div></li>)}</ul>
             </motion.section>}
-            </>}
+            {!published && <div className="about-additional-team"><button type="button" className="about-team-toggle" disabled>{text("Informasjon om teamet og lærerne kommer...", "Information about the team and teachers is coming soon...")}</button></div>}
           </div>
         </section>
         <motion.section {...reveal()} className="section wrap about-history-section" id="history">

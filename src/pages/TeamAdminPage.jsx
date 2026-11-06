@@ -31,12 +31,13 @@ export default function TeamAdminPage() {
     };
   }, []);
   const team = useWebsiteTeam();
-  async function togglePublication() {
+  async function togglePublication(leadership = false) {
     setBusy(true); setError(''); setNotice('');
     try {
-      const next = !team.published;
-      await saveInlineContent("website-team-published", String(next), team.publicationValue ?? "");
-      setNotice(next ? 'Team og lærere vises nå på nettsiden.' : 'Presentasjonen er skjult. Informasjon om teamet og lærerne kommer...');
+      const next = !(leadership ? team.leadershipPublished : team.published);
+      const key = leadership ? "website-leadership-published" : "website-team-published";
+      await saveInlineContent(key, String(next), (leadership ? team.leadershipPublicationValue : team.publicationValue) ?? "");
+      setNotice('Synligheten er oppdatert.');
     } catch (e) { setError(e.message || 'Innstillingen kunne ikke lagres. Prøv igjen.'); }
     finally { setBusy(false); }
   }
@@ -184,8 +185,12 @@ export default function TeamAdminPage() {
         ) : (
           <form onSubmit={save}>
             <div className="team-toolbar">
-              <div><strong>Offentlig team- og lærerpresentasjon</strong><p>{team.published ? 'Synlig på nettsiden' : 'Skjult: Informasjon om teamet og lærerne kommer...'}</p></div>
-              <button type="button" disabled={busy || !!team.error} aria-pressed={team.published} onClick={togglePublication}>{team.published ? 'Skjul presentasjonen' : 'Vis team og lærere'}</button>
+              <div><strong>Thomas, Hilde Karin og Anne-Linn</strong><p>{team.leadershipPublished ? 'Synlig på nettsiden' : 'Skjult på nettsiden'}</p></div>
+              <button type="button" disabled={busy || !!team.error} aria-pressed={team.leadershipPublished} onClick={() => togglePublication(true)}>{team.leadershipPublished ? 'Skjul presentasjonen' : 'Vis presentasjonen'}</button>
+            </div>
+            <div className="team-toolbar">
+              <div><strong>Øvrige teammedlemmer og lærere</strong><p>{team.published ? 'Synlig på nettsiden' : 'Skjult: Informasjon om teamet og lærerne kommer...'}</p></div>
+              <button type="button" disabled={busy || !!team.error} aria-pressed={team.published} onClick={() => togglePublication()}>{team.published ? 'Skjul presentasjonen' : 'Vis team og lærere'}</button>
             </div>
             <div className="team-toolbar">
               <p>

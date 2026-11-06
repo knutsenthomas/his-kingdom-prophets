@@ -10,9 +10,9 @@ import { fadeInUp, staggerContainer } from './animations';
 
 export default function LandingAbout() {
   const { language } = useApp();
-  const {people, published} = useWebsiteTeam();
+  const {people, leadershipPublished} = useWebsiteTeam();
 
-  if (!published) return <section className="about section" id="about"><div className="wrap"><h2>{language === 'no' ? 'Team og lærere' : 'Team and teachers'}</h2><p>{language === 'no' ? 'Informasjon om teamet og lærerne kommer...' : 'Information about the team and teachers is coming soon...'}</p></div></section>;
+  if (!leadershipPublished) return <section className="about section" id="about"><div className="wrap"><h2>{language === 'no' ? 'Team og lærere' : 'Team and teachers'}</h2><p>{language === 'no' ? 'Informasjon om teamet og lærerne kommer...' : 'Information about the team and teachers is coming soon...'}</p></div></section>;
   return (
     <section className="about section" id="about">
       <div className="wrap about-layout">
