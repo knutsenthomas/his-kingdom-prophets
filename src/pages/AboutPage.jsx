@@ -31,7 +31,7 @@ export default function AboutPage() {
     { icon: Heart, title: text('Tro i hverdagen', 'Faith in everyday life'), description: text('Bønn, karakter og disippelskap hører sammen. Det vi lærer, skal få vokse til virksom tro og tjeneste i hverdagen.', 'Prayer, character and discipleship belong together. What we learn should grow into active faith and ministry in everyday life.') },
     { icon: Users, title: text('Et fellesskap å vokse i', 'A community to grow in'), description: text('Gjennom undervisning, samtaler og praktisk trening gir vi rom for å lære, spørre og vokse sammen.', 'Through teaching, conversations and practical training, we make room to learn, ask questions and grow together.') },
   ];
-  const { people } = useWebsiteTeam();
+  const { people, published } = useWebsiteTeam();
   const staff = people.filter(p => p.visible && p.group === 'staff');
   const volunteers = people.filter(p => p.visible && p.group === 'volunteer');
   const prayerTeam = people.filter(p => p.visible && p.group === 'prayer');
@@ -62,6 +62,7 @@ export default function AboutPage() {
         </section>
         <section className="about-team-section section" id="team">
           <div className="wrap">
+            {!published ? <><h2>{text('Team og lærere', 'Team and teachers')}</h2><p className="about-section-intro">{text('Informasjon om teamet og lærerne kommer...', 'Information about the team and teachers is coming soon...')}</p></> : <>
             <p className="eyebrow"><SiteText fallback={text('MENNESKENE BAK HIS KINGDOM PROPHETIC COMMUNITY', 'THE PEOPLE BEHIND HIS KINGDOM PROPHETIC COMMUNITY')} /></p>
             <h2><SiteText fallback={text('Mennesker med et felles hjerte.', 'People with a shared heart.')} /></h2>
             <p className="about-section-intro"><CmsText slug="about-page-team-intro" fallback={text('Hilde Karin og Thomas Knutsen leder His Kingdom Ministry med et hjerte for misjon, disippelskap og utrustning.', 'Hilde Karin and Thomas Knutsen lead His Kingdom Ministry with a heart for mission, discipleship and equipping believers.')} /></p>
@@ -74,6 +75,7 @@ export default function AboutPage() {
               </div>
               <ul id="prayer-team-members" className="about-name-grid" hidden={!showPrayerTeam}>{prayerTeam.map(person => <li key={person.id}>{safeImage(person.image) ? <img className="about-member-photo" src={safeImage(person.image)} alt={person.name} loading="lazy"/> : <span className="about-member-initials" aria-hidden="true">{initials(person.name)}</span>}<span className="about-member-name">{person.name}</span><span className="about-member-role">{no ? person.roleNo || person.roleEn : person.roleEn || person.roleNo}</span>{(no ? person.bioNo || person.bioEn : person.bioEn || person.bioNo) && <p>{no ? person.bioNo || person.bioEn : person.bioEn || person.bioNo}</p>}<div className="about-person-contact">{person.email && <a href={`mailto:${encodeURIComponent(person.email)}`}>{person.email}</a>}{person.phone && <a href={`tel:${person.phone.replace(/[^+\d]/g, '')}`}>{person.phone}</a>}</div></li>)}</ul>
             </motion.section>}
+            </>}
           </div>
         </section>
         <motion.section {...reveal()} className="section wrap about-history-section" id="history">

@@ -31,6 +31,15 @@ export default function TeamAdminPage() {
     };
   }, []);
   const team = useWebsiteTeam();
+  async function togglePublication() {
+    setBusy(true); setError(''); setNotice('');
+    try {
+      const next = !team.published;
+      await saveInlineContent("website-team-published", String(next), team.publicationValue ?? "");
+      setNotice(next ? 'Team og lærere vises nå på nettsiden.' : 'Presentasjonen er skjult. Informasjon om teamet og lærerne kommer...');
+    } catch (e) { setError(e.message || 'Innstillingen kunne ikke lagres. Prøv igjen.'); }
+    finally { setBusy(false); }
+  }
   const [draft, setDraft] = useState([]),
     [base, setBase] = useState(),
     [selected, setSelected] = useState(""),
@@ -134,7 +143,7 @@ export default function TeamAdminPage() {
     try {
       await saveInlineContent(TEAM_KEY, JSON.stringify(draft), base);
       setDirty(false);
-      setNotice("Teamet er lagret og publisert på Om oss.");
+      setNotice("Teamet er lagret. Synlighet styres med knappen over.");
     } catch (failure) {
       setError(failure.message || "Endringene kunne ikke lagres.");
     } finally {
@@ -174,6 +183,10 @@ export default function TeamAdminPage() {
           <p>Laster teamet …</p>
         ) : (
           <form onSubmit={save}>
+            <div className="team-toolbar">
+              <div><strong>Offentlig team- og lærerpresentasjon</strong><p>{team.published ? 'Synlig på nettsiden' : 'Skjult: Informasjon om teamet og lærerne kommer...'}</p></div>
+              <button type="button" disabled={busy || !!team.error} aria-pressed={team.published} onClick={togglePublication}>{team.published ? 'Skjul presentasjonen' : 'Vis team og lærere'}</button>
+            </div>
             <div className="team-toolbar">
               <p>
                 {draft.length} personer ·{" "}

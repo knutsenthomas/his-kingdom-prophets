@@ -197,7 +197,7 @@ export default function SiteHeader() {
               title={language === 'no' ? 'Språk: Norsk (trykk for å endre)' : 'Language: English (click to change)'}
             >
               <Globe size={16} className="lang-globe-icon" />
-              <span className="lang-code-text"><SiteText fallback={language === 'no' ? 'NO' : 'EN'} /></span>
+              <span className="lang-code-text notranslate" translate="no">{language === 'no' ? 'NO' : 'EN'}</span>
               <ChevronDown 
                 size={12} 
                 className={`lang-chevron ${isLangMenuOpen ? 'open' : ''}`} 
@@ -211,12 +211,13 @@ export default function SiteHeader() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.96 }}
                   transition={{ duration: 0.16, ease: "easeOut" }}
-                  className="lang-dropdown-menu"
+                  className="lang-dropdown-menu notranslate"
+                  translate="no"
                   role="listbox"
                   aria-label="Språkliste"
                 >
                   <div className="lang-dropdown-header">
-                    <span><SiteText fallback={language === 'no' ? 'Velg språk' : 'Select language'} /></span>
+                    <span lang="nb" translate="no">Velg språk</span>
                   </div>
 
                   <div className="lang-dropdown-list">
@@ -234,8 +235,8 @@ export default function SiteHeader() {
                       <div className="lang-item-content">
                         <span className="lang-flag" aria-hidden="true">🇳🇴</span>
                         <div className="lang-item-text">
-                          <span className="lang-title"><SiteText fallback={"Norsk"} /></span>
-                          <span className="lang-detail"><SiteText fallback={"Bokmål"} /></span>
+                          <span className="lang-title"><span lang="nb" translate="no">Norsk</span></span>
+                          <span className="lang-detail" lang="nb" translate="no">Bokmål</span>
                         </div>
                       </div>
                       {language === 'no' && (
@@ -257,8 +258,8 @@ export default function SiteHeader() {
                       <div className="lang-item-content">
                         <span className="lang-flag" aria-hidden="true">🇬🇧</span>
                         <div className="lang-item-text">
-                          <span className="lang-title"><SiteText fallback={"English"} /></span>
-                          <span className="lang-detail"><SiteText fallback={"International"} /></span>
+                          <span className="lang-title"><span lang="en" translate="no">English</span></span>
+                          <span className="lang-detail" lang="en" translate="no">International</span>
                         </div>
                       </div>
                       {language === 'en' && (
