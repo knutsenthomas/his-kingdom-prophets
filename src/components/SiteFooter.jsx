@@ -10,7 +10,6 @@ const NETWORK_LINKS = [
   { url: 'https://hiskingdomministry.no/', name: 'His Kingdom Ministry' },
   { url: 'https://hiskingdomfoundation.no/', name: 'His Kingdom Foundation' },
   { url: 'https://hiskingdomdesigns.no/', name: 'His Kingdom Designs' },
-  { url: 'https://prayer.no/', name: 'Pust' },
 ];
 
 export default function SiteFooter() {
