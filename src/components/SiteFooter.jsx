@@ -6,6 +6,13 @@ import { ArrowUp, ShieldCheck } from 'lucide-react';
 import CmsText from '@/components/CmsText';
 import '@/styles/hkpc-redesign.css';
 
+const NETWORK_LINKS = [
+  { url: 'https://hiskingdomministry.no/', name: 'His Kingdom Ministry' },
+  { url: 'https://hiskingdomfoundation.no/', name: 'His Kingdom Foundation' },
+  { url: 'https://hiskingdomdesigns.no/', name: 'His Kingdom Designs' },
+  { url: 'https://prayer.no/', name: 'Pust' },
+];
+
 export default function SiteFooter() {
   const navigate = useNavigate();
   const { language, user } = useApp();
@@ -76,6 +83,21 @@ export default function SiteFooter() {
                   ? `© ${currentYear} His Kingdom Prophetic Community. Alle rettigheter reservert. Utrustning av profetiske tjenester for menigheten.`
                   : `© ${currentYear} His Kingdom Prophetic Community. All rights reserved. Equipping prophetic ministries for the church.`}
               />
+            </p>
+          </div>
+          <div className="footer-network" style={{ marginTop: '1rem', fontSize: '.8125rem', lineHeight: 1.7, opacity: .75, textAlign: 'center' }}>
+            <p style={{ margin: 0 }}>
+              {language === 'no' ? 'Del av' : 'Part of'}{' '}
+              {NETWORK_LINKS.map((site, i) => (
+                <React.Fragment key={site.url}>
+                  {i > 0 && ' · '}
+                  <a href={site.url} target="_blank" rel="noopener">{site.name}</a>
+                </React.Fragment>
+              ))}
+            </p>
+            <p style={{ margin: '.25rem 0 0' }}>
+              {language === 'no' ? 'Nettside laget av' : 'Website by'}{' '}
+              <a href="https://www.tk-design.no/" target="_blank" rel="noopener">TK-design</a>
             </p>
           </div>
         </div>
