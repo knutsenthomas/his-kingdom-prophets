@@ -597,3 +597,4 @@
 .hkpc-landing.uia-look { --u-cream: #f5f0fa; }
 .hkpc-landing.uia-look .topics span.topic-num { background: var(--u-purple); color: #fff; border-radius: 12px; }
 .hkpc-landing.uia-look .u-feature-text .signature { border-left: 0; padding-left: 0; }
+.hkpc-landing.uia-look .u-feature-image img { object-position: 22% center; }
