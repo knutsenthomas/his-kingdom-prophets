@@ -22,7 +22,7 @@ export default function LandingPage() {
   const { language } = useApp();
 
   return (
-    <div className="hkpc-landing uia-look min-h-screen">
+    <div className="hkpc-landing uia-look uia-home min-h-screen">
       <SeoHead
         title={language === 'no' 
           ? "His Kingdom Prophetic Community | Profetisk Skole & Utrustningssenter"

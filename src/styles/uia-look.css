@@ -282,7 +282,7 @@
   background: #fff;
   padding: clamp(64px, 8vw, 110px) 0 0;
 }
-.hkpc-landing.uia-look .section { padding-top: clamp(64px, 8vw, 110px); padding-bottom: 0; }
+.hkpc-landing.uia-look.uia-home .section { padding-top: clamp(64px, 8vw, 110px); padding-bottom: 0; }
 .hkpc-landing.uia-look .section-head { align-items: flex-end; margin-bottom: 32px; }
 .hkpc-landing.uia-look .section-head h2,
 .hkpc-landing.uia-look .resources h2 {

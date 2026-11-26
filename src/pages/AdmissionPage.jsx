@@ -1931,7 +1931,7 @@ export default function AdmissionPage() {
                               currentStep === item.step
                                 ? "bg-[#561291] text-white shadow-sm"
                                 : currentStep > item.step
-                                  ? "bg-green-50 text-green-700 border border-green-200"
+                                  ? "bg-[#eee6f6] text-[#561291] border border-[#e0d3ee]"
                                   : "bg-slate-50 text-slate-400 hover:text-slate-600"
                             }`}
                           >
@@ -1945,9 +1945,9 @@ export default function AdmissionPage() {
 
                       {/* Draft Auto-Saved Indicator & Reset Option */}
                       {hasDraft && (
-                        <div className="flex flex-wrap items-center justify-between gap-2 p-3 px-4 bg-emerald-50/90 border border-emerald-200/80 rounded-2xl text-xs text-emerald-900 shadow-xs">
+                        <div className="flex flex-wrap items-center justify-between gap-2 p-3 px-4 bg-[#f5f0fa] border border-[#e6dcf0] rounded-2xl text-xs text-[#3d2a52] shadow-xs">
                           <div className="flex items-center gap-2 font-medium">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                            <span className="w-2 h-2 rounded-full bg-[#561291] animate-pulse" />
                             <span>
                               <SiteText
                                 fallback={
@@ -1958,7 +1958,7 @@ export default function AdmissionPage() {
                               />
                             </span>
                             {draftSavedAt && (
-                              <span className="text-emerald-700/70 hidden sm:inline">
+                              <span className="text-[#6b5a80] hidden sm:inline">
                                 •{" "}
                                 <SiteText
                                   fallback={

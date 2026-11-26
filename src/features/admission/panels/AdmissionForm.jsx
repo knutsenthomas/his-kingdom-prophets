@@ -80,7 +80,7 @@ export default function AdmissionForm({
                 }
                 value={formData.name}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-full focus:outline-none placeholder:text-slate-400 font-normal transition-all"
               />
             </div>
 
@@ -181,7 +181,7 @@ export default function AdmissionForm({
                 placeholder="ola@eksempel.no"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-full focus:outline-none placeholder:text-slate-400 font-normal transition-all"
               />
             </div>
           </div>
@@ -203,7 +203,7 @@ export default function AdmissionForm({
                 placeholder="+47 000 00 000"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-full focus:outline-none placeholder:text-slate-400 font-normal transition-all"
               />
             </div>
 
@@ -229,7 +229,7 @@ export default function AdmissionForm({
                 }
                 value={formData.occupation}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-full focus:outline-none placeholder:text-slate-400 font-normal transition-all"
               />
             </div>
           </div>
@@ -256,7 +256,7 @@ export default function AdmissionForm({
               }
               value={formData.address}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-xl focus:outline-none placeholder:text-slate-400 font-normal transition-all"
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:border-[#561291]/60 focus:ring-2 focus:ring-[#561291]/15 text-base rounded-full focus:outline-none placeholder:text-slate-400 font-normal transition-all"
             />
           </div>
 
@@ -308,7 +308,7 @@ export default function AdmissionForm({
                     : "Kladd lagret! Du kan lukke siden og fortsette senere.",
                 );
               }}
-              className="w-full sm:w-auto min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
+              className="w-full sm:w-auto min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-full font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
             >
               <Save size={16} />
               <span>
@@ -325,7 +325,7 @@ export default function AdmissionForm({
             <button
               type="button"
               onClick={handleNextStep}
-              className="w-full sm:w-auto min-h-[44px] px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
+              className="w-full sm:w-auto min-h-[44px] px-8 py-3.5 bg-[#561291] hover:bg-[#6a1fae] text-white font-semibold text-base rounded-full transition-all duration-200 shadow-none active:scale-[0.98] inline-flex items-center justify-center gap-2"
             >
               <span>
                 <SiteText
@@ -673,7 +673,7 @@ export default function AdmissionForm({
               <button
                 type="button"
                 onClick={handlePrevStep}
-                className="flex-1 sm:flex-initial min-h-[44px] px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
+                className="flex-1 sm:flex-initial min-h-[44px] px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base rounded-full transition-all duration-200 inline-flex items-center justify-center gap-2"
               >
                 <ArrowLeft size={18} />
                 <span>
@@ -691,7 +691,7 @@ export default function AdmissionForm({
                       : "Kladd lagret! Du kan lukke siden og fortsette senere.",
                   );
                 }}
-                className="flex-1 sm:flex-initial min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
+                className="flex-1 sm:flex-initial min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-full font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
               >
                 <Save size={16} />
                 <span>
@@ -704,7 +704,7 @@ export default function AdmissionForm({
             <button
               type="button"
               onClick={handleNextStep}
-              className="w-full sm:w-auto min-h-[44px] px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
+              className="w-full sm:w-auto min-h-[44px] px-8 py-3.5 bg-[#561291] hover:bg-[#6a1fae] text-white font-semibold text-base rounded-full transition-all duration-200 shadow-none active:scale-[0.98] inline-flex items-center justify-center gap-2"
             >
               <span>
                 <SiteText
@@ -1019,7 +1019,7 @@ export default function AdmissionForm({
               <button
                 type="button"
                 onClick={handlePrevStep}
-                className="flex-1 sm:flex-initial min-h-[44px] px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
+                className="flex-1 sm:flex-initial min-h-[44px] px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base rounded-full transition-all duration-200 inline-flex items-center justify-center gap-2"
               >
                 <ArrowLeft size={18} />
                 <span>
@@ -1037,7 +1037,7 @@ export default function AdmissionForm({
                       : "Kladd lagret! Du kan lukke siden og fortsette senere.",
                   );
                 }}
-                className="flex-1 sm:flex-initial min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
+                className="flex-1 sm:flex-initial min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-full font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
               >
                 <Save size={16} />
                 <span>
@@ -1050,7 +1050,7 @@ export default function AdmissionForm({
             <button
               type="button"
               onClick={handleNextStep}
-              className="w-full sm:w-auto min-h-[44px] px-8 py-3.5 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2"
+              className="w-full sm:w-auto min-h-[44px] px-8 py-3.5 bg-[#561291] hover:bg-[#6a1fae] text-white font-semibold text-base rounded-full transition-all duration-200 shadow-none active:scale-[0.98] inline-flex items-center justify-center gap-2"
             >
               <span>
                 <SiteText
@@ -1241,7 +1241,7 @@ export default function AdmissionForm({
               <button
                 type="button"
                 onClick={handlePrevStep}
-                className="flex-1 sm:flex-initial min-h-[44px] px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base uppercase tracking-wider rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2"
+                className="flex-1 sm:flex-initial min-h-[44px] px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base rounded-full transition-all duration-200 inline-flex items-center justify-center gap-2"
               >
                 <ArrowLeft size={18} />
                 <span>
@@ -1259,7 +1259,7 @@ export default function AdmissionForm({
                       : "Kladd lagret! Du kan lukke siden og fortsette senere.",
                   );
                 }}
-                className="flex-1 sm:flex-initial min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
+                className="flex-1 sm:flex-initial min-h-[44px] px-4 py-3 text-slate-600 hover:text-[#561291] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-full font-medium text-sm transition-all duration-200 inline-flex items-center justify-center gap-2"
               >
                 <Save size={16} />
                 <span>
@@ -1273,7 +1273,7 @@ export default function AdmissionForm({
             <button
               type="submit"
               disabled={isSubmitting || adminPreview}
-              className="w-full sm:w-auto min-h-[48px] px-10 py-4 bg-[#D7B978] hover:bg-[#c4a565] text-[#561291] font-bold text-base font-sans uppercase tracking-wider rounded-xl transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98] inline-flex items-center justify-center gap-2.5 disabled:opacity-50"
+              className="w-full sm:w-auto min-h-[48px] px-10 py-4 bg-[#561291] hover:bg-[#6a1fae] text-white font-semibold text-base font-sans rounded-full transition-all duration-200 shadow-none active:scale-[0.98] inline-flex items-center justify-center gap-2.5 disabled:opacity-50"
             >
               {isSubmitting ? (
                 <>
@@ -1296,7 +1296,7 @@ export default function AdmissionForm({
                       fallback={
                         language === "en"
                           ? "Submit Application"
-                          : "Send Inn Min Søknad"
+                          : "Send inn min søknad"
                       }
                     />
                   </span>

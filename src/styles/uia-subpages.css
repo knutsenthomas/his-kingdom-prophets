@@ -408,3 +408,32 @@
 .hkpc-landing.uia-look .about-copy h2 span,
 .hkpc-landing.uia-look .program.secondary h3,
 .hkpc-landing.uia-look .u-subhero h2 { color: #fff !important; }
+
+/* Undersider: alltid luft over og under seksjoner, og før bunnteksten */
+.hkpc-landing.uia-look:not(.uia-home) .section {
+  padding-top: clamp(56px, 7vw, 96px);
+  padding-bottom: clamp(56px, 7vw, 96px);
+}
+.hkpc-landing.uia-look:not(.uia-home) .section + .section { padding-top: 0; }
+.hkpc-landing.uia-look:not(.uia-home) main > :last-child { margin-bottom: 0; }
+
+/* Om oss: «Vil du bli bedre kjent med oss?» som lyst panel med pilleknapp */
+.hkpc-landing.uia-look .about-contact { background: none !important; padding-top: 0 !important; }
+.hkpc-landing.uia-look .about-contact .wrap {
+  background: var(--u-lavender);
+  border-radius: var(--u-radius);
+  padding: clamp(32px, 5vw, 64px);
+}
+.hkpc-landing.uia-look .about-contact h2 { font-size: clamp(28px, 3.4vw, 42px); margin: 0 0 10px; }
+.hkpc-landing.uia-look .about-contact p { color: var(--u-ink); font-size: var(--u-body, 17px); margin: 0 0 24px; }
+.hkpc-landing.uia-look .about-contact a {
+  display: inline-flex; align-items: center; gap: 10px;
+  border-radius: 999px !important;
+  padding: 13px 22px;
+  background: var(--u-purple); color: #fff; font-weight: 600;
+}
+.hkpc-landing.uia-look .about-history-section a { margin-top: 20px; }
+
+/* Søknadsskjema: forhåndsvisningsvarselet brytes pent på små skjermer */
+.uia-look .bg-amber-50 > div { flex-wrap: wrap; min-width: 0; }
+.uia-look .bg-amber-50 span { min-width: 0; overflow-wrap: anywhere; }
