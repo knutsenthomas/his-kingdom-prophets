@@ -592,3 +592,8 @@
 /* Opptak: undertekst på én linje på store skjermer */
 .hkpc-landing.uia-look .admissions .wrap > p:not(.eyebrow) { max-width: none; }
 .hkpc-landing.uia-look .admissions .wrap > p:not(.eyebrow) br { display: none; }
+
+/* Ingen beige: den varme flaten blir en lysere lilla nyanse */
+.hkpc-landing.uia-look { --u-cream: #f5f0fa; }
+.hkpc-landing.uia-look .topics span.topic-num { background: var(--u-purple); color: #fff; border-radius: 12px; }
+.hkpc-landing.uia-look .u-feature-text .signature { border-left: 0; padding-left: 0; }
