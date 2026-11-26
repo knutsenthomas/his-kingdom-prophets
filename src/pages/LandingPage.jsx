@@ -16,12 +16,13 @@ import {
   LandingAdmissions
 } from '@/components/landing';
 import '@/styles/hkpc-redesign.css';
+import '@/styles/uia-look.css';
 
 export default function LandingPage() {
   const { language } = useApp();
 
   return (
-    <div className="hkpc-landing min-h-screen">
+    <div className="hkpc-landing uia-look min-h-screen">
       <SeoHead
         title={language === 'no' 
           ? "His Kingdom Prophetic Community | Profetisk Skole & Utrustningssenter"

@@ -3,28 +3,28 @@ import { motion } from 'framer-motion';
 import { useApp } from '@/contexts/AppContext';
 import CmsText from '@/components/CmsText';
 import { fadeInUp, staggerContainer } from './animations';
+import welcomeImage from '@/assets/worship_hero.png';
 
 export default function LandingWelcome() {
   const { language } = useApp();
 
   return (
     <motion.section 
-      className="section wrap welcome" 
+      className="u-feature wrap" 
       id="introduction"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-60px" }}
       variants={staggerContainer}
     >
-      <motion.div variants={fadeInUp}>
-        <p className="eyebrow purple">
+      <motion.div className="u-feature-card" variants={fadeInUp}>
+      <div className="u-feature-text">
+        <p className="u-kicker">
           <CmsText slug="landing-welcome-eyebrow" fallback={language === 'no' ? 'FELLESSKAP & UTRUSTNING' : 'COMMUNITY & EQUIPPING'} />
         </p>
         <h2>
           <CmsText slug="landing-welcome-title" fallback={language === 'no' ? 'En dypere tro. Et levende fellesskap.' : 'A deeper faith. A living fellowship.'} />
         </h2>
-      </motion.div>
-      <motion.div variants={fadeInUp}>
         <h3><CmsText slug="landing-welcome-sub" fallback={language === 'no' ? 'Alle er velkomne.' : 'All are welcome.'} /></h3>
         <p>
           <CmsText slug="landing-welcome-p1" fallback={language === 'no'
@@ -39,6 +39,10 @@ export default function LandingWelcome() {
         <div className="signature">
           <CmsText slug="landing-welcome-signature" fallback={language === 'no' ? 'Guds ord som fundament. Jesus i sentrum.' : 'God’s word as our foundation. Jesus at the center.'} />
         </div>
+      </div>
+      <figure className="u-feature-image">
+        <img src={welcomeImage} alt={language === 'no' ? 'Lovsang i et fullsatt fellesskap' : 'Worship in a full gathering'} loading="lazy" decoding="async" />
+      </figure>
       </motion.div>
     </motion.section>
   );

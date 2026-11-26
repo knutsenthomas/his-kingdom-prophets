@@ -5,6 +5,7 @@ import { useApp } from '@/contexts/AppContext';
 import { ArrowUp, ShieldCheck } from 'lucide-react';
 import CmsText from '@/components/CmsText';
 import '@/styles/hkpc-redesign.css';
+import '@/styles/uia-look.css';
 
 const NETWORK_LINKS = [
   { url: 'https://hiskingdomministry.no/', name: 'His Kingdom Ministry' },
@@ -35,7 +36,7 @@ export default function SiteFooter() {
   };
 
   return (
-    <div className="hkpc-landing site-footer-wrapper">
+    <div className="hkpc-landing uia-look site-footer-wrapper">
       <footer className="site-footer">
         <div className="wrap">
           <div className="footer-layout">
