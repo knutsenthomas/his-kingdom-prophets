@@ -437,3 +437,15 @@
 /* Søknadsskjema: forhåndsvisningsvarselet brytes pent på små skjermer */
 .uia-look .bg-amber-50 > div { flex-wrap: wrap; min-width: 0; }
 .uia-look .bg-amber-50 span { min-width: 0; overflow-wrap: anywhere; }
+
+/* Logo rett på lilla: ingen hvit ramme rundt kronen */
+.uia-look .site-header-wrapper.hkpc-landing header .brand img,
+.hkpc-landing.uia-look .site-header-wrapper header .brand img,
+.hkpc-landing.uia-look .site-footer .brand img {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  width: 44px;
+  height: 44px;
+}
