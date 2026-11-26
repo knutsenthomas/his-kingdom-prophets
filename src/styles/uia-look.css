@@ -690,3 +690,23 @@
 .hkpc-landing.uia-look .program.secondary .program-bottom a:hover { background: #e6cf9c; }
 .hkpc-landing.uia-look .program.secondary .program-top .pill,
 .hkpc-landing.uia-look .program.secondary .program-top .pill span { color: var(--u-purple); }
+
+/* Lik størrelse på brødtekst over hele forsiden: 17px PC, 16px mobil */
+.hkpc-landing.uia-look { --u-body: 17px; --u-meta: 15px; }
+@media (max-width: 640px) { .hkpc-landing.uia-look { --u-body: 16px; --u-meta: 14px; } }
+.hkpc-landing.uia-look .program > p,
+.hkpc-landing.uia-look .program li,
+.hkpc-landing.uia-look .program li span,
+.hkpc-landing.uia-look .topics p,
+.hkpc-landing.uia-look .format p,
+.hkpc-landing.uia-look .u-tile p,
+.hkpc-landing.uia-look .u-feature-text p,
+.hkpc-landing.uia-look .faq-header .faq-subtitle,
+.hkpc-landing.uia-look .section-head > p,
+.hkpc-landing.uia-look .admissions .wrap > p:not(.eyebrow):not(.admission-opening-note),
+.hkpc-landing.uia-look .about-copy p,
+.hkpc-landing.uia-look .admissions details p { font-size: var(--u-body); line-height: 1.65; }
+.hkpc-landing.uia-look .program .program-bottom span,
+.hkpc-landing.uia-look .program .program-bottom b,
+.hkpc-landing.uia-look .program .program-bottom small,
+.hkpc-landing.uia-look .program .program-bottom small span { font-size: var(--u-meta); }
