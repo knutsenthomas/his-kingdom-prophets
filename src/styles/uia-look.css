@@ -767,3 +767,10 @@
   .hkpc-landing.uia-look .u-fact-label { align-self: end; }
   .hkpc-landing.uia-look .u-fact-value { align-self: start; font-size: 17px; }
 }
+
+/* Velkomstkortet: kolonnene kan aldri bli bredere enn kortet */
+.hkpc-landing.uia-look .u-feature-card { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+@media (max-width: 900px) {
+  .hkpc-landing.uia-look .u-feature-card { grid-template-columns: minmax(0, 1fr); }
+  .hkpc-landing.uia-look .u-hero-inner { grid-template-columns: minmax(0, 1fr); }
+}

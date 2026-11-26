@@ -16,7 +16,7 @@ export default function AccessibilityPage() {
   const isEn = language === 'en';
 
   return (
-    <div className="hkpc-landing legal-page min-h-screen flex flex-col">
+    <div className="hkpc-landing uia-look legal-page min-h-screen flex flex-col">
       <SeoHead
         title={isEn ? "Accessibility Statement (WCAG 2.1) | HKPC" : "Tilgjengelighetserklæring (WCAG 2.1) | HKPC"}
         description={isEn 
@@ -65,7 +65,7 @@ export default function AccessibilityPage() {
           className="legal-content"
         >
           {/* Hero */}
-          <div className="legal-hero">
+          <div className="legal-hero u-subhero u-subhero-panel">
             <Link to="/" className="legal-back"><ArrowLeft size={18} />{isEn ? 'Back to home' : 'Tilbake til forsiden'}</Link>
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mx-auto sm:mx-0">
               <Eye size={24} />

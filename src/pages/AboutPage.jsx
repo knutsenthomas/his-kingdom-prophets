@@ -36,11 +36,11 @@ export default function AboutPage() {
   const volunteers = people.filter(p => p.visible && p.group === 'volunteer');
   const prayerTeam = people.filter(p => p.visible && p.group === 'prayer');
   return (
-    <div className="hkpc-landing about-page min-h-screen">
+    <div className="hkpc-landing uia-look about-page min-h-screen">
       <SeoHead title={text('Om oss | His Kingdom Prophetic Community', 'About us | His Kingdom Prophetic Community')} description={text('Bli kjent med HKPC, vårt bibelske fundament og staben: Hilde Karin og Thomas Knutsen.', 'Get to know HKPC, our biblical foundation and our team: Hilde Karin and Thomas Knutsen.')} canonicalPath="/about" />
       <SiteHeader />
       <main>
-        <section className="about-page-hero">
+        <section className="about-page-hero u-subhero">
           <motion.div className="wrap" {...reveal()}>
             <Link to="/" className="about-back"><ArrowLeft size={18} /><SiteText fallback={text('Tilbake til forsiden', 'Back to home')} /></Link>
             <p className="eyebrow"><SiteText fallback={text('OM OSS', 'ABOUT US')} /></p>

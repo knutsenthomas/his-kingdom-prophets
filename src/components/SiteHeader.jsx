@@ -5,6 +5,8 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ExternalLink, ShieldCheck, GraduationCap, Sparkles, X, ArrowRight, Globe, Check, Menu } from 'lucide-react';
 import '@/styles/hkpc-redesign.css';
+import '@/styles/uia-look.css';
+import '@/styles/uia-subpages.css';
 
 export default function SiteHeader() {
   const navigate = useNavigate();

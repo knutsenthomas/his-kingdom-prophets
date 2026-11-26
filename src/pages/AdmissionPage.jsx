@@ -1045,7 +1045,7 @@ export default function AdmissionPage() {
     programs.find((p) => p.id === formData.program) || programs[0];
 
   return (
-    <div className="bg-[#F6F4F8] text-[#271f30] font-sans min-h-screen">
+    <div className="uia-look bg-[#F6F4F8] text-[#271f30] font-sans min-h-screen">
       <SeoHead
         title={
           language === "en"
@@ -1114,7 +1114,7 @@ export default function AdmissionPage() {
       <SiteHeader />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#561291] to-[#3b0b66] text-white py-16 px-6 overflow-hidden">
+      <section className="u-subhero u-subhero-center relative bg-gradient-to-br from-[#561291] to-[#3b0b66] text-white py-16 px-6 overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-white/5 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-[#D7B978]/10 blur-3xl pointer-events-none" />

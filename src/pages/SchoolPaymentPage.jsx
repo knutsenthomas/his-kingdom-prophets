@@ -205,11 +205,11 @@ export default function SchoolPaymentPage({ gift = false }) {
     finally { inFlight.current = false; if (alive.current) setBusy(false); }
   }
 
-  return <div className="hkpc-landing school-payment-page">
+  return <div className="hkpc-landing uia-look school-payment-page">
     <SeoHead title={text(gift ? 'Gi en gave til skolen | HKPC' : 'Betal skoleavgift | HKPC', gift ? 'Give to the school | HKPC' : 'School payments | HKPC')} description={text('Skolebetaling og gaver til His Kingdom Prophetic Community.', 'School payments and gifts to His Kingdom Prophetic Community.')} canonicalPath={gift ? '/gi-gave' : '/betaling'} />
     <SiteHeader />
     <main>
-      <section className="about-page-hero payment-hero"><motion.div className="wrap" initial={reducedMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+      <section className="about-page-hero payment-hero u-subhero"><motion.div className="wrap" initial={reducedMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <Link className="about-back" to="/"><ArrowLeft size={18} /><SiteText fallback={text('Tilbake til forsiden', 'Back to home')} /></Link>
         <p className="eyebrow"><SiteText fallback={text(gift ? 'EN GAVE TIL SKOLEN' : 'SKOLEBETALING', gift ? 'GIVE TO THE SCHOOL' : 'SCHOOL PAYMENTS')} /></p><h1><SiteText fallback={title} /></h1>
         <p className="about-page-intro"><SiteText fallback={text(gift ? 'Din gave støtter skolens arbeid med bibelundervisning, disippelskap og profetisk utrustning.' : 'Velg månedlig avtale, halvårsbetaling, hele studieåret eller kickoff.', gift ? 'Your gift supports Bible teaching, discipleship and prophetic equipping.' : 'Choose a monthly plan, one semester, the full school year or kickoff.')} /></p>

@@ -19,11 +19,11 @@ export default function AppsPage() {
     try { await navigator.clipboard.writeText(appLandingLink(id, language)); setCopied(id); setCopyError(''); }
     catch { setCopyError(t('Kunne ikke kopiere. Bruk lenken under QR-koden.', 'Could not copy. Use the link below the QR code.')); }
   }
-  return <div className="hkpc-landing apps-page">
+  return <div className="hkpc-landing uia-look apps-page">
     <SeoHead title={t('HKPC-apper', 'HKPC apps')} description={t('HKP Community for iPhone, iPad, Android og Mac. Følg undervisningen og hold kontakten med skolen.', 'HKP Community for iPhone, iPad, Android and Mac. Follow your courses and stay connected with the school.')} canonicalPath="/apper" />
     <SiteHeader />
     <main>
-      <section className="apps-hero">
+      <section className="apps-hero u-subhero">
         <div className="apps-container apps-hero-layout">
           <div>
             <p className="apps-eyebrow">HKP COMMUNITY</p>

@@ -1,0 +1,206 @@
+/* =========================================================
+   HKPC – forsidedesignet overført til undersidene (test-grenen)
+   Lilla meny, flat lilla toppflate med avrundet hjørne nede til
+   venstre, stor hvit overskrift, pilleknapper, myke kort.
+   ========================================================= */
+
+.uia-look {
+  --u-purple: #561291;
+  --u-purple-deep: #561291;
+  --u-gold: #D7B978;
+  --u-ink: #1f1828;
+  --u-muted: #5f566a;
+  --u-lavender: #eee6f6;
+  --u-line: #d9d1e0;
+  --u-radius: 20px;
+}
+
+/* ---------- Menyen på lilla (også sider uten .hkpc-landing på roten) ---------- */
+.uia-look .site-header-wrapper.hkpc-landing header {
+  background: var(--u-purple);
+  border-bottom: 0;
+}
+.uia-look .site-header-wrapper.hkpc-landing header .brand .brand-name { color: #fff; font-family: 'DM Sans', Arial, sans-serif; font-weight: 700; }
+.uia-look .site-header-wrapper.hkpc-landing header .brand img { background: #fff; border-radius: 10px; padding: 3px; }
+@media (min-width: 1201px) {
+  .uia-look .site-header-wrapper.hkpc-landing .header-nav a { color: #fff; }
+  .uia-look .site-header-wrapper.hkpc-landing .header-nav a:hover,
+  .uia-look .site-header-wrapper.hkpc-landing .header-nav a[aria-current="page"] { color: #fff; background: rgba(255,255,255,.14); }
+}
+.uia-look .site-header-wrapper.hkpc-landing .lang-globe-btn,
+.uia-look .site-header-wrapper.hkpc-landing .login-btn,
+.uia-look .site-header-wrapper.hkpc-landing .menu { background: transparent; color: #fff; border-color: rgba(255,255,255,.55); }
+.uia-look .site-header-wrapper.hkpc-landing .lang-globe-btn *,
+.uia-look .site-header-wrapper.hkpc-landing .menu * { color: #fff; stroke: currentColor; }
+.uia-look .site-header-wrapper.hkpc-landing .headerlink { background: #fff; color: var(--u-purple); border-color: #fff; border-radius: 999px; }
+
+/* ---------- Toppflaten på undersidene ---------- */
+.uia-look .u-subhero {
+  background: var(--u-purple) !important;
+  background-image: none !important;
+  color: #fff;
+  border-radius: 0 0 0 clamp(48px, 7vw, 110px) !important;
+  padding-top: clamp(36px, 5vw, 72px) !important;
+  padding-bottom: clamp(48px, 6vw, 88px) !important;
+  position: relative;
+  overflow: hidden;
+  box-shadow: none;
+}
+/* skjul dekor-sirkler og glød fra de gamle toppfeltene */
+.uia-look .u-subhero > .absolute { display: none !important; }
+
+.uia-look .u-subhero h1,
+.uia-look .u-subhero h1 span {
+  color: #fff !important;
+  font-family: 'DM Sans', Arial, sans-serif;
+  font-weight: 600 !important;
+  letter-spacing: -0.03em;
+}
+.uia-look .u-subhero h1 {
+  font-size: clamp(34px, 4.6vw, 56px) !important;
+  line-height: 1.1 !important;
+  margin: 10px 0 18px;
+  max-width: 22ch;
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
+.uia-look .u-subhero .eyebrow,
+.uia-look .u-subhero .apps-eyebrow {
+  color: var(--u-gold) !important;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.uia-look .u-subhero p,
+.uia-look .u-subhero p span { color: #f1e9f8; }
+.uia-look .u-subhero .about-page-intro,
+.uia-look .u-subhero .support-intro,
+.uia-look .u-subhero .apps-intro { font-size: clamp(17px, 1.5vw, 19px); line-height: 1.6; max-width: 60ch; }
+.uia-look .u-subhero .about-back,
+.uia-look .u-subhero .legal-back { color: #fff !important; opacity: .9; }
+.uia-look .u-subhero .about-back:hover,
+.uia-look .u-subhero .legal-back:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+
+/* lenker i toppflaten («På denne siden») som lyse piller */
+.uia-look .u-subhero .about-section-nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.uia-look .u-subhero .about-section-nav a {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 16px;
+  border: 1.5px solid rgba(255,255,255,.6);
+  border-radius: 999px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+}
+.uia-look .u-subhero .about-section-nav a:hover { background: rgba(255,255,255,.12); }
+
+/* Toppflater som var sentrert (Opptak, HKM): venstrejustert i sidebredde */
+.uia-look .u-subhero-center > div:not(.absolute) {
+  max-width: 1160px !important;
+  width: min(1160px, calc(100% - 48px));
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: left !important;
+  padding: 0;
+}
+.uia-look .u-subhero-center .mx-auto { margin-left: 0 !important; margin-right: 0 !important; }
+.uia-look .u-subhero-center p { max-width: 60ch; font-size: clamp(17px, 1.5vw, 19px) !important; line-height: 1.6 !important; }
+.uia-look .u-subhero-center .justify-center { justify-content: flex-start !important; }
+.uia-look .u-subhero-center span.inline-flex {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  color: var(--u-gold) !important;
+  font-size: 13px !important;
+  letter-spacing: .1em !important;
+}
+.uia-look .u-subhero-center span.inline-flex svg { display: none; }
+@media (min-width: 641px) {
+  .uia-look .u-subhero-center { padding-left: 0 !important; padding-right: 0 !important; }
+}
+
+/* knapper i toppflaten som hvite piller */
+.uia-look .u-subhero a.apps-primary,
+.uia-look .u-subhero-center a[class*="rounded"],
+.uia-look .u-subhero-center button[class*="rounded"] {
+  border-radius: 999px !important;
+}
+.uia-look .u-subhero a.apps-primary { background: #fff !important; color: var(--u-ink) !important; }
+
+/* Juridiske sider: toppen som lilla panel i innholdsbredden */
+.uia-look .u-subhero-panel {
+  border-radius: var(--u-radius) var(--u-radius) var(--u-radius) clamp(40px, 6vw, 88px) !important;
+  padding: clamp(28px, 4vw, 52px) !important;
+  margin-bottom: 36px;
+  border-bottom: 0 !important;
+}
+.uia-look .u-subhero-panel > div:not(.absolute) { background: rgba(255,255,255,.14) !important; color: #fff !important; margin-left: 0 !important; }
+.uia-look .u-subhero-panel h1 { font-size: clamp(30px, 4vw, 48px) !important; }
+
+/* Support: toppen i full bredde */
+.uia-look .support-hero.u-subhero { margin-bottom: 40px; }
+
+/* Apper: flat bunn som på forsiden */
+.uia-look .apps-hero.u-subhero .apps-brand-art span,
+.uia-look .apps-hero.u-subhero .apps-brand-art p { color: #fff; }
+
+/* ---------- Innhold på undersidene ---------- */
+.hkpc-landing.uia-look .about-value-card,
+.hkpc-landing.uia-look .about-team-card,
+.hkpc-landing.uia-look .support-contact-card,
+.hkpc-landing.uia-look .apps-card {
+  border-radius: var(--u-radius);
+  box-shadow: none;
+  border: 1px solid var(--u-line);
+}
+.hkpc-landing.uia-look .about-value-card { background: #fff; }
+.hkpc-landing.uia-look .about-value-card svg { color: var(--u-purple); }
+.hkpc-landing.uia-look .section h2,
+.hkpc-landing.uia-look .apps-section-heading h2,
+.hkpc-landing.uia-look .payment-aside h2 {
+  font-family: 'DM Sans', Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--u-ink);
+}
+.hkpc-landing.uia-look .apps-web { background: var(--u-lavender); border-radius: var(--u-radius); }
+.hkpc-landing.uia-look .apps-page .apps-primary,
+.hkpc-landing.uia-look .payment-submit,
+.hkpc-landing.uia-look .apps-download { border-radius: 999px; }
+
+/* ---------- Ingen tekst utenfor boksen: generelle sikringer ---------- */
+.uia-look h1, .uia-look h2, .uia-look h3, .uia-look h4,
+.uia-look p, .uia-look li, .uia-look dd, .uia-look dt,
+.uia-look a, .uia-look summary, .uia-look label, .uia-look td, .uia-look th {
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+.uia-look .about-team-card *,
+.uia-look .payment-layout *,
+.uia-look .support-grid * { min-width: 0; }
+.uia-look table { max-width: 100%; }
+.uia-look .legal-content table { display: block; overflow-x: auto; }
+.uia-look img { max-width: 100%; }
+
+@media (max-width: 640px) {
+  .uia-look .u-subhero { border-bottom-left-radius: 48px !important; }
+  .uia-look .u-subhero h1 { font-size: 34px !important; max-width: none; }
+  .uia-look .u-subhero-panel { padding: 24px !important; }
+  .uia-look .u-subhero-panel h1 { font-size: 28px !important; }
+  .uia-look .u-subhero-center > div:not(.absolute) { width: 100%; }
+}
+
+/* Juridiske sider: lys tekst i det lilla panelet */
+.uia-look .u-subhero-panel p,
+.uia-look .u-subhero-panel p span { color: #e9dff3 !important; }
+
+/* Gave/betaling: knappene får plass også på de minste skjermene */
+.hkpc-landing.uia-look .payment-amounts button { min-width: 0; white-space: normal; overflow-wrap: anywhere; line-height: 1.25; }
+@media (max-width: 380px) {
+  .hkpc-landing.uia-look .payment-amounts { gap: 6px; }
+  .hkpc-landing.uia-look .payment-amounts button { padding: 12px 4px; font-size: 14px; }
+}

@@ -57,7 +57,7 @@ export default function ContactSupportPage() {
   };
 
   return (
-    <div className="hkpc-landing support-page min-h-screen flex flex-col">
+    <div className="hkpc-landing uia-look support-page min-h-screen flex flex-col">
       <SeoHead
         title={isEn ? "Contact & Support | His Kingdom Prophetic Community" : "Kontakt & Støtte | His Kingdom Prophetic Community"}
         description={isEn
@@ -100,7 +100,7 @@ export default function ContactSupportPage() {
       {/* Site Header */}
       <SiteHeader />
 
-      <section className="support-hero"><div className="support-container"><Link to="/" className="about-back"><ArrowLeft size={18}/><SiteText fallback={isEn ? 'Back to home' : 'Tilbake til forsiden'} /></Link><p className="eyebrow"><SiteText fallback={isEn ? 'CONTACT THE SCHOOL' : 'KONTAKT SKOLEN'} /></p>
+      <section className="support-hero u-subhero"><div className="support-container"><Link to="/" className="about-back"><ArrowLeft size={18}/><SiteText fallback={isEn ? 'Back to home' : 'Tilbake til forsiden'} /></Link><p className="eyebrow"><SiteText fallback={isEn ? 'CONTACT THE SCHOOL' : 'KONTAKT SKOLEN'} /></p>
               <h1 >
                 <CmsText slug="support-hero-title" fallback={isEn ? 'Get in Touch with Us' : 'Kontakt Kundestøtte'} />
               </h1>

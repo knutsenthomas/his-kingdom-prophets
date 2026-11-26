@@ -70,7 +70,7 @@ export default function HkmAboutPage() {
   ];
 
   return (
-    <div className="bg-[#F6F4F8] text-[#271f30] font-sans min-h-screen flex flex-col justify-between">
+    <div className="uia-look bg-[#F6F4F8] text-[#271f30] font-sans min-h-screen flex flex-col justify-between">
       <SeoHead
         title={isEn ? "His Kingdom Ministry | Global Missions & Prophetic Teaching" : "His Kingdom Ministry | Misjon, Bønn & Forkynnelse"}
         description={isEn 
@@ -119,7 +119,7 @@ export default function HkmAboutPage() {
       <SiteHeader />
 
       {/* Hero Header Section with vibrant blending colors */}
-      <section className="relative bg-gradient-to-br from-[#561291] to-[#561291] text-white py-12 sm:py-20 px-4 sm:px-6 overflow-hidden">
+      <section className="u-subhero u-subhero-center relative bg-gradient-to-br from-[#561291] to-[#561291] text-white py-12 sm:py-20 px-4 sm:px-6 overflow-hidden">
         {/* Glow rings and absolute blobs */}
         <div className="absolute top-[-30%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#d17d39]/10 blur-3xl pointer-events-none" />
         <div className="absolute bottom-[-20%] left-[-15%] w-[450px] h-[450px] rounded-full bg-primary/20 blur-3xl pointer-events-none" />
