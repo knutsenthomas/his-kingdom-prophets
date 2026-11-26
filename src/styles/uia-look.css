@@ -627,3 +627,7 @@
 
 /* Gaveboks: hvit med gull kant, så den skiller seg fra lilla flater rundt */
 .hkpc-landing.uia-look .school-campaign-card { background: #fff; border: 2px solid var(--u-gold); }
+
+/* Bruk HKPC-lilla i stedet for den mørke lilla */
+.hkpc-landing.uia-look { --u-purple-deep: #561291; }
+.hkpc-landing.uia-look .site-footer .footer-contact-button:hover { color: #561291; }
