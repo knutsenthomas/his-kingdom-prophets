@@ -576,3 +576,11 @@
 .hkpc-landing.uia-look .u-hero-copy { padding-top: clamp(8px, 2vw, 24px); }
 .hkpc-landing.uia-look .u-hero h1 { margin-bottom: 28px; }
 .hkpc-landing.uia-look .u-hero-image { align-self: end; }
+
+/* Litt høyere toppboks */
+.hkpc-landing.uia-look .u-hero-inner { padding-top: clamp(32px, 4.4vw, 64px); }
+.hkpc-landing.uia-look .u-hero-copy { padding-bottom: clamp(48px, 6vw, 88px); }
+.hkpc-landing.uia-look .u-hero-image img { aspect-ratio: 4 / 3.9; max-height: 500px; }
+@media (max-width: 900px) {
+  .hkpc-landing.uia-look .u-hero-image img { aspect-ratio: 16 / 11; max-height: 340px; }
+}
