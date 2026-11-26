@@ -679,3 +679,7 @@
 }
 .hkpc-landing.uia-look .admission-box .admission-facts dd { white-space: nowrap; }
 .hkpc-landing.uia-look .admission-box .admission-facts > div { align-items: baseline; }
+
+/* Opptakskrav: lesbar mørk tekst på lys bakgrunn */
+.hkpc-landing.uia-look .admissions details p,
+.hkpc-landing.uia-look .admissions details p span { color: var(--u-ink); opacity: 1; font-size: 16px; line-height: 1.7; }
