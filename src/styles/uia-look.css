@@ -710,3 +710,60 @@
 .hkpc-landing.uia-look .program .program-bottom b,
 .hkpc-landing.uia-look .program .program-bottom small,
 .hkpc-landing.uia-look .program .program-bottom small span { font-size: var(--u-meta); }
+
+/* Opptakskort på mobil: etikett over verdi, ingenting stikker ut */
+@media (max-width: 640px) {
+  .hkpc-landing.uia-look .admission-box { padding: 22px; }
+  .hkpc-landing.uia-look .admission-box b { font-size: 19px; }
+  .hkpc-landing.uia-look .admission-box .admission-facts > div { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .hkpc-landing.uia-look .admission-box .admission-facts dt { font-size: 14px; }
+  .hkpc-landing.uia-look .admission-box .admission-facts dd { text-align: left; white-space: normal; font-size: 16px; }
+  .hkpc-landing.uia-look .admission-opening-note { font-size: 16px; line-height: 1.5; margin-bottom: 18px; }
+  .hkpc-landing.uia-look .admissions h2 { font-size: 34px; }
+}
+
+/* Neste skoleår: tre like faktakort */
+.hkpc-landing.uia-look .u-facts {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.hkpc-landing.uia-look .u-facts li {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 26px;
+  background: #fff;
+  border: 1px solid var(--u-line);
+  border-radius: var(--u-radius);
+}
+.hkpc-landing.uia-look .u-fact-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--u-lavender);
+  color: var(--u-purple);
+  margin-bottom: 12px;
+}
+.hkpc-landing.uia-look .u-fact-label { font-size: var(--u-meta, 15px); color: var(--u-muted); font-weight: 500; }
+.hkpc-landing.uia-look .u-fact-value { font-size: 20px; font-weight: 600; line-height: 1.3; color: var(--u-ink); }
+@media (max-width: 900px) {
+  .hkpc-landing.uia-look .u-facts { grid-template-columns: 1fr; gap: 12px; }
+  .hkpc-landing.uia-look .u-facts li {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    column-gap: 16px;
+    row-gap: 2px;
+    align-items: center;
+    padding: 18px;
+  }
+  .hkpc-landing.uia-look .u-fact-icon { grid-row: 1 / span 2; margin: 0; }
+  .hkpc-landing.uia-look .u-fact-label { align-self: end; }
+  .hkpc-landing.uia-look .u-fact-value { align-self: start; font-size: 17px; }
+}
