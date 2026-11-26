@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { useApp } from '@/contexts/AppContext';
 import CmsText from '@/components/CmsText';
 import { fadeInUp, staggerContainer } from './animations';
-import welcomeImage from '@/assets/worship_hero.png';
+// Foto: Unsplash (Unsplash-lisens), liten gruppe som ber sammen
+const welcomeImage = 'https://images.unsplash.com/photo-1520857014576-2c4f4c972b57?auto=format&fit=crop&w=1200&q=80';
 
 export default function LandingWelcome() {
   const { language } = useApp();
@@ -41,7 +42,7 @@ export default function LandingWelcome() {
         </div>
       </div>
       <figure className="u-feature-image">
-        <img src={welcomeImage} alt={language === 'no' ? 'Lovsang i et fullsatt fellesskap' : 'Worship in a full gathering'} loading="lazy" decoding="async" />
+        <img src={welcomeImage} alt={language === 'no' ? 'En liten gruppe ber for hverandre' : 'A small group praying for one another'} loading="lazy" decoding="async" />
       </figure>
       </motion.div>
     </motion.section>
