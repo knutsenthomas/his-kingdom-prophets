@@ -631,3 +631,51 @@
 /* Bruk HKPC-lilla i stedet for den mørke lilla */
 .hkpc-landing.uia-look { --u-purple-deep: #561291; }
 .hkpc-landing.uia-look .site-footer .footer-contact-button:hover { color: #561291; }
+
+/* Opptak: to kolonner – tekst til venstre, opptakskort til høyre */
+@media (min-width: 901px) {
+  .hkpc-landing.uia-look .admissions .wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+    column-gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+  .hkpc-landing.uia-look .admissions .wrap > * { grid-column: 1; }
+  .hkpc-landing.uia-look .admissions .wrap > .admission-box { grid-column: 2; grid-row: 1 / span 6; align-self: center; }
+  .hkpc-landing.uia-look .admissions .wrap > p:not(.eyebrow) { max-width: 40ch; }
+}
+.hkpc-landing.uia-look .admissions .wrap > p:not(.eyebrow) br { display: inline; }
+.hkpc-landing.uia-look .admission-opening-note { margin: 4px 0 0; font-size: 16px; }
+.hkpc-landing.uia-look .admission-box {
+  margin: 0;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+  padding: clamp(24px, 3vw, 36px);
+  background: #fff;
+}
+.hkpc-landing.uia-look .admission-box b { display: block; font-size: 22px; padding-bottom: 14px; border-bottom: 1px solid var(--u-line); }
+.hkpc-landing.uia-look .admission-box .admission-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+}
+.hkpc-landing.uia-look .admission-box .admission-facts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--u-line);
+}
+.hkpc-landing.uia-look .admission-box .admission-facts dt { color: var(--u-muted); font-size: 15px; margin: 0; }
+.hkpc-landing.uia-look .admission-box .admission-facts dd { font-weight: 600; font-size: 15px; margin: 0; text-align: right; }
+.hkpc-landing.uia-look .admission-box .button,
+.hkpc-landing.uia-look .admission-box .purple-button { width: 100%; justify-content: center; min-width: 0; }
+.hkpc-landing.uia-look .admissions details { margin-top: 28px; padding-left: 0; border-top: 1px solid rgba(31, 24, 40, .2); }
+.hkpc-landing.uia-look .admissions .wrap > details { margin: 28px 0 0; max-width: none; width: 100%; }
+@media (min-width: 901px) {
+  .hkpc-landing.uia-look .admissions .wrap { grid-template-columns: minmax(0, 1fr) minmax(360px, 1fr); }
+}
+.hkpc-landing.uia-look .admission-box .admission-facts dd { white-space: nowrap; }
+.hkpc-landing.uia-look .admission-box .admission-facts > div { align-items: baseline; }
