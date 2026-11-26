@@ -402,3 +402,9 @@
   .uia-look .site-header-wrapper.hkpc-landing .mobile-login-box a.mobile-choice-btn,
   .uia-look .site-header-wrapper.hkpc-landing .mobile-login-box button.mobile-choice-btn { justify-content: flex-start; }
 }
+
+/* Overskrifter på lilla flater skal alltid være hvite */
+.hkpc-landing.uia-look .about-copy h2,
+.hkpc-landing.uia-look .about-copy h2 span,
+.hkpc-landing.uia-look .program.secondary h3,
+.hkpc-landing.uia-look .u-subhero h2 { color: #fff !important; }
