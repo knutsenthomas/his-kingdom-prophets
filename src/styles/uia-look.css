@@ -683,3 +683,10 @@
 /* Opptakskrav: lesbar mørk tekst på lys bakgrunn */
 .hkpc-landing.uia-look .admissions details p,
 .hkpc-landing.uia-look .admissions details p span { color: var(--u-ink); opacity: 1; font-size: 16px; line-height: 1.7; }
+
+/* Andre år: lesbar tekst på gull knapp og hvit merkelapp */
+.hkpc-landing.uia-look .program.secondary .program-bottom a,
+.hkpc-landing.uia-look .program.secondary .program-bottom a span { color: #2b0a49; }
+.hkpc-landing.uia-look .program.secondary .program-bottom a:hover { background: #e6cf9c; }
+.hkpc-landing.uia-look .program.secondary .program-top .pill,
+.hkpc-landing.uia-look .program.secondary .program-top .pill span { color: var(--u-purple); }
