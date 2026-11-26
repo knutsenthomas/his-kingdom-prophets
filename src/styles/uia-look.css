@@ -598,3 +598,32 @@
 .hkpc-landing.uia-look .topics span.topic-num { background: var(--u-purple); color: #fff; border-radius: 12px; }
 .hkpc-landing.uia-look .u-feature-text .signature { border-left: 0; padding-left: 0; }
 .hkpc-landing.uia-look .u-feature-image img { object-position: 22% center; }
+
+/* Mer variasjon: lys lilla + hvit med kant + mørk lilla, gull som aksent */
+/* Andre år: mørk lilla flate */
+.hkpc-landing.uia-look .program.secondary { background: var(--u-purple-deep); color: #fff; }
+.hkpc-landing.uia-look .program.secondary h3,
+.hkpc-landing.uia-look .program.secondary p,
+.hkpc-landing.uia-look .program.secondary li,
+.hkpc-landing.uia-look .program.secondary .program-bottom,
+.hkpc-landing.uia-look .program.secondary .program-bottom span { color: #fff; }
+.hkpc-landing.uia-look .program.secondary .program-top,
+.hkpc-landing.uia-look .program.secondary .program-top span:first-child { color: var(--u-gold); }
+.hkpc-landing.uia-look .program.secondary small { color: #d9cce6; }
+.hkpc-landing.uia-look .program.secondary li,
+.hkpc-landing.uia-look .program.secondary .program-bottom { border-color: rgba(255,255,255,.16); }
+.hkpc-landing.uia-look .program.secondary .program-bottom a { background: var(--u-gold); color: var(--u-purple-deep); }
+
+/* Tre studieformer: hvite kort med tynn kant */
+.hkpc-landing.uia-look .format > div,
+.hkpc-landing.uia-look .format > div:first-child { background: #fff; border: 1px solid var(--u-line); }
+.hkpc-landing.uia-look .format span.format-num { background: var(--u-lavender); color: var(--u-purple); }
+
+/* Fagkort: hvite med kant og gull nummer */
+.hkpc-landing.uia-look .topics article,
+.hkpc-landing.uia-look .topics article:first-child,
+.hkpc-landing.uia-look .topics article:last-child { background: #fff; border: 1px solid var(--u-line); }
+.hkpc-landing.uia-look .topics span.topic-num { background: var(--u-gold); color: var(--u-purple-deep); }
+
+/* Gaveboks: hvit med gull kant, så den skiller seg fra lilla flater rundt */
+.hkpc-landing.uia-look .school-campaign-card { background: #fff; border: 2px solid var(--u-gold); }
