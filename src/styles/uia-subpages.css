@@ -204,3 +204,38 @@
   .hkpc-landing.uia-look .payment-amounts { gap: 6px; }
   .hkpc-landing.uia-look .payment-amounts button { padding: 12px 4px; font-size: 14px; }
 }
+
+/* Betaling: «Støtt oppstartssamlingen» som eget kort med luft før bunnteksten */
+.hkpc-landing.uia-look .payment-campaign-note {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin: 40px 0 clamp(56px, 7vw, 96px);
+  padding: 22px 28px;
+  background: #fff;
+  border: 2px solid var(--u-gold);
+  border-radius: var(--u-radius);
+  font-size: 17px;
+  color: var(--u-ink);
+}
+.hkpc-landing.uia-look .payment-campaign-note .school-campaign-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--u-purple);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+.hkpc-landing.uia-look .payment-campaign-note .school-campaign-link:hover { background: #6a1fae; }
+.hkpc-landing.uia-look .payment-campaign-note .school-campaign-link span { color: #fff; }
+.hkpc-landing.uia-look .payment-section { padding-bottom: 0; }
+@media (max-width: 640px) {
+  .hkpc-landing.uia-look .payment-campaign-note { padding: 20px; }
+  .hkpc-landing.uia-look .payment-campaign-note .school-campaign-link { width: 100%; justify-content: center; }
+}
