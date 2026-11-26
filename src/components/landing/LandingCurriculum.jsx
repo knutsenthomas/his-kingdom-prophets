@@ -66,18 +66,6 @@ export default function LandingCurriculum() {
           <p><CmsText slug="landing-topic-4-desc" fallback={language === 'no' ? 'Tro i hverdagen, forvaltning, smågrupper og misjon.' : 'Faith in daily life, stewardship, small groups, and mission.'} /></p>
         </motion.article>
       </motion.div>
-
-      <details>
-        <summary><CmsText slug="landing-curriculum-summary" fallback={language === 'no' ? 'Se mer om fagene' : 'Read more about the courses'} /></summary>
-        <p>
-          <CmsText
-            slug="landing-curriculum-course-overview"
-            fallback={language === 'no'
-              ? 'Førsteåret gir undervisning i blant annet Profeti 101, å høre Guds stemme, gaver og tjeneste, bønn og faste, gudsfrykt, nådegaver og praktisk kristenliv.'
-              : 'The first year includes teaching on Prophecy 101, hearing God’s voice, gifts and ministry, prayer and fasting, the fear of the Lord, spiritual gifts and everyday Christian life.'}
-          />
-        </p>
-      </details>
     </section>
   );
 }
