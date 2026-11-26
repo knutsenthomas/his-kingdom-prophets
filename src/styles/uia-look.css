@@ -892,3 +892,12 @@
   .hkpc-landing.uia-look .footer-bottom-bar { justify-content: flex-start; align-items: flex-start; flex-direction: column; }
   .hkpc-landing.uia-look .site-footer .footer-back-top { align-self: flex-start; margin: 0; }
 }
+
+/* Diskrete skillelinjer i stedet for mørke streker */
+.hkpc-landing.uia-look .faq-container { border-top-color: var(--u-line); }
+.hkpc-landing.uia-look .faq-item { border-bottom-color: var(--u-line); }
+.hkpc-landing.uia-look .curriculum details,
+.hkpc-landing.uia-look .about details { border-top-color: var(--u-line); border-bottom-color: var(--u-line); }
+.hkpc-landing.uia-look .u-event-list li,
+.hkpc-landing.uia-look .u-event-list li:first-child { border-color: var(--u-line); }
+.hkpc-landing.uia-look .admissions details { border-top-color: var(--u-line); }
