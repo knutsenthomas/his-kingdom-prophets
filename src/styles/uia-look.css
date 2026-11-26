@@ -588,3 +588,7 @@
 /* Gaveboksen: lys lilla i stedet for beige */
 .hkpc-landing.uia-look .school-campaign-card { background: var(--u-lavender); }
 .hkpc-landing.uia-look .school-campaign-card p { color: var(--u-ink); }
+
+/* Opptak: undertekst på én linje på store skjermer */
+.hkpc-landing.uia-look .admissions .wrap > p:not(.eyebrow) { max-width: none; }
+.hkpc-landing.uia-look .admissions .wrap > p:not(.eyebrow) br { display: none; }
