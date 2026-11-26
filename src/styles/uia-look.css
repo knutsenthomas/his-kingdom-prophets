@@ -584,3 +584,7 @@
 @media (max-width: 900px) {
   .hkpc-landing.uia-look .u-hero-image img { aspect-ratio: 16 / 11; max-height: 340px; }
 }
+
+/* Gaveboksen: lys lilla i stedet for beige */
+.hkpc-landing.uia-look .school-campaign-card { background: var(--u-lavender); }
+.hkpc-landing.uia-look .school-campaign-card p { color: var(--u-ink); }
