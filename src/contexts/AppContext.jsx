@@ -3,10 +3,8 @@ import { languageFromUrl } from '../utils/languageLink.js';
 import React, { createContext, useState, useEffect, useContext, useMemo } from 'react';
 import { auth, db, storage } from '@/firebase';
 import { 
-  signInWithEmailAndPassword, 
   signOut, 
   onAuthStateChanged,
-  createUserWithEmailAndPassword,
   GoogleAuthProvider,
   OAuthProvider,
   signInWithPopup,
@@ -618,130 +616,6 @@ export const AppProvider = ({ children }) => {
     setIsLoggedIn(false);
   };
 
-  // Login handler with Firebase Authentication
-  const login = async (email, password) => {
-    const cleanEmail = email?.trim().toLowerCase();
-    try {
-      await signInWithEmailAndPassword(auth, cleanEmail, password);
-      showToast("Logget inn via Firebase!");
-    } catch (err) {
-      console.error("Firebase Auth login failed:", err.code, err.message);
-      
-      // Auto-provisioning: If the user doesn't exist in Firebase Auth yet, let's check if they exist in Firestore
-      if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
-        try {
-          const q = query(collection(db, "users"), where("email", "==", cleanEmail));
-          const querySnapshot = await getDocs(q);
-          let invitedDoc = null;
-          querySnapshot.forEach(docSnap => {
-            const data = docSnap.data();
-            invitedDoc = { id: docSnap.id, data };
-          });
-
-          if (invitedDoc || cleanEmail === 'knutsenthomas@gmail.com') {
-            // Yes! The user is pre-created or is the superadmin owner!
-            // Let's automatically register/create them in Firebase Auth on the fly!
-            showToast("Oppretter sikker innlogging for din e-post...");
-            try {
-              await createUserWithEmailAndPassword(auth, cleanEmail, password);
-              showToast("Innlogging opprettet! Velkommen!");
-              return; // Successful auto-creation automatically triggers onAuthStateChanged which handles migration
-            } catch (createErr) {
-              console.error("Auto-provisioning in Firebase Auth failed:", createErr);
-              if (createErr.code === 'auth/email-already-in-use') {
-                // If already exists, then the password they typed was simply wrong
-                showToast("Ugyldig passord for denne e-posten.");
-                throw err;
-              } else if (createErr.code === 'auth/weak-password') {
-                showToast("Passordet er for svakt (minimum 6 tegn).");
-                throw createErr;
-              }
-            }
-          }
-        } catch (fsErr) {
-          console.error("Failed to query Firestore for auto-provisioning:", fsErr);
-        }
-      }
-
-      let msg = "Feil ved innlogging. Vennligst sjekk e-post og passord.";
-      if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
-        msg = "Ugyldig e-post eller passord.";
-      } else if (err.code === 'auth/invalid-email') {
-        msg = "Ugyldig e-postformat.";
-      }
-      showToast(msg);
-      throw err;
-    }
-  };
-
-  // Sign up with Email/Password
-  const registerWithEmail = async (email, password, name, role) => {
-    const checkEmail = email?.toLowerCase();
-    
-    // Check if pre-invited/pre-added by administrator
-    try {
-      let isInvited = false;
-      let invitedProfile = null;
-      let docId = null;
-      let assignedRole = role || 'member';
-
-      if (checkEmail === 'knutsenthomas@gmail.com') {
-        isInvited = true;
-        assignedRole = 'superadmin';
-      } else {
-        const q = query(collection(db, "users"), where("email", "==", checkEmail));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(docSnap => {
-          const data = docSnap.data();
-          isInvited = true;
-          invitedProfile = data;
-          docId = docSnap.id;
-          assignedRole = data.role || 'student';
-        });
-      }
-
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const firebaseUser = userCredential.user;
-      
-      const defaultProfile = {
-        uid: firebaseUser.uid,
-        name: invitedProfile?.name || name || 'Ny Bruker',
-        email,
-        role: assignedRole,
-        avatar: (invitedProfile?.avatar && !invitedProfile.avatar.includes('unsplash')) ? invitedProfile.avatar : (firebaseUser.photoURL || ""),
-        phone: invitedProfile?.phone || "+47 900 00 000",
-        location: invitedProfile?.location || "Kristiansand, Norge",
-        birthYear: invitedProfile?.birthYear || "1995",
-        bio: invitedProfile?.bio || "",
-        heading: invitedProfile?.heading || "",
-        title: invitedProfile?.title || "",
-        department: invitedProfile?.department || "",
-        expertise: invitedProfile?.expertise || "",
-        officeHours: invitedProfile?.officeHours || "",
-        zoomLink: invitedProfile?.zoomLink || "",
-        ministry: invitedProfile?.ministry || "",
-        socialInstagram: invitedProfile?.socialInstagram || "",
-        socialFacebook: invitedProfile?.socialFacebook || ""
-      };
-      
-      // Save profile under their actual Firebase UID
-      await setDoc(doc(db, "users", firebaseUser.uid), defaultProfile);
-      
-      // Clean up the temporary doc generated in Brukeradministrasjon
-      if (docId && docId !== firebaseUser.uid) {
-        await deleteDoc(doc(db, "users", docId));
-      }
-
-      setUser(defaultProfile);
-      setIsLoggedIn(true);
-      showToast(`Bruker registrert som ${defaultProfile.role}!`);
-    } catch (err) {
-      console.error("Firebase registration failed:", err.message);
-      showToast("Kunne ikke registrere bruker: " + err.message);
-      throw err;
-    }
-  };
-
   // Login with Google Provider
   const loginWithGoogle = async (role) => {
     try {
@@ -811,18 +685,6 @@ export const AppProvider = ({ children }) => {
         console.error("Redirect fallback failed too:", redirErr);
         showToast(`Kunne ikke koble til Apple (${redirErr.code || redirErr.message || redirErr}).`);
       }
-    }
-  };
-
-  // Passwordless magic link login
-  const loginPasswordless = async (email, role) => {
-    try {
-      await signInWithEmailAndPassword(auth, email, "pass123");
-      showToast("Løsinnlogging fullført!");
-    } catch (err) {
-      console.error("Løsinnlogging feilet:", err.message);
-      showToast("Kunne ikke logge inn uten passord. Bruk vanlig pålogging.");
-      throw err;
     }
   };
 
@@ -1702,13 +1564,10 @@ export const AppProvider = ({ children }) => {
       assistantMessages,
       isAssistantTyping,
       toastMessage,
-      login,
       logout,
       changePersona,
-      registerWithEmail,
       loginWithGoogle,
       loginWithApple,
-      loginPasswordless,
       updateUserProfile,
       addCourseModule,
       toggleModuleCompleted,
