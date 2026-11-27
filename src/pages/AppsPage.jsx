@@ -20,7 +20,7 @@ export default function AppsPage() {
     catch { setCopyError(t('Kunne ikke kopiere. Bruk lenken under QR-koden.', 'Could not copy. Use the link below the QR code.')); }
   }
   return <div className="hkpc-landing uia-look apps-page">
-    <SeoHead title={t('HKPC-apper', 'HKPC apps')} description={t('HKP Community for iPhone, iPad, Android og Mac. Følg undervisningen og hold kontakten med skolen.', 'HKP Community for iPhone, iPad, Android and Mac. Follow your courses and stay connected with the school.')} canonicalPath="/apper" />
+    <SeoHead title={t('HKPC-apper', 'HKPC apps')} description={t('HKP Community for iPhone, iPad, Android og Mac. Følg undervisningen og hold kontakten med skolen.', 'HKP Community for iPhone, iPad, Android and Mac. Follow your courses and stay connected with the school.')} canonicalPath="/apper" noindex />
     <SiteHeader />
     <main>
       <section className="apps-hero u-subhero">

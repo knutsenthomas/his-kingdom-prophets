@@ -13,7 +13,8 @@ export default function SeoHead({
   type = 'website',
   image = 'https://hkpc.no/og-image.jpg',
   keywords,
-  schema
+  schema,
+  noindex = false
 }) {
   const location = useLocation();
   const currentPath = canonicalPath || location.pathname;
@@ -49,6 +50,10 @@ export default function SeoHead({
     if (keywords) {
       setMeta('name', 'keywords', keywords);
     }
+
+    // Skjulte sider (f.eks. /apper før lansering) skal ikke indekseres.
+    const DEFAULT_ROBOTS = 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+    setMeta('name', 'robots', noindex ? 'noindex, nofollow' : DEFAULT_ROBOTS);
 
     // 3. Canonical Tag
     let canonicalTag = document.querySelector('link[rel="canonical"]');
@@ -93,7 +98,7 @@ export default function SeoHead({
         currentSchemaScript.remove();
       }
     };
-  }, [fullTitle, fullDesc, canonicalUrl, type, image, keywords, schema]);
+  }, [fullTitle, fullDesc, canonicalUrl, type, image, keywords, schema, noindex]);
 
   return null;
 }

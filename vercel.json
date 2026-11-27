@@ -90,6 +90,15 @@
           "value": "public, max-age=86400, stale-while-revalidate=43200"
         }
       ]
+    },
+    {
+      "source": "/apper",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     }
   ],
   "rewrites": [
