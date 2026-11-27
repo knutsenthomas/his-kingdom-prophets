@@ -32,7 +32,6 @@ export default function AppsPage() {
             <a className="apps-primary" href="#velg-app">{t('Finn appen for deg', 'Find your app')} <ArrowUpRight size={20} /></a>
             <p className="apps-availability">{t('Appene kommer snart. Nettversjonen er tilgjengelig nå.', 'Apps coming soon. The web version is available now.')}</p>
           </div>
-          <div className="apps-brand-art" aria-hidden="true"><img src="/hkp-logo.png" alt="" /><span>HKP Community</span><p>iPhone / iPad / Android / Mac</p></div>
         </div>
       </section>
       <section className="apps-container apps-features" aria-label={t('Dette finner du i appen', 'Inside the app')}>

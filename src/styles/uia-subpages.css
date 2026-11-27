@@ -483,3 +483,10 @@
 @media (max-width: 640px) {
   .site-header-wrapper .lang-switch-btn { min-width: 40px; padding: 0 8px; font-size: 14px; }
 }
+
+/* Apper: toppfeltet uten krone-blokk, én kolonne som på de andre undersidene */
+.uia-look .apps-hero.u-subhero .apps-hero-layout { grid-template-columns: minmax(0, 1fr); }
+.uia-look .apps-hero.u-subhero .apps-intro { max-width: 60ch; }
+/* Apper: samme sidebredde som resten av nettstedet */
+.hkpc-landing.uia-look.apps-page .apps-container { width: min(1160px, calc(100% - 96px)); }
+@media (max-width: 600px) { .hkpc-landing.uia-look.apps-page .apps-container { width: calc(100% - 28px); } }
