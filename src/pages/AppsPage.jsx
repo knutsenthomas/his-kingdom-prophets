@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Smartphone, Tablet, Monitor, ArrowUpRight, PlayCircle, CalendarDays, Users, Copy, Check, Download, Globe } from 'lucide-react';
+import { Smartphone, Tablet, Monitor, ArrowUpRight, ArrowDown, PlayCircle, CalendarDays, Users, Copy, Check, Download, Globe } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
@@ -29,7 +29,7 @@ export default function AppsPage() {
             <p className="apps-eyebrow">HKP COMMUNITY</p>
             <h1>{t('Skolehverdagen.\nDer du er.', 'Your school.\nWherever you are.')}</h1>
             <p className="apps-intro">{t('Undervisning, samlinger og fellesskap samlet på mobilen, nettbrettet og Mac-en din.', 'Teaching, gatherings and community together on your phone, tablet and Mac.')}</p>
-            <a className="apps-primary" href="#velg-app">{t('Finn appen for deg', 'Find your app')} <ArrowUpRight size={20} /></a>
+            <a className="apps-primary" href="#velg-app">{t('Finn appen for deg', 'Find your app')} <ArrowDown size={18} aria-hidden="true" /></a>
             <p className="apps-availability">{t('Appene kommer snart. Nettversjonen er tilgjengelig nå.', 'Apps coming soon. The web version is available now.')}</p>
           </div>
         </div>
