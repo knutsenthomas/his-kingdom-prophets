@@ -1,6 +1,7 @@
 import { getApps, initializeApp } from 'firebase/app';
 import { getAuth, initializeAuth, inMemoryPersistence, browserPopupRedirectResolver, GoogleAuthProvider, signInWithPopup, signInWithCredential, signInWithCustomToken, signOut } from 'firebase/auth';
 import { auth, firebaseConfig } from '../firebase';
+import { isSecondFactorChallenge, resolveSecondFactor } from './centralSecondFactor';
 
 const endpoint = 'https://europe-west1-his-kingdom-ministry.cloudfunctions.net/communitySso';
 const encode = bytes => btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
@@ -25,13 +26,20 @@ export async function signInWebsiteAdministrator() {
     const result = await signInWithPopup(popupAuth, provider);
     const credential = GoogleAuthProvider.credentialFromResult(result);
     if (!credential) throw new Error('Google-innloggingen kunne ikke bekreftes.');
-    const central = await signInWithCredential(centralAuth, credential);
+    // HKM accounts require a second factor; enrolled accounts are asked for their code here.
+    const central = await signInWithCredential(centralAuth, credential).catch(error => {
+      if (isSecondFactorChallenge(error)) return resolveSecondFactor(centralAuth, error);
+      throw error;
+    });
     const verifier = encode(crypto.getRandomValues(new Uint8Array(32)));
     const challenge = encode(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier))));
     const authorization = await fetch(endpoint + '/authorize', {
       method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await central.user.getIdToken()}` }, body: JSON.stringify({ challenge }),
     });
     const handoff = await authorization.json();
+    if (!authorization.ok && handoff.error === 'mfa-required') {
+      throw new Error('Tofaktor er påkrevd. Sett det opp ved å logge inn på hiskingdomministry.no/minside, og prøv igjen.');
+    }
     if (!authorization.ok) throw new Error('Skolens tilgang kunne ikke bekreftes. Logg inn med administratorkontoen din.');
     const exchange = await fetch(endpoint + '/exchange', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: handoff.code, verifier }) });
     const session = await exchange.json();
