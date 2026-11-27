@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ExternalLink, ShieldCheck, GraduationCap, Sparkles, X, ArrowRight, Globe, Check, Menu } from 'lucide-react';
+import { ChevronDown, ExternalLink, ShieldCheck, GraduationCap, Sparkles, X, ArrowRight, Menu } from 'lucide-react';
 import '@/styles/hkpc-redesign.css';
 import '@/styles/uia-look.css';
 import '@/styles/uia-subpages.css';
@@ -117,9 +117,6 @@ export default function SiteHeader() {
 
           {/* Mobile only action items */}
           <div className="mobile-nav-actions">
-            <button onClick={toggleLanguage} className="mobile-action-btn">
-              <SiteText fallback={language === 'no' ? '🌐 Switch to English' : '🌐 Bytt til Norsk'} />
-            </button>
             {user ? (
               <button 
                 onClick={() => { 
@@ -187,91 +184,36 @@ export default function SiteHeader() {
 
         {/* Header controls: Globe language selector (outside mobile menu), Desktop actions, Mobile menu button */}
         <div className="header-controls">
-          {/* Globe Language Selector - Matches media_1791038711517.png */}
-          <div className="lang-dropdown-wrapper" ref={langMenuRef}>
-            <button 
+          {/* Språkvalg: to knapper, det aktive språket har ring rundt (som på uia.no) */}
+          <div
+            className="lang-switch notranslate"
+            translate="no"
+            role="group"
+            aria-label={language === 'no' ? 'Velg språk' : 'Choose language'}
+            ref={langMenuRef}
+          >
+            <button
               type="button"
-              onClick={() => setIsLangMenuOpen(prev => !prev)} 
-              className={`lang-globe-btn ${isLangMenuOpen ? 'open' : ''}`}
-              aria-expanded={isLangMenuOpen}
-              aria-haspopup="listbox"
-              aria-label={language === 'no' ? 'Velg språk' : 'Select language'}
-              title={language === 'no' ? 'Språk: Norsk (trykk for å endre)' : 'Language: English (click to change)'}
+              lang="nb"
+              className={`lang-switch-btn ${language === 'no' ? 'active' : ''}`}
+              aria-pressed={language === 'no'}
+              aria-label="Norsk"
+              title="Norsk"
+              onClick={() => selectLanguage('no')}
             >
-              <Globe size={16} className="lang-globe-icon" />
-              <span className="lang-code-text notranslate" translate="no">{language === 'no' ? 'NO' : 'EN'}</span>
-              <ChevronDown 
-                size={12} 
-                className={`lang-chevron ${isLangMenuOpen ? 'open' : ''}`} 
-              />
+              NO
             </button>
-
-            <AnimatePresence>
-              {isLangMenuOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 6, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.96 }}
-                  transition={{ duration: 0.16, ease: "easeOut" }}
-                  className="lang-dropdown-menu notranslate"
-                  translate="no"
-                  role="listbox"
-                  aria-label="Språkliste"
-                >
-                  <div className="lang-dropdown-header">
-                    <span lang="nb" translate="no">Velg språk</span>
-                  </div>
-
-                  <div className="lang-dropdown-list">
-                    {/* Norsk Option */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        selectLanguage('no');
-                        setIsLangMenuOpen(false);
-                      }}
-                      className={`lang-item ${language === 'no' ? 'active' : ''}`}
-                      role="option"
-                      aria-selected={language === 'no'}
-                    >
-                      <div className="lang-item-content">
-                        <span className="lang-flag" aria-hidden="true">🇳🇴</span>
-                        <div className="lang-item-text">
-                          <span className="lang-title"><span lang="nb" translate="no">Norsk</span></span>
-                          <span className="lang-detail" lang="nb" translate="no">Bokmål</span>
-                        </div>
-                      </div>
-                      {language === 'no' && (
-                        <Check size={16} className="lang-check-icon" />
-                      )}
-                    </button>
-
-                    {/* English Option */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        selectLanguage('en');
-                        setIsLangMenuOpen(false);
-                      }}
-                      className={`lang-item ${language === 'en' ? 'active' : ''}`}
-                      role="option"
-                      aria-selected={language === 'en'}
-                    >
-                      <div className="lang-item-content">
-                        <span className="lang-flag" aria-hidden="true">🇬🇧</span>
-                        <div className="lang-item-text">
-                          <span className="lang-title"><span lang="en" translate="no">English</span></span>
-                          <span className="lang-detail" lang="en" translate="no">International</span>
-                        </div>
-                      </div>
-                      {language === 'en' && (
-                        <Check size={16} className="lang-check-icon" />
-                      )}
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <button
+              type="button"
+              lang="en"
+              className={`lang-switch-btn ${language === 'en' ? 'active' : ''}`}
+              aria-pressed={language === 'en'}
+              aria-label="English"
+              title="English"
+              onClick={() => selectLanguage('en')}
+            >
+              EN
+            </button>
           </div>
 
           {/* Desktop actions */}

@@ -449,3 +449,37 @@
   width: 44px;
   height: 44px;
 }
+
+/* =========================================================
+   Språkvalg NO / EN direkte i toppen (som uia.no)
+   ========================================================= */
+.site-header-wrapper .lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.site-header-wrapper .lang-switch-btn {
+  min-width: 44px;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: #561291;
+  font: 700 15px/1 'DM Sans', Arial, sans-serif;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: border-color .15s, background-color .15s;
+}
+.site-header-wrapper .lang-switch-btn:hover { background: rgba(86, 18, 145, .08); }
+.site-header-wrapper .lang-switch-btn.active { border-color: currentColor; }
+.site-header-wrapper .lang-switch-btn:focus-visible { outline: 3px solid #D7B978; outline-offset: 2px; }
+
+/* På den lilla menyen: hvit tekst og hvit ring */
+.uia-look .site-header-wrapper .lang-switch-btn { color: #fff; }
+.uia-look .site-header-wrapper .lang-switch-btn:hover { background: rgba(255, 255, 255, .12); }
+.uia-look .site-header-wrapper .lang-switch-btn.active { border-color: #fff; }
+
+@media (max-width: 640px) {
+  .site-header-wrapper .lang-switch-btn { min-width: 40px; padding: 0 8px; font-size: 14px; }
+}
