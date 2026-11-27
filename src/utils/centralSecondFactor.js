@@ -1,6 +1,6 @@
-import { getMultiFactorResolver, PhoneAuthProvider, PhoneMultiFactorGenerator, RecaptchaVerifier, TotpMultiFactorGenerator } from 'firebase/auth';
+import { getMultiFactorResolver, TotpMultiFactorGenerator } from 'firebase/auth';
 
-// Every HKM account signs in with a second factor (authenticator app, or SMS as a fallback).
+// Every HKM account signs in with a second factor: the code from an authenticator app.
 // The website asks for the code here; accounts set it up on hiskingdomministry.no.
 
 const STYLE = `
@@ -19,10 +19,7 @@ export function secondFactorMessage(error) {
   switch (error?.code) {
     case 'auth/invalid-verification-code':
     case 'auth/invalid-totp-code': return 'Koden stemmer ikke. Sjekk at klokken på telefonen er riktig, og prøv en ny kode.';
-    case 'auth/code-expired': return 'Koden er utløpt. Be om en ny.';
     case 'auth/too-many-requests': return 'For mange forsøk. Vent litt og prøv igjen.';
-    case 'auth/captcha-check-failed':
-    case 'auth/unauthorized-domain': return 'SMS kan ikke sendes fra denne siden. Bruk autentiseringsappen.';
     default: return error?.message || 'Noe gikk galt. Prøv igjen.';
   }
 }
@@ -33,9 +30,9 @@ function openDialog() {
   }
   const backdrop = document.createElement('div');
   backdrop.className = 'hkm2f-backdrop';
-  backdrop.innerHTML = '<div class="hkm2f" role="dialog" aria-modal="true" aria-labelledby="hkm2f-title"></div><div id="hkm2f-recaptcha"></div>';
+  backdrop.innerHTML = '<div class="hkm2f" role="dialog" aria-modal="true" aria-labelledby="hkm2f-title"></div>';
   document.body.appendChild(backdrop);
-  return { box: backdrop.querySelector('.hkm2f'), recaptcha: backdrop.querySelector('#hkm2f-recaptcha'), close: () => backdrop.remove() };
+  return { box: backdrop.querySelector('.hkm2f'), close: () => backdrop.remove() };
 }
 
 function showError(box, error) {
@@ -59,49 +56,21 @@ function codeForm(box, onSubmit) {
   setTimeout(() => input.focus(), 50);
 }
 
-/** Asks for the code of an enrolled factor and resolves with the completed sign-in. */
+/** Asks for the authenticator code and resolves with the completed sign-in. */
 export function resolveSecondFactor(auth, error) {
   const resolver = getMultiFactorResolver(auth, error);
   const totpHint = resolver.hints.find(hint => hint.factorId === TotpMultiFactorGenerator.FACTOR_ID);
-  const smsHint = resolver.hints.find(hint => hint.factorId === PhoneMultiFactorGenerator.FACTOR_ID);
+  // Accounts set up with SMS before it was removed have no app code; an administrator resets them.
+  if (!totpHint) return Promise.reject(new Error('Kontoen din har en tofaktormetode som ikke lenger brukes. Be en administrator om å nullstille tofaktor, så kan du sette opp en autentiseringsapp på hiskingdomministry.no/minside.'));
   return new Promise((resolve, reject) => {
-    if (!totpHint && !smsHint) { reject(new Error('Kontoen har en tofaktormetode som ikke støttes her.')); return; }
     const dialog = openDialog();
-    let verifier;
-    const finish = credential => { verifier?.clear(); dialog.close(); resolve(credential); };
-    const render = method => {
-      dialog.box.innerHTML = `<h2 id="hkm2f-title">Bekreft at det er deg</h2><p>${method === 'totp' ? 'Skriv inn koden fra autentiseringsappen.' : 'Vi sender en kode på SMS.'}</p>`;
-      if (method === 'totp') {
-        codeForm(dialog.box, (code, button) => busy(button, async () => {
-          try { finish(await resolver.resolveSignIn(TotpMultiFactorGenerator.assertionForSignIn(totpHint.uid, code))); }
-          catch (err) { showError(dialog.box, err); }
-        }));
-      } else {
-        const send = document.createElement('button'); send.className = 'primary'; send.type = 'button';
-        send.textContent = `Send kode til ${smsHint.phoneNumber || 'mobilen'}`;
-        send.onclick = () => busy(send, async () => {
-          try {
-            verifier ||= new RecaptchaVerifier(auth, dialog.recaptcha, { size: 'invisible' });
-            const verificationId = await new PhoneAuthProvider(auth).verifyPhoneNumber({ multiFactorHint: smsHint, session: resolver.session }, verifier);
-            send.remove();
-            codeForm(dialog.box, (code, button) => busy(button, async () => {
-              try { finish(await resolver.resolveSignIn(PhoneMultiFactorGenerator.assertion(PhoneAuthProvider.credential(verificationId, code)))); }
-              catch (err) { showError(dialog.box, err); }
-            }));
-          } catch (err) { verifier?.clear(); verifier = null; showError(dialog.box, err); }
-        });
-        dialog.box.appendChild(send);
-      }
-      if (totpHint && smsHint) {
-        const other = document.createElement('button'); other.className = 'link'; other.type = 'button';
-        other.textContent = method === 'totp' ? 'Bruk SMS i stedet' : 'Bruk autentiseringsappen i stedet';
-        other.onclick = () => render(method === 'totp' ? 'sms' : 'totp');
-        dialog.box.appendChild(other);
-      }
-      const cancel = document.createElement('button'); cancel.className = 'link'; cancel.type = 'button'; cancel.textContent = 'Avbryt';
-      cancel.onclick = () => { verifier?.clear(); dialog.close(); reject(new Error('Innloggingen ble avbrutt.')); };
-      dialog.box.appendChild(cancel);
-    };
-    render(totpHint ? 'totp' : 'sms');
+    dialog.box.innerHTML = '<h2 id="hkm2f-title">Bekreft at det er deg</h2><p>Skriv inn koden fra autentiseringsappen.</p>';
+    codeForm(dialog.box, (code, button) => busy(button, async () => {
+      try { const credential = await resolver.resolveSignIn(TotpMultiFactorGenerator.assertionForSignIn(totpHint.uid, code)); dialog.close(); resolve(credential); }
+      catch (err) { showError(dialog.box, err); }
+    }));
+    const cancel = document.createElement('button'); cancel.className = 'link'; cancel.type = 'button'; cancel.textContent = 'Avbryt';
+    cancel.onclick = () => { dialog.close(); reject(new Error('Innloggingen ble avbrutt.')); };
+    dialog.box.appendChild(cancel);
   });
 }
