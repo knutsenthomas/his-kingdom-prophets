@@ -98,6 +98,19 @@
 .hkpc-landing.uia-look .site-header-wrapper .menu:hover { background: rgba(255,255,255,.12); }
 .hkpc-landing.uia-look .site-header-wrapper .lang-globe-btn *,
 .hkpc-landing.uia-look .site-header-wrapper .menu * { color: #fff; stroke: currentColor; }
+/* The admin shortcut sits on the purple bar too; violet-on-violet only showed on hover. */
+.hkpc-landing.uia-look .site-header-wrapper .admin-badge-btn {
+  background: rgba(255,255,255,.12);
+  color: #fff;
+  border-color: rgba(255,255,255,.55);
+}
+.hkpc-landing.uia-look .site-header-wrapper .admin-badge-btn:hover {
+  background: rgba(255,255,255,.22);
+  color: #fff;
+  border-color: #fff;
+  box-shadow: none;
+}
+.hkpc-landing.uia-look .site-header-wrapper .admin-badge-btn:focus-visible { outline: 3px solid var(--u-gold); outline-offset: 2px; }
 .hkpc-landing.uia-look .site-header-wrapper .headerlink {
   background: #fff;
   color: var(--u-purple);
